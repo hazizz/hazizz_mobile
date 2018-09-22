@@ -30,8 +30,8 @@ public class OfflineRunnable implements Runnable{
                     MiddleMan.sendRequestsFromQ();
                     Log.e("hey", "sent request");
                   //  loopBool = false;
-                   // MiddleMan.removeRequestFromQ(0);
-                    MiddleMan.requestQueue.remove(0);
+                 //   MiddleMan.removeRequestFromQ(0);
+                   // MiddleMan.requestQueue.remove(0);
                 }
             }
         }

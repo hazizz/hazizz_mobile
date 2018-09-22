@@ -56,10 +56,15 @@ public abstract class MiddleMan{
     }
 
     public static void sendRequestsFromQ(){
-        for(Request r : requestQueue){
-            r.requestType.setupCall();
-            r.requestType.makeCall();
+        int size = requestQueue.size()-1;
+        Log.e("hey", "q1: " + size);
+        // for(Request r : requestQueue){
+        for(int i = 0; i <= size; i++){
+            requestQueue.get(0).requestType.setupCall();
+            requestQueue.get(0).requestType.makeCall();
             Log.e("hey", "q: " + requestQueue.size());
+            Log.e("hey", "i: " + i);
+            requestQueue.remove(0);
         }
     }
 
