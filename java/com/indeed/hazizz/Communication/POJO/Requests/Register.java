@@ -1,4 +1,4 @@
-package com.indeed.hazizz.Communication.POJO.Requests;
+/*package com.indeed.hazizz.Communication.POJO.Requests;
 
 //import com.indeed.hazizz.Communication.POJO.ParentPOJO;
 
@@ -25,3 +25,4 @@ public class Register implements RequestInterface {
     }
 
 }
+*/

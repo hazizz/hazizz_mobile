@@ -1,7 +1,5 @@
 package com.indeed.hazizz.Activities;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -95,8 +93,9 @@ public class MainActivity extends AppCompatActivity
             }
         };
 
-        MiddleMan sendRegisterRequest = new MiddleMan(getBaseContext(), "me", null, responseHandler);
-        sendRegisterRequest.sendRequest2();
+        MiddleMan.newRequest(getBaseContext(), "me", null, responseHandler);
+       // MiddleMan(getBaseContext(), "me", null, responseHandler)
+       // sendRegisterRequest.sendRequest2();
     }
 
     @Override

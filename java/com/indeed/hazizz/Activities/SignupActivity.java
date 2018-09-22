@@ -2,10 +2,9 @@ package com.indeed.hazizz.Activities;
 
 import com.indeed.hazizz.Activities.LoginActivity;
 import com.indeed.hazizz.Communication.MiddleMan;
-import com.indeed.hazizz.Communication.MyCallback;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
-import com.indeed.hazizz.Communication.ResponseBodies;
 import com.indeed.hazizz.Communication.ResponseHandler;
+import com.indeed.hazizz.OfflineRunnable;
 import com.indeed.hazizz.R;
 
 import android.content.Intent;
@@ -33,8 +32,7 @@ public class SignupActivity extends AppCompatActivity {
 
     private TextView textView;
     private TextView toLoginActivity;
-
-    private MyCallback<ResponseBodies.Error> errorCallback;
+    // private MyCallback<ResponseBodies.Error> errorCallback;
 
     private static final String BASE_URL = "http://80.98.42.103:8080/";
     private ResponseHandler responseHandler = new ResponseHandler() {
@@ -161,7 +159,9 @@ public class SignupActivity extends AppCompatActivity {
         button_signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // signUp(); //parameter: JSONObject,
+                boolean asd = true;
+
+                // signUp(); //parameter: JSONObject,
                 if(usernameET.getText().toString().length() >= 4 || passwordET.getText().toString().length() >= 8) {
                     username = usernameET.getText().toString();
                     email = emailET.getText().toString();
@@ -181,6 +181,7 @@ public class SignupActivity extends AppCompatActivity {
                         public void onResponse(HashMap<String, Object> response) {
                             textView.append("\n errorCode: " + response.get("errorCode"));
                             Log.e("hey", "got here");
+                         //   MiddleMan.removeRequestFromQ(0);
                         }
 
                         @Override
@@ -192,16 +193,18 @@ public class SignupActivity extends AppCompatActivity {
                         public void onFailure() {
                             textView.append("\n your signup was successful");
                             switchToLoginActivity();
+                           // MiddleMan.removeRequestFromQ(0);
                         }
 
                         @Override
                         public void onErrorResponse(HashMap<String, Object> errorResponse) {
                             textView.append("\n errorCode: " + errorResponse.get("errorCode"));
                             Log.e("hey", "got here");
+                          //  MiddleMan.removeRequestFromQ(0);
                         }
                     };
-                    MiddleMan sendRegisterRequest = new MiddleMan(getBaseContext(),"register", requestBody, responseHandler);
-                    sendRegisterRequest.sendRequest();
+                    MiddleMan.newRequest(getBaseContext(),"register", requestBody, responseHandler);
+                   // sendRegisterRequest.sendRequest();
                 }else{
 
                 }
@@ -214,6 +217,11 @@ public class SignupActivity extends AppCompatActivity {
                 switchToLoginActivity();
             }
         });
+
+        Thread MessageThread2 = new Thread(new OfflineRunnable(getBaseContext()));
+
+        MessageThread2.start();
+
     }
 
     private void switchToLoginActivity(){

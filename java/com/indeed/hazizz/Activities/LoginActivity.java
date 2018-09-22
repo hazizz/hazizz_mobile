@@ -1,10 +1,9 @@
 package com.indeed.hazizz.Activities;
 
 import com.indeed.hazizz.Communication.MiddleMan;
-import com.indeed.hazizz.Communication.MyCallback;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
-import com.indeed.hazizz.Communication.ResponseBodies;
 import com.indeed.hazizz.Communication.ResponseHandler;
+import com.indeed.hazizz.MyLoop;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.SharedPrefs;
 
@@ -21,6 +20,8 @@ import android.widget.TextView;
 
 import java.util.HashMap;
 
+
+
 public class LoginActivity extends AppCompatActivity {
 
     private String username;
@@ -32,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button button_login;
     private TextView textView;
 
-    private MyCallback<ResponseBodies.Error> errorCallback;
+  //  private MyCallback<ResponseBodies.Error> errorCallback;
 
     private ResponseHandler responseHandler = new ResponseHandler() {
 
@@ -160,6 +161,19 @@ public class LoginActivity extends AppCompatActivity {
         button_login = (Button) findViewById(R.id.button_login);
 
         button_login.setOnClickListener(new View.OnClickListener() {
+            boolean asd = true;
+
+
+
+          /*  Runnable runnable = new Runnable() {
+                public void run() {
+
+                    while (asd) {
+                        Log.e("hey", "looping...");
+                    }
+                }
+            }; */
+
             @Override
             public void onClick(View v) {
                 if(usernameET.getText().toString().length() >= 4 || passwordET.getText().toString().length() >= 8) {
@@ -201,8 +215,8 @@ public class LoginActivity extends AppCompatActivity {
                             Log.e("hey", "got here onResponse");
                         }
                     };
-                    MiddleMan sendRegisterRequest = new MiddleMan(getBaseContext(), "login", requestBody, responseHandler);
-                    sendRegisterRequest.sendRequest();
+                    MiddleMan.newRequest(getBaseContext(), "login", requestBody, responseHandler);
+                   // sendRegisterRequest.sendRequest();
                 }else{
                     //TODO show that the username or password not long enough
                 }

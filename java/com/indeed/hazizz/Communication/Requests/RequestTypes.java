@@ -1,14 +1,11 @@
 package com.indeed.hazizz.Communication.Requests;
 
-//import com.indeed.hazizz.Communication.POJO.Requests.Register;
-import com.indeed.hazizz.Communication.POJO.Requests.RequestInterface;
-import com.indeed.hazizz.Communication.POJO.Response.Error;
 import com.indeed.hazizz.Communication.POJO.Response.POJOgroup;
 import com.indeed.hazizz.Communication.POJO.Response.POJOme;
-import com.indeed.hazizz.Communication.POJO.Response.ResponseInterface;
-import com.indeed.hazizz.Communication.SetupInterface;
+import com.indeed.hazizz.Communication.POJO.Response.POJOregister;
 
 import org.json.JSONObject;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +19,7 @@ import retrofit2.http.*;
 public interface RequestTypes{
 
     @POST("register")
-    Call<HashMap<String, Object>> register(
+    Call<POJOregister> register(
             @HeaderMap Map<String, String> headers,
             @Body HashMap<String, Object>  register
     );

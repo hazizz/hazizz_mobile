@@ -89,8 +89,8 @@ public class GroupFragment extends Fragment {
         }
         for(int groupID : gIDs) {
             Log.e("hey", "here 1");
-            MiddleMan sendRegisterRequest = new MiddleMan(this.getActivity(), "getGroup", null, responseHandler, groupID);
-            sendRegisterRequest.sendRequest2();
+            MiddleMan.newRequest(this.getActivity(), "getGroup", null, responseHandler, groupID);
+           // sendRegisterRequest.sendRequest2();
         }
        /* Context context = getActivity();
         SharedPreferences sharedPref = getActivity().getSharedPreferences(

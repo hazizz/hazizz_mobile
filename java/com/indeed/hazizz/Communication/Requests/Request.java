@@ -5,9 +5,11 @@ import android.util.Log;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOgroup;
 import com.indeed.hazizz.Communication.POJO.Response.POJOme;
+import com.indeed.hazizz.Communication.POJO.Response.POJOregister;
 import com.indeed.hazizz.Communication.RequestInterface1;
 import com.indeed.hazizz.SharedPrefs;
 
@@ -28,8 +30,6 @@ import retrofit2.http.Path;
 public class Request {
 
     public final String BASE_URL = "https://hazizz.duckdns.org:8080/";
-  //  private com.indeed.hazizz.Communication.POJO.Requests.RequestInterface pp;
-   // private ParentPOJO pp;
     public RequestInterface1 requestType;
 
     public  HashMap<String, Object> response1;
@@ -82,8 +82,6 @@ public class Request {
         //   requestType = new Login();
         aRequest = retrofit.create(RequestTypes.class);
     }
-
-
 
     public void findRequestType(String reqType){
         switch(reqType){
@@ -348,16 +346,14 @@ public class Request {
             Log.e("hey", "created");
         }
 
+        Call<POJOregister> call1;
+       // Call<HashMap<String, Object>>  call1;
+
         @Override
         public void setupCall() {
             HashMap<String, String> headerMap = new HashMap<String, String>();
             headerMap.put("Content-Type", "application/json");
-         /*   headerMap.put("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFt" +
-                    "ZSI6ImJlbGEiLCJzdWIiOiJBdXRoZW50aWNhdGlvbiB0b2tlbiIsImlhdCI6MT" +
-                    "UzNzA5MzcyNiwiZXhwIjoxNTM3MTgwMTI2fQ.NbQNNCyMEIsGwVPton8bruyreAzJKPs" +
-                    "x-fjYf3lMVQHYoqROAzuret19uyMd9NPM5Nc6437fLApLXPhMerx16g"); */
-          //  Log.e("hey", requestJson.toString());
-            call = aRequest.register(headerMap, request);
+            call1 = aRequest.register(headerMap, request);
         }
 
         public HashMap<String, Object>  getResponse() {
@@ -366,14 +362,14 @@ public class Request {
 
         @Override
         public void makeCall() {
-            call.enqueue(new Callback<HashMap<String, Object> >() {
+            call1.enqueue(new Callback<POJOregister>() {
                 @Override
-                public void onResponse(Call<HashMap<String, Object>> call, Response<HashMap<String, Object>> response) {
+                public void onResponse(Call<POJOregister> call, Response<POJOregister> response) {
                     Log.e("hey", "gotResponse");
                     Log.e("hey", response.raw().toString());
 
                     if(response.body() != null){ // response != null
-                        Log.e("hey", (String)response.body().toString());
+                 /*       Log.e("hey", (String)response.body().toString());
                         if(response.body().containsKey("errorCode")) {
                             cOnResponse.onErrorResponse(response.body());
                             Log.e("hey", "2");
@@ -381,7 +377,7 @@ public class Request {
                             response1 = response.body();
                             cOnResponse.onResponse(response1);
                             Log.e("hey", "3");
-                        }
+                        } */
                     }else {
                         try {
                             String strError = response.errorBody().string();
@@ -401,16 +397,12 @@ public class Request {
                             e.printStackTrace();
                         }
                     }
-                    // Log.e("hey", "errorCode : " + response.errorBody().get("errorCode"));
-
-                    //   Log.e("hey", "errorCode is : " + response.body().getErrorCode());
-                    // responseHandler.checkErrorCode(response.body().getErrorCode());
-                    // responseHandler.checkHttpStatus(response.code());
-
+                    removeFromQ(0);
                 }
                 @Override
-                public void onFailure(Call<HashMap<String, Object>> call, Throwable t) {
+                public void onFailure(Call<POJOregister> call, Throwable t) {
                     cOnResponse.onFailure();
+                    removeFromQ(0);
                 }
             });
             // TODO  requestType.get("key");
@@ -468,15 +460,12 @@ public class Request {
                             e.printStackTrace();
                         }
                     }
-                    // Log.e("hey", "errorCode : " + response.errorBody().get("errorCode"));
-
-                    //   Log.e("hey", "errorCode is : " + response.body().getErrorCode());
-                    // responseHandler.checkErrorCode(response.body().getErrorCode());
-                    // responseHandler.checkHttpStatus(response.code());
+                    removeFromQ(0);
                 }
                 @Override
                 public void onFailure(Call<POJOme> call, Throwable t) {
                     cOnResponse.onFailure();
+                    removeFromQ(0);
                 }
             });
             // TODO  requestType.get("key");
@@ -538,6 +527,7 @@ public class Request {
                             e.printStackTrace();
                         }
                     }
+                    removeFromQ(0);
                     // Log.e("hey", "errorCode : " + response.errorBody().get("errorCode"));
 
                     //   Log.e("hey", "errorCode is : " + response.body().getErrorCode());
@@ -551,5 +541,10 @@ public class Request {
             });
             // TODO  requestType.get("key");
         }
+    }
+
+    private void removeFromQ(int i){
+       // MiddleMan.removeRequestFromQ(i);
+
     }
 }
