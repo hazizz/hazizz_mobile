@@ -1,5 +1,6 @@
 package com.indeed.hazizz.Communication.Requests;
 
+import com.indeed.hazizz.Communication.POJO.Response.POJOcreateTask;
 import com.indeed.hazizz.Communication.POJO.Response.POJOgroup;
 import com.indeed.hazizz.Communication.POJO.Response.POJOme;
 import com.indeed.hazizz.Communication.POJO.Response.POJOregister;
@@ -45,6 +46,12 @@ public interface RequestTypes{
 
     @GET("groups/{id}")
     Call<POJOgroup> getGroup(
+            @Path("id") String id,
+            @HeaderMap Map<String, String> headers
+    );
+
+    @POST("groups/{id}/tasks")
+    Call<POJOcreateTask> createTask(
             @Path("id") String id,
             @HeaderMap Map<String, String> headers
     );

@@ -3,7 +3,6 @@ package com.indeed.hazizz.Activities;
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.ResponseHandler;
-import com.indeed.hazizz.MyLoop;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.SharedPrefs;
 
@@ -161,19 +160,6 @@ public class LoginActivity extends AppCompatActivity {
         button_login = (Button) findViewById(R.id.button_login);
 
         button_login.setOnClickListener(new View.OnClickListener() {
-            boolean asd = true;
-
-
-
-          /*  Runnable runnable = new Runnable() {
-                public void run() {
-
-                    while (asd) {
-                        Log.e("hey", "looping...");
-                    }
-                }
-            }; */
-
             @Override
             public void onClick(View v) {
                 if(usernameET.getText().toString().length() >= 4 || passwordET.getText().toString().length() >= 8) {
@@ -189,7 +175,6 @@ public class LoginActivity extends AppCompatActivity {
 
                         @Override
                         public void onResponse(HashMap<String, Object> response) {
-                         //   textView.append("\n errorCode: " + response.get("errorCode"));
                             Log.e("hey", "got here onResponse");
                             SharedPrefs.save(getBaseContext(), "token", "token", (String) response.get("token"));
                             textView.append("\n" + SharedPrefs.getString(getBaseContext(), "token", "token"));
@@ -197,10 +182,8 @@ public class LoginActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onResponse1(Object response) {
-
+                        public void onPOJOResponse(Object response) {
                         }
-
                         @Override
                         public void onFailure() {
                             textView.append("\n  no response");
@@ -216,7 +199,6 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     };
                     MiddleMan.newRequest(getBaseContext(), "login", requestBody, responseHandler);
-                   // sendRegisterRequest.sendRequest();
                 }else{
                     //TODO show that the username or password not long enough
                 }
@@ -226,7 +208,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private void switchToMain(){
         Intent i = new Intent(this, MainActivity.class);
-      //  i.putExtra("username", username);
         startActivity(i);
     }
 }

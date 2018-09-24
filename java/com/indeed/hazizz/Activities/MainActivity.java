@@ -16,6 +16,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.indeed.hazizz.Communication.MiddleMan;
@@ -24,6 +26,8 @@ import com.indeed.hazizz.Communication.POJO.Response.POJOgroup;
 import com.indeed.hazizz.Communication.POJO.Response.POJOme;
 import com.indeed.hazizz.Fragments.ChatFragment;
 import com.indeed.hazizz.Fragments.GroupFragment;
+import com.indeed.hazizz.Listviews.GroupList.CustomAdapter;
+import com.indeed.hazizz.Listviews.GroupList.GroupItem;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.SharedPrefs;
 
@@ -39,12 +43,13 @@ public class MainActivity extends AppCompatActivity
 
     private ArrayList<Integer> groupIDs;
 
+    private List<GroupItem> listGroup;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-     //   setSupportActionBar(toolbar);
 
         groupIDs = new ArrayList<Integer>();
 
@@ -68,11 +73,10 @@ public class MainActivity extends AppCompatActivity
         CustomResponseHandler responseHandler = new CustomResponseHandler() {
             @Override
             public void onResponse(HashMap<String, Object> response) {
-
             }
 
             @Override
-            public void onResponse1(Object response) {
+            public void onPOJOResponse(Object response) {
                 navUsername.setText(((POJOme) response).getUsername());
                 navEmail.setText(((POJOme) response).getEmailAddress());
 
@@ -94,8 +98,39 @@ public class MainActivity extends AppCompatActivity
         };
 
         MiddleMan.newRequest(getBaseContext(), "me", null, responseHandler);
-       // MiddleMan(getBaseContext(), "me", null, responseHandler)
-       // sendRegisterRequest.sendRequest2();
+
+     /*   ListView name = (ListView)findViewById(R.id.listView1);
+
+        listGroup = new ArrayList<>();
+
+        for(int i = 0; i < 10; i++) {
+            listGroup.add(new GroupItem(R.drawable.ic_launcher_background, "a Group Name"));
+        }
+
+        ListView listView = (ListView)findViewById(R.id.listView1);
+
+        CustomAdapter adapter = new CustomAdapter(this, R.layout.list_item, listGroup);
+
+        if(adapter == null){
+            Log.e("hey", "adapter is null");
+
+        }
+        if(listView == null){
+            Log.e("hey", "listView is null");
+        }
+
+        Log.e("hey", "all set0");
+
+        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.e("hey", "clicked");
+            }
+        });
+        Log.e("hey", "all set"); */
+
     }
 
     @Override
@@ -137,8 +172,6 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_groups) {
-
-           // getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new GroupFragment()).commit();
             // TODO send groupIDs to fragment
             Bundle bundle = new Bundle();
             bundle.putIntegerArrayList("groupIDs", groupIDs);

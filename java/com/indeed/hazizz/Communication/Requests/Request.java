@@ -39,7 +39,6 @@ public class Request {
 
     Call<HashMap<String, Object>>  call;
     Call<ResponseBody>  call2;
-   // Call<Object>  call1;
     RequestTypes aRequest;
 
     CustomResponseHandler cOnResponse;
@@ -61,7 +60,6 @@ public class Request {
                 .build();
 
         findRequestType(reqType);
-     //   requestType = new Login();
         aRequest = retrofit.create(RequestTypes.class);
     }
 
@@ -79,7 +77,6 @@ public class Request {
                 .build();
 
         findRequestType(reqType);
-        //   requestType = new Login();
         aRequest = retrofit.create(RequestTypes.class);
     }
 
@@ -101,16 +98,11 @@ public class Request {
     }
 
     public void makeCall(){
-      //  try {
             requestType.makeCall();
             Log.e("hey", "its fine");
-       /* }catch(Exception e){
-            Log.e("hey", "got error here");
-            makeCall1();
-        } */
     }
 
-    public void makeCall1(){
+  /*  public void makeCall1(){
         call.enqueue(new Callback<HashMap<String, Object> >() {
             @Override
             public void onResponse(Call<HashMap<String, Object>> call, Response<HashMap<String, Object>> response) {
@@ -146,12 +138,6 @@ public class Request {
                         e.printStackTrace();
                     }
                 }
-                // Log.e("hey", "errorCode : " + response.errorBody().get("errorCode"));
-
-             //   Log.e("hey", "errorCode is : " + response.body().getErrorCode());
-                // responseHandler.checkErrorCode(response.body().getErrorCode());
-                // responseHandler.checkHttpStatus(response.code());
-
             }
             @Override
             public void onFailure(Call<HashMap<String, Object>> call, Throwable t) {
@@ -159,9 +145,9 @@ public class Request {
             }
         });
       // TODO  requestType.get("key");
-    }
+    } */
 
-    public void makeCall2(){
+ /*   public void makeCall2(){
         call2.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -174,7 +160,6 @@ public class Request {
                     e.printStackTrace();
                     Log.e("hey", "no success");
                 }
-
 
                 Log.e("hey", "gotResponse");
                 Log.e("hey", response.raw().toString());
@@ -201,56 +186,6 @@ public class Request {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-           /*     try {
-                 //   Log.e("hey", "emailAddress: " + response.body().get("emailAddress"));
-                } catch (JSONException e) {
-           //         e.printStackTrace();
-                    Log.e("hey", "couldnt get emailAddress");
-                } */
-             /*   try {
-                    Log.e("hey", response.errorBody().string());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Log.e("hey","error");
-                }*/
-
-             /*   if(response.body() != null){ // response != null
-                    Log.e("hey", (String)response.body().toString());
-                    if(response.body().containsKey("errorCode")) {
-                        cOnResponse.onErrorResponse(response.body());
-                        Log.e("hey", "2");
-                    }else{
-                        response1 = response.body();
-                        cOnResponse.onResponse(response1);
-                        Log.e("hey", "3");
-                    }
-                }else {
-                    try {
-                        String strError = response.errorBody().string();
-                        JSONObject errorJson = new JSONObject(strError);
-                        HashMap<String, Object> errorResponse = new HashMap<String, Object>();
-
-                        errorResponse.put("time", String.valueOf(errorJson.get("time")));
-                        errorResponse.put("errorCode", String.valueOf(errorJson.get("errorCode")));
-                        errorResponse.put("title", String.valueOf(errorJson.get("title")));
-                        errorResponse.put("message", String.valueOf(errorJson.get("message")));
-
-                        cOnResponse.onErrorResponse(errorResponse);
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                // Log.e("hey", "errorCode : " + response.errorBody().get("errorCode"));
-
-                //   Log.e("hey", "errorCode is : " + response.body().getErrorCode());
-                // responseHandler.checkErrorCode(response.body().getErrorCode());
-                // responseHandler.checkHttpStatus(response.code());
-                */
-
             }
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
@@ -258,7 +193,7 @@ public class Request {
             }
         });
         // TODO  requestType.get("key");
-    }
+    } */
 
     public HashMap<String, Object>  getResponse(){
         return response1;
@@ -341,13 +276,11 @@ public class Request {
     }
 
     public class Register implements RequestInterface1 {
-     //   public String name = "register";
         Register(){
             Log.e("hey", "created");
         }
 
         Call<POJOregister> call1;
-       // Call<HashMap<String, Object>>  call1;
 
         @Override
         public void setupCall() {
@@ -397,12 +330,10 @@ public class Request {
                             e.printStackTrace();
                         }
                     }
-                    removeFromQ(0);
                 }
                 @Override
                 public void onFailure(Call<POJOregister> call, Throwable t) {
                     cOnResponse.onFailure();
-                    removeFromQ(0);
                 }
             });
             // TODO  requestType.get("key");
@@ -438,7 +369,7 @@ public class Request {
                         Log.e("hey", (String)response.body().toString());
                         Log.e("hey", "2");
 
-                        cOnResponse.onResponse1(response.body());
+                        cOnResponse.onPOJOResponse(response.body());
                         Log.e("hey", "3");
                     }
                     else if(false){
@@ -460,12 +391,10 @@ public class Request {
                             e.printStackTrace();
                         }
                     }
-                    removeFromQ(0);
                 }
                 @Override
                 public void onFailure(Call<POJOme> call, Throwable t) {
                     cOnResponse.onFailure();
-                    removeFromQ(0);
                 }
             });
             // TODO  requestType.get("key");
@@ -505,7 +434,7 @@ public class Request {
                         Log.e("hey", (String)response.body().toString());
                         Log.e("hey", "2");
 
-                        cOnResponse.onResponse1(response.body());
+                        cOnResponse.onPOJOResponse(response.body());
                         Log.e("hey", "3");
                     }
                     else if(false){
@@ -527,12 +456,6 @@ public class Request {
                             e.printStackTrace();
                         }
                     }
-                    removeFromQ(0);
-                    // Log.e("hey", "errorCode : " + response.errorBody().get("errorCode"));
-
-                    //   Log.e("hey", "errorCode is : " + response.body().getErrorCode());
-                    // responseHandler.checkErrorCode(response.body().getErrorCode());
-                    // responseHandler.checkHttpStatus(response.code());
                 }
                 @Override
                 public void onFailure(Call<POJOgroup> call, Throwable t) {
@@ -543,8 +466,68 @@ public class Request {
         }
     }
 
-    private void removeFromQ(int i){
-       // MiddleMan.removeRequestFromQ(i);
+    public class CreateTask implements RequestInterface1 {
+        //   public String name = "register";
+        CreateTask(){
+            Log.e("hey", "created CreateTask object");
+        }
 
+        Call<POJOgroup> call1;
+
+        @Override
+        public void setupCall() {
+            HashMap<String, String> headerMap = new HashMap<String, String>();
+            headerMap.put("Authorization", "Bearer " + SharedPrefs.getString(context, "token", "token"));//SharedPrefs.getString(context, "token", "token"));
+
+            HashMap<String, String> pathMap = new HashMap<String, String>();
+            pathMap.put("id", Integer.toString(groupID));
+            call1 = aRequest.getGroup(Integer.toString(groupID), headerMap);
+        }
+        public HashMap<String, Object>  getResponse() {
+            return response1;
+        }
+
+        @Override
+        public void makeCall() {
+            call1.enqueue(new Callback<POJOgroup>() {
+                @Override
+                public void onResponse(Call<POJOgroup> call, Response<POJOgroup> response) {
+                    Log.e("hey", "gotResponse");
+                    Log.e("hey", response.raw().toString());
+
+                    if(response.body() != null){ // response != null
+                        Log.e("hey", (String)response.body().toString());
+                        Log.e("hey", "2");
+
+                        cOnResponse.onPOJOResponse(response.body());
+                        Log.e("hey", "3");
+                    }
+                    else if(false){
+                        try {
+                            String strError = response.errorBody().string();
+                            JSONObject errorJson = new JSONObject(strError);
+                            HashMap<String, Object> errorResponse = new HashMap<String, Object>();
+
+                            errorResponse.put("time", String.valueOf(errorJson.get("time")));
+                            errorResponse.put("errorCode", String.valueOf(errorJson.get("errorCode")));
+                            errorResponse.put("title", String.valueOf(errorJson.get("title")));
+                            errorResponse.put("message", String.valueOf(errorJson.get("message")));
+
+                            cOnResponse.onErrorResponse(errorResponse);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                @Override
+                public void onFailure(Call<POJOgroup> call, Throwable t) {
+                    cOnResponse.onFailure();
+                }
+            });
+            // TODO  requestType.get("key");
+        }
     }
 }

@@ -4,8 +4,8 @@ import com.indeed.hazizz.Activities.LoginActivity;
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.ResponseHandler;
-import com.indeed.hazizz.OfflineRunnable;
 import com.indeed.hazizz.R;
+import com.indeed.hazizz.RequestSenderRunnable;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -17,7 +17,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.HashMap;
-
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -32,9 +31,7 @@ public class SignupActivity extends AppCompatActivity {
 
     private TextView textView;
     private TextView toLoginActivity;
-    // private MyCallback<ResponseBodies.Error> errorCallback;
 
-    private static final String BASE_URL = "http://80.98.42.103:8080/";
     private ResponseHandler responseHandler = new ResponseHandler() {
 
         @Override
@@ -160,15 +157,11 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 boolean asd = true;
-
-                // signUp(); //parameter: JSONObject,
                 if(usernameET.getText().toString().length() >= 4 || passwordET.getText().toString().length() >= 8) {
                     username = usernameET.getText().toString();
                     email = emailET.getText().toString();
                     password = passwordET.getText().toString();
-                    //  RequestBodies.Register user = new RequestBodies.Register(username, password, email);
                     textView.append("username: " + username + "\n email: " + email + "\n password: " + password);
-                    // textView.append(REQUESTS.ERRORS.TIME.value());
                     HashMap<String, Object> requestBody = new HashMap<>();
 
                     requestBody.put("username", username);
@@ -176,35 +169,26 @@ public class SignupActivity extends AppCompatActivity {
                     requestBody.put("emailAddress", email);
 
                     CustomResponseHandler responseHandler = new CustomResponseHandler() {
-
                         @Override
                         public void onResponse(HashMap<String, Object> response) {
                             textView.append("\n errorCode: " + response.get("errorCode"));
                             Log.e("hey", "got here");
-                         //   MiddleMan.removeRequestFromQ(0);
                         }
-
                         @Override
-                        public void onResponse1(Object response) {
-
+                        public void onPOJOResponse(Object response) {
                         }
-
                         @Override
                         public void onFailure() {
                             textView.append("\n your signup was successful");
                             switchToLoginActivity();
-                           // MiddleMan.removeRequestFromQ(0);
                         }
-
                         @Override
                         public void onErrorResponse(HashMap<String, Object> errorResponse) {
                             textView.append("\n errorCode: " + errorResponse.get("errorCode"));
                             Log.e("hey", "got here");
-                          //  MiddleMan.removeRequestFromQ(0);
                         }
                     };
                     MiddleMan.newRequest(getBaseContext(),"register", requestBody, responseHandler);
-                   // sendRegisterRequest.sendRequest();
                 }else{
 
                 }
@@ -218,12 +202,9 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
 
-        Thread MessageThread2 = new Thread(new OfflineRunnable(getBaseContext()));
-
-        MessageThread2.start();
-
+        Thread SenderThread = new Thread(new RequestSenderRunnable(getBaseContext()));
+        SenderThread.start();
     }
-
     private void switchToLoginActivity(){
         Intent i = new Intent(this, LoginActivity.class);
         startActivity(i);

@@ -1,6 +1,6 @@
 package com.indeed.hazizz.Communication;
 
-        import android.content.Context;
+import android.content.Context;
         import android.os.Looper;
         import android.os.Message;
         import android.util.Log;
@@ -16,14 +16,6 @@ package com.indeed.hazizz.Communication;
 public abstract class MiddleMan{
 
     public static ArrayList<Request> requestQueue = new ArrayList<>();
-    //  private Request newRequest;
-
-   /* public MiddleMan(){
-        requestList = new ArrayList<Request>();
-    } */
-
- /*   public MiddleMan(Context baseContext, String me, Object o, CustomResponseHandler responseHandler) {
-    } */
 
     public MiddleMan(Context context, String requestType, HashMap<String, Object>  pp, CustomResponseHandler cOnResponse, int groupID) {
 
@@ -33,16 +25,6 @@ public abstract class MiddleMan{
     public MiddleMan(Context context, String requestType, HashMap<String, Object>  pp, CustomResponseHandler cOnResponse) {
         Request newRequest = new Request(context, requestType, pp, cOnResponse);
         requestQueue.add(newRequest);
-    }
-
-    public void sendRequest() {
-       /* newRequest.requestType.setupCall();
-        newRequest.makeCall(); */
-    }
-
-    public void sendRequest2() {
-       /* newRequest.requestType.setupCall();
-        newRequest.requestType.makeCall(); */
     }
 
     public static void newRequest(Context context, String requestType, HashMap<String, Object>  pp, CustomResponseHandler cOnResponse) {
@@ -58,7 +40,6 @@ public abstract class MiddleMan{
     public static void sendRequestsFromQ(){
         int size = requestQueue.size()-1;
         Log.e("hey", "q1: " + size);
-        // for(Request r : requestQueue){
         for(int i = 0; i <= size; i++){
             requestQueue.get(0).requestType.setupCall();
             requestQueue.get(0).requestType.makeCall();
