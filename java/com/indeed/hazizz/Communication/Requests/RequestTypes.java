@@ -1,9 +1,11 @@
 package com.indeed.hazizz.Communication.Requests;
 
 import com.indeed.hazizz.Communication.POJO.Response.POJOcreateTask;
+import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.POJO.Response.POJOgroup;
 import com.indeed.hazizz.Communication.POJO.Response.POJOme;
 import com.indeed.hazizz.Communication.POJO.Response.POJOregister;
+import com.indeed.hazizz.Communication.POJO.Response.POJOsubjects;
 
 import org.json.JSONObject;
 
@@ -50,8 +52,15 @@ public interface RequestTypes{
             @HeaderMap Map<String, String> headers
     );
 
-    @POST("groups/{id}/tasks")
-    Call<POJOcreateTask> createTask(
+    @POST("groups/2/tasks")
+    Call<POJOerror> createTask(
+          //  @Path("id") String id,
+            @HeaderMap Map<String, String> headers,
+            @Body HashMap<String, Object> taskBody
+    );
+
+    @GET("groups/{id}/subjectsasd")
+    Call<ResponseBody> getSubjects(
             @Path("id") String id,
             @HeaderMap Map<String, String> headers
     );

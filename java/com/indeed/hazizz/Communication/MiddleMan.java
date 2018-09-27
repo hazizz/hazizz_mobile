@@ -27,6 +27,11 @@ public abstract class MiddleMan{
         requestQueue.add(newRequest);
     }
 
+    public static void newRequest(Context context, String requestType, HashMap<String, Object>  pp, CustomResponseHandler cOnResponse, HashMap<String, Object> vars) {
+        Request newRequest = new Request(context, requestType, pp, cOnResponse, vars);
+        requestQueue.add(newRequest);
+    }
+
     public static void newRequest(Context context, String requestType, HashMap<String, Object>  pp, CustomResponseHandler cOnResponse) {
         Request newRequest = new Request(context, requestType, pp, cOnResponse);
         requestQueue.add(newRequest);

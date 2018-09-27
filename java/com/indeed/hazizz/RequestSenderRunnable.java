@@ -24,7 +24,6 @@ public class RequestSenderRunnable implements Runnable{
             ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
             if(activeNetwork != null && activeNetwork.isConnectedOrConnecting()){
-                Log.e("hey", "found connection");
                 if (!MiddleMan.requestQueue.isEmpty()) {
                    // try{ Thread.sleep(500); }catch(InterruptedException e){ }
                     MiddleMan.sendRequestsFromQ();
