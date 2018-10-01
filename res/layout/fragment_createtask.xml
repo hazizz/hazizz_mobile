@@ -4,22 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@android:color/white"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/taskType"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
-            android:hint="taskType"
-            android:inputType="text"
-            android:maxLines="1" />
+        <Spinner
+            android:id="@+id/taskType_spinner"
+            android:layout_width="217dp"
+            android:layout_height="52dp"
+            android:layout_gravity="center_horizontal"/>
+
+        <Spinner
+            android:id="@+id/subject_spinner"
+            android:layout_width="217dp"
+            android:layout_height="52dp"
+            android:layout_gravity="center_horizontal"/>
+
 
         <EditText
             android:id="@+id/taskTitle"

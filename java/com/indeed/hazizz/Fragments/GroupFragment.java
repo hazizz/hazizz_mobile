@@ -79,7 +79,9 @@ public class GroupFragment extends Fragment {
         int size = gIDs.size() - 1;
         for (int i = 0; i <= size; i++) {
             Log.e("hey", "here 1");
-            MiddleMan.newRequest(this.getActivity(), "getGroup", null, responseHandler, gIDs.get(i));
+            HashMap<String, Object> vars = new HashMap<>();
+            vars.put("id", gIDs.get(i));
+            MiddleMan.newRequest(this.getActivity(), "getGroup", null, responseHandler, vars);
         }
     }
 

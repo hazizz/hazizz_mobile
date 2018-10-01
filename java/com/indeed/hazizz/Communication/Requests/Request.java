@@ -12,7 +12,8 @@ import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.POJO.Response.POJOgroup;
 import com.indeed.hazizz.Communication.POJO.Response.POJOme;
 import com.indeed.hazizz.Communication.POJO.Response.POJOregister;
-import com.indeed.hazizz.Communication.POJO.Response.POJOsubjects;
+import com.indeed.hazizz.Communication.POJO.Response.POJOsubject;
+import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
 import com.indeed.hazizz.Communication.RequestInterface1;
 import com.indeed.hazizz.SharedPrefs;
 
@@ -20,7 +21,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -68,7 +71,7 @@ public class Request {
         aRequest = retrofit.create(RequestTypes.class);
     }
 
-    public Request(Context context, String reqType, HashMap<String, Object>  body, CustomResponseHandler cOnResponse){
+  /*  public Request(Context context, String reqType, HashMap<String, Object>  body, CustomResponseHandler cOnResponse){
         this.cOnResponse = cOnResponse;
         this.body = body;
         this.context = context;
@@ -82,9 +85,9 @@ public class Request {
 
         findRequestType(reqType);
         aRequest = retrofit.create(RequestTypes.class);
-    }
+    } */
 
-    public Request(Context context, String reqType, HashMap<String, Object>  body, CustomResponseHandler cOnResponse, int groupID){
+  /*  public Request(Context context, String reqType, HashMap<String, Object>  body, CustomResponseHandler cOnResponse, int groupID){
         this.cOnResponse = cOnResponse;
         this.body = body;
         this.context = context;
@@ -99,7 +102,7 @@ public class Request {
 
         findRequestType(reqType);
         aRequest = retrofit.create(RequestTypes.class);
-    }
+    } */
 
     public void findRequestType(String reqType){
         switch(reqType){
@@ -120,6 +123,9 @@ public class Request {
                 break;
             case "getSubjects":
                 requestType = new GetSubjects();
+                break;
+            case "getTasks":
+                requestType = new GetTasks();
                 break;
         }
     }
@@ -159,7 +165,7 @@ public class Request {
                     Log.e("hey", "gotResponse");
                     Log.e("hey", response.raw().toString());
 
-                    if(response.body() != null){ // response != null
+                    if(response.isSuccessful()){ // response != null
                         Log.e("hey", (String)response.body().toString());
                         if(response.body().containsKey("errorCode")) {
                             cOnResponse.onErrorResponse(response.body());
@@ -230,7 +236,7 @@ public class Request {
                     Log.e("hey", "gotResponse");
                     Log.e("hey", response.raw().toString());
 
-                    if(response.body() != null){ // response != null
+                    if(response.isSuccessful()){ // response != null
                  /*       Log.e("hey", (String)response.body().toString());
                         if(response.body().containsKey("errorCode")) {
                             cOnResponse.onErrorResponse(response.body());
@@ -294,7 +300,7 @@ public class Request {
                     Log.e("hey", "gotResponse");
                     Log.e("hey", response.raw().toString());
 
-                    if(response.body() != null){ // response != null
+                    if(response.isSuccessful()){ // response != null
                         Log.e("hey", (String)response.body().toString());
                         Log.e("hey", "2");
 
@@ -343,9 +349,9 @@ public class Request {
             HashMap<String, String> headerMap = new HashMap<String, String>();
             headerMap.put("Authorization", "Bearer " + SharedPrefs.getString(context, "token", "token"));//SharedPrefs.getString(context, "token", "token"));
 
-            HashMap<String, String> pathMap = new HashMap<String, String>();
-            pathMap.put("id", Integer.toString(groupID));
-            call1 = aRequest.getGroup(Integer.toString(groupID), headerMap);
+           // HashMap<String, String> pathMap = new HashMap<String, String>();
+           // pathMap.put("id", vars.get("id").toString());
+            call1 = aRequest.getGroup(vars.get("id").toString(), headerMap);
         }
         public HashMap<String, Object>  getResponse() {
             return response1;
@@ -359,7 +365,7 @@ public class Request {
                     Log.e("hey", "gotResponse");
                     Log.e("hey", response.raw().toString());
 
-                    if(response.body() != null){ // response != null
+                    if(response.isSuccessful()){ // response != null
                         Log.e("hey", (String)response.body().toString());
                         Log.e("hey", "2");
 
@@ -395,43 +401,6 @@ public class Request {
         }
     }
 
- /*   public class CreateTask1 implements RequestInterface1{
-
-        Call<Void> call1;
-
-        CreateTask1(){
-            Log.e("hey", "created CreateTask object");
-        }
-
-        @Override
-        public void setupCall() {
-            HashMap<String, String> headerMap = new HashMap<String, String>();
-          //  headerMap.put("Content-Type", "application/json");
-            headerMap.put("Authorization", "Bearer " + SharedPrefs.getString(context, "token", "token"));//SharedPrefs.getString(context, "token", "token"));
-            call1 = aRequest.createTask( headerMap, body); //Integer.toString(groupID)
-        }
-
-        @Override
-        public Object getResponse() {
-            return null;
-        }
-
-        @Override
-        public void makeCall() {
-            call1.enqueue(new Callback<ResponseBody>() {
-                @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    Log.e("hey", "wow a response");
-                }
-
-                @Override
-                public void onFailure(Call<Void> call, Throwable t) {
-                    Log.e("hey", "wow onfailure");
-                }
-            });
-        }
-    } */
-
     public class CreateTask implements RequestInterface1 {
         //   public String name = "register";
         CreateTask(){
@@ -445,7 +414,7 @@ public class Request {
             HashMap<String, String> headerMap = new HashMap<String, String>();
             headerMap.put("Content-Type", "application/json");
             headerMap.put("Authorization", "Bearer " + SharedPrefs.getString(context, "token", "token"));//SharedPrefs.getString(context, "token", "token"));
-            call1 = aRequest.createTask(headerMap, body); //Integer.toString(groupID)
+            call1 = aRequest.createTask(vars.get("id").toString(), headerMap, body); //Integer.toString(groupID)
         }
         public HashMap<String, Object>  getResponse() {
             return response1;
@@ -462,7 +431,7 @@ public class Request {
                     Log.e("hey", "title: " +response.body().getTitle());
                     Log.e("hey", "message: " + response.body().getMessage());
 
-                    if(response.body() != null){ // response != null
+                    if(response.isSuccessful()){ // response != null
                         Log.e("hey", (String)response.body().toString());
                         Log.e("hey", "2");
 
@@ -504,12 +473,12 @@ public class Request {
             Log.e("hey", "created Me object");
         }
 
-        Call<ResponseBody> call1;
+        Call<List<POJOsubject>> call1;
         @Override
         public void setupCall() {
             HashMap<String, String> headerMap = new HashMap<String, String>();
             headerMap.put("Authorization", "Bearer " + SharedPrefs.getString(context, "token", "token"));//SharedPrefs.getString(context, "token", "token"));
-            call1 = aRequest.getSubjects("2", headerMap);
+            call1 = aRequest.getSubjects("2", headerMap); // vars.get("id").toString()
         }
         public HashMap<String, Object>  getResponse() {
             return response1;
@@ -517,13 +486,13 @@ public class Request {
 
         @Override
         public void makeCall() {
-            call1.enqueue(new Callback<ResponseBody>() {
+            call1.enqueue(new Callback<List<POJOsubject>>() {
                 @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                public void onResponse(Call<List<POJOsubject>> call, Response<List<POJOsubject>> response) {
                     Log.e("hey", "gotResponse");
                     Log.e("hey", response.raw().toString());
 
-                    if(response.body() != null){ // response != null
+                    if(response.isSuccessful()){ // response != null
                         Log.e("hey", (String)response.body().toString());
                         Log.e("hey", "2");
 
@@ -551,7 +520,7 @@ public class Request {
                     }
                 }
                 @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                public void onFailure(Call<List<POJOsubject>> call, Throwable t) {
                     cOnResponse.onFailure();
                 }
             });
@@ -559,4 +528,97 @@ public class Request {
         }
     }
 
+    public class GetTasks implements RequestInterface1 {
+        //   public String name = "register";
+        GetTasks(){
+            Log.e("hey", "created GetTasks object");
+        }
+
+        Call<ArrayList<POJOgetTask>> call1;
+
+        @Override
+        public void setupCall() {
+            HashMap<String, String> headerMap = new HashMap<String, String>();
+            headerMap.put("Authorization", "Bearer " + SharedPrefs.getString(context, "token", "token"));//SharedPrefs.getString(context, "token", "token"));
+            call1 = aRequest.getTasks(vars.get("id").toString(), headerMap);
+        }
+        public HashMap<String, Object>  getResponse() {
+            return response1;
+        }
+
+        @Override
+        public void makeCall() {
+            call1.enqueue(new Callback<ArrayList<POJOgetTask>>() {
+                @Override
+                public void onResponse(Call<ArrayList<POJOgetTask>> call, Response<ArrayList<POJOgetTask>> response) {
+                    Log.e("hey", "gotResponse");
+                    Log.e("hey", response.raw().toString());
+
+                    if(response.isSuccessful()){ // response != null response.isSuccessful()
+                        Log.e("hey", (String)response.body().toString());
+                        Log.e("hey", "2");
+
+                        cOnResponse.onPOJOResponse(response.body());
+                        Log.e("hey", "3");
+                    }
+                    else if(response.errorBody() != null){
+                        try {
+                            String strError = response.errorBody().string();
+                            JSONObject errorJson = new JSONObject(strError);
+                            HashMap<String, Object> errorResponse = new HashMap<String, Object>();
+
+                            errorResponse.put("time", String.valueOf(errorJson.get("time")));
+                            errorResponse.put("errorCode", String.valueOf(errorJson.get("errorCode")));
+                            errorResponse.put("title", String.valueOf(errorJson.get("title")));
+                            errorResponse.put("message", String.valueOf(errorJson.get("message")));
+
+                            cOnResponse.onErrorResponse(errorResponse);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                @Override
+                public void onFailure(Call<ArrayList<POJOgetTask>> call, Throwable t) {
+                    cOnResponse.onFailure();
+                }
+            });
+            // TODO  requestType.get("key");
+        }
+    }
 }
+
+//TODO THIS WILL SAVE YOUR LIFE!!!
+/*
+Call.enqueue(new Callback<RegistrationResponse>() {
+@Override
+public void onResponse(Call<RegistrationResponse> call, Response<RegistrationResponse> response)
+        {
+        if (response.isSuccessful()) {
+        // do your code here
+        } else if (response.code() == 400) {
+        Converter<ResponseBody, ApiError> converter =
+        ApiClient.retrofit.responseBodyConverter(ApiError.class, new Annotation[0]);
+
+        ApiError error;
+
+        try {
+        error = converter.convert(response.errorBody());
+        Log.e("error message", error.getErrorMessage());
+        Toast.makeText(context, error.getErrorMessage(), Toast.LENGTH_LONG).show();
+        } catch (IOException e) {
+        e.printStackTrace();
+        }
+        }
+        }
+
+@Override
+public void onFailure(Call<RegistrationResponse> call, Throwable t) {
+        //do your failure handling code here
+        }
+        }
+        */
+//TODO THIS WILL SAVE YOUR LIFE!!!

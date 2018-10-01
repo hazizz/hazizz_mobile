@@ -5,12 +5,18 @@ import lombok.Data;
 @Data
 public class POJOsubject {
 
-    private String id;
+    private long id;
+
     private String name;
 
-    POJOsubject(String id, String name){
+
+    public POJOsubject(long id, String name) {
         this.id = id;
         this.name = name;
     }
 
+    @Override
+    public String toString(){
+        return name;
+    }
 }

@@ -5,16 +5,20 @@ import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.POJO.Response.POJOgroup;
 import com.indeed.hazizz.Communication.POJO.Response.POJOme;
 import com.indeed.hazizz.Communication.POJO.Response.POJOregister;
-import com.indeed.hazizz.Communication.POJO.Response.POJOsubjects;
+import com.indeed.hazizz.Communication.POJO.Response.POJOsubject;
+import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
 
 import org.json.JSONObject;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.HeaderMap;
 import retrofit2.http.*;
@@ -52,15 +56,22 @@ public interface RequestTypes{
             @HeaderMap Map<String, String> headers
     );
 
-    @POST("groups/2/tasks")
+    @POST("groups/{id}/tasks")
     Call<POJOerror> createTask(
-          //  @Path("id") String id,
+            @Path("id") String id,
             @HeaderMap Map<String, String> headers,
             @Body HashMap<String, Object> taskBody
     );
 
-    @GET("groups/{id}/subjectsasd")
-    Call<ResponseBody> getSubjects(
+    @GET("/groups/{id}/subjects")  // /groups/{id}/subjects
+    Call<List<POJOsubject>> getSubjects(
+            @Path("id") String id,
+            @HeaderMap Map<String, String> headers
+
+    );
+
+    @GET("groups/{id}/tasks")
+    Call<ArrayList<POJOgetTask>> getTasks(
             @Path("id") String id,
             @HeaderMap Map<String, String> headers
     );

@@ -53,6 +53,11 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                Bundle bundle = new Bundle();
+                bundle.putIntegerArrayList("groupIDs", groupIDs);
+                GroupFragment groupFragment = new GroupFragment();
+                groupFragment.setArguments(bundle);
+                makeTransaction(groupFragment);
             }
         });
 
@@ -166,7 +171,6 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_groups) {
-            // TODO send groupIDs to fragment
             Bundle bundle = new Bundle();
             bundle.putIntegerArrayList("groupIDs", groupIDs);
             GroupFragment groupFragment = new GroupFragment();

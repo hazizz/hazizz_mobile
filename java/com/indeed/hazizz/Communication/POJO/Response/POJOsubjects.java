@@ -7,9 +7,9 @@ import lombok.Data;
 @Data
 public class POJOsubjects {
 
-    List<POJOsubject> subjects;
+    private final List<POJOsubject> subjects;
 
-    POJOsubjects(List<POJOsubject> subjects){
+    public POJOsubjects(List<POJOsubject> subjects){
         this.subjects = subjects;
     }
 

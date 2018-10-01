@@ -17,27 +17,27 @@ public abstract class MiddleMan{
 
     public static ArrayList<Request> requestQueue = new ArrayList<>();
 
-    public MiddleMan(Context context, String requestType, HashMap<String, Object>  pp, CustomResponseHandler cOnResponse, int groupID) {
+    public MiddleMan(Context context, String requestType, HashMap<String, Object>  body, CustomResponseHandler cOnResponse, int groupID) {
 
-        Request newRequest = new Request(context, requestType, pp, cOnResponse, groupID);
+        Request newRequest = new Request(context, requestType, body, cOnResponse, groupID);
         requestQueue.add(newRequest);
     }
-    public MiddleMan(Context context, String requestType, HashMap<String, Object>  pp, CustomResponseHandler cOnResponse) {
-        Request newRequest = new Request(context, requestType, pp, cOnResponse);
-        requestQueue.add(newRequest);
-    }
-
-    public static void newRequest(Context context, String requestType, HashMap<String, Object>  pp, CustomResponseHandler cOnResponse, HashMap<String, Object> vars) {
-        Request newRequest = new Request(context, requestType, pp, cOnResponse, vars);
+    public MiddleMan(Context context, String requestType, HashMap<String, Object>  body, CustomResponseHandler cOnResponse) {
+        Request newRequest = new Request(context, requestType, body, cOnResponse);
         requestQueue.add(newRequest);
     }
 
-    public static void newRequest(Context context, String requestType, HashMap<String, Object>  pp, CustomResponseHandler cOnResponse) {
-        Request newRequest = new Request(context, requestType, pp, cOnResponse);
+    public static void newRequest(Context context, String requestType, HashMap<String, Object>  body, CustomResponseHandler cOnResponse, HashMap<String, Object> vars) {
+        Request newRequest = new Request(context, requestType, body, cOnResponse, vars);
         requestQueue.add(newRequest);
     }
-    public static void newRequest(Context context, String requestType, HashMap<String, Object>  pp, CustomResponseHandler cOnResponse, int groupID) {
-        Request newRequest = new Request(context, requestType, pp, cOnResponse, groupID);
+
+    public static void newRequest(Context context, String requestType, HashMap<String, Object>  body, CustomResponseHandler cOnResponse) {
+        Request newRequest = new Request(context, requestType, body, cOnResponse);
+        requestQueue.add(newRequest);
+    }
+    public static void newRequest(Context context, String requestType, HashMap<String, Object>  body, CustomResponseHandler cOnResponse, int groupID) {
+        Request newRequest = new Request(context, requestType, body, cOnResponse, groupID);
         requestQueue.add(newRequest);
         Log.e("hey", "q: " + requestQueue.size());
     }

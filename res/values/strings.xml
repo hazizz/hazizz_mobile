@@ -7,4 +7,9 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+
+    <string-array name="taskTypes">
+            <item>Test</item>
+            <item>Homework</item>
+    </string-array>
 </resources>
