@@ -188,7 +188,7 @@ public class SignupActivity extends AppCompatActivity {
                             Log.e("hey", "got here");
                         }
                     };
-                    MiddleMan.newRequest(getBaseContext(),"register", requestBody, responseHandler);
+                    MiddleMan.newRequest(getBaseContext(),"register", requestBody, responseHandler, null);
                 }else{
 
                 }

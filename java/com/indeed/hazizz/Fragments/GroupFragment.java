@@ -20,6 +20,7 @@ import com.indeed.hazizz.Communication.Requests.Request;
 import com.indeed.hazizz.Listviews.GroupList.CustomAdapter;
 import com.indeed.hazizz.Listviews.GroupList.GroupItem;
 import com.indeed.hazizz.R;
+import com.indeed.hazizz.Transactor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -96,14 +97,8 @@ public class GroupFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                makeTransaction(new CreateTaskFragment());
+                Transactor.makeTransaction(new CreateTaskFragment(), getFragmentManager().beginTransaction());
             }
         });
-    }
-
-    void makeTransaction(Fragment frag){
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.fragment_container, frag);
-        fragmentTransaction.commit();
     }
 }

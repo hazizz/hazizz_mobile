@@ -22,8 +22,10 @@ import com.indeed.hazizz.Communication.POJO.Response.POJOgroup;
 import com.indeed.hazizz.Communication.POJO.Response.POJOme;
 import com.indeed.hazizz.Fragments.ChatFragment;
 import com.indeed.hazizz.Fragments.GroupFragment;
+import com.indeed.hazizz.Fragments.MainFragment;
 import com.indeed.hazizz.Listviews.GroupList.GroupItem;
 import com.indeed.hazizz.R;
+import com.indeed.hazizz.Transactor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,7 +59,7 @@ public class MainActivity extends AppCompatActivity
                 bundle.putIntegerArrayList("groupIDs", groupIDs);
                 GroupFragment groupFragment = new GroupFragment();
                 groupFragment.setArguments(bundle);
-                makeTransaction(groupFragment);
+                Transactor.makeTransaction(groupFragment, getSupportFragmentManager().beginTransaction());
             }
         });
 
@@ -96,7 +98,7 @@ public class MainActivity extends AppCompatActivity
             }
         };
 
-        MiddleMan.newRequest(getBaseContext(), "me", null, responseHandler);
+        MiddleMan.newRequest(getBaseContext(), "me", null, responseHandler, null);
 
      /*   ListView name = (ListView)findViewById(R.id.listView1);
 
@@ -129,6 +131,8 @@ public class MainActivity extends AppCompatActivity
             }
         });
         Log.e("hey", "all set"); */
+
+        Transactor.makeTransaction(new MainFragment(), getSupportFragmentManager().beginTransaction());
 
     }
 
@@ -176,11 +180,11 @@ public class MainActivity extends AppCompatActivity
             GroupFragment groupFragment = new GroupFragment();
             groupFragment.setArguments(bundle);
 
-            makeTransaction(groupFragment);
+            Transactor.makeTransaction(groupFragment, getSupportFragmentManager().beginTransaction());
 
         } else if (id == R.id.nav_unfinished_homeworks) {
             ChatFragment chatFragment = new ChatFragment();
-            makeTransaction(chatFragment);
+            Transactor.makeTransaction(chatFragment, getSupportFragmentManager().beginTransaction());
         } else if (id == R.id.nav_finished_homeworks) {
 
         } else if (id == R.id.nav_manage) {
@@ -193,11 +197,5 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    public void makeTransaction(Fragment frag){
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.fragment_container, frag);
-        fragmentTransaction.commit();
     }
 }

@@ -6,7 +6,7 @@
     >
 
     <ImageView
-        android:id="@+id/profile_pic"
+        android:id="@+id/task_pic"
         android:layout_width="43dp"
         android:layout_height="41dp"
         android:layout_gravity="left"
@@ -26,7 +26,6 @@
         android:layout_margin="5dp"
         android:layout_marginLeft="200dp"
         android:layout_marginStart="20dp"
-        android:layout_weight="20dp"
         android:text="description" />
 
     <TextView

@@ -203,7 +203,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.e("hey", "got here onResponse");
                         }
                     };
-                    MiddleMan.newRequest(getBaseContext(), "login", requestBody, responseHandler);
+                    MiddleMan.newRequest(getBaseContext(), "login", requestBody, responseHandler, null);
                 }else{
                     //TODO show that the username or password not long enough
                 }

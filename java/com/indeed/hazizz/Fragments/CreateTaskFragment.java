@@ -18,7 +18,6 @@ import android.widget.TextView;
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOsubject;
-import com.indeed.hazizz.Communication.POJO.Response.POJOsubjects;
 import com.indeed.hazizz.D8;
 import com.indeed.hazizz.R;
 
