@@ -12,7 +12,7 @@ public class TaskItem {
     String taskDescription;
     String taskDueDate;
 
-    public TaskItem(int pic, String groupName){
+    public TaskItem(int taskPic, String taskTitle, String taskDescription, String taskDueDate){
         this.taskPic = taskPic;
         this.taskTitle = taskTitle;
         this.taskDescription = taskDescription;

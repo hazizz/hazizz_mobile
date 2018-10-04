@@ -22,6 +22,7 @@ import com.indeed.hazizz.Listviews.GroupList.GroupItem;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -64,6 +65,7 @@ public class GroupFragment extends Fragment {
                 listGroup.add(new GroupItem(R.drawable.ic_launcher_background, ((POJOgroup) response).getName()));
                 adapter.notifyDataSetChanged();
                 Log.e("hey", "got response");
+             //   (Array) response.
             }
 
             @Override

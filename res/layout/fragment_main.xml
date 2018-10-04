@@ -13,7 +13,7 @@
 
 
     <ListView
-        android:id="@+id/listView1"
+        android:id="@+id/listView2"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:layout_alignParentStart="true"

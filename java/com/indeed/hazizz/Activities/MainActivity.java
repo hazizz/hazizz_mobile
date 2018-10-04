@@ -85,6 +85,13 @@ public class MainActivity extends AppCompatActivity
                     groupIDs.add(g.getId());
                     Log.e("hey", "added groupID");
                 }
+
+                Bundle bundle = new Bundle();
+                bundle.putIntegerArrayList("groupIDs", groupIDs);
+                MainFragment mainFragment = new MainFragment();
+                mainFragment.setArguments(bundle);
+
+                Transactor.makeTransaction(mainFragment, getSupportFragmentManager().beginTransaction());
         }
 
             @Override
@@ -132,7 +139,7 @@ public class MainActivity extends AppCompatActivity
         });
         Log.e("hey", "all set"); */
 
-        Transactor.makeTransaction(new MainFragment(), getSupportFragmentManager().beginTransaction());
+       // Transactor.makeTransaction(new MainFragment(), getSupportFragmentManager().beginTransaction());
 
     }
 

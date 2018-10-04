@@ -215,7 +215,7 @@ public class Request {
             Log.e("hey", "created");
         }
 
-        Call<POJOregister> call1;
+        Call<Void> call1;
 
         @Override
         public void setupCall() {
@@ -230,9 +230,9 @@ public class Request {
 
         @Override
         public void makeCall() {
-            call1.enqueue(new Callback<POJOregister>() {
+            call1.enqueue(new Callback<Void>() {
                 @Override
-                public void onResponse(Call<POJOregister> call, Response<POJOregister> response) {
+                public void onResponse(Call<Void> call, Response<Void> response) {
                     Log.e("hey", "gotResponse");
                     Log.e("hey", response.raw().toString());
 
@@ -267,7 +267,7 @@ public class Request {
                     }
                 }
                 @Override
-                public void onFailure(Call<POJOregister> call, Throwable t) {
+                public void onFailure(Call<Void> call, Throwable t) {
                     cOnResponse.onFailure();
                 }
             });
@@ -276,7 +276,6 @@ public class Request {
     }
 
     public class Me implements RequestInterface1 {
-        //   public String name = "register";
         Me(){
             Log.e("hey", "created Me object");
         }
@@ -468,7 +467,6 @@ public class Request {
         }
     }
     public class GetSubjects implements RequestInterface1 {
-        //   public String name = "register";
         GetSubjects(){
             Log.e("hey", "created Me object");
         }
@@ -529,7 +527,6 @@ public class Request {
     }
 
     public class GetTasks implements RequestInterface1 {
-        //   public String name = "register";
         GetTasks(){
             Log.e("hey", "created GetTasks object");
         }
@@ -560,26 +557,34 @@ public class Request {
 
                         cOnResponse.onPOJOResponse(response.body());
                         Log.e("hey", "3");
+
                     }
-                    else if(response.errorBody() != null){
-                        try {
-                            String strError = response.errorBody().string();
-                            JSONObject errorJson = new JSONObject(strError);
-                            HashMap<String, Object> errorResponse = new HashMap<String, Object>();
+                 /*   if (response.body() instanceof ArrayList<POJOgetTask> )
+                    {
 
-                            errorResponse.put("time", String.valueOf(errorJson.get("time")));
-                            errorResponse.put("errorCode", String.valueOf(errorJson.get("errorCode")));
-                            errorResponse.put("title", String.valueOf(errorJson.get("title")));
-                            errorResponse.put("message", String.valueOf(errorJson.get("message")));
+                        ArrayList<POJOgetTask> myObj = (MyPOJO) response.body();
+                        //handle MyPOJO
+                    } */
 
-                            cOnResponse.onErrorResponse(errorResponse);
+                 /*   if(response.body() instanceof ArrayList<?>)
+                    {
+                       // if(((ArrayList<POJOgetTask>)response.body()).get(0) instanceof POJOgetTask){
 
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                         //   ArrayList<POJOgetTask> r = (ArrayList<POJOgetTask>) response.body();
+                            POJOgetTask r = (POJOgetTask) ((ArrayList)response.body()).get(0);
+
+                            cOnResponse.onPOJOResponse((Object)r);
+                            Log.e("hey", "onPOJOresponse");
+                       // }
                     }
+                    else  //must be error object
+                    {
+                      //  MyError myError = (MyError) response.body();
+                        //handle error object
+                        Log.e("hey", "new thing doesnt work");
+                    }
+                    Log.e("hey", "right here");
+                    */
                 }
                 @Override
                 public void onFailure(Call<ArrayList<POJOgetTask>> call, Throwable t) {
@@ -622,3 +627,29 @@ public void onFailure(Call<RegistrationResponse> call, Throwable t) {
         }
         */
 //TODO THIS WILL SAVE YOUR LIFE!!!
+    /*
+Call<Object> call = api.login(username, password);
+call.enqueue(new Callback<Object>()
+        {
+@Override
+public void onResponse(Response<Object> response, Retrofit retrofit)
+        {
+        if (response.body() instanceof MyPOJO )
+        {
+        MyPOJO myObj = (MyPOJO) response.body();
+        //handle MyPOJO
+        }
+        else  //must be error object
+        {
+        MyError myError = (MyError) response.body();
+        //handle error object
+        }
+        }
+
+@Override
+public void onFailure(Throwable t)
+        {
+        ///Handle failure
+        }
+        });
+*/

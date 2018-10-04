@@ -26,7 +26,7 @@ import retrofit2.http.*;
 public interface RequestTypes{
 
     @POST("register")
-    Call<POJOregister> register(
+    Call<Void> register(
             @HeaderMap Map<String, String> headers,
             @Body HashMap<String, Object>  register
     );
