@@ -13,10 +13,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
+import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.POJO.Response.POJOsubject;
+import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
+import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTaskDetailed;
 import com.indeed.hazizz.D8;
 import com.indeed.hazizz.R;
 
@@ -27,19 +31,21 @@ import java.util.List;
 
 public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSelectedListener{
 
-    private int groupId;
+    private String groupId;
+    private String taskId;
 
     private Spinner subject_spinner;
 
-    private Spinner taskType;
-    private EditText taskTitle;
-    private EditText description;
-    private Button button_send;
+    private TextView type;
+    private TextView title;
+    private TextView description;
+    private TextView creatorName;
+    private TextView subject;
+    private TextView deadLine;
 
     private List<POJOsubject> subjects = new ArrayList<>();
 
-    private CustomResponseHandler rh_subjects;
-    private CustomResponseHandler rh_taskTypes;
+    private CustomResponseHandler rh;
 
     private ArrayList<POJOsubject> subjectList = new ArrayList<POJOsubject>();
 
@@ -49,12 +55,25 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.fragment_createtask, container, false);
+        v = inflater.inflate(R.layout.fragment_viewtask, container, false);
         Log.e("hey", "im here lol");
 
+        type = v.findViewById(R.id.textView_tasktype);
+        title = v.findViewById(R.id.textView_title);
+        description = v.findViewById(R.id.textView_description);
+        creatorName = v.findViewById(R.id.textView_creator);
+        subject = v.findViewById(R.id.textView_subject);
+        deadLine = v.findViewById(R.id.textview_deadline);
 
 
-        rh_taskTypes = new CustomResponseHandler() {
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            taskId =  bundle.getString("taskId");
+            groupId = bundle.getString("groupId");
+            Log.e("hey", "got IDs");
+            Log.e("hey", taskId + ", " + groupId);
+        }else{Log.e("hey", "bundle is null");}
+        rh = new CustomResponseHandler() {
             @Override
             public void onResponse(HashMap<String, Object> response) {
                 Log.e("hey", "got regular response");
@@ -63,7 +82,16 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
 
             @Override
             public void onPOJOResponse(Object response) {
-                Log.e("hey", "got POJOresponse");
+                type.setText(((POJOgetTaskDetailed)response).getType());
+                title.setText(((POJOgetTaskDetailed)response).getTitle());
+                description.setText(((POJOgetTaskDetailed)response).getDescription());
+                creatorName.setText(((POJOgetTaskDetailed)response).getCreator().getUsername());
+              //  subject.setText(((POJOgetTaskDetailed)response).getSubjectData().getName());
+                subject.setText("NOT IMPLEMENTED");
+
+                deadLine.setText(((POJOgetTaskDetailed)response).getDueDate().get(0) + "." +
+                        ((POJOgetTaskDetailed)response).getDueDate().get(1) + "." +
+                        ((POJOgetTaskDetailed)response).getDueDate().get(2));
             }
 
             @Override
@@ -74,10 +102,21 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
             }
 
             @Override
-            public void onErrorResponse(HashMap<String, Object> errorResponse) {
+            public void onErrorResponse(POJOerror error) {
                 Log.e("hey", "onErrorResponse");
             }
+
+            @Override
+            public void onNoResponse(POJOerror error) {
+
+            }
         };
+        HashMap<String, Object> vars = new HashMap<>();
+        vars.put("taskId", taskId);
+        vars.put("groupId", groupId);
+        MiddleMan.newRequest(this.getActivity(), "getTask", null, rh, vars);
+
+
         return v;
     }
 

@@ -7,6 +7,7 @@ import com.indeed.hazizz.Communication.POJO.Response.POJOme;
 import com.indeed.hazizz.Communication.POJO.Response.POJOregister;
 import com.indeed.hazizz.Communication.POJO.Response.POJOsubject;
 import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
+import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTaskDetailed;
 
 import org.json.JSONObject;
 
@@ -57,13 +58,13 @@ public interface RequestTypes{
     );
 
     @POST("groups/{id}/tasks")
-    Call<POJOerror> createTask(
+    Call<ResponseBody> createTask(
             @Path("id") String id,
             @HeaderMap Map<String, String> headers,
             @Body HashMap<String, Object> taskBody
     );
 
-    @GET("/groups/{id}/subjects")  // /groups/{id}/subjects
+    @GET("groups/{id}/subjects")  // /groups/{id}/subjects
     Call<List<POJOsubject>> getSubjects(
             @Path("id") String id,
             @HeaderMap Map<String, String> headers
@@ -71,8 +72,34 @@ public interface RequestTypes{
     );
 
     @GET("groups/{id}/tasks")
-    Call<ArrayList<POJOgetTask>> getTasks(
+    Call<ArrayList<POJOgetTask>> getTasksFromGroup(
             @Path("id") String id,
             @HeaderMap Map<String, String> headers
     );
+
+    @GET("me/tasks")
+    Call<ArrayList<POJOgetTask>> getTasksFromMe(
+            @HeaderMap Map<String, String> headers
+    );
+
+    @GET("me/groups")
+    Call<ArrayList<POJOgetTask>> getGroupsFromMe(
+            @HeaderMap Map<String, String> headers
+    );
+
+    @GET("groups/{groupId}/tasks/{taskId}")
+    Call<POJOgetTaskDetailed> getTask(
+            @Path("groupId") String groupId,
+            @Path("taskId") String taskId,
+            @HeaderMap Map<String, String> headers
+    );
+
+
+
+
+
+
+
+
+
 }

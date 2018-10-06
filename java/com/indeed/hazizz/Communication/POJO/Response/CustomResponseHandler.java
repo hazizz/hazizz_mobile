@@ -7,6 +7,7 @@ public interface CustomResponseHandler {
     public void onResponse(HashMap<String, Object> response);
     public void onPOJOResponse(Object response);
     public void onFailure();
-    public void onErrorResponse(HashMap<String, Object> response);
+    public void onErrorResponse(POJOerror error);
+    public void onNoResponse(POJOerror error);
 
 }

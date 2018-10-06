@@ -13,15 +13,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
+import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.POJO.Response.POJOsubject;
 import com.indeed.hazizz.D8;
 import com.indeed.hazizz.R;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -58,7 +57,7 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
         button_send = (Button)v.findViewById(R.id.button_send1);
         taskType = (Spinner)v.findViewById(R.id.taskType_spinner);
         taskTitle = v.findViewById(R.id.taskTitle);
-        description = v.findViewById(R.id.description);
+        description = v.findViewById(R.id.textView_description);
         // tasktype spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.taskTypes, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -98,8 +97,13 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
             }
 
             @Override
-            public void onErrorResponse(HashMap<String, Object> errorResponse) {
+            public void onErrorResponse(POJOerror error) {
                 Log.e("hey", "onErrorResponse");
+            }
+
+            @Override
+            public void onNoResponse(POJOerror error) {
+
             }
         };
         rh_subjects = new CustomResponseHandler() {
@@ -125,8 +129,13 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
             }
 
             @Override
-            public void onErrorResponse(HashMap<String, Object> errorResponse) {
+            public void onErrorResponse(POJOerror error) {
                 Log.e("hey", "onErrorResponse");
+            }
+
+            @Override
+            public void onNoResponse(POJOerror error) {
+
             }
         };
 
@@ -147,7 +156,7 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
         requestBody.put("taskType", taskType.getSelectedItem().toString());
         requestBody.put("taskTitle", taskTitle.getText().toString());
         requestBody.put("description", description.getText().toString());
-        requestBody.put("subjectId", ((POJOsubject) subject_spinner.getSelectedItem()).getId());
+        requestBody.put("subjectId", 10);//((POJOsubject) subject_spinner.getSelectedItem()).getId());
         requestBody.put("dueDate", D8.getDateTomorrow());
 
         HashMap<String, Object> vars = new HashMap<>();

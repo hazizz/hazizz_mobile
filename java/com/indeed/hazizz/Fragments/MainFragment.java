@@ -13,6 +13,7 @@ import android.widget.ListView;
 
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
+import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.POJO.Response.POJOgroup;
 import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
 import com.indeed.hazizz.Listviews.TaskList.CustomAdapter;
@@ -59,7 +60,13 @@ public class MainFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Transactor.makeTransaction(new CreateTaskFragment(), getFragmentManager().beginTransaction());
+                // TODO
+                HashMap<String, Object> vars = new HashMap<>();
+                vars.put("taskId", ((TaskItem)listView.getItemAtPosition(i)).getTaskId());
+                vars.put("groupId", ((TaskItem)listView.getItemAtPosition(i)).getGroupData().getId());
+                Log.e("hey", "asd: " + vars.get("taskId") + ", " + vars.get("groupId"));
+
+                Transactor.makeTransaction(new ViewTaskFragment(), getFragmentManager().beginTransaction(), vars);
             }
         });
     }
@@ -74,14 +81,22 @@ public class MainFragment extends Fragment {
 
             @Override
             public void onPOJOResponse(Object response) {
-                listTask.add(new TaskItem(R.drawable.ic_launcher_background, ((POJOgetTask)((List) response).get(0)).getTitle(),
-                        ((POJOgetTask)((List) response).get(0)).getDescription(), ((POJOgetTask)((List) response).get(0)).getDueDate()));
-                // ((ArrayList) response.get())
-                adapter.notifyDataSetChanged();
+                ArrayList<POJOgetTask> casted = (ArrayList<POJOgetTask>) response;
+
+                for(POJOgetTask t : casted) {
+                    listTask.add(new TaskItem(R.drawable.ic_launcher_background, t.getTitle(),
+                            t.getDescription(), t.getDueDate(), t.getGroupData(), t.getId()));
+                    adapter.notifyDataSetChanged();
+                    Log.e("hey", t.getId() + " " + t.getGroupData().getId());
+                }
+
+             /*   int size = ((ArrayList)response).size();
+                for(int i = 0; i < size-1; i++) {
+                    listTask.add(new TaskItem(R.drawable.ic_launcher_background, ((POJOgetTask) ((List) response).get(i)).getTitle(),
+                            ((POJOgetTask) ((List) response).get(i)).getDescription(), ((POJOgetTask) ((List) response).get(i)).getDueDate()));
+                    adapter.notifyDataSetChanged();
+                } */
                 Log.e("hey", "got response");
-              //  Log.e("hey", ((POJOgetTask)response).getTitle());
-
-
             }
 
             @Override
@@ -91,16 +106,16 @@ public class MainFragment extends Fragment {
             }
 
             @Override
-            public void onErrorResponse(HashMap<String, Object> errorResponse) {
+            public void onErrorResponse(POJOerror error) {
                 Log.e("hey", "onErrorResponse");
             }
+
+            @Override
+            public void onNoResponse(POJOerror error) {
+
+            }
         };
-        int size = gIDs.size() - 1;
-        for (;i <= size; i++) {
-            Log.e("hey", "here 1");
-            HashMap<String, Object> vars = new HashMap<>();
-            vars.put("id", gIDs.get(i));
-            MiddleMan.newRequest(this.getActivity(), "getTasks", null, responseHandler, vars);
-        }
+        MiddleMan.newRequest(this.getActivity(), "getTasksFromMe", null, responseHandler, null);
+
     }
 }

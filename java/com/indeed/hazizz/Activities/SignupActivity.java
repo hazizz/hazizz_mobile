@@ -3,6 +3,7 @@ package com.indeed.hazizz.Activities;
 import com.indeed.hazizz.Activities.LoginActivity;
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
+import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.ResponseHandler;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.RequestSenderRunnable;
@@ -183,9 +184,14 @@ public class SignupActivity extends AppCompatActivity {
                             switchToLoginActivity();
                         }
                         @Override
-                        public void onErrorResponse(HashMap<String, Object> errorResponse) {
-                            textView.append("\n errorCode: " + errorResponse.get("errorCode"));
+                        public void onErrorResponse(POJOerror error) {
+                            textView.append("\n errorCode: " + error.getErrorCode());
                             Log.e("hey", "got here");
+                        }
+
+                        @Override
+                        public void onNoResponse(POJOerror error) {
+
                         }
                     };
                     MiddleMan.newRequest(getBaseContext(),"register", requestBody, responseHandler, null);

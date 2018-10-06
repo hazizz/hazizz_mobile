@@ -15,6 +15,7 @@ import android.widget.ListView;
 import com.indeed.hazizz.Activities.MainActivity;
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
+import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.POJO.Response.POJOgroup;
 import com.indeed.hazizz.Communication.Requests.Request;
 import com.indeed.hazizz.Listviews.GroupList.CustomAdapter;
@@ -75,8 +76,13 @@ public class GroupFragment extends Fragment {
             }
 
             @Override
-            public void onErrorResponse(HashMap<String, Object> errorResponse) {
+            public void onErrorResponse(POJOerror error) {
                 Log.e("hey", "onErrorResponse");
+            }
+
+            @Override
+            public void onNoResponse(POJOerror error) {
+
             }
         };
         int size = gIDs.size() - 1;
