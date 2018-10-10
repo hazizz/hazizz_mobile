@@ -18,6 +18,7 @@ public class POJOgetTaskDetailed {
     private List<Integer> dueDate;
     private POJOcreator creator;
     private POJOgroupData group;
+    private POJOsubjectData subjectData;
     private List<POJOcommentSection> commentSections;
 
 

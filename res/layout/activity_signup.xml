@@ -84,7 +84,7 @@
             android:layout_alignParentBottom="true"
 
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="22dp"
+            android:layout_marginBottom="17dp"
             android:clickable="true"
             android:onClick="onClick"
             android:paddingBottom="10dp"

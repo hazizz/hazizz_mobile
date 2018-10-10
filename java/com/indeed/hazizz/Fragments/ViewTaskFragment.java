@@ -22,7 +22,9 @@ import com.indeed.hazizz.Communication.POJO.Response.POJOsubject;
 import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
 import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTaskDetailed;
 import com.indeed.hazizz.D8;
+import com.indeed.hazizz.FragTag;
 import com.indeed.hazizz.R;
+import com.indeed.hazizz.Transactor;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -31,8 +33,8 @@ import java.util.List;
 
 public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSelectedListener{
 
-    private String groupId;
-    private String taskId;
+    private int groupId;
+    private int taskId;
 
     private Spinner subject_spinner;
 
@@ -68,8 +70,8 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            taskId =  bundle.getString("taskId");
-            groupId = bundle.getString("groupId");
+            taskId =  bundle.getInt("taskId");
+            groupId = bundle.getInt("groupId");
             Log.e("hey", "got IDs");
             Log.e("hey", taskId + ", " + groupId);
         }else{Log.e("hey", "bundle is null");}
@@ -87,7 +89,7 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
                 description.setText(((POJOgetTaskDetailed)response).getDescription());
                 creatorName.setText(((POJOgetTaskDetailed)response).getCreator().getUsername());
               //  subject.setText(((POJOgetTaskDetailed)response).getSubjectData().getName());
-                subject.setText("NOT IMPLEMENTED");
+                subject.setText(((POJOgetTaskDetailed)response).getSubjectData().getName());
 
                 deadLine.setText(((POJOgetTaskDetailed)response).getDueDate().get(0) + "." +
                         ((POJOgetTaskDetailed)response).getDueDate().get(1) + "." +
@@ -107,7 +109,7 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
             }
 
             @Override
-            public void onNoResponse(POJOerror error) {
+            public void onNoResponse() {
 
             }
         };
@@ -115,7 +117,6 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
         vars.put("taskId", taskId);
         vars.put("groupId", groupId);
         MiddleMan.newRequest(this.getActivity(), "getTask", null, rh, vars);
-
 
         return v;
     }
@@ -126,5 +127,10 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
+    }
+
+    public void toCreateTask(){
+        Log.e("hey", "toCreateTask in viewtaskFrag" + groupId);
+        Transactor.makeTransaction(new CreateTaskFragment(), getFragmentManager().beginTransaction(), FragTag.createTask.toString(), groupId);
     }
 }

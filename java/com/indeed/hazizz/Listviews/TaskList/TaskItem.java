@@ -16,9 +16,9 @@ public class TaskItem {
     String taskDescription;
     String taskDueDate;
     POJOgroupData groupData;
-    long taskId;
+    int taskId;
 
-    public TaskItem(int taskPic, String taskTitle, String taskDescription, String taskDueDate, POJOgroupData groupData, long taskId){
+    public TaskItem(int taskPic, String taskTitle, String taskDescription, String taskDueDate, POJOgroupData groupData, int taskId){
         this.taskPic = taskPic;
         this.taskTitle = taskTitle;
         this.taskDescription = taskDescription;

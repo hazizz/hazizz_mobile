@@ -190,7 +190,7 @@ public class SignupActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onNoResponse(POJOerror error) {
+                        public void onNoResponse() {
 
                         }
                     };

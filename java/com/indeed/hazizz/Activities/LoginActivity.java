@@ -2,6 +2,7 @@ package com.indeed.hazizz.Activities;
 
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
+import com.indeed.hazizz.Communication.POJO.Response.POJOauth;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.ResponseHandler;
 import com.indeed.hazizz.R;
@@ -34,121 +35,10 @@ public class LoginActivity extends AppCompatActivity {
     private EditText passwordET;
     private CheckBox checkBox_autoLogin;
     private Button button_login;
-    private TextView textView;
+ //   private TextView textView;
 
   //  private MyCallback<ResponseBodies.Error> errorCallback;
 
-    private ResponseHandler responseHandler = new ResponseHandler() {
-
-        @Override
-        public void on401() {
-            textView.append("created");
-        }
-
-        @Override
-        public void on400() {
-            textView.append("Registration was successful");
-        }
-
-        /* @Override
-         public void onInvalidData(){
-
-         } */
-        @Override
-        public void onUnknowError() {
-            textView.append("Unknown Error");
-        }
-
-   /*     @Override
-        public void onInvalidData() {
-
-        } */
-
-        @Override
-        public void onDatabaseError() {
-
-        }
-
-        @Override
-        public void onPathVariableMissing() {
-
-        }
-
-        @Override
-        public void onForbidden() {
-
-        }
-
-        @Override
-        public void onGeneralAuthenticationError() {
-            textView.append("onGeneralAuthenticationError");
-        }
-
-        @Override
-        public void onInvalidPassword() {
-
-        }
-
-        @Override
-        public void onAccountLocked() {
-
-        }
-
-        @Override
-        public void onAccountDisabled() {
-
-        }
-
-        @Override
-        public void onAccountExpired() {
-
-        }
-
-        @Override
-        public void onUnkownPermission() {
-
-        }
-
-        @Override
-        public void onBadAuthenticationRequest() {
-
-        }
-
-        @Override
-        public void onGeneralUserError() {
-
-        }
-
-        @Override
-        public void onUserNotFound() {
-
-        }
-
-        @Override
-        public void onUsernameConflict() {
-
-        }
-
-        @Override
-        public void onEmailConflict() {
-
-        }
-
-        @Override
-        public void onGeneralGroupError() {
-
-        }
-
-        @Override
-        public void onGroupNotFound() {
-
-        }
-
-        @Override
-        public void onGroupNameConflict() {
-
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,9 +47,6 @@ public class LoginActivity extends AppCompatActivity {
         usernameET = findViewById(R.id.editText_username);
         passwordET = findViewById(R.id.editText_password);
         checkBox_autoLogin = findViewById(R.id.checkBox_autoLogin);
-        textView = findViewById(R.id.textView);
-
-        textView.append("hah");
         Calendar cal = new GregorianCalendar();
         cal.add(Calendar.YEAR, 1);
 
@@ -171,7 +58,6 @@ public class LoginActivity extends AppCompatActivity {
                 if(usernameET.getText().toString().length() >= 4 || passwordET.getText().toString().length() >= 8) {
                     username = usernameET.getText().toString();
                     password = passwordET.getText().toString();
-                    textView.append("username: " + username + "\n password: " + password);
                     HashMap<String, Object> requestBody = new HashMap<>();
 
                     requestBody.put("username", username);
@@ -181,31 +67,30 @@ public class LoginActivity extends AppCompatActivity {
 
                         @Override
                         public void onResponse(HashMap<String, Object> response) {
-                            Log.e("hey", "got here onResponse");
-                            SharedPrefs.save(getBaseContext(), "token", "token", (String) response.get("token"));
-                            textView.append("\n" + SharedPrefs.getString(getBaseContext(), "token", "token"));
-                            switchToMain();
+
                         }
 
                         @Override
                         public void onPOJOResponse(Object response) {
+                            Log.e("hey", "got here onResponse");
+                            SharedPrefs.save(getBaseContext(), "token", "token", (String) ((POJOauth)response).getToken());
+                            switchToMain();
                         }
                         @Override
                         public void onFailure() {
-                            textView.append("\n  no response");
                             Log.e("hey", "4");
                             Log.e("hey", "got here onFailure");
                         }
 
 
                         @Override
-                        public void onNoResponse(POJOerror error) {
+                        public void onNoResponse() {
 
                         }
 
                         @Override
                         public void onErrorResponse(POJOerror error) {
-                            textView.append("\n errorCode: " + error.getErrorCode());
+                          //  textView.append("\n errorCode: " + error.getErrorCode());
                             Log.e("hey", "got here");
                             Log.e("hey", "got here onResponse");
                         }
@@ -214,8 +99,10 @@ public class LoginActivity extends AppCompatActivity {
                 }else{
                     //TODO show that the username or password not long enough
                 }
+                button_login.setEnabled(false);
             }
         });
+
     }
 
     private void switchToMain(){

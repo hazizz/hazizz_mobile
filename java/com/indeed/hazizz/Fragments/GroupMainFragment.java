@@ -14,11 +14,9 @@ import android.widget.ListView;
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
-import com.indeed.hazizz.Communication.POJO.Response.POJOgroup;
 import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
 import com.indeed.hazizz.FragTag;
 import com.indeed.hazizz.Listviews.TaskList.CustomAdapter;
-import com.indeed.hazizz.Listviews.GroupList.GroupItem;
 import com.indeed.hazizz.Listviews.TaskList.TaskItem;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
@@ -27,25 +25,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MainFragment extends Fragment {
+public class GroupMainFragment extends Fragment{
 
     private View v;
     private CustomAdapter adapter;
     private List<TaskItem> listTask;
-    private ArrayList<Integer> groupIDs;
+    private int groupID;
 
-    private int i = 0;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.fragment_main, container, false);
-        Log.e("hey", "main fragment created");
+        v = inflater.inflate(R.layout.fragment_maingroup, container, false);
+        Log.e("hey", "mainGroup fragment created");
 
-        groupIDs = getArguments().getIntegerArrayList("groupIDs");
+        groupID = getArguments().getInt("groupId");
 
         createViewList();
-        getTasks(groupIDs);
+        getTask();
 
         return v;
     }
@@ -53,7 +50,7 @@ public class MainFragment extends Fragment {
     void createViewList(){
         listTask = new ArrayList<>();
 
-        ListView listView = (ListView)v.findViewById(R.id.listView2);
+        ListView listView = (ListView)v.findViewById(R.id.listView_mainGroupFrag);
 
         adapter = new CustomAdapter(getActivity(), R.layout.task_item, listTask);
         listView.setAdapter(adapter);
@@ -64,15 +61,15 @@ public class MainFragment extends Fragment {
                 // TODO
                 HashMap<String, Object> vars = new HashMap<>();
                 vars.put("taskId", ((TaskItem)listView.getItemAtPosition(i)).getTaskId());
-                vars.put("groupId", ((TaskItem)listView.getItemAtPosition(i)).getGroupData().getId());
+                vars.put("groupId",((TaskItem)listView.getItemAtPosition(i)).getGroupData().getId());
                 Log.e("hey", "asd: " + vars.get("taskId") + ", " + vars.get("groupId"));
 
-                Transactor.makeTransaction(new ViewTaskFragment(), getFragmentManager().beginTransaction(), FragTag.viewTask.toString(),vars);
+                Transactor.makeTransaction(new ViewTaskFragment(), getFragmentManager().beginTransaction(), FragTag.viewTask.toString(), vars);
             }
         });
     }
 
-    private void getTasks(ArrayList<Integer> gIDs){
+    private void getTask(){
         Log.e("hey", "atleast here 2");
         CustomResponseHandler responseHandler = new CustomResponseHandler() {
             @Override
@@ -116,7 +113,15 @@ public class MainFragment extends Fragment {
 
             }
         };
-        MiddleMan.newRequest(this.getActivity(), "getTasksFromMe", null, responseHandler, null);
+        HashMap<String, Object> vars = new HashMap<>();
+        vars.put("groupId", groupID);
+        MiddleMan.newRequest(this.getActivity(), "getTasksFromGroup", null, responseHandler, vars);
+    }
 
+    public void toCreateTask(){
+        Transactor.makeTransaction(new CreateTaskFragment(), getFragmentManager().beginTransaction(), FragTag.createTask.toString(), groupID);
+        Log.e("hey", "called 123");
     }
 }
+
+

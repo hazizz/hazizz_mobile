@@ -33,13 +33,12 @@ public interface RequestTypes{
     );
 
     @GET("users/")
-    Call<HashMap<String, Object>> getUsers(
-            @HeaderMap Map<String, String> headers,
-            @Body JSONObject registerBody
+    Call<ResponseBody> getUsers(
+            @HeaderMap Map<String, String> headers
     );
 
     @POST("auth/")
-    Call<HashMap<String, Object>> login(
+    Call<ResponseBody> login(
             @HeaderMap Map<String, String> headers,
             @Body HashMap<String, Object> registerBody
     );
@@ -71,11 +70,19 @@ public interface RequestTypes{
 
     );
 
+    @POST("groups/{id}/subjects")
+    Call<ResponseBody> createSubject(
+            @Path("groupId") String groupId,
+            @HeaderMap Map<String, String> headers
+    );
+
     @GET("groups/{id}/tasks")
-    Call<ArrayList<POJOgetTask>> getTasksFromGroup(
+    Call<ResponseBody> getTasksFromGroup(
             @Path("id") String id,
             @HeaderMap Map<String, String> headers
     );
+
+
 
     @GET("me/tasks")
     Call<ArrayList<POJOgetTask>> getTasksFromMe(
@@ -88,11 +95,20 @@ public interface RequestTypes{
     );
 
     @GET("groups/{groupId}/tasks/{taskId}")
-    Call<POJOgetTaskDetailed> getTask(
+    Call<ResponseBody> getTask(
             @Path("groupId") String groupId,
             @Path("taskId") String taskId,
             @HeaderMap Map<String, String> headers
     );
+
+    @POST("groups/{id}/tasks")
+    Call<ResponseBody> createTask(
+            @Path("groupId") String groupId,
+            @HeaderMap Map<String, String> headers
+    );
+
+
+
 
 
 

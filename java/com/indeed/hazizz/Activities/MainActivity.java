@@ -1,5 +1,7 @@
 package com.indeed.hazizz.Activities;
 
+//import android.app.Fragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -21,9 +23,14 @@ import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.POJO.Response.POJOgroup;
 import com.indeed.hazizz.Communication.POJO.Response.POJOme;
+import com.indeed.hazizz.Communication.Requests.Request;
+import com.indeed.hazizz.FragTag;
 import com.indeed.hazizz.Fragments.ChatFragment;
-import com.indeed.hazizz.Fragments.GroupFragment;
+import com.indeed.hazizz.Fragments.CreateTaskFragment;
+import com.indeed.hazizz.Fragments.GroupMainFragment;
+import com.indeed.hazizz.Fragments.GroupsFragment;
 import com.indeed.hazizz.Fragments.MainFragment;
+import com.indeed.hazizz.Fragments.ViewTaskFragment;
 import com.indeed.hazizz.Listviews.GroupList.GroupItem;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
@@ -42,11 +49,14 @@ public class MainActivity extends AppCompatActivity
 
     private List<GroupItem> listGroup;
 
+    public Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         groupIDs = new ArrayList<Integer>();
 
@@ -54,13 +64,20 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                Bundle bundle = new Bundle();
-                bundle.putIntegerArrayList("groupIDs", groupIDs);
-                GroupFragment groupFragment = new GroupFragment();
-                groupFragment.setArguments(bundle);
-                Transactor.makeTransaction(groupFragment, getSupportFragmentManager().beginTransaction());
+             /*   Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show(); */
+                Fragment currentFrag = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                if (currentFrag instanceof GroupMainFragment) {
+                    Log.e("hey", "instance of groupmain fragment");
+                    ((GroupMainFragment)currentFrag).toCreateTask();
+                }
+                if (currentFrag instanceof ViewTaskFragment) {
+                    ((ViewTaskFragment)currentFrag).toCreateTask();
+                }
+                else if(currentFrag instanceof CreateTaskFragment || currentFrag instanceof GroupsFragment){}
+                else {
+                    toGroupsFrag();
+                }
             }
         });
 
@@ -90,9 +107,9 @@ public class MainActivity extends AppCompatActivity
                 Bundle bundle = new Bundle();
                 bundle.putIntegerArrayList("groupIDs", groupIDs);
                 MainFragment mainFragment = new MainFragment();
-                mainFragment.setArguments(bundle);
 
-                Transactor.makeTransaction(mainFragment, getSupportFragmentManager().beginTransaction());
+
+                Transactor.makeTransaction(mainFragment, getSupportFragmentManager().beginTransaction(), FragTag.main.toString(), bundle);
         }
 
             @Override
@@ -102,7 +119,7 @@ public class MainActivity extends AppCompatActivity
             }
 
             @Override
-            public void onNoResponse(POJOerror error) {
+            public void onNoResponse() {
 
             }
 
@@ -189,16 +206,11 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_groups) {
-            Bundle bundle = new Bundle();
-            bundle.putIntegerArrayList("groupIDs", groupIDs);
-            GroupFragment groupFragment = new GroupFragment();
-            groupFragment.setArguments(bundle);
-
-            Transactor.makeTransaction(groupFragment, getSupportFragmentManager().beginTransaction());
+            toGroupsFrag();
 
         } else if (id == R.id.nav_unfinished_homeworks) {
             ChatFragment chatFragment = new ChatFragment();
-            Transactor.makeTransaction(chatFragment, getSupportFragmentManager().beginTransaction());
+            Transactor.makeTransaction(chatFragment, getSupportFragmentManager().beginTransaction(), FragTag.chat.toString());
         } else if (id == R.id.nav_finished_homeworks) {
 
         } else if (id == R.id.nav_manage) {
@@ -211,5 +223,9 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    void toGroupsFrag(){
+        Transactor.makeTransaction(new GroupsFragment(), getSupportFragmentManager().beginTransaction(), FragTag.groups.toString(), groupIDs);
     }
 }

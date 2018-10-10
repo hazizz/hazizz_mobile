@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class POJOgetTask {
 
-    private long id;
+    private int id;
     private String type;
     private String title;
     private String description;
@@ -13,7 +13,7 @@ public class POJOgetTask {
     private String dueDate;
     private POJOgroupData groupData;
 
-    public POJOgetTask(long id, String type, String title, String description, POJOsubjectData subjectData,
+    public POJOgetTask(int id, String type, String title, String description, POJOsubjectData subjectData,
     String dueDate, POJOgroupData groupData){
         this.id = id;
         this.type = type;

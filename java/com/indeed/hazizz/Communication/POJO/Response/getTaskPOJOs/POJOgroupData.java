@@ -5,12 +5,12 @@ import lombok.Data;
 @Data
 public class POJOgroupData {
 
-    private long id;
+    private int id;
     private String name;
     private String groupType;
     private int userCount;
 
-    public POJOgroupData(long id, String name, String groupType, int userCount) {
+    public POJOgroupData(int id, String name, String groupType, int userCount) {
         this.id = id;
         this.name = name;
         this.groupType = groupType;

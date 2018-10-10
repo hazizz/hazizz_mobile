@@ -9,7 +9,7 @@
     <string name="action_settings">Settings</string>
 
     <string-array name="taskTypes">
-            <item>Test</item>
-            <item>Homework</item>
+            <item>test</item>
+            <item>homework</item>
     </string-array>
 </resources>

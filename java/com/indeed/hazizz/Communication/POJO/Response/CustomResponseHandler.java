@@ -8,6 +8,6 @@ public interface CustomResponseHandler {
     public void onPOJOResponse(Object response);
     public void onFailure();
     public void onErrorResponse(POJOerror error);
-    public void onNoResponse(POJOerror error);
+    public void onNoResponse();
 
 }

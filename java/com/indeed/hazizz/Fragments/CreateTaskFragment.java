@@ -19,7 +19,9 @@ import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.POJO.Response.POJOsubject;
 import com.indeed.hazizz.D8;
+import com.indeed.hazizz.FragTag;
 import com.indeed.hazizz.R;
+import com.indeed.hazizz.Transactor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,6 +53,9 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_createtask, container, false);
         Log.e("hey", "im here lol");
+
+        groupId = getArguments().getInt("groupId");
+        Log.e("hey", "in createtaskFrag construvtor: " + groupId);
 
         subject_spinner = (Spinner)v.findViewById(R.id.subject_spinner);
 
@@ -98,12 +103,12 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
 
             @Override
             public void onErrorResponse(POJOerror error) {
-                Log.e("hey", "onErrorResponse");
+                Log.e("hey", error.getMessage());
             }
 
             @Override
-            public void onNoResponse(POJOerror error) {
-
+            public void onNoResponse() {
+                toMainGroupFrag();
             }
         };
         rh_subjects = new CustomResponseHandler() {
@@ -134,8 +139,8 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
             }
 
             @Override
-            public void onNoResponse(POJOerror error) {
-
+            public void onNoResponse() {
+                Log.e("hey", "there is no repsonse");
             }
         };
 
@@ -145,7 +150,7 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
 
     private void getSubjects(){
         HashMap<String, Object> vars = new HashMap<>();
-        vars.put("id", 2);
+        vars.put("id", groupId);
         MiddleMan.newRequest(this.getActivity(), "getSubjects", null, rh_subjects, vars);
     }
 
@@ -156,11 +161,11 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
         requestBody.put("taskType", taskType.getSelectedItem().toString());
         requestBody.put("taskTitle", taskTitle.getText().toString());
         requestBody.put("description", description.getText().toString());
-        requestBody.put("subjectId", 10);//((POJOsubject) subject_spinner.getSelectedItem()).getId());
+        requestBody.put("subjectId", ((POJOsubject) subject_spinner.getSelectedItem()).getId());//((POJOsubject) subject_spinner.getSelectedItem()).getId());
         requestBody.put("dueDate", D8.getDateTomorrow());
 
         HashMap<String, Object> vars = new HashMap<>();
-        vars.put("id", 2);
+        vars.put("id", groupId);
 
         MiddleMan.newRequest(this.getActivity(), "createTask", requestBody, rh_taskTypes, vars);
         }
@@ -171,5 +176,11 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
+    }
+
+
+
+    void toMainGroupFrag(){
+        Transactor.makeTransaction(new GroupMainFragment(), getFragmentManager().beginTransaction(), FragTag.groupMain.toString(), groupId);
     }
 }
