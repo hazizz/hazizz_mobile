@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
@@ -30,7 +31,12 @@ public class GroupMainFragment extends Fragment{
     private View v;
     private CustomAdapter adapter;
     private List<TaskItem> listTask;
+
+    private TextView textView_info;
+
     private int groupID;
+    private String groupName;
+
 
 
     @Nullable
@@ -40,6 +46,11 @@ public class GroupMainFragment extends Fragment{
         Log.e("hey", "mainGroup fragment created");
 
         groupID = getArguments().getInt("groupId");
+        groupName = getArguments().getString("groupName");
+
+        textView_info = v.findViewById(R.id.textView_info);
+        textView_info.setText("Csoport: " + groupName);
+
 
         createViewList();
         getTask();
@@ -62,9 +73,13 @@ public class GroupMainFragment extends Fragment{
                 HashMap<String, Object> vars = new HashMap<>();
                 vars.put("taskId", ((TaskItem)listView.getItemAtPosition(i)).getTaskId());
                 vars.put("groupId",((TaskItem)listView.getItemAtPosition(i)).getGroupData().getId());
+                groupName = ((TaskItem)listView.getItemAtPosition(i)).getGroupData().getName();
                 Log.e("hey", "asd: " + vars.get("taskId") + ", " + vars.get("groupId"));
 
-                Transactor.makeTransaction(new ViewTaskFragment(), getFragmentManager().beginTransaction(), FragTag.viewTask.toString(), vars);
+                Transactor.fragmentViewTask(getFragmentManager().beginTransaction(),
+                        ((TaskItem)listView.getItemAtPosition(i)).getGroupData().getId(),
+                        ((TaskItem)listView.getItemAtPosition(i)).getTaskId(),
+                        ((TaskItem)listView.getItemAtPosition(i)).getGroupData().getName());
             }
         });
     }
@@ -83,7 +98,7 @@ public class GroupMainFragment extends Fragment{
 
                 for(POJOgetTask t : casted) {
                     listTask.add(new TaskItem(R.drawable.ic_launcher_background, t.getTitle(),
-                            t.getDescription(), t.getDueDate(), t.getGroupData(), t.getId()));
+                            t.getDescription(), t.getDueDate(), t.getGroupData(), t.getCreator(), t.getSubjectData(), t.getId()));
                     adapter.notifyDataSetChanged();
                     Log.e("hey", t.getId() + " " + t.getGroupData().getId());
                 }
@@ -119,7 +134,7 @@ public class GroupMainFragment extends Fragment{
     }
 
     public void toCreateTask(){
-        Transactor.makeTransaction(new CreateTaskFragment(), getFragmentManager().beginTransaction(), FragTag.createTask.toString(), groupID);
+        Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(),groupID, groupName);
         Log.e("hey", "called 123");
     }
 }

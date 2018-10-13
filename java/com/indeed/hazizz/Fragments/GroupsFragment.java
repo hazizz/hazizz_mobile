@@ -22,7 +22,6 @@ import com.indeed.hazizz.Communication.Requests.Request;
 import com.indeed.hazizz.FragTag;
 import com.indeed.hazizz.Listviews.GroupList.CustomAdapter;
 import com.indeed.hazizz.Listviews.GroupList.GroupItem;
-import com.indeed.hazizz.Listviews.TaskList.TaskItem;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
@@ -41,6 +40,10 @@ public class GroupsFragment extends Fragment {
 
     private Toolbar toolbar;
 
+    private boolean destCreateTask = false;
+
+    public int popo;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -49,16 +52,15 @@ public class GroupsFragment extends Fragment {
         Log.e("hey", "im here lol");
         Log.e("hey", "groups fragment created");
         groups = new ArrayList<POJOgroup>();
-        groupIDs = getArguments().getIntegerArrayList("groupsIds");
+        //groupIDs = getArguments().getIntegerArrayList("groupIds");
        // groups = getGroups(groupIDs);
         createViewList();
-        getGroups(groupIDs);
+        getGroups();
 
         return v;
     }
 
-    public void getGroups(List<Integer> gIDs) {
-        List<POJOgroup> groupsList = new ArrayList<POJOgroup>();
+    public void getGroups() {
         Log.e("hey", "atleast here 2");
         CustomResponseHandler responseHandler = new CustomResponseHandler() {
             @Override
@@ -68,8 +70,11 @@ public class GroupsFragment extends Fragment {
 
             @Override
             public void onPOJOResponse(Object response) {
-                groupsList.add((POJOgroup) response);
-                listGroup.add(new GroupItem(R.drawable.ic_launcher_background, ((POJOgroup) response).getName(), ((POJOgroup) response).getId()));
+                ArrayList<POJOgroup> castedListFullOfPojos = (ArrayList<POJOgroup>)response;
+                for(POJOgroup g : castedListFullOfPojos){
+                    listGroup.add(new GroupItem(R.drawable.ic_launcher_background, g.getName(), g.getId()));
+                }
+
                 adapter.notifyDataSetChanged();
                 Log.e("hey", "got response");
             }
@@ -90,13 +95,7 @@ public class GroupsFragment extends Fragment {
 
             }
         };
-        int size = gIDs.size() - 1;
-        for (int i = 0; i <= size; i++) {
-            Log.e("hey", "here 1");
-            HashMap<String, Object> vars = new HashMap<>();
-            vars.put("id", gIDs.get(i));
-            MiddleMan.newRequest(this.getActivity(), "getGroup", null, responseHandler, vars);
-        }
+        MiddleMan.newRequest(this.getActivity(), "getGroupsFromMe", null, responseHandler, null);
     }
 
     void createViewList(){
@@ -110,8 +109,16 @@ public class GroupsFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Transactor.makeTransaction(new GroupMainFragment(), getFragmentManager().beginTransaction(), FragTag.groupMain.toString(), ((GroupItem)listView.getItemAtPosition(i)).getGroupId());
+                if(destCreateTask) {
+                    Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(), ((GroupItem) listView.getItemAtPosition(i)).getGroupId(), ((GroupItem) listView.getItemAtPosition(i)).getGroupName());
+                }else{
+                    Transactor.fragmentMainGroup(getFragmentManager().beginTransaction(), ((GroupItem) listView.getItemAtPosition(i)).getGroupId(), ((GroupItem) listView.getItemAtPosition(i)).getGroupName());
+                }
             }
         });
+    }
+
+    public void destCreateTask(){
+        destCreateTask = true;
     }
 }

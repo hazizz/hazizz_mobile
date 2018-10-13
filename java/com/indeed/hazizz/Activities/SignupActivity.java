@@ -4,13 +4,13 @@ import com.indeed.hazizz.Activities.LoginActivity;
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
-import com.indeed.hazizz.Communication.ResponseHandler;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.RequestSenderRunnable;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -33,117 +33,7 @@ public class SignupActivity extends AppCompatActivity {
     private TextView textView;
     private TextView toLoginActivity;
 
-    private ResponseHandler responseHandler = new ResponseHandler() {
-
-        @Override
-        public void on401() {
-            textView.append("created");
-        }
-
-        @Override
-        public void on400() {
-            textView.append("Registration was successful");
-        }
-
-        /* @Override
-         public void onInvalidData(){
-
-         } */
-        @Override
-        public void onUnknowError() {
-            textView.append("Unknown Error");
-        }
-
-   /*     @Override
-        public void onInvalidData() {
-
-        } */
-
-        @Override
-        public void onDatabaseError() {
-
-        }
-
-        @Override
-        public void onPathVariableMissing() {
-
-        }
-
-        @Override
-        public void onForbidden() {
-
-        }
-
-        @Override
-        public void onGeneralAuthenticationError() {
-            textView.append("onGeneralAuthenticationError");
-        }
-
-        @Override
-        public void onInvalidPassword() {
-
-        }
-
-        @Override
-        public void onAccountLocked() {
-
-        }
-
-        @Override
-        public void onAccountDisabled() {
-
-        }
-
-        @Override
-        public void onAccountExpired() {
-
-        }
-
-        @Override
-        public void onUnkownPermission() {
-
-        }
-
-        @Override
-        public void onBadAuthenticationRequest() {
-
-        }
-
-        @Override
-        public void onGeneralUserError() {
-
-        }
-
-        @Override
-        public void onUserNotFound() {
-
-        }
-
-        @Override
-        public void onUsernameConflict() {
-
-        }
-
-        @Override
-        public void onEmailConflict() {
-
-        }
-
-        @Override
-        public void onGeneralGroupError() {
-
-        }
-
-        @Override
-        public void onGroupNotFound() {
-
-        }
-
-        @Override
-        public void onGroupNameConflict() {
-
-        }
-    };
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,6 +43,8 @@ public class SignupActivity extends AppCompatActivity {
         emailET = findViewById(R.id.editText_email);
         passwordET = findViewById(R.id.editText_password);
         textView = findViewById(R.id.textView);
+        toolbar = findViewById(R.id.toolbar);
+
         button_signup = (Button) findViewById(R.id.button_signup);
         button_signup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,27 +63,20 @@ public class SignupActivity extends AppCompatActivity {
 
                     CustomResponseHandler responseHandler = new CustomResponseHandler() {
                         @Override
-                        public void onResponse(HashMap<String, Object> response) {
-                            textView.append("\n errorCode: " + response.get("errorCode"));
-                            Log.e("hey", "got here");
-                        }
+                        public void onResponse(HashMap<String, Object> response) {}
                         @Override
-                        public void onPOJOResponse(Object response) {
-                        }
+                        public void onPOJOResponse(Object response) {}
                         @Override
                         public void onFailure() {
-                            textView.append("\n your signup was successful");
-                            switchToLoginActivity();
                         }
                         @Override
                         public void onErrorResponse(POJOerror error) {
                             textView.append("\n errorCode: " + error.getErrorCode());
                             Log.e("hey", "got here");
                         }
-
                         @Override
                         public void onNoResponse() {
-
+                            switchToLoginActivity();
                         }
                     };
                     MiddleMan.newRequest(getBaseContext(),"register", requestBody, responseHandler, null);

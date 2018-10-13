@@ -138,6 +138,9 @@ public class Request {
             case "getTask1":
                 requestType = new GetTask();
                 break;
+            case "getGroupsFromMe":
+                requestType = new GetGroupsFromMe();
+                break;
         }
     }
 
@@ -156,10 +159,12 @@ public class Request {
             HashMap<String, String> headerMap = new HashMap<String, String>();
             headerMap.put("Content-Type", "application/json");
 
-            HashMap<String, Object> body = new HashMap<String, Object>();
-            body.put("username", "bela");
-            body.put("password", "sasasajt");
-            call = aRequest.login(headerMap, body);
+            HashMap<String, String> b = new HashMap<>();
+          //  body.put("username", "bela");
+         //   body.put("password", "sasasajt");
+            b.put("username", body.get("username").toString());
+            b.put("password", body.get("password").toString());
+            call = aRequest.login(headerMap, b);
         }
 
         public HashMap<String, Object>  getResponse() {
@@ -217,13 +222,12 @@ public class Request {
             Log.e("hey", "created");
         }
 
-        Call<Void> call1;
 
         @Override
         public void setupCall() {
             HashMap<String, String> headerMap = new HashMap<String, String>();
             headerMap.put("Content-Type", "application/json");
-            call1 = aRequest.register(headerMap, body);
+            call = aRequest.register(headerMap, body);
         }
 
         public HashMap<String, Object>  getResponse() {
@@ -232,26 +236,26 @@ public class Request {
 
         @Override
         public void makeCall() {
-            call1.enqueue(new Callback<Void>() {
+            call.enqueue(new Callback<ResponseBody>() {
                 @Override
-                public void onResponse(Call<Void> call, Response<Void> response) {
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     Log.e("hey", "gotResponse");
                     Log.e("hey", response.raw().toString());
 
-                    if(response.isSuccessful()){ // response != null
-                 /*       Log.e("hey", (String)response.body().toString());
-                        if(response.body().containsKey("errorCode")) {
-                            cOnResponse.onErrorResponse(response.body());
-                            Log.e("hey", "2");
-                        }else{
-                            response1 = response.body();
-                            cOnResponse.onResponse(response1);
-                            Log.e("hey", "3");
-                        } */
+                    if (response.isSuccessful() && response.code() == 201) { // response != null
+                        Log.e("hey", "response.isSuccessful()");
+                        cOnResponse.onNoResponse();
+                    }
+
+                    if (!response.isSuccessful()) { // response != null
+                        //    Log.e("hey", (String)response.body().toString());
+                        POJOerror pojoError = gson.fromJson(response.errorBody().charStream(), POJOerror.class);
+                        Log.e("hey", "errorCOde is: " + pojoError.getErrorCode());
+                        cOnResponse.onErrorResponse(pojoError);
                     }
                 }
                 @Override
-                public void onFailure(Call<Void> call, Throwable t) {
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
                     cOnResponse.onFailure();
                 }
             });
@@ -269,7 +273,7 @@ public class Request {
         public void setupCall() {
             HashMap<String, String> headerMap = new HashMap<String, String>();
             headerMap.put("Authorization", "Bearer " + SharedPrefs.getString(context, "token", "token"));//SharedPrefs.getString(context, "token", "token"));
-            call1 = aRequest.me(headerMap);
+            call = aRequest.me(headerMap);
         }
         public HashMap<String, Object>  getResponse() {
             return response1;
@@ -277,22 +281,30 @@ public class Request {
 
         @Override
         public void makeCall() {
-            call1.enqueue(new Callback<POJOme>() {
+            call.enqueue(new Callback<ResponseBody>() {
                 @Override
-                public void onResponse(Call<POJOme> call, Response<POJOme> response) {
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     Log.e("hey", "gotResponse");
                     Log.e("hey", response.raw().toString());
 
                     if(response.isSuccessful()){ // response != null
-                        Log.e("hey", (String)response.body().toString());
-                        Log.e("hey", "2");
+                        Log.e("hey", "response.isSuccessful()");
 
-                        cOnResponse.onPOJOResponse(response.body());
-                        Log.e("hey", "3");
+                        POJOme pojoMe = gson.fromJson(response.body().charStream(),POJOme.class);
+
+                        cOnResponse.onPOJOResponse(pojoMe);
                     }
+
+                    if(!response.isSuccessful()){ // response != null
+                        //    Log.e("hey", (String)response.body().toString());
+                        POJOerror pojoError = gson.fromJson(response.errorBody().charStream(),POJOerror.class);
+                        Log.e("hey", "errorCOde is: " +pojoError.getErrorCode());
+                        cOnResponse.onErrorResponse(pojoError);
+                    }
+                    else{cOnResponse.onNoResponse();}
                 }
                 @Override
-                public void onFailure(Call<POJOme> call, Throwable t) {
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
                     cOnResponse.onFailure();
                 }
             });
@@ -681,6 +693,66 @@ public class Request {
                         List<POJOgetTask> castedList = gson.fromJson(response.body().charStream(), listType);
 
                      //   POJOgetUser pojoError = gson.fromJson(response.body().charStream(),POJOerror.class);
+
+                        cOnResponse.onPOJOResponse(castedList);
+                    }
+
+                    if(!response.isSuccessful()){ // response != null
+                        //    Log.e("hey", (String)response.body().toString());
+                        POJOerror pojoError = gson.fromJson(response.errorBody().charStream(),POJOerror.class);
+                        Log.e("hey", "errorCOde is: " +pojoError.getErrorCode());
+                        cOnResponse.onErrorResponse(pojoError);
+                    }
+                    else{cOnResponse.onNoResponse();}
+                }
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Log.e("hey", call.toString());
+                    cOnResponse.onFailure();
+                }
+            });
+        }
+    }
+
+    public class GetGroupsFromMe implements RequestInterface1 {
+        //   public String name = "register";
+        GetGroupsFromMe(){
+            Log.e("hey", "created GetGroupsFromMe object");
+        }
+
+      //  Call<ResponseBody> call1;
+
+        @Override
+        public void setupCall() {
+            HashMap<String, String> headerMap = new HashMap<String, String>();
+            headerMap.put("Authorization", "Bearer " + SharedPrefs.getString(context, "token", "token"));//SharedPrefs.getString(context, "token", "token"));
+            call = aRequest.getGroupsFromMe(headerMap); //Integer.toString(groupID)
+        }
+        public HashMap<String, Object>  getResponse() {
+            return response1;
+        }
+
+        @Override
+        public void makeCall() {
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    Log.e("hey", "gotResponse");
+
+                    if(response.body() == null){
+                        Log.e("hey", "response is null ");
+                    }
+                   /* if(response.body().toString() == ""){
+                        Log.e("hey", "response is blank ");
+                    } */
+
+                    if(response.isSuccessful()){ // response != null
+                        Log.e("hey", "response.isSuccessful()");
+
+                        Type listType = new TypeToken<ArrayList<POJOgroup>>(){}.getType();
+                        List<POJOgroup> castedList = gson.fromJson(response.body().charStream(), listType);
+
+                        //   POJOgetUser pojoError = gson.fromJson(response.body().charStream(),POJOerror.class);
 
                         cOnResponse.onPOJOResponse(castedList);
                     }

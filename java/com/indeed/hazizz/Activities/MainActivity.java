@@ -42,14 +42,47 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private TextView textView_userName;
-    private TextView textView_email;
+    private TextView navUsername;
+    private TextView navEmail;
+    private TextView navLogout;
 
     private ArrayList<Integer> groupIDs;
 
-    private List<GroupItem> listGroup;
 
     public Toolbar toolbar;
+
+    CustomResponseHandler responseHandler = new CustomResponseHandler() {
+        @Override
+        public void onResponse(HashMap<String, Object> response) {
+        }
+
+        @Override
+        public void onPOJOResponse(Object response) {
+            Log.e("hey", "got pojo response");
+            navUsername.setText(((POJOme) response).getUsername());
+            navEmail.setText(((POJOme) response).getEmailAddress());
+
+         /*   for(POJOgroup g : ((POJOme) response).getGroups()){
+                groupIDs.add(g.getId());
+                Log.e("hey", "added groupID");
+            } */
+          //  toMainFrag();
+        }
+        @Override
+        public void onFailure() {
+            Log.e("hey", "4");
+            Log.e("hey", "got here onFailure");
+        }
+        @Override
+        public void onNoResponse() {
+            Log.e("hey", "NO RESPONSE");
+
+        }
+        @Override
+        public void onErrorResponse(POJOerror error) {
+            Log.e("hey", "onErrorResponse");
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +90,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         groupIDs = new ArrayList<Integer>();
 
@@ -71,7 +105,7 @@ public class MainActivity extends AppCompatActivity
                     Log.e("hey", "instance of groupmain fragment");
                     ((GroupMainFragment)currentFrag).toCreateTask();
                 }
-                if (currentFrag instanceof ViewTaskFragment) {
+                else if (currentFrag instanceof ViewTaskFragment) {
                     ((ViewTaskFragment)currentFrag).toCreateTask();
                 }
                 else if(currentFrag instanceof CreateTaskFragment || currentFrag instanceof GroupsFragment){}
@@ -86,88 +120,15 @@ public class MainActivity extends AppCompatActivity
         navigationView.bringToFront();
 
         View headerView = navigationView.getHeaderView(0);
-        TextView navUsername = (TextView) headerView.findViewById(R.id.textView_userName);
-        TextView navEmail = (TextView) headerView.findViewById(R.id.textView_email);
-
-        CustomResponseHandler responseHandler = new CustomResponseHandler() {
-            @Override
-            public void onResponse(HashMap<String, Object> response) {
-            }
-
-            @Override
-            public void onPOJOResponse(Object response) {
-                navUsername.setText(((POJOme) response).getUsername());
-                navEmail.setText(((POJOme) response).getEmailAddress());
-
-                for(POJOgroup g : ((POJOme) response).getGroups()){
-                    groupIDs.add(g.getId());
-                    Log.e("hey", "added groupID");
-                }
-
-                Bundle bundle = new Bundle();
-                bundle.putIntegerArrayList("groupIDs", groupIDs);
-                MainFragment mainFragment = new MainFragment();
-
-
-                Transactor.makeTransaction(mainFragment, getSupportFragmentManager().beginTransaction(), FragTag.main.toString(), bundle);
-        }
-
-            @Override
-            public void onFailure() {
-                Log.e("hey", "4");
-                Log.e("hey", "got here onFailure");
-            }
-
-            @Override
-            public void onNoResponse() {
-
-            }
-
-            @Override
-            public void onErrorResponse(POJOerror error) {
-                Log.e("hey", "onErrorResponse");
-            }
-        };
+        navUsername = (TextView) headerView.findViewById(R.id.textView_userName);
+        navEmail = (TextView) headerView.findViewById(R.id.textView_email);
+        navLogout = headerView.findViewById(R.id.textView_logout);
 
         MiddleMan.newRequest(getBaseContext(), "me", null, responseHandler, null);
-
-     /*   ListView name = (ListView)findViewById(R.id.listView1);
-
-        listGroup = new ArrayList<>();
-
-        for(int i = 0; i < 10; i++) {
-            listGroup.add(new GroupItem(R.drawable.ic_launcher_background, "a Group Name"));
-        }
-
-        ListView listView = (ListView)findViewById(R.id.listView1);
-
-        CustomAdapter adapter = new CustomAdapter(this, R.layout.list_item, listGroup);
-
-        if(adapter == null){
-            Log.e("hey", "adapter is null");
-
-        }
-        if(listView == null){
-            Log.e("hey", "listView is null");
-        }
-
-        Log.e("hey", "all set0");
-
-        listView.setAdapter(adapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.e("hey", "clicked");
-            }
-        });
-        Log.e("hey", "all set"); */
-
-       // Transactor.makeTransaction(new MainFragment(), getSupportFragmentManager().beginTransaction());
-
+        toMainFrag();
     }
 
-    @Override
+  /*  @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -175,7 +136,21 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+    } */
+
+ /*   @Override
+    public void onResume(){
+        super.onResume();
+        Log.e("hey", "onResume is trigered");
+        toMainFrag();
     }
+    @Override
+    public void onStart(){
+        super.onStart();
+        Log.e("hey", "onResume is trigered");
+        toMainFrag();
+    } */
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -205,20 +180,13 @@ public class MainActivity extends AppCompatActivity
         Log.e("hey", "chechk1");
         int id = item.getItemId();
 
-        if (id == R.id.nav_groups) {
+
+        if (id == R.id.nav_home) {
+            toMainFrag();
+        } else if (id == R.id.nav_groups) {
             toGroupsFrag();
-
-        } else if (id == R.id.nav_unfinished_homeworks) {
-            ChatFragment chatFragment = new ChatFragment();
-            Transactor.makeTransaction(chatFragment, getSupportFragmentManager().beginTransaction(), FragTag.chat.toString());
-        } else if (id == R.id.nav_finished_homeworks) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+       /* } else if (id == R.id.nav_new_task) {
+            toCreateTaskFrag(); */
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -226,6 +194,46 @@ public class MainActivity extends AppCompatActivity
     }
 
     void toGroupsFrag(){
-        Transactor.makeTransaction(new GroupsFragment(), getSupportFragmentManager().beginTransaction(), FragTag.groups.toString(), groupIDs);
+        Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction(), false);
     }
+
+    void toMainFrag(){
+        Transactor.fragmentMain(getSupportFragmentManager().beginTransaction());
+    }
+
+    void toCreateTaskFrag(){
+        Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction(), true);
+    }
+
+  /*  @Override
+    public void onBackPressed() {
+        Log.e("hey", "onBackPressed in MainActivity");
+        Fragment currentFrag = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (currentFrag instanceof GroupMainFragment) {
+            Log.e("hey", "instance of groupmain fragment");
+            Transactor.makeTransaction(new MainFragment(), getSupportFragmentManager().beginTransaction(),true, FragTag.groups.toString(), groupIDs);
+        }
+        if (currentFrag instanceof ViewTaskFragment) {
+            Transactor.makeTransaction(new GroupMainFragment(), getSupportFragmentManager().beginTransaction(),true, FragTag.groups.toString(), groupIDs);
+
+        }
+        else if(currentFrag instanceof CreateTaskFragment || currentFrag instanceof GroupsFragment){}
+        else {
+            toGroupsFrag();
+        }
+    } */
+
+    /*@Override
+    public void onBackPressed() {
+
+        int count = getFragmentManager().getBackStackEntryCount();
+
+        if (count == 0) {
+            super.onBackPressed();
+            //additional code
+        } else {
+            getFragmentManager().popBackStack();
+        }
+
+    } */
 }

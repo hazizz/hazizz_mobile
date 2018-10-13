@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
@@ -30,6 +31,7 @@ import java.util.List;
 public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSelectedListener{
 
     private int groupId;
+    private String groupName;
 
     private Spinner subject_spinner;
 
@@ -37,6 +39,7 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
     private EditText taskTitle;
     private EditText description;
     private Button button_send;
+    private TextView textView_group;
 
     private List<POJOsubject> subjects = new ArrayList<>();
 
@@ -55,6 +58,7 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
         Log.e("hey", "im here lol");
 
         groupId = getArguments().getInt("groupId");
+        groupName = getArguments().getString("groupName");
         Log.e("hey", "in createtaskFrag construvtor: " + groupId);
 
         subject_spinner = (Spinner)v.findViewById(R.id.subject_spinner);
@@ -63,6 +67,8 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
         taskType = (Spinner)v.findViewById(R.id.taskType_spinner);
         taskTitle = v.findViewById(R.id.taskTitle);
         description = v.findViewById(R.id.textView_description);
+        textView_group = v.findViewById(R.id.textView_group);
+        textView_group.setText(groupName);
         // tasktype spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.taskTypes, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -80,6 +86,7 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
             public void onClick(View view) {
                 Log.e("hey", "rick rolled");
                 createTask();
+                button_send.setEnabled(false);
             }
         });
         rh_taskTypes = new CustomResponseHandler() {
@@ -104,11 +111,13 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
             @Override
             public void onErrorResponse(POJOerror error) {
                 Log.e("hey", error.getMessage());
+                button_send.setEnabled(true);
             }
 
             @Override
             public void onNoResponse() {
                 toMainGroupFrag();
+                button_send.setEnabled(true);
             }
         };
         rh_subjects = new CustomResponseHandler() {
@@ -181,6 +190,6 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
 
 
     void toMainGroupFrag(){
-        Transactor.makeTransaction(new GroupMainFragment(), getFragmentManager().beginTransaction(), FragTag.groupMain.toString(), groupId);
+        Transactor.fragmentMainGroup(getFragmentManager().beginTransaction(),groupId, groupName);
     }
 }

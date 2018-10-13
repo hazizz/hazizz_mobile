@@ -10,6 +10,8 @@ import com.indeed.hazizz.SharedPrefs;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,6 +37,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText passwordET;
     private CheckBox checkBox_autoLogin;
     private Button button_login;
+    private TextView textView_error;
  //   private TextView textView;
 
   //  private MyCallback<ResponseBodies.Error> errorCallback;
@@ -47,8 +50,9 @@ public class LoginActivity extends AppCompatActivity {
         usernameET = findViewById(R.id.editText_username);
         passwordET = findViewById(R.id.editText_password);
         checkBox_autoLogin = findViewById(R.id.checkBox_autoLogin);
-        Calendar cal = new GregorianCalendar();
-        cal.add(Calendar.YEAR, 1);
+
+        textView_error = (TextView) findViewById(R.id.textView_error);
+        textView_error.setTextColor(Color.rgb(255, 0, 0));
 
         button_login = (Button) findViewById(R.id.button_login);
 
@@ -75,6 +79,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.e("hey", "got here onResponse");
                             SharedPrefs.save(getBaseContext(), "token", "token", (String) ((POJOauth)response).getToken());
                             switchToMain();
+                            button_login.setEnabled(true);
                         }
                         @Override
                         public void onFailure() {
@@ -91,8 +96,15 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onErrorResponse(POJOerror error) {
                           //  textView.append("\n errorCode: " + error.getErrorCode());
-                            Log.e("hey", "got here");
+                            if(error.getErrorCode() == 12){ // wrong password
+                                textView_error.setText("Helytelen jelszó");
+                            }
+                            if(error.getErrorCode() == 31){ // no such user
+                                textView_error.setText("Felhasználó nem található");
+                            }
+                            Log.e("hey", "errodCOde is " + error.getErrorCode() + "");
                             Log.e("hey", "got here onResponse");
+                            button_login.setEnabled(true);
                         }
                     };
                     MiddleMan.newRequest(getBaseContext(), "login", requestBody, responseHandler, null);
@@ -108,6 +120,11 @@ public class LoginActivity extends AppCompatActivity {
     private void switchToMain(){
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
+      //  finish();
     }
+
+
+
+
 }
 
