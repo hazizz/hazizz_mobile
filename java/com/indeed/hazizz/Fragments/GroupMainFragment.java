@@ -33,9 +33,11 @@ public class GroupMainFragment extends Fragment{
     private List<TaskItem> listTask;
 
     private TextView textView_info;
+    private TextView textView_noContent;
 
     private int groupID;
     private String groupName;
+
 
 
 
@@ -51,6 +53,7 @@ public class GroupMainFragment extends Fragment{
         textView_info = v.findViewById(R.id.textView_info);
         textView_info.setText("Csoport: " + groupName);
 
+        textView_noContent = v.findViewById(R.id.textView_noContent);
 
         createViewList();
         getTask();
@@ -116,6 +119,7 @@ public class GroupMainFragment extends Fragment{
             public void onFailure() {
                 Log.e("hey", "4");
                 Log.e("hey", "got here onFailure");
+                textView_noContent.setVisibility(v.VISIBLE);
             }
 
             @Override
@@ -124,7 +128,12 @@ public class GroupMainFragment extends Fragment{
             }
 
             @Override
-            public void onNoResponse() {
+            public void onEmptyResponse() {
+                textView_noContent.setVisibility(v.VISIBLE);
+            }
+
+            @Override
+            public void onSuccessfulResponse() {
 
             }
         };

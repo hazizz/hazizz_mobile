@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.indeed.hazizz.Activities.MainActivity;
 import com.indeed.hazizz.Communication.MiddleMan;
@@ -37,12 +38,10 @@ public class GroupsFragment extends Fragment {
     private List<GroupItem> listGroup;
     private View v;
     private CustomAdapter adapter;
-
-    private Toolbar toolbar;
+    private TextView textView_noContent;
 
     private boolean destCreateTask = false;
 
-    public int popo;
 
     @Nullable
     @Override
@@ -56,6 +55,8 @@ public class GroupsFragment extends Fragment {
        // groups = getGroups(groupIDs);
         createViewList();
         getGroups();
+
+        textView_noContent = v.findViewById(R.id.textView_noContent);
 
         return v;
     }
@@ -91,7 +92,12 @@ public class GroupsFragment extends Fragment {
             }
 
             @Override
-            public void onNoResponse() {
+            public void onEmptyResponse() {
+                textView_noContent.setVisibility(v.VISIBLE);
+            }
+
+            @Override
+            public void onSuccessfulResponse() {
 
             }
         };

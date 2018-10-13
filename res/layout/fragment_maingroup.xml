@@ -25,10 +25,13 @@
             android:scrollbars="vertical" />
 
         <TextView
+            android:id="@+id/textView_noContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="MainGroup Fragment"
-            android:visibility="visible" />
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="49dp"
+            android:text="Nincs házi"
+            android:visibility="invisible" />
     </RelativeLayout>
 </LinearLayout>

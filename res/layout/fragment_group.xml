@@ -16,11 +16,14 @@
         >
 
         <TextView
+            android:id="@+id/textView_noContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Group Fragment"
-            android:layout_centerInParent="true"
-            />
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="49dp"
+            android:text="Nem vagy tagja egyik csoportnak sem"
+            android:visibility="invisible" />
 
 
         <ListView

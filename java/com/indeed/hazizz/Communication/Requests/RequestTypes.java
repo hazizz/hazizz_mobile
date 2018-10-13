@@ -62,17 +62,11 @@ public interface RequestTypes{
             @Body HashMap<String, Object> taskBody
     );
 
-    @GET("groups/{id}/subjects")  // /groups/{id}/subjects
-    Call<List<POJOsubject>> getSubjects(
-            @Path("id") String id,
-            @HeaderMap Map<String, String> headers
-
-    );
-
-    @POST("groups/{id}/subjects")
-    Call<ResponseBody> createSubject(
+    @GET("groups/{groupId}/subjects")  // /groups/{id}/subjects
+    Call<ResponseBody> getSubjects(
             @Path("groupId") String groupId,
             @HeaderMap Map<String, String> headers
+
     );
 
     @GET("groups/{id}/tasks")
@@ -82,7 +76,7 @@ public interface RequestTypes{
     );
 
     @GET("me/tasks")
-    Call<ArrayList<POJOgetTask>> getTasksFromMe(
+    Call<ResponseBody> getTasksFromMe(
             @HeaderMap Map<String, String> headers
     );
 
@@ -104,15 +98,26 @@ public interface RequestTypes{
             @HeaderMap Map<String, String> headers
     );
 
+    @POST("groups/{groupId}/subjects")
+    Call<ResponseBody> createSubject(
+            @Path("groupId") String groupId,
+            @HeaderMap Map<String, String> headers,
+            @Body HashMap<String, Object> body
+    );
+
+    @POST("groups")
+    Call<ResponseBody> createGroup(
+            @HeaderMap Map<String, String> headers,
+            @Body HashMap<String, Object> body
+    );
 
 
-
-
-
-
-
-
-
+    @POST("groups/{groupId}/invited")
+    Call<ResponseBody> inviteUserToGroup(
+            @Path("groupId") String groupId,
+            @HeaderMap Map<String, String> headers,
+            @Body HashMap<String, Object> body
+    );
 
 
 }

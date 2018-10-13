@@ -2,6 +2,7 @@ package com.indeed.hazizz.Activities;
 
 //import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -26,6 +27,7 @@ import com.indeed.hazizz.Communication.POJO.Response.POJOme;
 import com.indeed.hazizz.Communication.Requests.Request;
 import com.indeed.hazizz.FragTag;
 import com.indeed.hazizz.Fragments.ChatFragment;
+import com.indeed.hazizz.Fragments.CreateSubjectFragment;
 import com.indeed.hazizz.Fragments.CreateTaskFragment;
 import com.indeed.hazizz.Fragments.GroupMainFragment;
 import com.indeed.hazizz.Fragments.GroupsFragment;
@@ -74,10 +76,16 @@ public class MainActivity extends AppCompatActivity
             Log.e("hey", "got here onFailure");
         }
         @Override
-        public void onNoResponse() {
+        public void onEmptyResponse() {
             Log.e("hey", "NO RESPONSE");
 
         }
+
+        @Override
+        public void onSuccessfulResponse() {
+
+        }
+
         @Override
         public void onErrorResponse(POJOerror error) {
             Log.e("hey", "onErrorResponse");
@@ -109,12 +117,14 @@ public class MainActivity extends AppCompatActivity
                     ((ViewTaskFragment)currentFrag).toCreateTask();
                 }
                 else if(currentFrag instanceof CreateTaskFragment || currentFrag instanceof GroupsFragment){}
+                else if (currentFrag instanceof MainFragment) {
+                    toCreateTaskFrag(true);
+                }
                 else {
                     toGroupsFrag();
                 }
             }
         });
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.bringToFront();
@@ -122,8 +132,15 @@ public class MainActivity extends AppCompatActivity
         View headerView = navigationView.getHeaderView(0);
         navUsername = (TextView) headerView.findViewById(R.id.textView_userName);
         navEmail = (TextView) headerView.findViewById(R.id.textView_email);
-        navLogout = headerView.findViewById(R.id.textView_logout);
+        navLogout = findViewById(R.id.textView_logout);
+        navLogout.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+                 Log.e("hey", "pressed logout");
+                 logout();
 
+             }
+             });
         MiddleMan.newRequest(getBaseContext(), "me", null, responseHandler, null);
         toMainFrag();
     }
@@ -201,27 +218,42 @@ public class MainActivity extends AppCompatActivity
         Transactor.fragmentMain(getSupportFragmentManager().beginTransaction());
     }
 
-    void toCreateTaskFrag(){
-        Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction(), true);
+    void toCreateTaskFrag(boolean dest){
+        Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction(), dest);
     }
 
-  /*  @Override
+    void logout(){
+        Intent i = new Intent(this, LoginActivity.class);
+        startActivity(i);
+    }
+
+
+    @Override
     public void onBackPressed() {
-        Log.e("hey", "onBackPressed in MainActivity");
         Fragment currentFrag = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-        if (currentFrag instanceof GroupMainFragment) {
-            Log.e("hey", "instance of groupmain fragment");
-            Transactor.makeTransaction(new MainFragment(), getSupportFragmentManager().beginTransaction(),true, FragTag.groups.toString(), groupIDs);
+        if      (currentFrag instanceof MainFragment) {}
+        else if (currentFrag instanceof GroupsFragment) {
+            Transactor.fragmentMain(getSupportFragmentManager().beginTransaction());
         }
-        if (currentFrag instanceof ViewTaskFragment) {
-            Transactor.makeTransaction(new GroupMainFragment(), getSupportFragmentManager().beginTransaction(),true, FragTag.groups.toString(), groupIDs);
+        else if (currentFrag instanceof GroupMainFragment) {
+            Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction(), false);
+        }
+        else if (currentFrag instanceof CreateTaskFragment) {
+            Transactor.fragmentMainGroup(getSupportFragmentManager().beginTransaction(), ((CreateTaskFragment)currentFrag).getGroupId(), ((CreateTaskFragment)currentFrag).getGroupName());
 
         }
-        else if(currentFrag instanceof CreateTaskFragment || currentFrag instanceof GroupsFragment){}
-        else {
-            toGroupsFrag();
+        else if (currentFrag instanceof ViewTaskFragment) {
+            Transactor.fragmentMainGroup(getSupportFragmentManager().beginTransaction(), ((ViewTaskFragment)currentFrag).getGroupId(), ((ViewTaskFragment)currentFrag).getGroupName());
+
         }
-    } */
+        else if (currentFrag instanceof CreateSubjectFragment) {
+            ((CreateSubjectFragment) currentFrag).goBack();
+        }
+        else {
+            Log.e("hey", "back button pressed and Else block is being called");
+            Transactor.fragmentMain(getSupportFragmentManager().beginTransaction());
+        }
+    }
 
     /*@Override
     public void onBackPressed() {

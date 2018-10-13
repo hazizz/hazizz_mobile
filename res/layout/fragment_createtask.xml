@@ -117,14 +117,14 @@
         <Button
             android:id="@+id/add_button"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
-            android:layout_marginLeft="264dp"
-            android:layout_marginStart="264dp"
-            android:text="Add"
-            android:visibility="invisible"
+            android:layout_height="44dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:text="Hozzáad"
+            android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@+id/taskTitle"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toEndOf="@+id/relativeLayout2" />
 
         <TextView
             android:id="@+id/textView_group"

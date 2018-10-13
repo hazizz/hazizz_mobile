@@ -39,6 +39,7 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
     private EditText taskTitle;
     private EditText description;
     private Button button_send;
+    private Button button_add;
     private TextView textView_group;
 
     private List<POJOsubject> subjects = new ArrayList<>();
@@ -64,6 +65,7 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
         subject_spinner = (Spinner)v.findViewById(R.id.subject_spinner);
 
         button_send = (Button)v.findViewById(R.id.button_send1);
+        button_add = v.findViewById(R.id.add_button);
         taskType = (Spinner)v.findViewById(R.id.taskType_spinner);
         taskTitle = v.findViewById(R.id.taskTitle);
         description = v.findViewById(R.id.textView_description);
@@ -80,6 +82,13 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
         subject_spinner.setAdapter(s_adapter);
         s_adapter.notifyDataSetChanged();
         subject_spinner.setOnItemSelectedListener(this);
+
+        button_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toCreateSubjectFrag();
+            }
+        });
 
         button_send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,9 +124,14 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
             }
 
             @Override
-            public void onNoResponse() {
+            public void onEmptyResponse() {
                 toMainGroupFrag();
                 button_send.setEnabled(true);
+            }
+
+            @Override
+            public void onSuccessfulResponse() {
+
             }
         };
         rh_subjects = new CustomResponseHandler() {
@@ -148,8 +162,13 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
             }
 
             @Override
-            public void onNoResponse() {
+            public void onEmptyResponse() {
                 Log.e("hey", "there is no repsonse");
+            }
+
+            @Override
+            public void onSuccessfulResponse() {
+
             }
         };
 
@@ -159,7 +178,7 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
 
     private void getSubjects(){
         HashMap<String, Object> vars = new HashMap<>();
-        vars.put("id", groupId);
+        vars.put("groupId", groupId);
         MiddleMan.newRequest(this.getActivity(), "getSubjects", null, rh_subjects, vars);
     }
 
@@ -191,5 +210,16 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
 
     void toMainGroupFrag(){
         Transactor.fragmentMainGroup(getFragmentManager().beginTransaction(),groupId, groupName);
+    }
+
+    void toCreateSubjectFrag(){
+        Transactor.fragmentCreateSubject(getFragmentManager().beginTransaction(), groupId, groupName);
+    }
+
+    public int getGroupId(){
+        return groupId;
+    }
+    public String getGroupName(){
+        return groupName;
     }
 }
