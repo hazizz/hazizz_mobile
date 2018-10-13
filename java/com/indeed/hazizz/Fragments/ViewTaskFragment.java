@@ -58,7 +58,7 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
         title = v.findViewById(R.id.textView_title);
         description = v.findViewById(R.id.textView_description);
         creatorName = v.findViewById(R.id.textView_creator);
-        subject = v.findViewById(R.id.textView_title);
+        subject = v.findViewById(R.id.textView_subject);
         deadLine = v.findViewById(R.id.textview_deadline);
 
 
@@ -105,7 +105,12 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
             }
 
             @Override
-            public void onNoResponse() {
+            public void onEmptyResponse() {
+
+            }
+
+            @Override
+            public void onSuccessfulResponse() {
 
             }
         };
@@ -133,4 +138,11 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
         Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(),groupID, groupName);
         Log.e("hey", "called 123");
     } */
+
+    public int getGroupId(){
+        return groupId;
+    }
+    public String getGroupName(){
+        return groupName;
+    }
 }

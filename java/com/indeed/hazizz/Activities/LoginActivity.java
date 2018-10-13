@@ -4,13 +4,10 @@ import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOauth;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
-import com.indeed.hazizz.Communication.ResponseHandler;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.SharedPrefs;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,9 +18,6 @@ import android.widget.EditText;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.sql.Date;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 
 
@@ -89,7 +83,12 @@ public class LoginActivity extends AppCompatActivity {
 
 
                         @Override
-                        public void onNoResponse() {
+                        public void onEmptyResponse() {
+
+                        }
+
+                        @Override
+                        public void onSuccessfulResponse() {
 
                         }
 

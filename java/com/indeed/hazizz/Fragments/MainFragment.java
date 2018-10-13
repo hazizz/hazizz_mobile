@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
@@ -36,6 +37,8 @@ public class MainFragment extends Fragment {
 
     private int i = 0;
 
+    private TextView textView_noContent;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -44,6 +47,8 @@ public class MainFragment extends Fragment {
 
         createViewList();
         getTasks();
+
+        textView_noContent = v.findViewById(R.id.textView_noContent);
 
         return v;
     }
@@ -81,6 +86,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onPOJOResponse(Object response) {
                 ArrayList<POJOgetTask> casted = (ArrayList<POJOgetTask>) response;
+
                 for(POJOgetTask t : casted) {
                     listTask.add(new TaskItem(R.drawable.ic_launcher_background, t.getTitle(),
                             t.getDescription(), t.getDueDate(), t.getGroupData(), t.getCreator(), t.getSubjectData(), t.getId()));
@@ -99,7 +105,13 @@ public class MainFragment extends Fragment {
             }
 
             @Override
-            public void onNoResponse() {
+            public void onEmptyResponse() {
+                textView_noContent.setVisibility(v.VISIBLE);
+            }
+
+            @Override
+            public void onSuccessfulResponse() {
+
             }
         };
         MiddleMan.newRequest(this.getActivity(), "getTasksFromMe", null, responseHandler, null);

@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
 import com.indeed.hazizz.Fragments.ChatFragment;
+import com.indeed.hazizz.Fragments.CreateSubjectFragment;
 import com.indeed.hazizz.Fragments.CreateTaskFragment;
 import com.indeed.hazizz.Fragments.GroupMainFragment;
 import com.indeed.hazizz.Fragments.GroupsFragment;
@@ -154,13 +155,15 @@ public abstract class Transactor extends FragmentActivity {
         fTransaction.commit();
     }
 
-
-
-
-
-
-
-
-
+    public static void fragmentCreateSubject(FragmentTransaction fTransaction, int groupId, String groupName){
+        Bundle bundle = new Bundle();
+        CreateSubjectFragment frag = new CreateSubjectFragment();
+        bundle.putInt("groupId", groupId);
+        bundle.putString("groupName", groupName);
+        frag.setArguments(bundle);
+        fTransaction.add(R.id.fragment_container, frag);//.addToBackStack(null);
+        if(backStack){ fTransaction.addToBackStack(null); }
+        fTransaction.commit();
+    }
 
 }

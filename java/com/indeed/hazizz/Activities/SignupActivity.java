@@ -75,8 +75,13 @@ public class SignupActivity extends AppCompatActivity {
                             Log.e("hey", "got here");
                         }
                         @Override
-                        public void onNoResponse() {
+                        public void onEmptyResponse() {
                             switchToLoginActivity();
+                        }
+
+                        @Override
+                        public void onSuccessfulResponse() {
+
                         }
                     };
                     MiddleMan.newRequest(getBaseContext(),"register", requestBody, responseHandler, null);
