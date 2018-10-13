@@ -42,10 +42,8 @@ public class MainFragment extends Fragment {
         v = inflater.inflate(R.layout.fragment_main, container, false);
         Log.e("hey", "main fragment created");
 
-        groupIDs = getArguments().getIntegerArrayList("groupIDs");
-
         createViewList();
-        getTasks(groupIDs);
+        getTasks();
 
         return v;
     }
@@ -61,51 +59,40 @@ public class MainFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                // TODO
-                HashMap<String, Object> vars = new HashMap<>();
-                vars.put("taskId", ((TaskItem)listView.getItemAtPosition(i)).getTaskId());
-                vars.put("groupId", ((TaskItem)listView.getItemAtPosition(i)).getGroupData().getId());
-                Log.e("hey", "asd: " + vars.get("taskId") + ", " + vars.get("groupId"));
 
-                Transactor.makeTransaction(new ViewTaskFragment(), getFragmentManager().beginTransaction(), FragTag.viewTask.toString(),vars);
+              /*  HashMap<String, Object> vars = new HashMap<>();
+                vars.put("taskId", ((TaskItem)listView.getItemAtPosition(i)).getTaskId());
+                vars.put("groupId", ((TaskItem)listView.getItemAtPosition(i)).getGroupData().getId()); */
+             //   Log.e("hey", "asd: " + vars.get("taskId") + ", " + vars.get("groupId"));
+
+                Transactor.fragmentViewTask(getFragmentManager().beginTransaction(),((TaskItem)listView.getItemAtPosition(i)).getGroupData().getId(),
+                        ((TaskItem)listView.getItemAtPosition(i)).getTaskId(),
+                        ((TaskItem)listView.getItemAtPosition(i)).getGroupData().getName());
             }
         });
     }
 
-    private void getTasks(ArrayList<Integer> gIDs){
-        Log.e("hey", "atleast here 2");
+    private void getTasks(){
         CustomResponseHandler responseHandler = new CustomResponseHandler() {
             @Override
             public void onResponse(HashMap<String, Object> response) {
 
             }
-
             @Override
             public void onPOJOResponse(Object response) {
                 ArrayList<POJOgetTask> casted = (ArrayList<POJOgetTask>) response;
-
                 for(POJOgetTask t : casted) {
                     listTask.add(new TaskItem(R.drawable.ic_launcher_background, t.getTitle(),
-                            t.getDescription(), t.getDueDate(), t.getGroupData(), t.getId()));
+                            t.getDescription(), t.getDueDate(), t.getGroupData(), t.getCreator(), t.getSubjectData(), t.getId()));
                     adapter.notifyDataSetChanged();
                     Log.e("hey", t.getId() + " " + t.getGroupData().getId());
                 }
-
-             /*   int size = ((ArrayList)response).size();
-                for(int i = 0; i < size-1; i++) {
-                    listTask.add(new TaskItem(R.drawable.ic_launcher_background, ((POJOgetTask) ((List) response).get(i)).getTitle(),
-                            ((POJOgetTask) ((List) response).get(i)).getDescription(), ((POJOgetTask) ((List) response).get(i)).getDueDate()));
-                    adapter.notifyDataSetChanged();
-                } */
-                Log.e("hey", "got response");
             }
-
             @Override
             public void onFailure() {
                 Log.e("hey", "4");
                 Log.e("hey", "got here onFailure");
             }
-
             @Override
             public void onErrorResponse(POJOerror error) {
                 Log.e("hey", "onErrorResponse");
@@ -113,10 +100,8 @@ public class MainFragment extends Fragment {
 
             @Override
             public void onNoResponse() {
-
             }
         };
         MiddleMan.newRequest(this.getActivity(), "getTasksFromMe", null, responseHandler, null);
-
     }
 }

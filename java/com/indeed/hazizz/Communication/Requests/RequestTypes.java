@@ -27,7 +27,7 @@ import retrofit2.http.*;
 public interface RequestTypes{
 
     @POST("register")
-    Call<Void> register(
+    Call<ResponseBody> register(
             @HeaderMap Map<String, String> headers,
             @Body HashMap<String, Object>  register
     );
@@ -40,16 +40,15 @@ public interface RequestTypes{
     @POST("auth/")
     Call<ResponseBody> login(
             @HeaderMap Map<String, String> headers,
-            @Body HashMap<String, Object> registerBody
+            @Body HashMap<String, String> registerBody
     );
 
     @GET("me/details")
-    Call<POJOme> me(
+    Call<ResponseBody> me(
             @HeaderMap Map<String, String> headers
     );
 
     // Groups
-
     @GET("groups/{id}")
     Call<POJOgroup> getGroup(
             @Path("id") String id,
@@ -82,15 +81,8 @@ public interface RequestTypes{
             @HeaderMap Map<String, String> headers
     );
 
-
-
     @GET("me/tasks")
     Call<ArrayList<POJOgetTask>> getTasksFromMe(
-            @HeaderMap Map<String, String> headers
-    );
-
-    @GET("me/groups")
-    Call<ArrayList<POJOgetTask>> getGroupsFromMe(
             @HeaderMap Map<String, String> headers
     );
 
@@ -104,6 +96,11 @@ public interface RequestTypes{
     @POST("groups/{id}/tasks")
     Call<ResponseBody> createTask(
             @Path("groupId") String groupId,
+            @HeaderMap Map<String, String> headers
+    );
+
+    @GET("me/groups")
+    Call<ResponseBody> getGroupsFromMe(
             @HeaderMap Map<String, String> headers
     );
 

@@ -9,9 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -19,14 +16,10 @@ import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.POJO.Response.POJOsubject;
-import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
 import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTaskDetailed;
-import com.indeed.hazizz.D8;
-import com.indeed.hazizz.FragTag;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +28,7 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
 
     private int groupId;
     private int taskId;
+    private String groupName;
 
     private Spinner subject_spinner;
 
@@ -64,7 +58,7 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
         title = v.findViewById(R.id.textView_title);
         description = v.findViewById(R.id.textView_description);
         creatorName = v.findViewById(R.id.textView_creator);
-        subject = v.findViewById(R.id.textView_subject);
+        subject = v.findViewById(R.id.textView_title);
         deadLine = v.findViewById(R.id.textview_deadline);
 
 
@@ -72,6 +66,8 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
         if (bundle != null) {
             taskId =  bundle.getInt("taskId");
             groupId = bundle.getInt("groupId");
+            groupName = bundle.getString("groupName");
+
             Log.e("hey", "got IDs");
             Log.e("hey", taskId + ", " + groupId);
         }else{Log.e("hey", "bundle is null");}
@@ -131,6 +127,10 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
 
     public void toCreateTask(){
         Log.e("hey", "toCreateTask in viewtaskFrag" + groupId);
-        Transactor.makeTransaction(new CreateTaskFragment(), getFragmentManager().beginTransaction(), FragTag.createTask.toString(), groupId);
+        Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(),groupId, groupName);
     }
+  /*  public void toCreateTask(){
+        Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(),groupID, groupName);
+        Log.e("hey", "called 123");
+    } */
 }
