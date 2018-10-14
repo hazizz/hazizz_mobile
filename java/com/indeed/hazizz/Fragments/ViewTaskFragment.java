@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.indeed.hazizz.Activities.MainActivity;
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
@@ -53,7 +54,7 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_viewtask, container, false);
         Log.e("hey", "im here lol");
-
+        ((MainActivity)getActivity()).onFragmentCreated();
         type = v.findViewById(R.id.textView_tasktype);
         title = v.findViewById(R.id.textView_title);
         description = v.findViewById(R.id.textView_description);

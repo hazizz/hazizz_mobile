@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Tantárgy hozzáadás"
+        android:text="Új csoport létrehozása"
         android:textSize="28sp" />
 
     <android.support.constraint.ConstraintLayout
@@ -30,7 +30,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/editText_newSubject"
+            android:id="@+id/editText_createGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
@@ -39,15 +39,15 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="72dp"
             android:ems="10"
+            android:hint="Új csoport"
             android:inputType="textPersonName"
-            android:hint="Új tantárgy"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.503"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/button_addSubject"
+            android:id="@+id/button_createGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
@@ -59,7 +59,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.501"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editText_newSubject" />
+            app:layout_constraintTop_toBottomOf="@+id/editText_createGroup" />
 
     </android.support.constraint.ConstraintLayout>
 </LinearLayout>

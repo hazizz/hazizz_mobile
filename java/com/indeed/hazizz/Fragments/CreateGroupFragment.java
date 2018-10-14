@@ -22,12 +22,12 @@ import com.indeed.hazizz.Transactor;
 
 import java.util.HashMap;
 
-public class CreateSubjectFragment extends Fragment {
+public class CreateGroupFragment extends Fragment {
 
     private View v;
     private CustomAdapter adapter;
-    private EditText editText_newSubject;
-    private Button button_addSubject;
+    private EditText editText_createGroup;
+    private Button button_createGroup;
 
     private int groupId;
     private String groupName;
@@ -48,7 +48,7 @@ public class CreateSubjectFragment extends Fragment {
         public void onFailure() {
             Log.e("hey", "4");
             Log.e("hey", "got here onFailure");
-            button_addSubject.setEnabled(true);
+            button_createGroup.setEnabled(true);
         }
 
 
@@ -66,14 +66,14 @@ public class CreateSubjectFragment extends Fragment {
         public void onErrorResponse(POJOerror error) {
             //  textView.append("\n errorCode: " + error.getErrorCode());
             if(error.getErrorCode() == 2){ // validation failed
-              //  textView_error.setText("Helytelen jelszó");
+                //  textView_error.setText("Helytelen jelszó");
             }
             if(error.getErrorCode() == 31){ // no such user
-              //  textView_error.setText("Felhasználó nem található");
+                //  textView_error.setText("Felhasználó nem található");
             }
             Log.e("hey", "errodCOde is " + error.getErrorCode() + "");
             Log.e("hey", "got here onErrorResponse");
-            button_addSubject.setEnabled(true);
+            button_createGroup.setEnabled(true);
         }
     };
 
@@ -81,24 +81,22 @@ public class CreateSubjectFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.fragment_addsubject, container, false);
+        v = inflater.inflate(R.layout.fragment_creategroup, container, false);
+
         ((MainActivity)getActivity()).onFragmentCreated();
-        groupId = getArguments().getInt("groupId");
-        groupName = getArguments().getString("groupName");
 
-        editText_newSubject = v.findViewById(R.id.editText_newSubject);
-        button_addSubject = v.findViewById(R.id.button_addSubject);
+        editText_createGroup = v.findViewById(R.id.editText_createGroup);
+        button_createGroup = v.findViewById(R.id.button_createGroup);
 
-        button_addSubject.setOnClickListener(new View.OnClickListener() {
+        button_createGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(button_addSubject.getTextSize() != 0) {
+                if(button_createGroup.getTextSize() != 0) {
                     HashMap<String, Object> body = new HashMap<>();
-                    body.put("name", editText_newSubject.getText().toString());
-                    HashMap<String, Object> vars = new HashMap<>();
-                    vars.put("groupId", groupId);
-                    MiddleMan.newRequest(getActivity(), "createSubject", body, rh, vars);
-                    button_addSubject.setEnabled(false);
+                    body.put("groupName", editText_createGroup.getText().toString());
+                    body.put("type", "OPEN");
+                    MiddleMan.newRequest(getActivity(), "createGroup", body, rh, null);
+                    button_createGroup.setEnabled(false);
                 }else{
                     // TODO subject name not long enough
                     Log.e("hey", "else 123");
@@ -109,6 +107,6 @@ public class CreateSubjectFragment extends Fragment {
     }
 
     public void goBack(){
-        Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(), groupId, groupName);
+        Transactor.fragmentGroups(getFragmentManager().beginTransaction(), false);
     }
 }
