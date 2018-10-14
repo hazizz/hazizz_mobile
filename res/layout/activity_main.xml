@@ -34,14 +34,57 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.design.widget.FloatingActionButton
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="120dp"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="@dimen/fab_margin"
+            app:elevation="0dp"
+            app:borderWidth="0dp"
+            >
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab_createTask"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="bottom|end"
+                app:backgroundTint="@color/colorAccent"
+                app:srcCompat="@drawable/ic_create_white"
+                app:elevation="0dp"
+                app:borderWidth="0dp"/>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab_createGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|end"
+                android:layout_marginBottom="50dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="0dp"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
+                android:clickable="true"
+                app:backgroundTint="@color/colorAccent"
+                app:layout_anchor="@id/fab_createTask"
+                app:layout_anchorGravity="top"
+                app:srcCompat="@drawable/ic_group_black"
+                app:elevation="0dp"
+                app:borderWidth="0dp"
+                />
+        </RelativeLayout>
+
+      <!--  <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
             app:backgroundTint="@color/colorAccent"
-            app:srcCompat="@drawable/ic_create_white" />
+            app:srcCompat="@drawable/ic_create_white" /> -->
     </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.NavigationView

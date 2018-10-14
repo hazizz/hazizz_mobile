@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -44,9 +45,16 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle toggle;
+
     private TextView navUsername;
     private TextView navEmail;
     private TextView navLogout;
+
+    FloatingActionButton fab_inviteToGroup;
+    FloatingActionButton fab_createGroup;
+    FloatingActionButton fab_createTask;
 
     private ArrayList<Integer> groupIDs;
 
@@ -101,9 +109,21 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         groupIDs = new ArrayList<Integer>();
+        fab_createGroup = (FloatingActionButton) findViewById(R.id.fab_createGroup);
+        fab_createGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment currentFrag = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                if (currentFrag instanceof GroupsFragment) {
+                    Log.e("hey", "instance of groupmain fragment");
+                    ((GroupsFragment)currentFrag).toCreateGroup();
+                }
+            }
+        });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        fab_inviteToGroup = (FloatingActionButton) findViewById(R.id.fab_createTask);
+        fab_createTask = (FloatingActionButton) findViewById(R.id.fab_createTask);
+        fab_createTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
              /*   Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -133,6 +153,15 @@ public class MainActivity extends AppCompatActivity
         navUsername = (TextView) headerView.findViewById(R.id.textView_userName);
         navEmail = (TextView) headerView.findViewById(R.id.textView_email);
         navLogout = findViewById(R.id.textView_logout);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
+
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
         navLogout.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View view) {
@@ -181,6 +210,9 @@ public class MainActivity extends AppCompatActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+        if(toggle.onOptionsItemSelected(item)){
+            return true;
+        }
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -252,6 +284,16 @@ public class MainActivity extends AppCompatActivity
         else {
             Log.e("hey", "back button pressed and Else block is being called");
             Transactor.fragmentMain(getSupportFragmentManager().beginTransaction());
+        }
+    }
+
+    public void onFragmentCreated(){
+        Fragment currentFrag = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (currentFrag instanceof GroupsFragment) {
+            fab_createGroup.setVisibility(View.VISIBLE);
+        }else{
+            fab_createGroup.setVisibility(View.INVISIBLE);
+
         }
     }
 

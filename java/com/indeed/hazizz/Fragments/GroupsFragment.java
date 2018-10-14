@@ -47,7 +47,7 @@ public class GroupsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_group, container, false);
-
+        ((MainActivity)getActivity()).onFragmentCreated();
         Log.e("hey", "im here lol");
         Log.e("hey", "groups fragment created");
         groups = new ArrayList<POJOgroup>();
@@ -126,5 +126,9 @@ public class GroupsFragment extends Fragment {
 
     public void destCreateTask(){
         destCreateTask = true;
+    }
+
+    public void toCreateGroup(){
+        Transactor.fragmentCreateGroup(getFragmentManager().beginTransaction());
     }
 }
