@@ -3,6 +3,7 @@ package com.indeed.hazizz.Activities;
 //import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.net.TrafficStats;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -45,19 +46,27 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+
     private DrawerLayout drawerLayout;
+    private NavigationView navView;
     private ActionBarDrawerToggle toggle;
 
     private TextView navUsername;
     private TextView navEmail;
     private TextView navLogout;
 
-    FloatingActionButton fab_inviteToGroup;
+    FloatingActionButton fab_joinGroup;
     FloatingActionButton fab_createGroup;
     FloatingActionButton fab_createTask;
+    FloatingActionButton fab_addToGroup;
+
+    private Menu menu_main;
+    private MenuItem menuItem_createGroup;
+    private MenuItem menuItem_joinGroup;
+    private MenuItem menuItem_leaveGroup;
+
 
     private ArrayList<Integer> groupIDs;
-
 
     public Toolbar toolbar;
 
@@ -121,7 +130,15 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        fab_inviteToGroup = (FloatingActionButton) findViewById(R.id.fab_createTask);
+   /*     fab_addToGroup = (FloatingActionButton) findViewById(R.id.fab_addToGroup);
+        fab_joinGroup = (FloatingActionButton) findViewById(R.id.fab_joinGroup);
+        fab_joinGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Transactor.fragmentJoinGroup(getSupportFragmentManager().beginTransaction());
+            }
+        }); */
+
         fab_createTask = (FloatingActionButton) findViewById(R.id.fab_createTask);
         fab_createTask.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,15 +162,18 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        navigationView.bringToFront();
+        navView = (NavigationView) findViewById(R.id.nav_view);
+        navView.setNavigationItemSelectedListener(this);
+        navView.bringToFront();
 
-        View headerView = navigationView.getHeaderView(0);
+        View headerView = navView.getHeaderView(0);
         navUsername = (TextView) headerView.findViewById(R.id.textView_userName);
         navEmail = (TextView) headerView.findViewById(R.id.textView_email);
         navLogout = findViewById(R.id.textView_logout);
         drawerLayout = findViewById(R.id.drawer_layout);
+
+
+
         toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
 
         drawerLayout.addDrawerListener(toggle);
@@ -171,7 +191,7 @@ public class MainActivity extends AppCompatActivity
              }
              });
         MiddleMan.newRequest(getBaseContext(), "me", null, responseHandler, null);
-        toMainFrag();
+
     }
 
   /*  @Override
@@ -201,7 +221,20 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        menu_main = menu;
+        getMenuInflater().inflate(R.menu.main, menu_main);
+
+
+        menuItem_createGroup = menu_main.findItem(R.id.action_createGroup);
+        menuItem_joinGroup = menu_main.findItem(R.id.action_joinGroup);
+        menuItem_leaveGroup = menu_main.findItem(R.id.action_leaveGroup);
+
+        if(menuItem_createGroup == null || menuItem_joinGroup == null || menuItem_leaveGroup == null){
+            Log.e("hey", "menu items are null");
+        }
+
+        toMainFrag();
+
         return true;
     }
 
@@ -216,8 +249,16 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Log.e("hey", "action_settings");
+        if (id == R.id.action_createGroup) {
+            Transactor.fragmentCreateGroup(getSupportFragmentManager().beginTransaction());
+            return true;
+        }
+        if (id == R.id.action_joinGroup) {
+            Transactor.fragmentJoinGroup(getSupportFragmentManager().beginTransaction());
+            return true;
+        }
+        if (id == R.id.action_leaveGroup) {
+
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -291,10 +332,39 @@ public class MainActivity extends AppCompatActivity
         Fragment currentFrag = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if (currentFrag instanceof GroupsFragment) {
             fab_createGroup.setVisibility(View.VISIBLE);
+            menuItem_createGroup.setVisible(true);
+            menuItem_joinGroup.setVisible(true);
         }else{
+            fab_createGroup.setVisibility(View.INVISIBLE);
+            menuItem_createGroup.setVisible(false);
+            menuItem_joinGroup.setVisible(false);
+        }
+
+        if(currentFrag instanceof GroupMainFragment) {
+            menuItem_leaveGroup.setVisible(true);
+        }
+        else{
+            menuItem_leaveGroup.setVisible(false);
+
+        }
+
+        if(currentFrag instanceof CreateSubjectFragment || currentFrag instanceof CreateTaskFragment) {
             fab_createGroup.setVisibility(View.INVISIBLE);
 
         }
+
+        if(currentFrag instanceof GroupsFragment){
+            navView.getMenu().getItem(1).setChecked(true);
+        }else{
+            navView.getMenu().getItem(1).setChecked(false);
+        }
+
+        if(currentFrag instanceof MainFragment){
+            navView.getMenu().getItem(0).setChecked(true);
+        }else{
+            navView.getMenu().getItem(0).setChecked(false);
+        }
+
     }
 
     /*@Override

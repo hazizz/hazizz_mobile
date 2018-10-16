@@ -50,8 +50,14 @@ public interface RequestTypes{
 
     // Groups
     @GET("groups/{id}")
-    Call<POJOgroup> getGroup(
+    Call<ResponseBody> getGroup(
             @Path("id") String id,
+            @HeaderMap Map<String, String> headers
+    );
+
+    // Groups
+    @GET("groups")
+    Call<ResponseBody> getGroups(
             @HeaderMap Map<String, String> headers
     );
 
@@ -118,6 +124,14 @@ public interface RequestTypes{
             @HeaderMap Map<String, String> headers,
             @Body HashMap<String, Object> body
     );
+
+    @GET("me/joingroup/{groupId}")
+    Call<ResponseBody> joinGroup(
+            @Path("groupId") String groupId,
+            @HeaderMap Map<String, String> headers
+    );
+
+
 
 
 }
