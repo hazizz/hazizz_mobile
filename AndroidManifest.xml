@@ -27,11 +27,11 @@
         <activity android:name=".Activities.SignupActivity"
             android:noHistory="true"
             android:windowSoftInputMode="adjustPan">
-            <intent-filter>
+          <!--  <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter> -->
         </activity>
         <activity android:name=".Activities.LoginActivity"
             android:noHistory="true"/>
@@ -43,6 +43,15 @@
         <activity android:name=".Activities.MainActivity"
             android:windowSoftInputMode="adjustPan"
             android:noHistory="true">
+        </activity>
+        <activity android:name=".Activities.AuthActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

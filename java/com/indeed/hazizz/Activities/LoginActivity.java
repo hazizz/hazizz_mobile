@@ -4,6 +4,7 @@ import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOauth;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
+import com.indeed.hazizz.Hasher;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.SharedPrefs;
 
@@ -59,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
                     HashMap<String, Object> requestBody = new HashMap<>();
 
                     requestBody.put("username", username);
-                    requestBody.put("password", password);
+                    requestBody.put("password", Hasher.hashString(password));
 
                     CustomResponseHandler responseHandler = new CustomResponseHandler() {
 
@@ -67,7 +68,6 @@ public class LoginActivity extends AppCompatActivity {
                         public void onResponse(HashMap<String, Object> response) {
 
                         }
-
                         @Override
                         public void onPOJOResponse(Object response) {
                             Log.e("hey", "got here onResponse");
@@ -80,18 +80,14 @@ public class LoginActivity extends AppCompatActivity {
                             Log.e("hey", "4");
                             Log.e("hey", "got here onFailure");
                         }
-
-
                         @Override
                         public void onEmptyResponse() {
 
                         }
-
                         @Override
                         public void onSuccessfulResponse() {
 
                         }
-
                         @Override
                         public void onErrorResponse(POJOerror error) {
                           //  textView.append("\n errorCode: " + error.getErrorCode());
@@ -113,17 +109,11 @@ public class LoginActivity extends AppCompatActivity {
                 button_login.setEnabled(false);
             }
         });
-
     }
 
     private void switchToMain(){
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
-      //  finish();
     }
-
-
-
-
 }
 

@@ -28,6 +28,7 @@ public class CreateGroupFragment extends Fragment {
     private CustomAdapter adapter;
     private EditText editText_createGroup;
     private Button button_createGroup;
+    private TextView textView_error;
 
     private int groupId;
     private String groupName;
@@ -66,10 +67,14 @@ public class CreateGroupFragment extends Fragment {
         public void onErrorResponse(POJOerror error) {
             //  textView.append("\n errorCode: " + error.getErrorCode());
             if(error.getErrorCode() == 2){ // validation failed
-                //  textView_error.setText("Helytelen jelszó");
+                  textView_error.setText("Helytelen csoport név");
             }
-            if(error.getErrorCode() == 31){ // no such user
+            else if(error.getErrorCode() == 31){ // no such user
                 //  textView_error.setText("Felhasználó nem található");
+            }
+
+            else if(error.getErrorCode() == 52){ // group already exists
+                  textView_error.setText("A csoport már létezik");
             }
             Log.e("hey", "errodCOde is " + error.getErrorCode() + "");
             Log.e("hey", "got here onErrorResponse");
@@ -85,6 +90,7 @@ public class CreateGroupFragment extends Fragment {
 
         ((MainActivity)getActivity()).onFragmentCreated();
 
+        textView_error = v.findViewById(R.id.textView_error);
         editText_createGroup = v.findViewById(R.id.editText_createGroup);
         button_createGroup = v.findViewById(R.id.button_createGroup);
 

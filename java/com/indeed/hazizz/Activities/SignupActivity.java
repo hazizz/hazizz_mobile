@@ -4,6 +4,7 @@ import com.indeed.hazizz.Activities.LoginActivity;
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
+import com.indeed.hazizz.Hasher;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.RequestSenderRunnable;
 
@@ -58,7 +59,7 @@ public class SignupActivity extends AppCompatActivity {
                     HashMap<String, Object> requestBody = new HashMap<>();
 
                     requestBody.put("username", username);
-                    requestBody.put("password", password);
+                    requestBody.put("password", Hasher.hashString(password));
                     requestBody.put("emailAddress", email);
 
                     CustomResponseHandler responseHandler = new CustomResponseHandler() {
@@ -90,13 +91,13 @@ public class SignupActivity extends AppCompatActivity {
                 }
             }
         });
-        toLoginActivity = findViewById(R.id.toLoginActivity);
-        toLoginActivity.setOnClickListener(new View.OnClickListener(){
+     /*   textView_toLogin = findViewById(R.id.toLoginActivity);
+        textView_toLogin.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 switchToLoginActivity();
             }
-        });
+        }); */
 
         Thread SenderThread = new Thread(new RequestSenderRunnable(getBaseContext()));
         SenderThread.start();

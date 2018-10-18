@@ -32,9 +32,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Request {
 
     private Gson gson = new Gson();
-    public final String BASE_URL = "https://hazizz.duckdns.org:8081/";
+    private final String BASE_URL = "https://hazizz.duckdns.org:8081/";
     public RequestInterface1 requestType;
-    public  HashMap<String, Object> response1;
+    private HashMap<String, Object> response1;
     private HashMap<String, Object> body;
     private Retrofit retrofit;
 
@@ -201,9 +201,9 @@ public class Request {
                     Log.e("hey", "gotResponse");
                     Log.e("hey", response.raw().toString());
 
-                    if (response.isSuccessful() && response.code() == 201) { // response != null
+                    if (response.isSuccessful()) { // response != null
                         Log.e("hey", "response.isSuccessful()");
-                        cOnResponse.onEmptyResponse();
+                        cOnResponse.onSuccessfulResponse();
                     }
 
                     if (!response.isSuccessful()) { // response != null
@@ -858,3 +858,5 @@ public class Request {
         }
     }
 }
+
+// TODO java.lang.IllegalStateException: Already executed. at retrofit2.OkHttpCall.enqueue(OkHttpCall.java:84)
