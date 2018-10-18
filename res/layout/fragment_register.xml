@@ -7,10 +7,6 @@
     android:orientation="vertical"
     tools:context=".Activities.SignupActivity">
 
-    <include layout="@layout/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,7 +22,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:gravity="center_horizontal"
-            android:text="Sign Up"
+            android:text="Regisztráció"
             android:textSize="30sp"
             android:textStyle="bold" />
 
@@ -36,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
-            android:hint="Username"
+            android:hint="Felhasználónév"
             android:inputType="text"
             android:maxLines="1" />
 
@@ -56,19 +52,27 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
-            android:hint="Password"
+            android:hint="jelszó"
             android:inputType="textPassword"
             android:maxLines="1" />
 
 
+        <TextView
+            android:id="@+id/textView_error"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:text=" " />
 
         <Button
             android:id="@+id/button_signup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
-            android:text="Sign Up" />
+            android:layout_marginTop="10dp"
+            android:text="Regisztráció" />
 
 
     </LinearLayout>
@@ -81,10 +85,10 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text=" " />
 
         <TextView
-            android:id="@+id/textView_toLoginActivity"
+            android:id="@+id/textView_toLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -94,7 +98,7 @@
             android:clickable="true"
             android:onClick="onClick"
             android:paddingBottom="10dp"
-            android:text="Login"
+            android:text="Bejelentkezés"
             android:textSize="20sp" />
     </RelativeLayout>
 </LinearLayout>

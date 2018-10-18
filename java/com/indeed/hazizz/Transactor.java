@@ -1,9 +1,13 @@
 package com.indeed.hazizz;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 
+import com.indeed.hazizz.Fragments.AuthFrags.FirstFragment;
+import com.indeed.hazizz.Fragments.AuthFrags.LoginFragment;
+import com.indeed.hazizz.Fragments.AuthFrags.RegisterFragment;
 import com.indeed.hazizz.Fragments.ChatFragment;
 import com.indeed.hazizz.Fragments.CreateGroupFragment;
 import com.indeed.hazizz.Fragments.CreateSubjectFragment;
@@ -18,18 +22,26 @@ public abstract class Transactor extends FragmentActivity {
 
     private static boolean backStack = true;
 
+    public static void fragmentFirst(FragmentTransaction fTransaction){
+        FirstFragment frag = new FirstFragment();
+        fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
+        if(backStack){ fTransaction.addToBackStack(null); }
+        fTransaction.commit();
+    }
+
     public static void fragmentRegister(FragmentTransaction fTransaction){
-        JoinGroupFragment frag = new JoinGroupFragment();
+        RegisterFragment frag = new RegisterFragment();
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }
         fTransaction.commit();
     }
     public static void fragmentLogin(FragmentTransaction fTransaction){
-        JoinGroupFragment frag = new JoinGroupFragment();
+        LoginFragment frag = new LoginFragment();
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }
         fTransaction.commit();
     }
+
 
     public static void fragmentMain(FragmentTransaction fTransaction){
         MainFragment frag = new MainFragment();

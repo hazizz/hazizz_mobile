@@ -65,10 +65,10 @@ public class MainActivity extends AppCompatActivity
     private MenuItem menuItem_joinGroup;
     private MenuItem menuItem_leaveGroup;
 
+    private Toolbar toolbar;
+
 
     private ArrayList<Integer> groupIDs;
-
-    public Toolbar toolbar;
 
     CustomResponseHandler responseHandler = new CustomResponseHandler() {
         @Override
