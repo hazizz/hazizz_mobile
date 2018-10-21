@@ -51,8 +51,8 @@ public abstract class Transactor extends FragmentActivity {
     }
     public static void fragmentGroups(FragmentTransaction fTransaction, boolean destCreateTask){
         Bundle bundle = new Bundle();
+        bundle.putBoolean("destCreateTask", destCreateTask);
         GroupsFragment frag = new GroupsFragment();
-        if(destCreateTask){ frag.destCreateTask(); }
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }

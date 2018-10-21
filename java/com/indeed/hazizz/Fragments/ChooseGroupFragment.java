@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class GroupsFragment extends Fragment {
+public class ChooseGroupFragment extends Fragment{
 
     public List<Integer> groupIDs;
     public List<POJOgroup> groups;
@@ -53,15 +53,12 @@ public class GroupsFragment extends Fragment {
         ((MainActivity)getActivity()).onFragmentCreated();
         groups = new ArrayList<POJOgroup>();
 
+        destCreateTask = getArguments().getBoolean("destCreateTask");
+
         createViewList();
         getGroups();
         textView_noContent = v.findViewById(R.id.textView_noContent);
         textView_title = v.findViewById(R.id.textView_title);
-
-        destCreateTask = getArguments().getBoolean("destCreateTask");
-        if(destCreateTask){
-            textView_title.setText("Csoport választás");
-        }
         return v;
     }
 
@@ -128,8 +125,9 @@ public class GroupsFragment extends Fragment {
         });
     }
 
-    public void toJoinGroup(){
-        Transactor.fragmentCreateGroup(getFragmentManager().beginTransaction());
+    public void destCreateTask(){
+        destCreateTask = true;
+        textView_title.setText("Csoport választás");
     }
 
     public void toCreateGroup(){

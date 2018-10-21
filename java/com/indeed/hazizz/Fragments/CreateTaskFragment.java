@@ -1,5 +1,7 @@
 package com.indeed.hazizz.Fragments;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -26,10 +29,15 @@ import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
 public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSelectedListener{
+
+
+    private Integer year, month, day;
+    private String str_year, str_month, str_day;
 
     private int groupId;
     private String groupName;
@@ -42,6 +50,11 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
     private Button button_send;
     private Button button_add;
     private TextView textView_group;
+    private TextView textView_error;
+    private TextView textView_deadline;
+
+    private DatePickerDialog dpd;
+
 
     private List<POJOsubject> subjects = new ArrayList<>();
 
@@ -72,6 +85,16 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
         description = v.findViewById(R.id.textView_description);
         textView_group = v.findViewById(R.id.textView_group);
         textView_group.setText(groupName);
+        textView_error = v.findViewById(R.id.textView_error);
+        textView_deadline = v.findViewById(R.id.textView_deadline);
+
+        textView_deadline.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                dpd.show();
+            }
+        });
+
         // tasktype spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.taskTypes, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -94,9 +117,19 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
         button_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("hey", "rick rolled");
-                createTask();
-                button_send.setEnabled(false);
+                if (year != null && month != null && day != null) {
+                    if (taskTitle.getText().length() < 2) {
+                        textView_error.setText("A cím túl rövid (minimum 2 karakter)");
+                    } else if (taskTitle.getText().length() > 20) {
+                        textView_error.setText("A cím túl hosszú (maximum 20 karakter)");
+                    } else {
+                        createTask();
+                        button_send.setEnabled(false);
+                    }
+                }else{
+                    textView_error.setText("Nem állítottál be határidőt");
+                }
+
             }
         });
         rh_taskTypes = new CustomResponseHandler() {
@@ -121,6 +154,10 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
             @Override
             public void onErrorResponse(POJOerror error) {
                 Log.e("hey", error.getMessage());
+                int errorCode = error.getErrorCode();
+                if(errorCode == 2){ // cím túl hosszú (2-20 karatket)
+                    textView_error.setText("A cím nem megfelelő");
+                }
                 button_send.setEnabled(true);
             }
 
@@ -173,25 +210,36 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
             }
         };
 
-        getSubjects();
-        return v;
-    }
+        dpd = new DatePickerDialog(this.getActivity(), new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int y, int m, int d) {
+                year = y;
+                month = m + 1;
+                day = d;
+                str_year = "" + year;
+                if(month < 10) { str_month = "0" + month; }else{ str_month = month + ""; }
+                if(day < 10){str_day = "0" + day;}else{str_day = day + "";}
+                textView_deadline.setText("Határidő: " +str_year + "." + str_month + "."+ str_day);
+            }
+        }, Integer.parseInt(D8.getYear()), Integer.parseInt(D8.getMonth()) -2, Integer.parseInt(D8.getDay()));
+        dpd.getDatePicker().setMinDate(Calendar.getInstance().getTimeInMillis() - 1000);
 
-    private void getSubjects(){
         HashMap<String, Object> vars = new HashMap<>();
         vars.put("groupId", groupId);
         MiddleMan.newRequest(this.getActivity(), "getSubjects", null, rh_subjects, vars);
+
+        return v;
     }
 
     private void createTask(){
-        Log.e("hey", "creating task");
         HashMap<String, Object> requestBody = new HashMap<>();
 
         requestBody.put("taskType", taskType.getSelectedItem().toString());
         requestBody.put("taskTitle", taskTitle.getText().toString());
         requestBody.put("description", description.getText().toString());
         requestBody.put("subjectId", ((POJOsubject) subject_spinner.getSelectedItem()).getId());//((POJOsubject) subject_spinner.getSelectedItem()).getId());
-        requestBody.put("dueDate", D8.getDateTomorrow());
+        Log.e("hey", "date: " + year + "-" + month + "-" + day);
+        requestBody.put("dueDate", str_year + "-" + str_month + "-" + str_day);
 
         HashMap<String, Object> vars = new HashMap<>();
         vars.put("id", groupId);

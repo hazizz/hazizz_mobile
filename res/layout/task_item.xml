@@ -22,8 +22,8 @@
 
     <TextView
         android:id="@+id/task_description"
-        android:layout_width="271dp"
-        android:layout_height="74dp"
+        android:layout_width="224dp"
+        android:layout_height="127dp"
         android:layout_margin="5dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="12dp"
@@ -68,6 +68,35 @@
         android:text="subject"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_creator" />
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="200dp">
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            tools:layout_editor_absoluteX="244dp"
+            tools:layout_editor_absoluteY="38dp" />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            tools:layout_editor_absoluteX="244dp"
+            tools:layout_editor_absoluteY="64dp" />
+
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            tools:layout_editor_absoluteX="244dp"
+            tools:layout_editor_absoluteY="104dp" />
+    </RelativeLayout>
 
 
 </android.support.constraint.ConstraintLayout>

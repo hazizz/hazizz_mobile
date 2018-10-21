@@ -73,11 +73,20 @@ public class LoginFragment extends Fragment {
             if(error.getErrorCode() == 12){ // wrong password
                 textView_error.setText("Helytelen jelszó");
             }
+            if(error.getErrorCode() == 13){ // no such user
+                textView_error.setText("A fiók zárolva van");
+            }
+            if(error.getErrorCode() == 14){ // no such user
+                textView_error.setText("A fiók lejárt");
+            }
+            if(error.getErrorCode() == 15){ // no such user
+                textView_error.setText("A fiók le van tiltva");
+            }
             if(error.getErrorCode() == 31){ // no such user
                 textView_error.setText("Felhasználó nem található");
             }
+
             Log.e("hey", "errodCOde is " + error.getErrorCode() + "");
-            Log.e("hey", "got here onResponse");
             button_login.setEnabled(true);
         }
     };
@@ -106,7 +115,11 @@ public class LoginFragment extends Fragment {
         button_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(editText_username.getText().toString().length() >= 4 || editText_password.getText().toString().length() >= 8) {
+                if(editText_password.getText().toString().length() < 8) {
+                    textView_error.setText("Jelszó nem elég hosszú");
+                }else if(editText_username.getText().toString().length() < 4) {
+                    textView_error.setText("Felhasználónév nem elég hosszú");
+                }else{
                     username = editText_username.getText().toString();
                     password = editText_password.getText().toString();
                     HashMap<String, Object> requestBody = new HashMap<>();
@@ -114,12 +127,9 @@ public class LoginFragment extends Fragment {
                     requestBody.put("username", username);
                     requestBody.put("password", Hasher.hashString(password));
 
-
                     MiddleMan.newRequest(getContext(), "login", requestBody, responseHandler, null);
-                }else{
-                    //TODO show that the username or password not long enough
+                    button_login.setEnabled(false);
                 }
-                button_login.setEnabled(false);
             }
         });
         return v;

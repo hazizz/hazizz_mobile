@@ -9,6 +9,7 @@
             android:icon="@drawable/ic_home_black"
             android:title="Főmenü" />
         <item
+            android:visible="true"
             android:id="@+id/nav_groups"
             android:icon="@drawable/ic_group_black"
             android:title="Csoportok" />
@@ -18,7 +19,26 @@
             android:title="Új feladat" /> -->
     </group>
 
-   <!-- <item android:title="Communicate">
+    <item android:title="Csoportok"
+        android:id="@+id/nav_item_groups"
+        android:checkableBehavior="single"
+        android:visible="false">
+        <menu>
+            <item
+                android:id="@+id/nav_newGroup"
+                android:icon="@drawable/ic_creategroup_black"
+                android:title="Új csoport létrehozása" />
+            <item
+                android:id="@+id/nav_joinGroup"
+                android:icon="@drawable/ic_group_add_black"
+                android:title="Csatlakozás csoportba" />
+        </menu>
+    </item>
+
+    <item android:title="Csoport: "
+        android:id="@+id/nav_item_mainGroup"
+        android:checkableBehavior="single"
+        android:visible="false">
         <menu>
             <item
                 android:id="@+id/nav_share"
@@ -29,6 +49,6 @@
                 android:icon="@drawable/ic_menu_send"
                 android:title="Send" />
         </menu>
-    </item> -->
+    </item>
 
 </menu>
