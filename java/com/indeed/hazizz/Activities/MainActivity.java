@@ -1,6 +1,7 @@
 package com.indeed.hazizz.Activities;
 
 //import android.app.Fragment;
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.net.TrafficStats;
@@ -11,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
+import android.view.SubMenu;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -60,13 +62,17 @@ public class MainActivity extends AppCompatActivity
     FloatingActionButton fab_createTask;
     FloatingActionButton fab_addToGroup;
 
-    private Menu menu_main;
+    private Menu menu_options;
     private MenuItem menuItem_createGroup;
     private MenuItem menuItem_joinGroup;
     private MenuItem menuItem_leaveGroup;
 
-    private Toolbar toolbar;
+    private Menu menu_nav;
 
+    private MenuItem menu_groups;
+    private MenuItem menu_mainGroup;
+
+    private Toolbar toolbar;
 
     private ArrayList<Integer> groupIDs;
 
@@ -170,9 +176,13 @@ public class MainActivity extends AppCompatActivity
         navUsername = (TextView) headerView.findViewById(R.id.textView_userName);
         navEmail = (TextView) headerView.findViewById(R.id.textView_email);
         navLogout = findViewById(R.id.textView_logout);
+
+        menu_nav = navView.getMenu();
+
+        menu_groups= menu_nav.getItem(2);
+        menu_mainGroup = menu_nav.getItem(3);
+
         drawerLayout = findViewById(R.id.drawer_layout);
-
-
 
         toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
 
@@ -181,12 +191,14 @@ public class MainActivity extends AppCompatActivity
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        Activity thisActivity = this;
 
         navLogout.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View view) {
                  Log.e("hey", "pressed logout");
-                 logout();
+                 Intent i = new Intent(thisActivity, AuthActivity.class);
+                 startActivity(i);
 
              }
              });
@@ -221,13 +233,13 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        menu_main = menu;
-        getMenuInflater().inflate(R.menu.main, menu_main);
+        menu_options = menu;
+        getMenuInflater().inflate(R.menu.main, menu_options);
 
 
-        menuItem_createGroup = menu_main.findItem(R.id.action_createGroup);
-        menuItem_joinGroup = menu_main.findItem(R.id.action_joinGroup);
-        menuItem_leaveGroup = menu_main.findItem(R.id.action_leaveGroup);
+        menuItem_createGroup = menu_options.findItem(R.id.action_createGroup);
+        menuItem_joinGroup = menu_options.findItem(R.id.action_joinGroup);
+        menuItem_leaveGroup = menu_options.findItem(R.id.action_leaveGroup);
 
         if(menuItem_createGroup == null || menuItem_joinGroup == null || menuItem_leaveGroup == null){
             Log.e("hey", "menu items are null");
@@ -270,14 +282,21 @@ public class MainActivity extends AppCompatActivity
         Log.e("hey", "chechk1");
         int id = item.getItemId();
 
-
+        Fragment currentFrag = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if (id == R.id.nav_home) {
             toMainFrag();
         } else if (id == R.id.nav_groups) {
             toGroupsFrag();
        /* } else if (id == R.id.nav_new_task) {
             toCreateTaskFrag(); */
+        } else if (id == R.id.nav_newGroup) {
+           // ((GroupsFragment)currentFrag).toCreateGroup();
+            Transactor.fragmentCreateGroup(getSupportFragmentManager().beginTransaction());
+        } else if (id == R.id.nav_joinGroup) {
+            //((GroupsFragment)currentFrag).
+            Transactor.fragmentJoinGroup(getSupportFragmentManager().beginTransaction());
         }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -296,7 +315,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     void logout(){
-        Intent i = new Intent(this, LoginActivity.class);
+        Intent i = new Intent(this, AuthActivity.class);
         startActivity(i);
     }
 
@@ -342,9 +361,11 @@ public class MainActivity extends AppCompatActivity
 
         if(currentFrag instanceof GroupMainFragment) {
             menuItem_leaveGroup.setVisible(true);
+            menu_mainGroup.setVisible(true);
         }
         else{
             menuItem_leaveGroup.setVisible(false);
+            menu_mainGroup.setVisible(false);
 
         }
 
@@ -352,11 +373,12 @@ public class MainActivity extends AppCompatActivity
             fab_createGroup.setVisibility(View.INVISIBLE);
 
         }
-
         if(currentFrag instanceof GroupsFragment){
             navView.getMenu().getItem(1).setChecked(true);
+            menu_groups.setVisible(true);
         }else{
             navView.getMenu().getItem(1).setChecked(false);
+            menu_groups.setVisible(false);
         }
 
         if(currentFrag instanceof MainFragment){

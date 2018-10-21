@@ -38,6 +38,7 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
     private TextView description;
     private TextView creatorName;
     private TextView subject;
+    private TextView group;
     private TextView deadLine;
 
     private List<POJOsubject> subjects = new ArrayList<>();
@@ -60,6 +61,7 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
         description = v.findViewById(R.id.textView_description);
         creatorName = v.findViewById(R.id.textView_creator);
         subject = v.findViewById(R.id.textView_subject);
+        group = v.findViewById(R.id.textView_group);
         deadLine = v.findViewById(R.id.textview_deadline);
 
 
@@ -87,6 +89,7 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
                 creatorName.setText(((POJOgetTaskDetailed)response).getCreator().getUsername());
               //  subject.setText(((POJOgetTaskDetailed)response).getSubjectData().getName());
                 subject.setText(((POJOgetTaskDetailed)response).getSubjectData().getName());
+                group.setText(((POJOgetTaskDetailed)response).getGroup().getName());
 
                 deadLine.setText(((POJOgetTaskDetailed)response).getDueDate().get(0) + "." +
                         ((POJOgetTaskDetailed)response).getDueDate().get(1) + "." +

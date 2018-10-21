@@ -62,6 +62,8 @@ public class JoinGroupFragment extends Fragment {
         @Override
         public void onErrorResponse(POJOerror error) {
             Log.e("hey", "onErrorResponse");
+            Log.e("hey", "error message: " + error.getMessage());
+            button_joinGroup.setEnabled(true);
         }
 
         @Override
@@ -96,12 +98,14 @@ public class JoinGroupFragment extends Fragment {
                         break;
                     } else {
                         textView_error.setText("Nincs jogod belépni");
+                        button_joinGroup.setEnabled(true);
                         break;
                     }
                 }
             }
             if(!found){
                 textView_error.setText("Nem létezik ilyen csoport");
+                button_joinGroup.setEnabled(true);
             }
         }
         @Override

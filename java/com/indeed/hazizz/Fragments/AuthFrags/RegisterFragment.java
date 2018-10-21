@@ -49,6 +49,9 @@ public class RegisterFragment extends Fragment {
         public void onPOJOResponse(Object response) {}
         @Override
         public void onFailure() {
+            button_signup.setEnabled(true);
+            textView_error.setText("Nincs internet kapcsolat");
+
         }
 
         @Override
@@ -61,11 +64,15 @@ public class RegisterFragment extends Fragment {
                 textView_error.setText("A megadott adatok nem megfelelőek");
 
             }if(errorCode == 32){ // létezik ilyen nevű
+              //  textView_error.setText("A felhasználónév már foglalt");
                 textView_error.setText("A felhasználónév már foglalt");
+
             }
-            if(errorCode == 32){ // létezik ilyen nevű
+            if(errorCode == 33){ // létezik ilyen nevű
                 textView_error.setText("Az email címmel már regisztráltak");
             }
+            button_signup.setEnabled(true);
+
         }
 
         @Override
@@ -93,7 +100,11 @@ public class RegisterFragment extends Fragment {
         button_signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(editText_username.getText().toString().length() >= 4 || editText_password.getText().toString().length() >= 8) {
+                if(editText_password.getText().toString().length() < 8) {
+                    textView_error.setText("A jelszónak legalább 8 karakteresnek kell lennie");
+                }else if(editText_username.getText().toString().length() < 4) {
+                    textView_error.setText("A felhasználónévnek legalább 8 karakteresnek kell lennie");
+                }else{
                     username = editText_username.getText().toString();
                     email = editText_email.getText().toString();
                     password = Hasher.hashString(editText_password.getText().toString());
@@ -104,8 +115,7 @@ public class RegisterFragment extends Fragment {
                     requestBody.put("emailAddress", email);
 
                     MiddleMan.newRequest(getContext(),"register", requestBody, responseHandler, null);
-                }else{
-
+                    button_signup.setEnabled(false);
                 }
             }
         });
