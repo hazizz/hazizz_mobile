@@ -57,10 +57,8 @@ public class MainActivity extends AppCompatActivity
     private TextView navEmail;
     private TextView navLogout;
 
-    FloatingActionButton fab_joinGroup;
     FloatingActionButton fab_createGroup;
     FloatingActionButton fab_createTask;
-    FloatingActionButton fab_addToGroup;
 
     private Menu menu_options;
     private MenuItem menuItem_createGroup;
@@ -86,12 +84,6 @@ public class MainActivity extends AppCompatActivity
             Log.e("hey", "got pojo response");
             navUsername.setText(((POJOme) response).getUsername());
             navEmail.setText(((POJOme) response).getEmailAddress());
-
-         /*   for(POJOgroup g : ((POJOme) response).getGroups()){
-                groupIDs.add(g.getId());
-                Log.e("hey", "added groupID");
-            } */
-          //  toMainFrag();
         }
         @Override
         public void onFailure() {
@@ -123,7 +115,7 @@ public class MainActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        groupIDs = new ArrayList<Integer>();
+        groupIDs = new ArrayList<>();
         fab_createGroup = (FloatingActionButton) findViewById(R.id.fab_createGroup);
         fab_createGroup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,15 +127,6 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
-
-   /*     fab_addToGroup = (FloatingActionButton) findViewById(R.id.fab_addToGroup);
-        fab_joinGroup = (FloatingActionButton) findViewById(R.id.fab_joinGroup);
-        fab_joinGroup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Transactor.fragmentJoinGroup(getSupportFragmentManager().beginTransaction());
-            }
-        }); */
 
         fab_createTask = (FloatingActionButton) findViewById(R.id.fab_createTask);
         fab_createTask.setOnClickListener(new View.OnClickListener() {
@@ -205,16 +188,6 @@ public class MainActivity extends AppCompatActivity
         MiddleMan.newRequest(getBaseContext(), "me", null, responseHandler, null);
 
     }
-
-  /*  @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    } */
 
  /*   @Override
     public void onResume(){
@@ -351,12 +324,17 @@ public class MainActivity extends AppCompatActivity
         Fragment currentFrag = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if (currentFrag instanceof GroupsFragment) {
             fab_createGroup.setVisibility(View.VISIBLE);
-            menuItem_createGroup.setVisible(true);
-            menuItem_joinGroup.setVisible(true);
+        //    menuItem_createGroup.setVisible(true);
+        //    menuItem_joinGroup.setVisible(true);
+            navView.getMenu().getItem(1).setVisible(false);
+          //  navView.getMenu().getItem(1).setChecked(true);
+            menu_groups.setVisible(true);
         }else{
             fab_createGroup.setVisibility(View.INVISIBLE);
-            menuItem_createGroup.setVisible(false);
-            menuItem_joinGroup.setVisible(false);
+           //0 menuItem_createGroup.setVisible(false);
+           // menuItem_joinGroup.setVisible(false);
+            navView.getMenu().getItem(1).setVisible(true);
+            menu_groups.setVisible(false);
         }
 
         if(currentFrag instanceof GroupMainFragment) {
@@ -373,20 +351,16 @@ public class MainActivity extends AppCompatActivity
             fab_createGroup.setVisibility(View.INVISIBLE);
 
         }
-        if(currentFrag instanceof GroupsFragment){
-            navView.getMenu().getItem(1).setChecked(true);
-            menu_groups.setVisible(true);
-        }else{
-            navView.getMenu().getItem(1).setChecked(false);
-            menu_groups.setVisible(false);
-        }
 
         if(currentFrag instanceof MainFragment){
             navView.getMenu().getItem(0).setChecked(true);
         }else{
             navView.getMenu().getItem(0).setChecked(false);
         }
+    }
 
+    public void setGroupName(String name){
+        menu_mainGroup.setTitle("Csoportok: " + name);
     }
 
     /*@Override

@@ -56,6 +56,8 @@ public class GroupMainFragment extends Fragment{
 
         textView_noContent = v.findViewById(R.id.textView_noContent);
 
+        ((MainActivity)getActivity()).setGroupName(groupName);
+
         createViewList();
         getTask();
 

@@ -34,10 +34,12 @@ public class LoginFragment extends Fragment {
 
     private EditText editText_username;
     private EditText editText_password;
+
     private CheckBox checkBox_autoLogin;
     private Button button_login;
     private TextView textView_error;
     private TextView textView_register;
+
 
     private View v;
     //   private TextView textView;
@@ -115,11 +117,13 @@ public class LoginFragment extends Fragment {
         button_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+             //   Log.e("hey", "password: " + editText_password.getText().toString() + ", passwordCheck: " + editText_passwordCheck.getText().toString() + " and they equal: " + editText_password.getText().toString().equals(editText_passwordCheck.getText().toString()));
                 if(editText_password.getText().toString().length() < 8) {
                     textView_error.setText("Jelszó nem elég hosszú");
                 }else if(editText_username.getText().toString().length() < 4) {
                     textView_error.setText("Felhasználónév nem elég hosszú");
-                }else{
+                }
+                else{
                     username = editText_username.getText().toString();
                     password = editText_password.getText().toString();
                     HashMap<String, Object> requestBody = new HashMap<>();

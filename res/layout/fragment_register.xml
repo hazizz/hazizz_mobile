@@ -52,10 +52,20 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
-            android:hint="jelszó"
+            android:hint="Jelszó"
             android:inputType="textPassword"
             android:maxLines="1" />
 
+
+        <EditText
+            android:id="@+id/editText_passwordCheck"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:hint="Jelszó mégegyszer"
+            android:inputType="textPassword"
+            android:maxLines="1" />
 
         <TextView
             android:id="@+id/textView_error"

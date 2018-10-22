@@ -34,6 +34,7 @@ public class RegisterFragment extends Fragment {
     private EditText editText_username;
     private EditText editText_email;
     private EditText editText_password;
+    private EditText editText_passwordCheck;
     private Button button_signup;
 
     private TextView textView_error;
@@ -92,6 +93,8 @@ public class RegisterFragment extends Fragment {
         editText_username = v.findViewById(R.id.editText_username);
         editText_email = v.findViewById(R.id.editText_email);
         editText_password = v.findViewById(R.id.editText_password);
+        editText_passwordCheck = v.findViewById(R.id.editText_passwordCheck);
+
 
         textView_error = v.findViewById(R.id.textView_error);
         textView_error.setTextColor(Color.rgb(255, 0, 0));
@@ -103,7 +106,10 @@ public class RegisterFragment extends Fragment {
                 if(editText_password.getText().toString().length() < 8) {
                     textView_error.setText("A jelszónak legalább 8 karakteresnek kell lennie");
                 }else if(editText_username.getText().toString().length() < 4) {
-                    textView_error.setText("A felhasználónévnek legalább 8 karakteresnek kell lennie");
+                    textView_error.setText("A felhasználónévnek legalább 4 karakteresnek kell lennie");
+                }else if (!(editText_password.getText().toString().equals(editText_passwordCheck.getText().toString()))) {
+                        textView_error.setText("Jelszó nem egyezik");
+
                 }else{
                     username = editText_username.getText().toString();
                     email = editText_email.getText().toString();
