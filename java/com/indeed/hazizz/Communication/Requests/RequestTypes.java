@@ -131,6 +131,12 @@ public interface RequestTypes{
             @HeaderMap Map<String, String> headers
     );
 
+    @GET("groups/{groupId}/users")
+    Call<ResponseBody> getGroupMembers(
+            @Path("groupId") String groupId,
+            @HeaderMap Map<String, String> headers
+    );
+
 
 
 

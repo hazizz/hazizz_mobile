@@ -23,21 +23,10 @@ public abstract class MiddleMan{
     }
 
     public static void sendRequestsFromQ() {
-        int size = requestQueue.size() - 1;
-     //   Log.e("hey", "q1: " + size);
-        //for (int i = 0; i <= size; i++) {
         for (Request r : requestQueue) {
-          /*  requestQueue.get(0).requestType.setupCall();
-            requestQueue.get(0).requestType.makeCall();
-            //  Log.e("hey", "q: " + requestQueue.size());
-            //  Log.e("hey", "i: " + i);
-            requestQueue.remove(0); */
-
             r.requestType.setupCall();
             r.requestType.makeCall();
-            //  Log.e("hey", "q: " + requestQueue.size());
-            //  Log.e("hey", "i: " + i);
-            requestQueue.remove(0);
         }
+        requestQueue.clear();
     }
 }

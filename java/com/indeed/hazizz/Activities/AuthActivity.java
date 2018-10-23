@@ -20,6 +20,7 @@ import com.indeed.hazizz.Transactor;
 public class AuthActivity extends AppCompatActivity {
 
     public Toolbar toolbar;
+    private Fragment currentFrag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,7 @@ public class AuthActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Fragment currentFrag = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager());
         if(currentFrag instanceof FirstFragment) {}
         else{
             Transactor.fragmentFirst(getSupportFragmentManager().beginTransaction());

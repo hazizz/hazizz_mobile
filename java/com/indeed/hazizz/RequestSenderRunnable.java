@@ -25,12 +25,8 @@ public class RequestSenderRunnable implements Runnable{
             NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
             if(activeNetwork != null && activeNetwork.isConnectedOrConnecting()){
                 if (!MiddleMan.requestQueue.isEmpty()) {
-                   // try{ Thread.sleep(500); }catch(InterruptedException e){ }
                     MiddleMan.sendRequestsFromQ();
                     Log.e("hey", "sent request");
-                  //  loopBool = false;
-                 //   MiddleMan.removeRequestFromQ(0);
-                   // MiddleMan.requestQueue.remove(0);
                 }
             }
         }

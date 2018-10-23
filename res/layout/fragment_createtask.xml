@@ -9,12 +9,12 @@
     android:background="@color/colorBackground"
     >
 
-    <TextView
+  <!--  <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="Új feladat"
-        android:textSize="28sp" />
+        android:textSize="28sp" /> -->
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
             android:layout_height="106dp"
             android:layout_marginLeft="4dp"
             android:layout_marginStart="4dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="4dp"
             app:layout_constraintStart_toEndOf="@+id/textView5"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -56,7 +56,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
             android:hint="Cím"
             android:inputType="text"
             android:maxLines="1"
@@ -67,12 +67,13 @@
         <EditText
             android:id="@+id/textView_description"
             android:layout_width="300dp"
-            android:layout_height="225dp"
+            android:layout_height="204dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:gravity="top|left"
             android:hint="Leírás"
             android:inputType="textMultiLine"
+            android:maxLength="240"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/taskTitle" />
@@ -82,7 +83,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="4dp"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
@@ -90,7 +91,6 @@
             android:text="Küldés"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.517"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
@@ -119,35 +119,13 @@
             android:id="@+id/add_button"
             android:layout_width="wrap_content"
             android:layout_height="44dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="12dp"
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:text="Hozzáad"
             android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@+id/taskTitle"
             app:layout_constraintStart_toEndOf="@+id/relativeLayout2" />
-
-        <TextView
-            android:id="@+id/textView_group"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="2dp"
-            android:layout_marginStart="2dp"
-            android:layout_marginTop="28dp"
-            android:text="TextView"
-            app:layout_constraintStart_toEndOf="@+id/textView14"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textView14"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="28dp"
-            android:text="Csoport:"
-            app:layout_constraintStart_toEndOf="@+id/relativeLayout2"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/textView_error"
@@ -166,16 +144,17 @@
             android:id="@+id/textView_deadline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="8dp"
+            android:clickable="true"
+            android:onClick="onClick"
             android:text="Válasz határidőt!"
             android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/textView_error"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_description"
-            android:onClick="onClick"
-            android:clickable="true"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/textView_description" />
 
 
     </android.support.constraint.ConstraintLayout>

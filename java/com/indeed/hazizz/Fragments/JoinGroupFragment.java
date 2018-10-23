@@ -74,6 +74,7 @@ public class JoinGroupFragment extends Fragment {
         @Override
         public void onSuccessfulResponse() {
             Transactor.fragmentMainGroup(getFragmentManager().beginTransaction(), groupId, groupName);
+         //   Transactor.fragmentGroupTab(getFragmentManager().beginTransaction(), groupId, groupName);
         }
     };
 
