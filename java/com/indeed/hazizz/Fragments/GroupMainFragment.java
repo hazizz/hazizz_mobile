@@ -33,7 +33,6 @@ public class GroupMainFragment extends Fragment{
     private CustomAdapter adapter;
     private List<TaskItem> listTask;
 
-    private TextView textView_info;
     private TextView textView_noContent;
 
     private int groupID;
@@ -51,8 +50,6 @@ public class GroupMainFragment extends Fragment{
         groupID = getArguments().getInt("groupId");
         groupName = getArguments().getString("groupName");
 
-        textView_info = v.findViewById(R.id.textView_info);
-        textView_info.setText("Csoport: " + groupName);
 
         textView_noContent = v.findViewById(R.id.textView_noContent);
 

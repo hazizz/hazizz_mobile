@@ -83,8 +83,6 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
         taskType = (Spinner)v.findViewById(R.id.taskType_spinner);
         taskTitle = v.findViewById(R.id.taskTitle);
         description = v.findViewById(R.id.textView_description);
-        textView_group = v.findViewById(R.id.textView_group);
-        textView_group.setText(groupName);
         textView_error = v.findViewById(R.id.textView_error);
         textView_deadline = v.findViewById(R.id.textView_deadline);
 
@@ -259,6 +257,8 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
 
     void toMainGroupFrag(){
         Transactor.fragmentMainGroup(getFragmentManager().beginTransaction(),groupId, groupName);
+      //  Transactor.fragmentGroupTab(getFragmentManager().beginTransaction(), groupId, groupName);
+
     }
 
     void toCreateSubjectFrag(){

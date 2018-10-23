@@ -99,8 +99,7 @@ public class SignupActivity extends AppCompatActivity {
             }
         }); */
 
-        Thread SenderThread = new Thread(new RequestSenderRunnable(getBaseContext()));
-        SenderThread.start();
+
     }
     private void switchToLoginActivity(){
         Intent i = new Intent(this, LoginActivity.class);

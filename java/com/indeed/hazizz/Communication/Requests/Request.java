@@ -12,6 +12,7 @@ import com.indeed.hazizz.Communication.POJO.Response.POJOgetUser;
 import com.indeed.hazizz.Communication.POJO.Response.POJOgroup;
 import com.indeed.hazizz.Communication.POJO.Response.POJOme;
 import com.indeed.hazizz.Communication.POJO.Response.POJOsubject;
+import com.indeed.hazizz.Communication.POJO.Response.POJOuser;
 import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
 import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTaskDetailed;
 import com.indeed.hazizz.Communication.RequestInterface1;
@@ -116,6 +117,10 @@ public class Request {
 
             case "joinGroup":
                 requestType = new JoinGroup();
+                break;
+
+            case "getGroupMembers":
+                requestType = new GetGroupMembers();
                 break;
         }
     }
@@ -839,6 +844,48 @@ public class Request {
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     if(response.isSuccessful()){ // response != null
                         cOnResponse.onSuccessfulResponse();
+                    }
+                    else if(!response.isSuccessful()){ // response != null
+                        //    Log.e("hey", (String)response.body().toString());
+                        POJOerror pojoError = gson.fromJson(response.errorBody().charStream(),POJOerror.class);
+                        Log.e("hey", "errorCOde is: " +pojoError.getErrorCode());
+                        cOnResponse.onErrorResponse(pojoError);
+                    }
+                    else{cOnResponse.onEmptyResponse();}
+                }
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    cOnResponse.onFailure();
+                    Log.e("hey", "Failure: " + call.toString());
+                    t.printStackTrace();
+                }
+            });
+        }
+    }
+
+    public class GetGroupMembers implements RequestInterface1 {
+        GetGroupMembers(){
+            Log.e("hey", "created getGroupMembers object");
+        }
+
+        @Override
+        public void setupCall() {
+            HashMap<String, String> headerMap = new HashMap<String, String>();
+            headerMap.put("Authorization", "Bearer " + SharedPrefs.getString(context, "token", "token"));//SharedPrefs.getString(context, "token", "token"));
+            call = aRequest.getGroupMembers(vars.get("groupId").toString(), headerMap);
+        }
+
+        public HashMap<String, Object>  getResponse() { return response1; }
+        @Override
+        public void makeCall() {
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if(response.isSuccessful()){ // response != null
+
+                        Type listType = new TypeToken<ArrayList<POJOuser>>(){}.getType();
+                        List<POJOuser> castedList = gson.fromJson(response.body().charStream(), listType);
+                        cOnResponse.onPOJOResponse(castedList);
                     }
                     else if(!response.isSuccessful()){ // response != null
                         //    Log.e("hey", (String)response.body().toString());

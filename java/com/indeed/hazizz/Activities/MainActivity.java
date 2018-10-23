@@ -72,6 +72,8 @@ public class MainActivity extends AppCompatActivity
 
     private Toolbar toolbar;
 
+    private Fragment currentFrag;
+
     private ArrayList<Integer> groupIDs;
 
     CustomResponseHandler responseHandler = new CustomResponseHandler() {
@@ -93,7 +95,6 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void onEmptyResponse() {
             Log.e("hey", "NO RESPONSE");
-
         }
 
         @Override
@@ -120,7 +121,7 @@ public class MainActivity extends AppCompatActivity
         fab_createGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Fragment currentFrag = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager());
                 if (currentFrag instanceof GroupsFragment) {
                     Log.e("hey", "instance of groupmain fragment");
                     ((GroupsFragment)currentFrag).toCreateGroup();
@@ -134,7 +135,7 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
              /*   Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show(); */
-                Fragment currentFrag = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager());
                 if (currentFrag instanceof GroupMainFragment) {
                     Log.e("hey", "instance of groupmain fragment");
                     ((GroupMainFragment)currentFrag).toCreateTask();
@@ -255,7 +256,7 @@ public class MainActivity extends AppCompatActivity
         Log.e("hey", "chechk1");
         int id = item.getItemId();
 
-        Fragment currentFrag = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager());
         if (id == R.id.nav_home) {
             toMainFrag();
         } else if (id == R.id.nav_groups) {
@@ -295,7 +296,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        Fragment currentFrag = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager());
         if      (currentFrag instanceof MainFragment) {}
         else if (currentFrag instanceof GroupsFragment) {
             Transactor.fragmentMain(getSupportFragmentManager().beginTransaction());
@@ -305,10 +306,11 @@ public class MainActivity extends AppCompatActivity
         }
         else if (currentFrag instanceof CreateTaskFragment) {
             Transactor.fragmentMainGroup(getSupportFragmentManager().beginTransaction(), ((CreateTaskFragment)currentFrag).getGroupId(), ((CreateTaskFragment)currentFrag).getGroupName());
-
+         //   Transactor.fragmentGroupTab(getSupportFragmentManager().beginTransaction(), ((CreateTaskFragment)currentFrag).getGroupId(), ((CreateTaskFragment)currentFrag).getGroupName());
         }
         else if (currentFrag instanceof ViewTaskFragment) {
             Transactor.fragmentMainGroup(getSupportFragmentManager().beginTransaction(), ((ViewTaskFragment)currentFrag).getGroupId(), ((ViewTaskFragment)currentFrag).getGroupName());
+          //  Transactor.fragmentGroupTab(getSupportFragmentManager().beginTransaction(), ((CreateTaskFragment)currentFrag).getGroupId(), ((CreateTaskFragment)currentFrag).getGroupName());
 
         }
         else if (currentFrag instanceof CreateSubjectFragment) {
@@ -321,7 +323,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void onFragmentCreated(){
-        Fragment currentFrag = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager());
         if (currentFrag instanceof GroupsFragment) {
             fab_createGroup.setVisibility(View.VISIBLE);
         //    menuItem_createGroup.setVisible(true);
@@ -349,7 +351,9 @@ public class MainActivity extends AppCompatActivity
 
         if(currentFrag instanceof CreateSubjectFragment || currentFrag instanceof CreateTaskFragment) {
             fab_createGroup.setVisibility(View.INVISIBLE);
-
+            fab_createTask.setVisibility(View.INVISIBLE);
+        }else{
+            fab_createTask.setVisibility(View.VISIBLE);
         }
 
         if(currentFrag instanceof MainFragment){
