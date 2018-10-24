@@ -81,11 +81,12 @@ public abstract class Transactor extends FragmentActivity {
 
         fragmentGroupTab(fTransaction, groupId, groupName, 0);
     }
-    public static void fragmentViewTask(FragmentTransaction fTransaction, int groupId, int taskId, String groupName){
+    public static void fragmentViewTask(FragmentTransaction fTransaction, int groupId, int taskId, String groupName, boolean goBackToMain){
         Bundle bundle = new Bundle();
         bundle.putInt("groupId", groupId);
         bundle.putInt("taskId", taskId);
         bundle.putString("groupName", groupName);
+        bundle.putBoolean("goBackToMain", goBackToMain);
         ViewTaskFragment frag = new ViewTaskFragment();
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);

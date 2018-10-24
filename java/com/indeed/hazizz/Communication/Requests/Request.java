@@ -122,6 +122,10 @@ public class Request {
             case "getGroupMembers":
                 requestType = new GetGroupMembers();
                 break;
+
+            case "leaveGroup":
+                requestType = new LeaveGroup();
+                break;
         }
     }
 
@@ -886,6 +890,47 @@ public class Request {
                         Type listType = new TypeToken<ArrayList<POJOuser>>(){}.getType();
                         List<POJOuser> castedList = gson.fromJson(response.body().charStream(), listType);
                         cOnResponse.onPOJOResponse(castedList);
+                    }
+                    else if(!response.isSuccessful()){ // response != null
+                        //    Log.e("hey", (String)response.body().toString());
+                        POJOerror pojoError = gson.fromJson(response.errorBody().charStream(),POJOerror.class);
+                        Log.e("hey", "errorCOde is: " +pojoError.getErrorCode());
+                        cOnResponse.onErrorResponse(pojoError);
+                    }
+                    else{cOnResponse.onEmptyResponse();}
+                }
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    cOnResponse.onFailure();
+                    Log.e("hey", "Failure: " + call.toString());
+                    t.printStackTrace();
+                }
+            });
+        }
+    }
+
+
+    public class LeaveGroup implements RequestInterface1 {
+        LeaveGroup(){
+            Log.e("hey", "created LeaveGroup object");
+        }
+
+        @Override
+        public void setupCall() {
+            HashMap<String, String> headerMap = new HashMap<String, String>();
+            headerMap.put("Authorization", "Bearer " + SharedPrefs.getString(context, "token", "token"));//SharedPrefs.getString(context, "token", "token"));
+            headerMap.put("Content-Type", "application/json");
+            call = aRequest.getGroupMembers(vars.get("groupId").toString(), headerMap);
+        }
+
+        public HashMap<String, Object>  getResponse() { return response1; }
+        @Override
+        public void makeCall() {
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if(response.isSuccessful()){ // response != null
+                        cOnResponse.onSuccessfulResponse();
                     }
                     else if(!response.isSuccessful()){ // response != null
                         //    Log.e("hey", (String)response.body().toString());

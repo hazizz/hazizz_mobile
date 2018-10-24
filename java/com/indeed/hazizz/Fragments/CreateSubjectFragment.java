@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.indeed.hazizz.Activities.MainActivity;
+import com.indeed.hazizz.AndroidThings;
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
@@ -59,6 +60,8 @@ public class CreateSubjectFragment extends Fragment {
 
         @Override
         public void onSuccessfulResponse() {
+
+            AndroidThings.closeKeyboard(getContext(), v);
             goBack();
         }
 

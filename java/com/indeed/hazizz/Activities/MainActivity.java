@@ -26,14 +26,12 @@ import android.widget.TextView;
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
-import com.indeed.hazizz.Communication.POJO.Response.POJOgroup;
 import com.indeed.hazizz.Communication.POJO.Response.POJOme;
-import com.indeed.hazizz.Communication.Requests.Request;
-import com.indeed.hazizz.FragTag;
-import com.indeed.hazizz.Fragments.ChatFragment;
 import com.indeed.hazizz.Fragments.CreateSubjectFragment;
 import com.indeed.hazizz.Fragments.CreateTaskFragment;
+import com.indeed.hazizz.Fragments.GetGroupMembersFragment;
 import com.indeed.hazizz.Fragments.GroupMainFragment;
+import com.indeed.hazizz.Fragments.GroupTabs.GroupTabFragment;
 import com.indeed.hazizz.Fragments.GroupsFragment;
 import com.indeed.hazizz.Fragments.MainFragment;
 import com.indeed.hazizz.Fragments.ViewTaskFragment;
@@ -63,7 +61,7 @@ public class MainActivity extends AppCompatActivity
     private Menu menu_options;
     private MenuItem menuItem_createGroup;
     private MenuItem menuItem_joinGroup;
-    private MenuItem menuItem_leaveGroup;
+ //   private MenuItem menuItem_leaveGroup;
 
     private Menu menu_nav;
 
@@ -71,7 +69,6 @@ public class MainActivity extends AppCompatActivity
     private MenuItem menu_mainGroup;
 
     private Toolbar toolbar;
-
     private Fragment currentFrag;
 
     private ArrayList<Integer> groupIDs;
@@ -213,9 +210,9 @@ public class MainActivity extends AppCompatActivity
 
         menuItem_createGroup = menu_options.findItem(R.id.action_createGroup);
         menuItem_joinGroup = menu_options.findItem(R.id.action_joinGroup);
-        menuItem_leaveGroup = menu_options.findItem(R.id.action_leaveGroup);
+      //  menuItem_leaveGroup = menu_options.findItem(R.id.action_leaveGroup);
 
-        if(menuItem_createGroup == null || menuItem_joinGroup == null || menuItem_leaveGroup == null){
+        if(menuItem_createGroup == null || menuItem_joinGroup == null ){// || menuItem_leaveGroup == null){
             Log.e("hey", "menu items are null");
         }
 
@@ -229,6 +226,7 @@ public class MainActivity extends AppCompatActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+        Fragment cFrag = Transactor.getCurrentFragment(getSupportFragmentManager());
         if(toggle.onOptionsItemSelected(item)){
             return true;
         }
@@ -243,10 +241,11 @@ public class MainActivity extends AppCompatActivity
             Transactor.fragmentJoinGroup(getSupportFragmentManager().beginTransaction());
             return true;
         }
-        if (id == R.id.action_leaveGroup) {
+      /*  if (id == R.id.action_leaveGroup) {
+            ((GroupTabFragment)cFrag).leaveGroup();
 
             return true;
-        }
+        } */
         return super.onOptionsItemSelected(item);
     }
 
@@ -269,6 +268,14 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_joinGroup) {
             //((GroupsFragment)currentFrag).
             Transactor.fragmentJoinGroup(getSupportFragmentManager().beginTransaction());
+        }
+        else if (id == R.id.nav_tasks) {
+            //((GroupsFragment)currentFrag).
+            ((GroupTabFragment)currentFrag).setTab(2);
+
+        }else if (id == R.id.nav_groupMembers) {
+            //((GroupsFragment)currentFrag).
+            ((GroupTabFragment)currentFrag).setTab(1);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -309,7 +316,11 @@ public class MainActivity extends AppCompatActivity
          //   Transactor.fragmentGroupTab(getSupportFragmentManager().beginTransaction(), ((CreateTaskFragment)currentFrag).getGroupId(), ((CreateTaskFragment)currentFrag).getGroupName());
         }
         else if (currentFrag instanceof ViewTaskFragment) {
-            Transactor.fragmentMainGroup(getSupportFragmentManager().beginTransaction(), ((ViewTaskFragment)currentFrag).getGroupId(), ((ViewTaskFragment)currentFrag).getGroupName());
+            if(!((ViewTaskFragment)currentFrag).getGoBackToMain()) {
+                Transactor.fragmentMainGroup(getSupportFragmentManager().beginTransaction(), ((ViewTaskFragment) currentFrag).getGroupId(), ((ViewTaskFragment) currentFrag).getGroupName());
+            }else{
+                Transactor.fragmentMain(getSupportFragmentManager().beginTransaction());
+            }
           //  Transactor.fragmentGroupTab(getSupportFragmentManager().beginTransaction(), ((CreateTaskFragment)currentFrag).getGroupId(), ((CreateTaskFragment)currentFrag).getGroupName());
 
         }
@@ -339,27 +350,35 @@ public class MainActivity extends AppCompatActivity
             menu_groups.setVisible(false);
         }
 
-        if(currentFrag instanceof GroupMainFragment) {
-            menuItem_leaveGroup.setVisible(true);
+      /*  if(currentFrag instanceof GroupMainFragment || currentFrag instanceof GetGroupMembersFragment || currentFrag instanceof CreateTaskFragment) {
+          //  menuItem_leaveGroup.setVisible(true);
             menu_mainGroup.setVisible(true);
         }
         else{
-            menuItem_leaveGroup.setVisible(false);
+          //  menuItem_leaveGroup.setVisible(false);
             menu_mainGroup.setVisible(false);
 
-        }
+        } */
 
-        if(currentFrag instanceof CreateSubjectFragment || currentFrag instanceof CreateTaskFragment) {
+        if(currentFrag instanceof CreateSubjectFragment) {
             fab_createGroup.setVisibility(View.INVISIBLE);
-            fab_createTask.setVisibility(View.INVISIBLE);
+        //    fab_createTask.setVisibility(View.INVISIBLE);
         }else{
-            fab_createTask.setVisibility(View.VISIBLE);
+          //  fab_createTask.setVisibility(View.VISIBLE);
         }
 
         if(currentFrag instanceof MainFragment){
             navView.getMenu().getItem(0).setChecked(true);
         }else{
             navView.getMenu().getItem(0).setChecked(false);
+        }
+
+        if(currentFrag instanceof MainFragment ) {
+            //  menuItem_leaveGroup.setVisible(true);
+            fab_createTask.setVisibility(View.VISIBLE);
+        }else{
+            fab_createTask.setVisibility(View.INVISIBLE);
+
         }
     }
 

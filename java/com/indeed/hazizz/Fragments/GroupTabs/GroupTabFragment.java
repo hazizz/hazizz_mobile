@@ -6,29 +6,67 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+
+import com.indeed.hazizz.Communication.MiddleMan;
+import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
+import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.PagerAdapter;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.indeed.hazizz.Activities.MainActivity;
 import com.indeed.hazizz.R;
+import com.indeed.hazizz.Transactor;
+
+import java.util.HashMap;
 
 public class GroupTabFragment extends Fragment {
 
     private View v;
 
     private TextView textView_title;
-    private PagerAdapter adapter;
+    public PagerAdapter adapter;
 
     private int groupId;
     private String groupName;
     private int startingTab;
 
+    private ViewPager viewPager;
     private Fragment currentFrag;
+
+    CustomResponseHandler rh = new CustomResponseHandler() {
+        @Override
+        public void onResponse(HashMap<String, Object> response) {
+
+        }
+
+        @Override
+        public void onPOJOResponse(Object response) {
+
+        }
+
+        @Override
+        public void onFailure() {
+
+        }
+
+        @Override
+        public void onErrorResponse(POJOerror error) {
+
+        }
+
+        @Override
+        public void onEmptyResponse() {
+
+        }
+
+        @Override
+        public void onSuccessfulResponse() {
+            Transactor.fragmentGroups(getFragmentManager().beginTransaction(), false);
+        }
+    };
 
     @Nullable
     @Override
@@ -52,7 +90,7 @@ public class GroupTabFragment extends Fragment {
       //  tabLayout.setcur
        // tabLayout.setCu
 
-        final ViewPager viewPager = (ViewPager) v.findViewById(R.id.pager);
+        viewPager = (ViewPager) v.findViewById(R.id.pager);
         adapter = new PagerAdapter
                 (getFragmentManager(), tabLayout.getTabCount());
         adapter.giveArgs(groupId, groupName);
@@ -84,5 +122,16 @@ public class GroupTabFragment extends Fragment {
 
     public Fragment getCurrentFrag(){
         return adapter.getCurrentFrag();
+    }
+
+    public void setTab(int i){
+        viewPager.setCurrentItem(i, true);
+    }
+
+    public void leaveGroup(){
+        HashMap<String, Object> vars = new HashMap<>();
+        vars.put("groupId", groupId);
+        MiddleMan.newRequest(getContext(), "leaveGroup", null, rh, vars);
+
     }
 }

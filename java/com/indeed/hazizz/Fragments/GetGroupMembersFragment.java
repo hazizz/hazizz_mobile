@@ -34,7 +34,6 @@ public class GetGroupMembersFragment extends Fragment {
     private CustomAdapter adapter;
     private int groupId;
 
-    private boolean destCreateTask;
 
 
     @Nullable
