@@ -17,7 +17,6 @@ import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
-import com.indeed.hazizz.FragTag;
 import com.indeed.hazizz.Listviews.TaskList.CustomAdapter;
 import com.indeed.hazizz.Listviews.TaskList.TaskItem;
 import com.indeed.hazizz.R;
@@ -82,7 +81,7 @@ public class GroupMainFragment extends Fragment{
                 Transactor.fragmentViewTask(getFragmentManager().beginTransaction(),
                         ((TaskItem)listView.getItemAtPosition(i)).getGroupData().getId(),
                         ((TaskItem)listView.getItemAtPosition(i)).getTaskId(),
-                        ((TaskItem)listView.getItemAtPosition(i)).getGroupData().getName());
+                        ((TaskItem)listView.getItemAtPosition(i)).getGroupData().getName(), false);
             }
         });
     }

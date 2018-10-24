@@ -2,6 +2,7 @@ package com.indeed.hazizz.Fragments;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,12 +20,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.indeed.hazizz.Activities.MainActivity;
+import com.indeed.hazizz.AndroidThings;
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.POJO.Response.POJOsubject;
 import com.indeed.hazizz.D8;
-import com.indeed.hazizz.FragTag;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
@@ -84,6 +85,8 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
         taskTitle = v.findViewById(R.id.taskTitle);
         description = v.findViewById(R.id.textView_description);
         textView_error = v.findViewById(R.id.textView_error);
+        textView_error.setTextColor(Color.rgb(255, 0, 0));
+
         textView_deadline = v.findViewById(R.id.textView_deadline);
 
         textView_deadline.setOnClickListener(new View.OnClickListener(){
@@ -127,9 +130,9 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
                 }else{
                     textView_error.setText("Nem állítottál be határidőt");
                 }
-
+                AndroidThings.closeKeyboard(getContext(), v);
             }
-        });
+    });
         rh_taskTypes = new CustomResponseHandler() {
             @Override
             public void onResponse(HashMap<String, Object> response) {
@@ -252,8 +255,6 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
     }
-
-
 
     void toMainGroupFrag(){
         Transactor.fragmentMainGroup(getFragmentManager().beginTransaction(),groupId, groupName);

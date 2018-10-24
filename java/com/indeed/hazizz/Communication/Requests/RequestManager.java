@@ -3,8 +3,8 @@ package com.indeed.hazizz.Communication.Requests;
 import android.util.Log;
 
 //import com.indeed.hazizz.Communication.RequestInterface;
-import com.indeed.hazizz.Communication.SetupInterface;
 import com.indeed.hazizz.Communication.Requests.Request;
+import com.indeed.hazizz.Communication.SetupInterface;
 
 import org.json.JSONObject;
 

@@ -47,6 +47,8 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
 
     private ArrayList<POJOsubject> subjectList = new ArrayList<POJOsubject>();
 
+    private boolean goBackToMain;
+
     private View v;
 
     public ViewTaskFragment(){
@@ -70,6 +72,7 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
             taskId =  bundle.getInt("taskId");
             groupId = bundle.getInt("groupId");
             groupName = bundle.getString("groupName");
+            goBackToMain = bundle.getBoolean("goBackToMain");
 
             Log.e("hey", "got IDs");
             Log.e("hey", taskId + ", " + groupId);
@@ -109,14 +112,9 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
             }
 
             @Override
-            public void onEmptyResponse() {
-
-            }
-
+            public void onEmptyResponse() { }
             @Override
-            public void onSuccessfulResponse() {
-
-            }
+            public void onSuccessfulResponse() { }
         };
         HashMap<String, Object> vars = new HashMap<>();
         vars.put("taskId", taskId);
@@ -136,7 +134,7 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
 
     public void toCreateTask(){
         Log.e("hey", "toCreateTask in viewtaskFrag" + groupId);
-        Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(),groupId, groupName);
+        Transactor.fragmentGroups(getFragmentManager().beginTransaction(), true);
     }
   /*  public void toCreateTask(){
         Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(),groupID, groupName);
@@ -148,5 +146,8 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
     }
     public String getGroupName(){
         return groupName;
+    }
+    public boolean getGoBackToMain(){
+        return goBackToMain;
     }
 }

@@ -24,7 +24,7 @@
             android:id="@+id/relativeLayout2"
             android:layout_width="wrap_content"
 
-            android:layout_height="106dp"
+            android:layout_height="84dp"
             android:layout_marginLeft="4dp"
             android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
@@ -35,14 +35,14 @@
             <Spinner
                 android:id="@+id/subject_spinner"
                 android:layout_width="124dp"
-                android:layout_height="45dp"
+                android:layout_height="40dp"
                 android:layout_alignParentBottom="true"
                 android:layout_gravity="left" />
 
             <Spinner
                 android:id="@+id/taskType_spinner"
                 android:layout_width="124dp"
-                android:layout_height="45dp"
+                android:layout_height="40dp"
                 android:layout_gravity="center_horizontal" />
         </RelativeLayout>
 
@@ -97,9 +97,9 @@
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="44dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="20dp"
             android:text="Tantárgy"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView5" />
@@ -110,7 +110,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="22dp"
+            android:layout_marginTop="16dp"
             android:text="Feladat típusa"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -119,9 +119,7 @@
             android:id="@+id/add_button"
             android:layout_width="wrap_content"
             android:layout_height="44dp"
-            android:layout_marginBottom="12dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginBottom="4dp"
             android:text="Hozzáad"
             android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@+id/taskTitle"

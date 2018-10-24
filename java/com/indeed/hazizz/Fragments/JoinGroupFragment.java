@@ -63,6 +63,9 @@ public class JoinGroupFragment extends Fragment {
         public void onErrorResponse(POJOerror error) {
             Log.e("hey", "onErrorResponse");
             Log.e("hey", "error message: " + error.getMessage());
+            if(error.getErrorCode() == 55){ // user already in group
+                textView_error.setText("Már tagja vagy a csoportnak");
+            }
             button_joinGroup.setEnabled(true);
         }
 
