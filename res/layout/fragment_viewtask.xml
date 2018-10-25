@@ -16,28 +16,42 @@
         android:text="Házi megtekintés"
         android:textSize="28sp" />
 
+    <TextView
+        android:id="@+id/textView_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:text="Csoport név"
+        android:textSize="22sp" />
+
+
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
         <TextView
             android:id="@+id/textView_description"
-            android:layout_width="339dp"
+            android:layout_width="317dp"
             android:layout_height="267dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="60dp"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
+            android:inputType="textMultiLine"
             android:scrollbars="vertical"
             android:singleLine="false"
-            android:inputType="textMultiLine"
             android:text="description"
-            app:layout_constraintBottom_toTopOf="@+id/textview_deadline"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.517"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
@@ -46,11 +60,11 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="2dp"
             android:layout_marginStart="2dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="12dp"
             android:maxWidth="80dp"
             android:text="creator"
             app:layout_constraintStart_toEndOf="@+id/textView6"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
 
         <ImageView
             android:id="@+id/imageView2"
@@ -65,20 +79,20 @@
         <TextView
             android:id="@+id/textview_deadline"
             android:layout_width="wrap_content"
-            android:layout_height="18dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginStart="4dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
             android:text="Dead Line"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textView8" />
+            app:layout_constraintBottom_toTopOf="@+id/textView_description"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <RelativeLayout
             android:id="@+id/relativeLayout"
             android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
+            android:layout_height="56dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -94,24 +108,19 @@
                 android:id="@+id/textView12"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
                 android:layout_centerVertical="true"
+
+                android:layout_marginBottom="0dp"
                 android:maxLines="1"
                 android:text="Tantárgy:" />
 
-            <TextView
-                android:id="@+id/textView13"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="0dp"
-                android:gravity="bottom"
-                android:maxLines="1"
-                android:text="Cím:" />
+
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="100dp"
+            android:layout_height="56dp"
             android:layout_marginLeft="4dp"
             android:layout_marginStart="4dp"
             android:layout_marginTop="16dp"
@@ -122,48 +131,38 @@
                 android:id="@+id/textView_tasktype"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="          "
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:maxWidth="80dp"
                 android:singleLine="true"
-                android:ellipsize="end"
-                android:maxLines="1" />
+                android:text="          " />
 
             <TextView
                 android:id="@+id/textView_subject"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="           "
-                android:maxWidth="80dp"
-                android:singleLine="true"
-                android:ellipsize="end"
-                android:maxLines="1" />
-
-            <TextView
-                android:id="@+id/textView_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
+                android:layout_centerVertical="true"
                 android:layout_marginBottom="0dp"
-                android:gravity="bottom"
-                android:maxLines="1"
-                android:text="         "
-                android:singleLine="true"
                 android:ellipsize="end"
+                android:maxLines="1"
                 android:maxWidth="80dp"
-                />
+                android:singleLine="true"
+                android:text="           " />
+
+
         </RelativeLayout>
 
         <TextView
             android:id="@+id/textView6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="88dp"
-            android:layout_marginRight="88dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
             android:text="Kreátor:"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
 
         <TextView
             android:id="@+id/textView7"
@@ -182,21 +181,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginEnd="2dp"
+            android:layout_marginLeft="240dp"
+            android:layout_marginRight="2dp"
+            android:layout_marginStart="240dp"
             android:text="Határidő:"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/textView_description"
+            app:layout_constraintEnd_toStartOf="@+id/textview_deadline"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="84dp"
-            android:layout_marginRight="84dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:text="Csoport:"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
         <TextView
@@ -205,7 +208,7 @@
             android:layout_height="0dp"
             android:layout_marginLeft="2dp"
             android:layout_marginStart="2dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:text="group name"
             app:layout_constraintStart_toEndOf="@+id/textView1"
             app:layout_constraintTop_toBottomOf="@+id/textView_creator" />

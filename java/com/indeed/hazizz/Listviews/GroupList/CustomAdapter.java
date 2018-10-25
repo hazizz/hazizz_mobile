@@ -31,7 +31,7 @@ public class CustomAdapter extends ArrayAdapter<GroupItem> {
     }
 
     static class DataHolder{
-        ImageView profilePic;
+       // ImageView profilePic;
         TextView groupName;
     }
     @NonNull
@@ -45,7 +45,7 @@ public class CustomAdapter extends ArrayAdapter<GroupItem> {
             convertView = inflater.inflate(picID, parent, false);
 
             holder = new DataHolder();
-            holder.profilePic = (ImageView) convertView.findViewById(R.id.profile_pic);
+         //   holder.profilePic = (ImageView) convertView.findViewById(R.id.profile_pic);
             holder.groupName = (TextView) convertView.findViewById(R.id.group_name);
 
             convertView.setTag(holder);
@@ -55,7 +55,7 @@ public class CustomAdapter extends ArrayAdapter<GroupItem> {
 
         GroupItem groupItem = data.get(position);
         holder.groupName.setText(groupItem.groupName);
-        holder.profilePic.setImageResource(groupItem.pic);
+       // holder.profilePic.setImageResource(groupItem.pic);
 
         return convertView;
         // return super.getView(position, convertView, parent);
