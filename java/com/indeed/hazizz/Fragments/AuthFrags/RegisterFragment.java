@@ -84,6 +84,12 @@ public class RegisterFragment extends Fragment {
         public void onSuccessfulResponse() {
             Transactor.fragmentLogin(getFragmentManager().beginTransaction());
         }
+
+        @Override
+        public void onNoConnection() {
+            textView_error.setText("Nincs internet kapcsolat");
+            button_signup.setEnabled(true);
+        }
     };
 
     @Override
@@ -118,9 +124,9 @@ public class RegisterFragment extends Fragment {
                     requestBody.put("username", username);
                     requestBody.put("password", password);
                     requestBody.put("emailAddress", email);
+                    button_signup.setEnabled(false);
 
                     MiddleMan.newRequest(getContext(),"register", requestBody, responseHandler, null);
-                    button_signup.setEnabled(false);
                 }
             }
         });

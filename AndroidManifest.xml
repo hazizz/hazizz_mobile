@@ -14,7 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:windowSoftInputMode="adjustPan">
-      <!--  <activity android:name=".Activities.MainActivity">
+
+        <!--
+        <activity android:name=".Activities.MainActivity">
 
 
             <intent-filter>
@@ -23,27 +25,58 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-        </activity> -->
-        <activity android:name=".Activities.LoginActivity"
-            android:noHistory="true"/>
-      <!--  <activity
+        </activity>
+        -->
+        <activity
+            android:name=".Activities.LoginActivity"
+            android:noHistory="true" />
+        <!--
+            <activity
             android:name=".Activities.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar"
-            tools:ignore="DuplicateActivity"></activity> -->
-        <activity android:name=".Activities.MainActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:noHistory="true">
-        </activity>
-        <activity android:name=".Activities.AuthActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:noHistory="true">
+            tools:ignore="DuplicateActivity"></activity>
+        -->
+        <activity
+            android:name=".Activities.MainActivity"
+            android:noHistory="true"
+            android:windowSoftInputMode="adjustPan"></activity>
+        <activity
+            android:name=".Activities.AuthActivity"
+            android:noHistory="true"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver android:name=".HazizzWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.intent.action.SCREEN_ON"/>
+                <action android:name="android.intent.action.SCREEN_OFF"/>
+
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/hazizz_widget_info" />
+        </receiver>
+
+
+        <activity android:name=".HazizzWidgetConfigureActivity">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <service android:name=".WidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"/>
+
+        <service android:name=".UpdateService" />
+
     </application>
 
 </manifest>

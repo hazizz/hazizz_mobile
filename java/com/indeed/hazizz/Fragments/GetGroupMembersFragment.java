@@ -51,7 +51,6 @@ public class GetGroupMembersFragment extends Fragment {
     }
 
     public void getUsers() {
-        Log.e("hey", "atleast here 2");
         CustomResponseHandler responseHandler = new CustomResponseHandler() {
             @Override
             public void onResponse(HashMap<String, Object> response) {
@@ -87,6 +86,11 @@ public class GetGroupMembersFragment extends Fragment {
 
             @Override
             public void onSuccessfulResponse() {
+
+            }
+
+            @Override
+            public void onNoConnection() {
 
             }
         };

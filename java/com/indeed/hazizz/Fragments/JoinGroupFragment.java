@@ -65,6 +65,8 @@ public class JoinGroupFragment extends Fragment {
             Log.e("hey", "error message: " + error.getMessage());
             if(error.getErrorCode() == 55){ // user already in group
                 textView_error.setText("Már tagja vagy a csoportnak");
+            }if(error.getErrorCode() == 1){ // user already in group
+                textView_error.setText("Nem sikerült a csoportba csatlakozás.\nMert a Java úgy döntött hogy most nem működik\nRemélhetőleg hamarosan sikerül megjavítani");
             }
             button_joinGroup.setEnabled(true);
         }
@@ -78,6 +80,12 @@ public class JoinGroupFragment extends Fragment {
         public void onSuccessfulResponse() {
             Transactor.fragmentMainGroup(getFragmentManager().beginTransaction(), groupId, groupName);
          //   Transactor.fragmentGroupTab(getFragmentManager().beginTransaction(), groupId, groupName);
+        }
+
+        @Override
+        public void onNoConnection() {
+            textView_error.setText("Nincs internet kapcsolat");
+            button_joinGroup.setEnabled(true);
         }
     };
 
@@ -134,6 +142,11 @@ public class JoinGroupFragment extends Fragment {
         @Override
         public void onSuccessfulResponse() {
         }
+
+        @Override
+        public void onNoConnection() {
+
+        }
     };
 
 
@@ -150,9 +163,9 @@ public class JoinGroupFragment extends Fragment {
         button_joinGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                groupName = editText_joinGroup.getText().toString();
+                groupName = editText_joinGroup.getText().toString();                button_joinGroup.setEnabled(false);
+
                 MiddleMan.newRequest(getActivity(), "getGroups", null, rh_getGroups, null);
-                button_joinGroup.setEnabled(false);
             }
         });
 

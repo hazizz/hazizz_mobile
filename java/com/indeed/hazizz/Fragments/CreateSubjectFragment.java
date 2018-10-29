@@ -29,6 +29,7 @@ public class CreateSubjectFragment extends Fragment {
     private CustomAdapter adapter;
     private EditText editText_newSubject;
     private Button button_addSubject;
+    private TextView textView_error;
 
     private int groupId;
     private String groupName;
@@ -66,6 +67,12 @@ public class CreateSubjectFragment extends Fragment {
         }
 
         @Override
+        public void onNoConnection() {
+            textView_error.setText("Nincs internet kapcsolat");
+            button_addSubject.setEnabled(true);
+        }
+
+        @Override
         public void onErrorResponse(POJOerror error) {
             //  textView.append("\n errorCode: " + error.getErrorCode());
             if(error.getErrorCode() == 2){ // validation failed
@@ -89,8 +96,10 @@ public class CreateSubjectFragment extends Fragment {
         groupId = getArguments().getInt("groupId");
         groupName = getArguments().getString("groupName");
 
+        textView_error = v.findViewById(R.id.textView_error);
         editText_newSubject = v.findViewById(R.id.editText_newSubject);
         button_addSubject = v.findViewById(R.id.button_addSubject);
+
 
         button_addSubject.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,9 +108,9 @@ public class CreateSubjectFragment extends Fragment {
                     HashMap<String, Object> body = new HashMap<>();
                     body.put("name", editText_newSubject.getText().toString());
                     HashMap<String, Object> vars = new HashMap<>();
-                    vars.put("groupId", groupId);
+                    vars.put("groupId", groupId);                    button_addSubject.setEnabled(false);
+
                     MiddleMan.newRequest(getActivity(), "createSubject", body, rh, vars);
-                    button_addSubject.setEnabled(false);
                 }else{
                     // TODO subject name not long enough
                     Log.e("hey", "else 123");

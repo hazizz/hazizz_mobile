@@ -1,16 +1,17 @@
 package com.indeed.hazizz.Fragments;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -83,7 +84,9 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
         button_add = v.findViewById(R.id.add_button);
         taskType = (Spinner)v.findViewById(R.id.taskType_spinner);
         taskTitle = v.findViewById(R.id.taskTitle);
-        description = v.findViewById(R.id.textView_description);
+        description = v.findViewById(R.id.editText_description);
+        description.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        description.setRawInputType(InputType.TYPE_CLASS_TEXT);
         textView_error = v.findViewById(R.id.textView_error);
         textView_error.setTextColor(Color.rgb(255, 0, 0));
 
@@ -124,8 +127,8 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
                     } else if (taskTitle.getText().length() > 20) {
                         textView_error.setText("A cím túl hosszú (maximum 20 karakter)");
                     } else {
-                        createTask();
                         button_send.setEnabled(false);
+                        createTask();
                     }
                 }else{
                     textView_error.setText("Nem állítottál be határidőt");
@@ -172,6 +175,12 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
             public void onSuccessfulResponse() {
 
             }
+
+            @Override
+            public void onNoConnection() {
+                textView_error.setText("Nincs internet kapcsolat");
+                button_send.setEnabled(true);
+            }
         };
         rh_subjects = new CustomResponseHandler() {
             @Override
@@ -208,6 +217,12 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
             @Override
             public void onSuccessfulResponse() {
 
+            }
+
+            @Override
+            public void onNoConnection() {
+                textView_error.setText("Nincs internet kapcsolat");
+                button_send.setEnabled(true);
             }
         };
 

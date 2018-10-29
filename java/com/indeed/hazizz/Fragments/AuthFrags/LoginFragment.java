@@ -69,6 +69,14 @@ public class LoginFragment extends Fragment {
         @Override
         public void onSuccessfulResponse() {
         }
+
+        @Override
+        public void onNoConnection() {
+            textView_error.setText("Nincs internet kapcsolat");
+            button_login.setEnabled(true);
+            Log.e("hey", "succes");
+        }
+
         @Override
         public void onErrorResponse(POJOerror error) {
             //  textView.append("\n errorCode: " + error.getErrorCode());
@@ -131,8 +139,8 @@ public class LoginFragment extends Fragment {
                     requestBody.put("username", username);
                     requestBody.put("password", Hasher.hashString(password));
 
-                    MiddleMan.newRequest(getContext(), "login", requestBody, responseHandler, null);
                     button_login.setEnabled(false);
+                    MiddleMan.newRequest(getContext(), "login", requestBody, responseHandler, null);
                 }
             }
         });

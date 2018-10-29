@@ -68,6 +68,12 @@ public class AddToGroupFragment extends Fragment {
         }
 
         @Override
+        public void onNoConnection() {
+            textView_error.setText("Nincs internet kapcsolat");
+            button_addMember.setEnabled(true);
+        }
+
+        @Override
         public void onErrorResponse(POJOerror error) {
             //  textView.append("\n errorCode: " + error.getErrorCode());
             if(error.getErrorCode() == 2){ // validation failed
@@ -107,9 +113,9 @@ public class AddToGroupFragment extends Fragment {
                     body.put("userId", editText_memberName.getText().toString());
 
                     HashMap<String, Object> vars = new HashMap<>();
-                    vars.put("groupId", groupId);
+                    vars.put("groupId", groupId);                    button_addMember.setEnabled(false);
+
                     MiddleMan.newRequest(getActivity(), "inviteToGroup", body, rh, vars);
-                    button_addMember.setEnabled(false);
                 }else{
                     // TODO subject name not long enough
                     Log.e("hey", "else 123");

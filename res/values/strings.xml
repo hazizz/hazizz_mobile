@@ -11,9 +11,11 @@
     <string name="close">Close</string>
 
 
-
     <string-array name="taskTypes">
-            <item>test</item>
-            <item>homework</item>
+        <item>test</item>
+        <item>homework</item>
     </string-array>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="configure">Configure</string>
+    <string name="add_widget">Add widget</string>
 </resources>

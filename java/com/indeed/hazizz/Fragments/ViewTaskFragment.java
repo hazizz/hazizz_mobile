@@ -60,7 +60,7 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
         ((MainActivity)getActivity()).onFragmentCreated();
         type = v.findViewById(R.id.textView_tasktype);
         title = v.findViewById(R.id.textView_title);
-        description = v.findViewById(R.id.textView_description);
+        description = v.findViewById(R.id.editText_description);
         creatorName = v.findViewById(R.id.textView_creator);
         subject = v.findViewById(R.id.textView_subject);
         group = v.findViewById(R.id.textView_group);
@@ -87,7 +87,7 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
             @Override
             public void onPOJOResponse(Object response) {
                 type.setText(((POJOgetTaskDetailed)response).getType());
-                title.setText("Csoport: " + ((POJOgetTaskDetailed)response).getTitle());
+                title.setText("Cím: " + ((POJOgetTaskDetailed)response).getTitle());
                 description.setText(((POJOgetTaskDetailed)response).getDescription());
                 creatorName.setText(((POJOgetTaskDetailed)response).getCreator().getUsername());
               //  subject.setText(((POJOgetTaskDetailed)response).getSubjectData().getName());
@@ -115,6 +115,12 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
             public void onEmptyResponse() { }
             @Override
             public void onSuccessfulResponse() { }
+
+            @Override
+            public void onNoConnection() {
+            //    textView_noContent.setText("Nincs internet kapcsolat");
+
+            }
         };
         HashMap<String, Object> vars = new HashMap<>();
         vars.put("taskId", taskId);
