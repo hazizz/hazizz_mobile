@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity
     private TextView navEmail;
     private TextView navLogout;
 
+    FloatingActionButton fab_joinGroup;
     FloatingActionButton fab_createGroup;
     FloatingActionButton fab_createTask;
 
@@ -100,6 +101,11 @@ public class MainActivity extends AppCompatActivity
         }
 
         @Override
+        public void onNoConnection() {
+
+        }
+
+        @Override
         public void onErrorResponse(POJOerror error) {
             Log.e("hey", "onErrorResponse");
         }
@@ -114,6 +120,15 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         groupIDs = new ArrayList<>();
+
+        fab_joinGroup = findViewById(R.id.fab_joinGroup);
+        fab_joinGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Transactor.fragmentJoinGroup(getSupportFragmentManager().beginTransaction());
+            }
+        });
+
         fab_createGroup = (FloatingActionButton) findViewById(R.id.fab_createGroup);
         fab_createGroup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -350,15 +365,14 @@ public class MainActivity extends AppCompatActivity
             menu_groups.setVisible(false);
         }
 
-      /*  if(currentFrag instanceof GroupMainFragment || currentFrag instanceof GetGroupMembersFragment || currentFrag instanceof CreateTaskFragment) {
-          //  menuItem_leaveGroup.setVisible(true);
-            menu_mainGroup.setVisible(true);
+        if(currentFrag instanceof GroupsFragment) {
+
+            fab_joinGroup.setVisibility(View.VISIBLE);
         }
         else{
-          //  menuItem_leaveGroup.setVisible(false);
-            menu_mainGroup.setVisible(false);
+            fab_joinGroup.setVisibility(View.INVISIBLE);
 
-        } */
+        }
 
         if(currentFrag instanceof CreateSubjectFragment) {
             fab_createGroup.setVisibility(View.INVISIBLE);

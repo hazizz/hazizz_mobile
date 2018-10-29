@@ -10,5 +10,6 @@ public interface CustomResponseHandler {
     public void onErrorResponse(POJOerror error);
     public void onEmptyResponse();
     public void onSuccessfulResponse();
+    public void onNoConnection();
 
 }

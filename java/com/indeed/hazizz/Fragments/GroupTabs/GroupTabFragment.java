@@ -66,6 +66,11 @@ public class GroupTabFragment extends Fragment {
         public void onSuccessfulResponse() {
             Transactor.fragmentGroups(getFragmentManager().beginTransaction(), false);
         }
+
+        @Override
+        public void onNoConnection() {
+
+        }
     };
 
     @Nullable

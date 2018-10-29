@@ -111,6 +111,12 @@ public class MainFragment extends Fragment {
             public void onSuccessfulResponse() {
 
             }
+
+            @Override
+            public void onNoConnection() {
+                textView_noContent.setText("Nincs internet kapcsolat");
+
+            }
         };
         MiddleMan.newRequest(this.getActivity(), "getTasksFromMe", null, responseHandler, null);
     }

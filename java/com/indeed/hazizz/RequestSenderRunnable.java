@@ -20,15 +20,13 @@ public class RequestSenderRunnable implements Runnable{
         // check for internet connection
         boolean loopBool = true;
         while(loopBool) {
-
-            ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-            if(activeNetwork != null && activeNetwork.isConnectedOrConnecting()){
+            if(Network.getActiveNetwork(context) != null && Network.isConnectedOrConnecting(context)) {
                 if (!MiddleMan.requestQueue.isEmpty()) {
                     MiddleMan.sendRequestsFromQ();
                     Log.e("hey", "sent request");
                 }
             }
+
         }
     }
 }

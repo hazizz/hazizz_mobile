@@ -42,10 +42,15 @@ public class Request {
     Call<ResponseBody>  call;
     RequestTypes aRequest;
 
-    CustomResponseHandler cOnResponse;
+    public CustomResponseHandler cOnResponse;
     Context context;
 
     private HashMap<String, Object> vars;
+
+    private boolean reacted = false;
+
+    public void setReacted(boolean r){reacted = r;}
+    public boolean getReacted(){return reacted;}
 
     public Request(Context context, String reqType, HashMap<String, Object>  body, CustomResponseHandler cOnResponse, HashMap<String, Object> vars){
         this.cOnResponse = cOnResponse;

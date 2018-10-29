@@ -65,7 +65,7 @@
             app:layout_constraintTop_toBottomOf="@+id/relativeLayout2" />
 
         <EditText
-            android:id="@+id/textView_description"
+            android:id="@+id/editText_description"
             android:layout_width="300dp"
             android:layout_height="204dp"
             android:layout_marginEnd="8dp"
@@ -152,7 +152,7 @@
             android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@+id/textView_error"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_description" />
+            app:layout_constraintTop_toBottomOf="@+id/editText_description" />
 
 
     </android.support.constraint.ConstraintLayout>

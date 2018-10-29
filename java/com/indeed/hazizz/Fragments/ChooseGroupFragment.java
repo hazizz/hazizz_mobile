@@ -99,6 +99,11 @@ public class ChooseGroupFragment extends Fragment{
             public void onSuccessfulResponse() {
 
             }
+
+            @Override
+            public void onNoConnection() {
+
+            }
         };
         MiddleMan.newRequest(this.getActivity(), "getGroupsFromMe", null, responseHandler, null);
     }

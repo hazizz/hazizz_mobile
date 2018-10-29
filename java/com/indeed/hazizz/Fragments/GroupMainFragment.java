@@ -135,6 +135,11 @@ public class GroupMainFragment extends Fragment{
             public void onSuccessfulResponse() {
 
             }
+
+            @Override
+            public void onNoConnection() {
+                textView_noContent.setText("Nincs internet kapcsolat");
+            }
         };
         HashMap<String, Object> vars = new HashMap<>();
         vars.put("groupId", groupID);

@@ -7,8 +7,9 @@ import android.content.Context;
 
         import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
         import com.indeed.hazizz.Communication.Requests.Request;
+import com.indeed.hazizz.Network;
 
-        import java.util.ArrayList;
+import java.util.ArrayList;
         import java.util.HashMap;
         import java.util.logging.Handler;
         import java.util.logging.LogRecord;
@@ -19,6 +20,14 @@ public abstract class MiddleMan{
 
     public static void newRequest(Context context, String requestType, HashMap<String, Object>  body, CustomResponseHandler cOnResponse, HashMap<String, Object> vars) {
         Request newRequest = new Request(context, requestType, body, cOnResponse, vars);
+        for (Request r : requestQueue) {
+            if(r.getClass() == newRequest.getClass()){
+                requestQueue.remove(r);
+            }
+        }
+        if(Network.getActiveNetwork(context) == null || !Network.isConnectedOrConnecting(context)) {
+            newRequest.cOnResponse.onNoConnection();
+        }
         requestQueue.add(newRequest);
     }
 

@@ -68,6 +68,7 @@ public class GroupsFragment extends Fragment {
             @Override
             public void onPOJOResponse(Object response) {
                 ArrayList<POJOgroup> castedListFullOfPojos = (ArrayList<POJOgroup>)response;
+                listGroup.clear();
                 for(POJOgroup g : castedListFullOfPojos){
                     listGroup.add(new GroupItem(R.drawable.ic_launcher_background, g.getName(), g.getId()));
                 }
@@ -94,6 +95,11 @@ public class GroupsFragment extends Fragment {
 
             @Override
             public void onSuccessfulResponse() {
+                textView_noContent.setText("Nincs internet kapcsolat");
+
+            }
+            @Override
+            public void onNoConnection() {
 
             }
         };
