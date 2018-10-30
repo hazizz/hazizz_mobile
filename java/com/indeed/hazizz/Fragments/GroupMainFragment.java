@@ -26,6 +26,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+
 public class GroupMainFragment extends Fragment{
 
     private View v;
@@ -115,7 +118,7 @@ public class GroupMainFragment extends Fragment{
             }
 
             @Override
-            public void onFailure() {
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Log.e("hey", "4");
                 Log.e("hey", "got here onFailure");
                 textView_noContent.setVisibility(v.VISIBLE);

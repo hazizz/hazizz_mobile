@@ -27,6 +27,7 @@ import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.POJO.Response.POJOsubject;
 import com.indeed.hazizz.D8;
+import com.indeed.hazizz.ErrorHandler;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
@@ -34,6 +35,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
 
 public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSelectedListener{
 
@@ -149,7 +153,7 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
             }
 
             @Override
-            public void onFailure() {
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Log.e("hey", "4");
                 Log.e("hey", "got here onFailure");
                 Log.e("hey", "task created");
@@ -161,6 +165,9 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
                 int errorCode = error.getErrorCode();
                 if(errorCode == 2){ // cím túl hosszú (2-20 karatket)
                     textView_error.setText("A cím nem megfelelő");
+                }
+                else{
+                    ErrorHandler.unExpectedResponseDialog(getContext());
                 }
                 button_send.setEnabled(true);
             }
@@ -198,7 +205,7 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
             }
 
             @Override
-            public void onFailure() {
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Log.e("hey", "4");
                 Log.e("hey", "got here onFailure");
                 Log.e("hey", "subject fail");
