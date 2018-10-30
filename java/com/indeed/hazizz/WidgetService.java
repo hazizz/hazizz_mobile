@@ -18,6 +18,9 @@ import com.indeed.hazizz.Listviews.TaskList.TaskItem;
 import java.util.HashMap;
 import java.util.List;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+
 public class WidgetService extends RemoteViewsService {
 
   //  public List<TaskItem> data = null;
@@ -62,7 +65,7 @@ public class WidgetService extends RemoteViewsService {
                 }
 
                 @Override
-                public void onFailure() {
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
 
                 }
 

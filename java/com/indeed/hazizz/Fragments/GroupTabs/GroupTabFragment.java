@@ -22,6 +22,9 @@ import com.indeed.hazizz.Transactor;
 
 import java.util.HashMap;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+
 public class GroupTabFragment extends Fragment {
 
     private View v;
@@ -48,7 +51,7 @@ public class GroupTabFragment extends Fragment {
         }
 
         @Override
-        public void onFailure() {
+        public void onFailure(Call<ResponseBody> call, Throwable t) {
 
         }
 

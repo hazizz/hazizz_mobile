@@ -27,6 +27,9 @@ import com.indeed.hazizz.Transactor;
 
 import java.util.HashMap;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+
 public class LoginFragment extends Fragment {
 
     private String username;
@@ -60,7 +63,7 @@ public class LoginFragment extends Fragment {
             button_login.setEnabled(true);
         }
         @Override
-        public void onFailure() {
+        public void onFailure(Call<ResponseBody> call, Throwable t) {
             Log.e("hey", "got here onFailure");
         }
         @Override

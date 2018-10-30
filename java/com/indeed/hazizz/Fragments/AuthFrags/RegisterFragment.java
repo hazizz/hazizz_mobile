@@ -25,6 +25,9 @@ import com.indeed.hazizz.Transactor;
 
 import java.util.HashMap;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+
 public class RegisterFragment extends Fragment {
     private String username;
     private String email;
@@ -48,7 +51,7 @@ public class RegisterFragment extends Fragment {
         @Override
         public void onPOJOResponse(Object response) {}
         @Override
-        public void onFailure() {
+        public void onFailure(Call<ResponseBody> call, Throwable t) {
             button_signup.setEnabled(true);
             textView_error.setText("Nincs internet kapcsolat");
 

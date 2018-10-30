@@ -128,7 +128,7 @@ public class HazizzWidget extends AppWidgetProvider {
                 }
 
                 @Override
-                public void onFailure() {
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
 
                 }
 

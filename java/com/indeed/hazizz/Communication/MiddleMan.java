@@ -9,6 +9,7 @@ import android.content.Context;
         import com.indeed.hazizz.Communication.Requests.Request;
 import com.indeed.hazizz.Network;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
         import java.util.HashMap;
         import java.util.logging.Handler;
@@ -17,6 +18,17 @@ import java.util.ArrayList;
 public abstract class MiddleMan{
 
     public static ArrayList<Request> requestQueue = new ArrayList<>();
+
+    public static boolean serverReachable(){
+        {
+            try {
+                InetAddress.getByName("https://hazizz.duckdns.org:8081").isReachable(4000); //Replace with your name
+                return true;
+            } catch (Exception e) {
+                return false;
+            }
+        }
+    }
 
     public static void newRequest(Context context, String requestType, HashMap<String, Object>  body, CustomResponseHandler cOnResponse, HashMap<String, Object> vars) {
         Request newRequest = new Request(context, requestType, body, cOnResponse, vars);

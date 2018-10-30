@@ -18,11 +18,14 @@ import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTaskDet
 import com.indeed.hazizz.Communication.RequestInterface1;
 import com.indeed.hazizz.SharedPrefs;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -52,6 +55,8 @@ public class Request {
     public void setReacted(boolean r){reacted = r;}
     public boolean getReacted(){return reacted;}
 
+
+
     public Request(Context context, String reqType, HashMap<String, Object>  body, CustomResponseHandler cOnResponse, HashMap<String, Object> vars){
         this.cOnResponse = cOnResponse;
         this.body = body;
@@ -61,10 +66,17 @@ public class Request {
         //.excludeFieldsWithModifiers(Modifier.FINAL, Modifier.TRANSIENT, Modifier.STATIC)
         Gson gson = new GsonBuilder().serializeNulls().excludeFieldsWithoutExposeAnnotation().create();
 
+        final OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(5, TimeUnit.SECONDS)
+                .writeTimeout(5, TimeUnit.SECONDS)
+                .readTimeout(5, TimeUnit.SECONDS)
+                .build();
+
+
         retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
-              //  .client(okHttpClient)
+                .client(okHttpClient)
               //  .setEndpoint(endPoint)F
                 .build();
 
@@ -72,7 +84,7 @@ public class Request {
         aRequest = retrofit.create(RequestTypes.class);
     }
 
-    private void findRequestType(String reqType){
+    public void findRequestType(String reqType){
         switch(reqType){
             case "register":
                 requestType = new Register();
@@ -97,6 +109,9 @@ public class Request {
                 break;
             case "getTasksFromMe":
                 requestType = new GetTasksFromMe();
+                break;
+            case "getTasksFromMeSync":
+                requestType = new GetTasksFromMeSync();
                 break;
             case "getTasksFromGroup":
                 requestType = new GetTasksFromGroup();
@@ -185,7 +200,7 @@ public class Request {
                 }
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    cOnResponse.onFailure();
+                    cOnResponse.onFailure(call, t);
                 }
             });
         }
@@ -229,7 +244,7 @@ public class Request {
                 }
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    cOnResponse.onFailure();
+                    cOnResponse.onFailure(call, t);
                 }
             });
         }
@@ -272,7 +287,7 @@ public class Request {
                 }
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    cOnResponse.onFailure();
+                    cOnResponse.onFailure(call, t);
                 }
             });
         }
@@ -313,7 +328,7 @@ public class Request {
                 }
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    cOnResponse.onFailure();
+                    cOnResponse.onFailure(call, t);
                 }
             });
         }
@@ -355,7 +370,7 @@ public class Request {
                 }
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    cOnResponse.onFailure();
+                    cOnResponse.onFailure(call, t);
                 }
             });
         }
@@ -405,7 +420,7 @@ public class Request {
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
                     Log.e("hey", call.toString());
-                    cOnResponse.onFailure();
+                    cOnResponse.onFailure(call, t);
                 }
             });
         }
@@ -454,7 +469,7 @@ public class Request {
                 }
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    cOnResponse.onFailure();
+                    cOnResponse.onFailure(call, t);
                 }
             });
         }
@@ -503,7 +518,7 @@ public class Request {
                 }
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    cOnResponse.onFailure();
+                    cOnResponse.onFailure(call, t);
                 }
             });
         }
@@ -549,9 +564,39 @@ public class Request {
                 }
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    cOnResponse.onFailure();
+                    cOnResponse.onFailure(call, t);
                 }
             });
+        }
+    }
+
+    public class GetTasksFromMeSync implements RequestInterface1 {
+        GetTasksFromMeSync(){
+            Log.e("hey", "created GetTasksFromMeSync object");
+        }
+
+        @Override
+        public void setupCall() {
+            HashMap<String, String> headerMap = new HashMap<String, String>();
+            headerMap.put("Authorization", "Bearer " + SharedPrefs.getString(context, "token", "token"));//SharedPrefs.getString(context, "token", "token"));
+            call = aRequest.getTasksFromMe(headerMap);
+        }
+        public HashMap<String, Object>  getResponse() {
+            return response1;
+        }
+
+        @Override
+        public void makeCall() {
+            try {
+                Response<ResponseBody> response = call.execute();
+                response.body();
+                Type listType = new TypeToken<ArrayList<POJOgetTask>>(){}.getType();
+                List<POJOgetTask> castedList = gson.fromJson(response.body().charStream(), listType);
+                cOnResponse.onPOJOResponse(castedList);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -593,7 +638,7 @@ public class Request {
                 }
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    cOnResponse.onFailure();
+                    cOnResponse.onFailure(call, t);
                 }
             });
         }
@@ -646,7 +691,7 @@ public class Request {
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
                     Log.e("hey", call.toString());
-                    cOnResponse.onFailure();
+                    cOnResponse.onFailure(call, t);
                 }
             });
         }
@@ -701,7 +746,7 @@ public class Request {
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
                     Log.e("hey", call.toString());
-                    cOnResponse.onFailure();
+                    cOnResponse.onFailure(call, t);
                 }
             });
         }
@@ -739,7 +784,7 @@ public class Request {
                 }
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    cOnResponse.onFailure();
+                    cOnResponse.onFailure(call, t);
                     Log.e("hey", "Failure: " + call.toString());
                     t.printStackTrace();
                 }
@@ -781,7 +826,7 @@ public class Request {
                 }
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    cOnResponse.onFailure();
+                    cOnResponse.onFailure(call, t);
                     Log.e("hey", "Failure: " + call.toString());
                     t.printStackTrace();
                 }
@@ -825,7 +870,7 @@ public class Request {
                 }
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    cOnResponse.onFailure();
+                    cOnResponse.onFailure(call, t);
                     Log.e("hey", "Failure: " + call.toString());
                     t.printStackTrace();
                 }
@@ -864,7 +909,7 @@ public class Request {
                 }
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    cOnResponse.onFailure();
+                    cOnResponse.onFailure(call, t);
                     Log.e("hey", "Failure: " + call.toString());
                     t.printStackTrace();
                 }
@@ -906,7 +951,7 @@ public class Request {
                 }
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    cOnResponse.onFailure();
+                    cOnResponse.onFailure(call, t);
                     Log.e("hey", "Failure: " + call.toString());
                     t.printStackTrace();
                 }
@@ -947,7 +992,7 @@ public class Request {
                 }
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    cOnResponse.onFailure();
+                    cOnResponse.onFailure(call, t);
                     Log.e("hey", "Failure: " + call.toString());
                     t.printStackTrace();
                 }

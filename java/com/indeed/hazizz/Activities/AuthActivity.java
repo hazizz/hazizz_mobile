@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
+import com.indeed.hazizz.Communication.MiddleMan;
+import com.indeed.hazizz.ErrorHandler;
 import com.indeed.hazizz.Fragments.AuthFrags.FirstFragment;
 import com.indeed.hazizz.Fragments.CreateSubjectFragment;
 import com.indeed.hazizz.Fragments.CreateTaskFragment;
@@ -32,6 +34,11 @@ public class AuthActivity extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        ErrorHandler.unExpectedResponseDialog(this);
+
+
+        //   Log.e("hey" , "server is running: " + MiddleMan.serverReachable());
 
     //    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

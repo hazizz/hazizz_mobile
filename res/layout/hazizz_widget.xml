@@ -1,8 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#09C"
     android:padding="@dimen/widget_margin"
+    android:background="#ffffff"
     android:orientation="vertical">
 
     <TextView
@@ -11,24 +11,16 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_margin="8dp"
-        android:background="#09C"
-        android:contentDescription="@string/appwidget_text"
-        android:text="@string/appwidget_text"
-        android:textColor="#ffffff"
-        android:textSize="24sp"
-        android:textStyle="bold|italic" />
-
-    <Button
-        android:id="@+id/widget_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Das widget button"
-        />
+        android:text="Feladatok"
+        android:layout_gravity="center"
+        android:textColor="#808080"
+        android:textSize="24sp"/>
 
     <FrameLayout
         android:layout_height="match_parent"
-        android:layout_width="match_parent">
+        android:layout_width="match_parent"
+        android:background="#FF9F9F9F"
+        >
 
         <ListView
             android:id="@+id/widget_stack"

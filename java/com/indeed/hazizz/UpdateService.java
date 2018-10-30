@@ -20,6 +20,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+
 /**
  * Created by yutku on 29/11/16.
  */
@@ -79,7 +82,7 @@ public class UpdateService extends Service {
             }
 
             @Override
-            public void onFailure() {
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
 
             }
 
@@ -106,7 +109,7 @@ public class UpdateService extends Service {
 
     //    MiddleMan.newRequest(this,"getTasksFromMe", null, rh, null);
 
-      //  manager.notifyAppWidgetViewDataChanged(theWidget.g, view.getLayoutId());
+    //    manager.notifyAppWidgetViewDataChanged(theWidget, view.getLayoutId());
 
         return super.onStartCommand(intent, flags, startId);
     }
