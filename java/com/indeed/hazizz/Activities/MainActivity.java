@@ -37,6 +37,7 @@ import com.indeed.hazizz.Fragments.MainFragment;
 import com.indeed.hazizz.Fragments.ViewTaskFragment;
 import com.indeed.hazizz.Listviews.GroupList.GroupItem;
 import com.indeed.hazizz.R;
+import com.indeed.hazizz.SharedPrefs;
 import com.indeed.hazizz.Transactor;
 
 import java.util.ArrayList;
@@ -195,7 +196,7 @@ public class MainActivity extends AppCompatActivity
         navLogout.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View view) {
-                 Log.e("hey", "pressed logout");
+                 SharedPrefs.savePref(getBaseContext(), "autoLogin", "autoLogin", false);
                  Intent i = new Intent(thisActivity, AuthActivity.class);
                  startActivity(i);
 

@@ -128,6 +128,10 @@ public class LoginFragment extends Fragment {
         button_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(checkBox_autoLogin.isChecked()){
+                    SharedPrefs.savePref(getContext(), "autoLogin", "autoLogin", true);
+                }
+
              //   Log.e("hey", "password: " + editText_password.getText().toString() + ", passwordCheck: " + editText_passwordCheck.getText().toString() + " and they equal: " + editText_password.getText().toString().equals(editText_passwordCheck.getText().toString()));
                 if(editText_password.getText().toString().length() < 8) {
                     textView_error.setText("Jelszó nem elég hosszú");
