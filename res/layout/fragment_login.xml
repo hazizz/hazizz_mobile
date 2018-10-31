@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.LoginActivity"
     android:orientation="vertical">
 
     <TextView
@@ -43,8 +42,8 @@
         android:layout_width="300dp"
         android:layout_height="19dp"
         android:layout_gravity="center_horizontal"
-        android:text="auto login"
-        android:visibility="invisible" />
+        android:text="Automatikus bejelentkezés"
+        android:visibility="visible" />
 
     <TextView
         android:id="@+id/textView_error"

@@ -1,5 +1,7 @@
 package com.indeed.hazizz.Activities;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +19,7 @@ import com.indeed.hazizz.Fragments.MainFragment;
 import com.indeed.hazizz.Fragments.ViewTaskFragment;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.RequestSenderRunnable;
+import com.indeed.hazizz.SharedPrefs;
 import com.indeed.hazizz.Transactor;
 
 public class AuthActivity extends AppCompatActivity {
@@ -35,14 +38,18 @@ public class AuthActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ErrorHandler.unExpectedResponseDialog(this);
+      //  ErrorHandler.unExpectedResponseDialog(this);
 
 
         //   Log.e("hey" , "server is running: " + MiddleMan.serverReachable());
 
     //    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        Transactor.fragmentFirst(getSupportFragmentManager().beginTransaction());
+        if(SharedPrefs.getBoolean(this, "autoLogin", "autoLogin")){
+            Intent i = new Intent(this, MainActivity.class);
+            startActivity(i);
+        }else {
+            Transactor.fragmentFirst(getSupportFragmentManager().beginTransaction());
+        }
     }
 
     @Override
