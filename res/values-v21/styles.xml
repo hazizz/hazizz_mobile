@@ -8,5 +8,8 @@
     </style> -->
 <style name="TitleText">
     <item name="android:textColor">@color/colorTitleText</item>
+    <item name="android:layout_gravity">center</item>
+    <item name="android:textSize">28sp</item>
+
 </style>
 </resources>

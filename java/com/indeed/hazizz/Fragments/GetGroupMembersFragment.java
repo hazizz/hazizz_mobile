@@ -97,9 +97,9 @@ public class GetGroupMembersFragment extends Fragment {
 
             }
         };
-        HashMap<String, Object> vars = new HashMap<>();
-        vars.put("groupId", groupId);
-        MiddleMan.newRequest(this.getActivity(), "getGroupMembers", null, responseHandler, vars);
+        HashMap<String, String> vars = new HashMap<>();
+        vars.put("groupId", Integer.toString(groupId));
+        MiddleMan.newRequest(this.getActivity(),"getGroupMembers", null, responseHandler, vars);
     }
 
     void createViewList(){

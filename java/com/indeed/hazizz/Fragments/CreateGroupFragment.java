@@ -113,7 +113,9 @@ public class CreateGroupFragment extends Fragment {
         @Override
         public void onSuccessfulResponse() {
            // goBack();
+        //    MiddleMan.request.getGroupsFromMe(getActivity(), null, rh_getGroups, null);
             MiddleMan.newRequest(getActivity(), "getGroupsFromMe", null, rh_getGroups, null);
+
         }
 
         @Override
@@ -163,7 +165,7 @@ public class CreateGroupFragment extends Fragment {
                     HashMap<String, Object> body = new HashMap<>();
                     body.put("groupName", newGroupName);
                     body.put("type", "OPEN");button_createGroup.setEnabled(false);
-                    MiddleMan.newRequest(getActivity(), "createGroup", body, rh, null);
+                    MiddleMan.newRequest(getActivity(),"createGroup", body, rh, null);
 
                 }else{
                     // TODO subject name not long enough

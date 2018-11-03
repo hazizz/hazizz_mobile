@@ -1,19 +1,19 @@
 package com.indeed.hazizz.Communication;
 
 import android.content.Context;
-        import android.os.Looper;
-        import android.os.Message;
-        import android.util.Log;
+import android.os.Looper;
+import android.os.Message;
+import android.util.Log;
 
-        import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
-        import com.indeed.hazizz.Communication.Requests.Request;
+import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
+import com.indeed.hazizz.Communication.Requests.Request;
 import com.indeed.hazizz.Network;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
-        import java.util.HashMap;
-        import java.util.logging.Handler;
-        import java.util.logging.LogRecord;
+import java.util.HashMap;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 public abstract class MiddleMan{
 
@@ -30,10 +30,10 @@ public abstract class MiddleMan{
         }
     }
 
-    public static void newRequest(Context context, String requestType, HashMap<String, Object>  body, CustomResponseHandler cOnResponse, HashMap<String, Object> vars) {
+    public static void newRequest(Context context, String requestType, HashMap<String, Object>  body, CustomResponseHandler cOnResponse, HashMap<String, String> vars) {
         Request newRequest = new Request(context, requestType, body, cOnResponse, vars);
         for (Request r : requestQueue) {
-            if(r.getClass() == newRequest.getClass()){
+            if(r.requestType.getClass() == newRequest.requestType.getClass()){
                 requestQueue.remove(r);
             }
         }

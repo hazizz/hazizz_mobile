@@ -132,7 +132,7 @@ public class LoginFragment extends Fragment {
                     SharedPrefs.savePref(getContext(), "autoLogin", "autoLogin", true);
                 }
 
-             //   Log.e("hey", "password: " + editText_password.getText().toString() + ", passwordCheck: " + editText_passwordCheck.getText().toString() + " and they equal: " + editText_password.getText().toString().equals(editText_passwordCheck.getText().toString()));
+                //   Log.e("hey", "password: " + editText_password.getText().toString() + ", passwordCheck: " + editText_passwordCheck.getText().toString() + " and they equal: " + editText_password.getText().toString().equals(editText_passwordCheck.getText().toString()));
                 if(editText_password.getText().toString().length() < 8) {
                     textView_error.setText("Jelszó nem elég hosszú");
                 }else if(editText_username.getText().toString().length() < 4) {

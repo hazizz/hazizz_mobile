@@ -17,6 +17,7 @@ import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
+import com.indeed.hazizz.D8;
 import com.indeed.hazizz.Listviews.TaskList.CustomAdapter;
 import com.indeed.hazizz.Listviews.TaskList.TaskItem;
 import com.indeed.hazizz.R;
@@ -99,9 +100,9 @@ public class GroupMainFragment extends Fragment{
 
             @Override
             public void onPOJOResponse(Object response) {
-                ArrayList<POJOgetTask> casted = (ArrayList<POJOgetTask>) response;
+                ArrayList<POJOgetTask> sorted = D8.sortTasksByDate((ArrayList<POJOgetTask>) response);
 
-                for(POJOgetTask t : casted) {
+                for(POJOgetTask t : sorted) {
                     listTask.add(new TaskItem(R.drawable.ic_launcher_background, t.getTitle(),
                             t.getDescription(), t.getDueDate(), t.getGroupData(), t.getCreator(), t.getSubjectData(), t.getId()));
                     adapter.notifyDataSetChanged();
@@ -144,14 +145,57 @@ public class GroupMainFragment extends Fragment{
                 textView_noContent.setText("Nincs internet kapcsolat");
             }
         };
-        HashMap<String, Object> vars = new HashMap<>();
-        vars.put("groupId", groupID);
-        MiddleMan.newRequest(this.getActivity(), "getTasksFromGroup", null, responseHandler, vars);
+        HashMap<String, String> vars = new HashMap<>();
+        vars.put("groupId", Integer.toString(groupID));
+      //  MiddleMan.request.getTasksFromGroup(this.getActivity(), null, responseHandler, vars);
+        MiddleMan.newRequest(this.getActivity(),"getTasksFromGroup", null, responseHandler, vars);
+
     }
 
     public void toCreateTask(){
         Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(),groupID, groupName);
         Log.e("hey", "called 123");
+    }
+
+    public void leaveGroup(){
+        HashMap<String, String> vars = new HashMap<>();
+        vars.put("groupId", Integer.toString(groupID));
+        MiddleMan.newRequest(this.getActivity(), "leaveGroup", null, new CustomResponseHandler() {
+            @Override
+            public void onResponse(HashMap<String, Object> response) {
+
+            }
+
+            @Override
+            public void onPOJOResponse(Object response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+
+            @Override
+            public void onErrorResponse(POJOerror error) {
+
+            }
+
+            @Override
+            public void onEmptyResponse() {
+
+            }
+
+            @Override
+            public void onSuccessfulResponse() {
+                Transactor.fragmentGroups(getFragmentManager().beginTransaction(), false);
+            }
+
+            @Override
+            public void onNoConnection() {
+
+            }
+        }, vars);
     }
 }
 

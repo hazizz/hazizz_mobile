@@ -5,6 +5,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOauth;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
@@ -13,12 +14,14 @@ import com.indeed.hazizz.Communication.POJO.Response.POJOgroup;
 import com.indeed.hazizz.Communication.POJO.Response.POJOme;
 import com.indeed.hazizz.Communication.POJO.Response.POJOsubject;
 import com.indeed.hazizz.Communication.POJO.Response.POJOuser;
+import com.indeed.hazizz.Communication.POJO.Response.PojoPicSmall;
 import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
 import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTaskDetailed;
-import com.indeed.hazizz.Communication.RequestInterface1;
+import com.indeed.hazizz.Communication.RequestInterface;
 import com.indeed.hazizz.SharedPrefs;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,8 +40,7 @@ public class Request {
 
     private Gson gson = new Gson();
     private final String BASE_URL = "https://hazizz.duckdns.org:8081/";
-    public RequestInterface1 requestType;
-    private HashMap<String, Object> response1;
+    public RequestInterface requestType;
     private HashMap<String, Object> body;
     private Retrofit retrofit;
 
@@ -48,7 +50,7 @@ public class Request {
     public CustomResponseHandler cOnResponse;
     Context context;
 
-    private HashMap<String, Object> vars;
+    private HashMap<String, String> vars;
 
     private boolean reacted = false;
 
@@ -57,7 +59,7 @@ public class Request {
 
 
 
-    public Request(Context context, String reqType, HashMap<String, Object>  body, CustomResponseHandler cOnResponse, HashMap<String, Object> vars){
+    public Request(Context context, String reqType, HashMap<String, Object>  body, CustomResponseHandler cOnResponse, HashMap<String, String> vars){
         this.cOnResponse = cOnResponse;
         this.body = body;
         this.context = context;
@@ -77,12 +79,13 @@ public class Request {
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(okHttpClient)
-              //  .setEndpoint(endPoint)F
+                //  .setEndpoint(endPoint)F
                 .build();
 
         findRequestType(reqType);
         aRequest = retrofit.create(RequestTypes.class);
     }
+
 
     public void findRequestType(String reqType){
         switch(reqType){
@@ -146,19 +149,25 @@ public class Request {
             case "leaveGroup":
                 requestType = new LeaveGroup();
                 break;
+
+            case "getUserProfilePic":
+                requestType = new GetUserProfilePic();
+                break;
+            case "getMyProfilePic":
+                requestType = new GetMyProfilePic();
+                break;
+
         }
     }
 
-    public HashMap<String, Object>  getResponse(){
-        return response1;
-    }
-    public class Login implements RequestInterface1 {
+
+    public class Login implements RequestInterface {
         //   public String name = "register";
         Login(){
             Log.e("hey", "created Login object");
         }
 
-        @Override
+      //  @Override
         public void setupCall() {
             HashMap<String, String> headerMap = new HashMap<String, String>();
             headerMap.put("Content-Type", "application/json");
@@ -169,11 +178,9 @@ public class Request {
             call = aRequest.login(headerMap, b);
         }
 
-        public HashMap<String, Object>  getResponse() {
-            return response1;
-        }
+      //  public HashMap<String, Object>  getResponse() { return response1; }
 
-        @Override
+       // @Override
         public void makeCall() {
             call.enqueue(new Callback<ResponseBody>() {
                 @Override
@@ -206,7 +213,7 @@ public class Request {
         }
     }
 
-    public class Register implements RequestInterface1 {
+    public class Register implements RequestInterface {
         Register(){
             Log.e("hey", "created");
         }
@@ -218,11 +225,9 @@ public class Request {
             call = aRequest.register(headerMap, body);
         }
 
-        public HashMap<String, Object>  getResponse() {
-            return response1;
-        }
+           
 
-        @Override
+        
         public void makeCall() {
             call.enqueue(new Callback<ResponseBody>() {
                 @Override
@@ -250,7 +255,7 @@ public class Request {
         }
     }
 
-    public class Me implements RequestInterface1 {
+    public class Me implements RequestInterface {
         Me(){
             Log.e("hey", "created Me object");
         }
@@ -261,9 +266,7 @@ public class Request {
             headerMap.put("Authorization", "Bearer " + SharedPrefs.getString(context, "token", "token"));//SharedPrefs.getString(context, "token", "token"));
             call = aRequest.me(headerMap);
         }
-        public HashMap<String, Object>  getResponse() {
-            return response1;
-        }
+           
 
         @Override
         public void makeCall() {
@@ -293,7 +296,7 @@ public class Request {
         }
     }
 
-    public class GetGroup implements RequestInterface1 {
+    public class GetGroup implements RequestInterface {
         //   public String name = "register";
         GetGroup(){
             Log.e("hey", "created GetGroup object");
@@ -305,9 +308,7 @@ public class Request {
             headerMap.put("Authorization", "Bearer " + SharedPrefs.getString(context, "token", "token"));//SharedPrefs.getString(context, "token", "token"));
             call = aRequest.getGroup(vars.get("groupId").toString(), headerMap);
         }
-        public HashMap<String, Object>  getResponse() {
-            return response1;
-        }
+           
 
         @Override
         public void makeCall() {
@@ -334,7 +335,7 @@ public class Request {
         }
     }
 
-    public class GetGroups implements RequestInterface1 {
+    public class GetGroups implements RequestInterface {
         GetGroups(){
             Log.e("hey", "created GetGroups object");
         }
@@ -345,9 +346,7 @@ public class Request {
             headerMap.put("Authorization", "Bearer " + SharedPrefs.getString(context, "token", "token"));//SharedPrefs.getString(context, "token", "token"));
             call = aRequest.getGroups(headerMap);
         }
-        public HashMap<String, Object>  getResponse() {
-            return response1;
-        }
+           
 
         @Override
         public void makeCall() {
@@ -376,7 +375,7 @@ public class Request {
         }
     }
 
-    public class CreateTask implements RequestInterface1 {
+    public class CreateTask implements RequestInterface {
         //   public String name = "register";
         CreateTask(){
             Log.e("hey", "created CreateTask object");
@@ -389,9 +388,7 @@ public class Request {
             headerMap.put("Authorization", "Bearer " + SharedPrefs.getString(context, "token", "token"));//SharedPrefs.getString(context, "token", "token"));
             call = aRequest.createTask(vars.get("id").toString(), headerMap, body); //Integer.toString(groupID)
         }
-        public HashMap<String, Object>  getResponse() {
-            return response1;
-        }
+           
 
         @Override
         public void makeCall() {
@@ -426,7 +423,7 @@ public class Request {
         }
     }
 
-    public class GetSubjects implements RequestInterface1 {
+    public class GetSubjects implements RequestInterface {
         GetSubjects(){
             Log.e("hey", "created Me object");
         }
@@ -437,9 +434,7 @@ public class Request {
             headerMap.put("Authorization", "Bearer " + SharedPrefs.getString(context, "token", "token"));//SharedPrefs.getString(context, "token", "token"));
             call = aRequest.getSubjects(vars.get("groupId").toString(), headerMap); // vars.get("id").toString()
         }
-        public HashMap<String, Object>  getResponse() {
-            return response1;
-        }
+           
 
         @Override
         public void makeCall() { // List<POJOsubject>
@@ -475,7 +470,7 @@ public class Request {
         }
     }
 
-    public class GetTasksFromGroup implements RequestInterface1 {
+    public class GetTasksFromGroup implements RequestInterface {
         GetTasksFromGroup(){
             Log.e("hey", "created GetTasksFromGroup object");
         }
@@ -486,9 +481,7 @@ public class Request {
             headerMap.put("Authorization", "Bearer " + SharedPrefs.getString(context, "token", "token"));//SharedPrefs.getString(context, "token", "token"));
             call = aRequest.getTasksFromGroup(vars.get("groupId").toString(), headerMap);
         }
-        public HashMap<String, Object>  getResponse() {
-            return response1;
-        }
+           
 
         @Override
         public void makeCall() {
@@ -524,7 +517,7 @@ public class Request {
         }
     }
 
-    public class GetTasksFromMe implements RequestInterface1 {
+    public class GetTasksFromMe implements RequestInterface {
         GetTasksFromMe(){
             Log.e("hey", "created GetTasks object");
         }
@@ -535,9 +528,7 @@ public class Request {
             headerMap.put("Authorization", "Bearer " + SharedPrefs.getString(context, "token", "token"));//SharedPrefs.getString(context, "token", "token"));
             call = aRequest.getTasksFromMe(headerMap);
         }
-        public HashMap<String, Object>  getResponse() {
-            return response1;
-        }
+           
 
         @Override
         public void makeCall() {
@@ -570,7 +561,7 @@ public class Request {
         }
     }
 
-    public class GetTasksFromMeSync implements RequestInterface1 {
+    public class GetTasksFromMeSync implements RequestInterface {
         GetTasksFromMeSync(){
             Log.e("hey", "created GetTasksFromMeSync object");
         }
@@ -580,9 +571,6 @@ public class Request {
             HashMap<String, String> headerMap = new HashMap<String, String>();
             headerMap.put("Authorization", "Bearer " + SharedPrefs.getString(context, "token", "token"));//SharedPrefs.getString(context, "token", "token"));
             call = aRequest.getTasksFromMe(headerMap);
-        }
-        public HashMap<String, Object>  getResponse() {
-            return response1;
         }
 
         @Override
@@ -600,7 +588,7 @@ public class Request {
         }
     }
 
-    public class GetTask implements RequestInterface1 {
+    public class GetTask implements RequestInterface {
         GetTask(){
             Log.e("hey", "created GetTask object");
         }
@@ -612,9 +600,7 @@ public class Request {
 
             call = aRequest.getTask(vars.get("groupId").toString(), vars.get("taskId").toString(), headerMap);
         }
-        public HashMap<String, Object>  getResponse() {
-            return response1;
-        }
+           
 
         @Override
         public void makeCall() {
@@ -644,7 +630,7 @@ public class Request {
         }
     }
 
-    public class GetUsers implements RequestInterface1 {
+    public class GetUsers implements RequestInterface {
         //   public String name = "register";
         GetUsers(){
             Log.e("hey", "created CreateTask object");
@@ -657,9 +643,7 @@ public class Request {
             headerMap.put("Authorization", "Bearer " + SharedPrefs.getString(context, "token", "token"));//SharedPrefs.getString(context, "token", "token"));
             call = aRequest.getUsers(headerMap); //Integer.toString(groupID)
         }
-        public HashMap<String, Object>  getResponse() {
-            return response1;
-        }
+           
 
         @Override
         public void makeCall() {
@@ -697,7 +681,7 @@ public class Request {
         }
     }
 
-    public class GetGroupsFromMe implements RequestInterface1 {
+    public class GetGroupsFromMe implements RequestInterface {
         GetGroupsFromMe(){
             Log.e("hey", "created GetGroupsFromMe object");
         }
@@ -708,9 +692,7 @@ public class Request {
             headerMap.put("Authorization", "Bearer " + SharedPrefs.getString(context, "token", "token"));//SharedPrefs.getString(context, "token", "token"));
             call = aRequest.getGroupsFromMe(headerMap); //Integer.toString(groupID)
         }
-        public HashMap<String, Object>  getResponse() {
-            return response1;
-        }
+           
 
         @Override
         public void makeCall() {
@@ -752,7 +734,7 @@ public class Request {
         }
     }
 
-    public class CreateSubject implements RequestInterface1 {
+    public class CreateSubject implements RequestInterface {
         CreateSubject(){
             Log.e("hey", "created CreateSubject object");
         }
@@ -765,7 +747,7 @@ public class Request {
             call = aRequest.createSubject(vars.get("groupId").toString(), headerMap, body);
         }
 
-        public HashMap<String, Object>  getResponse() { return response1; }
+           
         @Override
         public void makeCall() {
             call.enqueue(new Callback<ResponseBody>() {
@@ -792,7 +774,7 @@ public class Request {
         }
     }
 
-    public class CreateGroup implements RequestInterface1 {
+    public class CreateGroup implements RequestInterface {
         CreateGroup(){
             Log.e("hey", "created CreateGroup object");
         }
@@ -805,7 +787,7 @@ public class Request {
             call = aRequest.createGroup(headerMap, body);
         }
 
-        public HashMap<String, Object>  getResponse() { return response1; }
+           
         @Override
         public void makeCall() {
             call.enqueue(new Callback<ResponseBody>() {
@@ -834,7 +816,7 @@ public class Request {
         }
     }
 
-    public class inviteUserToGroup implements RequestInterface1 {
+    public class inviteUserToGroup implements RequestInterface {
         //   public String name = "register";
         inviteUserToGroup(){
             Log.e("hey", "created inviteUserToGroup object");
@@ -849,7 +831,7 @@ public class Request {
             call = aRequest.inviteUserToGroup(vars.get("groupId").toString(), headerMap, body);
         }
 
-        public HashMap<String, Object>  getResponse() { return response1; }
+           
         @Override
         public void makeCall() {
             call.enqueue(new Callback<ResponseBody>() {
@@ -878,7 +860,7 @@ public class Request {
         }
     }
 
-    public class JoinGroup implements RequestInterface1 {
+    public class JoinGroup implements RequestInterface {
         JoinGroup(){
             Log.e("hey", "created JoinGroup object");
         }
@@ -890,7 +872,7 @@ public class Request {
             call = aRequest.joinGroup(vars.get("groupId").toString(), headerMap);
         }
 
-        public HashMap<String, Object>  getResponse() { return response1; }
+           
         @Override
         public void makeCall() {
             call.enqueue(new Callback<ResponseBody>() {
@@ -917,7 +899,7 @@ public class Request {
         }
     }
 
-    public class GetGroupMembers implements RequestInterface1 {
+    public class GetGroupMembers implements RequestInterface {
         GetGroupMembers(){
             Log.e("hey", "created getGroupMembers object");
         }
@@ -929,7 +911,7 @@ public class Request {
             call = aRequest.getGroupMembers(vars.get("groupId").toString(), headerMap);
         }
 
-        public HashMap<String, Object>  getResponse() { return response1; }
+           
         @Override
         public void makeCall() {
             call.enqueue(new Callback<ResponseBody>() {
@@ -960,7 +942,7 @@ public class Request {
     }
 
 
-    public class LeaveGroup implements RequestInterface1 {
+    public class LeaveGroup implements RequestInterface {
         LeaveGroup(){
             Log.e("hey", "created LeaveGroup object");
         }
@@ -970,10 +952,10 @@ public class Request {
             HashMap<String, String> headerMap = new HashMap<String, String>();
             headerMap.put("Authorization", "Bearer " + SharedPrefs.getString(context, "token", "token"));//SharedPrefs.getString(context, "token", "token"));
             headerMap.put("Content-Type", "application/json");
-            call = aRequest.getGroupMembers(vars.get("groupId").toString(), headerMap);
+            call = aRequest.getGroupMembers(vars.get("groupId"), headerMap);
         }
 
-        public HashMap<String, Object>  getResponse() { return response1; }
+           
         @Override
         public void makeCall() {
             call.enqueue(new Callback<ResponseBody>() {
@@ -999,6 +981,93 @@ public class Request {
             });
         }
     }
+
+    public class GetUserProfilePic implements RequestInterface {
+        GetUserProfilePic(){
+            Log.e("hey", "created LeaveGroup object");
+        }
+
+        @Override
+        public void setupCall() {
+            HashMap<String, String> headerMap = new HashMap<String, String>();
+            headerMap.put("Authorization", "Bearer " + SharedPrefs.getString(context, "token", "token"));//SharedPrefs.getString(context, "token", "token"));
+            call = aRequest.getUserProfilePic(vars.get("userId"), headerMap);
+        }
+
+
+        @Override
+        public void makeCall() {
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                    if(response.isSuccessful()){ // response != null
+
+                        PojoPicSmall pojoPicSmall = gson.fromJson(response.body().charStream(),PojoPicSmall.class);
+                        cOnResponse.onPOJOResponse(pojoPicSmall);
+                    }
+                    else if(!response.isSuccessful()){ // response != null
+                        //    Log.e("hey", (String)response.body().toString());
+                        POJOerror pojoError = gson.fromJson(response.errorBody().charStream(),POJOerror.class);
+                        Log.e("hey", "errorCOde is: " +pojoError.getErrorCode());
+                        cOnResponse.onErrorResponse(pojoError);
+                    }
+                    else{cOnResponse.onEmptyResponse();}
+                }
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    cOnResponse.onFailure(call, t);
+                    Log.e("hey", "Failure: " + call.toString());
+                    t.printStackTrace();
+                }
+            });
+        }
+    }
+    public class GetMyProfilePic implements RequestInterface {
+        GetMyProfilePic(){
+            Log.e("hey", "created GetMyProfilePic object");
+        }
+
+        @Override
+        public void setupCall() {
+            HashMap<String, String> headerMap = new HashMap<String, String>();
+            headerMap.put("Authorization", "Bearer " + SharedPrefs.getString(context, "token", "token"));//SharedPrefs.getString(context, "token", "token"));
+            call = aRequest.getMyProfilePic(headerMap);
+            Log.e("hey", "setup call on getMyProfilePic");
+        }
+
+        @Override
+        public void makeCall() {
+            Log.e("hey", "made call on getMyProfilePic");
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                    if(response.isSuccessful()){ // response != null
+                        PojoPicSmall pojoPicSmall = gson.fromJson(response.body().charStream(),PojoPicSmall.class);
+                        cOnResponse.onPOJOResponse(pojoPicSmall);
+
+                    }
+                    else if(!response.isSuccessful()){ // response != null
+                        //    Log.e("hey", (String)response.body().toString());
+                        POJOerror pojoError = gson.fromJson(response.errorBody().charStream(),POJOerror.class);
+                        Log.e("hey", "errorCOde is: " +pojoError.getErrorCode());
+                        cOnResponse.onErrorResponse(pojoError);
+                    }
+                    else{cOnResponse.onEmptyResponse();
+                        Log.e("hey", "got empty response");
+                    }
+                }
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    cOnResponse.onFailure(call, t);
+                    Log.e("hey", "Failure: " + call.toString());
+                    t.printStackTrace();
+                }
+            });
+        }
+    }
 }
 
-// TODO java.lang.IllegalStateException: Already executed. at retrofit2.OkHttpCall.enqueue(OkHttpCall.java:84)
+
+//TODO java.lang.IllegalStateException: Already executed. at retrofit2.OkHttpCall.enqueue(OkHttpCall.java:84)

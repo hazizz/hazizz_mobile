@@ -64,6 +64,7 @@ public class CustomAdapter extends ArrayAdapter<TaskItem> {
         holder.taskTitle.setText(taskItem.getTaskTitle());
         holder.taskDescription.setText(taskItem.getTaskDescription());
         holder.taskDueDate.setText(taskItem.getTaskDueDate());
+     //   holder.taskCreator.setText(taskItem.getCreator().getUsername());
         holder.taskCreator.setText(taskItem.getCreator().getUsername());
         holder.taskSubject.setText(taskItem.getSubject().getName());
       //  holder.taskPic.setImageResource(taskItem.taskPic);

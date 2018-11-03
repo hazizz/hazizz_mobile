@@ -6,6 +6,7 @@ import lombok.Data;
 public class POJOauth {
 
     private String token;
+    private String refresh;
 
     POJOauth(String token){
         this.token = token;

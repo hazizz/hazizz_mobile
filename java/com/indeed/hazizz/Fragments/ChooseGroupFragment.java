@@ -108,7 +108,7 @@ public class ChooseGroupFragment extends Fragment{
 
             }
         };
-        MiddleMan.newRequest(this.getActivity(), "getGroupsFromMe", null, responseHandler, null);
+        MiddleMan.newRequest(this.getActivity(),"getGroupsFromMe", null, responseHandler, null);
     }
 
     void createViewList(){

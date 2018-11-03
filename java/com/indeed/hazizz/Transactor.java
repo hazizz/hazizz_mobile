@@ -1,11 +1,14 @@
 package com.indeed.hazizz;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
+import com.indeed.hazizz.Activities.AuthActivity;
 import com.indeed.hazizz.Fragments.AuthFrags.FirstFragment;
 import com.indeed.hazizz.Fragments.AuthFrags.LoginFragment;
 import com.indeed.hazizz.Fragments.AuthFrags.RegisterFragment;
@@ -159,6 +162,11 @@ public abstract class Transactor extends FragmentActivity {
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }
         fTransaction.commit();
+    }
+
+    public static void feedbackActivity(Activity thisActivity, Class<Activity> theActivity, Fragment goBackFragment){
+        Intent i = new Intent(thisActivity, theActivity);
+        thisActivity.startActivity(i);
     }
 
 }

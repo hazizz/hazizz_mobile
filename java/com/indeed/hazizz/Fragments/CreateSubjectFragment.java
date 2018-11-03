@@ -110,10 +110,12 @@ public class CreateSubjectFragment extends Fragment {
                 if(editText_newSubject.getTextSize() != 0) {
                     HashMap<String, Object> body = new HashMap<>();
                     body.put("name", editText_newSubject.getText().toString());
-                    HashMap<String, Object> vars = new HashMap<>();
-                    vars.put("groupId", groupId);                    button_addSubject.setEnabled(false);
+                    HashMap<String, String> vars = new HashMap<>();
+                    vars.put("groupId", Integer.toString(groupId));
+                    button_addSubject.setEnabled(false);
 
                     MiddleMan.newRequest(getActivity(), "createSubject", body, rh, vars);
+                    MiddleMan.newRequest(getActivity(),"createSubject", body, rh, vars);
                 }else{
                     // TODO subject name not long enough
                     Log.e("hey", "else 123");

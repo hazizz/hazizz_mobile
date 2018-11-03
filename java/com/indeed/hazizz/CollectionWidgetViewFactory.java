@@ -106,7 +106,7 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
             public void onResponse(HashMap<String, Object> response) {}
             @Override
             public void onPOJOResponse(Object response) {
-                data = (ArrayList<POJOgetTask>)response;
+                data = D8.sortTasksByDate((ArrayList<POJOgetTask>) response);
                 Log.e("hey", "pojo response");
             }
             @Override
