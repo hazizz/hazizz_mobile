@@ -12,7 +12,7 @@ public class POJOerror{// implements ResponseInterface {
     private String title;
     private String message;
 
-    public POJOerror(String time, int drrorCode, String title, String message){
+    public POJOerror(String time, int errorCode, String title, String message){
         this.time = time;
         this.errorCode = errorCode;
         this.title = title;

@@ -1,18 +1,12 @@
 package com.indeed.hazizz.Activities;
 
-//import android.app.Fragment;
 import android.app.Activity;
-import android.app.FragmentManager;
 import android.content.Intent;
-import android.net.TrafficStats;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
-import android.view.SubMenu;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -21,12 +15,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.POJO.Response.POJOme;
+import com.indeed.hazizz.Communication.POJO.Response.PojoPicSmall;
+import com.indeed.hazizz.Converter.Converter;
 import com.indeed.hazizz.Fragments.CreateSubjectFragment;
 import com.indeed.hazizz.Fragments.CreateTaskFragment;
 import com.indeed.hazizz.Fragments.GetGroupMembersFragment;
@@ -35,14 +32,12 @@ import com.indeed.hazizz.Fragments.GroupTabs.GroupTabFragment;
 import com.indeed.hazizz.Fragments.GroupsFragment;
 import com.indeed.hazizz.Fragments.MainFragment;
 import com.indeed.hazizz.Fragments.ViewTaskFragment;
-import com.indeed.hazizz.Listviews.GroupList.GroupItem;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.SharedPrefs;
 import com.indeed.hazizz.Transactor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -55,6 +50,7 @@ public class MainActivity extends AppCompatActivity
     private NavigationView navView;
     private ActionBarDrawerToggle toggle;
 
+    private ImageView navProfilePic;
     private TextView navUsername;
     private TextView navEmail;
     private TextView navLogout;
@@ -66,6 +62,7 @@ public class MainActivity extends AppCompatActivity
     private Menu menu_options;
     private MenuItem menuItem_createGroup;
     private MenuItem menuItem_joinGroup;
+    private MenuItem menuItem_leaveGroup;
  //   private MenuItem menuItem_leaveGroup;
 
     private Menu menu_nav;
@@ -77,6 +74,47 @@ public class MainActivity extends AppCompatActivity
     private Fragment currentFrag;
 
     private ArrayList<Integer> groupIDs;
+
+    CustomResponseHandler rh_profilePic = new CustomResponseHandler() {
+        @Override
+        public void onResponse(HashMap<String, Object> response) {
+
+        }
+
+        @Override
+        public void onPOJOResponse(Object response) {
+            String a = ((PojoPicSmall)response).getData().split(",")[1];
+          //  String[] imageSplit = a.split(",");
+          //  a = imageSplit[1];
+            navProfilePic.setImageBitmap(Converter.imageFromText(a));
+            Log.e("hey", "got profile pic response");
+        }
+
+        @Override
+        public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+        }
+
+        @Override
+        public void onErrorResponse(POJOerror error) {
+
+        }
+
+        @Override
+        public void onEmptyResponse() {
+
+        }
+
+        @Override
+        public void onSuccessfulResponse() {
+
+        }
+
+        @Override
+        public void onNoConnection() {
+
+        }
+    };
 
     CustomResponseHandler responseHandler = new CustomResponseHandler() {
         @Override
@@ -173,6 +211,7 @@ public class MainActivity extends AppCompatActivity
         navView.bringToFront();
 
         View headerView = navView.getHeaderView(0);
+        navProfilePic = (ImageView) headerView.findViewById(R.id.imageView_profilePic);
         navUsername = (TextView) headerView.findViewById(R.id.textView_userName);
         navEmail = (TextView) headerView.findViewById(R.id.textView_email);
         navLogout = findViewById(R.id.textView_logout);
@@ -202,6 +241,8 @@ public class MainActivity extends AppCompatActivity
 
              }
              });
+        MiddleMan.newRequest(getBaseContext(), "getMyProfilePic", null, rh_profilePic, null);
+
         MiddleMan.newRequest(getBaseContext(), "me", null, responseHandler, null);
 
     }
@@ -229,7 +270,7 @@ public class MainActivity extends AppCompatActivity
 
         menuItem_createGroup = menu_options.findItem(R.id.action_createGroup);
         menuItem_joinGroup = menu_options.findItem(R.id.action_joinGroup);
-      //  menuItem_leaveGroup = menu_options.findItem(R.id.action_leaveGroup);
+        menuItem_leaveGroup = menu_options.findItem(R.id.action_leaveGroup);
 
         if(menuItem_createGroup == null || menuItem_joinGroup == null ){// || menuItem_leaveGroup == null){
             Log.e("hey", "menu items are null");
@@ -260,11 +301,10 @@ public class MainActivity extends AppCompatActivity
             Transactor.fragmentJoinGroup(getSupportFragmentManager().beginTransaction());
             return true;
         }
-      /*  if (id == R.id.action_leaveGroup) {
-            ((GroupTabFragment)cFrag).leaveGroup();
-
+        if (id == R.id.action_leaveGroup) {
+            ((GroupMainFragment)cFrag).leaveGroup();
             return true;
-        } */
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -356,26 +396,16 @@ public class MainActivity extends AppCompatActivity
         currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager());
         if (currentFrag instanceof GroupsFragment) {
             fab_createGroup.setVisibility(View.VISIBLE);
-        //    menuItem_createGroup.setVisible(true);
-        //    menuItem_joinGroup.setVisible(true);
+            fab_joinGroup.setVisibility(View.VISIBLE);
+
             navView.getMenu().getItem(1).setVisible(false);
-          //  navView.getMenu().getItem(1).setChecked(true);
             menu_groups.setVisible(true);
         }else{
             fab_createGroup.setVisibility(View.INVISIBLE);
-           //0 menuItem_createGroup.setVisible(false);
-           // menuItem_joinGroup.setVisible(false);
+            fab_joinGroup.setVisibility(View.INVISIBLE);
+            navView.getMenu().getItem(1).setChecked(false);
             navView.getMenu().getItem(1).setVisible(true);
             menu_groups.setVisible(false);
-        }
-
-        if(currentFrag instanceof GroupsFragment) {
-
-            fab_joinGroup.setVisibility(View.VISIBLE);
-        }
-        else{
-            fab_joinGroup.setVisibility(View.INVISIBLE);
-
         }
 
         if(currentFrag instanceof CreateSubjectFragment) {
@@ -387,16 +417,23 @@ public class MainActivity extends AppCompatActivity
 
         if(currentFrag instanceof MainFragment){
             navView.getMenu().getItem(0).setChecked(true);
-        }else{
-            navView.getMenu().getItem(0).setChecked(false);
-        }
-
-        if(currentFrag instanceof MainFragment ) {
-            //  menuItem_leaveGroup.setVisible(true);
             fab_createTask.setVisibility(View.VISIBLE);
         }else{
+            navView.getMenu().getItem(0).setChecked(false);
             fab_createTask.setVisibility(View.INVISIBLE);
+        }
 
+        if (currentFrag instanceof GroupsFragment || currentFrag instanceof MainFragment) {
+                menuItem_createGroup.setVisible(true);
+                menuItem_joinGroup.setVisible(true);
+        }else{
+                menuItem_createGroup.setVisible(false);
+                menuItem_joinGroup.setVisible(false);
+        }
+        if(currentFrag instanceof GroupTabFragment || currentFrag instanceof GroupMainFragment || currentFrag instanceof ViewTaskFragment || currentFrag instanceof GetGroupMembersFragment){
+            menuItem_leaveGroup.setVisible(true);
+        }else{
+            menuItem_leaveGroup.setVisible(false);
         }
     }
 
@@ -404,17 +441,4 @@ public class MainActivity extends AppCompatActivity
         menu_mainGroup.setTitle("Csoportok: " + name);
     }
 
-    /*@Override
-    public void onBackPressed() {
-
-        int count = getFragmentManager().getBackStackEntryCount();
-
-        if (count == 0) {
-            super.onBackPressed();
-            //additional code
-        } else {
-            getFragmentManager().popBackStack();
-        }
-
-    } */
 }

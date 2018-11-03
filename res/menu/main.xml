@@ -23,6 +23,13 @@
         android:visible="true"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/action_leaveGroup"
+        android:orderInCategory="100"
+        android:title="Csoportból kilépés"
+        android:visible="false"
+        app:showAsAction="never" />
+
  <!--   <item
         android:id="@+id/action_leaveGroup"
         android:orderInCategory="100"

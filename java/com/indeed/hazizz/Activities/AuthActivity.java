@@ -44,7 +44,7 @@ public class AuthActivity extends AppCompatActivity {
         //   Log.e("hey" , "server is running: " + MiddleMan.serverReachable());
 
     //    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        if(SharedPrefs.getBoolean(this, "autoLogin", "autoLogin")){
+        if(SharedPrefs.getBoolean(this, "autoLogin", "autoLogin") && SharedPrefs.getString(getBaseContext(), "token", "token").length() >= 210){
             Intent i = new Intent(this, MainActivity.class);
             startActivity(i);
         }else {

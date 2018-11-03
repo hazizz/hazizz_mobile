@@ -106,9 +106,9 @@ public class JoinGroupFragment extends Fragment {
                 if(g.getName().equals(groupName)) {
                     if (g.getGroupType().equals("OPEN")) {
                         groupId = g.getId();
-                        HashMap<String, Object> vars = new HashMap<>();
-                        vars.put("groupId", groupId);
-                        MiddleMan.newRequest(getActivity(), "joinGroup", null, rh_joinGroup, vars);
+                        HashMap<String, String> vars = new HashMap<>();
+                        vars.put("groupId", Integer.toString(groupId));
+                        MiddleMan.newRequest(getActivity(),"joinGroup", null, rh_joinGroup, vars);
                         found = true;
                         break;
                     } else {
@@ -168,7 +168,9 @@ public class JoinGroupFragment extends Fragment {
             public void onClick(View v) {
                 groupName = editText_joinGroup.getText().toString();                button_joinGroup.setEnabled(false);
 
-                MiddleMan.newRequest(getActivity(), "getGroups", null, rh_getGroups, null);
+              //  MiddleMan.request.getGroups(getActivity(), null, rh_getGroups, null);
+                MiddleMan.newRequest(getActivity(),"getGroups", null, rh_getGroups, null);
+
             }
         });
 

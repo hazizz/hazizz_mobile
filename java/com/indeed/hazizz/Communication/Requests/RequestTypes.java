@@ -68,7 +68,7 @@ public interface RequestTypes{
             @Body HashMap<String, Object> taskBody
     );
 
-    @GET("groups/{groupId}/subjects")  // /groups/{id}/subjects
+    @GET("subjects/{groupId}")  // /groups/{id}/subjects
     Call<ResponseBody> getSubjects(
             @Path("groupId") String groupId,
             @HeaderMap Map<String, String> headers
@@ -104,7 +104,7 @@ public interface RequestTypes{
             @HeaderMap Map<String, String> headers
     );
 
-    @POST("groups/{groupId}/subjects")
+    @POST("subjects/{groupId}")
     Call<ResponseBody> createSubject(
             @Path("groupId") String groupId,
             @HeaderMap Map<String, String> headers,
@@ -143,7 +143,15 @@ public interface RequestTypes{
             @HeaderMap Map<String, String> headers
     );
 
+    @GET("users/{userId}/picture")
+    Call<ResponseBody> getUserProfilePic(
+            @Path("userId") String userId,
+            @HeaderMap Map<String, String> headers
+    );
 
-
+    @GET("me/picture")
+    Call<ResponseBody> getMyProfilePic(
+            @HeaderMap Map<String, String> headers
+    );
 
 }

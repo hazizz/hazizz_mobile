@@ -17,12 +17,19 @@ import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
+import com.indeed.hazizz.D8;
 import com.indeed.hazizz.Listviews.TaskList.CustomAdapter;
 import com.indeed.hazizz.Listviews.TaskList.TaskItem;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -86,13 +93,14 @@ public class MainFragment extends Fragment {
             }
             @Override
             public void onPOJOResponse(Object response) {
-                ArrayList<POJOgetTask> casted = (ArrayList<POJOgetTask>) response;
+             //   ArrayList<POJOgetTask> casted = (ArrayList<POJOgetTask>) response;
+                ArrayList<POJOgetTask> sorted = D8.sortTasksByDate((ArrayList<POJOgetTask>) response);
 
-                for(POJOgetTask t : casted) {
+                for(POJOgetTask t : sorted) {
                     listTask.add(new TaskItem(R.drawable.ic_launcher_background, t.getTitle(),
                             t.getDescription(), t.getDueDate(), t.getGroupData(), t.getCreator(), t.getSubjectData(), t.getId()));
                     adapter.notifyDataSetChanged();
-                    Log.e("hey", t.getId() + " " + t.getGroupData().getId());
+                 //   Log.e("hey", t.getId() + " " + t.getGroupData().getId());
                 }
             }
             @Override

@@ -125,9 +125,9 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
 
             }
         };
-        HashMap<String, Object> vars = new HashMap<>();
-        vars.put("taskId", taskId);
-        vars.put("groupId", groupId);
+        HashMap<String, String> vars = new HashMap<>();
+        vars.put("taskId", Integer.toString(taskId));
+        vars.put("groupId", Integer.toString(groupId));
         MiddleMan.newRequest(this.getActivity(), "getTask", null, rh, vars);
 
         return v;

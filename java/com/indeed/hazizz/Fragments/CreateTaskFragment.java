@@ -247,9 +247,9 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
         }, Integer.parseInt(D8.getYear()), Integer.parseInt(D8.getMonth()) -2, Integer.parseInt(D8.getDay()));
         dpd.getDatePicker().setMinDate(Calendar.getInstance().getTimeInMillis() - 1000);
 
-        HashMap<String, Object> vars = new HashMap<>();
-        vars.put("groupId", groupId);
-        MiddleMan.newRequest(this.getActivity(), "getSubjects", null, rh_subjects, vars);
+        HashMap<String, String> vars = new HashMap<>();
+        vars.put("groupId", Integer.toString(groupId));
+        MiddleMan.newRequest(this.getActivity(),"getSubjects", null, rh_subjects, vars);
 
         return v;
     }
@@ -264,11 +264,13 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
         Log.e("hey", "date: " + year + "-" + month + "-" + day);
         requestBody.put("dueDate", str_year + "-" + str_month + "-" + str_day);
 
-        HashMap<String, Object> vars = new HashMap<>();
-        vars.put("id", groupId);
+        HashMap<String, String> vars = new HashMap<>();
+        vars.put("id", Integer.toString(groupId));
 
+      //  MiddleMan.request.createTask(this.getActivity(), requestBody, rh_taskTypes, vars);
         MiddleMan.newRequest(this.getActivity(), "createTask", requestBody, rh_taskTypes, vars);
-        }
+
+    }
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {

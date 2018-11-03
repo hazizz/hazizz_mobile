@@ -129,7 +129,8 @@ public class RegisterFragment extends Fragment {
                     requestBody.put("emailAddress", email);
                     button_signup.setEnabled(false);
 
-                    MiddleMan.newRequest(getContext(),"register", requestBody, responseHandler, null);
+                   // MiddleMan.request.register(getContext(), requestBody, responseHandler, null);
+                    MiddleMan.newRequest(getContext(), "register", requestBody, responseHandler, null);
                 }
             }
         });

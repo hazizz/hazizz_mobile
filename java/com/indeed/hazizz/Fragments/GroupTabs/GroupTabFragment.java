@@ -67,8 +67,7 @@ public class GroupTabFragment extends Fragment {
 
         @Override
         public void onSuccessfulResponse() {
-            Transactor.fragmentGroups(getFragmentManager().beginTransaction(), false);
-        }
+            Transactor.fragmentGroups(getFragmentManager().beginTransaction(), false);        }
 
         @Override
         public void onNoConnection() {
@@ -137,8 +136,9 @@ public class GroupTabFragment extends Fragment {
     }
 
     public void leaveGroup(){
-        HashMap<String, Object> vars = new HashMap<>();
-        vars.put("groupId", groupId);
+        HashMap<String, String> vars = new HashMap<>();
+        vars.put("groupId", Integer.toString(groupId));
+      //  MiddleMan.request.leaveGroup(getContext(), null, rh, vars);
         MiddleMan.newRequest(getContext(), "leaveGroup", null, rh, vars);
 
     }

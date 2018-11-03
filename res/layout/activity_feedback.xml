@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.FeedbackActivity">
+
+    <include layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        style="@style/TitleText"
+        android:id="@+id/textView_feedback"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Visszajelzés"/>
+
+    <EditText
+        android:id="@+id/editText_feedback"
+        android:layout_width="300dp"
+        android:layout_height="204dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:gravity="top|left"
+        android:hint="Visszajelzés"
+        android:inputType="textMultiLine"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_feedback"
+        android:text="Küldés"/>
+
+    <include layout="@layout/content_feedback" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@android:drawable/ic_dialog_email" />
+
+</LinearLayout>
