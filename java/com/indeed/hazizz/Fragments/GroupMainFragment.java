@@ -101,13 +101,16 @@ public class GroupMainFragment extends Fragment{
             @Override
             public void onPOJOResponse(Object response) {
                 ArrayList<POJOgetTask> sorted = D8.sortTasksByDate((ArrayList<POJOgetTask>) response);
+                if(sorted.size() == 0){
+                    textView_noContent.setVisibility(v.VISIBLE);
+                }else {
 
-                for(POJOgetTask t : sorted) {
-                    listTask.add(new TaskItem(R.drawable.ic_launcher_background, t.getTitle(),
-                            t.getDescription(), t.getDueDate(), t.getGroupData(), t.getCreator(), t.getSubjectData(), t.getId()));
-                    adapter.notifyDataSetChanged();
-                    Log.e("hey", t.getId() + " " + t.getGroupData().getId());
-                }
+                    for (POJOgetTask t : sorted) {
+                        listTask.add(new TaskItem(R.drawable.ic_launcher_background, t.getTitle(),
+                                t.getDescription(), t.getDueDate(), t.getGroupData(), t.getCreator(), t.getSubjectData(), t.getId()));
+                        adapter.notifyDataSetChanged();
+                        Log.e("hey", t.getId() + " " + t.getGroupData().getId());
+                    }
 
              /*   int size = ((ArrayList)response).size();
                 for(int i = 0; i < size-1; i++) {
@@ -115,7 +118,8 @@ public class GroupMainFragment extends Fragment{
                             ((POJOgetTask) ((List) response).get(i)).getDescription(), ((POJOgetTask) ((List) response).get(i)).getDueDate()));
                     adapter.notifyDataSetChanged();
                 } */
-                Log.e("hey", "got response");
+                    Log.e("hey", "got response");
+                }
             }
 
             @Override
@@ -132,7 +136,6 @@ public class GroupMainFragment extends Fragment{
 
             @Override
             public void onEmptyResponse() {
-                textView_noContent.setVisibility(v.VISIBLE);
             }
 
             @Override

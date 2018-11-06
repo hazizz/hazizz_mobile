@@ -43,8 +43,6 @@ public class MainFragment extends Fragment {
     private List<TaskItem> listTask;
     private ArrayList<Integer> groupIDs;
 
-    private int i = 0;
-
     private TextView textView_noContent;
 
     @Nullable
@@ -52,11 +50,14 @@ public class MainFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_main, container, false);
         Log.e("hey", "main fragment created");
+
+
+
+        textView_noContent = v.findViewById(R.id.textView_noContent);
+
         ((MainActivity)getActivity()).onFragmentCreated();
         createViewList();
         getTasks();
-
-        textView_noContent = v.findViewById(R.id.textView_noContent);
 
         return v;
     }
@@ -93,15 +94,17 @@ public class MainFragment extends Fragment {
             }
             @Override
             public void onPOJOResponse(Object response) {
-             //   ArrayList<POJOgetTask> casted = (ArrayList<POJOgetTask>) response;
                 ArrayList<POJOgetTask> sorted = D8.sortTasksByDate((ArrayList<POJOgetTask>) response);
-
-                for(POJOgetTask t : sorted) {
-                    listTask.add(new TaskItem(R.drawable.ic_launcher_background, t.getTitle(),
-                            t.getDescription(), t.getDueDate(), t.getGroupData(), t.getCreator(), t.getSubjectData(), t.getId()));
-                    adapter.notifyDataSetChanged();
-                 //   Log.e("hey", t.getId() + " " + t.getGroupData().getId());
+                if(sorted.size() == 0) {
+                    textView_noContent.setVisibility(v.VISIBLE);
+                }else {
+                    for (POJOgetTask t : sorted) {
+                        listTask.add(new TaskItem(R.drawable.ic_launcher_background, t.getTitle(),
+                                t.getDescription(), t.getDueDate(), t.getGroupData(), t.getCreator(), t.getSubjectData(), t.getId()));
+                        adapter.notifyDataSetChanged();
+                    }
                 }
+
             }
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
@@ -115,7 +118,7 @@ public class MainFragment extends Fragment {
 
             @Override
             public void onEmptyResponse() {
-                textView_noContent.setVisibility(v.VISIBLE);
+
             }
 
             @Override

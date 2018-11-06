@@ -130,6 +130,8 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
                         textView_error.setText("A cím túl rövid (minimum 2 karakter)");
                     } else if (taskTitle.getText().length() > 20) {
                         textView_error.setText("A cím túl hosszú (maximum 20 karakter)");
+                    }else if (subject_spinner.getSelectedItem() == null){
+                        textView_error.setText("Nincs kiválasztott tantárgyad");
                     } else {
                         button_send.setEnabled(false);
                         createTask();
@@ -143,10 +145,7 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
         rh_taskTypes = new CustomResponseHandler() {
             @Override
             public void onResponse(HashMap<String, Object> response) {
-                Log.e("hey", "got regular response");
-
-            }
-
+                Log.e("hey", "got regular response"); }
             @Override
             public void onPOJOResponse(Object response) {
                 Log.e("hey", "got POJOresponse");
@@ -174,13 +173,13 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
 
             @Override
             public void onEmptyResponse() {
-                toMainGroupFrag();
-                button_send.setEnabled(true);
+
             }
 
             @Override
             public void onSuccessfulResponse() {
-
+                toMainGroupFrag();
+                button_send.setEnabled(true);
             }
 
             @Override
@@ -198,6 +197,7 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
             @Override
             public void onPOJOResponse(Object response) {
                 subjects = (ArrayList<POJOsubject>)response;
+                s_adapter.clear();
                 for(POJOsubject s : subjects){
                     s_adapter.add(s);
                     s_adapter.notifyDataSetChanged();

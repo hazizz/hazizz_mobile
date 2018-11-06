@@ -83,7 +83,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="18dp"
                 android:layout_alignParentBottom="true"
-                android:layout_alignParentStart="true"
                 android:layout_marginBottom="0dp"
                 android:text="Határidő:"
                 android:textColor="#808080" />
@@ -103,7 +102,7 @@
                 android:text="date"
                 android:textColor="#808080"
                 android:ellipsize="end"
-                android:maxLines="1"
+                android:maxLines="2"
                 />
 
             <TextView

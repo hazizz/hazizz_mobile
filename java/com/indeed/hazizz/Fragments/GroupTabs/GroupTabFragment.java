@@ -139,7 +139,7 @@ public class GroupTabFragment extends Fragment {
         HashMap<String, String> vars = new HashMap<>();
         vars.put("groupId", Integer.toString(groupId));
       //  MiddleMan.request.leaveGroup(getContext(), null, rh, vars);
-        MiddleMan.newRequest(getContext(), "leaveGroup", null, rh, vars);
+        MiddleMan.newRequest(getActivity(), "leaveGroup", null, rh, vars);
 
     }
 }

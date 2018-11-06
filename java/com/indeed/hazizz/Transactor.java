@@ -169,4 +169,9 @@ public abstract class Transactor extends FragmentActivity {
         thisActivity.startActivity(i);
     }
 
+    public static void AuthActivity(Activity thisActivity){
+        Intent i = new Intent(thisActivity, AuthActivity.class);
+        thisActivity.startActivity(i);
+    }
+
 }

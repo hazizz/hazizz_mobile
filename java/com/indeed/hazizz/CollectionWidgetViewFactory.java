@@ -99,8 +99,6 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
     public void onDataSetChanged() {
         // Heavy lifting code can go here without blocking the UI.
         // You would update the data in your collection here as well.
-
-
         CustomResponseHandler rh = new CustomResponseHandler() {
             @Override
             public void onResponse(HashMap<String, Object> response) {}

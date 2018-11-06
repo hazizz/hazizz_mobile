@@ -37,20 +37,20 @@ public class RequestManager{
 
 
 
-    public void makeCall(){
+    public void call(){
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         aRequest = retrofit.create(SetupInterface.class);
 
-        Call<JSONObject> call = aRequest.makeCall(requestJson);
+        Call<JSONObject> call = aRequest.call(requestJson);
 
        /* HashMap<String, String> headerMap = new HashMap<String, String>();
         headerMap.put("Content-Type", "application/json"); */
 
 
-       // Call<JSONObject> call = thingRegister.makeCall(requestJson);
+       // Call<JSONObject> call = thingRegister.call(requestJson);
 
         call.enqueue(new Callback<JSONObject>() {
             @Override

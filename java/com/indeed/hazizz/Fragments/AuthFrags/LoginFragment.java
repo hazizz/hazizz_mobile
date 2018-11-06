@@ -23,7 +23,9 @@ import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Hasher;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.SharedPrefs;
+import com.indeed.hazizz.TokenManager;
 import com.indeed.hazizz.Transactor;
+import com.snatik.storage.Storage;
 
 import java.util.HashMap;
 
@@ -58,7 +60,11 @@ public class LoginFragment extends Fragment {
         @Override
         public void onPOJOResponse(Object response) {
             Log.e("hey", "got here onResponse");
-            SharedPrefs.save(getContext(), "token", "token", (String) ((POJOauth)response).getToken());
+          //  SharedPrefs.save(getContext(), "token", "token", (String) ((POJOauth)response).getToken());
+           // SharedPrefs.save(getContext(), "token", "refreshToken", (String) ((POJOauth)response).getRefresh());
+            TokenManager.setToken(getContext() ,((POJOauth)response).getToken());
+            TokenManager.setRefreshToken(getContext() ,((POJOauth)response).getRefresh());
+            TokenManager.setUseTokenToAccess(getContext());
             switchToMain();
             button_login.setEnabled(true);
         }
@@ -77,7 +83,6 @@ public class LoginFragment extends Fragment {
         public void onNoConnection() {
             textView_error.setText("Nincs internet kapcsolat");
             button_login.setEnabled(true);
-            Log.e("hey", "succes");
         }
 
         @Override
@@ -147,7 +152,7 @@ public class LoginFragment extends Fragment {
                     requestBody.put("password", Hasher.hashString(password));
 
                     button_login.setEnabled(false);
-                    MiddleMan.newRequest(getContext(), "login", requestBody, responseHandler, null);
+                    MiddleMan.newRequest(getActivity(), "login", requestBody, responseHandler, null);
                 }
             }
         });

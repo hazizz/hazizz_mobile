@@ -241,9 +241,11 @@ public class MainActivity extends AppCompatActivity
 
              }
              });
-        MiddleMan.newRequest(getBaseContext(), "getMyProfilePic", null, rh_profilePic, null);
 
-        MiddleMan.newRequest(getBaseContext(), "me", null, responseHandler, null);
+        MiddleMan.newRequest(this, "getMyProfilePic", null, rh_profilePic, null);
+
+        MiddleMan.newRequest(this, "me", null, responseHandler, null);
+
 
     }
 
@@ -302,7 +304,7 @@ public class MainActivity extends AppCompatActivity
             return true;
         }
         if (id == R.id.action_leaveGroup) {
-            ((GroupMainFragment)cFrag).leaveGroup();
+            ((GroupTabFragment)cFrag).leaveGroup();
             return true;
         }
         return super.onOptionsItemSelected(item);
