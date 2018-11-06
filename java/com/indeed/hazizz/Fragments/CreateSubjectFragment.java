@@ -40,31 +40,20 @@ public class CreateSubjectFragment extends Fragment {
     private boolean destCreateTask = false;
 
     CustomResponseHandler rh = new CustomResponseHandler() {
-
         @Override
-        public void onResponse(HashMap<String, Object> response) {
-
-        }
-
+        public void onResponse(HashMap<String, Object> response) {}
         @Override
-        public void onPOJOResponse(Object response) {
-        }
+        public void onPOJOResponse(Object response) {}
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
             Log.e("hey", "4");
             Log.e("hey", "got here onFailure");
             button_addSubject.setEnabled(true);
         }
-
-
         @Override
-        public void onEmptyResponse() {
-
-        }
-
+        public void onEmptyResponse() { }
         @Override
         public void onSuccessfulResponse() {
-
             AndroidThings.closeKeyboard(getContext(), v);
             goBack();
         }
@@ -114,7 +103,6 @@ public class CreateSubjectFragment extends Fragment {
                     vars.put("groupId", Integer.toString(groupId));
                     button_addSubject.setEnabled(false);
 
-                    MiddleMan.newRequest(getActivity(), "createSubject", body, rh, vars);
                     MiddleMan.newRequest(getActivity(),"createSubject", body, rh, vars);
                 }else{
                     // TODO subject name not long enough

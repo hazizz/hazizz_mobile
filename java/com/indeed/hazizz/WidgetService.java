@@ -90,7 +90,7 @@ public class WidgetService extends RemoteViewsService {
                 }
             };
 
-            MiddleMan.newRequest(context, "getTasksFromMe", null, rh, null);
+            MiddleMan.newRequest(null, "getTasksFromMe", null, rh, null);
         }
 
         @Override

@@ -33,7 +33,7 @@ public class RequestParent {
      protected HashMap<String, String> vars; */
 
     public void setupCall(){}
-    public void makeCall(Call<ResponseBody> call, CustomResponseHandler cOnResponse, Gson gson){
+    public void call(Call<ResponseBody> call, CustomResponseHandler cOnResponse, Gson gson){
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -46,7 +46,7 @@ public class RequestParent {
 
                 if(response.isSuccessful()){ // response != null
                     Log.e("hey", "response.isSuccessful()");
-                    callIsSuccessful();
+                    callIsSuccessful( response);
                 }
 
                 if(!response.isSuccessful()){ // response != null
@@ -62,6 +62,6 @@ public class RequestParent {
             }
         });
     }
-    public void callIsSuccessful(){}
+    public void callIsSuccessful(Response<ResponseBody> response){}
 
 }

@@ -19,11 +19,11 @@ public interface SetupInterface {
 
   //  public void setup();
 
-  //  public void makeCall();
+  //  public void call();
 
     public HashMap<String, String> makeHeader();
 
-    public Call<JSONObject> makeCall(JSONObject requestJson);
+    public Call<JSONObject> call(JSONObject requestJson);
 
 
   /*  @POST("register/")

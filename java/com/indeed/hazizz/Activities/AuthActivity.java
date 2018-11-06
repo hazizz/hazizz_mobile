@@ -20,20 +20,51 @@ import com.indeed.hazizz.Fragments.ViewTaskFragment;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.RequestSenderRunnable;
 import com.indeed.hazizz.SharedPrefs;
+import com.indeed.hazizz.TokenManager;
 import com.indeed.hazizz.Transactor;
+
+import java.util.Set;
 
 public class AuthActivity extends AppCompatActivity {
 
     public Toolbar toolbar;
     private Fragment currentFrag;
 
+    private static final String threadName = "unique_name";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
 
-        Thread SenderThread = new Thread(new RequestSenderRunnable(this));
-        SenderThread.start();
+       // Thread.currentThread().interrupt();
+
+     //   Thread SenderThread = new Thread(new RequestSenderRunnable(this));
+     //   SenderThread.start();
+
+        Set<Thread> threads = Thread.getAllStackTraces().keySet();
+
+        boolean foundIt = false;
+
+        for (Thread t : threads) {
+            if(t.getName().equals(threadName)){
+                foundIt = true;
+                break;
+            }
+        }
+        if(!foundIt){
+            Thread SenderThread = new Thread(new RequestSenderRunnable(this), threadName);
+            SenderThread.start();
+        }
+/*
+        if (Thread.currentThread().getName().equals("1234")){
+            Log.e("hey", "thread1 is already running");
+        }else{
+            Thread.currentThread().interrupt();
+            Thread SenderThread = new Thread(new RequestSenderRunnable(this), "1234");
+            SenderThread.start();
+            Log.e("hey", "thread1 wasnt  running");
+        } */
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -44,7 +75,7 @@ public class AuthActivity extends AppCompatActivity {
         //   Log.e("hey" , "server is running: " + MiddleMan.serverReachable());
 
     //    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        if(SharedPrefs.getBoolean(this, "autoLogin", "autoLogin") && SharedPrefs.getString(getBaseContext(), "token", "token").length() >= 210){
+        if(SharedPrefs.getBoolean(this, "autoLogin", "autoLogin") && TokenManager.getUseToken(this).length() >= 210){
             Intent i = new Intent(this, MainActivity.class);
             startActivity(i);
         }else {
