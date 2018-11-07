@@ -71,7 +71,7 @@ public class UpdateService extends Service {
 
                 RemoteViews views = new RemoteViews(getPackageName(), R.layout.hazizz_widget);
                 views.setRemoteAdapter(R.id.widget_stack, widgetServiceIntent);
-                views.setEmptyView(R.id.widget_stack, R.id.widget_epmty);
+                views.setEmptyView(R.id.widget_stack, R.id.widget_info);
 
                 ComponentName name = new ComponentName(context, HazizzWidget.class);
                 int [] ids = AppWidgetManager.getInstance(context).getAppWidgetIds(name);

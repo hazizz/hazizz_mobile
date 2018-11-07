@@ -114,7 +114,12 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
             @Override
             public void onErrorResponse(POJOerror error) {
                 Log.e("hey", "error response");
-
+                RemoteViews widgetView = new RemoteViews(mContext.getPackageName(), R.layout.hazizz_widget);
+                if(error.getErrorCode() == 17) {
+                    widgetView.setTextViewText(R.id.widget_info, "Nem vagy bejelentkezve");
+                }else{
+                    widgetView.setTextViewText(R.id.widget_info, "");
+                }
             }
             @Override
             public void onEmptyResponse() { }
@@ -127,6 +132,7 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
         Request request = new Request(mContext,"getTasksFromMeSync", null, rh, null);
         request.requestType.setupCall();
         request.requestType.makeCall();
+
 
 
         Log.e("hey", "onDataSetChanged called");

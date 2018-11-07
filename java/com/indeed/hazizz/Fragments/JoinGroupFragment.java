@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.indeed.hazizz.Activities.MainActivity;
+import com.indeed.hazizz.AndroidThings;
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOauth;
@@ -58,8 +59,7 @@ public class JoinGroupFragment extends Fragment {
 
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
-            Log.e("hey", "4");
-            Log.e("hey", "got here onFailure");
+            textView_error.setText("Nincs internet kapcsolat");
         }
 
         @Override
@@ -82,6 +82,7 @@ public class JoinGroupFragment extends Fragment {
         @Override
         public void onSuccessfulResponse() {
             Transactor.fragmentMainGroup(getFragmentManager().beginTransaction(), groupId, groupName);
+            AndroidThings.closeKeyboard(getContext(), v);
          //   Transactor.fragmentGroupTab(getFragmentManager().beginTransaction(), groupId, groupName);
         }
 
@@ -127,6 +128,7 @@ public class JoinGroupFragment extends Fragment {
         public void onFailure(Call<ResponseBody> call, Throwable t) {
             Log.e("hey", "4");
             Log.e("hey", "got here onFailure");
+            textView_error.setText("Nincs internet kapcsolat");
             button_joinGroup.setEnabled(true);
         }
 
@@ -148,7 +150,8 @@ public class JoinGroupFragment extends Fragment {
 
         @Override
         public void onNoConnection() {
-
+            textView_error.setText("Nincs internet kapcsolat");
+            button_joinGroup.setEnabled(true);
         }
     };
 

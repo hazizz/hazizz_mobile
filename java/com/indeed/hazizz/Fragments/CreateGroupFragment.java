@@ -59,7 +59,9 @@ public class CreateGroupFragment extends Fragment {
             }
         }
         @Override
-        public void onFailure(Call<ResponseBody> call, Throwable t) { }
+        public void onFailure(Call<ResponseBody> call, Throwable t) {
+            textView_error.setText("Nincs internet kapcsolat");
+        }
 
 
         @Override

@@ -432,11 +432,11 @@ public class MainActivity extends AppCompatActivity
                 menuItem_createGroup.setVisible(false);
                 menuItem_joinGroup.setVisible(false);
         }
-        if(currentFrag instanceof GroupTabFragment || currentFrag instanceof GroupMainFragment || currentFrag instanceof ViewTaskFragment || currentFrag instanceof GetGroupMembersFragment){
+      /*  if(currentFrag instanceof GroupTabFragment || currentFrag instanceof GroupMainFragment || currentFrag instanceof ViewTaskFragment || currentFrag instanceof GetGroupMembersFragment){
             menuItem_leaveGroup.setVisible(true);
         }else{
             menuItem_leaveGroup.setVisible(false);
-        }
+        } */
     }
 
     public void setGroupName(String name){

@@ -94,7 +94,7 @@ public class HazizzWidgetConfigureActivity extends Activity {
 
         RemoteViews views = new RemoteViews(this.getPackageName(), R.layout.hazizz_widget);
         views.setRemoteAdapter(R.id.widget_stack, serviceIntent);
-        views.setEmptyView(R.id.widget_stack, R.id.widget_epmty);
+        views.setEmptyView(R.id.widget_stack, R.id.widget_info);
 
 
     }
