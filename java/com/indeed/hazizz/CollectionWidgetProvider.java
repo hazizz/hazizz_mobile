@@ -40,7 +40,7 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
             appWidgetManager.notifyAppWidgetViewDataChanged(widgetId, widgetView.getLayoutId());
 
             widgetView.setRemoteAdapter(R.id.widget_stack, intent);
-            widgetView.setEmptyView(R.id.widget_stack, R.id.widget_epmty);
+            widgetView.setEmptyView(R.id.widget_stack, R.id.widget_info);
 
             Intent detailIntent = new Intent(ACTION_VIEW_DETAILS);
             PendingIntent pIntent = PendingIntent.getBroadcast(context, 0, detailIntent, PendingIntent.FLAG_UPDATE_CURRENT);

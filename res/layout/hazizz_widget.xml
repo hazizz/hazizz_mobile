@@ -30,12 +30,11 @@
         </ListView>
 
         <TextView
-            android:id="@+id/widget_epmty"
-            android:layout_height="match_parent"
+            android:id="@+id/widget_info"
             android:layout_width="match_parent"
-            android:text="Empty"
+            android:layout_height="match_parent"
             android:gravity="center"
-            />
+            android:text="Empty" />
     </FrameLayout>
 
 

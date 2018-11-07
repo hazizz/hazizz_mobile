@@ -491,9 +491,15 @@ public class Request {
             try {
                 Response<ResponseBody> response = call.execute();
              //   response.body();
-                Type listType = new TypeToken<ArrayList<POJOgetTask>>(){}.getType();
-                List<POJOgetTask> castedList = gson.fromJson(response.body().charStream(), listType);
-                cOnResponse.onPOJOResponse(castedList);
+                try {
+                    Type listType = new TypeToken<ArrayList<POJOgetTask>>() {
+                    }.getType();
+                    List<POJOgetTask> castedList = gson.fromJson(response.body().charStream(), listType);
+                    cOnResponse.onPOJOResponse(castedList);
+                }catch (Exception e){
+                    POJOerror error = gson.fromJson(response.errorBody().charStream(), POJOerror.class);
+                    cOnResponse.onErrorResponse(error);
+                }
 
             } catch (IOException e) {
                 e.printStackTrace();
