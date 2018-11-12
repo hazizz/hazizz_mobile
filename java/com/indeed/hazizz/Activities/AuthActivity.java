@@ -75,7 +75,7 @@ public class AuthActivity extends AppCompatActivity {
         //   Log.e("hey" , "server is running: " + MiddleMan.serverReachable());
 
     //    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        if(SharedPrefs.getBoolean(this, "autoLogin", "autoLogin") && TokenManager.getUseToken(this).length() >= 210){
+        if(SharedPrefs.getBoolean(this, "autoLogin", "autoLogin") && !TokenManager.getRefreshToken(this).equals("used")){
             Intent i = new Intent(this, MainActivity.class);
             startActivity(i);
         }else {
@@ -85,7 +85,7 @@ public class AuthActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager());
+        currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager(), false);
         if(currentFrag instanceof FirstFragment) {}
         else{
             Transactor.fragmentFirst(getSupportFragmentManager().beginTransaction());

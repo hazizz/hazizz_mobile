@@ -1,6 +1,7 @@
 package com.indeed.hazizz;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -12,4 +13,11 @@ public abstract class AndroidThings {
         InputMethodManager imm = (InputMethodManager)c.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
+
+
+
+    public static String getAppVersion(){ // this.getCurrentFocus()
+        return BuildConfig.VERSION_NAME;
+    }
+
 }

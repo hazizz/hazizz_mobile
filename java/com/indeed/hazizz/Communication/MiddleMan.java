@@ -36,6 +36,15 @@ public abstract class MiddleMan{
         }
     }
 
+    public static void cancelAllRequest(){
+        for (Request r : requestQueue) {
+            r.cancelRequest();
+        }
+        for (Request r : waitingForResponse) {
+            r.cancelRequest();
+        }
+    }
+
     public static void newRequest(Activity act, String requestType, HashMap<String, Object>  body, CustomResponseHandler cOnResponse, HashMap<String, String> vars) {
         Request newRequest = new Request(act, requestType, body, cOnResponse, vars);
         List<Request> duplicateRequest = Collections.synchronizedList(new ArrayList<Request>());

@@ -166,7 +166,7 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
                     textView_error.setText("A cím nem megfelelő");
                 }
                 else{
-                    ErrorHandler.unExpectedResponseDialog(getContext());
+                    ErrorHandler.unExpectedResponseDialog(getActivity());
                 }
                 button_send.setEnabled(true);
             }

@@ -1,19 +1,15 @@
 package com.indeed.hazizz.Communication;
 
 import android.app.Activity;
-import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.Requests.Request;
+import com.indeed.hazizz.ErrorHandler;
 import com.indeed.hazizz.TokenManager;
 import com.indeed.hazizz.Transactor;
-
-import org.json.JSONObject;
-
-import java.util.HashMap;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -21,13 +17,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public interface RequestInterface {
-    /* protected Context context;
-     protected HashMap<String, Object> body;
-     protected CustomResponseHandler cOnResponse;
-     protected HashMap<String, String> vars; */
-  //  boolean callAgain = true;
-
-
 
      public void setupCall();
 
@@ -55,16 +44,29 @@ public interface RequestInterface {
                     if(response.isSuccessful()){ // response != null
                          Log.e("hey", "response.isSuccessful()");
                          // callAgain = false;
-                         callIsSuccessful( response);
+                         callIsSuccessful(response);
                     }
 
                     else if(!response.isSuccessful()){ // response != null
                          POJOerror pojoError = gson.fromJson(response.errorBody().charStream(),POJOerror.class);
                          Log.e("hey", "errorCOde is: " + pojoError.getErrorCode());
-                         if(pojoError.getErrorCode() == 17){
-                              if(TokenManager.getRefreshToken(act).equals("")){
+                         Log.e("hey", "errorMessage is: " + pojoError.getMessage());
+                         if(pojoError.getErrorCode() == 1) {
+                              ErrorHandler.unExpectedResponseDialog(act);
+                         }
+
+
+                         else if(pojoError.getErrorCode() == 18 || pojoError.getErrorCode() == 17){
+                             Log.e("hey", "the refresh token is: " + TokenManager.getRefreshToken(act));
+                             Log.e("hey", "the use token is: " + TokenManager.getUseToken(act));
+                             Log.e("hey", "the access token is: " + TokenManager.getToken(act));
+                              if(TokenManager.getRefreshToken(act).equals("used")){
+                                   MiddleMan.cancelAllRequest();
+                                   Log.e("hey", "aut activity opened");
                                    Transactor.AuthActivity(act);
                               }else{
+                                   MiddleMan.cancelAllRequest();
+                                   Log.e("hey", "refresh toke is fine");
                                    TokenManager.setUseTokenToRefresh(act);
                                    callAgain = true;
                               }
@@ -87,10 +89,8 @@ public interface RequestInterface {
                     cOnResponse.onFailure(call, t);
                }
           };
-
           return callback;
      }
-
      public void makeCall();
 
      public void makeCallAgain();

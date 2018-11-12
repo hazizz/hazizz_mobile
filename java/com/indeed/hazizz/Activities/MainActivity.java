@@ -2,7 +2,12 @@ package com.indeed.hazizz.Activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -36,6 +41,9 @@ import com.indeed.hazizz.R;
 import com.indeed.hazizz.SharedPrefs;
 import com.indeed.hazizz.Transactor;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -44,6 +52,8 @@ import retrofit2.Call;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private static final int PICK_PHOTO_FOR_AVATAR = 1;
 
 
     private DrawerLayout drawerLayout;
@@ -63,6 +73,8 @@ public class MainActivity extends AppCompatActivity
     private MenuItem menuItem_createGroup;
     private MenuItem menuItem_joinGroup;
     private MenuItem menuItem_leaveGroup;
+    private MenuItem menuItem_profilePic;
+    private MenuItem menuItem_feedback;
  //   private MenuItem menuItem_leaveGroup;
 
     private Menu menu_nav;
@@ -73,7 +85,7 @@ public class MainActivity extends AppCompatActivity
     private Toolbar toolbar;
     private Fragment currentFrag;
 
-    private ArrayList<Integer> groupIDs;
+    private Activity thisActivity = this;
 
     CustomResponseHandler rh_profilePic = new CustomResponseHandler() {
         @Override
@@ -161,7 +173,6 @@ public class MainActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        groupIDs = new ArrayList<>();
 
         fab_joinGroup = findViewById(R.id.fab_joinGroup);
         fab_joinGroup.setOnClickListener(new View.OnClickListener() {
@@ -175,7 +186,7 @@ public class MainActivity extends AppCompatActivity
         fab_createGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager());
+                currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager(), false);
                 if (currentFrag instanceof GroupsFragment) {
                     Log.e("hey", "instance of groupmain fragment");
                     ((GroupsFragment)currentFrag).toCreateGroup();
@@ -189,7 +200,7 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
              /*   Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show(); */
-                currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager());
+                currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager(), false);
                 if (currentFrag instanceof GroupMainFragment) {
                     Log.e("hey", "instance of groupmain fragment");
                     ((GroupMainFragment)currentFrag).toCreateTask();
@@ -246,7 +257,6 @@ public class MainActivity extends AppCompatActivity
 
         MiddleMan.newRequest(this, "me", null, responseHandler, null);
 
-
     }
 
  /*   @Override
@@ -273,12 +283,14 @@ public class MainActivity extends AppCompatActivity
         menuItem_createGroup = menu_options.findItem(R.id.action_createGroup);
         menuItem_joinGroup = menu_options.findItem(R.id.action_joinGroup);
         menuItem_leaveGroup = menu_options.findItem(R.id.action_leaveGroup);
+        menuItem_profilePic = menu_options.findItem(R.id.action_profilePic);
+        menuItem_feedback = menu_options.findItem(R.id.action_feedback);
 
         if(menuItem_createGroup == null || menuItem_joinGroup == null ){// || menuItem_leaveGroup == null){
             Log.e("hey", "menu items are null");
         }
 
-        toMainFrag();
+       toMainFrag();
 
         return true;
     }
@@ -288,7 +300,7 @@ public class MainActivity extends AppCompatActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        Fragment cFrag = Transactor.getCurrentFragment(getSupportFragmentManager());
+        Fragment cFrag = Transactor.getCurrentFragment(getSupportFragmentManager(), false);
         if(toggle.onOptionsItemSelected(item)){
             return true;
         }
@@ -307,6 +319,14 @@ public class MainActivity extends AppCompatActivity
             ((GroupTabFragment)cFrag).leaveGroup();
             return true;
         }
+        if (id == R.id.action_profilePic) {
+            pickImage();
+            return true;
+        }
+        if (id == R.id.action_feedback) {
+            Transactor.feedbackActivity(this);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -316,7 +336,7 @@ public class MainActivity extends AppCompatActivity
         Log.e("hey", "chechk1");
         int id = item.getItemId();
 
-        currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager());
+        currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager(), false);
         if (id == R.id.nav_home) {
             toMainFrag();
         } else if (id == R.id.nav_groups) {
@@ -364,18 +384,20 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager());
+        Log.e("hey", "backButton pressed");
+        currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager(), true);
         if      (currentFrag instanceof MainFragment) {}
         else if (currentFrag instanceof GroupsFragment) {
             Transactor.fragmentMain(getSupportFragmentManager().beginTransaction());
         }
-        else if (currentFrag instanceof GroupMainFragment) {
+        else if (currentFrag instanceof GroupTabFragment) {//GroupMainFragment
             Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction(), false);
         }
-        else if (currentFrag instanceof CreateTaskFragment) {
+    /*    else if (currentFrag instanceof CreateTaskFragment) {
             Transactor.fragmentMainGroup(getSupportFragmentManager().beginTransaction(), ((CreateTaskFragment)currentFrag).getGroupId(), ((CreateTaskFragment)currentFrag).getGroupName());
          //   Transactor.fragmentGroupTab(getSupportFragmentManager().beginTransaction(), ((CreateTaskFragment)currentFrag).getGroupId(), ((CreateTaskFragment)currentFrag).getGroupName());
-        }
+        } */
+
         else if (currentFrag instanceof ViewTaskFragment) {
             if(!((ViewTaskFragment)currentFrag).getGoBackToMain()) {
                 Transactor.fragmentMainGroup(getSupportFragmentManager().beginTransaction(), ((ViewTaskFragment) currentFrag).getGroupId(), ((ViewTaskFragment) currentFrag).getGroupName());
@@ -395,7 +417,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void onFragmentCreated(){
-        currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager());
+        currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager(), false);
         if (currentFrag instanceof GroupsFragment) {
             fab_createGroup.setVisibility(View.VISIBLE);
             fab_joinGroup.setVisibility(View.VISIBLE);
@@ -441,6 +463,78 @@ public class MainActivity extends AppCompatActivity
 
     public void setGroupName(String name){
         menu_mainGroup.setTitle("Csoportok: " + name);
+    }
+
+
+    public void pickImage() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        startActivityForResult(intent, PICK_PHOTO_FOR_AVATAR);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_PHOTO_FOR_AVATAR && resultCode == Activity.RESULT_OK) {
+            if (data == null) {
+                //Display an error
+                return;
+            }
+            try {
+                InputStream inputStream = this.getContentResolver().openInputStream(data.getData());
+                Uri imageUri = data.getData();
+              //  Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                //bitmap = ((BitmapDrawable)navProfilePic.getDrawable()).getBitmap();
+
+                Bitmap yourSelectedImage = BitmapFactory.decodeStream(inputStream);
+               // encodeTobase64(yourSelectedImage);
+
+                yourSelectedImage = Bitmap.createScaledBitmap(yourSelectedImage, 200, 200, true);
+                //Bitmap bitmap = yourSelectedImage;
+
+                Bitmap bitmap=Bitmap.createBitmap(yourSelectedImage, 0,0,200, 200);
+
+                HashMap<String, Object> body = new HashMap<>();
+
+
+
+                body.put("data", "data:image/jpeg;base64," + Converter.imageToText(bitmap));
+                body.put("type", "ppfull");
+
+            /*    String asd = body.get("data");
+
+                 */
+
+                Log.e("hey" , "data is: " + body.get("data"));
+                MiddleMan.newRequest(this, "setMyProfilePic", body, new CustomResponseHandler() {
+                    @Override
+                    public void onResponse(HashMap<String, Object> response) { }
+                    @Override
+                    public void onPOJOResponse(Object response) { }
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) { }
+                    @Override
+                    public void onErrorResponse(POJOerror error) {
+                        Log.e("hey", "couldnt set profile pic");
+                    }
+                    @Override
+                    public void onEmptyResponse() { }
+                    @Override
+                    public void onSuccessfulResponse() {
+                        MiddleMan.newRequest(thisActivity, "getMyProfilePic", null, rh_profilePic, null);
+                    }
+                    @Override
+                    public void onNoConnection() { }
+                }, null);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                Log.e("hey", "file not found!");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            //Now you can do whatever you want with your inpustream, save it as file, upload to a server, decode a bitmap...
+        }
+        Log.e("hey", "onActivityResult");
     }
 
 }

@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
+import com.indeed.hazizz.Converter.Converter;
 import com.indeed.hazizz.Hasher;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.RequestSenderRunnable;
@@ -53,7 +54,7 @@ public class RegisterFragment extends Fragment {
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
             button_signup.setEnabled(true);
-            textView_error.setText("Nincs internet kapcsolat");
+            textView_error.setText("Szerver nem válaszol");
 
         }
 
@@ -73,6 +74,9 @@ public class RegisterFragment extends Fragment {
             }
             if(errorCode == 33){ // létezik ilyen nevű
                 textView_error.setText("Az email címmel már regisztráltak");
+            }
+            if(errorCode == 34){
+                textView_error.setText("A regisztráció zárolva van");
             }
             button_signup.setEnabled(true);
 
@@ -121,7 +125,7 @@ public class RegisterFragment extends Fragment {
                 }else{
                     username = editText_username.getText().toString();
                     email = editText_email.getText().toString();
-                    password = Hasher.hashString(editText_password.getText().toString());
+                    password = Converter.hashString(editText_password.getText().toString());
                     HashMap<String, Object> requestBody = new HashMap<>();
 
                     requestBody.put("username", username);

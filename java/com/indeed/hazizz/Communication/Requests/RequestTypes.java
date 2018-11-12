@@ -154,4 +154,31 @@ public interface RequestTypes{
             @HeaderMap Map<String, String> headers
     );
 
+    @POST("feedbacks")
+    Call<ResponseBody> feedback(
+            @HeaderMap Map<String, String> headers,
+            @Body HashMap<String, Object> body
+    );
+
+    @POST("me/picture")
+    Call<ResponseBody> setMyProfilePic(
+            @HeaderMap Map<String, String> headers,
+            @Body HashMap<String, Object> body
+    );
+
+    @GET("comments/{commentId}")
+    Call<ResponseBody> getCommentSection(
+            @Path("commentId") String commentId,
+            @HeaderMap Map<String, String> headers
+    );
+
+    @POST("comments/{commentId}")
+    Call<ResponseBody> addComment(
+            @Path("commentId") String commentId,
+            @HeaderMap Map<String, String> headers,
+            @Body HashMap<String, Object> body
+    );
+
+
+
 }

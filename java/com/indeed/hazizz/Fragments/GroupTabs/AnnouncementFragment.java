@@ -1,4 +1,4 @@
-package com.indeed.hazizz.Fragments;
+package com.indeed.hazizz.Fragments.GroupTabs;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -30,7 +30,7 @@ import java.util.List;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
-public class GroupMainFragment extends Fragment{
+public class AnnouncementFragment extends Fragment{
 
     private View v;
     private CustomAdapter adapter;
@@ -40,9 +40,6 @@ public class GroupMainFragment extends Fragment{
 
     private int groupID;
     private String groupName;
-
-
-
 
     @Nullable
     @Override
@@ -94,7 +91,10 @@ public class GroupMainFragment extends Fragment{
         Log.e("hey", "atleast here 2");
         CustomResponseHandler responseHandler = new CustomResponseHandler() {
             @Override
-            public void onResponse(HashMap<String, Object> response) { }
+            public void onResponse(HashMap<String, Object> response) {
+
+            }
+
             @Override
             public void onPOJOResponse(Object response) {
                 ArrayList<POJOgetTask> sorted = D8.sortTasksByDate((ArrayList<POJOgetTask>) response);
@@ -108,23 +108,38 @@ public class GroupMainFragment extends Fragment{
                         adapter.notifyDataSetChanged();
                         Log.e("hey", t.getId() + " " + t.getGroupData().getId());
                     }
+
+             /*   int size = ((ArrayList)response).size();
+                for(int i = 0; i < size-1; i++) {
+                    listTask.add(new TaskItem(R.drawable.ic_launcher_background, ((POJOgetTask) ((List) response).get(i)).getTitle(),
+                            ((POJOgetTask) ((List) response).get(i)).getDescription(), ((POJOgetTask) ((List) response).get(i)).getDueDate()));
+                    adapter.notifyDataSetChanged();
+                } */
                     Log.e("hey", "got response");
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Log.e("hey", "4");
                 Log.e("hey", "got here onFailure");
                 textView_noContent.setVisibility(v.VISIBLE);
             }
+
             @Override
             public void onErrorResponse(POJOerror error) {
                 Log.e("hey", "onErrorResponse");
             }
+
             @Override
-            public void onEmptyResponse() { }
+            public void onEmptyResponse() {
+            }
+
             @Override
-            public void onSuccessfulResponse() { }
+            public void onSuccessfulResponse() {
+
+            }
+
             @Override
             public void onNoConnection() {
                 textView_noContent.setText("Nincs internet kapcsolat");
@@ -132,7 +147,7 @@ public class GroupMainFragment extends Fragment{
         };
         HashMap<String, String> vars = new HashMap<>();
         vars.put("groupId", Integer.toString(groupID));
-      //  MiddleMan.request.getTasksFromGroup(this.getActivity(), null, responseHandler, vars);
+        //  MiddleMan.request.getTasksFromGroup(this.getActivity(), null, responseHandler, vars);
         MiddleMan.newRequest(this.getActivity(),"getTasksFromGroup", null, responseHandler, vars);
 
     }

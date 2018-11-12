@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import com.indeed.hazizz.Fragments.CreateTaskFragment;
 import com.indeed.hazizz.Fragments.GetGroupMembersFragment;
 import com.indeed.hazizz.Fragments.GroupMainFragment;
+import com.indeed.hazizz.Fragments.GroupTabs.AnnouncementFragment;
 
 public class PagerAdapter extends FragmentStatePagerAdapter {
     int mNumOfTabs;
@@ -29,6 +30,16 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
 
 
         switch (position) {
+          /*  case 0:
+                bundle = new Bundle();
+                bundle.putInt("groupId", groupId);
+                bundle.putString("groupName", groupName);
+                AnnouncementFragment frag0 = new AnnouncementFragment();
+                frag0.setArguments(bundle);
+
+                currentFrag = frag0;
+                return frag0;
+ */
             case 0:
                 bundle = new Bundle();
                 bundle.putInt("groupId", groupId);

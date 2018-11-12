@@ -9,10 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.indeed.hazizz.Activities.MainActivity;
+import com.indeed.hazizz.AndroidThings;
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
@@ -29,6 +31,8 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 
 public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSelectedListener{
+
+    private Button button_comments;
 
     private int groupId;
     private int taskId;
@@ -51,6 +55,8 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
     private ArrayList<POJOsubject> subjectList = new ArrayList<POJOsubject>();
 
     private boolean goBackToMain;
+    private int commentId;
+    private boolean gotResponse = false;
 
     private View v;
 
@@ -69,6 +75,15 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
         group = v.findViewById(R.id.textView_group);
         deadLine = v.findViewById(R.id.textview_deadline);
 
+        button_comments = v.findViewById(R.id.button_comments);
+        button_comments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(gotResponse){
+                    Transactor.fragmentCommentSection(getFragmentManager().beginTransaction(), commentId);//commentId);
+                }
+            }
+        });
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -89,6 +104,9 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
 
             @Override
             public void onPOJOResponse(Object response) {
+                commentId = (int)((POJOgetTaskDetailed)response).getSections().get(0).getId();
+                Log.e("hey", "id1 is: " +commentId );
+                gotResponse = true;
                 type.setText(((POJOgetTaskDetailed)response).getType());
                 title.setText("Cím: " + ((POJOgetTaskDetailed)response).getTitle());
                 description.setText(((POJOgetTaskDetailed)response).getDescription());
@@ -97,9 +115,9 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
                 subject.setText(((POJOgetTaskDetailed)response).getSubjectData().getName());
                 group.setText(((POJOgetTaskDetailed)response).getGroup().getName());
 
-                deadLine.setText(((POJOgetTaskDetailed)response).getDueDate().get(0) + "." +
-                        ((POJOgetTaskDetailed)response).getDueDate().get(1) + "." +
-                        ((POJOgetTaskDetailed)response).getDueDate().get(2));
+                deadLine.setText(((POJOgetTaskDetailed)response).getDueDate()[0] + "." +
+                        ((POJOgetTaskDetailed)response).getDueDate()[1] + "." +
+                        ((POJOgetTaskDetailed)response).getDueDate()[2]);
             }
 
             @Override
@@ -159,4 +177,6 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
     public boolean getGoBackToMain(){
         return goBackToMain;
     }
+
+
 }
