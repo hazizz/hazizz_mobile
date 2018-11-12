@@ -7,7 +7,7 @@
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_home_black"
-            android:title="Főmenü" />
+            android:title="Főoldal" />
         <item
             android:visible="true"
             android:id="@+id/nav_groups"

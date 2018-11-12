@@ -41,38 +41,20 @@ public class GroupTabFragment extends Fragment {
 
     CustomResponseHandler rh = new CustomResponseHandler() {
         @Override
-        public void onResponse(HashMap<String, Object> response) {
-
-        }
-
+        public void onResponse(HashMap<String, Object> response) { }
         @Override
-        public void onPOJOResponse(Object response) {
-
-        }
-
+        public void onPOJOResponse(Object response) { }
         @Override
-        public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-        }
-
+        public void onFailure(Call<ResponseBody> call, Throwable t) { }
         @Override
-        public void onErrorResponse(POJOerror error) {
-
-        }
-
+        public void onErrorResponse(POJOerror error) { }
         @Override
-        public void onEmptyResponse() {
-
-        }
-
+        public void onEmptyResponse() { }
         @Override
         public void onSuccessfulResponse() {
             Transactor.fragmentGroups(getFragmentManager().beginTransaction(), false);        }
-
         @Override
-        public void onNoConnection() {
-
-        }
+        public void onNoConnection() { }
     };
 
     @Nullable
@@ -90,7 +72,9 @@ public class GroupTabFragment extends Fragment {
      //   ((MainActivity)getActivity()).onFragmentCreated();
 
         TabLayout tabLayout = (TabLayout) v.findViewById(R.id.tab_layout);
+
         tabLayout.addTab(tabLayout.newTab().setText("Feladatok"));
+      //  tabLayout.addTab(tabLayout.newTab().setText("Bejelentések"));
         tabLayout.addTab(tabLayout.newTab().setText("Tagok"));
         tabLayout.addTab(tabLayout.newTab().setText("Új feladat"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
@@ -140,6 +124,5 @@ public class GroupTabFragment extends Fragment {
         vars.put("groupId", Integer.toString(groupId));
       //  MiddleMan.request.leaveGroup(getContext(), null, rh, vars);
         MiddleMan.newRequest(getActivity(), "leaveGroup", null, rh, vars);
-
     }
 }

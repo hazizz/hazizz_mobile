@@ -1,5 +1,6 @@
 package com.indeed.hazizz;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -7,33 +8,37 @@ import android.util.Log;
 
 public abstract class ErrorHandler {
 
-    public static void unExpectedResponseDialog(Context context){
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+    public static void unExpectedResponseDialog(Activity act){
+        try {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(act.getBaseContext());
 
-        alertDialogBuilder.setTitle("Hiba");
+            alertDialogBuilder.setTitle("Hiba");
 
-        alertDialogBuilder
-                .setMessage("Nem megszokott válasz a szervertől")
-                .setCancelable(false)
-                .setPositiveButton("Hiba Jelentés",new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,int id) {
+            alertDialogBuilder
+                    .setMessage("Nem megszokott válasz a szervertől")
+                    .setCancelable(false)
+                    .setPositiveButton("Hiba Jelentés", (dialog, id) -> {
                         // if this button is clicked, close
                         // current activity
+                        Transactor.feedbackActivity(act);
                         dialog.cancel();
                         Log.e("hey", "hiba jelentés");
-                    }
-                })
-                .setNegativeButton("Vissza",new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,int id) {
-                        // if this button is clicked, just close
-                        // the dialog box and do nothing
-                        dialog.cancel();
-                        Log.e("hey", "Vissza");
-                    }
-                });
+                    })
+                    .setNegativeButton("Vissza", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // if this button is clicked, just close
+                            // the dialog box and do nothing
+                            dialog.cancel();
+                            Log.e("hey", "Vissza");
+                        }
+                    });
 
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+        }
+        catch (Exception e){
+
+        }
     }
 
 }

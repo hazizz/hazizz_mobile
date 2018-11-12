@@ -7,12 +7,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 
 import com.indeed.hazizz.Activities.AuthActivity;
+import com.indeed.hazizz.Activities.FeedbackActivity;
+import com.indeed.hazizz.Activities.MainActivity;
 import com.indeed.hazizz.Fragments.AuthFrags.FirstFragment;
 import com.indeed.hazizz.Fragments.AuthFrags.LoginFragment;
 import com.indeed.hazizz.Fragments.AuthFrags.RegisterFragment;
 import com.indeed.hazizz.Fragments.ChatFragment;
+import com.indeed.hazizz.Fragments.CommentSectionFragment;
 import com.indeed.hazizz.Fragments.CreateGroupFragment;
 import com.indeed.hazizz.Fragments.CreateSubjectFragment;
 import com.indeed.hazizz.Fragments.CreateTaskFragment;
@@ -27,8 +31,11 @@ public abstract class Transactor extends FragmentActivity {
 
     private static boolean backStack = true;
 
-    public static Fragment getCurrentFragment(FragmentManager fManager){
+    public static Fragment getCurrentFragment(FragmentManager fManager, boolean asd){
         Fragment currentF = fManager.findFragmentById(R.id.fragment_container);
+        if(asd){
+            return fManager.findFragmentById(R.id.fragment_container);
+        }
         if(currentF instanceof GroupTabFragment){
             return ((GroupTabFragment) currentF).getCurrentFrag();
         }else {
@@ -164,8 +171,20 @@ public abstract class Transactor extends FragmentActivity {
         fTransaction.commit();
     }
 
-    public static void feedbackActivity(Activity thisActivity, Class<Activity> theActivity, Fragment goBackFragment){
-        Intent i = new Intent(thisActivity, theActivity);
+    public static void fragmentCommentSection(FragmentTransaction fTransaction, int commentId){
+        Bundle bundle = new Bundle();
+        Log.e("hey", "id1.1 : " + commentId);
+        bundle.putString("commentId", Integer.toString(commentId));
+        Log.e("hey", "id1.2 : " + Integer.toString(commentId));
+        CommentSectionFragment frag = new CommentSectionFragment();
+        frag.setArguments(bundle);
+        fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
+        if(backStack){ fTransaction.addToBackStack(null); }
+        fTransaction.commit();
+    }
+
+    public static void feedbackActivity(Activity thisActivity){ //, Fragment goBackFragment){
+        Intent i = new Intent(thisActivity, FeedbackActivity.class);
         thisActivity.startActivity(i);
     }
 
@@ -174,4 +193,8 @@ public abstract class Transactor extends FragmentActivity {
         thisActivity.startActivity(i);
     }
 
+    public static void activityMain(Activity thisActivity){
+        Intent i = new Intent(thisActivity, MainActivity.class);
+        thisActivity.startActivity(i);
+    }
 }

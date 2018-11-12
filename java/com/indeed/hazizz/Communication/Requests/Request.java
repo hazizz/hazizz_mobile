@@ -6,6 +6,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.indeed.hazizz.Communication.POJO.Response.CommentSectionPOJOs.POJOCommentSection;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOauth;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
@@ -53,7 +54,9 @@ public class Request {
 
     private HashMap<String, String> vars;
     
-    Request thisRequest = this; 
+    Request thisRequest = this;
+
+    private OkHttpClient okHttpClient;
 
 
     public Request(Activity act, String reqType, HashMap<String, Object> body, CustomResponseHandler cOnResponse, HashMap<String, String> vars) {
@@ -66,7 +69,7 @@ public class Request {
         //.excludeFieldsWithModifiers(Modifier.FINAL, Modifier.TRANSIENT, Modifier.STATIC)
         Gson gson = new GsonBuilder().serializeNulls().excludeFieldsWithoutExposeAnnotation().create();
 
-        final OkHttpClient okHttpClient = new OkHttpClient.Builder()
+        okHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(5, TimeUnit.SECONDS)
                 .writeTimeout(5, TimeUnit.SECONDS)
                 .readTimeout(5, TimeUnit.SECONDS)
@@ -84,6 +87,10 @@ public class Request {
         aRequest = retrofit.create(RequestTypes.class);
     }
 
+    public void cancelRequest(){
+        okHttpClient.dispatcher().cancelAll();
+    }
+
     public Request(Context context, String reqType, HashMap<String, Object> body, CustomResponseHandler cOnResponse, HashMap<String, String> vars) {
         this.cOnResponse = cOnResponse;
         this.body = body;
@@ -93,7 +100,7 @@ public class Request {
         //.excludeFieldsWithModifiers(Modifier.FINAL, Modifier.TRANSIENT, Modifier.STATIC)
         Gson gson = new GsonBuilder().serializeNulls().excludeFieldsWithoutExposeAnnotation().create();
 
-        final OkHttpClient okHttpClient = new OkHttpClient.Builder()
+        okHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(5, TimeUnit.SECONDS)
                 .writeTimeout(5, TimeUnit.SECONDS)
                 .readTimeout(5, TimeUnit.SECONDS)
@@ -181,6 +188,19 @@ public class Request {
             case "getMyProfilePic":
                 requestType = new GetMyProfilePic();
                 break;
+            case "setMyProfilePic":
+                requestType = new SetMyProfilePic();
+                break;
+            case "feedback":
+                requestType = new Feedback();
+                break;
+            case "getCommentSection":
+                requestType = new GetCommentSection();
+                break;
+            case "addComment":
+                requestType = new AddComment();
+                break;
+
 
         }
     }
@@ -391,7 +411,7 @@ public class Request {
         public void setupCall() {
             HashMap<String, String> headerMap = new HashMap<String, String>();
             headerMap.put("Authorization", "Bearer " + TokenManager.getUseToken(act.getBaseContext()));//TokenManager.getUseToken(act.getBaseContext()));
-            call = aRequest.getSubjects(vars.get("groupId"), headerMap); // vars.get("id").toString()
+            call = aRequest.getSubjects(vars.get("groupId").toString(), headerMap); // vars.get("id").toString()
         }
 
         @Override
@@ -415,7 +435,7 @@ public class Request {
         public void setupCall() {
             HashMap<String, String> headerMap = new HashMap<String, String>();
             headerMap.put("Authorization", "Bearer " + TokenManager.getUseToken(act.getBaseContext()));//TokenManager.getUseToken(act.getBaseContext()));
-            call = aRequest.getTasksFromGroup(vars.get("groupId"), headerMap);
+            call = aRequest.getTasksFromGroup(vars.get("groupId").toString(), headerMap);
         }
 
         @Override
@@ -558,7 +578,7 @@ public class Request {
             HashMap<String, String> headerMap = new HashMap<String, String>();
             headerMap.put("Authorization", "Bearer " + TokenManager.getUseToken(act.getBaseContext()));//TokenManager.getUseToken(act.getBaseContext()));
 
-            call = aRequest.getTask(vars.get("groupId"), vars.get("taskId"), headerMap);
+            call = aRequest.getTask(vars.get("groupId").toString(), vars.get("taskId").toString(), headerMap);
         }
 
         @Override
@@ -809,7 +829,7 @@ public class Request {
             HashMap<String, String> headerMap = new HashMap<String, String>();
             headerMap.put("Authorization", "Bearer " + TokenManager.getUseToken(act.getBaseContext()));//TokenManager.getUseToken(act.getBaseContext()));
             headerMap.put("Content-Type", "application/json");
-            call = aRequest.getGroupMembers(vars.get("groupId"), headerMap);
+            call = aRequest.getGroupMembers(vars.get("groupId").toString(), headerMap);
         }
 
         @Override
@@ -838,7 +858,7 @@ public class Request {
         public void setupCall() {
             HashMap<String, String> headerMap = new HashMap<String, String>();
             headerMap.put("Authorization", "Bearer " + TokenManager.getUseToken(act.getBaseContext()));//TokenManager.getUseToken(act.getBaseContext()));
-            call = aRequest.getUserProfilePic(vars.get("userId"), headerMap);
+            call = aRequest.getUserProfilePic(vars.get("userId").toString(), headerMap);
         }
 
         @Override
@@ -884,6 +904,145 @@ public class Request {
         public void callIsSuccessful(Response<ResponseBody> response) {
             PojoPicSmall pojoPicSmall = gson.fromJson(response.body().charStream(), PojoPicSmall.class);
             cOnResponse.onPOJOResponse(pojoPicSmall);
+        }
+    }
+
+
+    public class Feedback implements RequestInterface {
+        Feedback() {
+            Log.e("hey", "created Feedback object");
+        }
+
+        public void setupCall() {
+            HashMap<String, String> headerMap = new HashMap<String, String>();
+            headerMap.put("Authorization", "Bearer " + TokenManager.getUseToken(act.getBaseContext()));//TokenManager.getUseToken(act.getBaseContext()));
+            headerMap.put("Content-Type", "application/json");
+            HashMap<String, Object> b = new HashMap<>();
+            b.put("platform", body.get("platform"));
+            b.put("version", body.get("version"));
+            b.put("message", body.get("message"));
+            b.put("data", body.get("data"));
+
+            call = aRequest.feedback(headerMap, b);
+            Log.e("hey", "setup call on Feedback");
+        }
+        @Override
+        public void makeCall() {
+            call(act,  thisRequest, call, cOnResponse, gson);
+        }
+        @Override
+        public void makeCallAgain() {
+            callAgain(act,  thisRequest, call, cOnResponse, gson);
+        }
+
+        @Override
+        public void callIsSuccessful(Response<ResponseBody> response) {
+            cOnResponse.onSuccessfulResponse();
+        }
+    }
+
+    public class SetMyProfilePic implements RequestInterface {
+        SetMyProfilePic() {
+            Log.e("hey", "created GetMyProfilePic object");
+        }
+
+        public void setupCall() {
+            HashMap<String, String> headerMap = new HashMap<String, String>();
+            headerMap.put("Authorization", "Bearer " + TokenManager.getUseToken(act.getBaseContext()));//TokenManager.getUseToken(act.getBaseContext()));
+            headerMap.put("Content-Type", "application/json");
+
+            Log.e("hey" , "data is: " + body.get("data"));
+
+            String finalString = body.get("data").toString().replaceAll("\\s","");
+            HashMap<String, Object> body2 = new HashMap<>();
+            body2.put("data", finalString);
+          //  body2.put("data", "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAyADIDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDs6KKa54xQA6mtIqnBYZ9O9QuhYHa7Rk9SuM0JGsYO0Yz1PUn8aAJd/oPzpw5FRZqVfuigBaKKKACuQP2i4utTkl1We1gtpscbmGCxA4B9q6+uOF9HZy6yrBHlkmHlpIm5Ww5znt3rObsdWGi5XstdPzJTZXMPm/a9cmhCTiFW+YgkqGBPPHB+g9aYLa7hhle/1ie28ubyeAzgnAIPB7io4Lm1vdPaLUr145WuvOY7CxYbQOwwP6Y6VNPr7G3mktHMM8lzu2lQTsCAc5GOoFRdbnWqdS/Lb8P+AS+GLq4n+1CeZ5Nuwje2cZ3Z/lXSxf6sVynhbh7v6J/7NXVQ/wCqFaQ1icWJXLVkkSUUUVZzhVK406xYPI1nbs7HJYxKSTnr0q7UcwZo8KMkmgabRmf2fY/8+dv/AN+l/wAKb/Z9j/z52/8A36X/AAq55Ev939RSi2kI/hH1NFg5n3K0UEFvu8iGOLd12KFz+VaMAxCufTNRraKD8zE/pVgDAwKBBRRRQAUUUUAFFFFABRRRQAUUUUAf/9k=");
+            body2.put("type", "ppfull");
+
+            if(body.get("data").equals(body2.get("data"))){
+                Log.e("hey", "its the same dude");
+            }else{
+                Log.e("hey", "its not the same dude");
+            }
+
+            Log.e("hey" , "data2 is: " + body2.get("data"));
+
+            call = aRequest.setMyProfilePic(headerMap, body2);
+            Log.e("hey", "setup call on setMyProfilePic");
+        }
+
+        @Override
+        public void makeCall() {
+            call(act,  thisRequest, call, cOnResponse, gson);
+        }
+
+        @Override
+        public void makeCallAgain() {
+            callAgain(act,  thisRequest, call, cOnResponse, gson);
+        }
+
+        @Override
+        public void callIsSuccessful(Response<ResponseBody> response) {
+            cOnResponse.onSuccessfulResponse();
+        }
+    }
+
+    public class GetCommentSection implements RequestInterface {
+        GetCommentSection() {
+            Log.e("hey", "created GetMyProfilePic object");
+        }
+
+        public void setupCall() {
+            HashMap<String, String> headerMap = new HashMap<String, String>();
+            headerMap.put("Authorization", "Bearer " + TokenManager.getUseToken(act.getBaseContext()));//TokenManager.getUseToken(act.getBaseContext()));
+            call = aRequest.getCommentSection(vars.get("commentId"), headerMap); //
+            Log.e("hey", "setup call on GetCommentSection");
+        }
+
+        @Override
+        public void makeCall() {
+            call(act,  thisRequest, call, cOnResponse, gson);
+        }
+
+        @Override
+        public void makeCallAgain() {
+            callAgain(act,  thisRequest, call, cOnResponse, gson);
+        }
+
+        @Override
+        public void callIsSuccessful(Response<ResponseBody> response) {
+            POJOCommentSection pojo = gson.fromJson(response.body().charStream(), POJOCommentSection.class);
+            cOnResponse.onPOJOResponse(pojo);
+        }
+    }
+
+    public class AddComment implements RequestInterface {
+        AddComment() {
+            Log.e("hey", "created AddComment object");
+        }
+
+        public void setupCall() {
+            HashMap<String, String> headerMap = new HashMap<String, String>();
+            headerMap.put("Authorization", "Bearer " + TokenManager.getUseToken(act.getBaseContext()));//TokenManager.getUseToken(act.getBaseContext()));
+            headerMap.put("Content-Type", "application/json");
+
+            call = aRequest.addComment(vars.get("commentId") ,headerMap, body);
+            Log.e("hey", "setup call on AddComment");
+        }
+
+        @Override
+        public void makeCall() {
+            call(act,  thisRequest, call, cOnResponse, gson);
+        }
+
+        @Override
+        public void makeCallAgain() {
+            callAgain(act,  thisRequest, call, cOnResponse, gson);
+        }
+
+        @Override
+        public void callIsSuccessful(Response<ResponseBody> response) {
+            cOnResponse.onSuccessfulResponse();
         }
     }
 }

@@ -4,34 +4,49 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.FeedbackActivity">
+    android:orientation="vertical">
 
     <include layout="@layout/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        />
 
     <TextView
-        style="@style/TitleText"
         android:id="@+id/textView_feedback"
+        style="@style/TitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Visszajelzés"/>
+        android:layout_marginTop="10dp"
+        android:text="Visszajelzés" />
 
     <EditText
         android:id="@+id/editText_feedback"
         android:layout_width="300dp"
-        android:layout_height="204dp"
+        android:layout_height="260dp"
+        android:layout_gravity="center"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
         android:gravity="top|left"
         android:hint="Visszajelzés"
-        android:inputType="textMultiLine"/>
+        android:inputType="textMultiLine" />
 
-    <Button
+    <TextView
+        android:id="@+id/textView_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        android:textColor="@color/colorError"
+        android:text="" />
+
+    <Button
         android:id="@+id/button_feedback"
-        android:text="Küldés"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:text="Küldés" />
 
     <include layout="@layout/content_feedback" />
 

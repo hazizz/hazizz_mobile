@@ -20,6 +20,7 @@ import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOauth;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
+import com.indeed.hazizz.Converter.Converter;
 import com.indeed.hazizz.Hasher;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.SharedPrefs;
@@ -71,6 +72,8 @@ public class LoginFragment extends Fragment {
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
             Log.e("hey", "got here onFailure");
+            button_login.setEnabled(true);
+            textView_error.setText("Szerver nem válaszol");
         }
         @Override
         public void onEmptyResponse() {
@@ -149,7 +152,7 @@ public class LoginFragment extends Fragment {
                     HashMap<String, Object> requestBody = new HashMap<>();
 
                     requestBody.put("username", username);
-                    requestBody.put("password", Hasher.hashString(password));
+                    requestBody.put("password", Converter.hashString(password));
 
                     button_login.setEnabled(false);
                     MiddleMan.newRequest(getActivity(), "login", requestBody, responseHandler, null);

@@ -30,6 +30,20 @@
         android:visible="false"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/action_profilePic"
+        android:orderInCategory="100"
+        android:title="Prodilkép feltöltése"
+        android:visible="true"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_feedback"
+        android:orderInCategory="100"
+        android:title="Visszajelzés"
+        android:visible="true"
+        app:showAsAction="never" />
+
  <!--   <item
         android:id="@+id/action_leaveGroup"
         android:orderInCategory="100"

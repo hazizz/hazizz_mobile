@@ -8,7 +8,7 @@ public abstract class TokenManager {
 
    // SharedPrefs.save(getContext(), "token", "token", (String) ((POJOauth)response).getToken());
     //SharedPrefs.save(getContext(), "token", "refreshToken", (String) ((POJOauth)response).getRefresh());
-
+    private static boolean tokenIsValid = true;
 
     public static String getToken(Context context){
         return SharedPrefs.getString(context, "token", "token");
@@ -33,7 +33,7 @@ public abstract class TokenManager {
 
     public static void setUseTokenToRefresh(Context context){
         SharedPrefs.save(context, "token", "useToken", getRefreshToken(context));
-        setRefreshToken(context, "");
+        setRefreshToken(context, "used");
     }
 
     public static void setUseTokenToAccess(Context context){
