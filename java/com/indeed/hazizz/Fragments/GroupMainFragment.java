@@ -1,9 +1,11 @@
 package com.indeed.hazizz.Fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +32,7 @@ import java.util.List;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
-public class GroupMainFragment extends Fragment{
+public class GroupMainFragment extends Fragment {
 
     private View v;
     private CustomAdapter adapter;
@@ -41,7 +43,7 @@ public class GroupMainFragment extends Fragment{
     private int groupID;
     private String groupName;
 
-
+    FragmentManager fg;
 
 
     @Nullable
@@ -53,10 +55,11 @@ public class GroupMainFragment extends Fragment{
         groupID = getArguments().getInt("groupId");
         groupName = getArguments().getString("groupName");
 
-
         textView_noContent = v.findViewById(R.id.textView_noContent);
 
         ((MainActivity)getActivity()).setGroupName(groupName);
+
+        fg = getFragmentManager();
 
         createViewList();
         getTask();
@@ -81,6 +84,7 @@ public class GroupMainFragment extends Fragment{
                 vars.put("groupId",((TaskItem)listView.getItemAtPosition(i)).getGroupData().getId());
                 groupName = ((TaskItem)listView.getItemAtPosition(i)).getGroupData().getName();
                 Log.e("hey", "asd: " + vars.get("taskId") + ", " + vars.get("groupId"));
+
 
                 Transactor.fragmentViewTask(getFragmentManager().beginTransaction(),
                         ((TaskItem)listView.getItemAtPosition(i)).getGroupData().getId(),
@@ -130,56 +134,41 @@ public class GroupMainFragment extends Fragment{
                 textView_noContent.setText("Nincs internet kapcsolat");
             }
         };
-        HashMap<String, String> vars = new HashMap<>();
+        HashMap<String, Object> vars = new HashMap<>();
         vars.put("groupId", Integer.toString(groupID));
       //  MiddleMan.request.getTasksFromGroup(this.getActivity(), null, responseHandler, vars);
         MiddleMan.newRequest(this.getActivity(),"getTasksFromGroup", null, responseHandler, vars);
 
     }
 
-    public void toCreateTask(){
-        Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(),groupID, groupName);
-        Log.e("hey", "called 123");
+    public void toCreateTask(FragmentManager fm){
+        groupID = getArguments().getInt("groupId");
+        groupName = getArguments().getString("groupName");
+        Log.e("hey", "GROUPID: " + groupID);
+        Transactor.fragmentCreateTask(fm.beginTransaction(), groupID, groupName);
+
     }
 
     public void leaveGroup(){
-        HashMap<String, String> vars = new HashMap<>();
+        HashMap<String, Object> vars = new HashMap<>();
         vars.put("groupId", Integer.toString(groupID));
         MiddleMan.newRequest(this.getActivity(), "leaveGroup", null, new CustomResponseHandler() {
             @Override
-            public void onResponse(HashMap<String, Object> response) {
-
-            }
-
+            public void onResponse(HashMap<String, Object> response) { }
             @Override
-            public void onPOJOResponse(Object response) {
-
-            }
-
+            public void onPOJOResponse(Object response) { }
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-            }
-
+            public void onFailure(Call<ResponseBody> call, Throwable t) { }
             @Override
-            public void onErrorResponse(POJOerror error) {
-
-            }
-
+            public void onErrorResponse(POJOerror error) { }
             @Override
-            public void onEmptyResponse() {
-
-            }
-
+            public void onEmptyResponse() { }
             @Override
             public void onSuccessfulResponse() {
                 Transactor.fragmentGroups(getFragmentManager().beginTransaction(), false);
             }
-
             @Override
-            public void onNoConnection() {
-
-            }
+            public void onNoConnection() { }
         }, vars);
     }
 }

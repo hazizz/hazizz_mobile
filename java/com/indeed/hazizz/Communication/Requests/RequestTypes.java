@@ -32,6 +32,13 @@ public interface RequestTypes{
             @Body HashMap<String, Object>  register
     );
 
+    @POST("auth/")
+    Call<ResponseBody> refreshToken(
+            @HeaderMap Map<String, String> headers,
+            @Body HashMap<String, Object>  register
+    );
+
+
     @GET("users/")
     Call<ResponseBody> getUsers(
             @HeaderMap Map<String, String> headers
@@ -66,6 +73,21 @@ public interface RequestTypes{
             @Path("id") String id,
             @HeaderMap Map<String, String> headers,
             @Body HashMap<String, Object> taskBody
+    );
+
+    @PATCH("groups/{groupId}/tasks/{taskId}")
+    Call<ResponseBody> updateTask(
+            @Path("groupId") String groupId,
+            @Path("taskId") String taskId,
+            @HeaderMap Map<String, String> headers,
+            @Body HashMap<String, Object> taskBody
+    );
+
+    @DELETE("groups/{groupId}/tasks/{taskId}")
+    Call<ResponseBody> deleteTask(
+            @Path("groupId") String groupId,
+            @Path("taskId") String taskId,
+            @HeaderMap Map<String, String> headers
     );
 
     @GET("subjects/{groupId}")  // /groups/{id}/subjects
@@ -179,6 +201,22 @@ public interface RequestTypes{
             @Body HashMap<String, Object> body
     );
 
+    @GET("announcements/{groupId}")
+    Call<ResponseBody> getAnnouncements(
+            @Path("groupId") String groupId,
+            @HeaderMap Map<String, String> headers
+    );
 
+    @GET("me/announcements")
+    Call<ResponseBody> getMyAnnouncements(
+            @HeaderMap Map<String, String> headers
+    );
+
+    @POST("announcements/{groupId}")
+    Call<ResponseBody> createAnnouncements(
+            @Path("groupId") String groupId,
+            @HeaderMap Map<String, String> headers,
+            @Body HashMap<String, Object> taskBody
+    );
 
 }

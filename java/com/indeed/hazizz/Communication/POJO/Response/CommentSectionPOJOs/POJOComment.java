@@ -13,10 +13,12 @@ public class POJOComment {
     private String content;
 
     private POJOcreator creator;
+    private int[] creationDate;
 
-    public POJOComment(int id, String content, POJOcreator creator) {
+    public POJOComment(int id, String content, POJOcreator creator, int[] creationDate) {
         this.id = id;
         this.content =  content;
         this.creator = creator;
+        this.creationDate = creationDate;
     }
 }

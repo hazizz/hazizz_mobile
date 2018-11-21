@@ -73,18 +73,19 @@ public class GroupTabFragment extends Fragment {
 
         TabLayout tabLayout = (TabLayout) v.findViewById(R.id.tab_layout);
 
+        tabLayout.addTab(tabLayout.newTab().setText("Bejegyzések"));
         tabLayout.addTab(tabLayout.newTab().setText("Feladatok"));
-      //  tabLayout.addTab(tabLayout.newTab().setText("Bejelentések"));
         tabLayout.addTab(tabLayout.newTab().setText("Tagok"));
-        tabLayout.addTab(tabLayout.newTab().setText("Új feladat"));
+       // tabLayout.addTab(tabLayout.newTab().setText("Új feladat"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
       //  tabLayout.setcur
        // tabLayout.setCu
 
         viewPager = (ViewPager) v.findViewById(R.id.pager);
         adapter = new PagerAdapter
-                (getFragmentManager(), tabLayout.getTabCount());
+                (getActivity().getSupportFragmentManager(), tabLayout.getTabCount());
         adapter.giveArgs(groupId, groupName);
+
     //    viewPager.setCurrent
        // bottomBar.setDefaultTab(R.id.tab_default);
         viewPager.setAdapter(adapter);
@@ -105,14 +106,38 @@ public class GroupTabFragment extends Fragment {
 
             }
         });
+/*
+        viewPager.setOnPageChangeListener(new OnPageChangeListener() {
+
+            public void onPageSelected(int pageNumber) {
+                // Just define a callback method in your fragment and call it like this!
+                adapter.getItem(pageNumber).imVisible();
+
+            }
+
+            public void onPageScrolled(int arg0, float arg1, int arg2) {
+                // TODO Auto-generated method stub
+
+            }
+
+            public void onPageScrollStateChanged(int arg0) {
+                // TODO Auto-generated method stub
+
+            }
+        }); */
 
         viewPager.setCurrentItem(startingTab, true);
+
+
 
         return v;
     }
 
     public Fragment getCurrentFrag(){
-        return adapter.getCurrentFrag();
+
+        return adapter.getItem(viewPager.getCurrentItem());
+
+       // return adapter.getCurrentFrag();
     }
 
     public void setTab(int i){
@@ -120,7 +145,7 @@ public class GroupTabFragment extends Fragment {
     }
 
     public void leaveGroup(){
-        HashMap<String, String> vars = new HashMap<>();
+        HashMap<String, Object> vars = new HashMap<>();
         vars.put("groupId", Integer.toString(groupId));
       //  MiddleMan.request.leaveGroup(getContext(), null, rh, vars);
         MiddleMan.newRequest(getActivity(), "leaveGroup", null, rh, vars);

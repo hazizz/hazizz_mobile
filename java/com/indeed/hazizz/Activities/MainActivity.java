@@ -4,10 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -30,9 +28,9 @@ import com.indeed.hazizz.Communication.POJO.Response.POJOme;
 import com.indeed.hazizz.Communication.POJO.Response.PojoPicSmall;
 import com.indeed.hazizz.Converter.Converter;
 import com.indeed.hazizz.Fragments.CreateSubjectFragment;
-import com.indeed.hazizz.Fragments.CreateTaskFragment;
 import com.indeed.hazizz.Fragments.GetGroupMembersFragment;
 import com.indeed.hazizz.Fragments.GroupMainFragment;
+import com.indeed.hazizz.Fragments.GroupTabs.AnnouncementFragment;
 import com.indeed.hazizz.Fragments.GroupTabs.GroupTabFragment;
 import com.indeed.hazizz.Fragments.GroupsFragment;
 import com.indeed.hazizz.Fragments.MainFragment;
@@ -42,9 +40,7 @@ import com.indeed.hazizz.SharedPrefs;
 import com.indeed.hazizz.Transactor;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import okhttp3.ResponseBody;
@@ -54,7 +50,6 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final int PICK_PHOTO_FOR_AVATAR = 1;
-
 
     private DrawerLayout drawerLayout;
     private NavigationView navView;
@@ -67,7 +62,7 @@ public class MainActivity extends AppCompatActivity
 
     FloatingActionButton fab_joinGroup;
     FloatingActionButton fab_createGroup;
-    FloatingActionButton fab_createTask;
+    FloatingActionButton fab_action;
 
     private Menu menu_options;
     private MenuItem menuItem_createGroup;
@@ -89,53 +84,40 @@ public class MainActivity extends AppCompatActivity
 
     CustomResponseHandler rh_profilePic = new CustomResponseHandler() {
         @Override
-        public void onResponse(HashMap<String, Object> response) {
-
-        }
-
+        public void onResponse(HashMap<String, Object> response) { }
         @Override
         public void onPOJOResponse(Object response) {
             String a = ((PojoPicSmall)response).getData().split(",")[1];
           //  String[] imageSplit = a.split(",");
           //  a = imageSplit[1];
-            navProfilePic.setImageBitmap(Converter.imageFromText(a));
+            Bitmap bitmap = Converter.imageFromText(a);
+            bitmap = Bitmap.createScaledBitmap(bitmap, 90, 90, false);
+            bitmap = Converter.getCroppedBitmap(bitmap);
+
+
+            navProfilePic.setImageBitmap(bitmap);
             Log.e("hey", "got profile pic response");
         }
-
         @Override
-        public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-        }
-
+        public void onFailure(Call<ResponseBody> call, Throwable t) { }
         @Override
-        public void onErrorResponse(POJOerror error) {
-
-        }
-
+        public void onErrorResponse(POJOerror error) { }
         @Override
-        public void onEmptyResponse() {
-
-        }
-
+        public void onEmptyResponse() { }
         @Override
-        public void onSuccessfulResponse() {
-
-        }
-
+        public void onSuccessfulResponse() {}
         @Override
-        public void onNoConnection() {
-
-        }
+        public void onNoConnection() {}
     };
 
     CustomResponseHandler responseHandler = new CustomResponseHandler() {
         @Override
-        public void onResponse(HashMap<String, Object> response) {
-        }
-
+        public void onResponse(HashMap<String, Object> response) { }
         @Override
         public void onPOJOResponse(Object response) {
             Log.e("hey", "got pojo response");
+          //  SharedPrefs.getString(act.getBaseContext(), "userInfo", "username")
+            SharedPrefs.save(getApplicationContext(),"userInfo", "username",((POJOme) response).getUsername());
             navUsername.setText(((POJOme) response).getUsername());
             navEmail.setText(((POJOme) response).getEmailAddress());
         }
@@ -148,17 +130,10 @@ public class MainActivity extends AppCompatActivity
         public void onEmptyResponse() {
             Log.e("hey", "NO RESPONSE");
         }
-
         @Override
-        public void onSuccessfulResponse() {
-
-        }
-
+        public void onSuccessfulResponse() { }
         @Override
-        public void onNoConnection() {
-
-        }
-
+        public void onNoConnection() { }
         @Override
         public void onErrorResponse(POJOerror error) {
             Log.e("hey", "onErrorResponse");
@@ -188,32 +163,36 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
                 currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager(), false);
                 if (currentFrag instanceof GroupsFragment) {
-                    Log.e("hey", "instance of groupmain fragment");
+                    Log.e("hey", "instance of groupmain fragment111");
                     ((GroupsFragment)currentFrag).toCreateGroup();
                 }
             }
         });
 
-        fab_createTask = (FloatingActionButton) findViewById(R.id.fab_createTask);
-        fab_createTask.setOnClickListener(new View.OnClickListener() {
+        fab_action = (FloatingActionButton) findViewById(R.id.fab_action);
+        fab_action.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
              /*   Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show(); */
+                Log.e("hey", "fab_action CLICKed");
                 currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager(), false);
                 if (currentFrag instanceof GroupMainFragment) {
                     Log.e("hey", "instance of groupmain fragment");
-                    ((GroupMainFragment)currentFrag).toCreateTask();
+                    ((GroupMainFragment)currentFrag).toCreateTask(getSupportFragmentManager());
                 }
-                else if (currentFrag instanceof ViewTaskFragment) {
-                    ((ViewTaskFragment)currentFrag).toCreateTask();
+                else if (currentFrag instanceof AnnouncementFragment) {
+                    ((AnnouncementFragment)currentFrag).toCreateAnnouncement(getSupportFragmentManager());
                 }
-                else if(currentFrag instanceof CreateTaskFragment || currentFrag instanceof GroupsFragment){}
+                else if (currentFrag instanceof GetGroupMembersFragment) {
+                    //((GetGroupMembersFragment)currentFrag).toCreateTask();
+                }
+             //   else if(currentFrag instanceof CreateTaskFragment || currentFrag instanceof GroupsFragment){}
                 else if (currentFrag instanceof MainFragment) {
                     toCreateTaskFrag(true);
                 }
                 else {
-                    toGroupsFrag();
+                 //   toGroupsFrag();
                 }
             }
         });
@@ -256,21 +235,22 @@ public class MainActivity extends AppCompatActivity
         MiddleMan.newRequest(this, "getMyProfilePic", null, rh_profilePic, null);
 
         MiddleMan.newRequest(this, "me", null, responseHandler, null);
-
     }
 
- /*   @Override
+    @Override
     public void onResume(){
+        invalidateOptionsMenu(); //  onCreateOptionsMenu(menu_options);
         super.onResume();
         Log.e("hey", "onResume is trigered");
-        toMainFrag();
+
     }
+    /*
     @Override
     public void onStart(){
         super.onStart();
         Log.e("hey", "onResume is trigered");
         toMainFrag();
-    } */
+    }  */
 
 
     @Override
@@ -278,7 +258,6 @@ public class MainActivity extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         menu_options = menu;
         getMenuInflater().inflate(R.menu.main, menu_options);
-
 
         menuItem_createGroup = menu_options.findItem(R.id.action_createGroup);
         menuItem_joinGroup = menu_options.findItem(R.id.action_joinGroup);
@@ -290,7 +269,7 @@ public class MainActivity extends AppCompatActivity
             Log.e("hey", "menu items are null");
         }
 
-       toMainFrag();
+        toMainFrag();
 
         return true;
     }
@@ -398,6 +377,8 @@ public class MainActivity extends AppCompatActivity
          //   Transactor.fragmentGroupTab(getSupportFragmentManager().beginTransaction(), ((CreateTaskFragment)currentFrag).getGroupId(), ((CreateTaskFragment)currentFrag).getGroupName());
         } */
 
+        else if (currentFrag instanceof GroupMainFragment)    {}
+
         else if (currentFrag instanceof ViewTaskFragment) {
             if(!((ViewTaskFragment)currentFrag).getGoBackToMain()) {
                 Transactor.fragmentMainGroup(getSupportFragmentManager().beginTransaction(), ((ViewTaskFragment) currentFrag).getGroupId(), ((ViewTaskFragment) currentFrag).getGroupName());
@@ -421,30 +402,29 @@ public class MainActivity extends AppCompatActivity
         if (currentFrag instanceof GroupsFragment) {
             fab_createGroup.setVisibility(View.VISIBLE);
             fab_joinGroup.setVisibility(View.VISIBLE);
-
-            navView.getMenu().getItem(1).setVisible(false);
-            menu_groups.setVisible(true);
+            navView.getMenu().getItem(1).setChecked(true);
         }else{
             fab_createGroup.setVisibility(View.INVISIBLE);
             fab_joinGroup.setVisibility(View.INVISIBLE);
             navView.getMenu().getItem(1).setChecked(false);
-            navView.getMenu().getItem(1).setVisible(true);
-            menu_groups.setVisible(false);
         }
 
         if(currentFrag instanceof CreateSubjectFragment) {
             fab_createGroup.setVisibility(View.INVISIBLE);
-        //    fab_createTask.setVisibility(View.INVISIBLE);
+        //    fab_action.setVisibility(View.INVISIBLE);
         }else{
-          //  fab_createTask.setVisibility(View.VISIBLE);
+          //  fab_action.setVisibility(View.VISIBLE);
         }
 
         if(currentFrag instanceof MainFragment){
             navView.getMenu().getItem(0).setChecked(true);
-            fab_createTask.setVisibility(View.VISIBLE);
         }else{
             navView.getMenu().getItem(0).setChecked(false);
-            fab_createTask.setVisibility(View.INVISIBLE);
+        }
+        if(currentFrag instanceof AnnouncementFragment || currentFrag instanceof GroupMainFragment || currentFrag instanceof GetGroupMembersFragment || currentFrag instanceof MainFragment){
+            fab_action.setVisibility(View.VISIBLE);
+        }else{
+            fab_action.setVisibility(View.INVISIBLE);
         }
 
         if (currentFrag instanceof GroupsFragment || currentFrag instanceof MainFragment) {
@@ -454,6 +434,8 @@ public class MainActivity extends AppCompatActivity
                 menuItem_createGroup.setVisible(false);
                 menuItem_joinGroup.setVisible(false);
         }
+
+
       /*  if(currentFrag instanceof GroupTabFragment || currentFrag instanceof GroupMainFragment || currentFrag instanceof ViewTaskFragment || currentFrag instanceof GetGroupMembersFragment){
             menuItem_leaveGroup.setVisible(true);
         }else{
@@ -489,10 +471,10 @@ public class MainActivity extends AppCompatActivity
                 Bitmap yourSelectedImage = BitmapFactory.decodeStream(inputStream);
                // encodeTobase64(yourSelectedImage);
 
-                yourSelectedImage = Bitmap.createScaledBitmap(yourSelectedImage, 200, 200, true);
+                yourSelectedImage = Bitmap.createScaledBitmap(yourSelectedImage, 300, 300, true);
                 //Bitmap bitmap = yourSelectedImage;
 
-                Bitmap bitmap=Bitmap.createBitmap(yourSelectedImage, 0,0,200, 200);
+                Bitmap bitmap=Bitmap.createBitmap(yourSelectedImage, 0,0,300, 300);
 
                 HashMap<String, Object> body = new HashMap<>();
 
@@ -529,8 +511,6 @@ public class MainActivity extends AppCompatActivity
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 Log.e("hey", "file not found!");
-            } catch (IOException e) {
-                e.printStackTrace();
             }
             //Now you can do whatever you want with your inpustream, save it as file, upload to a server, decode a bitmap...
         }

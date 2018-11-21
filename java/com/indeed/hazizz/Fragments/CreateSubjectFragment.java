@@ -99,7 +99,7 @@ public class CreateSubjectFragment extends Fragment {
                 if(editText_newSubject.getTextSize() != 0) {
                     HashMap<String, Object> body = new HashMap<>();
                     body.put("name", editText_newSubject.getText().toString());
-                    HashMap<String, String> vars = new HashMap<>();
+                    HashMap<String, Object> vars = new HashMap<>();
                     vars.put("groupId", Integer.toString(groupId));
                     button_addSubject.setEnabled(false);
 

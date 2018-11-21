@@ -7,6 +7,8 @@ import retrofit2.Call;
 
 public interface CustomResponseHandler {
 
+
+
     public void onResponse(HashMap<String, Object> response);
     public void onPOJOResponse(Object response);
     public void onFailure(Call<ResponseBody> call, Throwable t);

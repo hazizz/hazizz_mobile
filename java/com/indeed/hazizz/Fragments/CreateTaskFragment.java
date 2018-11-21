@@ -61,7 +61,6 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
 
     private DatePickerDialog dpd;
 
-
     private List<POJOsubject> subjects = new ArrayList<>();
 
     private CustomResponseHandler rh_subjects;
@@ -84,7 +83,7 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
 
         subject_spinner = (Spinner)v.findViewById(R.id.subject_spinner);
 
-        button_send = (Button)v.findViewById(R.id.button_send1);
+        button_send = (Button)v.findViewById(R.id.button_send);
         button_add = v.findViewById(R.id.add_button);
         taskType = (Spinner)v.findViewById(R.id.taskType_spinner);
         taskTitle = v.findViewById(R.id.taskTitle);
@@ -170,12 +169,8 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
                 }
                 button_send.setEnabled(true);
             }
-
             @Override
-            public void onEmptyResponse() {
-
-            }
-
+            public void onEmptyResponse() { }
             @Override
             public void onSuccessfulResponse() {
                 toMainGroupFrag();
@@ -220,12 +215,8 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
             public void onEmptyResponse() {
                 Log.e("hey", "there is no repsonse");
             }
-
             @Override
-            public void onSuccessfulResponse() {
-
-            }
-
+            public void onSuccessfulResponse() { }
             @Override
             public void onNoConnection() {
                 textView_error.setText("Nincs internet kapcsolat");
@@ -245,9 +236,10 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
                 textView_deadline.setText("Határidő: " +str_year + "." + str_month + "."+ str_day);
             }
         }, Integer.parseInt(D8.getYear()), Integer.parseInt(D8.getMonth()) -2, Integer.parseInt(D8.getDay()));
+        //dpd.getDatePicker().setMaxDate(Calendar.getInstance().getTimeInMillis() - 1000);
         dpd.getDatePicker().setMinDate(Calendar.getInstance().getTimeInMillis() - 1000);
 
-        HashMap<String, String> vars = new HashMap<>();
+        HashMap<String, Object> vars = new HashMap<>();
         vars.put("groupId", Integer.toString(groupId));
         MiddleMan.newRequest(this.getActivity(),"getSubjects", null, rh_subjects, vars);
 
@@ -264,13 +256,12 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
         Log.e("hey", "date: " + year + "-" + month + "-" + day);
         requestBody.put("dueDate", str_year + "-" + str_month + "-" + str_day);
 
-        HashMap<String, String> vars = new HashMap<>();
+        HashMap<String, Object> vars = new HashMap<>();
         vars.put("id", Integer.toString(groupId));
 
       //  MiddleMan.request.createTask(this.getActivity(), requestBody, rh_taskTypes, vars);
         MiddleMan.newRequest(this.getActivity(), "createTask", requestBody, rh_taskTypes, vars);
-
-    }
+        }
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -282,14 +273,10 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
 
     void toMainGroupFrag(){
         Transactor.fragmentMainGroup(getFragmentManager().beginTransaction(),groupId, groupName);
-      //  Transactor.fragmentGroupTab(getFragmentManager().beginTransaction(), groupId, groupName);
-
     }
-
     void toCreateSubjectFrag(){
         Transactor.fragmentCreateSubject(getFragmentManager().beginTransaction(), groupId, groupName);
     }
-
     public int getGroupId(){
         return groupId;
     }

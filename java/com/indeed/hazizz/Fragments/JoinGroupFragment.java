@@ -107,7 +107,7 @@ public class JoinGroupFragment extends Fragment {
                 if(g.getName().equals(groupName)) {
                     if (g.getGroupType().equals("OPEN")) {
                         groupId = g.getId();
-                        HashMap<String, String> vars = new HashMap<>();
+                        HashMap<String, Object> vars = new HashMap<>();
                         vars.put("groupId", Integer.toString(groupId));
                         MiddleMan.newRequest(getActivity(),"joinGroup", null, rh_joinGroup, vars);
                         found = true;

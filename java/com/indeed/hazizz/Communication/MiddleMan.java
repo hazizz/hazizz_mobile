@@ -45,15 +45,14 @@ public abstract class MiddleMan{
         }
     }
 
-    public static void newRequest(Activity act, String requestType, HashMap<String, Object>  body, CustomResponseHandler cOnResponse, HashMap<String, String> vars) {
+    public static void newRequest(Activity act, String requestType, HashMap<String, Object>  body, CustomResponseHandler cOnResponse, HashMap<String, Object> vars) {
         Request newRequest = new Request(act, requestType, body, cOnResponse, vars);
         List<Request> duplicateRequest = Collections.synchronizedList(new ArrayList<Request>());
-        for (Request r : requestQueue) {
-            if(r.requestType.getClass() == newRequest.requestType.getClass()){
+        for (Request r : requestQueue)
+            if (r.requestType.getClass() == newRequest.requestType.getClass()) {
                 duplicateRequest.add(r);
-                Log.e("hey", "removed a request");
+                Log.e("hey", "removed1 a request");
             }
-        }
         for(Request r : duplicateRequest){
             requestQueue.remove(r);
         }
@@ -63,13 +62,20 @@ public abstract class MiddleMan{
         requestQueue.add(newRequest);
     }
 
-    public static void newRequest(Context context, String requestType, HashMap<String, Object>  body, CustomResponseHandler cOnResponse, HashMap<String, String> vars) {
+
+
+    public static void newRequest(Context context, String requestType, HashMap<String, Object>  body, CustomResponseHandler cOnResponse, HashMap<String, Object> vars) {
         Request newRequest = new Request(context, requestType, body, cOnResponse, vars);
+        List<Request> duplicateRequest = Collections.synchronizedList(new ArrayList<Request>());
         for (Request r : requestQueue) {
             if(r.requestType.getClass() == newRequest.requestType.getClass()){
-                requestQueue.remove(r);
-                Log.e("hey", "removed a request");
+                duplicateRequest.add(r);
+                //requestQueue.remove(r);
+                Log.e("hey", "removed2 a request");
             }
+        }
+        for(Request r : duplicateRequest){
+            requestQueue.remove(r);
         }
         if(Network.getActiveNetwork(context) == null || !Network.isConnectedOrConnecting(context)) {
             newRequest.cOnResponse.onNoConnection();
@@ -82,12 +88,14 @@ public abstract class MiddleMan{
     }
 
     public static void callAgain(Request a){
-        for(Request r : waitingForResponse){
+        a.requestType.setupCall();
+        a.requestType.makeCallAgain();
+       /* for(Request r : waitingForResponse){
             if(r.equals(a)){
                 r.requestType.makeCallAgain();
                 break;
             }
-        }
+        } */
     }
 
     public static void sendRequestsFromQ() {
