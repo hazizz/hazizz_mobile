@@ -101,7 +101,7 @@ public class CommentSectionFragment extends Fragment {
                     button_send.setEnabled(false);
                     HashMap<String, Object> body = new HashMap<>();
                     body.put("content", editText_commentBody.getText().toString());
-                    HashMap<String, String> vars = new HashMap<>();
+                    HashMap<String, Object> vars = new HashMap<>();
                     vars.put("commentId", commentId);
                     MiddleMan.newRequest(getActivity(), "addComment", body, new CustomResponseHandler() {
                         @Override
@@ -172,7 +172,7 @@ public class CommentSectionFragment extends Fragment {
 
     private void getComments(){
 
-        HashMap<String, String> vars = new HashMap<>();
+        HashMap<String, Object> vars = new HashMap<>();
         vars.put("commentId", commentId);
         MiddleMan.newRequest(this.getActivity(), "getCommentSection", null, responseHandler, vars);
     }

@@ -17,6 +17,7 @@ import com.indeed.hazizz.Fragments.AuthFrags.LoginFragment;
 import com.indeed.hazizz.Fragments.AuthFrags.RegisterFragment;
 import com.indeed.hazizz.Fragments.ChatFragment;
 import com.indeed.hazizz.Fragments.CommentSectionFragment;
+import com.indeed.hazizz.Fragments.CreateAnnouncementFragment;
 import com.indeed.hazizz.Fragments.CreateGroupFragment;
 import com.indeed.hazizz.Fragments.CreateSubjectFragment;
 import com.indeed.hazizz.Fragments.CreateTaskFragment;
@@ -30,6 +31,7 @@ import com.indeed.hazizz.Fragments.ViewTaskFragment;
 public abstract class Transactor extends FragmentActivity {
 
     private static boolean backStack = true;
+    private static Fragment currentFrag;
 
     public static Fragment getCurrentFragment(FragmentManager fManager, boolean asd){
         Fragment currentF = fManager.findFragmentById(R.id.fragment_container);
@@ -37,6 +39,7 @@ public abstract class Transactor extends FragmentActivity {
             return fManager.findFragmentById(R.id.fragment_container);
         }
         if(currentF instanceof GroupTabFragment){
+          //  currentFrag = ;
             return ((GroupTabFragment) currentF).getCurrentFrag();
         }else {
             return fManager.findFragmentById(R.id.fragment_container);
@@ -88,7 +91,7 @@ public abstract class Transactor extends FragmentActivity {
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }
         fTransaction.commit(); */
-
+        Log.e("hey", "Fragment main group groupId: " + groupId);
         fragmentGroupTab(fTransaction, groupId, groupName, 0);
     }
     public static void fragmentViewTask(FragmentTransaction fTransaction, int groupId, int taskId, String groupName, boolean goBackToMain){
@@ -104,16 +107,33 @@ public abstract class Transactor extends FragmentActivity {
         fTransaction.commit();
     }
     public static void fragmentCreateTask(FragmentTransaction fTransaction, int groupId, String groupName){
-      /*  Bundle bundle = new Bundle();
+      //  FragmentTransaction fTransaction1 = getSupportFragmentManager().beginTransaction();
+
+        Bundle bundle = new Bundle();
         bundle.putInt("groupId", groupId);
         bundle.putString("groupName", groupName);
         CreateTaskFragment frag = new CreateTaskFragment();
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }
-        fTransaction.commit(); */
-        fragmentGroupTab(fTransaction, groupId, groupName, 2);
+        fTransaction.commit();
+      //  fragmentGroupTab(fTransaction, groupId, groupName, 2);
     }
+
+    public static void fragmentCreateAnnouncement(FragmentTransaction fTransaction, int groupId, String groupName){
+        //  FragmentTransaction fTransaction1 = getSupportFragmentManager().beginTransaction();
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("groupId", groupId);
+        bundle.putString("groupName", groupName);
+        CreateAnnouncementFragment frag = new CreateAnnouncementFragment();
+        frag.setArguments(bundle);
+        fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
+        if(backStack){ fTransaction.addToBackStack(null); }
+        fTransaction.commit();
+        //  fragmentGroupTab(fTransaction, groupId, groupName, 2);
+    }
+
     public static void fragmentChat(FragmentTransaction fTransaction){
         ChatFragment frag = new ChatFragment();
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);

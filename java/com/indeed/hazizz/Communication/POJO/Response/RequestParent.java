@@ -30,7 +30,7 @@ public class RequestParent {
     /* protected Context context;
      protected HashMap<String, Object> body;
      protected CustomResponseHandler cOnResponse;
-     protected HashMap<String, String> vars; */
+     protected HashMap<String, Object> vars; */
 
     public void setupCall(){}
     public void call(Call<ResponseBody> call, CustomResponseHandler cOnResponse, Gson gson){

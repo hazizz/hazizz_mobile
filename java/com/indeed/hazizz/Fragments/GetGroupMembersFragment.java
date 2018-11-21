@@ -97,7 +97,7 @@ public class GetGroupMembersFragment extends Fragment {
 
             }
         };
-        HashMap<String, String> vars = new HashMap<>();
+        HashMap<String, Object> vars = new HashMap<>();
         vars.put("groupId", Integer.toString(groupId));
         MiddleMan.newRequest(this.getActivity(),"getGroupMembers", null, responseHandler, vars);
     }

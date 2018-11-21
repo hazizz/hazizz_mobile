@@ -24,7 +24,6 @@ import com.indeed.hazizz.Converter.Converter;
 import com.indeed.hazizz.Hasher;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.SharedPrefs;
-import com.indeed.hazizz.TokenManager;
 import com.indeed.hazizz.Transactor;
 import com.snatik.storage.Storage;
 
@@ -63,9 +62,8 @@ public class LoginFragment extends Fragment {
             Log.e("hey", "got here onResponse");
           //  SharedPrefs.save(getContext(), "token", "token", (String) ((POJOauth)response).getToken());
            // SharedPrefs.save(getContext(), "token", "refreshToken", (String) ((POJOauth)response).getRefresh());
-            TokenManager.setToken(getContext() ,((POJOauth)response).getToken());
-            TokenManager.setRefreshToken(getContext() ,((POJOauth)response).getRefresh());
-            TokenManager.setUseTokenToAccess(getContext());
+            SharedPrefs.TokenManager.setToken(getContext() ,((POJOauth)response).getToken());
+            SharedPrefs.TokenManager.setRefreshToken(getContext() ,((POJOauth)response).getRefresh());
             switchToMain();
             button_login.setEnabled(true);
         }

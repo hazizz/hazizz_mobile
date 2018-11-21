@@ -20,7 +20,6 @@ import com.indeed.hazizz.Fragments.ViewTaskFragment;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.RequestSenderRunnable;
 import com.indeed.hazizz.SharedPrefs;
-import com.indeed.hazizz.TokenManager;
 import com.indeed.hazizz.Transactor;
 
 import java.util.Set;
@@ -75,7 +74,7 @@ public class AuthActivity extends AppCompatActivity {
         //   Log.e("hey" , "server is running: " + MiddleMan.serverReachable());
 
     //    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        if(SharedPrefs.getBoolean(this, "autoLogin", "autoLogin") && !TokenManager.getRefreshToken(this).equals("used")){
+        if(SharedPrefs.getBoolean(this, "autoLogin", "autoLogin") && !SharedPrefs.TokenManager.getRefreshToken(this).equals("used")){
             Intent i = new Intent(this, MainActivity.class);
             startActivity(i);
         }else {

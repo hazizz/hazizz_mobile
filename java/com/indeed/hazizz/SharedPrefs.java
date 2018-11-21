@@ -110,4 +110,29 @@ public class SharedPrefs {
     public static Set<String> getStringSet(Context context,String fileName, String key, Set<String> defaultValue) {
         return getPrefs(context, fileName).getStringSet(key, defaultValue);
     }
+
+    public static abstract class TokenManager {
+
+        // SharedPrefs.save(getContext(), "token", "token", (String) ((POJOauth)response).getToken());
+        //SharedPrefs.save(getContext(), "token", "refreshToken", (String) ((POJOauth)response).getRefresh());
+        private static boolean tokenIsValid = true;
+
+        public static String getToken(Context context){
+            return SharedPrefs.getString(context, "token", "token");
+        }
+
+        public static String getRefreshToken(Context context){
+            return SharedPrefs.getString(context, "token", "refreshToken");
+
+        }
+
+        public static void setToken(Context context, String newToken){
+            SharedPrefs.save(context, "token", "token", newToken);
+        }
+
+        public static void setRefreshToken(Context context, String newRefreshToken){
+            SharedPrefs.save(context, "token", "refreshToken", newRefreshToken);
+
+        }
+    }
 }
