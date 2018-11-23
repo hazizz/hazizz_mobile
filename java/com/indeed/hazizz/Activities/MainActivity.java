@@ -30,10 +30,10 @@ import com.indeed.hazizz.Converter.Converter;
 import com.indeed.hazizz.Fragments.CreateSubjectFragment;
 import com.indeed.hazizz.Fragments.GetGroupMembersFragment;
 import com.indeed.hazizz.Fragments.GroupMainFragment;
-import com.indeed.hazizz.Fragments.GroupTabs.AnnouncementFragment;
+import com.indeed.hazizz.Fragments.GroupTabs.GroupAnnouncementFragment;
 import com.indeed.hazizz.Fragments.GroupTabs.GroupTabFragment;
 import com.indeed.hazizz.Fragments.GroupsFragment;
-import com.indeed.hazizz.Fragments.MainFragment;
+import com.indeed.hazizz.Fragments.MainTab.MainFragment;
 import com.indeed.hazizz.Fragments.ViewTaskFragment;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.SharedPrefs;
@@ -181,8 +181,8 @@ public class MainActivity extends AppCompatActivity
                     Log.e("hey", "instance of groupmain fragment");
                     ((GroupMainFragment)currentFrag).toCreateTask(getSupportFragmentManager());
                 }
-                else if (currentFrag instanceof AnnouncementFragment) {
-                    ((AnnouncementFragment)currentFrag).toCreateAnnouncement(getSupportFragmentManager());
+                else if (currentFrag instanceof GroupAnnouncementFragment) {
+                    ((GroupAnnouncementFragment)currentFrag).toCreateAnnouncement(getSupportFragmentManager());
                 }
                 else if (currentFrag instanceof GetGroupMembersFragment) {
                     //((GetGroupMembersFragment)currentFrag).toCreateTask();
@@ -421,7 +421,7 @@ public class MainActivity extends AppCompatActivity
         }else{
             navView.getMenu().getItem(0).setChecked(false);
         }
-        if(currentFrag instanceof AnnouncementFragment || currentFrag instanceof GroupMainFragment || currentFrag instanceof GetGroupMembersFragment || currentFrag instanceof MainFragment){
+        if(currentFrag instanceof GroupAnnouncementFragment || currentFrag instanceof GroupMainFragment || currentFrag instanceof GetGroupMembersFragment || currentFrag instanceof MainFragment){
             fab_action.setVisibility(View.VISIBLE);
         }else{
             fab_action.setVisibility(View.INVISIBLE);

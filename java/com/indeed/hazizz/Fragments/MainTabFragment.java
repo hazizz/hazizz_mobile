@@ -1,4 +1,4 @@
-package com.indeed.hazizz.Fragments.GroupTabs;
+package com.indeed.hazizz.Fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -6,17 +6,16 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-
-import com.indeed.hazizz.Communication.MiddleMan;
-import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
-import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.indeed.hazizz.Communication.MiddleMan;
+import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
+import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
+import com.indeed.hazizz.Fragments.MainTab.PagerAdapter;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
@@ -25,16 +24,15 @@ import java.util.HashMap;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
-public class GroupTabFragment extends Fragment {
+public class MainTabFragment extends Fragment{
 
     private View v;
 
     private TextView textView_title;
     public PagerAdapter adapter;
 
-    private int groupId;
-    private String groupName;
     private int startingTab;
+    private boolean destCreateTask;
 
     private ViewPager viewPager;
     private Fragment currentFrag;
@@ -60,34 +58,31 @@ public class GroupTabFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.fragment_tabgroup, container, false);
+        v = inflater.inflate(R.layout.fragment_tabmain, container, false);
         Log.e("hey", "GroupTab fragment created");
 
-        groupId = getArguments().getInt("groupId");
-        groupName = getArguments().getString("groupName");
         startingTab = getArguments().getInt("startingTab");
+        destCreateTask = getArguments().getBoolean("destCreateTask");
 
         textView_title = v.findViewById(R.id.textView_title);
-        textView_title.setText("Csoport: " + groupName);
-     //   ((MainActivity)getActivity()).onFragmentCreated();
+        //   ((MainActivity)getActivity()).onFragmentCreated();
 
         TabLayout tabLayout = (TabLayout) v.findViewById(R.id.tab_layout);
 
-        tabLayout.addTab(tabLayout.newTab().setText("Bejegyzések"));
         tabLayout.addTab(tabLayout.newTab().setText("Feladatok"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tagok"));
-       // tabLayout.addTab(tabLayout.newTab().setText("Új feladat"));
+        tabLayout.addTab(tabLayout.newTab().setText("Bejegyzések"));
+        tabLayout.addTab(tabLayout.newTab().setText("Csoportok"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-      //  tabLayout.setcur
-       // tabLayout.setCu
+        //  tabLayout.setcur
+        // tabLayout.setCu
 
         viewPager = (ViewPager) v.findViewById(R.id.pager);
         adapter = new PagerAdapter
                 (getActivity().getSupportFragmentManager(), tabLayout.getTabCount());
-        adapter.giveArgs(groupId, groupName);
+        //adapter.giveArgs(groupId, groupName);
 
-    //    viewPager.setCurrent
-       // bottomBar.setDefaultTab(R.id.tab_default);
+        //    viewPager.setCurrent
+        // bottomBar.setDefaultTab(R.id.tab_default);
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -106,29 +101,8 @@ public class GroupTabFragment extends Fragment {
 
             }
         });
-/*
-        viewPager.setOnPageChangeListener(new OnPageChangeListener() {
-
-            public void onPageSelected(int pageNumber) {
-                // Just define a callback method in your fragment and call it like this!
-                adapter.getItem(pageNumber).imVisible();
-
-            }
-
-            public void onPageScrolled(int arg0, float arg1, int arg2) {
-                // TODO Auto-generated method stub
-
-            }
-
-            public void onPageScrollStateChanged(int arg0) {
-                // TODO Auto-generated method stub
-
-            }
-        }); */
 
         viewPager.setCurrentItem(startingTab, true);
-
-
 
         return v;
     }
@@ -137,17 +111,14 @@ public class GroupTabFragment extends Fragment {
 
         return adapter.getItem(viewPager.getCurrentItem());
 
-       // return adapter.getCurrentFrag();
+        // return adapter.getCurrentFrag();
     }
 
     public void setTab(int i){
         viewPager.setCurrentItem(i, true);
     }
 
-    public void leaveGroup(){
-        HashMap<String, Object> vars = new HashMap<>();
-        vars.put("groupId", Integer.toString(groupId));
-      //  MiddleMan.request.leaveGroup(getContext(), null, rh, vars);
-        MiddleMan.newRequest(getActivity(), "leaveGroup", null, rh, vars);
-    }
+
+
+
 }

@@ -1,22 +1,12 @@
 package com.indeed.hazizz.Activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 
-import com.indeed.hazizz.Communication.MiddleMan;
-import com.indeed.hazizz.ErrorHandler;
 import com.indeed.hazizz.Fragments.AuthFrags.FirstFragment;
-import com.indeed.hazizz.Fragments.CreateSubjectFragment;
-import com.indeed.hazizz.Fragments.CreateTaskFragment;
-import com.indeed.hazizz.Fragments.GroupMainFragment;
-import com.indeed.hazizz.Fragments.GroupsFragment;
-import com.indeed.hazizz.Fragments.MainFragment;
-import com.indeed.hazizz.Fragments.ViewTaskFragment;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.RequestSenderRunnable;
 import com.indeed.hazizz.SharedPrefs;
