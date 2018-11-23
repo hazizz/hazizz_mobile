@@ -24,6 +24,7 @@ public abstract class MiddleMan{
 
     public static List<Request> requestQueue = Collections.synchronizedList(new ArrayList<Request>());
     public static List<Request> waitingForResponse = Collections.synchronizedList(new ArrayList<Request>());
+    private static Request r;
 
     public static boolean serverReachable(){
         {

@@ -1,7 +1,5 @@
 package com.indeed.hazizz.Fragments;
 
-import android.app.DatePickerDialog;
-import android.app.FragmentManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -23,14 +20,10 @@ import com.indeed.hazizz.AndroidThings;
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
-import com.indeed.hazizz.Communication.POJO.Response.POJOsubject;
-import com.indeed.hazizz.D8;
 import com.indeed.hazizz.ErrorHandler;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 
 import okhttp3.ResponseBody;
@@ -38,19 +31,13 @@ import retrofit2.Call;
 
 public class CreateAnnouncementFragment extends Fragment{
 
-    private Integer year, month, day;
-    private String str_year, str_month, str_day;
-
     private int groupId;
     private String groupName;
-
 
     private EditText announcementTitle;
     private EditText description;
     private Button button_send;
     private TextView textView_error;
-
-
 
     private CustomResponseHandler rh_subjects;
     private CustomResponseHandler rh_taskTypes;
@@ -142,7 +129,6 @@ public class CreateAnnouncementFragment extends Fragment{
 
         MiddleMan.newRequest(this.getActivity(), "createAnnouncement", requestBody, rh, vars);
     }
-
 
     void toMainGroupFrag(){
         Transactor.fragmentMainGroup(getFragmentManager().beginTransaction(),groupId, groupName);

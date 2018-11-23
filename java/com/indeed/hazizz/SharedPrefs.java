@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 //import static android.app.PendingIntent.getActivity;
@@ -111,6 +114,30 @@ public class SharedPrefs {
         return getPrefs(context, fileName).getStringSet(key, defaultValue);
     }
 
+    public static abstract class ProfileImageManager {
+
+        static HashMap<Integer , HashMap<Integer, String>> groups = new HashMap<>();
+
+        public static void addUsersToGroup(Context context, int groupId, HashMap<Integer, String> users){
+            if(!groups.containsKey(groupId)) {
+                groups.put(groupId, users);
+            }
+            for(Map.Entry<Integer, String> entry : users.entrySet()) {
+                save(context, "group" + groupId, Integer.toString(entry.getKey()), entry.getValue());
+            }
+        }
+        public static HashMap<Integer, String> getProfilePicsFromGroup(Context context, int groupId){
+            HashMap<Integer, String> hashMap = groups.get(groupId);
+
+            HashMap<Integer, String> returnMap =  new HashMap<>();
+
+            for(Map.Entry<Integer, String> entry : hashMap.entrySet()){
+                returnMap.put(entry.getKey(), SharedPrefs.getString(context, "group" + groupId, Integer.toString(entry.getKey())));
+            }
+            return returnMap;
+        }
+    }
+
     public static abstract class TokenManager {
 
         // SharedPrefs.save(getContext(), "token", "token", (String) ((POJOauth)response).getToken());
@@ -135,4 +162,6 @@ public class SharedPrefs {
 
         }
     }
+
+
 }

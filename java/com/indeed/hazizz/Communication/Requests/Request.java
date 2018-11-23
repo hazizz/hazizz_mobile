@@ -212,17 +212,18 @@ public class Request {
             case "addComment":
                 requestType = new AddComment();
                 break;
-            case "getAnnouncements":
-                requestType = new GetAnnouncements();
+            case "getAnnouncementsFromGroup":
+                requestType = new GetAnnouncementsFromGroup();
                 break;
             case "getMyAnnouncements":
-                requestType = new GetAnnouncements();
+                requestType = new GetMyAnnouncements();
                 break;
             case "createAnnouncement":
                 requestType = new CreateAnnouncement();
                 break;
-
-
+            case "getGroupMembersProfilePic":
+                requestType = new GetGroupMembersProfilePic();
+                break;
         }
     }
 
@@ -1182,14 +1183,14 @@ public class Request {
     }
 
 
-    public class GetAnnouncements implements RequestInterface {
-        GetAnnouncements() {
+    public class GetAnnouncementsFromGroup implements RequestInterface {
+        GetAnnouncementsFromGroup() {
             Log.e("hey", "created GetAnnouncements object");
         }
         public void setupCall() {
             HashMap<String, String> headerMap = new HashMap<String, String>();
             headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
-            call = aRequest.getAnnouncements(vars.get("groupId").toString(), headerMap);
+            call = aRequest.getAnnouncementsFromGroup(vars.get("groupId").toString(), headerMap);
         }
         @Override
         public void makeCall() {
@@ -1230,8 +1231,6 @@ public class Request {
         }
         @Override
         public void callIsSuccessful(Response<ResponseBody> response) {
-            Log.e("hey", "response.isSuccessful()");
-
             Type listType = new TypeToken<ArrayList<POJOAnnouncement>>(){}.getType();
             List<POJOAnnouncement> castedList = gson.fromJson(response.body().charStream(), listType);
             cOnResponse.onPOJOResponse(castedList);
@@ -1261,6 +1260,32 @@ public class Request {
         public void callIsSuccessful(Response<ResponseBody> response) {
             Log.e("hey", "response.isSuccessful()");
             cOnResponse.onSuccessfulResponse();
+        }
+    }
+
+    public class GetGroupMembersProfilePic implements RequestInterface {
+        GetGroupMembersProfilePic() {
+            Log.e("hey", "created GetAnnouncements object");
+        }
+        public void setupCall() {
+            HashMap<String, String> headerMap = new HashMap<String, String>();
+            headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
+            call = aRequest.getGroupMembersProfilePic(vars.get("groupId").toString() ,headerMap);
+        }
+        @Override
+        public void makeCall() {
+            call(act,  thisRequest, call, cOnResponse, gson);
+        }
+        @Override
+        public void makeCallAgain() {
+            callAgain(act,  thisRequest, call, cOnResponse, gson);
+        }
+        @Override
+        public void callIsSuccessful(Response<ResponseBody> response) {
+            Type listType = new TypeToken<ArrayList<POJOAnnouncement>>(){}.getType();
+            List<POJOAnnouncement> castedList = gson.fromJson(response.body().charStream(), listType);
+            cOnResponse.onPOJOResponse(castedList);
+            Log.e("hey", "size of response list: " + castedList.size());
         }
     }
 }

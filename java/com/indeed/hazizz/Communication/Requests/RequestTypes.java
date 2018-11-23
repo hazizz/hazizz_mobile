@@ -202,7 +202,7 @@ public interface RequestTypes{
     );
 
     @GET("announcements/{groupId}")
-    Call<ResponseBody> getAnnouncements(
+    Call<ResponseBody> getAnnouncementsFromGroup(
             @Path("groupId") String groupId,
             @HeaderMap Map<String, String> headers
     );
@@ -217,6 +217,12 @@ public interface RequestTypes{
             @Path("groupId") String groupId,
             @HeaderMap Map<String, String> headers,
             @Body HashMap<String, Object> taskBody
+    );
+
+    @GET("group/{groupId}/users/picture")
+    Call<ResponseBody> getGroupMembersProfilePic(
+            @Path("groupId") String groupId,
+            @HeaderMap Map<String, String> headers
     );
 
 }
