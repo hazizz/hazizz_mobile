@@ -52,24 +52,24 @@ public class CustomAdapter extends ArrayAdapter<AnnouncementItem> {
             holder.taskTitle = (TextView) convertView.findViewById(R.id.announcement_title);
             holder.taskDescription = (TextView) convertView.findViewById(R.id.announcement_description);
             holder.taskCreator = (TextView) convertView.findViewById(R.id.textView_creator);
-            holder.taskSubject = (TextView) convertView.findViewById(R.id.textView_title);
-            holder.taskSubject_ = (TextView) convertView.findViewById(R.id.textView_subject_);
+         //   holder.taskSubject = (TextView) convertView.findViewById(R.id.textView_title);
+        //    holder.taskSubject_ = (TextView) convertView.findViewById(R.id.textView_subject_);
             convertView.setTag(holder);
         }else{
             holder = (DataHolder)convertView.getTag();
         }
 
         AnnouncementItem announcementItem = data.get(position);
-        holder.taskTitle.setText(announcementItem.getTaskTitle());
-        holder.taskDescription.setText(announcementItem.getTaskDescription());
+        holder.taskTitle.setText(announcementItem.getAnnouncementTitle());
+        holder.taskDescription.setText(announcementItem.getAnnouncementDescription());
         //   holder.taskCreator.setText(announcementItem.getCreator().getUsername());
         holder.taskCreator.setText(announcementItem.getCreator().getUsername());
-        if(announcementItem.getSubject() == null) {
+       /* if(announcementItem.getSubjectData() == null) {
             holder.taskSubject.setVisibility(View.INVISIBLE);
             holder.taskSubject_.setVisibility(View.INVISIBLE);
         }else{
-            holder.taskSubject.setText(announcementItem.getSubject().getName());
-        }
+            holder.taskSubject.setText(announcementItem.getSubjectData().getName());
+        } */
         //  holder.taskPic.setImageResource(announcementItem.taskPic);
 
         return convertView;

@@ -34,7 +34,7 @@ public class GroupAnnouncementFragment extends Fragment{
 
     private View v;
     private CustomAdapter adapter;
-    private List<AnnouncementItem> listTask;
+    private List<AnnouncementItem> listAnnouncement;
 
     private TextView textView_noContent;
 
@@ -45,7 +45,7 @@ public class GroupAnnouncementFragment extends Fragment{
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_announcements, container, false);
-        Log.e("hey", "mainGroup fragment created");
+        Log.e("hey", "announcement group fragment created");
         ((MainActivity)getActivity()).onFragmentCreated();
         groupId = getArguments().getInt("groupId");
         groupName = getArguments().getString("groupName");
@@ -58,24 +58,19 @@ public class GroupAnnouncementFragment extends Fragment{
         return v;
     }
     void createViewList(){
-        listTask = new ArrayList<>();
-        ListView listView = (ListView)v.findViewById(R.id.listView_mainGroupFrag);
-        adapter = new CustomAdapter(getActivity(), R.layout.announcement_item, listTask);
+        listAnnouncement = new ArrayList<>();
+        ListView listView = (ListView)v.findViewById(R.id.listView_announcementGroup);
+        adapter = new CustomAdapter(getActivity(), R.layout.announcement_item, listAnnouncement);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-               /* HashMap<String, Object> vars = new HashMap<>();
-                vars.put("taskId", ((TaskItem)listView.getItemAtPosition(i)).getTaskId());
-                vars.put("groupId",((TaskItem)listView.getItemAtPosition(i)).getGroupData().getId());
-                groupName = ((TaskItem)listView.getItemAtPosition(i)).getGroupData().getName();
-                Log.e("hey", "asd: " + vars.get("taskId") + ", " + vars.get("groupId"));
-
-                Transactor.fragmentViewTask(getFragmentManager().beginTransaction(),
-                        ((TaskItem)listView.getItemAtPosition(i)).getGroupData().getId(),
-                        ((TaskItem)listView.getItemAtPosition(i)).getTaskId(),
-                        ((TaskItem)listView.getItemAtPosition(i)).getGroupData().getName(), false); */
+                groupName = ((AnnouncementItem)listView.getItemAtPosition(i)).getGroupData().getName();
+                    Transactor.fragmentViewAnnouncement(getFragmentManager().beginTransaction(),
+                        ((AnnouncementItem)listView.getItemAtPosition(i)).getGroupData().getId(),
+                        ((AnnouncementItem)listView.getItemAtPosition(i)).getAnnouncementId(),
+                        ((AnnouncementItem)listView.getItemAtPosition(i)).getGroupData().getName(), false);
             }
         });
     }
@@ -90,7 +85,7 @@ public class GroupAnnouncementFragment extends Fragment{
                     textView_noContent.setVisibility(v.VISIBLE);
                 }else {
                     for (POJOAnnouncement t : pojoList) {
-                        listTask.add(new AnnouncementItem(t.getTitle(),
+                        listAnnouncement.add(new AnnouncementItem(t.getTitle(),
                                 t.getDescription(), t.getGroupData(), t.getCreator(), t.getSubjectData(), t.getId()));
                         adapter.notifyDataSetChanged();
                         Log.e("hey", t.getId() + " " + t.getGroupData().getId());

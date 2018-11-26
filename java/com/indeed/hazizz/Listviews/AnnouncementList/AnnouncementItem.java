@@ -9,19 +9,19 @@ import lombok.Data;
 @Data
 public class AnnouncementItem {
 
-    String taskTitle;
-    String taskDescription;
+    String announcementTitle;
+    String announcementDescription;
     POJOgroupData groupData;
     POJOcreator creator;
-    POJOsubjectData subject;
-    int taskId;
+    POJOsubjectData subjectData;
+    int announcementId;
 
-    public AnnouncementItem(String taskTitle, String taskDescription, POJOgroupData groupData, POJOcreator creator, POJOsubjectData subject, int taskId){
-        this.taskTitle = taskTitle;
-        this.taskDescription = taskDescription;
+    public AnnouncementItem(String taskTitle, String taskDescription, POJOgroupData groupData, POJOcreator creator, POJOsubjectData subjectData, int announcementId){
+        this.announcementTitle = taskTitle;
+        this.announcementDescription = taskDescription;
         this.groupData = groupData;
         this.creator = creator;
-        this.subject = subject;
-        this.taskId = taskId;
+        this.subjectData = subjectData;
+        this.announcementId = announcementId;
     }
 }

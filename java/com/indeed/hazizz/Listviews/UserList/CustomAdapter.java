@@ -8,9 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.indeed.hazizz.Listviews.TaskList.TaskItem;
+import com.indeed.hazizz.Converter.Converter;
 import com.indeed.hazizz.R;
 
 import java.util.List;
@@ -31,7 +32,7 @@ public class CustomAdapter extends ArrayAdapter<UserItem> {
     }
 
     static class DataHolder{
-       // ImageView taskPic;
+        ImageView userProfilePic;
         TextView userName;
     }
     @NonNull
@@ -45,7 +46,7 @@ public class CustomAdapter extends ArrayAdapter<UserItem> {
             convertView = inflater.inflate(picID, parent, false);
 
             holder = new DataHolder();
-           // holder.taskPic = (ImageView) convertView.findViewById(R.id.task_pic);
+            holder.userProfilePic = (ImageView) convertView.findViewById(R.id.imageView_memberProfilePic);
             holder.userName = (TextView) convertView.findViewById(R.id.textView_userName);
 
             convertView.setTag(holder);
@@ -54,6 +55,7 @@ public class CustomAdapter extends ArrayAdapter<UserItem> {
         }
 
         UserItem userItem = data.get(position);
+        holder.userProfilePic.setImageBitmap(Converter.getCroppedBitmap(Converter.scaleBitmapToRegular(Converter.imageFromText(userItem.userProfilePic))));
         holder.userName.setText(userItem.getUserName());
       //  holder.taskPic.setImageResource(taskItem.taskPic);
 

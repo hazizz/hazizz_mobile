@@ -219,9 +219,16 @@ public interface RequestTypes{
             @Body HashMap<String, Object> taskBody
     );
 
-    @GET("group/{groupId}/users/picture")
+    @GET("groups/{groupId}/users/picture")
     Call<ResponseBody> getGroupMembersProfilePic(
             @Path("groupId") String groupId,
+            @HeaderMap Map<String, String> headers
+    );
+
+    @GET("announcements/{groupId}/{announcementId}")
+    Call<ResponseBody> getAnnouncement(
+            @Path("groupId") String groupId,
+            @Path("announcementId") String announcementId,
             @HeaderMap Map<String, String> headers
     );
 

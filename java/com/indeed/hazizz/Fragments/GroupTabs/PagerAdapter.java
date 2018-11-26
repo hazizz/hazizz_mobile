@@ -22,9 +22,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     public PagerAdapter(FragmentManager fm, int NumOfTabs) {
         super(fm);
         this.mNumOfTabs = NumOfTabs;
-
     }
-
     @Override
     public Fragment getItem(int position) {
 
@@ -34,24 +32,22 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
         switch (position) {
             case 0:
                 bundle = new Bundle();
-                bundle.putInt("groupId", groupId);
-                bundle.putString("groupName", groupName);
-                MainAnnouncementFragment frag0 = new MainAnnouncementFragment();
-                frag0.setArguments(bundle);
-
-                currentFrag = frag0;
-                return frag0;
-
-            case 1:
-                bundle = new Bundle();
                 Log.e("hey", "pagerAdapter groupId: " + groupId);
                 bundle.putInt("groupId", groupId);
                 bundle.putString("groupName", groupName);
                 GroupMainFragment frag = new GroupMainFragment();
                 frag.setArguments(bundle);
-
                 currentFrag = frag;
                 return frag;
+
+            case 1:
+                bundle = new Bundle();
+                bundle.putInt("groupId", groupId);
+                bundle.putString("groupName", groupName);
+                GroupAnnouncementFragment frag0 = new GroupAnnouncementFragment();
+                frag0.setArguments(bundle);
+                currentFrag = frag0;
+                return frag0;
             case 2:
                 bundle = new Bundle();
                 bundle.putInt("groupId", groupId);
@@ -61,16 +57,6 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
 
                 currentFrag = frag2;
                 return frag2;
-
-           /* case 3:
-                bundle = new Bundle();
-                bundle.putInt("groupId", groupId);
-                bundle.putString("groupName", groupName);
-                CreateTaskFragment frag3 = new CreateTaskFragment();
-                frag3.setArguments(bundle);
-
-                currentFrag = frag3;
-                return frag3; */
             default:
                 return null;
         }

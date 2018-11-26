@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
+import com.indeed.hazizz.Communication.POJO.Response.POJOMembersProfilePic;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 
 import android.util.Log;
@@ -17,9 +18,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.indeed.hazizz.ProfilePicManager;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import okhttp3.ResponseBody;
@@ -29,6 +32,8 @@ public class GroupTabFragment extends Fragment {
 
     private View v;
 
+   // ArrayList<POJOMembersProfilePic> userProfilePics;
+
     private TextView textView_title;
     public PagerAdapter adapter;
 
@@ -37,7 +42,6 @@ public class GroupTabFragment extends Fragment {
     private int startingTab;
 
     private ViewPager viewPager;
-    private Fragment currentFrag;
 
     CustomResponseHandler rh = new CustomResponseHandler() {
         @Override
@@ -64,6 +68,7 @@ public class GroupTabFragment extends Fragment {
         Log.e("hey", "GroupTab fragment created");
 
         groupId = getArguments().getInt("groupId");
+        getGroupMemberProfilePics();
         groupName = getArguments().getString("groupName");
         startingTab = getArguments().getInt("startingTab");
 
@@ -73,8 +78,8 @@ public class GroupTabFragment extends Fragment {
 
         TabLayout tabLayout = (TabLayout) v.findViewById(R.id.tab_layout);
 
-        tabLayout.addTab(tabLayout.newTab().setText("Bejegyzések"));
         tabLayout.addTab(tabLayout.newTab().setText("Feladatok"));
+        tabLayout.addTab(tabLayout.newTab().setText("Bejegyzések"));
         tabLayout.addTab(tabLayout.newTab().setText("Tagok"));
        // tabLayout.addTab(tabLayout.newTab().setText("Új feladat"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
@@ -149,5 +154,35 @@ public class GroupTabFragment extends Fragment {
         vars.put("groupId", Integer.toString(groupId));
       //  MiddleMan.request.leaveGroup(getContext(), null, rh, vars);
         MiddleMan.newRequest(getActivity(), "leaveGroup", null, rh, vars);
+    }
+
+    public void getGroupMemberProfilePics() {
+        CustomResponseHandler responseHandler = new CustomResponseHandler() {
+            @Override
+            public void onResponse(HashMap<String, Object> response) { }
+            @Override
+            public void onPOJOResponse(Object response) {
+                ProfilePicManager.setCurrentGroupMembersProfilePic((HashMap<Integer, POJOMembersProfilePic>)response, groupId);
+                Log.e("hey", "got response");
+            }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e("hey", "4");
+                Log.e("hey", "got here onFailure");
+            }
+            @Override
+            public void onErrorResponse(POJOerror error) {
+                Log.e("hey", "onErrorResponse");
+            }
+            @Override
+            public void onEmptyResponse() { }
+            @Override
+            public void onSuccessfulResponse() { }
+            @Override
+            public void onNoConnection() { }
+        };
+        HashMap<String, Object> vars = new HashMap<>();
+        vars.put("groupId", Integer.toString(groupId));
+        MiddleMan.newRequest(this.getActivity(),"getGroupMembersProfilePic", null, responseHandler, vars);
     }
 }

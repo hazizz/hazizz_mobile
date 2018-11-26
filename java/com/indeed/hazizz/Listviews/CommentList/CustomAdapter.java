@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.indeed.hazizz.Converter.Converter;
-import com.indeed.hazizz.Listviews.TaskList.TaskItem;
 import com.indeed.hazizz.R;
 
 import java.util.List;
@@ -35,7 +34,6 @@ public class CustomAdapter extends ArrayAdapter<CommentItem>  {
     }
 
     static class DataHolder{
-        // ImageView taskPic;
         ImageView commentProfilePic;
         TextView commentName;
         TextView commentContent;
@@ -51,8 +49,7 @@ public class CustomAdapter extends ArrayAdapter<CommentItem>  {
             convertView = inflater.inflate(picID, parent, false);
 
             holder = new DataHolder();
-            // holder.taskPic = (ImageView) convertView.findViewById(R.id.task_pic);
-            holder.commentProfilePic = (ImageView) convertView.findViewById(R.id.imageView_profilePic);
+            holder.commentProfilePic = (ImageView) convertView.findViewById(R.id.imageView_memberProfilePic);
             holder.commentName = (TextView) convertView.findViewById(R.id.textView_userName);
             holder.commentContent = (TextView) convertView.findViewById(R.id.textView_description);
 
@@ -62,9 +59,7 @@ public class CustomAdapter extends ArrayAdapter<CommentItem>  {
         }
 
         CommentItem commentItem = data.get(position);
-        if(!commentItem.getCommentProfilePic().equals("")) {
-            holder.commentProfilePic.setImageBitmap(Converter.imageFromText(commentItem.getCommentProfilePic()));
-        }
+        holder.commentProfilePic.setImageBitmap(Converter.getCroppedBitmap(Converter.scaleBitmapToRegular(Converter.imageFromText(commentItem.commentProfilePic))));
         holder.commentName.setText(commentItem.getCommentName());
         holder.commentContent.setText(commentItem.getCommentContent());
         //   holder.taskCreator.setText(taskItem.getCreator().getUsername());

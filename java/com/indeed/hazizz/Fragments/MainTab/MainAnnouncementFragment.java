@@ -55,23 +55,19 @@ public class MainAnnouncementFragment extends Fragment{
     }
     void createViewList(){
         listTask = new ArrayList<>();
-        ListView listView = (ListView)v.findViewById(R.id.listView_mainGroupFrag);
+        ListView listView = (ListView)v.findViewById(R.id.listView_announcementGroup);
         adapter = new CustomAdapter(getActivity(), R.layout.announcement_item, listTask);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-           /* HashMap<String, Object> vars = new HashMap<>();
-            vars.put("taskId", ((TaskItem)listView.getItemAtPosition(i)).getTaskId());
-            vars.put("groupId",((TaskItem)listView.getItemAtPosition(i)).getGroupData().getId());
-            groupName = ((TaskItem)listView.getItemAtPosition(i)).getGroupData().getName();
-            Log.e("hey", "asd: " + vars.get("taskId") + ", " + vars.get("groupId"));
+               // groupName = ((AnnouncementItem)listView.getItemAtPosition(i)).getGroupData().getName();
+                Transactor.fragmentViewAnnouncement(getFragmentManager().beginTransaction(),
+                        ((AnnouncementItem)listView.getItemAtPosition(i)).getGroupData().getId(),
+                        ((AnnouncementItem)listView.getItemAtPosition(i)).getAnnouncementId(),
+                        ((AnnouncementItem)listView.getItemAtPosition(i)).getGroupData().getName(), false);
 
-            Transactor.fragmentViewTask(getFragmentManager().beginTransaction(),
-                    ((TaskItem)listView.getItemAtPosition(i)).getGroupData().getId(),
-                    ((TaskItem)listView.getItemAtPosition(i)).getTaskId(),
-                    ((TaskItem)listView.getItemAtPosition(i)).getGroupData().getName(), false); */
             }
         });
     }
@@ -87,7 +83,8 @@ public class MainAnnouncementFragment extends Fragment{
                 }else {
                     for (POJOAnnouncement t : pojoList) {
                         listTask.add(new AnnouncementItem(t.getTitle(),
-                                t.getDescription(), t.getGroupData(), t.getCreator(), t.getSubjectData(), t.getId()));
+                                t.getDescription(), t.getGroupData(), t.getCreator(),
+                                t.getSubjectData(), t.getId()));
                         adapter.notifyDataSetChanged();
                         Log.e("hey", t.getId() + " " + t.getGroupData().getId());
                     }
