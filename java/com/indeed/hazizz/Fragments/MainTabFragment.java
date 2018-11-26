@@ -108,9 +108,12 @@ public class MainTabFragment extends Fragment{
     }
 
     public Fragment getCurrentFrag(){
-
-        return adapter.getItem(viewPager.getCurrentItem());
-
+        Fragment cfrag = adapter.getItem(viewPager.getCurrentItem());
+        if(cfrag == null){
+            return this;
+        }else {
+            return cfrag;
+        }
         // return adapter.getCurrentFrag();
     }
 

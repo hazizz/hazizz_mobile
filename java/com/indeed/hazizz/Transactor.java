@@ -26,6 +26,7 @@ import com.indeed.hazizz.Fragments.GroupsFragment;
 import com.indeed.hazizz.Fragments.JoinGroupFragment;
 import com.indeed.hazizz.Fragments.MainTab.MainFragment;
 import com.indeed.hazizz.Fragments.MainTabFragment;
+import com.indeed.hazizz.Fragments.ViewAnnouncementFragment;
 import com.indeed.hazizz.Fragments.ViewTaskFragment;
 
 public abstract class Transactor extends FragmentActivity {
@@ -41,6 +42,10 @@ public abstract class Transactor extends FragmentActivity {
         if(currentF instanceof GroupTabFragment){
           //  currentFrag = ;
             return ((GroupTabFragment) currentF).getCurrentFrag();
+        }
+        if(currentF instanceof MainTabFragment){
+            //  currentFrag = ;
+            return ((MainTabFragment) currentF).getCurrentFrag();
         }else {
             return fManager.findFragmentById(R.id.fragment_container);
         }
@@ -134,6 +139,21 @@ public abstract class Transactor extends FragmentActivity {
         if(backStack){ fTransaction.addToBackStack(null); }
         fTransaction.commit();
         //  fragmentGroupTab(fTransaction, groupId, groupName, 2);
+    }
+
+
+
+    public static void fragmentViewAnnouncement(FragmentTransaction fTransaction, int groupId, int announcementId, String groupName, boolean goBackToMain){
+        Bundle bundle = new Bundle();
+        bundle.putInt("groupId", groupId);
+        bundle.putInt("announcementId", announcementId);
+        bundle.putString("groupName", groupName);
+        bundle.putBoolean("goBackToMain", goBackToMain);
+        ViewAnnouncementFragment frag = new ViewAnnouncementFragment();
+        frag.setArguments(bundle);
+        fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
+        if(backStack){ fTransaction.addToBackStack(null); }
+        fTransaction.commit();
     }
 
     public static void fragmentChat(FragmentTransaction fTransaction){

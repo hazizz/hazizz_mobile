@@ -20,9 +20,11 @@ import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CommentSectionPOJOs.POJOComment;
 import com.indeed.hazizz.Communication.POJO.Response.CommentSectionPOJOs.POJOCommentSection;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
+import com.indeed.hazizz.Communication.POJO.Response.POJOMembersProfilePic;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Listviews.CommentList.CommentItem;
 import com.indeed.hazizz.Listviews.CommentList.CustomAdapter;
+import com.indeed.hazizz.ProfilePicManager;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
@@ -51,15 +53,16 @@ public class CommentSectionFragment extends Fragment {
         public void onPOJOResponse(Object response) {
             //  ArrayList<POJOCommentSection> sorted = D8.sortTasksByDate((ArrayList<POJOCommentSection>) response);
             POJOCommentSection pojo = (POJOCommentSection) response;
+            HashMap<Integer, POJOMembersProfilePic> profilePicMap = ProfilePicManager.getCurrentGroupMembersProfilePic();
             List<POJOComment> comments = pojo.getComments();
             if(comments.size() == 0) {
                 textView_noContent.setVisibility(v.VISIBLE);
             }else {
                 adapter.clear();
                 for (POJOComment t : comments) {
-                    listComment.add(new CommentItem("", t.getCreator().getUsername(), t.getContent()));
-                    adapter.notifyDataSetChanged();
+                    listComment.add(new CommentItem(profilePicMap.get((int)t.getCreator().getId()).getData(), t.getCreator().getUsername(), t.getContent()));
                 }
+                adapter.notifyDataSetChanged();
                 textView_noContent.setVisibility(v.INVISIBLE);
             }
         }

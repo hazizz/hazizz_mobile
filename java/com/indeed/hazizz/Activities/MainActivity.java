@@ -33,6 +33,7 @@ import com.indeed.hazizz.Fragments.GroupMainFragment;
 import com.indeed.hazizz.Fragments.GroupTabs.GroupAnnouncementFragment;
 import com.indeed.hazizz.Fragments.GroupTabs.GroupTabFragment;
 import com.indeed.hazizz.Fragments.GroupsFragment;
+import com.indeed.hazizz.Fragments.MainTab.MainAnnouncementFragment;
 import com.indeed.hazizz.Fragments.MainTab.MainFragment;
 import com.indeed.hazizz.Fragments.ViewTaskFragment;
 import com.indeed.hazizz.R;
@@ -91,7 +92,7 @@ public class MainActivity extends AppCompatActivity
           //  String[] imageSplit = a.split(",");
           //  a = imageSplit[1];
             Bitmap bitmap = Converter.imageFromText(a);
-            bitmap = Bitmap.createScaledBitmap(bitmap, 90, 90, false);
+            bitmap = Converter.scaleBitmapToRegular(bitmap);
             bitmap = Converter.getCroppedBitmap(bitmap);
 
 
@@ -157,7 +158,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        fab_createGroup = (FloatingActionButton) findViewById(R.id.fab_createGroup);
+     /*   fab_createGroup = (FloatingActionButton) findViewById(R.id.fab_createGroup);
         fab_createGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -167,7 +168,7 @@ public class MainActivity extends AppCompatActivity
                     ((GroupsFragment)currentFrag).toCreateGroup();
                 }
             }
-        });
+        }); */
 
         fab_action = (FloatingActionButton) findViewById(R.id.fab_action);
         fab_action.setOnClickListener(new View.OnClickListener() {
@@ -191,6 +192,10 @@ public class MainActivity extends AppCompatActivity
                 else if (currentFrag instanceof MainFragment) {
                     toCreateTaskFrag(true);
                 }
+                else if (currentFrag instanceof GroupsFragment) {
+                    Log.e("hey", "instance of groupmain fragment111");
+                    ((GroupsFragment)currentFrag).toCreateGroup(getSupportFragmentManager());
+                }
                 else {
                  //   toGroupsFrag();
                 }
@@ -201,7 +206,7 @@ public class MainActivity extends AppCompatActivity
         navView.bringToFront();
 
         View headerView = navView.getHeaderView(0);
-        navProfilePic = (ImageView) headerView.findViewById(R.id.imageView_profilePic);
+        navProfilePic = (ImageView) headerView.findViewById(R.id.imageView_memberProfilePic);
         navUsername = (TextView) headerView.findViewById(R.id.textView_userName);
         navEmail = (TextView) headerView.findViewById(R.id.textView_email);
         navLogout = findViewById(R.id.textView_logout);
@@ -328,39 +333,30 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_joinGroup) {
             //((GroupsFragment)currentFrag).
             Transactor.fragmentJoinGroup(getSupportFragmentManager().beginTransaction());
-        }
-        else if (id == R.id.nav_tasks) {
+        } else if (id == R.id.nav_tasks) {
             //((GroupsFragment)currentFrag).
             ((GroupTabFragment)currentFrag).setTab(2);
-
         }else if (id == R.id.nav_groupMembers) {
             //((GroupsFragment)currentFrag).
             ((GroupTabFragment)currentFrag).setTab(1);
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
     void toGroupsFrag(){
         Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction(), false);
     }
-
     void toMainFrag(){
         Transactor.fragmentMain(getSupportFragmentManager().beginTransaction());
     }
-
     void toCreateTaskFrag(boolean dest){
         Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction(), dest);
     }
-
     void logout(){
         Intent i = new Intent(this, AuthActivity.class);
         startActivity(i);
     }
-
-
     @Override
     public void onBackPressed() {
         Log.e("hey", "backButton pressed");
@@ -387,11 +383,9 @@ public class MainActivity extends AppCompatActivity
             }
           //  Transactor.fragmentGroupTab(getSupportFragmentManager().beginTransaction(), ((CreateTaskFragment)currentFrag).getGroupId(), ((CreateTaskFragment)currentFrag).getGroupName());
 
-        }
-        else if (currentFrag instanceof CreateSubjectFragment) {
+        } else if (currentFrag instanceof CreateSubjectFragment) {
             ((CreateSubjectFragment) currentFrag).goBack();
-        }
-        else {
+        } else {
             Log.e("hey", "back button pressed and Else block is being called");
             Transactor.fragmentMain(getSupportFragmentManager().beginTransaction());
         }
@@ -399,15 +393,6 @@ public class MainActivity extends AppCompatActivity
 
     public void onFragmentCreated(){
         currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager(), false);
-        if (currentFrag instanceof GroupsFragment) {
-            fab_createGroup.setVisibility(View.VISIBLE);
-            fab_joinGroup.setVisibility(View.VISIBLE);
-            navView.getMenu().getItem(1).setChecked(true);
-        }else{
-            fab_createGroup.setVisibility(View.INVISIBLE);
-            fab_joinGroup.setVisibility(View.INVISIBLE);
-            navView.getMenu().getItem(1).setChecked(false);
-        }
 
         if(currentFrag instanceof CreateSubjectFragment) {
             fab_createGroup.setVisibility(View.INVISIBLE);
@@ -415,26 +400,30 @@ public class MainActivity extends AppCompatActivity
         }else{
           //  fab_action.setVisibility(View.VISIBLE);
         }
-
-        if(currentFrag instanceof MainFragment){
-            navView.getMenu().getItem(0).setChecked(true);
-        }else{
-            navView.getMenu().getItem(0).setChecked(false);
-        }
-        if(currentFrag instanceof GroupAnnouncementFragment || currentFrag instanceof GroupMainFragment || currentFrag instanceof GetGroupMembersFragment || currentFrag instanceof MainFragment){
+        if(currentFrag instanceof GroupAnnouncementFragment || currentFrag instanceof GroupMainFragment
+             || currentFrag instanceof MainAnnouncementFragment // || currentFrag instanceof GetGroupMembersFragment
+            || currentFrag instanceof MainFragment || currentFrag instanceof GroupsFragment){
             fab_action.setVisibility(View.VISIBLE);
+            if (currentFrag instanceof GroupsFragment) {
+                fab_joinGroup.setVisibility(View.VISIBLE);
+                navView.getMenu().getItem(1).setChecked(true);
+                if(currentFrag instanceof MainFragment){
+                    navView.getMenu().getItem(0).setChecked(true);
+                    menuItem_createGroup.setVisible(true);
+                    menuItem_joinGroup.setVisible(true);
+                }else{
+                    navView.getMenu().getItem(0).setChecked(false);
+                    menuItem_createGroup.setVisible(false);
+                    menuItem_joinGroup.setVisible(false);
+                }
+
+            }else{
+                fab_joinGroup.setVisibility(View.INVISIBLE);
+                navView.getMenu().getItem(1).setChecked(false);
+            }
         }else{
             fab_action.setVisibility(View.INVISIBLE);
         }
-
-        if (currentFrag instanceof GroupsFragment || currentFrag instanceof MainFragment) {
-                menuItem_createGroup.setVisible(true);
-                menuItem_joinGroup.setVisible(true);
-        }else{
-                menuItem_createGroup.setVisible(false);
-                menuItem_joinGroup.setVisible(false);
-        }
-
 
       /*  if(currentFrag instanceof GroupTabFragment || currentFrag instanceof GroupMainFragment || currentFrag instanceof ViewTaskFragment || currentFrag instanceof GetGroupMembersFragment){
             menuItem_leaveGroup.setVisible(true);
@@ -446,7 +435,6 @@ public class MainActivity extends AppCompatActivity
     public void setGroupName(String name){
         menu_mainGroup.setTitle("Csoportok: " + name);
     }
-
 
     public void pickImage() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -465,29 +453,13 @@ public class MainActivity extends AppCompatActivity
             try {
                 InputStream inputStream = this.getContentResolver().openInputStream(data.getData());
                 Uri imageUri = data.getData();
-              //  Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
-                //bitmap = ((BitmapDrawable)navProfilePic.getDrawable()).getBitmap();
-
                 Bitmap yourSelectedImage = BitmapFactory.decodeStream(inputStream);
-               // encodeTobase64(yourSelectedImage);
-
                 yourSelectedImage = Bitmap.createScaledBitmap(yourSelectedImage, 300, 300, true);
-                //Bitmap bitmap = yourSelectedImage;
-
                 Bitmap bitmap=Bitmap.createBitmap(yourSelectedImage, 0,0,300, 300);
-
                 HashMap<String, Object> body = new HashMap<>();
-
-
-
                 body.put("data", "data:image/jpeg;base64," + Converter.imageToText(bitmap));
                 body.put("type", "ppfull");
 
-            /*    String asd = body.get("data");
-
-                 */
-
-                Log.e("hey" , "data is: " + body.get("data"));
                 MiddleMan.newRequest(this, "setMyProfilePic", body, new CustomResponseHandler() {
                     @Override
                     public void onResponse(HashMap<String, Object> response) { }
@@ -512,7 +484,6 @@ public class MainActivity extends AppCompatActivity
                 e.printStackTrace();
                 Log.e("hey", "file not found!");
             }
-            //Now you can do whatever you want with your inpustream, save it as file, upload to a server, decode a bitmap...
         }
         Log.e("hey", "onActivityResult");
     }

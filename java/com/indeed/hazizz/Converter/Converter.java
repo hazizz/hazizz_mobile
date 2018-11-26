@@ -10,6 +10,7 @@ import android.graphics.Rect;
 import android.util.Base64;
 
 import com.google.common.hash.Hashing;
+import com.indeed.hazizz.Communication.POJO.Response.PojoPicSmall;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.Charset;
@@ -17,6 +18,9 @@ import java.nio.charset.Charset;
 public abstract class Converter {
 
     public static Bitmap imageFromText(String encodedImage){
+        if(encodedImage.startsWith("data")){
+            encodedImage = encodedImage.split(",")[1];
+        }
         byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
     }
@@ -32,6 +36,10 @@ public abstract class Converter {
         return Hashing.sha256()
                 .hashString(input, Charset.forName("UTF-8"))
                 .toString();
+    }
+
+    public static Bitmap scaleBitmapToRegular(Bitmap bitmap){
+        return Bitmap.createScaledBitmap(bitmap, 90, 90, false);
     }
 
     public static Bitmap getCroppedBitmap(Bitmap bitmap) {

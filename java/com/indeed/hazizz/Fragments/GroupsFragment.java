@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -135,7 +136,7 @@ public class GroupsFragment extends Fragment {
         Transactor.fragmentCreateGroup(getFragmentManager().beginTransaction());
     }
 
-    public void toCreateGroup(){
-        Transactor.fragmentCreateGroup(getFragmentManager().beginTransaction());
+    public void toCreateGroup(FragmentManager fm){
+        Transactor.fragmentCreateGroup(fm.beginTransaction());
     }
 }
