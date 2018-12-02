@@ -51,7 +51,6 @@ public class GroupAnnouncementFragment extends Fragment{
         groupName = getArguments().getString("groupName");
 
         textView_noContent = v.findViewById(R.id.textView_noContent);
-      //  ((MainActivity)getActivity()).setGroupName(groupName);
         createViewList();
         getAnnouncements();
 
@@ -114,7 +113,6 @@ public class GroupAnnouncementFragment extends Fragment{
         };
         HashMap<String, Object> vars = new HashMap<>();
         vars.put("groupId", Integer.toString(groupId));
-        //  MiddleMan.request.getTasksFromGroup(this.getActivity(), null, responseHandler, vars);
         MiddleMan.newRequest(this.getActivity(),"getAnnouncementsFromGroup", null, responseHandler, vars);
     }
 

@@ -24,6 +24,7 @@ public abstract class MiddleMan{
 
     public static List<Request> requestQueue = Collections.synchronizedList(new ArrayList<Request>());
     public static List<Request> waitingForResponse = Collections.synchronizedList(new ArrayList<Request>());
+    public static List<Request> waitingForCallAgain = Collections.synchronizedList(new ArrayList<Request>());
     private static Request r;
 
     public static boolean serverReachable(){
@@ -44,6 +45,10 @@ public abstract class MiddleMan{
         for (Request r : waitingForResponse) {
             r.cancelRequest();
         }
+    }
+
+    public static void addToCallAgain(Request r){
+        waitingForCallAgain.add(r);
     }
 
     public static void newRequest(Activity act, String requestType, HashMap<String, Object>  body, CustomResponseHandler cOnResponse, HashMap<String, Object> vars) {
@@ -91,6 +96,19 @@ public abstract class MiddleMan{
     public static void callAgain(Request a){
         a.requestType.setupCall();
         a.requestType.makeCallAgain();
+       /* for(Request r : waitingForResponse){
+            if(r.equals(a)){
+                r.requestType.makeCallAgain();
+                break;
+            }
+        } */
+    }
+
+    public static void callAgain(){
+        for(Request r : waitingForCallAgain) {
+            r.requestType.setupCall();
+            r.requestType.makeCallAgain();
+        }
        /* for(Request r : waitingForResponse){
             if(r.equals(a)){
                 r.requestType.makeCallAgain();

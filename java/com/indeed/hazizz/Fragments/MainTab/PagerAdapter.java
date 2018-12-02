@@ -18,11 +18,11 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
         super(fm);
         this.mNumOfTabs = NumOfTabs;
     }
+
     @Override
     public Fragment getItem(int position) {
 
-        Bundle bundle = new Bundle();
-
+        Bundle bundle;
         switch (position) {
             case 0:
                 bundle = new Bundle();
@@ -56,7 +56,12 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
                 currentFrag = frag3;
                 return frag3; */
             default:
-                return null;
+                bundle = new Bundle();
+                MainFragment frag5 = new MainFragment();
+                frag5.setArguments(bundle);
+
+                currentFrag = frag5;
+                return frag5;
         }
     }
     @Override

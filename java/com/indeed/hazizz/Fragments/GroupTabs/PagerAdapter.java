@@ -58,7 +58,14 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
                 currentFrag = frag2;
                 return frag2;
             default:
-                return null;
+                bundle = new Bundle();
+                Log.e("hey", "pagerAdapter groupId: " + groupId);
+                bundle.putInt("groupId", groupId);
+                bundle.putString("groupName", groupName);
+                GroupMainFragment frag3 = new GroupMainFragment();
+                frag3.setArguments(bundle);
+                currentFrag = frag3;
+                return frag3;
         }
     }
 

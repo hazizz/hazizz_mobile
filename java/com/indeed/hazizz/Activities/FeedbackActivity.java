@@ -1,14 +1,11 @@
 package com.indeed.hazizz.Activities;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,41 +32,24 @@ public class FeedbackActivity extends AppCompatActivity {
 
     CustomResponseHandler rh = new CustomResponseHandler() {
         @Override
-        public void onResponse(HashMap<String, Object> response) {
-
-        }
-
+        public void onResponse(HashMap<String, Object> response) { }
         @Override
-        public void onPOJOResponse(Object response) {
-
-        }
-
+        public void onPOJOResponse(Object response) { }
         @Override
-        public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-        }
-
+        public void onFailure(Call<ResponseBody> call, Throwable t) {  button_feedback.setEnabled(true);}
         @Override
         public void onErrorResponse(POJOerror error) {
             textView_error.setText("Hiba");
-
             button_feedback.setEnabled(true);
-
         }
-
         @Override
-        public void onEmptyResponse() {
-
-        }
-
+        public void onEmptyResponse() { }
         @Override
         public void onSuccessfulResponse() {
             Toast.makeText(getApplicationContext(), "Köszönjük a visszajelzésedet",
                     Toast.LENGTH_LONG).show();
             goBackToFrag();
-
         }
-
         @Override
         public void onNoConnection() {
             textView_error.setText("Nincs internet kapcsolat");
@@ -102,8 +82,6 @@ public class FeedbackActivity extends AppCompatActivity {
                 button_feedback.setEnabled(false);
             }
         });
-
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
@@ -114,9 +92,6 @@ public class FeedbackActivity extends AppCompatActivity {
                 goBackToFrag();
             }
         });
-       //
-
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,7 +103,6 @@ public class FeedbackActivity extends AppCompatActivity {
             }
         });
     }
-
     @Override
     public void onBackPressed() {
         goBackToFrag();
@@ -137,5 +111,4 @@ public class FeedbackActivity extends AppCompatActivity {
     private void goBackToFrag(){
         Transactor.activityMain(this);
     }
-
 }

@@ -95,7 +95,7 @@ public class MainAnnouncementFragment extends Fragment{
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Log.e("hey", "4");
                 Log.e("hey", "got here onFailure");
-                textView_noContent.setVisibility(v.VISIBLE);
+              //  textView_noContent.setVisibility(v.VISIBLE);
             }
             @Override
             public void onErrorResponse(POJOerror error) {

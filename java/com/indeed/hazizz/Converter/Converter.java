@@ -18,50 +18,62 @@ import java.nio.charset.Charset;
 public abstract class Converter {
 
     public static Bitmap imageFromText(String encodedImage){
-        if(encodedImage.startsWith("data")){
-            encodedImage = encodedImage.split(",")[1];
-        }
-        byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
-        return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        if(encodedImage != null && !encodedImage.equals("")) {
+            if (encodedImage.startsWith("data")) {
+                encodedImage = encodedImage.split(",")[1];
+            }
+            byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
+            return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        }else{return null;}
     }
 
     public static String imageToText(Bitmap bitmap){
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-        byte[] byteArray = outputStream.toByteArray();
-        return Base64.encodeToString(byteArray, Base64.DEFAULT);
+        if(bitmap != null) {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+            byte[] byteArray = outputStream.toByteArray();
+            return Base64.encodeToString(byteArray, Base64.DEFAULT);
+        }else{return null;}
     }
 
     public static String hashString(String input) {
-        return Hashing.sha256()
-                .hashString(input, Charset.forName("UTF-8"))
-                .toString();
+        if(input != null || !input.equals("")) {
+            return Hashing.sha256()
+                    .hashString(input, Charset.forName("UTF-8"))
+                    .toString();
+        }else{return null;}
     }
 
     public static Bitmap scaleBitmapToRegular(Bitmap bitmap){
-        return Bitmap.createScaledBitmap(bitmap, 90, 90, false);
+        if(bitmap != null) {
+            return Bitmap.createScaledBitmap(bitmap, 90, 90, false);
+        }else{return null;}
     }
 
     public static Bitmap getCroppedBitmap(Bitmap bitmap) {
-        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
-                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(output);
+        if(bitmap != null) {
+            Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
+                    bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(output);
 
-        final int color = 0xff424242;
-        final Paint paint = new Paint();
-        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+            final int color = 0xff424242;
+            final Paint paint = new Paint();
+            final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
 
-        paint.setAntiAlias(true);
-        canvas.drawARGB(0, 0, 0, 0);
-        paint.setColor(color);
-        // canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-        canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2,
-                bitmap.getWidth() / 2, paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        canvas.drawBitmap(bitmap, rect, rect, paint);
-        //Bitmap _bmp = Bitmap.createScaledBitmap(output, 60, 60, false);
-        //return _bmp;
-        return output;
+            paint.setAntiAlias(true);
+            canvas.drawARGB(0, 0, 0, 0);
+            paint.setColor(color);
+            // canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+            canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2,
+                    bitmap.getWidth() / 2, paint);
+            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+            canvas.drawBitmap(bitmap, rect, rect, paint);
+            //Bitmap _bmp = Bitmap.createScaledBitmap(output, 60, 60, false);
+            //return _bmp;
+            return output;
+        }else{
+            return null;
+        }
     }
 
 }

@@ -179,6 +179,6 @@ public class CreateGroupFragment extends Fragment {
     }
 
     public void goBack(){
-        Transactor.fragmentGroups(getFragmentManager().beginTransaction(), false);
+        Transactor.fragmentGroups(getFragmentManager().beginTransaction());
     }
 }

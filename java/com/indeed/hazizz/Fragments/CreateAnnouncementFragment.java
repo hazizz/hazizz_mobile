@@ -64,9 +64,6 @@ public class CreateAnnouncementFragment extends Fragment{
             if(errorCode == 2){ // cím túl hosszú (2-20 karatket)
                 textView_error.setText("A cím nem megfelelő");
             }
-            else if(errorCode == 1){
-                ErrorHandler.unExpectedResponseDialog(getActivity());
-            }
             button_send.setEnabled(true);
         }
         @Override

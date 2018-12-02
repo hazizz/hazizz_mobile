@@ -1,8 +1,7 @@
 package com.indeed.hazizz;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
+import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.util.Log;
 
@@ -10,35 +9,25 @@ public abstract class ErrorHandler {
 
     public static void unExpectedResponseDialog(Activity act){
         try {
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(act.getBaseContext());
-
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(act);
             alertDialogBuilder.setTitle("Hiba");
-
             alertDialogBuilder
                     .setMessage("Nem megszokott válasz a szervertől")
                     .setCancelable(false)
                     .setPositiveButton("Hiba Jelentés", (dialog, id) -> {
-                        // if this button is clicked, close
-                        // current activity
                         Transactor.feedbackActivity(act);
                         dialog.cancel();
-                        Log.e("hey", "hiba jelentés");
                     })
                     .setNegativeButton("Vissza", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            // if this button is clicked, just close
-                            // the dialog box and do nothing
-                            dialog.cancel();
-                            Log.e("hey", "Vissza");
+                            dialog.cancel();;
                         }
                     });
-
             AlertDialog alertDialog = alertDialogBuilder.create();
             alertDialog.show();
         }
         catch (Exception e){
-
+            e.printStackTrace();
         }
     }
-
 }

@@ -9,6 +9,7 @@ import com.indeed.hazizz.Communication.POJO.Response.POJORefreshToken;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.Requests.Request;
 import com.indeed.hazizz.ErrorHandler;
+import com.indeed.hazizz.Manager;
 import com.indeed.hazizz.SharedPrefs;
 import com.indeed.hazizz.Transactor;
 
@@ -28,7 +29,7 @@ public interface RequestInterface {
           call.enqueue(buildCallback(act, request, call, cOnResponse, gson));
      }
 
-     public default void callAgain(Activity act, Request request, Call<ResponseBody> call, CustomResponseHandler cOnResponse, Gson gson){
+     default void callAgain(Activity act, Request request, Call<ResponseBody> call, CustomResponseHandler cOnResponse, Gson gson){
          // setupCall();
           call.clone().enqueue(buildCallback(act, request, call, cOnResponse, gson));
           Log.e("hey", "CALL AGAIN");
@@ -40,7 +41,7 @@ public interface RequestInterface {
                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     Log.e("hey", "gotResponse");
                     Log.e("hey", response.raw().toString());
-                    boolean callAgain = false;
+                  //  boolean callAgain = false;
 
                     if(response.body() == null){
                          Log.e("hey", "response is null ");
@@ -61,10 +62,10 @@ public interface RequestInterface {
 
 
                          else if(pojoError.getErrorCode() == 18 || pojoError.getErrorCode() == 17){
-                             Log.e("hey", "the refresh token is: " + SharedPrefs.TokenManager.getRefreshToken(act));
-
-                             Log.e("hey", "the access token is: " + SharedPrefs.TokenManager.getToken(act));
-
+                              Manager.ThreadManager.freezeThread();
+                              MiddleMan.addToCallAgain(request);
+                            //  Log.e("hey", "the refresh token is: " + SharedPrefs.TokenManager.getRefreshToken(act));
+                            //  Log.e("hey", "the access token is: " + SharedPrefs.TokenManager.getToken(act));
                               HashMap<String, Object> body = new HashMap<>();
                               body.put("username", SharedPrefs.getString(act.getBaseContext(), "userInfo", "username"));
                               body.put("refreshToken", SharedPrefs.TokenManager.getRefreshToken(act.getBaseContext()));
@@ -72,10 +73,15 @@ public interface RequestInterface {
                               Log.e("hey", "the username is: " + body.get("username"));
                               Log.e("hey", "the refreshToken is: " + body.get("refreshToken"));
 
-                              HashMap<String, Object> vars = new HashMap<>();
-                              vars.put("requestAgain", request);
+                             // HashMap<String, Object> vars = new HashMap<>();
+                             // vars.put("requestAgain", request);
 
-                              MiddleMan.newRequest(act, "refreshToken", body, null, vars);
+                          //    MiddleMan.newRequest(act, "refreshToken", body, null, vars);
+                              Request r = new Request(act, "refreshToken", body, null, null);
+                              r.requestType.setupCall();
+                              r.requestType.makeCall();
+                              Manager.ThreadManager.unfreezeThread();
+                              MiddleMan.callAgain();
 
                              /*  if(TokenManager.getRefreshToken(act).equals("used")){
 
@@ -91,11 +97,11 @@ public interface RequestInterface {
                          }
                     }
 
-                    if(callAgain){
+                    /*if(callAgain){
                          MiddleMan.callAgain(request);
-                    }else{
-                         MiddleMan.gotRequestResponse(request);
-                    }
+                    }else{ */
+                    MiddleMan.gotRequestResponse(request);
+                   // }
 
                     //   else{cOnResponse.onEmptyResponse();}
                }

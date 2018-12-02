@@ -24,7 +24,7 @@ import com.indeed.hazizz.Communication.POJO.Response.POJOMembersProfilePic;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Listviews.CommentList.CommentItem;
 import com.indeed.hazizz.Listviews.CommentList.CustomAdapter;
-import com.indeed.hazizz.ProfilePicManager;
+import com.indeed.hazizz.Manager;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
@@ -53,7 +53,7 @@ public class CommentSectionFragment extends Fragment {
         public void onPOJOResponse(Object response) {
             //  ArrayList<POJOCommentSection> sorted = D8.sortTasksByDate((ArrayList<POJOCommentSection>) response);
             POJOCommentSection pojo = (POJOCommentSection) response;
-            HashMap<Integer, POJOMembersProfilePic> profilePicMap = ProfilePicManager.getCurrentGroupMembersProfilePic();
+            HashMap<Integer, POJOMembersProfilePic> profilePicMap = Manager.ProfilePicManager.getCurrentGroupMembersProfilePic();
             List<POJOComment> comments = pojo.getComments();
             if(comments.size() == 0) {
                 textView_noContent.setVisibility(v.VISIBLE);

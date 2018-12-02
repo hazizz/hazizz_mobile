@@ -164,9 +164,7 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
                 if(errorCode == 2){ // cím túl hosszú (2-20 karatket)
                     textView_error.setText("A cím nem megfelelő");
                 }
-                else{
-                    ErrorHandler.unExpectedResponseDialog(getActivity());
-                }
+
                 button_send.setEnabled(true);
             }
             @Override
