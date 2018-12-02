@@ -1,6 +1,7 @@
 package com.indeed.hazizz.Activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -36,6 +37,7 @@ import com.indeed.hazizz.Fragments.GroupsFragment;
 import com.indeed.hazizz.Fragments.MainTab.MainAnnouncementFragment;
 import com.indeed.hazizz.Fragments.MainTab.MainFragment;
 import com.indeed.hazizz.Fragments.ViewTaskFragment;
+import com.indeed.hazizz.Manager;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.SharedPrefs;
 import com.indeed.hazizz.Transactor;
@@ -62,7 +64,6 @@ public class MainActivity extends AppCompatActivity
     private TextView navLogout;
 
     FloatingActionButton fab_joinGroup;
-    FloatingActionButton fab_createGroup;
     FloatingActionButton fab_action;
 
     private Menu menu_options;
@@ -83,6 +84,7 @@ public class MainActivity extends AppCompatActivity
 
     private Activity thisActivity = this;
 
+    private boolean toMainFrag = false;
     CustomResponseHandler rh_profilePic = new CustomResponseHandler() {
         @Override
         public void onResponse(HashMap<String, Object> response) { }
@@ -141,34 +143,69 @@ public class MainActivity extends AppCompatActivity
         }
     };
 
+    CustomResponseHandler rh_motd = new CustomResponseHandler() {
+        @Override
+        public void onResponse(HashMap<String, Object> response) { }
+        @Override
+        public void onPOJOResponse(Object response) {
+            String motd = (String)response;
+            Log.e("hey", "MOTD: " + motd);
+            if(!motd.equals("")) {
+             //   try {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+                    alertDialogBuilder.setTitle("Napi üzenet");
+                    alertDialogBuilder
+                            .setMessage(motd)
+                            .setCancelable(true)
+                            .setPositiveButton("Oké", (dialog, id) -> {
+                                dialog.cancel();
+                            });
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+               /* } catch (Exception e) {
+                    Log.e("hey", "CAUGHT exception");
+                } */
+            }else{
+                Log.e("hey", "Message of the day is not");
+            }
+        }
+        @Override
+        public void onFailure(Call<ResponseBody> call, Throwable t) {
+            Log.e("hey", "4");
+            Log.e("hey", "got here onFailure");
+        }
+        @Override
+        public void onEmptyResponse() {
+        }
+        @Override
+        public void onSuccessfulResponse() { }
+        @Override
+        public void onNoConnection() { }
+        @Override
+        public void onErrorResponse(POJOerror error) {
+            Log.e("hey", "onErrorResponse");
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Manager.ThreadManager.startThreadIfNotRunning(this);
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
         fab_joinGroup = findViewById(R.id.fab_joinGroup);
         fab_joinGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Transactor.fragmentJoinGroup(getSupportFragmentManager().beginTransaction());
+                fab_joinGroup.setVisibility(View.INVISIBLE);
             }
         });
-
-     /*   fab_createGroup = (FloatingActionButton) findViewById(R.id.fab_createGroup);
-        fab_createGroup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager(), false);
-                if (currentFrag instanceof GroupsFragment) {
-                    Log.e("hey", "instance of groupmain fragment111");
-                    ((GroupsFragment)currentFrag).toCreateGroup();
-                }
-            }
-        }); */
+        toMainFrag = true;
 
         fab_action = (FloatingActionButton) findViewById(R.id.fab_action);
         fab_action.setOnClickListener(new View.OnClickListener() {
@@ -184,13 +221,16 @@ public class MainActivity extends AppCompatActivity
                 }
                 else if (currentFrag instanceof GroupAnnouncementFragment) {
                     ((GroupAnnouncementFragment)currentFrag).toCreateAnnouncement(getSupportFragmentManager());
+                }else if (currentFrag instanceof MainAnnouncementFragment) {
+                    toCreateAnnouncementFrag();
                 }
+
                 else if (currentFrag instanceof GetGroupMembersFragment) {
                     //((GetGroupMembersFragment)currentFrag).toCreateTask();
                 }
              //   else if(currentFrag instanceof CreateTaskFragment || currentFrag instanceof GroupsFragment){}
                 else if (currentFrag instanceof MainFragment) {
-                    toCreateTaskFrag(true);
+                    toCreateTaskFrag();
                 }
                 else if (currentFrag instanceof GroupsFragment) {
                     Log.e("hey", "instance of groupmain fragment111");
@@ -217,9 +257,7 @@ public class MainActivity extends AppCompatActivity
         menu_mainGroup = menu_nav.getItem(3);
 
         drawerLayout = findViewById(R.id.drawer_layout);
-
         toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
-
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -236,6 +274,7 @@ public class MainActivity extends AppCompatActivity
 
              }
              });
+        MiddleMan.newRequest(this, "messageOfTheDay", null, rh_motd, null);
 
         MiddleMan.newRequest(this, "getMyProfilePic", null, rh_profilePic, null);
 
@@ -244,10 +283,17 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onResume(){
-        invalidateOptionsMenu(); //  onCreateOptionsMenu(menu_options);
-        super.onResume();
-        Log.e("hey", "onResume is trigered");
+      /*  invalidateOptionsMenu();
+        try{
+            onCreateOptionsMenu(menu_options);
+        }
+        catch (NullPointerException e){
 
+        } */
+        super.onResume();
+      //  setHasOp
+        invalidateOptionsMenu();
+        Log.e("hey", "onResume is trigered");
     }
     /*
     @Override
@@ -257,10 +303,12 @@ public class MainActivity extends AppCompatActivity
         toMainFrag();
     }  */
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+       // super.onCreateOptionsMenu(menu);
+        Log.e("hey", "onCreateOptionsMenu asdasd");
+
         menu_options = menu;
         getMenuInflater().inflate(R.menu.main, menu_options);
 
@@ -274,8 +322,10 @@ public class MainActivity extends AppCompatActivity
             Log.e("hey", "menu items are null");
         }
 
-        toMainFrag();
-
+        if(toMainFrag) {
+            toMainFrag();
+            toMainFrag = false;
+        }
         return true;
     }
 
@@ -325,8 +375,6 @@ public class MainActivity extends AppCompatActivity
             toMainFrag();
         } else if (id == R.id.nav_groups) {
             toGroupsFrag();
-       /* } else if (id == R.id.nav_new_task) {
-            toCreateTaskFrag(); */
         } else if (id == R.id.nav_newGroup) {
            // ((GroupsFragment)currentFrag).toCreateGroup();
             Transactor.fragmentCreateGroup(getSupportFragmentManager().beginTransaction());
@@ -345,14 +393,21 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
     void toGroupsFrag(){
-        Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction(), false);
+        Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction());
     }
     void toMainFrag(){
         Transactor.fragmentMain(getSupportFragmentManager().beginTransaction());
     }
-    void toCreateTaskFrag(boolean dest){
-        Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction(), dest);
+
+    void toCreateTaskFrag(){
+        Manager.DestManager.setDest(Manager.DestManager.TOCREATETASK);
+        Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction());
     }
+    void toCreateAnnouncementFrag(){
+        Manager.DestManager.setDest(Manager.DestManager.TOCREATEANNOUNCEMENT);
+        Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction());
+    }
+
     void logout(){
         Intent i = new Intent(this, AuthActivity.class);
         startActivity(i);
@@ -366,7 +421,7 @@ public class MainActivity extends AppCompatActivity
             Transactor.fragmentMain(getSupportFragmentManager().beginTransaction());
         }
         else if (currentFrag instanceof GroupTabFragment) {//GroupMainFragment
-            Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction(), false);
+            Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction());
         }
     /*    else if (currentFrag instanceof CreateTaskFragment) {
             Transactor.fragmentMainGroup(getSupportFragmentManager().beginTransaction(), ((CreateTaskFragment)currentFrag).getGroupId(), ((CreateTaskFragment)currentFrag).getGroupName());
@@ -390,52 +445,75 @@ public class MainActivity extends AppCompatActivity
             Transactor.fragmentMain(getSupportFragmentManager().beginTransaction());
         }
     }
-
     public void onFragmentCreated(){
         currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager(), false);
 
         if(currentFrag instanceof CreateSubjectFragment) {
-            fab_createGroup.setVisibility(View.INVISIBLE);
+         //   fab_createGroup.setVisibility(View.INVISIBLE);
         //    fab_action.setVisibility(View.INVISIBLE);
         }else{
           //  fab_action.setVisibility(View.VISIBLE);
         }
-        if(currentFrag instanceof GroupAnnouncementFragment || currentFrag instanceof GroupMainFragment
-             || currentFrag instanceof MainAnnouncementFragment // || currentFrag instanceof GetGroupMembersFragment
-            || currentFrag instanceof MainFragment || currentFrag instanceof GroupsFragment){
+
+        if (currentFrag instanceof GroupAnnouncementFragment || currentFrag instanceof GroupMainFragment
+                || currentFrag instanceof MainAnnouncementFragment // || currentFrag instanceof GetGroupMembersFragment
+                || currentFrag instanceof MainFragment || currentFrag instanceof GroupsFragment) {
             fab_action.setVisibility(View.VISIBLE);
-            if (currentFrag instanceof GroupsFragment) {
-                fab_joinGroup.setVisibility(View.VISIBLE);
-                navView.getMenu().getItem(1).setChecked(true);
-                if(currentFrag instanceof MainFragment){
+            if(menuItem_createGroup != null && menuItem_feedback != null && menuItem_joinGroup != null
+                    && menuItem_leaveGroup != null && menuItem_profilePic != null) {
+                if (currentFrag instanceof GroupsFragment) {
+                    fab_joinGroup.setVisibility(View.VISIBLE);
+                    navView.getMenu().getItem(1).setChecked(true);
+                } else {
+                    fab_joinGroup.setVisibility(View.INVISIBLE);
+                    navView.getMenu().getItem(1).setChecked(false);
+                }
+                if (currentFrag instanceof MainFragment) {
                     navView.getMenu().getItem(0).setChecked(true);
                     menuItem_createGroup.setVisible(true);
                     menuItem_joinGroup.setVisible(true);
-                }else{
+                } else {
                     navView.getMenu().getItem(0).setChecked(false);
                     menuItem_createGroup.setVisible(false);
                     menuItem_joinGroup.setVisible(false);
                 }
-
-            }else{
-                fab_joinGroup.setVisibility(View.INVISIBLE);
-                navView.getMenu().getItem(1).setChecked(false);
             }
-        }else{
+        } else {
             fab_action.setVisibility(View.INVISIBLE);
         }
-
-      /*  if(currentFrag instanceof GroupTabFragment || currentFrag instanceof GroupMainFragment || currentFrag instanceof ViewTaskFragment || currentFrag instanceof GetGroupMembersFragment){
-            menuItem_leaveGroup.setVisible(true);
-        }else{
-            menuItem_leaveGroup.setVisible(false);
-        } */
     }
 
+    public void onTabSelected(Fragment currentFrag){
+        if(menuItem_createGroup != null && menuItem_feedback != null && menuItem_joinGroup != null
+                && menuItem_leaveGroup != null && menuItem_profilePic != null) {
+            if (currentFrag instanceof GroupAnnouncementFragment || currentFrag instanceof GroupMainFragment
+                    || currentFrag instanceof MainAnnouncementFragment // || currentFrag instanceof GetGroupMembersFragment
+                    || currentFrag instanceof MainFragment || currentFrag instanceof GroupsFragment) {
+                fab_action.setVisibility(View.VISIBLE);
+                if (currentFrag instanceof GroupsFragment) {
+                    fab_joinGroup.setVisibility(View.VISIBLE);
+                    navView.getMenu().getItem(1).setChecked(true);
+                } else {
+                    fab_joinGroup.setVisibility(View.INVISIBLE);
+                    navView.getMenu().getItem(1).setChecked(false);
+                }
+                if (currentFrag instanceof MainFragment) {
+                    navView.getMenu().getItem(0).setChecked(true);
+                    menuItem_createGroup.setVisible(true);
+                    menuItem_joinGroup.setVisible(true);
+                } else {
+                    navView.getMenu().getItem(0).setChecked(false);
+                    menuItem_createGroup.setVisible(false);
+                    menuItem_joinGroup.setVisible(false);
+                }
+            } else {
+                fab_action.setVisibility(View.INVISIBLE);
+            }
+        }
+    }
     public void setGroupName(String name){
         menu_mainGroup.setTitle("Csoportok: " + name);
     }
-
     public void pickImage() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");

@@ -77,9 +77,9 @@ public abstract class Transactor extends FragmentActivity {
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }
         fTransaction.commit();*/
-        fragmentMainTab(fTransaction, 0, false);
+        fragmentMainTab(fTransaction, 0);
     }
-    public static void fragmentGroups(FragmentTransaction fTransaction, boolean destCreateTask){
+    public static void fragmentGroups(FragmentTransaction fTransaction){
        /* Bundle bundle = new Bundle();
         bundle.putBoolean("destCreateTask", destCreateTask);
         GroupsFragment frag = new GroupsFragment();
@@ -87,7 +87,7 @@ public abstract class Transactor extends FragmentActivity {
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }
         fTransaction.commit(); */
-       fragmentMainTab(fTransaction, 2, destCreateTask);
+       fragmentMainTab(fTransaction, 2);
     }
     public static void fragmentMainGroup(FragmentTransaction fTransaction, int groupId, String groupName){
      /*   Bundle bundle = new Bundle();
@@ -213,10 +213,9 @@ public abstract class Transactor extends FragmentActivity {
         fTransaction.commit();
     }
 
-    public static void fragmentMainTab(FragmentTransaction fTransaction,int startingTab, boolean destCreateTask){
+    public static void fragmentMainTab(FragmentTransaction fTransaction,int startingTab){
         Bundle bundle = new Bundle();
         bundle.putInt("startingTab", startingTab);
-        bundle.putBoolean("destCreateTask", destCreateTask);
         MainTabFragment frag = new MainTabFragment();
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);

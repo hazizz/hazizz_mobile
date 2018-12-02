@@ -47,7 +47,7 @@ public interface RequestTypes{
     @POST("auth/")
     Call<ResponseBody> login(
             @HeaderMap Map<String, String> headers,
-            @Body HashMap<String, String> registerBody
+            @Body HashMap<String, Object> registerBody
     );
 
     @GET("me/details")
@@ -232,4 +232,6 @@ public interface RequestTypes{
             @HeaderMap Map<String, String> headers
     );
 
+    @GET("information/motd")
+    Call<ResponseBody> messageOfTheDay();
 }

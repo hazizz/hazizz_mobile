@@ -43,7 +43,7 @@
     <RelativeLayout
         android:id="@+id/relativeLayout4"
         android:layout_width="wrap_content"
-        android:layout_height="70dp"
+        android:layout_height="55dp"
         android:layout_marginLeft="4dp"
         android:layout_marginStart="4dp"
         android:layout_marginTop="12dp"
@@ -74,7 +74,7 @@
     <RelativeLayout
         android:id="@+id/relativeLayout3"
         android:layout_width="wrap_content"
-        android:layout_height="70dp"
+        android:layout_height="54dp"
         android:layout_marginLeft="2dp"
         android:layout_marginStart="2dp"
         android:layout_marginTop="12dp"

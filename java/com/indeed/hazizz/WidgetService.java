@@ -58,32 +58,26 @@ public class WidgetService extends RemoteViewsService {
                 public void onResponse(HashMap<String, Object> response) {
 
                 }
-
                 @Override
                 public void onPOJOResponse(Object response) {
                     data = (List<POJOgetTask>)response;
                 }
-
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
 
                 }
-
                 @Override
                 public void onErrorResponse(POJOerror error) {
 
                 }
-
                 @Override
                 public void onEmptyResponse() {
 
                 }
-
                 @Override
                 public void onSuccessfulResponse() {
 
                 }
-
                 @Override
                 public void onNoConnection() {
 

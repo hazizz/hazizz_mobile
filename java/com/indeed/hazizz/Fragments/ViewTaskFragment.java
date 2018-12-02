@@ -21,7 +21,8 @@ import com.indeed.hazizz.Communication.POJO.Response.POJOMembersProfilePic;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.POJO.Response.POJOsubject;
 import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTaskDetailed;
-import com.indeed.hazizz.ProfilePicManager;
+
+import com.indeed.hazizz.Manager;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
@@ -91,13 +92,13 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
         if (bundle != null) {
             taskId =  bundle.getInt("taskId");
             groupId = bundle.getInt("groupId");
-            if(ProfilePicManager.getCurrentGroupId() != groupId){
+            if(Manager.ProfilePicManager.getCurrentGroupId() != groupId){
                 CustomResponseHandler responseHandler = new CustomResponseHandler() {
                     @Override
                     public void onResponse(HashMap<String, Object> response) { }
                     @Override
                     public void onPOJOResponse(Object response) {
-                        ProfilePicManager.setCurrentGroupMembersProfilePic((HashMap<Integer, POJOMembersProfilePic>)response, groupId);
+                        Manager.ProfilePicManager.setCurrentGroupMembersProfilePic((HashMap<Integer, POJOMembersProfilePic>)response, groupId);
                     }
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
@@ -189,10 +190,6 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
     public void onNothingSelected(AdapterView<?> adapterView) {
     }
 
-    public void toCreateTask(){
-        Log.e("hey", "toCreateTask in viewtaskFrag" + groupId);
-        Transactor.fragmentGroups(getFragmentManager().beginTransaction(), true);
-    }
   /*  public void toCreateTask(){
         Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(),groupID, groupName);
         Log.e("hey", "called 123");

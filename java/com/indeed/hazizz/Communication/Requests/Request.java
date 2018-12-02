@@ -24,6 +24,7 @@ import com.indeed.hazizz.Communication.POJO.Response.PojoPicSmall;
 import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
 import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTaskDetailed;
 import com.indeed.hazizz.Communication.RequestInterface;
+import com.indeed.hazizz.Manager;
 import com.indeed.hazizz.SharedPrefs;
 import com.indeed.hazizz.Transactor;
 
@@ -193,6 +194,7 @@ public class Request {
             case "getUserProfilePic":
                 requestType = new GetUserProfilePic();
                 break;
+
             case "getMyProfilePic":
                 requestType = new GetMyProfilePic();
                 break;
@@ -220,12 +222,18 @@ public class Request {
             case "getGroupMembersProfilePic":
                 requestType = new GetGroupMembersProfilePic();
                 break;
+            case "getGroupMembersProfilePicSync":
+                requestType = new GetGroupMembersProfilePicSync();
+                break;
             case "getAnnouncement":
                 requestType = new GetAnnouncement();
                 break;
+            case "messageOfTheDay":
+                requestType = new MessageOfTheDay();
+                break;
+
         }
     }
-
     public class Login implements RequestInterface {
         Login() {
             Log.e("hey", "created Login object");
@@ -237,7 +245,7 @@ public class Request {
             HashMap<String, String> b = new HashMap<>();
             b.put("username", body.get("username").toString());
             b.put("password", body.get("password").toString());
-            call = aRequest.login(headerMap, b);
+            call = aRequest.login(headerMap, body);
         }
         @Override
         public void makeCall() {
@@ -284,11 +292,14 @@ public class Request {
             public void onResponse(HashMap<String, Object> response) { }
             @Override
             public void onPOJOResponse(Object response) {
-                MiddleMan.cancelAllRequest();
+               // MiddleMan.cancelAllRequest();
                 POJORefreshToken pojoRefreshToken = (POJORefreshToken)response;
                 SharedPrefs.TokenManager.setRefreshToken(act.getBaseContext(), pojoRefreshToken.getRefresh());
                 SharedPrefs.TokenManager.setToken(act.getBaseContext(), pojoRefreshToken.getToken());
-                MiddleMan.callAgain((Request) vars.get("requestAgain"));
+                Manager.ThreadManager.unfreezeThread();
+               // MiddleMan.callAgain((Request) vars.get("requestAgain"));
+                MiddleMan.callAgain();
+
                 Log.e("hey", "onPOJOResponse 123");
                 //  POJORefreshToken asd = new POJORefreshToken();
             }
@@ -320,7 +331,19 @@ public class Request {
         }
         @Override
         public void makeCall() {
-            call(act,  thisRequest, call, customResponseHandler, gson);
+            try {
+                Response<ResponseBody> response = call.execute();
+                try {
+                    POJORefreshToken pojo = gson.fromJson(response.body().charStream(), POJORefreshToken.class);
+                    cOnResponse.onPOJOResponse(pojo);
+                }catch (Exception e){
+                    POJOerror error = gson.fromJson(response.errorBody().charStream(), POJOerror.class);
+                    cOnResponse.onErrorResponse(error);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.e("hey", "exception");
+            }
         }
         @Override
         public void makeCallAgain() {
@@ -609,26 +632,10 @@ public class Request {
                 Log.e("hey", "exception");
             }
         }
-
         @Override
         public void callIsSuccessful(Response<ResponseBody> response) {
 
         }
-
-
-     /*   public void call() {
-            try {
-                Response<ResponseBody> response = call.execute();
-                response.body();
-                Type listType = new TypeToken<ArrayList<POJOgetTask>>() {
-                }.getType();
-                List<POJOgetTask> castedList = gson.fromJson(response.body().charStream(), listType);
-                cOnResponse.onPOJOResponse(castedList);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } */
     }
 
     public class GetTask implements RequestInterface {
@@ -1154,6 +1161,87 @@ public class Request {
             HashMap<Integer, POJOMembersProfilePic> castedMap = gson.fromJson(response.body().charStream(), listType);
             cOnResponse.onPOJOResponse(castedMap);
             Log.e("hey", "size of response map: " + castedMap.size());
+        }
+    }
+
+    public class GetGroupMembersProfilePicSync implements RequestInterface {
+        GetGroupMembersProfilePicSync() {
+            Log.e("hey", "created GetGroupMembersProfilePicSync object");
+        }
+        public void setupCall() {
+            HashMap<String, String> headerMap = new HashMap<String, String>();
+            headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
+            call = aRequest.getGroupMembersProfilePic(vars.get("groupId").toString() ,headerMap);
+        }
+        @Override
+        public void makeCall() {
+            //  call(act,  thisRequest, call, cOnResponse, gson);
+            try {
+                Response<ResponseBody> response = call.execute();
+                Type listType = new TypeToken<HashMap<Integer, POJOMembersProfilePic>>(){}.getType();
+                HashMap<Integer, POJOMembersProfilePic> castedMap = gson.fromJson(response.body().charStream(), listType);
+
+                cOnResponse.onPOJOResponse(castedMap);
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.e("hey", "exception");
+            }
+        }
+
+        public HashMap<Integer, POJOMembersProfilePic> getGroupMembersProfilePic(){
+            Response<ResponseBody> response = null;
+            try {
+                response = call.execute();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Type listType = new TypeToken<HashMap<Integer, POJOMembersProfilePic>>(){}.getType();
+            HashMap<Integer, POJOMembersProfilePic> castedMap = gson.fromJson(response.body().charStream(), listType);
+            return castedMap;
+        }
+
+        @Override
+        public void makeCallAgain() {
+            callAgain(act,  thisRequest, call, cOnResponse, gson);
+        }
+        public void call(Context act,  Request r, Call<ResponseBody> call, CustomResponseHandler cOnResponse, Gson gson){
+
+        }
+        @Override
+        public void callIsSuccessful(Response<ResponseBody> response) { }
+    }
+
+    public class MessageOfTheDay implements RequestInterface {
+        MessageOfTheDay() {
+            Log.e("hey", "created MessageOfTheDay object");
+        }
+
+        public void setupCall() {
+            call = aRequest.messageOfTheDay();
+        }
+
+        @Override
+        public void makeCall() {
+            call(act, thisRequest, call, cOnResponse, gson);
+        }
+
+        @Override
+        public void makeCallAgain() {
+            callAgain(act, thisRequest, call, cOnResponse, gson);
+        }
+
+        @Override
+        public void callIsSuccessful(Response<ResponseBody> response) {
+           /* Type listType = new TypeToken<HashMap<Integer, POJOMembersProfilePic>>(){}.getType();
+            HashMap<Integer, POJOMembersProfilePic> castedMap = gson.fromJson(response.body().charStream(), listType);
+            cOnResponse.onPOJOResponse(castedMap);
+            Log.e("hey", "size of response map: " + castedMap.size());*/
+            try {
+                String r = response.body().string();
+                cOnResponse.onPOJOResponse(r.substring(1, r.length() - 1));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

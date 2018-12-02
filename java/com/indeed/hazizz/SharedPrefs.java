@@ -163,5 +163,9 @@ public class SharedPrefs {
         }
     }
 
+    public static class DestManager{
+
+    }
+
 
 }

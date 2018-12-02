@@ -62,6 +62,9 @@ public class LoginFragment extends Fragment {
             Log.e("hey", "got here onResponse");
           //  SharedPrefs.save(getContext(), "token", "token", (String) ((POJOauth)response).getToken());
            // SharedPrefs.save(getContext(), "token", "refreshToken", (String) ((POJOauth)response).getRefresh());
+            if(checkBox_autoLogin.isChecked()){
+                SharedPrefs.savePref(getContext(), "autoLogin", "autoLogin", true);
+            }
             SharedPrefs.TokenManager.setToken(getContext() ,((POJOauth)response).getToken());
             SharedPrefs.TokenManager.setRefreshToken(getContext() ,((POJOauth)response).getRefresh());
             switchToMain();
@@ -134,9 +137,7 @@ public class LoginFragment extends Fragment {
         button_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(checkBox_autoLogin.isChecked()){
-                    SharedPrefs.savePref(getContext(), "autoLogin", "autoLogin", true);
-                }
+
 
                 //   Log.e("hey", "password: " + editText_password.getText().toString() + ", passwordCheck: " + editText_passwordCheck.getText().toString() + " and they equal: " + editText_password.getText().toString().equals(editText_passwordCheck.getText().toString()));
                 if(editText_password.getText().toString().length() < 8) {

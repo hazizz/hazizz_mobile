@@ -55,7 +55,11 @@ public class CustomAdapter extends ArrayAdapter<UserItem> {
         }
 
         UserItem userItem = data.get(position);
-        holder.userProfilePic.setImageBitmap(Converter.getCroppedBitmap(Converter.scaleBitmapToRegular(Converter.imageFromText(userItem.userProfilePic))));
+        if(userItem.getUserProfilePic() != null && !userItem.getUserProfilePic().equals("")) {
+            holder.userProfilePic.setImageBitmap(Converter.getCroppedBitmap(Converter.scaleBitmapToRegular(Converter.imageFromText(userItem.userProfilePic))));
+        }else{
+            holder.userProfilePic.setImageResource(R.mipmap.ic_launcher_round);
+        }
         holder.userName.setText(userItem.getUserName());
       //  holder.taskPic.setImageResource(taskItem.taskPic);
 

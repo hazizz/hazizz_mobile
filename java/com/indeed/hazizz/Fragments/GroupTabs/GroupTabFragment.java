@@ -7,6 +7,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 
+import com.indeed.hazizz.Activities.MainActivity;
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOMembersProfilePic;
@@ -18,7 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.indeed.hazizz.ProfilePicManager;
+import com.indeed.hazizz.Manager;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
@@ -56,7 +57,7 @@ public class GroupTabFragment extends Fragment {
         public void onEmptyResponse() { }
         @Override
         public void onSuccessfulResponse() {
-            Transactor.fragmentGroups(getFragmentManager().beginTransaction(), false);        }
+            Transactor.fragmentGroups(getFragmentManager().beginTransaction());        }
         @Override
         public void onNoConnection() { }
     };
@@ -91,6 +92,7 @@ public class GroupTabFragment extends Fragment {
                 (getActivity().getSupportFragmentManager(), tabLayout.getTabCount());
         adapter.giveArgs(groupId, groupName);
 
+        viewPager.setOffscreenPageLimit(3);
     //    viewPager.setCurrent
        // bottomBar.setDefaultTab(R.id.tab_default);
         viewPager.setAdapter(adapter);
@@ -99,50 +101,32 @@ public class GroupTabFragment extends Fragment {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
+                ((MainActivity)getActivity()).onTabSelected(adapter.getItem(viewPager.getCurrentItem()));
             }
-
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
 
             }
-
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
 
             }
         });
-/*
-        viewPager.setOnPageChangeListener(new OnPageChangeListener() {
-
-            public void onPageSelected(int pageNumber) {
-                // Just define a callback method in your fragment and call it like this!
-                adapter.getItem(pageNumber).imVisible();
-
-            }
-
-            public void onPageScrolled(int arg0, float arg1, int arg2) {
-                // TODO Auto-generated method stub
-
-            }
-
-            public void onPageScrollStateChanged(int arg0) {
-                // TODO Auto-generated method stub
-
-            }
-        }); */
 
         viewPager.setCurrentItem(startingTab, true);
-
-
 
         return v;
     }
 
     public Fragment getCurrentFrag(){
-
-        return adapter.getItem(viewPager.getCurrentItem());
-
-       // return adapter.getCurrentFrag();
+        if(viewPager != null){
+            return adapter.getItem(viewPager.getCurrentItem());
+        }else {
+          //  return adapter.getItem(viewPager.getCurrentItem());
+            Log.e("hey", "returned this");
+           // return adapter.getItem(0);
+            return this;
+        }
     }
 
     public void setTab(int i){
@@ -162,7 +146,7 @@ public class GroupTabFragment extends Fragment {
             public void onResponse(HashMap<String, Object> response) { }
             @Override
             public void onPOJOResponse(Object response) {
-                ProfilePicManager.setCurrentGroupMembersProfilePic((HashMap<Integer, POJOMembersProfilePic>)response, groupId);
+                Manager.ProfilePicManager.setCurrentGroupMembersProfilePic((HashMap<Integer, POJOMembersProfilePic>)response, groupId);
                 Log.e("hey", "got response");
             }
             @Override

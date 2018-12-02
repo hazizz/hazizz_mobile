@@ -165,7 +165,7 @@ public class GroupMainFragment extends Fragment {
             public void onEmptyResponse() { }
             @Override
             public void onSuccessfulResponse() {
-                Transactor.fragmentGroups(getFragmentManager().beginTransaction(), false);
+                Transactor.fragmentGroups(getFragmentManager().beginTransaction());
             }
             @Override
             public void onNoConnection() { }

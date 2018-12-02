@@ -25,6 +25,7 @@ import com.indeed.hazizz.RequestSenderRunnable;
 import com.indeed.hazizz.Transactor;
 
 import java.util.HashMap;
+import java.util.regex.Pattern;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -57,36 +58,27 @@ public class RegisterFragment extends Fragment {
             textView_error.setText("Szerver nem válaszol");
 
         }
-
         @Override
         public void onErrorResponse(POJOerror error) {
             int errorCode = error.getErrorCode();
             if(errorCode == 31){
 
-            }
-            if(errorCode == 2){ // rossz adat
+            }if(errorCode == 2){ // rossz adat
                 textView_error.setText("A megadott adatok nem megfelelőek");
 
             }if(errorCode == 32){ // létezik ilyen nevű
               //  textView_error.setText("A felhasználónév már foglalt");
                 textView_error.setText("A felhasználónév már foglalt");
 
-            }
-            if(errorCode == 33){ // létezik ilyen nevű
+            }if(errorCode == 33){ // létezik ilyen nevű
                 textView_error.setText("Az email címmel már regisztráltak");
-            }
-            if(errorCode == 34){
+            }if(errorCode == 34){
                 textView_error.setText("A regisztráció zárolva van");
             }
             button_signup.setEnabled(true);
-
         }
-
         @Override
-        public void onEmptyResponse() {
-
-        }
-
+        public void onEmptyResponse() { }
         @Override
         public void onSuccessfulResponse() {
             Transactor.fragmentLogin(getFragmentManager().beginTransaction());
@@ -115,26 +107,41 @@ public class RegisterFragment extends Fragment {
         button_signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(editText_password.getText().toString().length() < 8) {
-                    textView_error.setText("A jelszónak legalább 8 karakteresnek kell lennie");
-                }else if(editText_username.getText().toString().length() < 4) {
-                    textView_error.setText("A felhasználónévnek legalább 4 karakteresnek kell lennie");
-                }else if (!(editText_password.getText().toString().equals(editText_passwordCheck.getText().toString()))) {
+                username = editText_username.getText().toString();
+                password = editText_password.getText().toString();
+                email = editText_email.getText().toString();
+                Pattern emailRegex = Pattern
+                        .compile ("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?");
+
+                if(!username.matches("^[a-zA-Z0-9_-]*$")){
+                    textView_error.setText("Csak számokat, betűket, alsóvonalat és kötőjelet tartalmazhat a felhasználónév");
+                    return;
+                }if (!emailRegex.matcher(email).matches()){
+                    textView_error.setText("Az email helytelen");
+                }
+                else {
+                    if (password.length() < 8) {
+                        textView_error.setText("A jelszónak legalább 8 karakteresnek kell lennie");
+                    } else if (username.length() < 4) {
+                        textView_error.setText("A felhasználónévnek legalább 4 karakteresnek kell lennie");
+                    } else if (!(password.equals(editText_passwordCheck.getText().toString()))) {
                         textView_error.setText("Jelszó nem egyezik");
 
-                }else{
-                    username = editText_username.getText().toString();
-                    email = editText_email.getText().toString();
-                    password = Converter.hashString(editText_password.getText().toString());
-                    HashMap<String, Object> requestBody = new HashMap<>();
+                    } else {
+                        password = Converter.hashString(editText_password.getText().toString());
 
-                    requestBody.put("username", username);
-                    requestBody.put("password", password);
-                    requestBody.put("emailAddress", email);
-                    button_signup.setEnabled(false);
 
-                   // MiddleMan.request.register(getContext(), requestBody, responseHandler, null);
-                    MiddleMan.newRequest(getActivity(), "register", requestBody, responseHandler, null);
+                        HashMap<String, Object> requestBody = new HashMap<>();
+
+                        requestBody.put("username", username);
+                        requestBody.put("password", password);
+                        requestBody.put("emailAddress", email);
+                        button_signup.setEnabled(false);
+
+
+                        // MiddleMan.request.register(getContext(), requestBody, responseHandler, null);
+                        MiddleMan.newRequest(getActivity(), "register", requestBody, responseHandler, null);
+                    }
                 }
             }
         });

@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.indeed.hazizz.Fragments.AuthFrags.FirstFragment;
+import com.indeed.hazizz.Manager;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.RequestSenderRunnable;
 import com.indeed.hazizz.SharedPrefs;
@@ -31,20 +32,7 @@ public class AuthActivity extends AppCompatActivity {
      //   Thread SenderThread = new Thread(new RequestSenderRunnable(this));
      //   SenderThread.start();
 
-        Set<Thread> threads = Thread.getAllStackTraces().keySet();
-
-        boolean foundIt = false;
-
-        for (Thread t : threads) {
-            if(t.getName().equals(threadName)){
-                foundIt = true;
-                break;
-            }
-        }
-        if(!foundIt){
-            Thread SenderThread = new Thread(new RequestSenderRunnable(this), threadName);
-            SenderThread.start();
-        }
+        Manager.ThreadManager.startThreadIfNotRunning(this);
 /*
         if (Thread.currentThread().getName().equals("1234")){
             Log.e("hey", "thread1 is already running");

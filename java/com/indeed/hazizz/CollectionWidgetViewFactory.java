@@ -38,7 +38,7 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
 
     @Override
     public void onCreate() {
-        String[] titles = { "New Phones Released!", "Random App Makes $300 Million",
+       /* String[] titles = { "New Phones Released!", "Random App Makes $300 Million",
                 "Google Glass Robots", "Arduino Used in Mobile", "Orioles Win World Series" };
         String[] authors = { "Phone Scoop", "Yahoo Marketing Department", "Cyborg Alliance",
                 "Some Open Source Person", "Roch Kubatko" };
@@ -47,24 +47,20 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
         for(int i = 0; i < 5; i++) {
             data.add(new POJOgetTask(1, "type", titles[i], "descripto", new POJOsubjectData(1, "asd"),
                     dates[i], new POJOcreator(1, "usernaem", "2"), new POJOgroupData(1, "name", "OPen asd", 2)));
-        }
+        } */
     }
-
     @Override
     public int getCount() {
         return data.size();
     }
-
     @Override
     public long getItemId(int position) {
         return ID_CONSTANT + position;
     }
-
     @Override
     public RemoteViews getLoadingView() {
         return null;
     }
-
     @Override
     public RemoteViews getViewAt(int position) {
 

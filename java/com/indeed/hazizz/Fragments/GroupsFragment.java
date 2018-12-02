@@ -20,6 +20,7 @@ import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.POJO.Response.POJOgroup;
 import com.indeed.hazizz.Listviews.GroupList.CustomAdapter;
 import com.indeed.hazizz.Listviews.GroupList.GroupItem;
+import com.indeed.hazizz.Manager;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
@@ -39,7 +40,7 @@ public class GroupsFragment extends Fragment {
     private TextView textView_noContent;
     private TextView textView_title;
 
-    private boolean destCreateTask;
+    private String dest;
 
 
     @Nullable
@@ -54,9 +55,11 @@ public class GroupsFragment extends Fragment {
         textView_noContent = v.findViewById(R.id.textView_noContent);
         textView_title = v.findViewById(R.id.textView_title);
 
-        destCreateTask = getArguments().getBoolean("destCreateTask");
-        if(destCreateTask){
-            textView_title.setText("Csoport választás");
+        dest = getArguments().getString("dest");
+        if(dest != null){
+           // textView_title.setText("Csoport választás");
+        }else{
+            dest="";
         }
         return v;
     }
@@ -121,12 +124,16 @@ public class GroupsFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if(destCreateTask) {
-                    Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(), ((GroupItem) listView.getItemAtPosition(i)).getGroupId(), ((GroupItem) listView.getItemAtPosition(i)).getGroupName());
-                }else{
-                    Transactor.fragmentMainGroup(getFragmentManager().beginTransaction(), ((GroupItem) listView.getItemAtPosition(i)).getGroupId(), ((GroupItem) listView.getItemAtPosition(i)).getGroupName());
-                //    Transactor.fragmentGroupTab(getFragmentManager().beginTransaction(), ((GroupItem) listView.getItemAtPosition(i)).getGroupId(), ((GroupItem) listView.getItemAtPosition(i)).getGroupName());
-
+                switch (Manager.DestManager.getDest()) {
+                    case Manager.DestManager.TOCREATETASK:
+                        Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(), ((GroupItem) listView.getItemAtPosition(i)).getGroupId(), ((GroupItem) listView.getItemAtPosition(i)).getGroupName());
+                        break;
+                    case Manager.DestManager.TOCREATEANNOUNCEMENT:
+                        Transactor.fragmentCreateAnnouncement(getFragmentManager().beginTransaction(), ((GroupItem) listView.getItemAtPosition(i)).getGroupId(), ((GroupItem) listView.getItemAtPosition(i)).getGroupName());
+                        break;
+                    default:
+                        Transactor.fragmentMainGroup(getFragmentManager().beginTransaction(), ((GroupItem) listView.getItemAtPosition(i)).getGroupId(), ((GroupItem) listView.getItemAtPosition(i)).getGroupName());
+                        break;
                 }
             }
         });
