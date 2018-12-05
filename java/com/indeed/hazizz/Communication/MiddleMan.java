@@ -48,7 +48,11 @@ public abstract class MiddleMan{
     }
 
     public static void addToCallAgain(Request r){
+
         waitingForCallAgain.add(r);
+        for(Request a : waitingForCallAgain) {
+            Log.e("hey", "add to" + "call again list: " + a.requestType);
+        }
     }
 
     public static void newRequest(Activity act, String requestType, HashMap<String, Object>  body, CustomResponseHandler cOnResponse, HashMap<String, Object> vars) {
@@ -106,6 +110,8 @@ public abstract class MiddleMan{
 
     public static void callAgain(){
         for(Request r : waitingForCallAgain) {
+            Log.e("hey", "call again: " + r.requestType);
+
             r.requestType.setupCall();
             r.requestType.makeCallAgain();
         }

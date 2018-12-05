@@ -28,6 +28,7 @@ import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.POJO.Response.POJOsubject;
 import com.indeed.hazizz.D8;
 import com.indeed.hazizz.ErrorHandler;
+import com.indeed.hazizz.Manager;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
@@ -77,6 +78,9 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
         v = inflater.inflate(R.layout.fragment_createtask, container, false);
         Log.e("hey", "im here lol");
         ((MainActivity)getActivity()).onFragmentCreated();
+
+        Manager.DestManager.resetDest();
+
         groupId = getArguments().getInt("groupId");
         groupName = getArguments().getString("groupName");
         Log.e("hey", "in createtaskFrag construvtor: " + groupId);

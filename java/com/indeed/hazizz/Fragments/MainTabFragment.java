@@ -17,6 +17,7 @@ import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Fragments.MainTab.PagerAdapter;
+import com.indeed.hazizz.Manager;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
@@ -36,7 +37,7 @@ public class MainTabFragment extends Fragment{
     private String dest;
 
     private ViewPager viewPager;
-    private Fragment currentFrag;
+    private Fragment currentTab;
 
     CustomResponseHandler rh = new CustomResponseHandler() {
         @Override
@@ -95,12 +96,17 @@ public class MainTabFragment extends Fragment{
                 }else{
                     adapter.setDest("");
                 } */
+               // Manager.DestManager.setDest(Manager.DestManager.TOMAIN);
                 viewPager.setCurrentItem(tab.getPosition());
                 ((MainActivity)getActivity()).onTabSelected(adapter.getItem(viewPager.getCurrentItem()));
-
+                currentTab = adapter.getItem(viewPager.getCurrentItem());
             }
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
+             //   Manager.DestManager.setDest(Manager.DestManager.TOMAIN);
+                if(currentTab instanceof GroupsFragment){
+                    Manager.DestManager.setDest(Manager.DestManager.TOMAIN);
+                }
 
             }
             @Override

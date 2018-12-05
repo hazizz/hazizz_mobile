@@ -11,7 +11,6 @@ import java.util.Set;
 
 public class Manager {
 
-
     public static class ThreadManager {
         private static final String threadName = "unique_name";
         private static Thread thisThread = null;
@@ -95,9 +94,10 @@ public class Manager {
     }
 
     public static class DestManager{
-        private static int dest;
-        public static final int TOCREATETASK = 0;
-        public static final int TOCREATEANNOUNCEMENT = 1;
+        public static final int TOMAIN= 0;
+        public static final int TOCREATETASK = 1;
+        public static final int TOCREATEANNOUNCEMENT = 2;
+        private static int dest = TOMAIN;
 
         public static void setDest(int a){
             dest = a;
@@ -105,6 +105,10 @@ public class Manager {
 
         public static int getDest(){
             return dest;
+        }
+
+        public static void resetDest(){
+            dest = TOMAIN;
         }
 
     }

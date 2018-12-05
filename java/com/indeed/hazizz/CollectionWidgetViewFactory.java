@@ -1,25 +1,22 @@
 package com.indeed.hazizz;
 
-import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
-import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
-import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOcreator;
 import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
-import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgroupData;
-import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOsubjectData;
 import com.indeed.hazizz.Communication.Requests.Request;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+//import com.indeed.hazizz.CollectionWidgetProvider
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -95,12 +92,23 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
     public void onDataSetChanged() {
         // Heavy lifting code can go here without blocking the UI.
         // You would update the data in your collection here as well.
+        RemoteViews widgetView = new RemoteViews(mContext.getPackageName(), R.layout.hazizz_widget);
+        widgetView.setTextViewText(R.id.widget_textView_content, "Betöltés...");
+
         CustomResponseHandler rh = new CustomResponseHandler() {
             @Override
             public void onResponse(HashMap<String, Object> response) {}
             @Override
             public void onPOJOResponse(Object response) {
-                data = D8.sortTasksByDate((ArrayList<POJOgetTask>) response);
+                ArrayList<POJOgetTask> r = (ArrayList<POJOgetTask>) response;
+                if (r == null || r.size() == 0) {
+                    RemoteViews widgetView = new RemoteViews(mContext.getPackageName(), R.layout.hazizz_widget);
+                    widgetView.setTextViewText(R.id.widget_textView_content, "Nincs feladat");
+                } else {
+                    data = D8.sortTasksByDate(r);
+                    RemoteViews widgetView = new RemoteViews(mContext.getPackageName(), R.layout.hazizz_widget);
+                    widgetView.setTextViewText(R.id.widget_textView_content, "ASADASDASD");
+                }
                 Log.e("hey", "pojo response");
             }
             @Override
@@ -112,9 +120,9 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
                 Log.e("hey", "error response");
                 RemoteViews widgetView = new RemoteViews(mContext.getPackageName(), R.layout.hazizz_widget);
                 if(error.getErrorCode() == 17) {
-                    widgetView.setTextViewText(R.id.widget_info, "Nem vagy bejelentkezve");
+                    widgetView.setTextViewText(R.id.widget_textView_content, "Nem vagy bejelentkezve");
                 }else{
-                    widgetView.setTextViewText(R.id.widget_info, "");
+                    widgetView.setTextViewText(R.id.widget_textView_content, "else");
                 }
             }
             @Override
@@ -125,9 +133,42 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
             public void onNoConnection() { }
         };
 
-        Request request = new Request(mContext,"getTasksFromMeSync", null, rh, null);
-        request.requestType.setupCall();
-        request.requestType.makeCall();
+
+
+        if(!SharedPrefs.TokenManager.getToken(mContext).equals("")) {
+            Request request = new Request(mContext, "getTasksFromMeSync", null, rh, null);
+            request.requestType.setupCall();
+            request.requestType.makeCall();
+        }else{
+            data.clear();
+          //  widgetView.setTextColor(R.id.w);
+            widgetView = new RemoteViews(mContext.getPackageName(), R.layout.hazizz_widget);
+            widgetView.setTextViewText(R.id.widget_textView_content, "Nem vagy bejelentkezve");
+            widgetView.setViewVisibility(R.id.widget_textView_content, View.VISIBLE);
+         //   widgetView.setViewVisibility(R.id.widget_frameLayout, View.INVISIBLE);
+          //  widgetView.setEmptyView(R.id.widget_stack, R.id.o);
+         //   AppWidgetManager manager = AppWidgetManager.getInstance(mContext);
+         //   manager.updateAppWidget(this, widgetView);
+
+        /*    final AppWidgetManager mgr = AppWidgetManager.getInstance(mContext);
+            final ComponentName cn = new ComponentName(mContext, CollectionWidgetProvider.class);
+           // mgr.updateAppWidget(mgr.getAppWidgetIds(cn), R.id.widget_stack);
+
+            int[] widgetIds = mgr.getAppWidgetIds(cn);
+            for (int widgetId : widgetIds) {
+
+                RemoteViews remoteViews = new RemoteViews(mContext.getPackageName(), R.layout.hazizz_widget);
+
+                widgetView.setTextViewText(R.id.widget_textView_content, "Nem vagy bejelentkezve");
+
+                widgetView.setTextViewText(R.id.appwidget_text, "Nem vagy bejelentkezve");
+
+                Log.e("hey", "happening");
+
+                mgr.updateAppWidget(widgetId, remoteViews);
+            } */
+
+        }
 
 
 

@@ -88,6 +88,8 @@
 
         <receiver android:name=".CollectionWidgetProvider">
             <intent-filter>
+                <action android:name="com.indeed.hazizz.WIDGET_OPENAPPBUTTON" />
+                <action android:name="com.indeed.hazizz.WIDGET_REFRESHBUTTON" />
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="android.intent.action.SCREEN_ON" />
                 <action android:name="android.intent.action.SCREEN_OFF" />

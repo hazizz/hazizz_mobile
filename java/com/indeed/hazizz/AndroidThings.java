@@ -11,10 +11,10 @@ public abstract class AndroidThings {
 
     public static void closeKeyboard(Context c, View view){ // this.getCurrentFocus()
         InputMethodManager imm = (InputMethodManager)c.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        if(imm != null){
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
-
-
 
     public static String getAppVersion(){ // this.getCurrentFocus()
         return BuildConfig.VERSION_NAME;

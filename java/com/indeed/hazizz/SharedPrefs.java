@@ -161,6 +161,13 @@ public class SharedPrefs {
             SharedPrefs.save(context, "token", "refreshToken", newRefreshToken);
 
         }
+
+        public static void invalidateTokens(Context context){
+            setRefreshToken(context, "");
+            setToken(context, "");
+
+        }
+
     }
 
     public static class DestManager{
