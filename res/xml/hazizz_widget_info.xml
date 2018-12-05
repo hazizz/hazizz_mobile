@@ -6,7 +6,7 @@
     android:minHeight="110dp"
     android:minWidth="180dp"
     android:minResizeHeight="40dp"
-    android:previewImage="@drawable/example_appwidget_preview"
+    android:previewImage="@mipmap/ic_launcher2"
     android:resizeMode="horizontal|vertical"
 
     android:updatePeriodMillis="0"

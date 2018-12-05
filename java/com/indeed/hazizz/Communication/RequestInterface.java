@@ -60,7 +60,6 @@ public interface RequestInterface {
                               ErrorHandler.unExpectedResponseDialog(act);
                          }
 
-
                          else if(pojoError.getErrorCode() == 18 || pojoError.getErrorCode() == 17){
                               Manager.ThreadManager.freezeThread();
                               MiddleMan.addToCallAgain(request);
@@ -80,8 +79,6 @@ public interface RequestInterface {
                               Request r = new Request(act, "refreshToken", body, null, null);
                               r.requestType.setupCall();
                               r.requestType.makeCall();
-                              Manager.ThreadManager.unfreezeThread();
-                              MiddleMan.callAgain();
 
                              /*  if(TokenManager.getRefreshToken(act).equals("used")){
 
@@ -96,7 +93,6 @@ public interface RequestInterface {
                               cOnResponse.onErrorResponse(pojoError);
                          }
                     }
-
                     /*if(callAgain){
                          MiddleMan.callAgain(request);
                     }else{ */

@@ -269,6 +269,7 @@ public class MainActivity extends AppCompatActivity
              @Override
              public void onClick(View view) {
                  SharedPrefs.savePref(getBaseContext(), "autoLogin", "autoLogin", false);
+                 SharedPrefs.TokenManager.invalidateTokens(getBaseContext());
                  Intent i = new Intent(thisActivity, AuthActivity.class);
                  startActivity(i);
 
@@ -456,18 +457,11 @@ public class MainActivity extends AppCompatActivity
         }
 
         if (currentFrag instanceof GroupAnnouncementFragment || currentFrag instanceof GroupMainFragment
-                || currentFrag instanceof MainAnnouncementFragment // || currentFrag instanceof GetGroupMembersFragment
-                || currentFrag instanceof MainFragment || currentFrag instanceof GroupsFragment) {
+            || currentFrag instanceof MainAnnouncementFragment || currentFrag instanceof MainFragment ) {
             fab_action.setVisibility(View.VISIBLE);
             if(menuItem_createGroup != null && menuItem_feedback != null && menuItem_joinGroup != null
                     && menuItem_leaveGroup != null && menuItem_profilePic != null) {
-                if (currentFrag instanceof GroupsFragment) {
-                    fab_joinGroup.setVisibility(View.VISIBLE);
-                    navView.getMenu().getItem(1).setChecked(true);
-                } else {
-                    fab_joinGroup.setVisibility(View.INVISIBLE);
-                    navView.getMenu().getItem(1).setChecked(false);
-                }
+
                 if (currentFrag instanceof MainFragment) {
                     navView.getMenu().getItem(0).setChecked(true);
                     menuItem_createGroup.setVisible(true);
@@ -480,6 +474,14 @@ public class MainActivity extends AppCompatActivity
             }
         } else {
             fab_action.setVisibility(View.INVISIBLE);
+        }
+        if (currentFrag instanceof GroupsFragment) {
+            fab_joinGroup.setVisibility(View.VISIBLE);
+            navView.getMenu().getItem(1).setChecked(true);
+            fab_action.setVisibility(View.VISIBLE);
+        } else {
+            fab_joinGroup.setVisibility(View.INVISIBLE);
+            navView.getMenu().getItem(1).setChecked(false);
         }
     }
 
@@ -525,7 +527,6 @@ public class MainActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_PHOTO_FOR_AVATAR && resultCode == Activity.RESULT_OK) {
             if (data == null) {
-                //Display an error
                 return;
             }
             try {

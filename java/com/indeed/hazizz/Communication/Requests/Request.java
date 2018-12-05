@@ -300,6 +300,7 @@ public class Request {
                // MiddleMan.callAgain((Request) vars.get("requestAgain"));
                 MiddleMan.callAgain();
 
+
                 Log.e("hey", "onPOJOResponse 123");
                 //  POJORefreshToken asd = new POJORefreshToken();
             }
@@ -330,8 +331,8 @@ public class Request {
             call = aRequest.refreshToken(headerMap, body);
         }
         @Override
-        public void makeCall() {
-            try {
+        public void makeCall() { call(act,  thisRequest, call, cOnResponse, gson);
+           /* try {
                 Response<ResponseBody> response = call.execute();
                 try {
                     POJORefreshToken pojo = gson.fromJson(response.body().charStream(), POJORefreshToken.class);
@@ -343,7 +344,7 @@ public class Request {
             } catch (IOException e) {
                 e.printStackTrace();
                 Log.e("hey", "exception");
-            }
+            } */
         }
         @Override
         public void makeCallAgain() {

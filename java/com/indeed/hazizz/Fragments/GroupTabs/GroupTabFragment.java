@@ -68,6 +68,8 @@ public class GroupTabFragment extends Fragment {
         v = inflater.inflate(R.layout.fragment_tabgroup, container, false);
         Log.e("hey", "GroupTab fragment created");
 
+        Manager.DestManager.resetDest();
+
         groupId = getArguments().getInt("groupId");
         getGroupMemberProfilePics();
         groupName = getArguments().getString("groupName");
