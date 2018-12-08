@@ -33,15 +33,16 @@ proguard/
 # Android Studio captures folder
 captures/
 
-# IntelliJ
-*.iml
-.idea/workspace.xml
+### IntelliJ IDEA ###
 .idea/tasks.xml
 .idea/gradle.xml
 .idea/assetWizardSettings.xml
 .idea/dictionaries
-.idea/libraries
 .idea/caches
+.idea
+*.iws
+*.iml
+*.ipr
 
 # Keystore files
 # Uncomment the following lines if you do not want to check your keystore files in.
