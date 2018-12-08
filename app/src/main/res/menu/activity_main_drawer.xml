@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home_black"
+            android:title="Főoldal" />
+        <item
+            android:visible="true"
+            android:id="@+id/nav_groups"
+            android:icon="@drawable/ic_group_black"
+            android:title="Csoportok" />
+    <!--    <item
+            android:id="@+id/nav_new_task"
+            android:icon="@drawable/ic_create_black"
+            android:title="Új feladat" /> -->
+    </group>
+
+    <item android:title="Csoportok"
+        android:id="@+id/nav_item_groups"
+        android:checkableBehavior="single"
+        android:visible="false">
+        <menu>
+            <item
+                android:id="@+id/nav_newGroup"
+                android:icon="@drawable/ic_creategroup_black"
+                android:title="Új csoport létrehozása" />
+            <item
+                android:id="@+id/nav_joinGroup"
+                android:icon="@drawable/ic_group_add_black"
+                android:title="Csatlakozás csoportba" />
+        </menu>
+    </item>
+
+    <item android:title="Csoport: "
+        android:id="@+id/nav_item_mainGroup"
+        android:checkableBehavior="single"
+        android:visible="false">
+        <menu>
+            <item
+                android:id="@+id/nav_tasks"
+                android:icon="@drawable/ic_assignment_black"
+                android:title="Feladatok" />
+            <item
+                android:id="@+id/nav_groupMembers"
+                android:icon="@drawable/ic_group_black"
+                android:title="Csoport tagok" />
+        </menu>
+    </item>
+
+</menu>
