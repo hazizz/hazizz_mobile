@@ -27,7 +27,6 @@ public abstract class D8 {
         return Integer.toString(LocalDate.now().getDayOfMonth());
     }
     public static String getMonth(){
-     //   return LocalDate.now().monthOfYear().toString();
         return Integer.toString(LocalDate.now().getMonthOfYear() + 1);
 
     }
@@ -49,23 +48,18 @@ public abstract class D8 {
             Log.e("hey", "dates: " + data.get(i).getDueDate());
         }
         Collections.sort(data, ( POJOgetTask a1, POJOgetTask a2) -> a1.getDueDate().compareTo(a2.getDueDate()));
-       // Collections.sort(data, ( a1, a2) -> a1.c-a2.timeStarted);
         return data;
     }
-
-
 
     public static ArrayList<POJOgetTask> sortCommentsByDate(ArrayList<POJOgetTask> data) {
         ArrayList<POJOgetTask> helper = data;
 
         ArrayList<DateTime> dates = new ArrayList<>();
         for (int i = 0; i <= data.size() - 1; i++) {
-            // dates.add(casted.get(i).getDueDate());
             dates.add(D8.dtf.parseDateTime(data.get(i).getDueDate()));
             Log.e("hey", "dates: " + data.get(i).getDueDate());
         }
         Collections.sort(data, ( POJOgetTask a1, POJOgetTask a2) -> a1.getDueDate().compareTo(a2.getDueDate()));
-        // Collections.sort(data, ( a1, a2) -> a1.c-a2.timeStarted);
         return data;
     }
 

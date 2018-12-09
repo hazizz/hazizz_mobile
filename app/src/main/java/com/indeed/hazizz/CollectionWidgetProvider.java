@@ -1,6 +1,5 @@
 package com.indeed.hazizz;
 
-import android.animation.ObjectAnimator;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -9,19 +8,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.widget.RemoteViews;
 
 import com.indeed.hazizz.Activities.AuthActivity;
-import com.indeed.hazizz.Activities.MainActivity;
-import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
-import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
-import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class CollectionWidgetProvider extends AppWidgetProvider {
 
@@ -60,10 +49,6 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, buttonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             widgetView.setOnClickPendingIntent(R.id.button_refresh, pendingIntent);
 
-        //    buttonIntent = new Intent(WIDGET_OPENAPPBUTTON);
-        //    pendingIntent = PendingIntent.getBroadcast(context, 0, buttonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        //    widgetView.setOnClickPendingIntent(R.id.button_openapp, pendingIntent);
-
             intent = new Intent(context, AuthActivity.class);
             pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
             widgetView.setOnClickPendingIntent(R.id.button_openapp, pendingIntent);
@@ -82,14 +67,14 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        if(intent.getAction().equals(ACTION_VIEW_DETAILS)) {
+      /*  if(intent.getAction().equals(ACTION_VIEW_DETAILS)) {
             POJOgetTask article = (POJOgetTask)intent.getSerializableExtra(EXTRA_ITEM);
             if(article != null) {
                 // Handle the click here.
                 // Maybe start a details activity?
                 // Maybe consider using an Activity PendingIntent instead of a Broadcast?
             }
-        }
+        }*/
         Log.e("hey", "RECIEVED");
 
         if (WIDGET_REFRESHBUTTON.equals(intent.getAction())) {
@@ -106,21 +91,10 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
             }else {
                 widgetView.setViewVisibility(R.id.widget_textView_content, View.VISIBLE);
                 widgetView.setTextViewText(R.id.widget_textView_content, contentInfo);
-
-
-
             }
             mgr.updateAppWidget(mgr.getAppWidgetIds(cn),widgetView);
             Log.e("hey", "CLICK REFRESH BUTTON");
         }
-      /*  if (WIDGET_OPENAPPBUTTON.equals(intent.getAction())) {
-            // String str = intent.getAction();
-            final AppWidgetManager mgr = AppWidgetManager.getInstance(context);
-            final ComponentName cn = new ComponentName(context, CollectionWidgetProvider.class);
-            mgr.notifyAppWidgetViewDataChanged(mgr.getAppWidgetIds(cn), R.id.widget_stack);
-            Log.e("hey", "CLICK REFRESH BUTTON");
-        }  */
-
         super.onReceive(context, intent);
     }
 }
