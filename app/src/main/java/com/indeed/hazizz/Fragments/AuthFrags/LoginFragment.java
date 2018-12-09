@@ -21,7 +21,6 @@ import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOauth;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Converter.Converter;
-import com.indeed.hazizz.Hasher;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.SharedPrefs;
 import com.indeed.hazizz.Transactor;

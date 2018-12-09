@@ -8,8 +8,7 @@ import android.view.inputmethod.InputMethodManager;
 
 public abstract class AndroidThings {
 
-
-    public static void closeKeyboard(Context c, View view){ // this.getCurrentFocus()
+    public static void closeKeyboard(Context c, View view){
         InputMethodManager imm = (InputMethodManager)c.getSystemService(Context.INPUT_METHOD_SERVICE);
         if(imm != null){
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);

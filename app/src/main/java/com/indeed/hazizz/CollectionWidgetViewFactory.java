@@ -46,16 +46,13 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
                     dates[i], new POJOcreator(1, "usernaem", "2"), new POJOgroupData(1, "name", "OPen asd", 2)));
         } */
     }
-    @Override
-    public int getCount() {
+    @Override public int getCount() {
         return data.size();
     }
-    @Override
-    public long getItemId(int position) {
+    @Override public long getItemId(int position) {
         return ID_CONSTANT + position;
     }
-    @Override
-    public RemoteViews getLoadingView() {
+    @Override public RemoteViews getLoadingView() {
         return null;
     }
     @Override
@@ -78,24 +75,18 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
         return itemView;
     }
 
-    @Override
-    public int getViewTypeCount() {
+    @Override public int getViewTypeCount() {
         return 1;
     }
 
-    @Override
-    public boolean hasStableIds() {
+    @Override public boolean hasStableIds() {
         return true;
     }
 
     @Override
     public void onDataSetChanged() {
-        // Heavy lifting code can go here without blocking the UI.
-        // You would update the data in your collection here as well.
-
         RemoteViews widgetView = new RemoteViews(mContext.getPackageName(), R.layout.hazizz_widget);
         if(Network.isConnectedOrConnecting(mContext)) {
-
             contentInfo = "Betöltés...";
 
             CustomResponseHandler rh = new CustomResponseHandler() {
@@ -103,7 +94,6 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
                 public void onResponse(HashMap<String, Object> response) {}
                 @Override
                 public void onPOJOResponse(Object response) {
-
                     ArrayList<POJOgetTask> r = (ArrayList<POJOgetTask>) response;
                     if (r == null || r.size() == 0) {
                         data.clear();
@@ -145,21 +135,11 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
                 request.requestType.makeCall();
             } else {
                 data.clear();
-                //  widgetView.setTextColor(R.id.w);
-           //     widgetView = new RemoteViews(mContext.getPackageName(), R.layout.hazizz_widget);
                 contentInfo = "Nem vagy bejelentkezve";
-
-
-
-
             }
         }else{
-         //   contentInfo = "Nincs internet elérés";
             contentInfo = "";
         }
-
-
-
         Log.e("hey", "onDataSetChanged called");
     }
 

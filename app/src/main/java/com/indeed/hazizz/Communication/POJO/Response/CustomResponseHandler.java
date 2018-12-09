@@ -6,15 +6,12 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 
 public interface CustomResponseHandler {
-
-
-
-    public void onResponse(HashMap<String, Object> response);
-    public void onPOJOResponse(Object response);
-    public void onFailure(Call<ResponseBody> call, Throwable t);
-    public void onErrorResponse(POJOerror error);
-    public void onEmptyResponse();
-    public void onSuccessfulResponse();
-    public void onNoConnection();
+    void onResponse(HashMap<String, Object> response);
+    void onPOJOResponse(Object response);
+    void onFailure(Call<ResponseBody> call, Throwable t);
+    void onErrorResponse(POJOerror error);
+    void onEmptyResponse();
+    void onSuccessfulResponse();
+    void onNoConnection();
 
 }

@@ -23,11 +23,11 @@
 
         <RelativeLayout
             android:id="@+id/relativeLayout2"
-            android:layout_width="wrap_content"
+            android:layout_width="148dp"
 
             android:layout_height="84dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginStart="4dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginStart="2dp"
             android:layout_marginTop="4dp"
             app:layout_constraintStart_toEndOf="@+id/textView5"
             app:layout_constraintTop_toTopOf="parent">
@@ -35,14 +35,14 @@
 
             <Spinner
                 android:id="@+id/subject_spinner"
-                android:layout_width="124dp"
+                android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_alignParentBottom="true"
                 android:layout_gravity="left" />
 
             <Spinner
                 android:id="@+id/taskType_spinner"
-                android:layout_width="124dp"
+                android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_gravity="center_horizontal" />
         </RelativeLayout>
@@ -98,10 +98,10 @@
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="32dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="20dp"
-            android:text="Tantárgy"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:text="Tantárgy:"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
@@ -112,7 +112,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:text="Feladat típusa"
+            android:text="Feladat típusa:"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
