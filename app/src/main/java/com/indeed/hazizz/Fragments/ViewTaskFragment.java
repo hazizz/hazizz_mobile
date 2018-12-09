@@ -136,9 +136,12 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
             @Override
             public void onPOJOResponse(Object response) {
                 commentId = (int)((POJOgetTaskDetailed)response).getSections().get(0).getId();
-                Log.e("hey", "id1 is: " +commentId );
                 gotResponse = true;
-                type.setText(((POJOgetTaskDetailed)response).getType());
+                if(((POJOgetTaskDetailed)response).getType().equals("test")){
+                    type.setText("teszt");
+                }else{
+                    type.setText("házi feladat");
+                }
                 title.setText("Cím: " + ((POJOgetTaskDetailed)response).getTitle());
                 description.setText(((POJOgetTaskDetailed)response).getDescription());
                 creatorName.setText(((POJOgetTaskDetailed)response).getCreator().getUsername());

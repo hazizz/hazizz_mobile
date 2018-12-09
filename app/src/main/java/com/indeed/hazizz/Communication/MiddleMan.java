@@ -23,8 +23,8 @@ import java.util.logging.LogRecord;
 public abstract class MiddleMan{
 
     public static List<Request> requestQueue = Collections.synchronizedList(new ArrayList<Request>());
-    public static List<Request> waitingForResponse = Collections.synchronizedList(new ArrayList<Request>());
-    public static List<Request> waitingForCallAgain = Collections.synchronizedList(new ArrayList<Request>());
+    private static List<Request> waitingForResponse = Collections.synchronizedList(new ArrayList<Request>());
+    private static List<Request> waitingForCallAgain = Collections.synchronizedList(new ArrayList<Request>());
     private static Request r;
 
     public static boolean serverReachable(){
@@ -48,7 +48,6 @@ public abstract class MiddleMan{
     }
 
     public static void addToCallAgain(Request r){
-
         waitingForCallAgain.add(r);
         for(Request a : waitingForCallAgain) {
             Log.e("hey", "add to" + "call again list: " + a.requestType);
@@ -72,15 +71,12 @@ public abstract class MiddleMan{
         requestQueue.add(newRequest);
     }
 
-
-
     public static void newRequest(Context context, String requestType, HashMap<String, Object>  body, CustomResponseHandler cOnResponse, HashMap<String, Object> vars) {
         Request newRequest = new Request(context, requestType, body, cOnResponse, vars);
         List<Request> duplicateRequest = Collections.synchronizedList(new ArrayList<Request>());
         for (Request r : requestQueue) {
             if(r.requestType.getClass() == newRequest.requestType.getClass()){
                 duplicateRequest.add(r);
-                //requestQueue.remove(r);
                 Log.e("hey", "removed2 a request");
             }
         }
@@ -100,12 +96,6 @@ public abstract class MiddleMan{
     public static void callAgain(Request a){
         a.requestType.setupCall();
         a.requestType.makeCallAgain();
-       /* for(Request r : waitingForResponse){
-            if(r.equals(a)){
-                r.requestType.makeCallAgain();
-                break;
-            }
-        } */
     }
 
     public static void callAgain(){
@@ -115,12 +105,6 @@ public abstract class MiddleMan{
             r.requestType.setupCall();
             r.requestType.makeCallAgain();
         }
-       /* for(Request r : waitingForResponse){
-            if(r.equals(a)){
-                r.requestType.makeCallAgain();
-                break;
-            }
-        } */
     }
 
     public static void sendRequestsFromQ() {
@@ -132,20 +116,5 @@ public abstract class MiddleMan{
         for(Request r : waitingForResponse){
             requestQueue.remove(r);
         }
-
-      //  requestQueue.clear();
-
-      /*  for(Request r : requestQueueCopy){
-            if(requestQueue.contains(r)){
-                requestQueue.remove(r);
-                Log.e("hey", "removed a request: " + r.requestType.getClass().toString());
-                Log.e("hey", "2: " + requestQueue);
-                break;
-            }
-        }
-        Log.e("hey", "3: " + requestQueue); */
-
-
-      //
     }
 }

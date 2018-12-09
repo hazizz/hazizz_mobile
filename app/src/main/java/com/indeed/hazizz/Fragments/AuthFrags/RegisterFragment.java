@@ -19,9 +19,7 @@ import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Converter.Converter;
-import com.indeed.hazizz.Hasher;
 import com.indeed.hazizz.R;
-import com.indeed.hazizz.RequestSenderRunnable;
 import com.indeed.hazizz.Transactor;
 
 import java.util.HashMap;

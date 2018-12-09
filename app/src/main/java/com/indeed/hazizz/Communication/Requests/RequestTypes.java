@@ -38,7 +38,6 @@ public interface RequestTypes{
             @Body HashMap<String, Object>  register
     );
 
-
     @GET("users/")
     Call<ResponseBody> getUsers(
             @HeaderMap Map<String, String> headers

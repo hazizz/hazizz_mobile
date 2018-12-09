@@ -72,11 +72,9 @@ public class MainActivity extends AppCompatActivity
     private MenuItem menuItem_leaveGroup;
     private MenuItem menuItem_profilePic;
     private MenuItem menuItem_feedback;
- //   private MenuItem menuItem_leaveGroup;
 
     private Menu menu_nav;
 
-    private MenuItem menu_groups;
     private MenuItem menu_mainGroup;
 
     private Toolbar toolbar;
@@ -90,27 +88,19 @@ public class MainActivity extends AppCompatActivity
         public void onResponse(HashMap<String, Object> response) { }
         @Override
         public void onPOJOResponse(Object response) {
-            String a = ((PojoPicSmall)response).getData().split(",")[1];
-          //  String[] imageSplit = a.split(",");
-          //  a = imageSplit[1];
-            Bitmap bitmap = Converter.imageFromText(a);
+            Bitmap bitmap = Converter.imageFromText(
+                    ((PojoPicSmall)response).getData().split(",")[1]);
             bitmap = Converter.scaleBitmapToRegular(bitmap);
             bitmap = Converter.getCroppedBitmap(bitmap);
-
 
             navProfilePic.setImageBitmap(bitmap);
             Log.e("hey", "got profile pic response");
         }
-        @Override
-        public void onFailure(Call<ResponseBody> call, Throwable t) { }
-        @Override
-        public void onErrorResponse(POJOerror error) { }
-        @Override
-        public void onEmptyResponse() { }
-        @Override
-        public void onSuccessfulResponse() {}
-        @Override
-        public void onNoConnection() {}
+        @Override public void onFailure(Call<ResponseBody> call, Throwable t) { }
+        @Override public void onErrorResponse(POJOerror error) { }
+        @Override public void onEmptyResponse() { }
+        @Override public void onSuccessfulResponse() {}
+        @Override public void onNoConnection() {}
     };
 
     CustomResponseHandler responseHandler = new CustomResponseHandler() {
@@ -119,7 +109,6 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void onPOJOResponse(Object response) {
             Log.e("hey", "got pojo response");
-          //  SharedPrefs.getString(act.getBaseContext(), "userInfo", "username")
             SharedPrefs.save(getApplicationContext(),"userInfo", "username",((POJOme) response).getUsername());
             navUsername.setText(((POJOme) response).getUsername());
             navEmail.setText(((POJOme) response).getEmailAddress());
@@ -129,23 +118,18 @@ public class MainActivity extends AppCompatActivity
             Log.e("hey", "4");
             Log.e("hey", "got here onFailure");
         }
-        @Override
-        public void onEmptyResponse() {
+        @Override public void onEmptyResponse() {
             Log.e("hey", "NO RESPONSE");
         }
-        @Override
-        public void onSuccessfulResponse() { }
-        @Override
-        public void onNoConnection() { }
-        @Override
-        public void onErrorResponse(POJOerror error) {
+        @Override public void onSuccessfulResponse() { }
+        @Override public void onNoConnection() { }
+        @Override public void onErrorResponse(POJOerror error) {
             Log.e("hey", "onErrorResponse");
         }
     };
 
     CustomResponseHandler rh_motd = new CustomResponseHandler() {
-        @Override
-        public void onResponse(HashMap<String, Object> response) { }
+        @Override public void onResponse(HashMap<String, Object> response) { }
         @Override
         public void onPOJOResponse(Object response) {
             String motd = (String)response;
@@ -165,31 +149,22 @@ public class MainActivity extends AppCompatActivity
                             SharedPrefs.save(getBaseContext(), "motd", "message", motd);
                             dialog.cancel();
                         });
-
                     ;
                     AlertDialog alertDialog = alertDialogBuilder.create();
                     alertDialog.show();
-               /* } catch (Exception e) {
-                    Log.e("hey", "CAUGHT exception");
-                } */
             }else{
                 Log.e("hey", "Message of the day is not");
             }
         }
-        @Override
-        public void onFailure(Call<ResponseBody> call, Throwable t) {
+        @Override public void onFailure(Call<ResponseBody> call, Throwable t) {
             Log.e("hey", "4");
             Log.e("hey", "got here onFailure");
         }
-        @Override
-        public void onEmptyResponse() {
+        @Override public void onEmptyResponse() {
         }
-        @Override
-        public void onSuccessfulResponse() { }
-        @Override
-        public void onNoConnection() { }
-        @Override
-        public void onErrorResponse(POJOerror error) {
+        @Override public void onSuccessfulResponse() { }
+        @Override public void onNoConnection() { }
+        @Override public void onErrorResponse(POJOerror error) {
             Log.e("hey", "onErrorResponse");
         }
     };
@@ -218,10 +193,9 @@ public class MainActivity extends AppCompatActivity
         fab_action.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-             /*   Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show(); */
                 Log.e("hey", "fab_action CLICKed");
                 currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager(), false);
+
                 if (currentFrag instanceof GroupMainFragment) {
                     Log.e("hey", "instance of groupmain fragment");
                     ((GroupMainFragment)currentFrag).toCreateTask(getSupportFragmentManager());
@@ -243,9 +217,6 @@ public class MainActivity extends AppCompatActivity
                     Log.e("hey", "instance of groupmain fragment111");
                     ((GroupsFragment)currentFrag).toCreateGroup(getSupportFragmentManager());
                 }
-                else {
-                 //   toGroupsFrag();
-                }
             }
         });
         navView = (NavigationView) findViewById(R.id.nav_view);
@@ -260,7 +231,6 @@ public class MainActivity extends AppCompatActivity
 
         menu_nav = navView.getMenu();
 
-        menu_groups= menu_nav.getItem(2);
         menu_mainGroup = menu_nav.getItem(3);
 
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -291,30 +261,14 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onResume(){
-      /*  invalidateOptionsMenu();
-        try{
-            onCreateOptionsMenu(menu_options);
-        }
-        catch (NullPointerException e){
-
-        } */
         super.onResume();
       //  setHasOp
         invalidateOptionsMenu();
         Log.e("hey", "onResume is trigered");
     }
-    /*
-    @Override
-    public void onStart(){
-        super.onStart();
-        Log.e("hey", "onResume is trigered");
-        toMainFrag();
-    }  */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-       // super.onCreateOptionsMenu(menu);
         Log.e("hey", "onCreateOptionsMenu asdasd");
 
         menu_options = menu;
@@ -346,28 +300,22 @@ public class MainActivity extends AppCompatActivity
         if(toggle.onOptionsItemSelected(item)){
             return true;
         }
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_createGroup) {
-            Transactor.fragmentCreateGroup(getSupportFragmentManager().beginTransaction());
-            return true;
-        }
-        if (id == R.id.action_joinGroup) {
-            Transactor.fragmentJoinGroup(getSupportFragmentManager().beginTransaction());
-            return true;
-        }
-        if (id == R.id.action_leaveGroup) {
-            ((GroupTabFragment)cFrag).leaveGroup();
-            return true;
-        }
-        if (id == R.id.action_profilePic) {
-            pickImage();
-            return true;
-        }
-        if (id == R.id.action_feedback) {
-            Transactor.feedbackActivity(this);
-            return true;
+        switch (item.getItemId()){
+            case R.id.action_createGroup:
+                Transactor.fragmentCreateGroup(getSupportFragmentManager().beginTransaction());
+                return true;
+            case R.id.action_joinGroup:
+                Transactor.fragmentJoinGroup(getSupportFragmentManager().beginTransaction());
+                return true;
+            case R.id.action_leaveGroup:
+                ((GroupTabFragment)cFrag).leaveGroup();
+                return true;
+            case R.id.action_profilePic:
+                pickImage();
+                return true;
+            case R.id.action_feedback:
+                Transactor.feedbackActivity(this);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -376,25 +324,26 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         Log.e("hey", "chechk1");
-        int id = item.getItemId();
-
         currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager(), false);
-        if (id == R.id.nav_home) {
-            toMainFrag();
-        } else if (id == R.id.nav_groups) {
-            toGroupsFrag();
-        } else if (id == R.id.nav_newGroup) {
-           // ((GroupsFragment)currentFrag).toCreateGroup();
-            Transactor.fragmentCreateGroup(getSupportFragmentManager().beginTransaction());
-        } else if (id == R.id.nav_joinGroup) {
-            //((GroupsFragment)currentFrag).
-            Transactor.fragmentJoinGroup(getSupportFragmentManager().beginTransaction());
-        } else if (id == R.id.nav_tasks) {
-            //((GroupsFragment)currentFrag).
-            ((GroupTabFragment)currentFrag).setTab(2);
-        }else if (id == R.id.nav_groupMembers) {
-            //((GroupsFragment)currentFrag).
-            ((GroupTabFragment)currentFrag).setTab(1);
+        switch (item.getItemId()) {
+            case R.id.nav_home:
+                toMainFrag();
+                break;
+            case R.id.nav_groups:
+                toGroupsFrag();
+                break;
+            case R.id.nav_newGroup:
+                Transactor.fragmentCreateGroup(getSupportFragmentManager().beginTransaction());
+                break;
+            case R.id.nav_joinGroup:
+                Transactor.fragmentJoinGroup(getSupportFragmentManager().beginTransaction());
+                break;
+            case R.id.nav_tasks:
+                ((GroupTabFragment) currentFrag).setTab(2);
+                break;
+            case R.id.nav_groupMembers:
+                ((GroupTabFragment) currentFrag).setTab(1);
+                break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -431,21 +380,12 @@ public class MainActivity extends AppCompatActivity
         else if (currentFrag instanceof GroupTabFragment) {//GroupMainFragment
             Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction());
         }
-    /*    else if (currentFrag instanceof CreateTaskFragment) {
-            Transactor.fragmentMainGroup(getSupportFragmentManager().beginTransaction(), ((CreateTaskFragment)currentFrag).getGroupId(), ((CreateTaskFragment)currentFrag).getGroupName());
-         //   Transactor.fragmentGroupTab(getSupportFragmentManager().beginTransaction(), ((CreateTaskFragment)currentFrag).getGroupId(), ((CreateTaskFragment)currentFrag).getGroupName());
-        } */
-
-        else if (currentFrag instanceof GroupMainFragment)    {}
-
         else if (currentFrag instanceof ViewTaskFragment) {
             if(!((ViewTaskFragment)currentFrag).getGoBackToMain()) {
                 Transactor.fragmentMainGroup(getSupportFragmentManager().beginTransaction(), ((ViewTaskFragment) currentFrag).getGroupId(), ((ViewTaskFragment) currentFrag).getGroupName());
             }else{
                 Transactor.fragmentMain(getSupportFragmentManager().beginTransaction());
             }
-          //  Transactor.fragmentGroupTab(getSupportFragmentManager().beginTransaction(), ((CreateTaskFragment)currentFrag).getGroupId(), ((CreateTaskFragment)currentFrag).getGroupName());
-
         } else if (currentFrag instanceof CreateSubjectFragment) {
             ((CreateSubjectFragment) currentFrag).goBack();
         } else {
@@ -455,20 +395,11 @@ public class MainActivity extends AppCompatActivity
     }
     public void onFragmentCreated(){
         currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager(), false);
-
-        if(currentFrag instanceof CreateSubjectFragment) {
-         //   fab_createGroup.setVisibility(View.INVISIBLE);
-        //    fab_action.setVisibility(View.INVISIBLE);
-        }else{
-          //  fab_action.setVisibility(View.VISIBLE);
-        }
-
         if (currentFrag instanceof GroupAnnouncementFragment || currentFrag instanceof GroupMainFragment
             || currentFrag instanceof MainAnnouncementFragment || currentFrag instanceof MainFragment ) {
             fab_action.setVisibility(View.VISIBLE);
             if(menuItem_createGroup != null && menuItem_feedback != null && menuItem_joinGroup != null
                     && menuItem_leaveGroup != null && menuItem_profilePic != null) {
-
                 if (currentFrag instanceof MainFragment) {
                     navView.getMenu().getItem(0).setChecked(true);
                     menuItem_createGroup.setVisible(true);
@@ -535,43 +466,35 @@ public class MainActivity extends AppCompatActivity
         if (requestCode == PICK_PHOTO_FOR_AVATAR && resultCode == Activity.RESULT_OK) {
             if (data == null) {
                 return;
-            }
-            try {
+            }try {
                 InputStream inputStream = this.getContentResolver().openInputStream(data.getData());
                 Uri imageUri = data.getData();
-                Bitmap yourSelectedImage = BitmapFactory.decodeStream(inputStream);
-                yourSelectedImage = Bitmap.createScaledBitmap(yourSelectedImage, 300, 300, true);
-                Bitmap bitmap=Bitmap.createBitmap(yourSelectedImage, 0,0,300, 300);
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                bitmap = Bitmap.createScaledBitmap(bitmap, 300, 300, true);
+                bitmap=Bitmap.createBitmap(bitmap, 0,0,300, 300);
                 HashMap<String, Object> body = new HashMap<>();
                 body.put("data", "data:image/jpeg;base64," + Converter.imageToText(bitmap));
                 body.put("type", "ppfull");
 
                 MiddleMan.newRequest(this, "setMyProfilePic", body, new CustomResponseHandler() {
-                    @Override
-                    public void onResponse(HashMap<String, Object> response) { }
-                    @Override
-                    public void onPOJOResponse(Object response) { }
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) { }
+                    @Override public void onResponse(HashMap<String, Object> response) { }
+                    @Override public void onPOJOResponse(Object response) { }
+                    @Override public void onFailure(Call<ResponseBody> call, Throwable t) { }
                     @Override
                     public void onErrorResponse(POJOerror error) {
                         Log.e("hey", "couldnt set profile pic");
                     }
-                    @Override
-                    public void onEmptyResponse() { }
+                    @Override public void onEmptyResponse() { }
                     @Override
                     public void onSuccessfulResponse() {
                         MiddleMan.newRequest(thisActivity, "getMyProfilePic", null, rh_profilePic, null);
                     }
-                    @Override
-                    public void onNoConnection() { }
+                    @Override public void onNoConnection() { }
                 }, null);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 Log.e("hey", "file not found!");
             }
         }
-        Log.e("hey", "onActivityResult");
     }
-
 }

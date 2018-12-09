@@ -33,6 +33,7 @@ import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -41,6 +42,8 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 
 public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSelectedListener{
+
+    private List<String> taskTypeList = Arrays.asList("házi feladat", "teszt");
 
 
     private Integer year, month, day;
@@ -56,7 +59,6 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
     private EditText description;
     private Button button_send;
     private Button button_add;
-    private TextView textView_group;
     private TextView textView_error;
     private TextView textView_deadline;
 
@@ -66,8 +68,6 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
 
     private CustomResponseHandler rh_subjects;
     private CustomResponseHandler rh_taskTypes;
-
-    private ArrayList<POJOsubject> subjectList = new ArrayList<POJOsubject>();
 
     private View v;
 
@@ -107,7 +107,14 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
         });
 
         // tasktype spinner
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.taskTypes, android.R.layout.simple_spinner_item);
+
+    //    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), taskTypeArray, android.R.layout.simple_spinner_item);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                getActivity(),
+                android.R.layout.simple_list_item_1,
+                taskTypeList );
+
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         taskType.setAdapter(adapter);
 
@@ -251,7 +258,20 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
     private void createTask(){
         HashMap<String, Object> requestBody = new HashMap<>();
 
-        requestBody.put("taskType", taskType.getSelectedItem().toString());
+        String tType;
+        switch(taskType.getSelectedItem().toString()){
+            case "teszt":
+                tType = "test";
+                break;
+            case "házi feladat":
+                tType = "homework";
+                break;
+            default:
+                tType = "házi feladat";
+                break;
+        }
+
+        requestBody.put("taskType", tType);
         requestBody.put("taskTitle", taskTitle.getText().toString());
         requestBody.put("description", description.getText().toString());
         requestBody.put("subjectId", ((POJOsubject) subject_spinner.getSelectedItem()).getId());//((POJOsubject) subject_spinner.getSelectedItem()).getId());
