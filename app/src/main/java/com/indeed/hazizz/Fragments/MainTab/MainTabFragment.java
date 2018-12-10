@@ -74,7 +74,7 @@ public class MainTabFragment extends Fragment{
 
         tabLayout.addTab(tabLayout.newTab().setText("Feladatok"));
         tabLayout.addTab(tabLayout.newTab().setText("Bejegyzések"));
-        tabLayout.addTab(tabLayout.newTab().setText("Csoportok"));
+       // tabLayout.addTab(tabLayout.newTab().setText("Csoportok"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         //  tabLayout.setcur
         // tabLayout.setCu

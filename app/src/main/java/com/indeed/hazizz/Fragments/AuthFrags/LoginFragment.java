@@ -28,6 +28,7 @@ import com.snatik.storage.Storage;
 
 import java.util.HashMap;
 
+import okhttp3.Headers;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
@@ -86,6 +87,11 @@ public class LoginFragment extends Fragment {
         public void onNoConnection() {
             textView_error.setText("Nincs internet kapcsolat");
             button_login.setEnabled(true);
+        }
+
+        @Override
+        public void getHeaders(Headers headers) {
+
         }
 
         @Override

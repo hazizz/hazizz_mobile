@@ -20,7 +20,7 @@ import com.indeed.hazizz.Communication.POJO.Response.AnnouncementPOJOs.POJOAnnou
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Listviews.AnnouncementList.AnnouncementItem;
-import com.indeed.hazizz.Listviews.AnnouncementList.CustomAdapter;
+import com.indeed.hazizz.Listviews.AnnouncementList.Main.CustomAdapter;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
@@ -64,7 +64,7 @@ public class MainAnnouncementFragment extends Fragment{
     void createViewList(){
         listTask = new ArrayList<>();
         ListView listView = (ListView)v.findViewById(R.id.listView_announcementGroup);
-        adapter = new CustomAdapter(getActivity(), R.layout.announcement_item, listTask);
+        adapter = new CustomAdapter(getActivity(), R.layout.announcement_main_item, listTask);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

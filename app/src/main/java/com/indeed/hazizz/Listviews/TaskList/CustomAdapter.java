@@ -52,7 +52,7 @@ public class CustomAdapter extends ArrayAdapter<TaskItem> {
             holder.taskTitle = (TextView) convertView.findViewById(R.id.task_title);
             holder.taskDescription = (TextView) convertView.findViewById(R.id.task_description);
             holder.taskDueDate = (TextView) convertView.findViewById(R.id.textView_dueDate);
-            holder.taskCreator = (TextView) convertView.findViewById(R.id.textView_creator);
+            holder.taskCreator = (TextView) convertView.findViewById(R.id.textView_group);
             holder.taskSubject = (TextView) convertView.findViewById(R.id.textView_title);
 
             convertView.setTag(holder);

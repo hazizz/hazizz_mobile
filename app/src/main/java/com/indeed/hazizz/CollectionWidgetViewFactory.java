@@ -1,10 +1,8 @@
 package com.indeed.hazizz;
 
-import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -16,6 +14,7 @@ import com.indeed.hazizz.Communication.Requests.Request;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import okhttp3.Headers;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
@@ -64,7 +63,7 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
 
         itemView.setTextViewText(R.id.task_title, article.getTitle());
         itemView.setTextViewText(R.id.task_description, article.getDescription());
-        itemView.setTextViewText(R.id.textView_creator, article.getCreator().getUsername());
+        itemView.setTextViewText(R.id.textView_group, article.getCreator().getUsername());
         itemView.setTextViewText(R.id.textView_subject, article.getSubjectData().getName());
         itemView.setTextViewText(R.id.textView_deadline, article.getDueDate());
 
@@ -87,8 +86,8 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
     public void onDataSetChanged() {
         RemoteViews widgetView = new RemoteViews(mContext.getPackageName(), R.layout.hazizz_widget);
         if(Network.isConnectedOrConnecting(mContext)) {
-            contentInfo = "Betöltés...";
-
+            //contentInfo = "Betöltés...";
+            contentInfo = "";
             CustomResponseHandler rh = new CustomResponseHandler() {
                 @Override
                 public void onResponse(HashMap<String, Object> response) {}
@@ -127,6 +126,11 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
                 public void onSuccessfulResponse() { }
                 @Override
                 public void onNoConnection() { }
+
+                @Override
+                public void getHeaders(Headers headers) {
+
+                }
             };
 
             if (!SharedPrefs.TokenManager.getToken(mContext).equals("")) {

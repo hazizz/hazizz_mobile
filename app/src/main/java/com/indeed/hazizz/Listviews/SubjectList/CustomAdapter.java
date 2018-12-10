@@ -1,4 +1,4 @@
-package com.indeed.hazizz.Listviews.UserList;
+package com.indeed.hazizz.Listviews.SubjectList;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,22 +8,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.indeed.hazizz.Converter.Converter;
+import com.indeed.hazizz.Listviews.AnnouncementList.AnnouncementItem;
 import com.indeed.hazizz.R;
 
 import java.util.List;
 
-public class CustomAdapter extends ArrayAdapter<UserItem> {
+public class CustomAdapter extends ArrayAdapter<SubjectItem> {
 
     Context context;
     int picID;
-    List<UserItem> data = null;
+    List<SubjectItem> data = null;
 
 
-    public CustomAdapter(@NonNull Context context, int resource, @NonNull List<UserItem> objects) {
+    public CustomAdapter(@NonNull Context context, int resource, @NonNull List<SubjectItem> objects) {
         super(context, resource, objects);
 
         this.picID = resource;
@@ -32,8 +31,8 @@ public class CustomAdapter extends ArrayAdapter<UserItem> {
     }
 
     static class DataHolder{
-        ImageView userProfilePic;
-        TextView userName;
+        // ImageView taskPic;
+        TextView subjectName;
     }
     @NonNull
     @Override
@@ -46,22 +45,21 @@ public class CustomAdapter extends ArrayAdapter<UserItem> {
             convertView = inflater.inflate(picID, parent, false);
 
             holder = new DataHolder();
-            holder.userProfilePic = (ImageView) convertView.findViewById(R.id.imageView_memberProfilePic);
-            holder.userName = (TextView) convertView.findViewById(R.id.subject_name);
-
+            holder.subjectName = (TextView) convertView.findViewById(R.id.subject_name);
             convertView.setTag(holder);
         }else{
             holder = (DataHolder)convertView.getTag();
         }
 
-        UserItem userItem = data.get(position);
-        if(userItem.getUserProfilePic() != null && !userItem.getUserProfilePic().equals("")) {
-            holder.userProfilePic.setImageBitmap(Converter.getCroppedBitmap(Converter.scaleBitmapToRegular(Converter.imageFromText(userItem.userProfilePic))));
+        SubjectItem subjectItem = data.get(position);
+        holder.subjectName.setText(subjectItem.getSubjectName());
+       /* if(announcementItem.getSubjectData() == null) {
+            holder.taskSubject.setVisibility(View.INVISIBLE);
+            holder.taskSubject_.setVisibility(View.INVISIBLE);
         }else{
-            holder.userProfilePic.setImageResource(R.mipmap.ic_launcher_round);
-        }
-        holder.userName.setText(userItem.getUserName());
-      //  holder.taskPic.setImageResource(taskItem.taskPic);
+            holder.taskSubject.setText(announcementItem.getSubjectData().getName());
+        } */
+        //  holder.taskPic.setImageResource(announcementItem.taskPic);
 
         return convertView;
         // return super.getView(position, convertView, parent);

@@ -38,8 +38,9 @@ public class GroupTabFragment extends Fragment {
     private TextView textView_title;
     public PagerAdapter adapter;
 
-    private int groupId;
-    private String groupName;
+    public static String groupDest = "";
+    public static int groupId;
+    public static String groupName;
     private int startingTab;
 
     private ViewPager viewPager;
@@ -83,8 +84,8 @@ public class GroupTabFragment extends Fragment {
 
         tabLayout.addTab(tabLayout.newTab().setText("Feladatok"));
         tabLayout.addTab(tabLayout.newTab().setText("Bejegyzések"));
+        tabLayout.addTab(tabLayout.newTab().setText("Témák"));
         tabLayout.addTab(tabLayout.newTab().setText("Tagok"));
-       // tabLayout.addTab(tabLayout.newTab().setText("Új feladat"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
       //  tabLayout.setcur
        // tabLayout.setCu
@@ -114,7 +115,6 @@ public class GroupTabFragment extends Fragment {
 
             }
         });
-
         viewPager.setCurrentItem(startingTab, true);
 
         return v;
@@ -138,7 +138,6 @@ public class GroupTabFragment extends Fragment {
     public void leaveGroup(){
         HashMap<String, Object> vars = new HashMap<>();
         vars.put("groupId", Integer.toString(groupId));
-      //  MiddleMan.request.leaveGroup(getContext(), null, rh, vars);
         MiddleMan.newRequest(getActivity(), "leaveGroup", null, rh, vars);
     }
 

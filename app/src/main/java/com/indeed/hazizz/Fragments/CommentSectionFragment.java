@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import okhttp3.Headers;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
@@ -149,6 +150,11 @@ public class CommentSectionFragment extends Fragment {
                         @Override
                         public void onNoConnection() {
                             button_send.setEnabled(true);
+                        }
+
+                        @Override
+                        public void getHeaders(Headers headers) {
+
                         }
                     }, vars);
                 }

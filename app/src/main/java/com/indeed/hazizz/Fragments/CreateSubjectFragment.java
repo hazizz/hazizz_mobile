@@ -17,14 +17,18 @@ import com.indeed.hazizz.AndroidThings;
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
+import com.indeed.hazizz.Fragments.GroupTabs.GroupTabFragment;
 import com.indeed.hazizz.Listviews.GroupList.CustomAdapter;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
 import java.util.HashMap;
 
+import okhttp3.Headers;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+
+import static com.indeed.hazizz.Fragments.GroupTabs.GroupTabFragment.groupDest;
 
 public class CreateSubjectFragment extends Fragment {
 
@@ -79,7 +83,6 @@ public class CreateSubjectFragment extends Fragment {
         }
     };
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -91,7 +94,6 @@ public class CreateSubjectFragment extends Fragment {
         textView_error = v.findViewById(R.id.textView_error);
         editText_newSubject = v.findViewById(R.id.editText_newSubject);
         button_addSubject = v.findViewById(R.id.button_addSubject);
-
 
         button_addSubject.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,6 +116,10 @@ public class CreateSubjectFragment extends Fragment {
     }
 
     public void goBack(){
-        Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(), groupId, groupName);
+        if(GroupTabFragment.groupDest.equals("toCreateTask")) {
+            Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(), GroupTabFragment.groupId, GroupTabFragment.groupName);
+        }else{
+            Transactor.fragmentSubjects(getFragmentManager().beginTransaction(), GroupTabFragment.groupId, GroupTabFragment.groupName);
+        }
     }
 }
