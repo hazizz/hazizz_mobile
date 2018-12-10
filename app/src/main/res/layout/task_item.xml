@@ -63,7 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="Tantárgy:"
+            android:text="Téma:"
             tools:layout_editor_absoluteX="244dp"
             tools:layout_editor_absoluteY="64dp" />
 
@@ -106,10 +106,10 @@
 
             android:text="subject"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_creator" />
+            app:layout_constraintTop_toBottomOf="@+id/textView_group" />
 
         <TextView
-            android:id="@+id/textView_creator"
+            android:id="@+id/textView_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="creator"

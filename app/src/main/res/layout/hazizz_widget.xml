@@ -6,18 +6,31 @@
     android:background="#ffffff"
     android:orientation="vertical">
 
-
+    <TextView
+        android:id="@+id/widget_textView_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="85dp"
+        android:background="@drawable/rounded_lightblue_border"
+        android:text="       "
+        android:textColor="#363636"
+        android:textSize="18sp"
+        android:visibility="invisible" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@color/colorPrimaryLightBlue"
+
         >
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryLightBlue"
+            >
 
             <TextView
                 android:id="@+id/appwidget_text"
@@ -54,7 +67,6 @@
         <FrameLayout
             android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:background="#FFFFFF"
             android:id="@+id/widget_frameLayout"
             >
 
@@ -76,18 +88,7 @@
     </LinearLayout>
 
 
-    <TextView
-        android:id="@+id/widget_textView_content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="85dp"
-        android:background="@drawable/rounded_lightblue_border"
-        android:text="       "
-        android:textColor="#363636"
-        android:textSize="18sp"
-        android:visibility="invisible" />
+
 
 
 

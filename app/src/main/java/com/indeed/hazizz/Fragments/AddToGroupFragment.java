@@ -24,6 +24,7 @@ import com.indeed.hazizz.Transactor;
 
 import java.util.HashMap;
 
+import okhttp3.Headers;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
@@ -74,6 +75,11 @@ public class AddToGroupFragment extends Fragment {
         public void onNoConnection() {
             textView_error.setText("Nincs internet kapcsolat");
             button_addMember.setEnabled(true);
+        }
+
+        @Override
+        public void getHeaders(Headers headers) {
+
         }
 
         @Override

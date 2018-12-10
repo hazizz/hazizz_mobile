@@ -1,4 +1,4 @@
-package com.indeed.hazizz.Listviews.AnnouncementList;
+package com.indeed.hazizz.Listviews.AnnouncementList.Group;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.indeed.hazizz.Listviews.AnnouncementList.AnnouncementItem;
 import com.indeed.hazizz.R;
 
 import java.util.List;
@@ -34,8 +35,6 @@ public class CustomAdapter extends ArrayAdapter<AnnouncementItem> {
         TextView taskTitle;
         TextView taskDescription;
         TextView taskCreator;
-        TextView taskSubject;
-        TextView taskSubject_;
     }
     @NonNull
     @Override
@@ -51,7 +50,7 @@ public class CustomAdapter extends ArrayAdapter<AnnouncementItem> {
             // holder.taskPic = (ImageView) convertView.findViewById(R.id.task_pic);
             holder.taskTitle = (TextView) convertView.findViewById(R.id.announcement_title);
             holder.taskDescription = (TextView) convertView.findViewById(R.id.announcement_description);
-            holder.taskCreator = (TextView) convertView.findViewById(R.id.textView_creator);
+            holder.taskCreator = (TextView) convertView.findViewById(R.id.textView_group);
          //   holder.taskSubject = (TextView) convertView.findViewById(R.id.textView_title);
         //    holder.taskSubject_ = (TextView) convertView.findViewById(R.id.textView_subject_);
             convertView.setTag(holder);

@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Kommentek"
+        android:text="Megjegyzések"
         android:textSize="28sp" />
 
 
@@ -40,7 +40,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="50dp"
-            android:text="Nincs komment"
+            android:text="Nincs még komment"
             android:visibility="invisible" />
     </RelativeLayout>
 

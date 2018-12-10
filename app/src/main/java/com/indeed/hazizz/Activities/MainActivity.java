@@ -33,6 +33,7 @@ import com.indeed.hazizz.Fragments.GroupTabs.GetGroupMembersFragment;
 import com.indeed.hazizz.Fragments.GroupTabs.GroupMainFragment;
 import com.indeed.hazizz.Fragments.GroupTabs.GroupAnnouncementFragment;
 import com.indeed.hazizz.Fragments.GroupTabs.GroupTabFragment;
+import com.indeed.hazizz.Fragments.GroupTabs.SubjectsFragment;
 import com.indeed.hazizz.Fragments.MainTab.GroupsFragment;
 import com.indeed.hazizz.Fragments.MainTab.MainAnnouncementFragment;
 import com.indeed.hazizz.Fragments.MainTab.MainFragment;
@@ -46,6 +47,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.HashMap;
 
+import okhttp3.Headers;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
@@ -86,6 +88,12 @@ public class MainActivity extends AppCompatActivity
     CustomResponseHandler rh_profilePic = new CustomResponseHandler() {
         @Override
         public void onResponse(HashMap<String, Object> response) { }
+
+        @Override
+        public void getHeaders(Headers headers) {
+
+        }
+
         @Override
         public void onPOJOResponse(Object response) {
             Bitmap bitmap = Converter.imageFromText(
@@ -123,6 +131,12 @@ public class MainActivity extends AppCompatActivity
         }
         @Override public void onSuccessfulResponse() { }
         @Override public void onNoConnection() { }
+
+        @Override
+        public void getHeaders(Headers headers) {
+
+        }
+
         @Override public void onErrorResponse(POJOerror error) {
             Log.e("hey", "onErrorResponse");
         }
@@ -164,6 +178,12 @@ public class MainActivity extends AppCompatActivity
         }
         @Override public void onSuccessfulResponse() { }
         @Override public void onNoConnection() { }
+
+        @Override
+        public void getHeaders(Headers headers) {
+
+        }
+
         @Override public void onErrorResponse(POJOerror error) {
             Log.e("hey", "onErrorResponse");
         }
@@ -205,9 +225,8 @@ public class MainActivity extends AppCompatActivity
                 }else if (currentFrag instanceof MainAnnouncementFragment) {
                     toCreateAnnouncementFrag();
                 }
-
-                else if (currentFrag instanceof GetGroupMembersFragment) {
-                    //((GetGroupMembersFragment)currentFrag).toCreateTask();
+                else if (currentFrag instanceof SubjectsFragment) {
+                    ((SubjectsFragment)currentFrag).toCreateSubject(getSupportFragmentManager());
                 }
              //   else if(currentFrag instanceof CreateTaskFragment || currentFrag instanceof GroupsFragment){}
                 else if (currentFrag instanceof MainFragment) {
@@ -225,7 +244,7 @@ public class MainActivity extends AppCompatActivity
 
         View headerView = navView.getHeaderView(0);
         navProfilePic = (ImageView) headerView.findViewById(R.id.imageView_memberProfilePic);
-        navUsername = (TextView) headerView.findViewById(R.id.textView_userName);
+        navUsername = (TextView) headerView.findViewById(R.id.subject_name);
         navEmail = (TextView) headerView.findViewById(R.id.textView_email);
         navLogout = findViewById(R.id.textView_logout);
 
@@ -427,7 +446,7 @@ public class MainActivity extends AppCompatActivity
         if(menuItem_createGroup != null && menuItem_feedback != null && menuItem_joinGroup != null
                 && menuItem_leaveGroup != null && menuItem_profilePic != null) {
             if (currentFrag instanceof GroupAnnouncementFragment || currentFrag instanceof GroupMainFragment
-                    || currentFrag instanceof MainAnnouncementFragment // || currentFrag instanceof GetGroupMembersFragment
+                    || currentFrag instanceof MainAnnouncementFragment || currentFrag instanceof SubjectsFragment
                     || currentFrag instanceof MainFragment || currentFrag instanceof GroupsFragment) {
                 fab_action.setVisibility(View.VISIBLE);
                 if (currentFrag instanceof GroupsFragment) {
@@ -490,6 +509,11 @@ public class MainActivity extends AppCompatActivity
                         MiddleMan.newRequest(thisActivity, "getMyProfilePic", null, rh_profilePic, null);
                     }
                     @Override public void onNoConnection() { }
+
+                    @Override
+                    public void getHeaders(Headers headers) {
+
+                    }
                 }, null);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();

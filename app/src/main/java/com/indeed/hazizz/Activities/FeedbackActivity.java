@@ -21,6 +21,7 @@ import com.indeed.hazizz.Transactor;
 
 import java.util.HashMap;
 
+import okhttp3.Headers;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
@@ -54,6 +55,12 @@ public class FeedbackActivity extends AppCompatActivity {
         public void onNoConnection() {
             textView_error.setText("Nincs internet kapcsolat");
             button_feedback.setEnabled(true);
+        }
+
+        @Override
+        public void getHeaders(Headers headers) {
+
+
         }
     };
 

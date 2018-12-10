@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/textView_userName"
+        android:id="@+id/subject_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="2dp"
@@ -39,5 +39,5 @@
         android:text="leyras"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView_memberProfilePic"
-        app:layout_constraintTop_toBottomOf="@+id/textView_userName" />
+        app:layout_constraintTop_toBottomOf="@+id/subject_name" />
 </android.support.constraint.ConstraintLayout>

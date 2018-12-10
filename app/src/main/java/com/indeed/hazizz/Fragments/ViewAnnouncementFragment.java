@@ -11,26 +11,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.indeed.hazizz.Activities.MainActivity;
-import com.indeed.hazizz.AndroidThings;
 import com.indeed.hazizz.Communication.MiddleMan;
-import com.indeed.hazizz.Communication.POJO.Response.AnnouncementPOJOs.POJOAnnouncement;
 import com.indeed.hazizz.Communication.POJO.Response.AnnouncementPOJOs.POJODetailedAnnouncement;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOMembersProfilePic;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
-import com.indeed.hazizz.Communication.POJO.Response.POJOsubject;
-import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTaskDetailed;
 import com.indeed.hazizz.Manager;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -65,7 +58,7 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
         type = v.findViewById(R.id.textView_tasktype);
         title = v.findViewById(R.id.textView_title);
         description = v.findViewById(R.id.editText_description);
-        creatorName = v.findViewById(R.id.textView_creator);
+        creatorName = v.findViewById(R.id.textView_group);
         group = v.findViewById(R.id.textView_group);
 
         button_comments = v.findViewById(R.id.button_comments);

@@ -5,29 +5,31 @@
     android:background="@color/colorBackground"
     android:orientation="vertical">
 
- <!--   <TextView
-        android:id="@+id/textView_info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Csoport"
-        android:textSize="28sp" /> -->
+    <!--   <TextView
+           android:id="@+id/textView_info"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_gravity="center"
+           android:text="Csoport"
+           android:textSize="28sp" /> -->
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipe_refresh_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <ListView
-                android:id="@+id/listView_mainGroupFrag"
+                android:id="@+id/listView_subjects"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_gravity="start"
                 android:scrollbars="vertical" />
         </android.support.v4.widget.SwipeRefreshLayout>
+
 
         <TextView
             android:id="@+id/textView_noContent"
@@ -36,7 +38,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="49dp"
-            android:text="Nincs még házi"
+            android:text="Nincs még téma"
             android:visibility="invisible" />
     </RelativeLayout>
 </LinearLayout>

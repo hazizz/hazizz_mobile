@@ -25,6 +25,7 @@ import com.indeed.hazizz.Transactor;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
+import okhttp3.Headers;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
@@ -86,6 +87,11 @@ public class RegisterFragment extends Fragment {
         public void onNoConnection() {
             textView_error.setText("Nincs internet kapcsolat");
             button_signup.setEnabled(true);
+        }
+
+        @Override
+        public void getHeaders(Headers headers) {
+
         }
     };
 

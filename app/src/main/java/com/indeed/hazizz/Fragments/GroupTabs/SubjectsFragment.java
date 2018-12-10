@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,11 +17,11 @@ import android.widget.TextView;
 
 import com.indeed.hazizz.Activities.MainActivity;
 import com.indeed.hazizz.Communication.MiddleMan;
-import com.indeed.hazizz.Communication.POJO.Response.AnnouncementPOJOs.POJOAnnouncement;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
-import com.indeed.hazizz.Listviews.AnnouncementList.AnnouncementItem;
-import com.indeed.hazizz.Listviews.AnnouncementList.Group.CustomAdapter;
+import com.indeed.hazizz.Communication.POJO.Response.POJOsubject;
+import com.indeed.hazizz.Listviews.SubjectList.CustomAdapter;
+import com.indeed.hazizz.Listviews.SubjectList.SubjectItem;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
@@ -31,11 +32,11 @@ import java.util.List;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
-public class GroupAnnouncementFragment extends Fragment{
+public class SubjectsFragment extends Fragment {
 
     private View v;
     private CustomAdapter adapter;
-    private List<AnnouncementItem> listAnnouncement;
+    private List<SubjectItem> listSubject;
 
     private TextView textView_noContent;
     private SwipeRefreshLayout sRefreshLayout;
@@ -46,66 +47,58 @@ public class GroupAnnouncementFragment extends Fragment{
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.fragment_announcements, container, false);
-        Log.e("hey", "announcement group fragment created");
+        v = inflater.inflate(R.layout.fragment_subjects, container, false);
+        Log.e("hey", "subject group fragment created");
         ((MainActivity)getActivity()).onFragmentCreated();
-        groupId = getArguments().getInt("groupId");
-        groupName = getArguments().getString("groupName");
+       // groupId = getArguments().getInt("groupId");
 
         textView_noContent = v.findViewById(R.id.textView_noContent);
         sRefreshLayout = v.findViewById(R.id.swipe_refresh_layout); sRefreshLayout.bringToFront();
         sRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getAnnouncements();
+                getSubjects();
             }});
 
         createViewList();
-        getAnnouncements();
+        getSubjects();
 
         return v;
     }
     void createViewList(){
-        listAnnouncement = new ArrayList<>();
-        ListView listView = (ListView)v.findViewById(R.id.listView_announcementGroup);
-        adapter = new CustomAdapter(getActivity(), R.layout.announcement_item, listAnnouncement);
+        listSubject = new ArrayList<>();
+        ListView listView = (ListView)v.findViewById(R.id.listView_subjects);
+        adapter = new CustomAdapter(getActivity(), R.layout.subject_item, listSubject);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                groupName = ((AnnouncementItem)listView.getItemAtPosition(i)).getGroupData().getName();
-                    Transactor.fragmentViewAnnouncement(getFragmentManager().beginTransaction(),
-                        ((AnnouncementItem)listView.getItemAtPosition(i)).getGroupData().getId(),
-                        ((AnnouncementItem)listView.getItemAtPosition(i)).getAnnouncementId(),
-                        ((AnnouncementItem)listView.getItemAtPosition(i)).getGroupData().getName(), false);
+                /*groupName = ((SubjectItem)listView.getItemAtPosition(i)).getGroupData().getName();
+                Transactor.fragmentViewAnnouncement(getFragmentManager().beginTransaction(),
+                        ((SubjectItem)listView.getItemAtPosition(i)).getGroupData().getId(),
+                        ((SubjectItem)listView.getItemAtPosition(i)).getAnnouncementId(),
+                        ((SubjectItem)listView.getItemAtPosition(i)).getGroupData().getName(), false);
+                */
             }
         });
     }
-    private void getAnnouncements(){
+    private void getSubjects(){
         adapter.clear();
         CustomResponseHandler responseHandler = new CustomResponseHandler() {
-            @Override
-            public int hashCode() {
-                return super.hashCode();
-            }
-
             @Override
             public void onResponse(HashMap<String, Object> response) { }
             @Override
             public void onPOJOResponse(Object response) {
-                ArrayList<POJOAnnouncement> pojoList = (ArrayList<POJOAnnouncement>) response;
+                ArrayList<POJOsubject> pojoList = (ArrayList<POJOsubject>) response;
                 if(pojoList.size() == 0){
                     textView_noContent.setVisibility(v.VISIBLE);
                 }else {
                     textView_noContent.setVisibility(v.INVISIBLE);
-                    for (POJOAnnouncement t : pojoList) {
-                        listAnnouncement.add(new AnnouncementItem(t.getTitle(),
-                                t.getDescription(), t.getGroupData(), t.getCreator(), t.getSubjectData(), t.getId()));
+                    for (POJOsubject t : pojoList) {
+                        listSubject.add(new SubjectItem(t.getName(), t.getId()));
                         adapter.notifyDataSetChanged();
-                        Log.e("hey", t.getId() + " " + t.getGroupData().getId());
                     }
-                    Log.e("hey", "got response");
                 }
                 sRefreshLayout.setRefreshing(false);
             }
@@ -136,16 +129,12 @@ public class GroupAnnouncementFragment extends Fragment{
             }
         };
         HashMap<String, Object> vars = new HashMap<>();
-        vars.put("groupId", Integer.toString(groupId));
-        MiddleMan.newRequest(this.getActivity(),"getAnnouncementsFromGroup", null, responseHandler, vars);
+        vars.put("groupId", Integer.toString(GroupTabFragment.groupId));
+        MiddleMan.newRequest(this.getActivity(),"getSubjects", null, responseHandler, vars);
     }
 
-    public void toCreateAnnouncement(FragmentManager fm){
-        groupId = getArguments().getInt("groupId");
-        groupName = getArguments().getString("groupName");
-        Transactor.fragmentCreateAnnouncement(fm.beginTransaction(),groupId, groupName);
-
+    public void toCreateSubject(FragmentManager fm){
+        Transactor.fragmentCreateSubject(fm.beginTransaction(), GroupTabFragment.groupId, GroupTabFragment.groupName);
     }
+
 }
-
-

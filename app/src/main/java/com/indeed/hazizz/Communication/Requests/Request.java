@@ -35,6 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Headers;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -320,6 +321,11 @@ public class Request {
             public void onSuccessfulResponse() { }
             @Override
             public void onNoConnection() { }
+
+            @Override
+            public void getHeaders(Headers headers) {
+
+            }
         };
 
         RefreshToken() {
@@ -583,8 +589,6 @@ public class Request {
             Type listType = new TypeToken<ArrayList<POJOgetTask>>(){}.getType();
             List<POJOgetTask> castedList = gson.fromJson(response.body().charStream(), listType);
             cOnResponse.onPOJOResponse(castedList);
-            Log.e("hey", "on POJOResponse called wow");
-            Log.e("hey", "size of response list: " + castedList.size());
         }
     }
 
@@ -761,7 +765,7 @@ public class Request {
         @Override
         public void callIsSuccessful(Response<ResponseBody> response) {
             cOnResponse.onSuccessfulResponse();
-
+            cOnResponse.getHeaders(response.headers());
         }
     }
 

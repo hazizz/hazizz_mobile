@@ -20,12 +20,14 @@ import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.POJO.Response.POJOgroup;
 import com.indeed.hazizz.Listviews.GroupList.CustomAdapter;
+import com.indeed.hazizz.Listviews.GroupList.GroupItem;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import okhttp3.Headers;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
@@ -47,6 +49,12 @@ public class CreateGroupFragment extends Fragment {
 
         @Override
         public void onResponse(HashMap<String, Object> response) { }
+
+        @Override
+        public void getHeaders(Headers headers) {
+
+        }
+
         @Override
         public void onPOJOResponse(Object response) {
             ArrayList<POJOgroup> castedList = (ArrayList<POJOgroup>) response;
@@ -108,7 +116,6 @@ public class CreateGroupFragment extends Fragment {
             button_createGroup.setEnabled(true);
         }
 
-
         @Override
         public void onEmptyResponse() { }
 
@@ -116,14 +123,22 @@ public class CreateGroupFragment extends Fragment {
         public void onSuccessfulResponse() {
            // goBack();
         //    MiddleMan.request.getGroupsFromMe(getActivity(), null, rh_getGroups, null);
-            MiddleMan.newRequest(getActivity(), "getGroupsFromMe", null, rh_getGroups, null);
-
+         //   MiddleMan.newRequest(getActivity(), "getGroupsFromMe", null, rh_getGroups, null);
         }
 
         @Override
         public void onNoConnection() {
             textView_error.setText("Nincs internet kapcsolat");
             button_createGroup.setEnabled(true);
+        }
+
+        @Override
+        public void getHeaders(Headers headers) {
+            int groupId = Integer.parseInt(headers.get("Location").split("groups/")[1]);
+         //   HashMap<String, Object> vars = new HashMap<>();
+          //  vars.put("groupId", groupId);
+           // MiddleMan.newRequest(getActivity(), "getGroupsFromMe", null, rh_getGroups, null);
+            Transactor.fragmentMainGroup(getFragmentManager().beginTransaction(), groupId, newGroupName);
         }
 
         @Override
@@ -163,7 +178,7 @@ public class CreateGroupFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(button_createGroup.getTextSize() != 0) {
-                    newGroupName = editText_createGroup.getText().toString();
+                    newGroupName = editText_createGroup.getText().toString().toLowerCase();
                     HashMap<String, Object> body = new HashMap<>();
                     body.put("groupName", newGroupName);
                     body.put("type", "OPEN");button_createGroup.setEnabled(false);
