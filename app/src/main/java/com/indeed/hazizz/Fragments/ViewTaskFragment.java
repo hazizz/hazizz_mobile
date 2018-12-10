@@ -14,7 +14,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.indeed.hazizz.Activities.MainActivity;
-import com.indeed.hazizz.AndroidThings;
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOMembersProfilePic;
@@ -73,7 +72,7 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
         type = v.findViewById(R.id.textView_tasktype);
         title = v.findViewById(R.id.textView_title);
         description = v.findViewById(R.id.editText_description);
-        creatorName = v.findViewById(R.id.textView_creator);
+        creatorName = v.findViewById(R.id.textView_group);
         subject = v.findViewById(R.id.textView_subject);
         group = v.findViewById(R.id.textView_group);
         deadLine = v.findViewById(R.id.textview_deadline);

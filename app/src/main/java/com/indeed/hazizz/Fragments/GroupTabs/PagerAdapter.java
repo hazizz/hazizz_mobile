@@ -22,7 +22,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
 
         Bundle bundle = new Bundle();
-
+        Fragment frag;
 
         switch (position) {
             case 0:
@@ -30,7 +30,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
                 Log.e("hey", "pagerAdapter groupId: " + groupId);
                 bundle.putInt("groupId", groupId);
                 bundle.putString("groupName", groupName);
-                GroupMainFragment frag = new GroupMainFragment();
+                frag = new GroupMainFragment();
                 frag.setArguments(bundle);
                 currentFrag = frag;
                 return frag;
@@ -39,28 +39,37 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
                 bundle = new Bundle();
                 bundle.putInt("groupId", groupId);
                 bundle.putString("groupName", groupName);
-                GroupAnnouncementFragment frag0 = new GroupAnnouncementFragment();
-                frag0.setArguments(bundle);
-                currentFrag = frag0;
-                return frag0;
+                frag= new GroupAnnouncementFragment();
+                frag.setArguments(bundle);
+                currentFrag = frag;
+                return frag;
             case 2:
                 bundle = new Bundle();
                 bundle.putInt("groupId", groupId);
-                bundle.putString("groupName", groupName);
-                GetGroupMembersFragment frag2 = new GetGroupMembersFragment();
-                frag2.setArguments(bundle);
+                frag = new SubjectsFragment();
+                frag.setArguments(bundle);
 
-                currentFrag = frag2;
-                return frag2;
+                currentFrag = frag;
+                return frag;
+            case 3:
+                bundle = new Bundle();
+                bundle.putInt("groupId", groupId);
+                bundle.putString("groupName", groupName);
+                frag = new GetGroupMembersFragment();
+                frag.setArguments(bundle);
+
+                currentFrag = frag;
+                return frag;
+
             default:
                 bundle = new Bundle();
                 Log.e("hey", "pagerAdapter groupId: " + groupId);
                 bundle.putInt("groupId", groupId);
                 bundle.putString("groupName", groupName);
-                GroupMainFragment frag3 = new GroupMainFragment();
-                frag3.setArguments(bundle);
-                currentFrag = frag3;
-                return frag3;
+                frag = new GroupMainFragment();
+                frag.setArguments(bundle);
+                currentFrag = frag;
+                return frag;
         }
     }
 

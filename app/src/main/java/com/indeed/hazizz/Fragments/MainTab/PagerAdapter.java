@@ -34,13 +34,13 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
 
                 currentFrag = frag;
                 return frag;
-            case 2:
+         /*   case 2:
                 bundle = new Bundle();
                 GroupsFragment frag2 = new GroupsFragment();
                 frag2.setArguments(bundle);
 
                 currentFrag = frag2;
-                return frag2;
+                return frag2; */
 
           /*  case 3:
                 bundle = new Bundle();

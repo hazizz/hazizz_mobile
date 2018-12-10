@@ -22,13 +22,17 @@ import com.indeed.hazizz.Fragments.CreateGroupFragment;
 import com.indeed.hazizz.Fragments.CreateSubjectFragment;
 import com.indeed.hazizz.Fragments.CreateTaskFragment;
 import com.indeed.hazizz.Fragments.GroupTabs.GroupTabFragment;
+import com.indeed.hazizz.Fragments.GroupTabs.SubjectsFragment;
 import com.indeed.hazizz.Fragments.JoinGroupFragment;
+import com.indeed.hazizz.Fragments.MainTab.GroupsFragment;
 import com.indeed.hazizz.Fragments.MainTab.MainTabFragment;
 import com.indeed.hazizz.Fragments.ViewAnnouncementFragment;
 import com.indeed.hazizz.Fragments.ViewTaskFragment;
 
 public abstract class Transactor extends FragmentActivity {
     private static boolean backStack = true;
+
+    private static Fragment frag;
 
     public static Fragment getCurrentFragment(FragmentManager fManager, boolean asd){
         Fragment currentF = fManager.findFragmentById(R.id.fragment_container);
@@ -72,7 +76,10 @@ public abstract class Transactor extends FragmentActivity {
         fragmentMainTab(fTransaction, 0);
     }
     public static void fragmentGroups(FragmentTransaction fTransaction){
-       fragmentMainTab(fTransaction, 2);
+        Fragment frag = new GroupsFragment();
+        fTransaction.replace(R.id.fragment_container, frag);
+        fTransaction.commit();
+      // fragmentMainTab(fTransaction, 2);
     }
     public static void fragmentMainGroup(FragmentTransaction fTransaction, int groupId, String groupName){
         fragmentGroupTab(fTransaction, groupId, groupName, 0);
@@ -144,6 +151,17 @@ public abstract class Transactor extends FragmentActivity {
         fTransaction.commit();
     }
 
+
+    public static void fragmentSubjects(FragmentTransaction fTransaction, int groupId, String groupName){
+    /*    Bundle bundle = new Bundle();
+        frag = new SubjectsFragment();
+        frag.setArguments(bundle);
+        fTransaction.replace(R.id.fragment_container, frag);
+        if(backStack){ fTransaction.addToBackStack(null); }
+        fTransaction.commit(); */
+        fragmentGroupTab(fTransaction, groupId, groupName, 2);
+    }
+
     public static void fragmentCreateGroup(FragmentTransaction fTransaction){
         CreateGroupFragment frag = new CreateGroupFragment();
         fTransaction.replace(R.id.fragment_container, frag);
@@ -159,7 +177,7 @@ public abstract class Transactor extends FragmentActivity {
     }
 
     public static void fragmentGetGroupMembers(FragmentTransaction fTransaction, int groupId, String groupName){
-        fragmentGroupTab(fTransaction, groupId, groupName, 1);
+        fragmentGroupTab(fTransaction, groupId, groupName, 3);
     }
 
     public static void fragmentGroupTab(FragmentTransaction fTransaction, int groupId, String groupName, int startingTab){

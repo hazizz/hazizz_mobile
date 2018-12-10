@@ -29,7 +29,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="50dp"
-                android:text="Nincs Házi"
+                android:text="Nincs még házi"
                 android:visibility="invisible" />
         </RelativeLayout>
 

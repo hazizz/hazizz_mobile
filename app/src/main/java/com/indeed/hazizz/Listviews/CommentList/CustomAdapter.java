@@ -50,7 +50,7 @@ public class CustomAdapter extends ArrayAdapter<CommentItem>  {
 
             holder = new DataHolder();
             holder.commentProfilePic = (ImageView) convertView.findViewById(R.id.imageView_memberProfilePic);
-            holder.commentName = (TextView) convertView.findViewById(R.id.textView_userName);
+            holder.commentName = (TextView) convertView.findViewById(R.id.subject_name);
             holder.commentContent = (TextView) convertView.findViewById(R.id.textView_description);
 
             convertView.setTag(holder);

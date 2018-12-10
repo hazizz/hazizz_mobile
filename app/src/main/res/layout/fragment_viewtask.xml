@@ -56,7 +56,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
         <TextView
-            android:id="@+id/textView_creator"
+            android:id="@+id/textView_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dp"
@@ -113,7 +113,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:maxLines="1"
-            android:text="Tantárgy:"
+            android:text="Téma:"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -148,7 +148,7 @@
             android:singleLine="true"
             android:text="          "
             app:layout_constraintStart_toEndOf="@+id/textView11"
-            app:layout_constraintTop_toBottomOf="@+id/textView_creator" />
+            app:layout_constraintTop_toBottomOf="@+id/textView_group" />
 
 
         <TextView
@@ -232,7 +232,7 @@
             android:layout_marginLeft="4dp"
             android:layout_marginStart="4dp"
             android:background="#0000"
-            android:text="Kommentek"
+            android:text="Megjegyzések"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
     </android.support.constraint.ConstraintLayout>

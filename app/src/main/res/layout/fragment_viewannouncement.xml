@@ -56,7 +56,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/textView_creator"
+            android:id="@+id/textView_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dp"
@@ -144,7 +144,7 @@
             android:layout_marginLeft="4dp"
             android:layout_marginStart="4dp"
             android:background="#0000"
-            android:text="Kommentek"
+            android:text="Megjegyzések"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
     </android.support.constraint.ConstraintLayout>

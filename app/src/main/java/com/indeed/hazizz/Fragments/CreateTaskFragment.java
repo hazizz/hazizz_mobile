@@ -38,6 +38,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
+import okhttp3.Headers;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
@@ -141,7 +142,7 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
                     } else if (taskTitle.getText().length() > 20) {
                         textView_error.setText("A cím túl hosszú (maximum 20 karakter)");
                     }else if (subject_spinner.getSelectedItem() == null){
-                        textView_error.setText("Nincs kiválasztott tantárgyad");
+                        textView_error.setText("Nincs kiválasztott témád");
                     } else {
                         button_send.setEnabled(false);
                         createTask();
@@ -204,8 +205,8 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
                 s_adapter.clear();
                 for(POJOsubject s : subjects){
                     s_adapter.add(s);
-                    s_adapter.notifyDataSetChanged();
                 }
+                s_adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -230,6 +231,11 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
             public void onNoConnection() {
                 textView_error.setText("Nincs internet kapcsolat");
                 button_send.setEnabled(true);
+            }
+
+            @Override
+            public void getHeaders(Headers headers) {
+
             }
         };
 

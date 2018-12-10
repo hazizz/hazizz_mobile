@@ -1,10 +1,8 @@
 package com.indeed.hazizz;
 
 import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
@@ -13,7 +11,6 @@ import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
-import com.indeed.hazizz.Listviews.TaskList.TaskItem;
 
 import java.util.HashMap;
 import java.util.List;
@@ -102,7 +99,7 @@ public class WidgetService extends RemoteViewsService {
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.task_item);
             views.setTextViewText(R.id.task_title, data.get(i).getTitle());
             views.setTextViewText(R.id.task_description, data.get(i).getDescription());
-            views.setTextViewText(R.id.textView_creator, data.get(i).getCreator().getUsername());
+            views.setTextViewText(R.id.textView_group, data.get(i).getCreator().getUsername());
             views.setTextViewText(R.id.textView_subject, data.get(i).getSubjectData().getName());
             views.setTextViewText(R.id.textView_deadline, data.get(i).getDueDate());
 

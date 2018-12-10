@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import okhttp3.Headers;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
@@ -65,12 +66,7 @@ public class GroupsFragment extends Fragment {
 
         getGroups();
 
-        dest = getArguments().getString("dest");
-        if(dest != null){
-           // textView_title.setText("Csoport választás");
-        }else{
-            dest="";
-        }
+
         return v;
     }
 
@@ -116,6 +112,11 @@ public class GroupsFragment extends Fragment {
                 textView_noContent.setText("Nincs internet kapcsolat");
                 textView_noContent.setVisibility(View.VISIBLE);
                 sRefreshLayout.setRefreshing(false);
+            }
+
+            @Override
+            public void getHeaders(Headers headers) {
+
             }
         };
         MiddleMan.newRequest(this.getActivity(),"getGroupsFromMe", null, responseHandler, null);
