@@ -21,7 +21,7 @@ import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
 import com.indeed.hazizz.D8;
-import com.indeed.hazizz.Listviews.TaskList.CustomAdapter;
+import com.indeed.hazizz.Listviews.TaskList.Group.CustomAdapter;
 import com.indeed.hazizz.Listviews.TaskList.TaskItem;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;

@@ -7,11 +7,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -39,6 +41,8 @@ public class RegisterFragment extends Fragment {
     private EditText editText_password;
     private EditText editText_passwordCheck;
     private Button button_signup;
+    private CheckBox checkBox_termsAndConditions;
+    private TextView textView_termsAndConditions;
 
     private TextView textView_error;
 
@@ -102,7 +106,12 @@ public class RegisterFragment extends Fragment {
         editText_email = v.findViewById(R.id.editText_email);
         editText_password = v.findViewById(R.id.editText_password);
         editText_passwordCheck = v.findViewById(R.id.editText_passwordCheck);
+        checkBox_termsAndConditions = v.findViewById(R.id.checkBox_termsAndConditions);
+        textView_termsAndConditions = v.findViewById(R.id.textView_termsAndConditions);
 
+    //    textView_termsAndConditions.setText(SafeURLSpan.parseSafeHtml(<<YOUR STRING GOES HERE>>));
+
+        textView_termsAndConditions.setMovementMethod(LinkMovementMethod.getInstance());
 
         textView_error = v.findViewById(R.id.textView_error);
         textView_error.setTextColor(Color.rgb(255, 0, 0));
@@ -132,19 +141,26 @@ public class RegisterFragment extends Fragment {
                         textView_error.setText("Jelszó nem egyezik");
 
                     } else {
-                        password = Converter.hashString(editText_password.getText().toString());
+                        if (checkBox_termsAndConditions.isChecked()) {
+                            password = Converter.hashString(editText_password.getText().toString());
 
 
-                        HashMap<String, Object> requestBody = new HashMap<>();
+                            HashMap<String, Object> requestBody = new HashMap<>();
 
-                        requestBody.put("username", username);
-                        requestBody.put("password", password);
-                        requestBody.put("emailAddress", email);
-                        button_signup.setEnabled(false);
+                            requestBody.put("username", username);
+                            requestBody.put("password", password);
+                            requestBody.put("emailAddress", email);
+                            requestBody.put("consent", true);
+                            button_signup.setEnabled(false);
 
 
-                        // MiddleMan.request.register(getContext(), requestBody, responseHandler, null);
-                        MiddleMan.newRequest(getActivity(), "register", requestBody, responseHandler, null);
+
+                            MiddleMan.newRequest(getActivity(), "register", requestBody, responseHandler, null);
+
+                        }else {
+                            textView_error.setText("Nem fogadtad el az általános felhasználó szerződést");
+
+                        }
                     }
                 }
             }

@@ -2,7 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="wrap_content"
     android:background="#ffffff"
     android:orientation="horizontal"
     android:paddingBottom="5dp"
@@ -11,7 +11,8 @@
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:orientation="vertical">
 
         <TextView
@@ -29,40 +30,33 @@
         <TextView
             android:id="@+id/task_description"
             android:layout_width="wrap_content"
-            android:layout_height="72dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="2dp"
             android:layout_marginTop="4dp"
             android:ellipsize="end"
-            android:maxHeight="230dp"
-            android:maxLines="5"
-            android:minWidth="150dp"
+            android:maxLines="6"
+
             android:text="Description"
             android:textColor="#363636" />
 
     </LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:textColor="#363636" />
 
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingBottom="12dp"
+        android:paddingLeft="4dp"
         android:paddingTop="12dp">
 
 
         <RelativeLayout
             android:id="@+id/relativeLayout4"
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
+            android:layout_width="70dp"
+            android:layout_height="91dp"
             android:layout_alignParentTop="true"
-            android:gravity="right">
+            android:gravity="left">
 
             <TextView
                 android:id="@+id/textView9"
@@ -92,7 +86,7 @@
         <RelativeLayout
             android:id="@+id/relativeLayout3"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="90dp"
             android:layout_alignBaseline="@+id/task_title">
 
             <TextView
@@ -116,7 +110,7 @@
                 android:textColor="#363636" />
 
             <TextView
-                android:id="@+id/textView_group"
+                android:id="@+id/textView_creator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"

@@ -72,7 +72,7 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
         type = v.findViewById(R.id.textView_tasktype);
         title = v.findViewById(R.id.textView_title);
         description = v.findViewById(R.id.editText_description);
-        creatorName = v.findViewById(R.id.textView_group);
+        creatorName = v.findViewById(R.id.textView_creator);
         subject = v.findViewById(R.id.textView_subject);
         group = v.findViewById(R.id.textView_group);
         deadLine = v.findViewById(R.id.textview_deadline);

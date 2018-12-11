@@ -1,9 +1,11 @@
 package com.indeed.hazizz.Communication;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.indeed.hazizz.Activities.AuthActivity;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJORefreshToken;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
@@ -58,6 +60,14 @@ public interface RequestInterface {
                          Log.e("hey", "errorMessage is: " + pojoError.getMessage());
                          if(pojoError.getErrorCode() == 1) {
                               ErrorHandler.unExpectedResponseDialog(act);
+                         }
+
+                         if(pojoError.getErrorCode() == 0) {
+                              if(SharedPrefs.TokenManager.tokenInvalidated(act)){
+                                   Intent i = new Intent(act, AuthActivity.class);
+
+                                   act.startActivity(i);
+                              }
                          }
 
                          else if(pojoError.getErrorCode() == 18 || pojoError.getErrorCode() == 17){

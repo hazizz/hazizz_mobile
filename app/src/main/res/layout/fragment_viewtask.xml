@@ -50,13 +50,14 @@
             android:scrollbars="vertical"
             android:singleLine="false"
             android:text="      "
+            android:textSize="15dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.509"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
         <TextView
-            android:id="@+id/textView_group"
+            android:id="@+id/textView_creator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dp"
@@ -64,6 +65,7 @@
             android:layout_marginTop="10dp"
             android:maxWidth="80dp"
             android:text="             "
+            android:textSize="17sp"
             app:layout_constraintStart_toEndOf="@+id/textView6"
             app:layout_constraintTop_toBottomOf="@+id/textView_group" />
 
@@ -85,6 +87,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:text="Dead Line"
+            android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@+id/editText_description"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -98,6 +101,7 @@
             android:layout_marginTop="10dp"
             android:maxLines="1"
             android:text="Feladat típusa:"
+            android:textSize="17sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
@@ -114,6 +118,7 @@
             android:layout_marginTop="16dp"
             android:maxLines="1"
             android:text="Téma:"
+            android:textSize="17sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -126,11 +131,10 @@
             android:layout_marginLeft="4dp"
             android:layout_marginStart="4dp"
             android:layout_marginTop="16dp"
-            android:ellipsize="end"
             android:maxLines="1"
-            android:maxWidth="80dp"
             android:singleLine="true"
             android:text="           "
+            android:textSize="17sp"
             app:layout_constraintStart_toEndOf="@+id/textView12"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -142,13 +146,12 @@
             android:layout_marginLeft="4dp"
             android:layout_marginStart="4dp"
             android:layout_marginTop="10dp"
-            android:ellipsize="end"
             android:maxLines="1"
-            android:maxWidth="80dp"
             android:singleLine="true"
             android:text="          "
+            android:textSize="17sp"
             app:layout_constraintStart_toEndOf="@+id/textView11"
-            app:layout_constraintTop_toBottomOf="@+id/textView_group" />
+            app:layout_constraintTop_toBottomOf="@+id/textView_creator" />
 
 
         <TextView
@@ -159,6 +162,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="10dp"
             android:text="Kreátor:"
+            android:textSize="17sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView1" />
 
@@ -170,7 +174,7 @@
             android:layout_marginStart="12dp"
             android:layout_marginTop="8dp"
             android:text="Leírás:"
-            android:textSize="18sp"
+            android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
@@ -184,6 +188,7 @@
             android:layout_marginRight="2dp"
             android:layout_marginStart="240dp"
             android:text="Határidő:"
+            android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@+id/editText_description"
             app:layout_constraintEnd_toStartOf="@+id/textview_deadline"
             app:layout_constraintHorizontal_bias="1.0"
@@ -197,6 +202,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="10dp"
             android:text="Csoport:"
+            android:textSize="17sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
@@ -208,6 +214,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginTop="10dp"
             android:text="           "
+            android:textSize="17sp"
             app:layout_constraintStart_toEndOf="@+id/textView1"
             app:layout_constraintTop_toBottomOf="@+id/textView_subject" />
 

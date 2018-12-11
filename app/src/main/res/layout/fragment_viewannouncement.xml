@@ -50,13 +50,14 @@
             android:scrollbars="vertical"
             android:singleLine="false"
             android:text="      "
+            android:textSize="15sp"
             app:layout_constraintBottom_toTopOf="@+id/button_comments"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.509"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/textView_group"
+            android:id="@+id/textView_creator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dp"
@@ -64,6 +65,7 @@
             android:layout_marginTop="10dp"
             android:maxWidth="80dp"
             android:text="             "
+            android:textSize="18sp"
             app:layout_constraintStart_toEndOf="@+id/textView6"
             app:layout_constraintTop_toBottomOf="@+id/textView_group" />
 
@@ -86,6 +88,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="10dp"
             android:text="Kreátor:"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView1" />
 
@@ -97,7 +100,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
             android:text="Leírás:"
-            android:textSize="18sp"
+            android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/editText_description"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -109,6 +112,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:text="Csoport:"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -121,7 +125,8 @@
             android:layout_marginTop="8dp"
             android:text="           "
             app:layout_constraintStart_toEndOf="@+id/textView1"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/button_edit"

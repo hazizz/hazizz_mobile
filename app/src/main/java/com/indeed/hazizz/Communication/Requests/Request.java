@@ -271,6 +271,7 @@ public class Request {
         public void setupCall() {
             HashMap<String, String> headerMap = new HashMap<String, String>();
             headerMap.put("Content-Type", "application/json");
+
             call = aRequest.register(headerMap, body);
         }
         @Override
