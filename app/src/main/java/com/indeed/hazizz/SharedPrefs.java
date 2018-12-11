@@ -155,6 +155,7 @@ public class SharedPrefs {
 
         public static void setToken(Context context, String newToken){
             SharedPrefs.save(context, "token", "token", newToken);
+            tokenIsValid = true;
         }
 
         public static void setRefreshToken(Context context, String newRefreshToken){
@@ -165,6 +166,11 @@ public class SharedPrefs {
         public static void invalidateTokens(Context context){
             setRefreshToken(context, "");
             setToken(context, "");
+            tokenIsValid = false;
+        }
+
+        public static boolean tokenInvalidated(Context context){
+            return !tokenIsValid;
 
         }
 

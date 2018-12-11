@@ -19,4 +19,7 @@
     <string name="configure">Configure</string>
     <string name="add_widget">Add widget</string>
     <string name="title_activity_feedback">FeedbackActivity</string>
+
+    <string name="TermsAndConditions">Elfogadom az<a href="https://hazizz.github.io/privacy-hu.txt"> általános felhasználói szerződést</a></string>
+
 </resources>

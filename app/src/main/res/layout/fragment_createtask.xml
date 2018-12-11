@@ -73,6 +73,7 @@
             android:layout_marginStart="8dp"
             android:gravity="top|left"
             android:hint="Leírás"
+            android:singleLine="false"
             android:inputType="textMultiLine"
             android:maxLength="240"
             app:layout_constraintEnd_toEndOf="parent"

@@ -53,6 +53,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:maxLines="6"
+            android:maxLength="150"
+            android:inputType="text"
             android:layout_gravity="bottom" />
 
         <ImageButton
@@ -60,7 +63,6 @@
             android:padding="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#0000"
             app:srcCompat="@drawable/ic_send" />
     </LinearLayout>
 

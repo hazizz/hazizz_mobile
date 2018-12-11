@@ -81,11 +81,15 @@ public class GroupsFragment extends Fragment {
                 textView_noContent.setVisibility(v.INVISIBLE);
                 ArrayList<POJOgroup> castedListFullOfPojos = (ArrayList<POJOgroup>)response;
                 listGroup.clear();
-                for(POJOgroup g : castedListFullOfPojos){
-                    listGroup.add(new GroupItem(R.drawable.ic_launcher_background, g.getName(), g.getId()));
-                }
+                if(castedListFullOfPojos.size() != 0) {
+                    for (POJOgroup g : castedListFullOfPojos) {
+                        listGroup.add(new GroupItem(R.drawable.ic_launcher_background, g.getName(), g.getId()));
+                    }
 
-                adapter.notifyDataSetChanged();
+                    adapter.notifyDataSetChanged();
+                }else{
+                    textView_noContent.setText("Nem vagy még tagja egy csoportnak sem");
+                }
                 sRefreshLayout.setRefreshing(false);
                 Log.e("hey", "got response");
             }
