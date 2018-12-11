@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
@@ -21,6 +22,44 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
             "com.company.android.ACTION_VIEW_DETAILS";
     public static final String EXTRA_ITEM =
             "com.company.android.CollectionWidgetProvider.EXTRA_ITEM";
+
+    @Override
+    public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
+
+        RemoteViews widgetView = new RemoteViews(context.getPackageName(), R.layout.hazizz_widget);
+
+        // See the dimensions and
+        Bundle options = appWidgetManager.getAppWidgetOptions(appWidgetId);
+
+        // Get min width and height.
+        int width = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
+        int height = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT);
+
+        if(width >= 320){
+
+          //  widgetView.setInt(R.id.task_description, "setWidth", 200);
+          //  widgetView.setViewPadding(R.id.task_description, 0, 0, 200, 150);
+            Log.e("hey", "cell: 5");
+
+
+        }else{
+           // widgetView.setInt(R.id.task_description, "setWidth", 100);
+          //  widgetView.setViewPadding(R.id.task_description, 0, 0, 150, 100);
+            Log.e("hey", "cell less than 5");
+        }
+
+        Log.e("hey", "changed layout. width: " + width);
+
+        // Obtain appropriate widget and update it.
+
+      //  AppWidgetManager.getInstance(context).getAppWidgetInfo(appWidgetId).
+
+       // options.getInt(AppWidgetManager.)
+
+
+        appWidgetManager.updateAppWidget(appWidgetId, widgetView);
+        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
+    }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager,
@@ -90,6 +129,7 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
                 widgetView.setViewVisibility(R.id.widget_textView_content, View.INVISIBLE);
             }else {
                 widgetView.setViewVisibility(R.id.widget_textView_content, View.VISIBLE);
+
                 widgetView.setTextViewText(R.id.widget_textView_content, contentInfo);
             }
             mgr.updateAppWidget(mgr.getAppWidgetIds(cn),widgetView);

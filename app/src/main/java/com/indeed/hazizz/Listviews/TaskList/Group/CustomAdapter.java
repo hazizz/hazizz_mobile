@@ -1,4 +1,4 @@
-package com.indeed.hazizz.Listviews.TaskList;
+package com.indeed.hazizz.Listviews.TaskList.Group;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.indeed.hazizz.Listviews.TaskList.TaskItem;
 import com.indeed.hazizz.R;
 
 import java.util.List;
@@ -52,7 +53,7 @@ public class CustomAdapter extends ArrayAdapter<TaskItem> {
             holder.taskTitle = (TextView) convertView.findViewById(R.id.task_title);
             holder.taskDescription = (TextView) convertView.findViewById(R.id.task_description);
             holder.taskDueDate = (TextView) convertView.findViewById(R.id.textView_dueDate);
-            holder.taskCreator = (TextView) convertView.findViewById(R.id.textView_group);
+            holder.taskCreator = (TextView) convertView.findViewById(R.id.textView_creator);
             holder.taskSubject = (TextView) convertView.findViewById(R.id.textView_title);
 
             convertView.setTag(holder);

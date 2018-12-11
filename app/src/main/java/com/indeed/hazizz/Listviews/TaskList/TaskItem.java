@@ -1,14 +1,8 @@
 package com.indeed.hazizz.Listviews.TaskList;
 
-import android.widget.ImageView;
-import android.widget.TextView;
-
 import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOcreator;
 import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgroupData;
 import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOsubjectData;
-import com.indeed.hazizz.R;
-
-import java.io.Serializable;
 
 import lombok.Data;
 

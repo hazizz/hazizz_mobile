@@ -42,7 +42,7 @@
             />
         <activity
             android:name=".Activities.AuthActivity"
-            android:noHistory="true"
+            android:noHistory="false"
             android:windowSoftInputMode="adjustPan"
             android:configChanges="orientation|screenSize">
             <intent-filter>

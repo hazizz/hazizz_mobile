@@ -19,7 +19,7 @@ import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
 import com.indeed.hazizz.D8;
-import com.indeed.hazizz.Listviews.TaskList.CustomAdapter;
+import com.indeed.hazizz.Listviews.TaskList.Main.CustomAdapter;
 import com.indeed.hazizz.Listviews.TaskList.TaskItem;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
@@ -78,7 +78,7 @@ public class MainFragment extends Fragment {
         ListView listView = (ListView)v.findViewById(R.id.listView2);
 
 
-        adapter = new CustomAdapter(getActivity(), R.layout.task_item, listTask);
+        adapter = new CustomAdapter(getActivity(), R.layout.task_main_item, listTask);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

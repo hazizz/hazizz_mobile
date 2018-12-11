@@ -266,9 +266,9 @@ public class MainActivity extends AppCompatActivity
              public void onClick(View view) {
                  SharedPrefs.savePref(getBaseContext(), "autoLogin", "autoLogin", false);
                  SharedPrefs.TokenManager.invalidateTokens(getBaseContext());
-                 Intent i = new Intent(thisActivity, AuthActivity.class);
-                 startActivity(i);
-
+                // Intent i = new Intent(thisActivity, AuthActivity.class);
+                 finish();
+                // startActivity(i);
              }
              });
         MiddleMan.newRequest(this, "messageOfTheDay", null, rh_motd, null);

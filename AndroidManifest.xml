@@ -35,14 +35,14 @@
             tools:ignore="DuplicateActivity"></activity>
         -->
         <activity
-            android:name=".Activities.MainActivity"
-            android:noHistory="false"
+            android:name="com.indeed.hazizz.Activities.MainActivity"
+            android:noHistory="true"
             android:windowSoftInputMode="adjustPan"
             android:configChanges="orientation|screenSize"
             />
         <activity
             android:name=".Activities.AuthActivity"
-            android:noHistory="true"
+            android:noHistory="false"
             android:windowSoftInputMode="adjustPan"
             android:configChanges="orientation|screenSize">
             <intent-filter>

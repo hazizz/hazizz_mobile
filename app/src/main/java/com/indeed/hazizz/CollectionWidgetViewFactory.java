@@ -63,7 +63,7 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
 
         itemView.setTextViewText(R.id.task_title, article.getTitle());
         itemView.setTextViewText(R.id.task_description, article.getDescription());
-        itemView.setTextViewText(R.id.textView_group, article.getCreator().getUsername());
+        itemView.setTextViewText(R.id.textView_creator, article.getCreator().getUsername());
         itemView.setTextViewText(R.id.textView_subject, article.getSubjectData().getName());
         itemView.setTextViewText(R.id.textView_deadline, article.getDueDate());
 

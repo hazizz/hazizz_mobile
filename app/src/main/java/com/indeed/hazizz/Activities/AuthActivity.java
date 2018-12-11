@@ -68,4 +68,14 @@ public class AuthActivity extends AppCompatActivity {
             Transactor.fragmentFirst(getSupportFragmentManager().beginTransaction());
         }
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onRestart() {
+        super.onRestart();
+    }
 }

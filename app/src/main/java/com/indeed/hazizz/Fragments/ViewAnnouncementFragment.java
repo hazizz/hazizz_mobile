@@ -58,7 +58,7 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
         type = v.findViewById(R.id.textView_tasktype);
         title = v.findViewById(R.id.textView_title);
         description = v.findViewById(R.id.editText_description);
-        creatorName = v.findViewById(R.id.textView_group);
+        creatorName = v.findViewById(R.id.textView_creator);
         group = v.findViewById(R.id.textView_group);
 
         button_comments = v.findViewById(R.id.button_comments);
