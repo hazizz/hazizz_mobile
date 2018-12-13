@@ -28,7 +28,9 @@ import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.POJO.Response.POJOme;
 import com.indeed.hazizz.Communication.POJO.Response.PojoPicSmall;
 import com.indeed.hazizz.Converter.Converter;
+import com.indeed.hazizz.Fragments.CreateAnnouncementFragment;
 import com.indeed.hazizz.Fragments.CreateSubjectFragment;
+import com.indeed.hazizz.Fragments.CreateTaskFragment;
 import com.indeed.hazizz.Fragments.GroupTabs.GetGroupMembersFragment;
 import com.indeed.hazizz.Fragments.GroupTabs.GroupMainFragment;
 import com.indeed.hazizz.Fragments.GroupTabs.GroupAnnouncementFragment;
@@ -39,6 +41,7 @@ import com.indeed.hazizz.Fragments.MainTab.MainAnnouncementFragment;
 import com.indeed.hazizz.Fragments.MainTab.MainFragment;
 import com.indeed.hazizz.Fragments.ViewTaskFragment;
 import com.indeed.hazizz.Manager;
+import com.indeed.hazizz.MeInfo;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.SharedPrefs;
 import com.indeed.hazizz.Transactor;
@@ -64,6 +67,9 @@ public class MainActivity extends AppCompatActivity
     private TextView navUsername;
     private TextView navEmail;
     private TextView navLogout;
+
+    public static String strNavUsername;
+    public static String strNavEmail;
 
     FloatingActionButton fab_joinGroup;
     FloatingActionButton fab_action;
@@ -118,8 +124,12 @@ public class MainActivity extends AppCompatActivity
         public void onPOJOResponse(Object response) {
             Log.e("hey", "got pojo response");
             SharedPrefs.save(getApplicationContext(),"userInfo", "username",((POJOme) response).getUsername());
-            navUsername.setText(((POJOme) response).getUsername());
-            navEmail.setText(((POJOme) response).getEmailAddress());
+            strNavEmail = ((POJOme) response).getEmailAddress();
+            strNavUsername = ((POJOme) response).getUsername();
+            MeInfo.setProfileName(strNavUsername);
+            MeInfo.setProfileEmail(strNavEmail);
+            navUsername.setText(strNavUsername);
+            navEmail.setText(strNavEmail);
         }
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
@@ -266,9 +276,9 @@ public class MainActivity extends AppCompatActivity
              public void onClick(View view) {
                  SharedPrefs.savePref(getBaseContext(), "autoLogin", "autoLogin", false);
                  SharedPrefs.TokenManager.invalidateTokens(getBaseContext());
-                // Intent i = new Intent(thisActivity, AuthActivity.class);
+                 Intent i = new Intent(thisActivity, AuthActivity.class);
                  finish();
-                // startActivity(i);
+                 startActivity(i);
              }
              });
         MiddleMan.newRequest(this, "messageOfTheDay", null, rh_motd, null);
@@ -414,6 +424,9 @@ public class MainActivity extends AppCompatActivity
     }
     public void onFragmentCreated(){
         currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager(), false);
+
+
+
         if (currentFrag instanceof GroupAnnouncementFragment || currentFrag instanceof GroupMainFragment
             || currentFrag instanceof MainAnnouncementFragment || currentFrag instanceof MainFragment ) {
             fab_action.setVisibility(View.VISIBLE);

@@ -21,6 +21,7 @@ import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Listviews.AnnouncementList.AnnouncementItem;
 import com.indeed.hazizz.Listviews.AnnouncementList.Group.CustomAdapter;
+import com.indeed.hazizz.Manager;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
@@ -78,7 +79,8 @@ public class GroupAnnouncementFragment extends Fragment{
                     Transactor.fragmentViewAnnouncement(getFragmentManager().beginTransaction(),
                         ((AnnouncementItem)listView.getItemAtPosition(i)).getGroupData().getId(),
                         ((AnnouncementItem)listView.getItemAtPosition(i)).getAnnouncementId(),
-                        ((AnnouncementItem)listView.getItemAtPosition(i)).getGroupData().getName(), false);
+                        ((AnnouncementItem)listView.getItemAtPosition(i)).getGroupData().getName(),
+                            false, Manager.DestManager.TOGROUP);
             }
         });
     }

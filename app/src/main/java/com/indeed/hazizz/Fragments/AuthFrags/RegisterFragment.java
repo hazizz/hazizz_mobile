@@ -120,7 +120,7 @@ public class RegisterFragment extends Fragment {
         button_signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                username = editText_username.getText().toString();
+                username = editText_username.getText().toString().trim();
                 password = editText_password.getText().toString();
                 email = editText_email.getText().toString();
                 Pattern emailRegex = Pattern

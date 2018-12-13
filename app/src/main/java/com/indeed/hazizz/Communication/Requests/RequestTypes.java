@@ -75,7 +75,7 @@ public interface RequestTypes{
     );
 
     @PATCH("groups/{groupId}/tasks/{taskId}")
-    Call<ResponseBody> updateTask(
+    Call<ResponseBody> editTask(
             @Path("groupId") String groupId,
             @Path("taskId") String taskId,
             @HeaderMap Map<String, String> headers,
@@ -86,6 +86,13 @@ public interface RequestTypes{
     Call<ResponseBody> deleteTask(
             @Path("groupId") String groupId,
             @Path("taskId") String taskId,
+            @HeaderMap Map<String, String> headers
+    );
+
+    @DELETE("announcements/{groupId}/{announcementId}")
+    Call<ResponseBody> deleteAnnouncement(
+            @Path("groupId") String groupId,
+            @Path("announcementId") String taskId,
             @HeaderMap Map<String, String> headers
     );
 

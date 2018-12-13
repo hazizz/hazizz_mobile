@@ -9,14 +9,6 @@
 
 
     <TextView
-        android:id="@+id/textView_info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Bejegyzés megtekintés"
-        android:textSize="28sp" />
-
-    <TextView
         android:id="@+id/textView_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,7 +17,7 @@
         android:maxLines="1"
         android:singleLine="true"
         android:text="Cím: "
-        android:textSize="22sp" />
+        android:textSize="30sp" />
 
 
     <android.support.constraint.ConstraintLayout
@@ -37,7 +29,7 @@
         <TextView
             android:id="@+id/editText_description"
             android:layout_width="317dp"
-            android:layout_height="268dp"
+            android:layout_height="215dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"
@@ -50,8 +42,8 @@
             android:scrollbars="vertical"
             android:singleLine="false"
             android:text="      "
-            android:textSize="15sp"
-            app:layout_constraintBottom_toTopOf="@+id/button_comments"
+            android:textSize="17sp"
+            app:layout_constraintBottom_toTopOf="@+id/button_edit"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.509"
             app:layout_constraintStart_toStartOf="parent" />
@@ -60,13 +52,13 @@
             android:id="@+id/textView_creator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginTop="8dp"
             android:maxWidth="80dp"
             android:text="             "
             android:textSize="18sp"
-            app:layout_constraintStart_toEndOf="@+id/textView6"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView_group" />
 
         <ImageView
@@ -84,10 +76,10 @@
             android:id="@+id/textView6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="10dp"
-            android:text="Kreátor:"
+            android:layout_marginLeft="32dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:text="Létrehozó:"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView1" />
@@ -108,9 +100,9 @@
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
             android:text="Csoport:"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -120,23 +112,36 @@
             android:id="@+id/textView_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginTop="32dp"
             android:text="           "
-            app:layout_constraintStart_toEndOf="@+id/textView1"
-            app:layout_constraintTop_toTopOf="parent"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/button_edit"
             android:layout_width="wrap_content"
-            android:layout_height="45dp"
-            android:layout_marginBottom="4dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_height="47dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginRight="6dp"
             android:background="#0000"
             android:text="Szerkesztés"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/button_delete"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <Button
+            android:id="@+id/button_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_marginBottom="2dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginRight="6dp"
+            android:background="#0000"
+            android:text="Törlés"
+            android:textColor="@color/colorAccent"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
