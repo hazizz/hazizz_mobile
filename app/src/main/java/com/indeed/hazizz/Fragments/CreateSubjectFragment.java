@@ -98,9 +98,10 @@ public class CreateSubjectFragment extends Fragment {
         button_addSubject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(editText_newSubject.getTextSize() != 0) {
+                String subjectName = editText_newSubject.getText().toString().trim();
+                if(subjectName.length() != 0) {
                     HashMap<String, Object> body = new HashMap<>();
-                    body.put("name", editText_newSubject.getText().toString());
+                    body.put("name", subjectName);
                     HashMap<String, Object> vars = new HashMap<>();
                     vars.put("groupId", Integer.toString(groupId));
                     button_addSubject.setEnabled(false);

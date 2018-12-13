@@ -23,6 +23,7 @@ import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
 import com.indeed.hazizz.D8;
 import com.indeed.hazizz.Listviews.TaskList.Group.CustomAdapter;
 import com.indeed.hazizz.Listviews.TaskList.TaskItem;
+import com.indeed.hazizz.Manager;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
@@ -99,7 +100,8 @@ public class GroupMainFragment extends Fragment {
                 Transactor.fragmentViewTask(getFragmentManager().beginTransaction(),
                         ((TaskItem)listView.getItemAtPosition(i)).getGroupData().getId(),
                         ((TaskItem)listView.getItemAtPosition(i)).getTaskId(),
-                        ((TaskItem)listView.getItemAtPosition(i)).getGroupData().getName(), false);
+                        ((TaskItem)listView.getItemAtPosition(i)).getGroupData().getName(),
+                        false, Manager.DestManager.TOGROUP);
             }
         });
     }

@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import lombok.Data;
+
 public class Manager {
 
     public static class ThreadManager {
@@ -94,6 +96,7 @@ public class Manager {
     }
 
     public static class DestManager{
+        public static final int TOGROUP= -1;
         public static final int TOMAIN= 0;
         public static final int TOCREATETASK = 1;
         public static final int TOCREATEANNOUNCEMENT = 2;
@@ -111,5 +114,28 @@ public class Manager {
             dest = TOMAIN;
         }
 
+    }
+
+    @Data
+    public static class GroupManager{
+
+        private static String groupName;
+        private static int groupId;
+
+        public static void setGroupId(int groupId) {
+            GroupManager.groupId = groupId;
+        }
+
+        public static void setGroupName(String groupName) {
+            GroupManager.groupName = groupName;
+        }
+
+        public static int getGroupId() {
+            return groupId;
+        }
+
+        public static String getGroupName() {
+            return groupName;
+        }
     }
 }

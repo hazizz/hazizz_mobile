@@ -18,10 +18,12 @@ import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOMembersProfilePic;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
+import com.indeed.hazizz.Communication.POJO.Response.POJOgroup;
 import com.indeed.hazizz.Communication.POJO.Response.POJOsubject;
 import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTaskDetailed;
 
 import com.indeed.hazizz.Manager;
+import com.indeed.hazizz.MeInfo;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
@@ -35,20 +37,30 @@ import retrofit2.Call;
 public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSelectedListener{
 
     private Button button_comments;
+    private Button button_delete;
+    private Button button_edit;
 
-    private int groupId;
     private int taskId;
+    private int groupId;
     private String groupName;
+    private String type;
+    private String subjectName;
+    private int subjectId;
+    private String title;
+    private String descripiton;
+    private int[] date;
+
+
 
     private Spinner subject_spinner;
 
-    private TextView type;
-    private TextView title;
-    private TextView description;
-    private TextView creatorName;
-    private TextView subject;
-    private TextView group;
-    private TextView deadLine;
+    private TextView textView_type;
+    private TextView textView_title;
+    private TextView textView_description;
+    private TextView textView_creatorName;
+    private TextView textView_subject;
+    private TextView textView_group;
+    private TextView textView_deadLine;
 
     private List<POJOsubject> subjects = new ArrayList<>();
 
@@ -60,6 +72,8 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
     private int commentId;
     private boolean gotResponse = false;
 
+
+
     private View v;
 
     public ViewTaskFragment(){
@@ -69,13 +83,49 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
         v = inflater.inflate(R.layout.fragment_viewtask, container, false);
         Log.e("hey", "im here lol");
         ((MainActivity)getActivity()).onFragmentCreated();
-        type = v.findViewById(R.id.textView_tasktype);
-        title = v.findViewById(R.id.textView_title);
-        description = v.findViewById(R.id.editText_description);
-        creatorName = v.findViewById(R.id.textView_creator);
-        subject = v.findViewById(R.id.textView_subject);
-        group = v.findViewById(R.id.textView_group);
-        deadLine = v.findViewById(R.id.textview_deadline);
+        textView_type = v.findViewById(R.id.textView_tasktype);
+        textView_title = v.findViewById(R.id.textView_title);
+        textView_description = v.findViewById(R.id.editText_description);
+        textView_creatorName = v.findViewById(R.id.textView_creator);
+        textView_subject = v.findViewById(R.id.textView_subject);
+        textView_group = v.findViewById(R.id.textView_group);
+        textView_deadLine = v.findViewById(R.id.textview_deadline);
+
+        button_delete = v.findViewById(R.id.button_delete);
+        button_edit = v.findViewById(R.id.button_edit);
+
+
+        button_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(gotResponse){
+                 //   Transactor.fragmentCommentSection(getFragmentManager().beginTransaction(), commentId);//commentId);
+                    HashMap<String, Object> vars = new HashMap<>();
+                    vars.put("groupId", groupId);
+                    vars.put("taskId", taskId);
+                    CustomResponseHandler rh = new CustomResponseHandler() {
+                        @Override
+                        public void onSuccessfulResponse() {
+                            if(Manager.DestManager.getDest() == Manager.DestManager.TOGROUP) {
+                                Transactor.fragmentGroupTask(getFragmentManager().beginTransaction(), Manager.GroupManager.getGroupId(), Manager.GroupManager.getGroupName());
+                            } else{
+                                Transactor.fragmentMainTask(getFragmentManager().beginTransaction());
+                            }
+                        }
+                    };
+                    MiddleMan.newRequest(getActivity(),"deleteTask", null, rh, vars);
+                }
+            }
+        });
+
+        button_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(gotResponse){
+                    Transactor.fragmentEditTask(getFragmentManager().beginTransaction(), Manager.GroupManager.getGroupId(), Manager.GroupManager.getGroupName(), taskId,type, subjectId, title, descripiton, date);//commentId);
+                }
+            }
+        });
 
         button_comments = v.findViewById(R.id.button_comments);
         button_comments.setOnClickListener(new View.OnClickListener() {
@@ -134,23 +184,48 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
 
             @Override
             public void onPOJOResponse(Object response) {
-                commentId = (int)((POJOgetTaskDetailed)response).getSections().get(0).getId();
-                gotResponse = true;
-                if(((POJOgetTaskDetailed)response).getType().equals("test")){
-                    type.setText("teszt");
-                }else{
-                    type.setText("házi feladat");
-                }
-                title.setText("Cím: " + ((POJOgetTaskDetailed)response).getTitle());
-                description.setText(((POJOgetTaskDetailed)response).getDescription());
-                creatorName.setText(((POJOgetTaskDetailed)response).getCreator().getUsername());
-              //  subject.setText(((POJOgetTaskDetailed)response).getSubjectData().getName());
-                subject.setText(((POJOgetTaskDetailed)response).getSubjectData().getName());
-                group.setText(((POJOgetTaskDetailed)response).getGroup().getName());
 
-                deadLine.setText(((POJOgetTaskDetailed)response).getDueDate()[0] + "." +
-                        ((POJOgetTaskDetailed)response).getDueDate()[1] + "." +
-                        ((POJOgetTaskDetailed)response).getDueDate()[2]);
+                POJOgetTaskDetailed pojoResponse = (POJOgetTaskDetailed)response;
+
+                Manager.GroupManager.setGroupId(pojoResponse.getGroup().getId());
+                Manager.GroupManager.setGroupName(pojoResponse.getGroup().getName());
+
+                groupId = pojoResponse.getGroup().getId();
+                taskId = (int)pojoResponse.getId();
+
+                type = pojoResponse.getType();
+                subjectName = pojoResponse.getSubjectData().getName();
+                subjectId = (int)pojoResponse.getSubjectData().getId();
+                type = pojoResponse.getType();
+                title = pojoResponse.getTitle();
+                descripiton = pojoResponse.getDescription();
+                date = pojoResponse.getDueDate();
+
+
+                commentId = (int)pojoResponse.getSections().get(0).getId();
+                gotResponse = true;
+                if(pojoResponse.getType().equals("test")){
+                    textView_type.setText("teszt");
+                }else{
+                    textView_type.setText("házi feladat");
+                }
+                textView_title.setText("Cím: " + pojoResponse.getTitle());
+                textView_description.setText(pojoResponse.getDescription());
+                String creatorUsername = pojoResponse.getCreator().getUsername();
+                textView_creatorName.setText(pojoResponse.getCreator().getUsername());
+
+                //  subject.setText(pojoResponse.getSubjectData().getName());
+                textView_subject.setText(creatorUsername);
+                textView_group.setText(pojoResponse.getGroup().getName());
+
+                textView_deadLine.setText(pojoResponse.getDueDate()[0] + "." +
+                        pojoResponse.getDueDate()[1] + "." +
+                        pojoResponse.getDueDate()[2]);
+
+                if(MeInfo.getProfileName().equals(creatorUsername)){
+                    button_delete.setVisibility(View.VISIBLE);
+                    button_edit.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override

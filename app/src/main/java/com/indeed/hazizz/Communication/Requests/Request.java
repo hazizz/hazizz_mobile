@@ -143,11 +143,14 @@ public class Request {
             case "createTask":
                 requestType = new CreateTask();
                 break;
-            case "updateTask":
-                requestType = new UpdateTask();
+            case "editTask":
+                requestType = new EditTask();
                 break;
             case "deleteTask":
                 requestType = new DeleteTask();
+                break;
+            case "deleteAnnouncement":
+                requestType = new DeleteAnnouncement();
                 break;
             case "getSubjects":
                 requestType = new GetSubjects();
@@ -465,9 +468,9 @@ public class Request {
         }
     }
 
-    public class UpdateTask implements RequestInterface {
-        UpdateTask() {
-            Log.e("hey", "created UpdateTask object");
+    public class EditTask implements RequestInterface {
+        EditTask() {
+            Log.e("hey", "created EditTask object");
         }
         @Override
         public void makeCall() {
@@ -481,7 +484,7 @@ public class Request {
             HashMap<String, String> headerMap = new HashMap<String, String>();
             headerMap.put("Content-Type", "application/json");
             headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
-            call = aRequest.updateTask(vars.get("groupId").toString(), vars.get("taskId").toString(), headerMap, body); //Integer.toString(groupID)
+            call = aRequest.editTask(vars.get("groupId").toString(), vars.get("taskId").toString(), headerMap, body); //Integer.toString(groupID)
         }
         @Override
         public void callIsSuccessful(Response<ResponseBody> response) {
@@ -505,6 +508,27 @@ public class Request {
             HashMap<String, String> headerMap = new HashMap<String, String>();
             headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
             call = aRequest.deleteTask(vars.get("groupId").toString(), vars.get("taskId").toString(), headerMap); //Integer.toString(groupID)
+        }
+        @Override
+        public void callIsSuccessful(Response<ResponseBody> response) {
+            cOnResponse.onSuccessfulResponse();
+        }
+    }
+
+    public class DeleteAnnouncement implements RequestInterface {
+        DeleteAnnouncement() { Log.e("hey", "created UpdateTask object"); }
+        @Override
+        public void makeCall() {
+            call(act,  thisRequest, call, cOnResponse, gson);
+        }
+        @Override
+        public void makeCallAgain() {
+            callAgain(act,  thisRequest, call, cOnResponse, gson);
+        }
+        public void setupCall() {
+            HashMap<String, String> headerMap = new HashMap<String, String>();
+            headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
+            call = aRequest.deleteAnnouncement(vars.get("groupId").toString(), vars.get("announcementId").toString(), headerMap); //Integer.toString(groupID)
         }
         @Override
         public void callIsSuccessful(Response<ResponseBody> response) {

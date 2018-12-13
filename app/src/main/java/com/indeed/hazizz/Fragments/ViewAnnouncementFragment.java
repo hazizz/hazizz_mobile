@@ -19,7 +19,9 @@ import com.indeed.hazizz.Communication.POJO.Response.AnnouncementPOJOs.POJODetai
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOMembersProfilePic;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
+import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTaskDetailed;
 import com.indeed.hazizz.Manager;
+import com.indeed.hazizz.MeInfo;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
@@ -31,6 +33,8 @@ import retrofit2.Call;
 public class ViewAnnouncementFragment extends Fragment implements AdapterView.OnItemSelectedListener{
 
     private Button button_comments;
+    private Button button_delete;
+    private Button button_edit;
 
     private int groupId;
     private int announcementId;
@@ -60,6 +64,32 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
         description = v.findViewById(R.id.editText_description);
         creatorName = v.findViewById(R.id.textView_creator);
         group = v.findViewById(R.id.textView_group);
+
+        button_delete = v.findViewById(R.id.button_delete);
+        button_edit = v.findViewById(R.id.button_edit);
+
+        button_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(gotResponse){
+                    //   Transactor.fragmentCommentSection(getFragmentManager().beginTransaction(), commentId);//commentId);
+                    HashMap<String, Object> vars = new HashMap<>();
+                    vars.put("groupId", groupId);
+                    vars.put("announcementId", announcementId);
+                    CustomResponseHandler rh = new CustomResponseHandler() {
+                        @Override
+                        public void onSuccessfulResponse() {
+                            if(Manager.DestManager.getDest() == Manager.DestManager.TOGROUP) {
+                                Transactor.fragmentGroupAnnouncement(getFragmentManager().beginTransaction(), Manager.GroupManager.getGroupId(), Manager.GroupManager.getGroupName());
+                            } else{
+                                Transactor.fragmentMainAnnouncement(getFragmentManager().beginTransaction());
+                            }
+                        }
+                    };
+                    MiddleMan.newRequest(getActivity(),"deleteAnnouncement", null, rh, vars);
+                }
+            }
+        });
 
         button_comments = v.findViewById(R.id.button_comments);
         button_comments.setOnClickListener(new View.OnClickListener() {
@@ -117,15 +147,31 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
             }
             @Override
             public void onPOJOResponse(Object response) {
-                commentId = (int)((POJODetailedAnnouncement)response).getSections().get(0).getId();
+
+                POJODetailedAnnouncement pojoResponse = (POJODetailedAnnouncement)response;
+
+                Manager.GroupManager.setGroupId(pojoResponse.getGroup().getId());
+                Manager.GroupManager.setGroupName(pojoResponse.getGroup().getName());
+
+                groupId = pojoResponse.getGroup().getId();
+                announcementId = pojoResponse.getId();
+
+                commentId = (int)pojoResponse.getSections().get(0).getId();
                 Log.e("hey", "id1 is: " +commentId );
                 gotResponse = true;
               //  type.setText(((POJOAnnouncement)response).getType());
-                title.setText("Cím: " + ((POJODetailedAnnouncement)response).getTitle());
-                description.setText(((POJODetailedAnnouncement)response).getDescription());
-                creatorName.setText(((POJODetailedAnnouncement)response).getCreator().getUsername());
+                title.setText("Cím: " + pojoResponse.getTitle());
+                description.setText(pojoResponse.getDescription());
+                String creatorUsername = pojoResponse.getCreator().getUsername();
+                creatorName.setText(creatorUsername);
                 //  subject.setText(((POJOgetTaskDetailed)response).getSubjectData().getName());
-                group.setText(((POJODetailedAnnouncement)response).getGroup().getName());
+                group.setText(pojoResponse.getGroup().getName());
+
+
+                if(MeInfo.getProfileName().equals(creatorUsername)){
+                    button_delete.setVisibility(View.VISIBLE);
+                    button_edit.setVisibility(View.VISIBLE);
+                }
             }
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
