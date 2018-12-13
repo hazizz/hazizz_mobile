@@ -46,18 +46,21 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
 
     private List<String> taskTypeList = Arrays.asList("házi feladat", "teszt");
 
+    private boolean editMode = false;
 
     private Integer year, month, day;
     private String str_year, str_month, str_day;
 
     private int groupId;
     private String groupName;
+    private int subject;
+    private int taskId;
 
-    private Spinner subject_spinner;
+    private Spinner spinner_subject;
 
-    private Spinner taskType;
-    private EditText taskTitle;
-    private EditText description;
+    private Spinner spinner_taskType;
+    private EditText editText_taskTitle;
+    private EditText editText_description;
     private Button button_send;
     private Button button_add;
     private TextView textView_error;
@@ -69,6 +72,7 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
 
     private CustomResponseHandler rh_subjects;
     private CustomResponseHandler rh_taskTypes;
+    private CustomResponseHandler rh_taskEdit;
 
     private View v;
 
@@ -82,19 +86,18 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
 
         Manager.DestManager.resetDest();
 
-        groupId = getArguments().getInt("groupId");
-        groupName = getArguments().getString("groupName");
-        Log.e("hey", "in createtaskFrag construvtor: " + groupId);
 
-        subject_spinner = (Spinner)v.findViewById(R.id.subject_spinner);
+
+
+        spinner_subject = (Spinner)v.findViewById(R.id.subject_spinner);
 
         button_send = (Button)v.findViewById(R.id.button_send);
         button_add = v.findViewById(R.id.add_button);
-        taskType = (Spinner)v.findViewById(R.id.taskType_spinner);
-        taskTitle = v.findViewById(R.id.taskTitle);
-        description = v.findViewById(R.id.editText_description);
-        description.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        description.setRawInputType(InputType.TYPE_CLASS_TEXT);
+        spinner_taskType = (Spinner)v.findViewById(R.id.taskType_spinner);
+        editText_taskTitle = v.findViewById(R.id.taskTitle);
+        editText_description = v.findViewById(R.id.editText_description);
+        editText_description.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        editText_description.setRawInputType(InputType.TYPE_CLASS_TEXT);
         textView_error = v.findViewById(R.id.textView_error);
         textView_error.setTextColor(Color.rgb(255, 0, 0));
 
@@ -117,14 +120,52 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
                 taskTypeList );
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        taskType.setAdapter(adapter);
+        spinner_taskType.setAdapter(adapter);
 
         // subject spinner
         ArrayAdapter<POJOsubject> s_adapter = new ArrayAdapter<POJOsubject>(getContext(), android.R.layout.simple_spinner_item);
         s_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        subject_spinner.setAdapter(s_adapter);
+        spinner_subject.setAdapter(s_adapter);
         s_adapter.notifyDataSetChanged();
-        subject_spinner.setOnItemSelectedListener(this);
+        spinner_subject.setOnItemSelectedListener(this);
+
+        groupId = getArguments().getInt("groupId");
+        groupName = getArguments().getString("groupName");
+
+        try {
+
+            taskId = getArguments().getInt("taskId");
+            subject = getArguments().getInt("subject");
+           // title = getArguments().getString("title");
+           // description = getArguments().getString("description");
+
+            int[] date = getArguments().getIntArray("date");
+
+            editText_taskTitle.setText(getArguments().getString("title"));
+            editText_description.setText(getArguments().getString("description"));
+            textView_deadline.setText(getArguments().getString("date"));
+            String type = getArguments().getString("type");
+
+            if(type == "homework"){
+                spinner_taskType.setSelection(0);
+            }else{
+                spinner_taskType.setSelection(1);
+            }
+
+            textView_deadline.setText("Határidő: " + date[0] + "." + date[1] + "." + date[2]);
+            str_year = Integer.toString(date[0]);
+            str_month = Integer.toString(date[1]);
+            str_day = Integer.toString(date[2]);
+
+
+
+            Log.e("hey", "in createtaskFrag construvtor: " + groupId);
+
+
+            editMode = true;
+        }catch (NullPointerException e){
+            editMode = false;
+        }
 
         button_add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,12 +177,13 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
         button_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (year != null && month != null && day != null) {
-                    if (taskTitle.getText().length() < 2) {
+                String title = editText_taskTitle.getText().toString().trim();
+                if (str_year != null && str_month != null && str_day != null) {
+                    if (title.length() < 2) {
                         textView_error.setText("A cím túl rövid (minimum 2 karakter)");
-                    } else if (taskTitle.getText().length() > 20) {
+                    } else if (title.length() > 20) {
                         textView_error.setText("A cím túl hosszú (maximum 20 karakter)");
-                    }else if (subject_spinner.getSelectedItem() == null){
+                    }else if (spinner_subject.getSelectedItem() == null){
                         textView_error.setText("Nincs kiválasztott témád");
                     } else {
                         button_send.setEnabled(false);
@@ -153,6 +195,47 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
                 AndroidThings.closeKeyboard(getContext(), v);
             }
     });
+        rh_taskEdit = new CustomResponseHandler() {
+            @Override
+            public void onResponse(HashMap<String, Object> response) {
+                Log.e("hey", "got regular response"); }
+            @Override
+            public void onPOJOResponse(Object response) {
+                Log.e("hey", "got POJOresponse");
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e("hey", "4");
+                Log.e("hey", "got here onFailure");
+                Log.e("hey", "task created");
+            }
+
+            @Override
+            public void onErrorResponse(POJOerror error) {
+                Log.e("hey", error.getMessage());
+                int errorCode = error.getErrorCode();
+                if(errorCode == 2){ // cím túl hosszú (2-20 karatket)
+                    textView_error.setText("A cím nem megfelelő");
+                }
+
+                button_send.setEnabled(true);
+            }
+            @Override
+            public void onEmptyResponse() { }
+            @Override
+            public void onSuccessfulResponse() {
+                toMainGroupFrag();
+                button_send.setEnabled(true);
+            }
+
+            @Override
+            public void onNoConnection() {
+                textView_error.setText("Nincs internet kapcsolat");
+                button_send.setEnabled(true);
+            }
+        };
+
         rh_taskTypes = new CustomResponseHandler() {
             @Override
             public void onResponse(HashMap<String, Object> response) {
@@ -203,8 +286,16 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
             public void onPOJOResponse(Object response) {
                 subjects = (ArrayList<POJOsubject>)response;
                 s_adapter.clear();
+                int emSubjectId = 0;
                 for(POJOsubject s : subjects){
                     s_adapter.add(s);
+                    if(subject == s.getId()){
+                        emSubjectId = s.getId();
+                    }
+                }
+                s_adapter.notifyDataSetChanged();
+                if(editMode){
+                    spinner_subject.setSelection(emSubjectId);
                 }
                 s_adapter.notifyDataSetChanged();
             }
@@ -261,11 +352,13 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
         return v;
     }
 
-    private void createTask(){
+
+
+    private void editTask() {
         HashMap<String, Object> requestBody = new HashMap<>();
 
         String tType;
-        switch(taskType.getSelectedItem().toString()){
+        switch (spinner_taskType.getSelectedItem().toString()) {
             case "teszt":
                 tType = "test";
                 break;
@@ -278,18 +371,52 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
         }
 
         requestBody.put("taskType", tType);
-        requestBody.put("taskTitle", taskTitle.getText().toString());
-        requestBody.put("description", description.getText().toString());
-        requestBody.put("subjectId", ((POJOsubject) subject_spinner.getSelectedItem()).getId());//((POJOsubject) subject_spinner.getSelectedItem()).getId());
+        requestBody.put("taskTitle", editText_taskTitle.getText().toString().trim());
+        requestBody.put("description", editText_description.getText().toString());
+        requestBody.put("subjectId", ((POJOsubject) spinner_subject.getSelectedItem()).getId());//((POJOsubject) subject_spinner.getSelectedItem()).getId());
+        Log.e("hey", "date: " + year + "-" + month + "-" + day);
+        requestBody.put("dueDate", str_year + "-" + str_month + "-" + str_day);
+
+        HashMap<String, Object> vars = new HashMap<>();
+        vars.put("groupId", Integer.toString(groupId));
+        vars.put("taskId", Integer.toString(taskId));
+
+        //  MiddleMan.request.createTask(this.getActivity(), requestBody, rh_taskTypes, vars);
+
+        MiddleMan.newRequest(this.getActivity(), "editTask", requestBody, rh_taskTypes, vars);
+    }
+
+    private void createTask() {
+        HashMap<String, Object> requestBody = new HashMap<>();
+
+        String tType;
+        switch (spinner_taskType.getSelectedItem().toString()) {
+            case "teszt":
+                tType = "test";
+                break;
+            case "házi feladat":
+                tType = "homework";
+                break;
+            default:
+                tType = "házi feladat";
+                break;
+        }
+
+        requestBody.put("taskType", tType);
+        requestBody.put("taskTitle", editText_taskTitle.getText().toString().trim());
+        requestBody.put("description", editText_description.getText().toString());
+        requestBody.put("subjectId", ((POJOsubject) spinner_subject.getSelectedItem()).getId());//((POJOsubject) subject_spinner.getSelectedItem()).getId());
         Log.e("hey", "date: " + year + "-" + month + "-" + day);
         requestBody.put("dueDate", str_year + "-" + str_month + "-" + str_day);
 
         HashMap<String, Object> vars = new HashMap<>();
         vars.put("id", Integer.toString(groupId));
 
-      //  MiddleMan.request.createTask(this.getActivity(), requestBody, rh_taskTypes, vars);
+        //  MiddleMan.request.createTask(this.getActivity(), requestBody, rh_taskTypes, vars);
+
         MiddleMan.newRequest(this.getActivity(), "createTask", requestBody, rh_taskTypes, vars);
-        }
+
+    }
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -311,4 +438,5 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
     public String getGroupName(){
         return groupName;
     }
+
 }

@@ -103,9 +103,10 @@ public class CreateAnnouncementFragment extends Fragment{
         button_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (announcementTitle.getText().length() < 2) {
+                String title = announcementTitle.getText().toString();
+                if (title.length() < 2) {
                     textView_error.setText("A cím túl rövid (minimum 2 karakter)");
-                } else if (announcementTitle.getText().length() > 20) {
+                } else if (title.length() > 20) {
                     textView_error.setText("A cím túl hosszú (maximum 20 karakter)");
                 } else {
                     button_send.setEnabled(false);
@@ -122,7 +123,7 @@ public class CreateAnnouncementFragment extends Fragment{
     private void createAnnouncement(){
         HashMap<String, Object> requestBody = new HashMap<>();
 
-        requestBody.put("announcementTitle", announcementTitle.getText().toString());
+        requestBody.put("announcementTitle", announcementTitle.getText().toString().trim());
         requestBody.put("description", description.getText().toString());
 
         HashMap<String, Object> vars = new HashMap<>();

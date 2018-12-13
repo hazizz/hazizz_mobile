@@ -81,6 +81,7 @@ public class GroupTabFragment extends Fragment {
      //   ((MainActivity)getActivity()).onFragmentCreated();
 
         TabLayout tabLayout = (TabLayout) v.findViewById(R.id.tab_layout);
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 
         tabLayout.addTab(tabLayout.newTab().setText("Feladatok"));
         tabLayout.addTab(tabLayout.newTab().setText("Bejegyzések"));

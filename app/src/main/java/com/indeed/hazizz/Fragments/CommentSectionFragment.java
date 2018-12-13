@@ -118,10 +118,11 @@ public class CommentSectionFragment extends Fragment {
         button_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!editText_commentBody.getText().toString().equals("")) {
+                String commentBody = editText_commentBody.getText().toString().trim();
+                if (!commentBody.equals("")) {
                     button_send.setEnabled(false);
                     HashMap<String, Object> body = new HashMap<>();
-                    body.put("content", editText_commentBody.getText().toString());
+                    body.put("content", commentBody);
                     HashMap<String, Object> vars = new HashMap<>();
                     vars.put("commentId", commentId);
                     MiddleMan.newRequest(getActivity(), "addComment", body, new CustomResponseHandler() {
@@ -133,7 +134,6 @@ public class CommentSectionFragment extends Fragment {
                         public void onFailure(Call<ResponseBody> call, Throwable t) {
                             button_send.setEnabled(true);
                         }
-
                         @Override
                         public void onErrorResponse(POJOerror error) {
                             button_send.setEnabled(true);
