@@ -54,7 +54,7 @@
         <RelativeLayout
             android:id="@+id/relativeLayout4"
             android:layout_width="70dp"
-            android:layout_height="91dp"
+            android:layout_height="70dp"
             android:layout_alignParentTop="true"
             android:gravity="left">
 
@@ -86,7 +86,7 @@
         <RelativeLayout
             android:id="@+id/relativeLayout3"
             android:layout_width="wrap_content"
-            android:layout_height="90dp"
+            android:layout_height="70dp"
             android:layout_alignBaseline="@+id/task_title">
 
             <TextView

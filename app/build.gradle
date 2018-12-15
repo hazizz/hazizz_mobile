@@ -1,4 +1,20 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
+
 
 android {
     compileSdkVersion 27
@@ -43,9 +59,19 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
+        
     implementation 'org.projectlombok:lombok:1.16.20'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.7'
 
-    compileOnly "org.projectlombok:lombok:1.16.20"
+
+   // ompileOnly "org.projectlombok:lombok:1.16.20"
     annotationProcessor "org.projectlombok:lombok:1.16.20"
+   // implementation 'com.crashlytics.sdk.android:crashlytics-ndk:2.0.5'
 
+}
+
+crashlytics {
+    enableNdk true
+    androidNdkOut 'src/main/obj'
+    androidNdkLibsOut 'src/main/libs'
 }

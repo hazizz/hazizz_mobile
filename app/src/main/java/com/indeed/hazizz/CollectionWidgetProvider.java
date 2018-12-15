@@ -61,6 +61,8 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
     }
 
+
+
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager,
                          int[] appWidgetIds) {
@@ -80,9 +82,9 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
             widgetView.setRemoteAdapter(R.id.widget_stack, intent);
             widgetView.setEmptyView(R.id.widget_stack, R.id.widget_info);
 
-            Intent detailIntent = new Intent(ACTION_VIEW_DETAILS);
-            PendingIntent pIntent = PendingIntent.getBroadcast(context, 0, detailIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            widgetView.setPendingIntentTemplate(R.id.widget_stack, pIntent);
+
+            widgetView.setInt(R.id.button_refresh, "setImageResource", R.drawable.ic_refresh_grey);
+            widgetView.setInt(R.id.button_openapp, "setImageResource", R.drawable.ic_open_app_grey);
 
             Intent buttonIntent = new Intent(WIDGET_REFRESHBUTTON);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, buttonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -92,8 +94,14 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
             pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
             widgetView.setOnClickPendingIntent(R.id.button_openapp, pendingIntent);
 
-            widgetView.setInt(R.id.button_refresh, "setImageResource", R.drawable.ic_refresh_grey);
-            widgetView.setInt(R.id.button_openapp, "setImageResource", R.drawable.ic_open_app_grey);
+            Intent detailIntent = new Intent(ACTION_VIEW_DETAILS);
+            PendingIntent pIntent = PendingIntent.getBroadcast(context, 0, detailIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            widgetView.setPendingIntentTemplate(R.id.widget_stack, pIntent);
+
+
+
+
+
 
             appWidgetManager.updateAppWidget(widgetId, widgetView);
             Log.e("hey", "looping");

@@ -141,7 +141,7 @@ public class GroupsFragment extends Fragment {
                     case Manager.DestManager.TOCREATETASK:
                         Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(), ((GroupItem) listView.getItemAtPosition(i)).getGroupId(), ((GroupItem) listView.getItemAtPosition(i)).getGroupName());
                         break;
-                    case Manager.DestManager.TOCREATEANNOUNCEMENT:
+                    case Manager.DestManager.TOAnnouncementEditor:
                         Transactor.fragmentCreateAnnouncement(getFragmentManager().beginTransaction(), ((GroupItem) listView.getItemAtPosition(i)).getGroupId(), ((GroupItem) listView.getItemAtPosition(i)).getGroupName());
                         break;
                     case Manager.DestManager.TOMAIN:

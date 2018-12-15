@@ -13,6 +13,7 @@
         android:layout_marginStart="2dp"
         android:layout_marginTop="4dp"
         android:text="user Name"
+        android:textColor="#363636"
         app:layout_constraintStart_toEndOf="@+id/imageView_memberProfilePic"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -37,6 +38,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
         android:text="leyras"
+        android:textColor="#363636"
+        android:textIsSelectable="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView_memberProfilePic"
         app:layout_constraintTop_toBottomOf="@+id/subject_name" />

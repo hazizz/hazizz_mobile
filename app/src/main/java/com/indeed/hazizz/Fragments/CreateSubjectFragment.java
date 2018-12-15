@@ -19,16 +19,15 @@ import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Fragments.GroupTabs.GroupTabFragment;
 import com.indeed.hazizz.Listviews.GroupList.CustomAdapter;
+import com.indeed.hazizz.Manager;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
 import java.util.HashMap;
 
-import okhttp3.Headers;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
-import static com.indeed.hazizz.Fragments.GroupTabs.GroupTabFragment.groupDest;
 
 public class CreateSubjectFragment extends Fragment {
 
@@ -41,11 +40,9 @@ public class CreateSubjectFragment extends Fragment {
     private int groupId;
     private String groupName;
 
-    private boolean destCreateTask = false;
+    private boolean destTaskEditor = false;
 
     CustomResponseHandler rh = new CustomResponseHandler() {
-        @Override
-        public void onResponse(HashMap<String, Object> response) {}
         @Override
         public void onPOJOResponse(Object response) {}
         @Override
@@ -72,7 +69,7 @@ public class CreateSubjectFragment extends Fragment {
         public void onErrorResponse(POJOerror error) {
             //  textView.append("\n errorCode: " + error.getErrorCode());
             if(error.getErrorCode() == 2){ // validation failed
-              //  textView_error.setText("Helytelen jelszó");
+
             }
             if(error.getErrorCode() == 31){ // no such user
               //  textView_error.setText("Felhasználó nem található");
@@ -99,7 +96,7 @@ public class CreateSubjectFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String subjectName = editText_newSubject.getText().toString().trim();
-                if(subjectName.length() != 0) {
+                if(subjectName.length() >= 2 || subjectName.length() <= 20) {
                     HashMap<String, Object> body = new HashMap<>();
                     body.put("name", subjectName);
                     HashMap<String, Object> vars = new HashMap<>();
@@ -108,8 +105,7 @@ public class CreateSubjectFragment extends Fragment {
 
                     MiddleMan.newRequest(getActivity(),"createSubject", body, rh, vars);
                 }else{
-                    // TODO subject name not long enough
-                    Log.e("hey", "else 123");
+                    textView_error.setText("A téma 2-20 karakter hosszú lehet");
                 }
             }
         });
@@ -117,8 +113,10 @@ public class CreateSubjectFragment extends Fragment {
     }
 
     public void goBack(){
-        if(GroupTabFragment.groupDest.equals("toCreateTask")) {
+        if(Manager.DestManager.getDest() == Manager.DestManager.TOCREATETASK) {
             Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(), GroupTabFragment.groupId, GroupTabFragment.groupName);
+        }else if(Manager.DestManager.getDest() == Manager.DestManager.TOSUBJECTS){
+            Transactor.fragmentSubjects(getFragmentManager().beginTransaction(), GroupTabFragment.groupId, GroupTabFragment.groupName);
         }else{
             Transactor.fragmentSubjects(getFragmentManager().beginTransaction(), GroupTabFragment.groupId, GroupTabFragment.groupName);
         }

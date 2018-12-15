@@ -28,10 +28,7 @@ import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.POJO.Response.POJOme;
 import com.indeed.hazizz.Communication.POJO.Response.PojoPicSmall;
 import com.indeed.hazizz.Converter.Converter;
-import com.indeed.hazizz.Fragments.CreateAnnouncementFragment;
 import com.indeed.hazizz.Fragments.CreateSubjectFragment;
-import com.indeed.hazizz.Fragments.CreateTaskFragment;
-import com.indeed.hazizz.Fragments.GroupTabs.GetGroupMembersFragment;
 import com.indeed.hazizz.Fragments.GroupTabs.GroupMainFragment;
 import com.indeed.hazizz.Fragments.GroupTabs.GroupAnnouncementFragment;
 import com.indeed.hazizz.Fragments.GroupTabs.GroupTabFragment;
@@ -53,6 +50,10 @@ import java.util.HashMap;
 import okhttp3.Headers;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+
+//import com.crashlytics.android.ndk.CrashlyticsNdk;
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -202,6 +203,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Fabric.with(this, new Crashlytics());
+
+
         setContentView(R.layout.activity_main);
 
         Manager.ThreadManager.startThreadIfNotRunning(this);
@@ -224,21 +229,22 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Log.e("hey", "fab_action CLICKed");
+
                 currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager(), false);
 
                 if (currentFrag instanceof GroupMainFragment) {
                     Log.e("hey", "instance of groupmain fragment");
-                    ((GroupMainFragment)currentFrag).toCreateTask(getSupportFragmentManager());
+                    ((GroupMainFragment)currentFrag).toTaskEditor(getSupportFragmentManager());
                 }
                 else if (currentFrag instanceof GroupAnnouncementFragment) {
-                    ((GroupAnnouncementFragment)currentFrag).toCreateAnnouncement(getSupportFragmentManager());
+                    ((GroupAnnouncementFragment)currentFrag).toAnnouncementEditor(getSupportFragmentManager());
                 }else if (currentFrag instanceof MainAnnouncementFragment) {
-                    toCreateAnnouncementFrag();
+                    toAnnouncementEditorFrag();
                 }
                 else if (currentFrag instanceof SubjectsFragment) {
                     ((SubjectsFragment)currentFrag).toCreateSubject(getSupportFragmentManager());
                 }
-             //   else if(currentFrag instanceof CreateTaskFragment || currentFrag instanceof GroupsFragment){}
+             //   else if(currentFrag instanceof TaskEditorFragment || currentFrag instanceof GroupsFragment){}
                 else if (currentFrag instanceof MainFragment) {
                     toCreateTaskFrag();
                 }
@@ -389,8 +395,8 @@ public class MainActivity extends AppCompatActivity
         Manager.DestManager.setDest(Manager.DestManager.TOCREATETASK);
         Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction());
     }
-    void toCreateAnnouncementFrag(){
-        Manager.DestManager.setDest(Manager.DestManager.TOCREATEANNOUNCEMENT);
+    void toAnnouncementEditorFrag(){
+        Manager.DestManager.setDest(Manager.DestManager.TOAnnouncementEditor);
         Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction());
     }
 

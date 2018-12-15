@@ -46,7 +46,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
                 bundle = new Bundle();
                 bundle.putInt("groupId", groupId);
                 bundle.putString("groupName", groupName);
-                CreateTaskFragment frag3 = new CreateTaskFragment();
+                TaskEditorFragment frag3 = new TaskEditorFragment();
                 frag3.setArguments(bundle);
 
                 currentFrag = frag3;

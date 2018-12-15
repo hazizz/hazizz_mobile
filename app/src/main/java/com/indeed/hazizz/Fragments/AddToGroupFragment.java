@@ -40,7 +40,7 @@ public class AddToGroupFragment extends Fragment {
     private int groupId;
     private String groupName;
 
-    private boolean destCreateTask = false;
+    private boolean destTaskEditor = false;
 
     CustomResponseHandler rh = new CustomResponseHandler() {
 

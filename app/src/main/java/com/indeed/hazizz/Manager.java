@@ -99,7 +99,8 @@ public class Manager {
         public static final int TOGROUP= -1;
         public static final int TOMAIN= 0;
         public static final int TOCREATETASK = 1;
-        public static final int TOCREATEANNOUNCEMENT = 2;
+        public static final int TOAnnouncementEditor = 2;
+        public static final int TOSUBJECTS = 3;
         private static int dest = TOMAIN;
 
         public static void setDest(int a){

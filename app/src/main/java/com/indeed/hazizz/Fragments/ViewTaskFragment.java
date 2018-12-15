@@ -212,10 +212,10 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
                 textView_title.setText("Cím: " + pojoResponse.getTitle());
                 textView_description.setText(pojoResponse.getDescription());
                 String creatorUsername = pojoResponse.getCreator().getUsername();
-                textView_creatorName.setText(pojoResponse.getCreator().getUsername());
+                textView_creatorName.setText(creatorUsername);
 
                 //  subject.setText(pojoResponse.getSubjectData().getName());
-                textView_subject.setText(creatorUsername);
+                textView_subject.setText(pojoResponse.getSubjectData().getName());
                 textView_group.setText(pojoResponse.getGroup().getName());
 
                 textView_deadLine.setText(pojoResponse.getDueDate()[0] + "." +
@@ -267,8 +267,8 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
     public void onNothingSelected(AdapterView<?> adapterView) {
     }
 
-  /*  public void toCreateTask(){
-        Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(),groupID, groupName);
+  /*  public void toTaskEditor(){
+        Transactor.fragmentTaskEditor(getFragmentManager().beginTransaction(),groupID, groupName);
         Log.e("hey", "called 123");
     } */
 

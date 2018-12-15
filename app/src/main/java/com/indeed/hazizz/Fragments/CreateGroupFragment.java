@@ -43,7 +43,7 @@ public class CreateGroupFragment extends Fragment {
     private String groupName;
     private String newGroupName;
 
-    private boolean destCreateTask = false;
+    private boolean destTaskEditor = false;
 
     CustomResponseHandler rh_getGroups = new CustomResponseHandler() {
 

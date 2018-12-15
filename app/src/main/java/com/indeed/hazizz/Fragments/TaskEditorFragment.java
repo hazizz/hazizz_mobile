@@ -42,7 +42,7 @@ import okhttp3.Headers;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
-public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSelectedListener{
+public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSelectedListener{
 
     private List<String> taskTypeList = Arrays.asList("házi feladat", "teszt");
 
@@ -70,17 +70,82 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
 
     private List<POJOsubject> subjects = new ArrayList<>();
 
-    private CustomResponseHandler rh_subjects;
-    private CustomResponseHandler rh_taskTypes;
-    private CustomResponseHandler rh_taskEdit;
 
     private View v;
 
-    public CreateTaskFragment(){
-    }
+    ArrayAdapter<POJOsubject> s_adapter;
+
+    CustomResponseHandler rh_task = new CustomResponseHandler() {
+        @Override
+        public void onPOJOResponse(Object response) {
+            Log.e("hey", "got POJOresponse");
+        }
+        @Override
+        public void onFailure(Call<ResponseBody> call, Throwable t) {
+            Log.e("hey", "4");
+            Log.e("hey", "got here onFailure");
+            Log.e("hey", "task created");
+        }
+        @Override
+        public void onErrorResponse(POJOerror error) {
+            Log.e("hey", error.getMessage());
+            int errorCode = error.getErrorCode();
+            if(errorCode == 2){ // cím túl hosszú (2-20 karatket)
+                textView_error.setText("A cím nem megfelelő");
+            }
+            button_send.setEnabled(true);
+        }
+        @Override
+        public void onSuccessfulResponse() {
+            toMainGroupFrag();
+            button_send.setEnabled(true);
+        }
+        @Override
+        public void onNoConnection() {
+            textView_error.setText("Nincs internet kapcsolat");
+            button_send.setEnabled(true);
+        }
+    };
+    CustomResponseHandler rh_subjects = new CustomResponseHandler() {
+        @Override
+        public void onPOJOResponse(Object response) {
+            subjects = (ArrayList<POJOsubject>)response;
+            s_adapter.clear();
+            int emSubjectId = 0;
+            for(POJOsubject s : subjects){
+                s_adapter.add(s);
+                if(subject == s.getId()){
+                    emSubjectId = s.getId();
+                }
+            }
+            s_adapter.notifyDataSetChanged();
+            if(editMode){
+                spinner_subject.setSelection(emSubjectId);
+            }
+            s_adapter.notifyDataSetChanged();
+        }
+        @Override
+        public void onFailure(Call<ResponseBody> call, Throwable t) {
+            Log.e("hey", "4");
+            Log.e("hey", "got here onFailure");
+            Log.e("hey", "subject fail");
+        }
+        @Override
+        public void onErrorResponse(POJOerror error) {
+            Log.e("hey", "onErrorResponse");
+        }
+        @Override
+        public void onSuccessfulResponse() {
+        }
+        @Override
+        public void onNoConnection() {
+            textView_error.setText("Nincs internet kapcsolat");
+            button_send.setEnabled(true);
+        }
+    };
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.fragment_createtask, container, false);
+        v = inflater.inflate(R.layout.fragment_taskeditor, container, false);
         Log.e("hey", "im here lol");
         ((MainActivity)getActivity()).onFragmentCreated();
 
@@ -123,33 +188,26 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
         spinner_taskType.setAdapter(adapter);
 
         // subject spinner
-        ArrayAdapter<POJOsubject> s_adapter = new ArrayAdapter<POJOsubject>(getContext(), android.R.layout.simple_spinner_item);
+        s_adapter = new ArrayAdapter<POJOsubject>(getContext(), android.R.layout.simple_spinner_item);
         s_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_subject.setAdapter(s_adapter);
         s_adapter.notifyDataSetChanged();
         spinner_subject.setOnItemSelectedListener(this);
 
-        groupId = getArguments().getInt("groupId");
-        groupName = getArguments().getString("groupName");
-
-        try {
-
-            taskId = getArguments().getInt("taskId");
+        groupId = Manager.GroupManager.getGroupId();
+        groupName = Manager.GroupManager.getGroupName();
+        taskId = getArguments().getInt("taskId");
+        if(taskId != 0) {
             subject = getArguments().getInt("subject");
-           // title = getArguments().getString("title");
-           // description = getArguments().getString("description");
-
             int[] date = getArguments().getIntArray("date");
-
             editText_taskTitle.setText(getArguments().getString("title"));
             editText_description.setText(getArguments().getString("description"));
-            textView_deadline.setText(getArguments().getString("date"));
             String type = getArguments().getString("type");
 
             if(type == "homework"){
-                spinner_taskType.setSelection(0);
-            }else{
                 spinner_taskType.setSelection(1);
+            }else{
+                spinner_taskType.setSelection(0);
             }
 
             textView_deadline.setText("Határidő: " + date[0] + "." + date[1] + "." + date[2]);
@@ -159,11 +217,11 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
 
 
 
-            Log.e("hey", "in createtaskFrag construvtor: " + groupId);
+            Log.e("hey", "in TaskEditorFrag construvtor: " + groupId);
 
 
             editMode = true;
-        }catch (NullPointerException e){
+        }else{
             editMode = false;
         }
 
@@ -187,7 +245,11 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
                         textView_error.setText("Nincs kiválasztott témád");
                     } else {
                         button_send.setEnabled(false);
-                        createTask();
+                        if(editMode){
+                            editTask();
+                        }else{
+                            createTask();
+                        }
                     }
                 }else{
                     textView_error.setText("Nem állítottál be határidőt");
@@ -195,140 +257,7 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
                 AndroidThings.closeKeyboard(getContext(), v);
             }
     });
-        rh_taskEdit = new CustomResponseHandler() {
-            @Override
-            public void onResponse(HashMap<String, Object> response) {
-                Log.e("hey", "got regular response"); }
-            @Override
-            public void onPOJOResponse(Object response) {
-                Log.e("hey", "got POJOresponse");
-            }
 
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.e("hey", "4");
-                Log.e("hey", "got here onFailure");
-                Log.e("hey", "task created");
-            }
-
-            @Override
-            public void onErrorResponse(POJOerror error) {
-                Log.e("hey", error.getMessage());
-                int errorCode = error.getErrorCode();
-                if(errorCode == 2){ // cím túl hosszú (2-20 karatket)
-                    textView_error.setText("A cím nem megfelelő");
-                }
-
-                button_send.setEnabled(true);
-            }
-            @Override
-            public void onEmptyResponse() { }
-            @Override
-            public void onSuccessfulResponse() {
-                toMainGroupFrag();
-                button_send.setEnabled(true);
-            }
-
-            @Override
-            public void onNoConnection() {
-                textView_error.setText("Nincs internet kapcsolat");
-                button_send.setEnabled(true);
-            }
-        };
-
-        rh_taskTypes = new CustomResponseHandler() {
-            @Override
-            public void onResponse(HashMap<String, Object> response) {
-                Log.e("hey", "got regular response"); }
-            @Override
-            public void onPOJOResponse(Object response) {
-                Log.e("hey", "got POJOresponse");
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.e("hey", "4");
-                Log.e("hey", "got here onFailure");
-                Log.e("hey", "task created");
-            }
-
-            @Override
-            public void onErrorResponse(POJOerror error) {
-                Log.e("hey", error.getMessage());
-                int errorCode = error.getErrorCode();
-                if(errorCode == 2){ // cím túl hosszú (2-20 karatket)
-                    textView_error.setText("A cím nem megfelelő");
-                }
-
-                button_send.setEnabled(true);
-            }
-            @Override
-            public void onEmptyResponse() { }
-            @Override
-            public void onSuccessfulResponse() {
-                toMainGroupFrag();
-                button_send.setEnabled(true);
-            }
-
-            @Override
-            public void onNoConnection() {
-                textView_error.setText("Nincs internet kapcsolat");
-                button_send.setEnabled(true);
-            }
-        };
-        rh_subjects = new CustomResponseHandler() {
-            @Override
-            public void onResponse(HashMap<String, Object> response) {
-                Log.e("hey", "got regular response");
-            }
-
-            @Override
-            public void onPOJOResponse(Object response) {
-                subjects = (ArrayList<POJOsubject>)response;
-                s_adapter.clear();
-                int emSubjectId = 0;
-                for(POJOsubject s : subjects){
-                    s_adapter.add(s);
-                    if(subject == s.getId()){
-                        emSubjectId = s.getId();
-                    }
-                }
-                s_adapter.notifyDataSetChanged();
-                if(editMode){
-                    spinner_subject.setSelection(emSubjectId);
-                }
-                s_adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.e("hey", "4");
-                Log.e("hey", "got here onFailure");
-                Log.e("hey", "subject fail");
-            }
-
-            @Override
-            public void onErrorResponse(POJOerror error) {
-                Log.e("hey", "onErrorResponse");
-            }
-
-            @Override
-            public void onEmptyResponse() {
-                Log.e("hey", "there is no repsonse");
-            }
-            @Override
-            public void onSuccessfulResponse() { }
-            @Override
-            public void onNoConnection() {
-                textView_error.setText("Nincs internet kapcsolat");
-                button_send.setEnabled(true);
-            }
-
-            @Override
-            public void getHeaders(Headers headers) {
-
-            }
-        };
 
         dpd = new DatePickerDialog(this.getActivity(), new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -381,9 +310,9 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
         vars.put("groupId", Integer.toString(groupId));
         vars.put("taskId", Integer.toString(taskId));
 
-        //  MiddleMan.request.createTask(this.getActivity(), requestBody, rh_taskTypes, vars);
+        //  MiddleMan.request.TaskEditor(this.getActivity(), requestBody, rh_taskTypes, vars);
 
-        MiddleMan.newRequest(this.getActivity(), "editTask", requestBody, rh_taskTypes, vars);
+        MiddleMan.newRequest(this.getActivity(), "editTask", requestBody, rh_task, vars);
     }
 
     private void createTask() {
@@ -412,16 +341,15 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
         HashMap<String, Object> vars = new HashMap<>();
         vars.put("id", Integer.toString(groupId));
 
-        //  MiddleMan.request.createTask(this.getActivity(), requestBody, rh_taskTypes, vars);
+        //  MiddleMan.request.TaskEditor(this.getActivity(), requestBody, rh_taskTypes, vars);
 
-        MiddleMan.newRequest(this.getActivity(), "createTask", requestBody, rh_taskTypes, vars);
+        MiddleMan.newRequest(this.getActivity(), "createTask", requestBody, rh_task, vars);
 
     }
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
     }
-
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
     }
@@ -430,6 +358,7 @@ public class CreateTaskFragment extends Fragment implements AdapterView.OnItemSe
         Transactor.fragmentMainGroup(getFragmentManager().beginTransaction(),groupId, groupName);
     }
     void toCreateSubjectFrag(){
+        Manager.DestManager.setDest(Manager.DestManager.TOCREATETASK);
         Transactor.fragmentCreateSubject(getFragmentManager().beginTransaction(), groupId, groupName);
     }
     public int getGroupId(){

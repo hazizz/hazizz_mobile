@@ -22,6 +22,7 @@ import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.POJO.Response.POJOsubject;
 import com.indeed.hazizz.Listviews.SubjectList.CustomAdapter;
 import com.indeed.hazizz.Listviews.SubjectList.SubjectItem;
+import com.indeed.hazizz.Manager;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
@@ -134,6 +135,7 @@ public class SubjectsFragment extends Fragment {
     }
 
     public void toCreateSubject(FragmentManager fm){
+        Manager.DestManager.setDest(Manager.DestManager.TOSUBJECTS);
         Transactor.fragmentCreateSubject(fm.beginTransaction(), GroupTabFragment.groupId, GroupTabFragment.groupName);
     }
 

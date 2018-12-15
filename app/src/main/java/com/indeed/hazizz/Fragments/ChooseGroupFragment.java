@@ -45,7 +45,7 @@ public class ChooseGroupFragment extends Fragment{
     private TextView textView_noContent;
     private TextView textView_title;
 
-    private boolean destCreateTask;
+    private boolean destTaskEditor;
 
 
     @Nullable
@@ -55,7 +55,7 @@ public class ChooseGroupFragment extends Fragment{
         ((MainActivity)getActivity()).onFragmentCreated();
         groups = new ArrayList<POJOgroup>();
 
-        destCreateTask = getArguments().getBoolean("destCreateTask");
+        destTaskEditor = getArguments().getBoolean("destTaskEditor");
 
         createViewList();
         getGroups();
@@ -128,7 +128,7 @@ public class ChooseGroupFragment extends Fragment{
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if(destCreateTask) {
+                if(destTaskEditor) {
                     Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(), ((GroupItem) listView.getItemAtPosition(i)).getGroupId(), ((GroupItem) listView.getItemAtPosition(i)).getGroupName());
                 }else{
                     Transactor.fragmentMainGroup(getFragmentManager().beginTransaction(), ((GroupItem) listView.getItemAtPosition(i)).getGroupId(), ((GroupItem) listView.getItemAtPosition(i)).getGroupName());
@@ -139,8 +139,8 @@ public class ChooseGroupFragment extends Fragment{
         });
     }
 
-    public void destCreateTask(){
-        destCreateTask = true;
+    public void destTaskEditor(){
+        destTaskEditor = true;
         textView_title.setText("Csoport választás");
     }
 

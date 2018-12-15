@@ -32,6 +32,7 @@ import retrofit2.Call;
 
 public class ViewAnnouncementFragment extends Fragment implements AdapterView.OnItemSelectedListener{
 
+
     private Button button_comments;
     private Button button_delete;
     private Button button_edit;
@@ -39,14 +40,46 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
     private int groupId;
     private int announcementId;
     private String groupName;
+    private String title;
+    private String descripiton;
 
     private TextView type;
-    private TextView title;
-    private TextView description;
+    private TextView textView_title;
+    private TextView textView_description;
     private TextView creatorName;
     private TextView group;
 
     private CustomResponseHandler rh;
+    private CustomResponseHandler rh_delete = new CustomResponseHandler() {
+        @Override
+        public void onResponse(HashMap<String, Object> response) {
+            Log.e("hey", "got regular response");
+
+        }
+
+        @Override
+        public void onFailure(Call<ResponseBody> call, Throwable t) {
+            Log.e("hey", "4");
+            Log.e("hey", "got here onFailure");
+            Log.e("hey", "task created");
+        }
+        @Override
+        public void onErrorResponse(POJOerror error) {
+            Log.e("hey", "onErrorResponse");
+        }
+        @Override
+        public void onEmptyResponse() { }
+        @Override
+        public void onSuccessfulResponse() {
+            button_delete.setEnabled(false);
+        }
+        @Override
+        public void onNoConnection() {
+            //    textView_noContent.setText("Nincs internet kapcsolat");
+
+        }
+    };
+
 
 
     private boolean goBackToMain;
@@ -60,13 +93,21 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
         Log.e("hey", "im here lol");
         ((MainActivity)getActivity()).onFragmentCreated();
         type = v.findViewById(R.id.textView_tasktype);
-        title = v.findViewById(R.id.textView_title);
-        description = v.findViewById(R.id.editText_description);
+        textView_title = v.findViewById(R.id.textView_title);
+        textView_description = v.findViewById(R.id.editText_description);
         creatorName = v.findViewById(R.id.textView_creator);
         group = v.findViewById(R.id.textView_group);
 
         button_delete = v.findViewById(R.id.button_delete);
         button_edit = v.findViewById(R.id.button_edit);
+        button_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(gotResponse){
+                    Transactor.fragmentEditAnnouncement(getFragmentManager().beginTransaction(), Manager.GroupManager.getGroupId(), announcementId,Manager.GroupManager.getGroupName(), title, descripiton);//commentId);
+                }
+            }});
+
 
         button_delete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,6 +127,7 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
                             }
                         }
                     };
+                    button_delete.setEnabled(false);
                     MiddleMan.newRequest(getActivity(),"deleteAnnouncement", null, rh, vars);
                 }
             }
@@ -160,8 +202,10 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
                 Log.e("hey", "id1 is: " +commentId );
                 gotResponse = true;
               //  type.setText(((POJOAnnouncement)response).getType());
-                title.setText("Cím: " + pojoResponse.getTitle());
-                description.setText(pojoResponse.getDescription());
+                title = pojoResponse.getTitle();
+                descripiton = pojoResponse.getDescription();
+                textView_title.setText("Cím: " + title);
+                textView_description.setText(descripiton);
                 String creatorUsername = pojoResponse.getCreator().getUsername();
                 creatorName.setText(creatorUsername);
                 //  subject.setText(((POJOgetTaskDetailed)response).getSubjectData().getName());

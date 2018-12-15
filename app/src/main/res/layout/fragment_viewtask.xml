@@ -228,6 +228,7 @@
             android:layout_marginEnd="6dp"
             android:layout_marginRight="6dp"
             android:background="#0000"
+            android:gravity="fill_vertical|end"
             android:text="Törlés"
             android:textColor="@color/colorAccent"
             android:visibility="invisible"

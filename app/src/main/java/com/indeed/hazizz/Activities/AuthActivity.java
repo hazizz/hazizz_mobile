@@ -6,13 +6,15 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+
+//import com.crashlytics.android.Crashlytics;
 import com.indeed.hazizz.Fragments.AuthFrags.FirstFragment;
 import com.indeed.hazizz.Manager;
 import com.indeed.hazizz.R;
-import com.indeed.hazizz.RequestSenderRunnable;
 import com.indeed.hazizz.SharedPrefs;
 import com.indeed.hazizz.Transactor;
 
+import io.fabric.sdk.android.Fabric;
 import java.util.Set;
 
 public class AuthActivity extends AppCompatActivity {
@@ -25,6 +27,8 @@ public class AuthActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+       // Fabric.with(this, new Crashlytics());
+
         setContentView(R.layout.activity_auth);
 
        // Thread.currentThread().interrupt();

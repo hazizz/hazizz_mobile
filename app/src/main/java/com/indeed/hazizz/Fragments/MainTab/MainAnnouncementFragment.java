@@ -132,10 +132,10 @@ public class MainAnnouncementFragment extends Fragment{
         MiddleMan.newRequest(this.getActivity(),"getMyAnnouncements", null, responseHandler, null);
     }
 
-    public void toCreateAnnouncement(FragmentManager fm){
+    public void toAnnouncementEditor(FragmentManager fm){
       /* groupId = getArguments().getInt("groupId");
         groupName = getArguments().getString("groupName");
-        Transactor.fragmentCreateAnnouncement(fm.beginTransaction(),groupId, groupName); */
+        Transactor.fragmentAnnouncementEditor(fm.beginTransaction(),groupId, groupName); */
 
     }
 
