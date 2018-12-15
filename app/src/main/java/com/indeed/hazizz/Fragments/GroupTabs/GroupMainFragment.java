@@ -159,9 +159,10 @@ public class GroupMainFragment extends Fragment {
 
     }
 
-    public void toCreateTask(FragmentManager fm){
-        groupID = getArguments().getInt("groupId");
-        groupName = getArguments().getString("groupName");
+    public void toTaskEditor(FragmentManager fm){
+        Manager.GroupManager.setGroupId(groupID);
+        Manager.GroupManager.setGroupName(groupName);
+
         Log.e("hey", "GROUPID: " + groupID);
         Transactor.fragmentCreateTask(fm.beginTransaction(), groupID, groupName);
 

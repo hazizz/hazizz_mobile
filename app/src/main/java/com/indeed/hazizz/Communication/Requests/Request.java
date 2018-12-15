@@ -223,6 +223,9 @@ public class Request {
             case "createAnnouncement":
                 requestType = new CreateAnnouncement();
                 break;
+            case "editAnnouncement":
+                requestType = new EditAnnouncement();
+                break;
             case "getGroupMembersProfilePic":
                 requestType = new GetGroupMembersProfilePic();
                 break;
@@ -446,7 +449,7 @@ public class Request {
     public class CreateTask implements RequestInterface {
         //   public String name = "register";
         CreateTask() {
-            Log.e("hey", "created CreateTask object");
+            Log.e("hey", "created TaskEditor object");
         }
         @Override
         public void makeCall() {
@@ -693,7 +696,7 @@ public class Request {
 
     public class GetUsers implements RequestInterface {
         GetUsers() {
-            Log.e("hey", "created CreateTask object");
+            Log.e("hey", "created TaskEditor object");
         }
         public void setupCall() {
             HashMap<String, String> headerMap = new HashMap<String, String>();
@@ -1150,7 +1153,7 @@ public class Request {
             HashMap<String, String> headerMap = new HashMap<String, String>();
             headerMap.put("Content-Type", "application/json");
             headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
-            call = aRequest.createAnnouncements(vars.get("groupId").toString(), headerMap, body);
+            call = aRequest.createAnnouncement(vars.get("groupId").toString(), headerMap, body);
         }
         @Override
         public void makeCall() {
@@ -1163,6 +1166,30 @@ public class Request {
         @Override
         public void callIsSuccessful(Response<ResponseBody> response) {
             Log.e("hey", "response.isSuccessful()");
+            cOnResponse.onSuccessfulResponse();
+        }
+    }
+
+    public class EditAnnouncement implements RequestInterface {
+        EditAnnouncement() {
+            Log.e("hey", "created EditAnnouncement object");
+        }
+        @Override
+        public void makeCall() {
+            call(act,  thisRequest, call, cOnResponse, gson);
+        }
+        @Override
+        public void makeCallAgain() {
+            callAgain(act,  thisRequest, call, cOnResponse, gson);
+        }
+        public void setupCall() {
+            HashMap<String, String> headerMap = new HashMap<String, String>();
+            headerMap.put("Content-Type", "application/json");
+            headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
+            call = aRequest.editAnnouncement(vars.get("groupId").toString(), vars.get("announcementId").toString(), headerMap, body); //Integer.toString(groupID)
+        }
+        @Override
+        public void callIsSuccessful(Response<ResponseBody> response) {
             cOnResponse.onSuccessfulResponse();
         }
     }

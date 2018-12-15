@@ -1,6 +1,5 @@
 package com.indeed.hazizz.Communication.Requests;
 
-import com.indeed.hazizz.Communication.POJO.Response.POJOcreateTask;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.POJO.Response.POJOgroup;
 import com.indeed.hazizz.Communication.POJO.Response.POJOme;
@@ -122,7 +121,7 @@ public interface RequestTypes{
     );
 
     @POST("groups/{id}/tasks")
-    Call<ResponseBody> createTask(
+    Call<ResponseBody> TaskEditor(
             @Path("groupId") String groupId,
             @HeaderMap Map<String, String> headers
     );
@@ -219,11 +218,20 @@ public interface RequestTypes{
     );
 
     @POST("announcements/{groupId}")
-    Call<ResponseBody> createAnnouncements(
+    Call<ResponseBody> createAnnouncement(
             @Path("groupId") String groupId,
             @HeaderMap Map<String, String> headers,
             @Body HashMap<String, Object> taskBody
     );
+
+    @PATCH("announcements/{groupId}/{announcementId}")
+    Call<ResponseBody> editAnnouncement(
+            @Path("groupId") String groupId,
+            @Path("announcementId") String announcementId,
+            @HeaderMap Map<String, String> headers,
+            @Body HashMap<String, Object> taskBody
+    );
+
 
     @GET("groups/{groupId}/users/picture")
     Call<ResponseBody> getGroupMembersProfilePic(

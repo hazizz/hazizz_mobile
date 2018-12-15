@@ -17,12 +17,12 @@ import com.indeed.hazizz.Fragments.AuthFrags.LoginFragment;
 import com.indeed.hazizz.Fragments.AuthFrags.RegisterFragment;
 import com.indeed.hazizz.Fragments.ChatFragment;
 import com.indeed.hazizz.Fragments.CommentSectionFragment;
-import com.indeed.hazizz.Fragments.CreateAnnouncementFragment;
+import com.indeed.hazizz.Fragments.AnnouncementEditorFragment;
 import com.indeed.hazizz.Fragments.CreateGroupFragment;
 import com.indeed.hazizz.Fragments.CreateSubjectFragment;
-import com.indeed.hazizz.Fragments.CreateTaskFragment;
+import com.indeed.hazizz.Fragments.TaskEditorFragment;
 import com.indeed.hazizz.Fragments.GroupTabs.GroupTabFragment;
-import com.indeed.hazizz.Fragments.GroupTabs.SubjectsFragment;
+
 import com.indeed.hazizz.Fragments.JoinGroupFragment;
 import com.indeed.hazizz.Fragments.MainTab.GroupsFragment;
 import com.indeed.hazizz.Fragments.MainTab.MainTabFragment;
@@ -101,8 +101,9 @@ public abstract class Transactor extends FragmentActivity {
     public static void fragmentCreateTask(FragmentTransaction fTransaction, int groupId, String groupName){
         Bundle bundle = new Bundle();
         bundle.putInt("groupId", groupId);
+        bundle.putInt("groupId", groupId);
         bundle.putString("groupName", groupName);
-        CreateTaskFragment frag = new CreateTaskFragment();
+        TaskEditorFragment frag = new TaskEditorFragment();
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }
@@ -121,7 +122,7 @@ public abstract class Transactor extends FragmentActivity {
         bundle.putString("title", taskTitle);
         bundle.putString("description", taskDescription);
         bundle.putIntArray("date", date);
-        CreateTaskFragment frag = new CreateTaskFragment();
+        TaskEditorFragment frag = new TaskEditorFragment();
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }
@@ -132,24 +133,26 @@ public abstract class Transactor extends FragmentActivity {
         Bundle bundle = new Bundle();
         bundle.putInt("groupId", groupId);
         bundle.putString("groupName", groupName);
-        CreateAnnouncementFragment frag = new CreateAnnouncementFragment();
+        AnnouncementEditorFragment frag = new AnnouncementEditorFragment();
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }
         fTransaction.commit();
     }
 
-    public static void fragmentEditAnnouncement(FragmentTransaction fTransaction, int groupId, String groupName, String title, String description){
+    public static void fragmentEditAnnouncement(FragmentTransaction fTransaction, int groupId, int announcementId, String groupName, String title, String description){
         Bundle bundle = new Bundle();
+        bundle.putInt("announcementId", announcementId);
         bundle.putInt("groupId", groupId);
         bundle.putString("groupName", groupName);
         bundle.putString("title", title);
         bundle.putString("description", description);
-        CreateAnnouncementFragment frag = new CreateAnnouncementFragment();
+        AnnouncementEditorFragment frag = new AnnouncementEditorFragment();
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }
         fTransaction.commit();
+
     }
 
 

@@ -30,13 +30,18 @@ import java.util.HashMap;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
-public class CreateAnnouncementFragment extends Fragment{
+public class AnnouncementEditorFragment extends Fragment{
 
+    private boolean editMode = false;
+
+    private int announcementId;
     private int groupId;
     private String groupName;
+    private String title;
+    private String description;
 
-    private EditText announcementTitle;
-    private EditText description;
+    private EditText editText_announcementTitle;
+    private EditText editText_description;
     private Button button_send;
     private TextView textView_error;
 
@@ -52,6 +57,7 @@ public class CreateAnnouncementFragment extends Fragment{
         @Override
         public void onPOJOResponse(Object response) {
             Log.e("hey", "got POJOresponse");
+
         }
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
@@ -82,49 +88,83 @@ public class CreateAnnouncementFragment extends Fragment{
     };
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.fragment_createannouncement, container, false);
+        v = inflater.inflate(R.layout.fragment_announcementeditor, container, false);
         Log.e("hey", "im here lol");
         ((MainActivity)getActivity()).onFragmentCreated();
 
         Manager.DestManager.resetDest();
 
-        groupId = getArguments().getInt("groupId");
-        groupName = getArguments().getString("groupName");
-        Log.e("hey", "in createtaskFrag construvtor: " + groupId);
 
-        announcementTitle = v.findViewById(R.id.editText_announcementTitle);
+        Log.e("hey", "in TaskEditorFrag construvtor: " + groupId);
+
+        editText_announcementTitle = v.findViewById(R.id.editText_announcementTitle);
         button_send = (Button)v.findViewById(R.id.button_send);
-        description = v.findViewById(R.id.editText_description);
-        description.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        description.setRawInputType(InputType.TYPE_CLASS_TEXT);
+        editText_description = v.findViewById(R.id.editText_description);
+        editText_description.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        editText_description.setRawInputType(InputType.TYPE_CLASS_TEXT);
         textView_error = v.findViewById(R.id.textView_error);
         textView_error.setTextColor(Color.rgb(255, 0, 0));
 
         button_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String title = announcementTitle.getText().toString();
+                String title = editText_announcementTitle.getText().toString();
                 if (title.length() < 2) {
                     textView_error.setText("A cím túl rövid (minimum 2 karakter)");
                 } else if (title.length() > 20) {
                     textView_error.setText("A cím túl hosszú (maximum 20 karakter)");
                 } else {
                     button_send.setEnabled(false);
-                    createAnnouncement();
+                    if(editMode) {
+                        editAnnouncement();
+                    }else{
+                        createAnnouncement();
+                    }
                 }
 
                 AndroidThings.closeKeyboard(getContext(), v);
             }
         });
 
+        groupId = getArguments().getInt("groupId");
+        groupName = getArguments().getString("groupName");
+        announcementId = getArguments().getInt("announcementId");
+
+        if(announcementId != 0) {
+            title = getArguments().getString("title");
+            description = getArguments().getString("description");
+
+            editText_announcementTitle.setText(title);
+            editText_description.setText(description);
+
+            editMode = true;
+        }else{
+            editMode = false;
+        }
+
         return v;
+    }
+
+    private void editAnnouncement(){
+        HashMap<String, Object> requestBody = new HashMap<>();
+
+        requestBody.put("announcementTitle", editText_announcementTitle.getText().toString().trim());
+        requestBody.put("description", editText_description.getText().toString());
+        requestBody.put("subjectId", null);
+
+        HashMap<String, Object> vars = new HashMap<>();
+        vars.put("groupId", Integer.toString(groupId));
+        vars.put("announcementId", Integer.toString(announcementId));
+
+        MiddleMan.newRequest(this.getActivity(), "editAnnouncement", requestBody, rh, vars);
     }
 
     private void createAnnouncement(){
         HashMap<String, Object> requestBody = new HashMap<>();
 
-        requestBody.put("announcementTitle", announcementTitle.getText().toString().trim());
-        requestBody.put("description", description.getText().toString());
+        requestBody.put("announcementTitle", editText_announcementTitle.getText().toString().trim());
+        requestBody.put("description", editText_description.getText().toString());
+        requestBody.put("subjectId", null);
 
         HashMap<String, Object> vars = new HashMap<>();
         vars.put("groupId", Integer.toString(groupId));

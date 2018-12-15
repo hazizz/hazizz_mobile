@@ -91,6 +91,7 @@
                 <action android:name="com.indeed.hazizz.WIDGET_OPENAPPBUTTON" />
                 <action android:name="com.indeed.hazizz.WIDGET_REFRESHBUTTON" />
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
                 <action android:name="android.intent.action.SCREEN_ON" />
                 <action android:name="android.intent.action.SCREEN_OFF" />
             </intent-filter>
@@ -100,7 +101,9 @@
                 android:resource="@xml/hazizz_widget_info" />
         </receiver>
 
-
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="0f9021718173dec04323139822a86d8a00779cc8" />
     </application>
 
 </manifest>

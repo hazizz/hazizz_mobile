@@ -38,7 +38,6 @@ public class GroupTabFragment extends Fragment {
     private TextView textView_title;
     public PagerAdapter adapter;
 
-    public static String groupDest = "";
     public static int groupId;
     public static String groupName;
     private int startingTab;
