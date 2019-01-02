@@ -19,6 +19,7 @@ import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.AnnouncementPOJOs.POJOAnnouncement;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
+import com.indeed.hazizz.Communication.Strings;
 import com.indeed.hazizz.Listviews.AnnouncementList.AnnouncementItem;
 import com.indeed.hazizz.Listviews.AnnouncementList.Group.CustomAdapter;
 import com.indeed.hazizz.Manager;
@@ -26,6 +27,7 @@ import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 
@@ -75,11 +77,11 @@ public class GroupAnnouncementFragment extends Fragment{
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                groupName = ((AnnouncementItem)listView.getItemAtPosition(i)).getGroupData().getName();
+                groupName = ((AnnouncementItem)listView.getItemAtPosition(i)).getGroup().getName();
                     Transactor.fragmentViewAnnouncement(getFragmentManager().beginTransaction(),
-                        ((AnnouncementItem)listView.getItemAtPosition(i)).getGroupData().getId(),
+                        ((AnnouncementItem)listView.getItemAtPosition(i)).getGroup().getId(),
                         ((AnnouncementItem)listView.getItemAtPosition(i)).getAnnouncementId(),
-                        ((AnnouncementItem)listView.getItemAtPosition(i)).getGroupData().getName(),
+                        ((AnnouncementItem)listView.getItemAtPosition(i)).getGroup().getName(),
                             false, Manager.DestManager.TOGROUP);
             }
         });
@@ -103,9 +105,9 @@ public class GroupAnnouncementFragment extends Fragment{
                     textView_noContent.setVisibility(v.INVISIBLE);
                     for (POJOAnnouncement t : pojoList) {
                         listAnnouncement.add(new AnnouncementItem(t.getTitle(),
-                                t.getDescription(), t.getGroupData(), t.getCreator(), t.getSubjectData(), t.getId()));
+                                t.getDescription(), t.getGroup(), t.getCreator(), t.getSubject(), t.getId()));
                         adapter.notifyDataSetChanged();
-                        Log.e("hey", t.getId() + " " + t.getGroupData().getId());
+                        Log.e("hey", t.getId() + " " + t.getGroup().getId());
                     }
                     Log.e("hey", "got response");
                 }
@@ -131,21 +133,19 @@ public class GroupAnnouncementFragment extends Fragment{
             public void onSuccessfulResponse() { }
             @Override
             public void onNoConnection() {
-                textView_noContent.setText("Nincs internet kapcsolat");
+                textView_noContent.setText(R.string.info_noInternetAccess);
                 textView_noContent.setVisibility(View.VISIBLE);
                 sRefreshLayout.setRefreshing(false);
                 //    textView_noContent.
             }
         };
-        HashMap<String, Object> vars = new HashMap<>();
-        vars.put("groupId", Integer.toString(groupId));
+        EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
+        vars.put(Strings.Path.GROUPID, Integer.toString(groupId));
         MiddleMan.newRequest(this.getActivity(),"getAnnouncementsFromGroup", null, responseHandler, vars);
     }
 
     public void toAnnouncementEditor(FragmentManager fm){
-        groupId = getArguments().getInt("groupId");
-        groupName = getArguments().getString("groupName");
-        Transactor.fragmentCreateAnnouncement(fm.beginTransaction(),groupId, groupName);
+        Transactor.fragmentCreateAnnouncement(fm.beginTransaction(),groupId, groupName, Manager.DestManager.TOGROUP);
 
     }
 }

@@ -7,19 +7,19 @@
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_home_black"
-            android:title="Főoldal" />
+            android:title="@string/mainpage_menu" />
         <item
             android:visible="true"
             android:id="@+id/nav_groups"
             android:icon="@drawable/ic_group_black"
-            android:title="Csoportok" />
+            android:title="@string/groups" />
     <!--    <item
             android:id="@+id/nav_new_task"
             android:icon="@drawable/ic_create_black"
             android:title="Új feladat" /> -->
     </group>
 
-    <item android:title="Csoportok"
+    <item android:title="@string/groups"
         android:id="@+id/nav_item_groups"
         android:checkableBehavior="single"
         android:visible="false">

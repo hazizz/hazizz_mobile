@@ -20,11 +20,13 @@ import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOMembersProfilePic;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTaskDetailed;
+import com.indeed.hazizz.Communication.Strings;
 import com.indeed.hazizz.Manager;
 import com.indeed.hazizz.MeInfo;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 
 import okhttp3.ResponseBody;
@@ -37,8 +39,7 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
     private Button button_delete;
     private Button button_edit;
 
-    private int groupId;
-    private int announcementId;
+    private int groupId, subjectId, announcementId;
     private String groupName;
     private String title;
     private String descripiton;
@@ -52,12 +53,6 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
     private CustomResponseHandler rh;
     private CustomResponseHandler rh_delete = new CustomResponseHandler() {
         @Override
-        public void onResponse(HashMap<String, Object> response) {
-            Log.e("hey", "got regular response");
-
-        }
-
-        @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
             Log.e("hey", "4");
             Log.e("hey", "got here onFailure");
@@ -68,19 +63,10 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
             Log.e("hey", "onErrorResponse");
         }
         @Override
-        public void onEmptyResponse() { }
-        @Override
         public void onSuccessfulResponse() {
             button_delete.setEnabled(false);
         }
-        @Override
-        public void onNoConnection() {
-            //    textView_noContent.setText("Nincs internet kapcsolat");
-
-        }
     };
-
-
 
     private boolean goBackToMain;
     private int commentId;
@@ -104,7 +90,7 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
             @Override
             public void onClick(View view) {
                 if(gotResponse){
-                    Transactor.fragmentEditAnnouncement(getFragmentManager().beginTransaction(), Manager.GroupManager.getGroupId(), announcementId,Manager.GroupManager.getGroupName(), title, descripiton);//commentId);
+                    Transactor.fragmentEditAnnouncement(getFragmentManager().beginTransaction(), Manager.GroupManager.getGroupId(), announcementId,Manager.GroupManager.getGroupName(), title, descripiton, Manager.DestManager.TOGROUP);//commentId);
                 }
             }});
 
@@ -114,9 +100,9 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
             public void onClick(View view) {
                 if(gotResponse){
                     //   Transactor.fragmentCommentSection(getFragmentManager().beginTransaction(), commentId);//commentId);
-                    HashMap<String, Object> vars = new HashMap<>();
-                    vars.put("groupId", groupId);
-                    vars.put("announcementId", announcementId);
+                    EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
+                    vars.put(Strings.Path.GROUPID, groupId);
+                    vars.put(Strings.Path.ANNOUNCEMENTID, announcementId);
                     CustomResponseHandler rh = new CustomResponseHandler() {
                         @Override
                         public void onSuccessfulResponse() {
@@ -126,28 +112,29 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
                                 Transactor.fragmentMainAnnouncement(getFragmentManager().beginTransaction());
                             }
                         }
+                        @Override
+                        public void onErrorResponse(POJOerror error) {
+                            button_delete.setEnabled(true);
+                        }
                     };
                     button_delete.setEnabled(false);
                     MiddleMan.newRequest(getActivity(),"deleteAnnouncement", null, rh, vars);
                 }
             }
         });
-
         button_comments = v.findViewById(R.id.button_comments);
         button_comments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(gotResponse){
-                    Transactor.fragmentCommentSection(getFragmentManager().beginTransaction(), commentId);//commentId);
-                }
+                Transactor.fragmentCommentSection(getFragmentManager().beginTransaction(), groupId, subjectId, 0, announcementId);
             }
         });
-
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             announcementId =  bundle.getInt("announcementId");
             groupId = bundle.getInt("groupId");
-            if(Manager.ProfilePicManager.getCurrentGroupId() != groupId){
+            subjectId = bundle.getInt("subjectId");
+            if(Manager.ProfilePicManager.getCurrentGroupId() != groupId || Manager.DestManager.getDest() == Manager.DestManager.TOMAIN){
                 CustomResponseHandler responseHandler = new CustomResponseHandler() {
                     @Override
                     public void onResponse(HashMap<String, Object> response) { }
@@ -164,15 +151,9 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
                     public void onErrorResponse(POJOerror error) {
                         Log.e("hey", "onErrorResponse");
                     }
-                    @Override
-                    public void onEmptyResponse() { }
-                    @Override
-                    public void onSuccessfulResponse() { }
-                    @Override
-                    public void onNoConnection() { }
                 };
-                HashMap<String, Object> vars = new HashMap<>();
-                vars.put("groupId", Integer.toString(groupId));
+                EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
+                vars.put(Strings.Path.GROUPID, Integer.toString(groupId));
                 MiddleMan.newRequest(this.getActivity(),"getGroupMembersProfilePic", null, responseHandler, vars);
             }
             groupName = bundle.getString("groupName");
@@ -198,17 +179,17 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
                 groupId = pojoResponse.getGroup().getId();
                 announcementId = pojoResponse.getId();
 
-                commentId = (int)pojoResponse.getSections().get(0).getId();
+           //     commentId = (int)pojoResponse.getSections().get(0).getId();
                 Log.e("hey", "id1 is: " +commentId );
                 gotResponse = true;
               //  type.setText(((POJOAnnouncement)response).getType());
                 title = pojoResponse.getTitle();
                 descripiton = pojoResponse.getDescription();
-                textView_title.setText("Cím: " + title);
+                textView_title.setText(title);
                 textView_description.setText(descripiton);
                 String creatorUsername = pojoResponse.getCreator().getUsername();
                 creatorName.setText(creatorUsername);
-                //  subject.setText(((POJOgetTaskDetailed)response).getSubjectData().getName());
+                //  subject.setText(((POJOgetTaskDetailed)response).getSubject().getName());
                 group.setText(pojoResponse.getGroup().getName());
 
 
@@ -233,13 +214,13 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
             public void onSuccessfulResponse() { }
             @Override
             public void onNoConnection() {
-                //    textView_noContent.setText("Nincs internet kapcsolat");
+                //    textView_noContent.setText(R.string.info_noInternetAccess);
 
             }
         };
-        HashMap<String, Object> vars = new HashMap<>();
-        vars.put("groupId", Integer.toString(groupId));
-        vars.put("announcementId", Integer.toString(announcementId));
+        EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
+        vars.put(Strings.Path.GROUPID, Integer.toString(groupId));
+        vars.put(Strings.Path.ANNOUNCEMENTID, Integer.toString(announcementId));
         MiddleMan.newRequest(this.getActivity(), "getAnnouncement", null, rh, vars);
 
         return v;

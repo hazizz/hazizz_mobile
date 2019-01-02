@@ -31,7 +31,6 @@ public class CustomAdapter extends ArrayAdapter<TaskItem> {
     }
 
     static class DataHolder{
-       // ImageView taskPic;
         TextView taskTitle;
         TextView taskDescription;
         TextView taskDueDate;
@@ -49,7 +48,6 @@ public class CustomAdapter extends ArrayAdapter<TaskItem> {
             convertView = inflater.inflate(picID, parent, false);
 
             holder = new DataHolder();
-           // holder.taskPic = (ImageView) convertView.findViewById(R.id.task_pic);
             holder.taskTitle = (TextView) convertView.findViewById(R.id.task_title);
             holder.taskDescription = (TextView) convertView.findViewById(R.id.task_description);
             holder.taskDueDate = (TextView) convertView.findViewById(R.id.textView_dueDate);
@@ -65,12 +63,11 @@ public class CustomAdapter extends ArrayAdapter<TaskItem> {
         holder.taskTitle.setText(taskItem.getTaskTitle());
         holder.taskDescription.setText(taskItem.getTaskDescription());
         holder.taskDueDate.setText(taskItem.getTaskDueDate());
-     //   holder.taskCreator.setText(taskItem.getCreator().getUsername());
-        holder.taskGroup.setText(taskItem.getGroupData().getName());
-        holder.taskSubject.setText(taskItem.getSubject().getName());
-      //  holder.taskPic.setImageResource(taskItem.taskPic);
+        holder.taskGroup.setText(taskItem.getGroup().getName());
+        if(taskItem.getSubject() != null) {
+            holder.taskSubject.setText(taskItem.getSubject().getName());
+        }
 
         return convertView;
-        // return super.getView(position, convertView, parent);
     }
 }

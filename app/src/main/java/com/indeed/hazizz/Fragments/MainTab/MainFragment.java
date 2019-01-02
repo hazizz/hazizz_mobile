@@ -87,13 +87,17 @@ public class MainFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
               /*  HashMap<String, Object> vars = new HashMap<>();
-                vars.put("taskId", ((TaskItem)listView.getItemAtPosition(i)).getTaskId());
-                vars.put("groupId", ((TaskItem)listView.getItemAtPosition(i)).getGroupData().getId()); */
+                vars.put(Strings.Id.TASK.toString(), ((TaskItem)listView.getItemAtPosition(i)).getTaskId());
+                vars.put(Strings.Id.GROUP.toString(), ((TaskItem)listView.getItemAtPosition(i)).getGroup().getId()); */
              //   Log.e("hey", "asd: " + vars.get("taskId") + ", " + vars.get("groupId"));
+                int subjectId;
+                if(((TaskItem)listView.getItemAtPosition(i)).getSubject() != null){
+                    subjectId = ((TaskItem)listView.getItemAtPosition(i)).getSubject().getId();
+                }else{subjectId=0;}
 
-                Transactor.fragmentViewTask(getFragmentManager().beginTransaction(),((TaskItem)listView.getItemAtPosition(i)).getGroupData().getId(),
-                        ((TaskItem)listView.getItemAtPosition(i)).getTaskId(),
-                        ((TaskItem)listView.getItemAtPosition(i)).getGroupData().getName(),
+                Transactor.fragmentViewTask(getFragmentManager().beginTransaction(),((TaskItem)listView.getItemAtPosition(i)).getGroup().getId(),
+                        subjectId, ((TaskItem)listView.getItemAtPosition(i)).getTaskId(),
+                        ((TaskItem)listView.getItemAtPosition(i)).getGroup().getName(),
                         true, Manager.DestManager.TOMAIN);
             }
         });
@@ -115,7 +119,7 @@ public class MainFragment extends Fragment {
                     textView_noContent.setVisibility(v.INVISIBLE);
                     for (POJOgetTask t : sorted) {
                         listTask.add(new TaskItem(R.drawable.ic_launcher_background, t.getTitle(),
-                                t.getDescription(), t.getDueDate(), t.getGroupData(), t.getCreator(), t.getSubjectData(), t.getId()));
+                                t.getDescription(), t.getDueDate(), t.getGroup(), t.getCreator(), t.getSubject(), t.getId()));
                         adapter.notifyDataSetChanged();
                     }
                 }
@@ -138,7 +142,7 @@ public class MainFragment extends Fragment {
             public void onSuccessfulResponse() { }
             @Override
             public void onNoConnection() {
-                textView_noContent.setText("Nincs internet kapcsolat");
+                textView_noContent.setText(R.string.info_noInternetAccess);
                 textView_noContent.setVisibility(View.VISIBLE);
                 sRefreshLayout.setRefreshing(false);
             }

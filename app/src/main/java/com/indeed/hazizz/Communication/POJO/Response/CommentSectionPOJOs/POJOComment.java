@@ -2,8 +2,6 @@ package com.indeed.hazizz.Communication.POJO.Response.CommentSectionPOJOs;
 
 import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOcreator;
 
-import org.w3c.dom.Comment;
-
 import lombok.Data;
 
 @Data
@@ -13,12 +11,18 @@ public class POJOComment {
     private String content;
 
     private POJOcreator creator;
-    private int[] creationDate;
 
-    public POJOComment(int id, String content, POJOcreator creator, int[] creationDate) {
+    private POJOComment[] children;
+
+    private String creationDate;
+    private boolean moreChildren;
+
+    public POJOComment(int id, String content, POJOcreator creator, POJOComment[] children, String creationDate, boolean moreChildren) {
         this.id = id;
         this.content =  content;
         this.creator = creator;
+        this.children = children;
         this.creationDate = creationDate;
+        this.moreChildren = moreChildren;
     }
 }

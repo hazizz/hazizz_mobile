@@ -19,6 +19,7 @@ import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOMembersProfilePic;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.POJO.Response.POJOuser;
+import com.indeed.hazizz.Communication.Strings;
 import com.indeed.hazizz.Listviews.UserList.CustomAdapter;
 import com.indeed.hazizz.Listviews.UserList.UserItem;
 
@@ -26,6 +27,7 @@ import com.indeed.hazizz.Manager;
 import com.indeed.hazizz.R;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 
@@ -110,13 +112,13 @@ public class GetGroupMembersFragment extends Fragment {
             public void onSuccessfulResponse(){}
             @Override
             public void onNoConnection(){
-                textView_noContent.setText("Nincs internet kapcsolat");
+                textView_noContent.setText(R.string.info_noInternetAccess);
                 textView_noContent.setVisibility(View.VISIBLE);
                 sRefreshLayout.setRefreshing(false);
             }
         };
-        HashMap<String, Object> vars = new HashMap<>();
-        vars.put("groupId", Integer.toString(groupId));
+        EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
+        vars.put(Strings.Path.GROUPID, Integer.toString(groupId));
         MiddleMan.newRequest(this.getActivity(),"getGroupMembers", null, responseHandler, vars);
     }
 

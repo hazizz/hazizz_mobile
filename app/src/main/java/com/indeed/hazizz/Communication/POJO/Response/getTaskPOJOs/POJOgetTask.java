@@ -3,6 +3,10 @@ package com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.indeed.hazizz.Communication.POJO.Response.POJOgroup;
+import com.indeed.hazizz.Communication.POJO.Response.POJOsubject;
+import com.indeed.hazizz.Communication.POJO.Response.PojoAssignation;
+import com.indeed.hazizz.Communication.POJO.Response.PojoType;
 
 import lombok.Data;
 
@@ -10,31 +14,34 @@ import lombok.Data;
 public class POJOgetTask implements Parcelable {
 
     private int id;
-    private String type;
+    private PojoAssignation assignation;
+    private PojoType type;
     private String title;
     private String description;
-    private POJOsubjectData subjectData;
+    private String creationDate;
     private String dueDate;
     private POJOcreator creator;
-    private POJOgroupData groupData;
+    private POJOgroup group;
+    private POJOsubject subject;
 
-    public POJOgetTask(int id, String type, String title, String description, POJOsubjectData subjectData,
-    String dueDate, POJOcreator creator, POJOgroupData groupData){
+    public POJOgetTask(int id, PojoType type, String title, String description, String creationDate, String dueDate, POJOcreator creator,
+                         POJOgroup group, POJOsubject subject){
         this.id = id;
         this.type = type;
         this.title = title;
+        this.creationDate = creationDate;
         this.description = description;
-        this.subjectData = subjectData;
+        this.subject = subject;
         this.dueDate = dueDate;
         this.creator = creator;
-        this.groupData = groupData;
+        this.group = group;
     }
 
     protected POJOgetTask(Parcel in) {
         id = in.readInt();
-        type = in.readString();
         title = in.readString();
         description = in.readString();
+        creationDate = in.readString();
         dueDate = in.readString();
     }
 
@@ -56,11 +63,11 @@ public class POJOgetTask implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(id);
-        parcel.writeString(type);
-        parcel.writeString(title);
-        parcel.writeString(description);
-        parcel.writeString(dueDate);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(title);
+        dest.writeString(description);
+        dest.writeString(creationDate);
+        dest.writeString(dueDate);
     }
 }

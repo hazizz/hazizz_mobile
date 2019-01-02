@@ -1,14 +1,12 @@
 package com.indeed.hazizz.Fragments.AuthFrags;
 
-import android.content.Intent;
+
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +15,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.SignUpEvent;
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
@@ -27,7 +27,6 @@ import com.indeed.hazizz.Transactor;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
-import okhttp3.Headers;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
@@ -52,31 +51,39 @@ public class RegisterFragment extends Fragment {
 
     CustomResponseHandler responseHandler = new CustomResponseHandler() {
         @Override
-        public void onResponse(HashMap<String, Object> response) {}
-        @Override
-        public void onPOJOResponse(Object response) {}
-        @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
             button_signup.setEnabled(true);
-            textView_error.setText("Szerver nem válaszol");
-
+            textView_error.setText(R.string.info_serverNotResponding);
         }
         @Override
         public void onErrorResponse(POJOerror error) {
             int errorCode = error.getErrorCode();
-            if(errorCode == 31){
+            if(errorCode == 2){
+                Answers.getInstance().logSignUp(new SignUpEvent()
+                        .putSuccess(false)
+                        .putCustomAttribute("error code", "2")
+                );
+                textView_error.setText(R.string.error_givenDataWrong);
 
-            }if(errorCode == 2){ // rossz adat
-                textView_error.setText("A megadott adatok nem megfelelőek");
+            }if(errorCode == 32){
+                Answers.getInstance().logSignUp(new SignUpEvent()
+                        .putSuccess(false)
+                        .putCustomAttribute("error code", "32")
+                );
+                textView_error.setText(R.string.error_usernameTaken);
 
-            }if(errorCode == 32){ // létezik ilyen nevű
-              //  textView_error.setText("A felhasználónév már foglalt");
-                textView_error.setText("A felhasználónév már foglalt");
-
-            }if(errorCode == 33){ // létezik ilyen nevű
-                textView_error.setText("Az email címmel már regisztráltak");
+            }if(errorCode == 33){
+                Answers.getInstance().logSignUp(new SignUpEvent()
+                        .putSuccess(false)
+                        .putCustomAttribute("error code", "33")
+                );
+                textView_error.setText(R.string.error_emailTaken);
             }if(errorCode == 34){
-                textView_error.setText("A regisztráció zárolva van");
+                Answers.getInstance().logSignUp(new SignUpEvent()
+                        .putSuccess(false)
+                        .putCustomAttribute("error code", "34")
+                );
+                textView_error.setText(R.string.error_registrationLocked);
             }
             button_signup.setEnabled(true);
         }
@@ -84,18 +91,14 @@ public class RegisterFragment extends Fragment {
         public void onEmptyResponse() { }
         @Override
         public void onSuccessfulResponse() {
+            Answers.getInstance().logSignUp(new SignUpEvent().putSuccess(true));
             Transactor.fragmentLogin(getFragmentManager().beginTransaction());
         }
 
         @Override
         public void onNoConnection() {
-            textView_error.setText("Nincs internet kapcsolat");
+            textView_error.setText(R.string.info_noInternetAccess);
             button_signup.setEnabled(true);
-        }
-
-        @Override
-        public void getHeaders(Headers headers) {
-
         }
     };
 
@@ -112,6 +115,12 @@ public class RegisterFragment extends Fragment {
     //    textView_termsAndConditions.setText(SafeURLSpan.parseSafeHtml(<<YOUR STRING GOES HERE>>));
 
         textView_termsAndConditions.setMovementMethod(LinkMovementMethod.getInstance());
+        textView_termsAndConditions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkBox_termsAndConditions.setChecked(!checkBox_termsAndConditions.isChecked());
+            }
+        });
 
         textView_error = v.findViewById(R.id.textView_error);
         textView_error.setTextColor(Color.rgb(255, 0, 0));
@@ -127,18 +136,18 @@ public class RegisterFragment extends Fragment {
                         .compile ("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?");
 
                 if(!username.matches("^[a-zA-Z0-9_-]*$")){
-                    textView_error.setText("Csak számokat, betűket, alsóvonalat és kötőjelet tartalmazhat a felhasználónév");
+                    textView_error.setText(R.string.error_usernameFormat);
                     return;
                 }if (!emailRegex.matcher(email).matches()){
-                    textView_error.setText("Az email helytelen");
+                    textView_error.setText(R.string.error_emailWrong);
                 }
                 else {
                     if (password.length() < 8) {
-                        textView_error.setText("A jelszónak legalább 8 karakteresnek kell lennie");
+                        textView_error.setText(R.string.error_passwordNotLongEnough);
                     } else if (username.length() < 4) {
-                        textView_error.setText("A felhasználónévnek legalább 4 karakteresnek kell lennie");
+                        textView_error.setText(R.string.error_usernameLength);
                     } else if (!(password.equals(editText_passwordCheck.getText().toString()))) {
-                        textView_error.setText("Jelszó nem egyezik");
+                        textView_error.setText(R.string.error_passwordDoesntMatch);
 
                     } else {
                         if (checkBox_termsAndConditions.isChecked()) {
@@ -153,12 +162,10 @@ public class RegisterFragment extends Fragment {
                             requestBody.put("consent", true);
                             button_signup.setEnabled(false);
 
-
-
                             MiddleMan.newRequest(getActivity(), "register", requestBody, responseHandler, null);
 
                         }else {
-                            textView_error.setText("Nem fogadtad el az általános felhasználó szerződést");
+                            textView_error.setText(R.string.error_termsAndConditionsNotAccepted);
 
                         }
                     }

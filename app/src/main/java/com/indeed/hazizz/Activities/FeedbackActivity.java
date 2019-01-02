@@ -16,6 +16,7 @@ import com.indeed.hazizz.AndroidThings;
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
+import com.indeed.hazizz.Manager;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
@@ -33,18 +34,10 @@ public class FeedbackActivity extends AppCompatActivity {
 
     CustomResponseHandler rh = new CustomResponseHandler() {
         @Override
-        public void onResponse(HashMap<String, Object> response) { }
-        @Override
-        public void onPOJOResponse(Object response) { }
-        @Override
-        public void onFailure(Call<ResponseBody> call, Throwable t) {  button_feedback.setEnabled(true);}
-        @Override
         public void onErrorResponse(POJOerror error) {
-            textView_error.setText("Hiba");
+            textView_error.setText(R.string.error);
             button_feedback.setEnabled(true);
         }
-        @Override
-        public void onEmptyResponse() { }
         @Override
         public void onSuccessfulResponse() {
             Toast.makeText(getApplicationContext(), "Köszönjük a visszajelzésedet",
@@ -53,14 +46,8 @@ public class FeedbackActivity extends AppCompatActivity {
         }
         @Override
         public void onNoConnection() {
-            textView_error.setText("Nincs internet kapcsolat");
+            textView_error.setText(R.string.info_noInternetAccess);
             button_feedback.setEnabled(true);
-        }
-
-        @Override
-        public void getHeaders(Headers headers) {
-
-
         }
     };
 
@@ -83,6 +70,13 @@ public class FeedbackActivity extends AppCompatActivity {
                 body.put("platform", "android");
                 body.put("version", AndroidThings.getAppVersion());
                 body.put("message", editText_feedback.getText().toString());
+
+                data.put("lastCall", Manager.CrashManager.getLastCall().toString());
+                data.put("time", Manager.CrashManager.getError().getTime());
+                data.put("errorCode", Integer.toString(Manager.CrashManager.getError().getErrorCode()));
+                data.put("title", Manager.CrashManager.getError().getTitle());
+                data.put("message", Manager.CrashManager.getError().getMessage());
+
                 body.put("data", data);
 
                 MiddleMan.newRequest(act, "feedback", body, rh, null);
@@ -105,8 +99,6 @@ public class FeedbackActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-              //  goBackToFrag();
-
             }
         });
     }

@@ -62,7 +62,7 @@
                 android:id="@+id/textView9"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Létrehozó:"
+                android:text="@string/creator_"
                 android:textColor="#363636" />
 
             <TextView
@@ -70,7 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:text="Téma: "
+                android:text="@string/subject_"
                 android:textColor="#363636" />
 
             <TextView
@@ -79,7 +79,7 @@
                 android:layout_height="18dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="0dp"
-                android:text="Határidő:"
+                android:text="@string/deadline_"
                 android:textColor="#363636" />
         </RelativeLayout>
 

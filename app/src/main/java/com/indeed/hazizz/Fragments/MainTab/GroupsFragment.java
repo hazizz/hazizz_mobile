@@ -88,7 +88,7 @@ public class GroupsFragment extends Fragment {
 
                     adapter.notifyDataSetChanged();
                 }else{
-                    textView_noContent.setText("Nem vagy még tagja egy csoportnak sem");
+                    textView_noContent.setText(R.string.error_notMemberOfGroup);
                 }
                 sRefreshLayout.setRefreshing(false);
                 Log.e("hey", "got response");
@@ -113,7 +113,7 @@ public class GroupsFragment extends Fragment {
             public void onSuccessfulResponse() { }
             @Override
             public void onNoConnection() {
-                textView_noContent.setText("Nincs internet kapcsolat");
+                textView_noContent.setText(R.string.info_noInternetAccess);
                 textView_noContent.setVisibility(View.VISIBLE);
                 sRefreshLayout.setRefreshing(false);
             }
@@ -139,10 +139,14 @@ public class GroupsFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (Manager.DestManager.getDest()) {
                     case Manager.DestManager.TOCREATETASK:
-                        Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(), ((GroupItem) listView.getItemAtPosition(i)).getGroupId(), ((GroupItem) listView.getItemAtPosition(i)).getGroupName());
+                        Manager.GroupManager.setGroupId(((GroupItem) listView.getItemAtPosition(i)).getGroupId());
+                        Manager.GroupManager.setGroupName(((GroupItem) listView.getItemAtPosition(i)).getGroupName());
+                        Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(), ((GroupItem) listView.getItemAtPosition(i)).getGroupId(), ((GroupItem) listView.getItemAtPosition(i)).getGroupName(), Manager.DestManager.TOMAIN);
                         break;
-                    case Manager.DestManager.TOAnnouncementEditor:
-                        Transactor.fragmentCreateAnnouncement(getFragmentManager().beginTransaction(), ((GroupItem) listView.getItemAtPosition(i)).getGroupId(), ((GroupItem) listView.getItemAtPosition(i)).getGroupName());
+                    case Manager.DestManager.TOCREATEANNOUNCEMENT:
+                        Manager.GroupManager.setGroupId(((GroupItem) listView.getItemAtPosition(i)).getGroupId());
+                        Manager.GroupManager.setGroupName(((GroupItem) listView.getItemAtPosition(i)).getGroupName());
+                        Transactor.fragmentCreateAnnouncement(getFragmentManager().beginTransaction(), ((GroupItem) listView.getItemAtPosition(i)).getGroupId(), ((GroupItem) listView.getItemAtPosition(i)).getGroupName(), Manager.DestManager.TOMAIN);
                         break;
                     case Manager.DestManager.TOMAIN:
                         Transactor.fragmentMainGroup(getFragmentManager().beginTransaction(), ((GroupItem) listView.getItemAtPosition(i)).getGroupId(), ((GroupItem) listView.getItemAtPosition(i)).getGroupName());

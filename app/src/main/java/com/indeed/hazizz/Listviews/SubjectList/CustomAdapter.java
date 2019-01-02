@@ -53,11 +53,11 @@ public class CustomAdapter extends ArrayAdapter<SubjectItem> {
 
         SubjectItem subjectItem = data.get(position);
         holder.subjectName.setText(subjectItem.getSubjectName());
-       /* if(announcementItem.getSubjectData() == null) {
+       /* if(announcementItem.getSubject() == null) {
             holder.taskSubject.setVisibility(View.INVISIBLE);
             holder.taskSubject_.setVisibility(View.INVISIBLE);
         }else{
-            holder.taskSubject.setText(announcementItem.getSubjectData().getName());
+            holder.taskSubject.setText(announcementItem.getSubject().getName());
         } */
         //  holder.taskPic.setImageResource(announcementItem.taskPic);
 

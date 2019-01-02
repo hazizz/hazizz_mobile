@@ -16,7 +16,6 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:singleLine="true"
-        android:text="Cím: "
         android:textSize="30sp" />
 
 
@@ -29,16 +28,15 @@
         <TextView
             android:id="@+id/editText_description"
             android:layout_width="317dp"
-            android:layout_height="209dp"
+            android:layout_height="198dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="4dp"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
             android:inputType="textMultiLine"
             android:scrollbars="vertical"
             android:singleLine="false"
@@ -47,8 +45,7 @@
             app:layout_constraintBottom_toTopOf="@+id/button_edit"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.509"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView7" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/textView_creator"
@@ -94,7 +91,7 @@
             android:layout_marginStart="32dp"
             android:layout_marginTop="8dp"
             android:maxLines="1"
-            android:text="Feladat típusa:"
+            android:text="@string/tasktype_"
             android:textSize="17sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView6" />
@@ -111,7 +108,7 @@
             android:layout_marginStart="32dp"
             android:layout_marginTop="16dp"
             android:maxLines="1"
-            android:text="Téma:"
+            android:text="@string/subject_"
             android:textSize="17sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -155,7 +152,7 @@
             android:layout_marginLeft="32dp"
             android:layout_marginStart="32dp"
             android:layout_marginTop="8dp"
-            android:text="Létrehozó:"
+            android:text="@string/creator_"
             android:textSize="17sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView1" />
@@ -164,13 +161,13 @@
             android:id="@+id/textView7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="20dp"
-            android:text="Leírás:"
+            android:text="@string/description_"
             android:textSize="20sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView8" />
+            app:layout_constraintBottom_toTopOf="@+id/editText_description"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/textView8"
@@ -179,7 +176,7 @@
             android:layout_marginLeft="32dp"
             android:layout_marginStart="32dp"
             android:layout_marginTop="8dp"
-            android:text="Határidő:"
+            android:text="@string/deadline_"
             android:textSize="17sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView11" />
@@ -191,7 +188,7 @@
             android:layout_marginLeft="32dp"
             android:layout_marginStart="32dp"
             android:layout_marginTop="8dp"
-            android:text="Csoport:"
+            android:text="@string/group_"
             android:textSize="17sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView12" />
@@ -215,7 +212,7 @@
             android:layout_marginEnd="6dp"
             android:layout_marginRight="6dp"
             android:background="#0000"
-            android:text="Szerkesztés"
+            android:text="@string/edit"
             android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@+id/button_delete"
             app:layout_constraintEnd_toEndOf="parent" />
@@ -229,7 +226,7 @@
             android:layout_marginRight="6dp"
             android:background="#0000"
             android:gravity="fill_vertical|end"
-            android:text="Törlés"
+            android:text="@string/delete"
             android:textColor="@color/colorAccent"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -243,7 +240,7 @@
             android:layout_marginLeft="4dp"
             android:layout_marginStart="4dp"
             android:background="#0000"
-            android:text="Megjegyzések"
+            android:text="@string/comments"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
     </android.support.constraint.ConstraintLayout>

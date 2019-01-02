@@ -1,41 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
     >
-
-    <item
-        android:id="@+id/action_createGroup"
-        android:orderInCategory="100"
-        android:title="Új csoport létrehozás"
-        android:visible="true"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_joinGroup"
-        android:orderInCategory="100"
-        android:title="Csatlakozás csoportba"
-        android:visible="true"
-        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_leaveGroup"
         android:orderInCategory="100"
-        android:title="Csoportból kilépés"
+        android:title="@string/leaveGroup_menu"
         android:visible="false"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_profilePic"
         android:orderInCategory="100"
-        android:title="Profilkép feltöltése"
+        android:title="@string/uploadProfilePic_menu"
         android:visible="true"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_feedback"
         android:orderInCategory="100"
-        android:title="Visszajelzés"
+        android:title="@string/feedback"
         android:visible="true"
         app:showAsAction="never" />
 

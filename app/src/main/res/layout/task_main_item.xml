@@ -54,7 +54,7 @@
             android:id="@+id/textView9"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Csoport:"
+            android:text="@string/group_"
             tools:layout_editor_absoluteX="244dp"
             tools:layout_editor_absoluteY="38dp" />
 
@@ -63,7 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="Téma:"
+            android:text="@string/subject_"
             tools:layout_editor_absoluteX="244dp"
             tools:layout_editor_absoluteY="64dp" />
 
@@ -74,7 +74,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerVertical="true"
             android:layout_marginBottom="0dp"
-            android:text="Határidő:"
+            android:text="@string/deadline_"
             tools:layout_editor_absoluteX="244dp"
             tools:layout_editor_absoluteY="104dp" />
     </RelativeLayout>

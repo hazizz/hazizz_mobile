@@ -71,11 +71,11 @@ public class MainAnnouncementFragment extends Fragment{
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-               // groupName = ((AnnouncementItem)listView.getItemAtPosition(i)).getGroupData().getName();
+               // groupName = ((AnnouncementItem)listView.getItemAtPosition(i)).getGroup().getName();
                 Transactor.fragmentViewAnnouncement(getFragmentManager().beginTransaction(),
-                        ((AnnouncementItem)listView.getItemAtPosition(i)).getGroupData().getId(),
+                        ((AnnouncementItem)listView.getItemAtPosition(i)).getGroup().getId(),
                         ((AnnouncementItem)listView.getItemAtPosition(i)).getAnnouncementId(),
-                        ((AnnouncementItem)listView.getItemAtPosition(i)).getGroupData().getName(),
+                        ((AnnouncementItem)listView.getItemAtPosition(i)).getGroup().getName(),
                         false, Manager.DestManager.TOMAIN);
 
             }
@@ -95,10 +95,10 @@ public class MainAnnouncementFragment extends Fragment{
                     textView_noContent.setVisibility(v.INVISIBLE);
                     for (POJOAnnouncement t : pojoList) {
                         listTask.add(new AnnouncementItem(t.getTitle(),
-                                t.getDescription(), t.getGroupData(), t.getCreator(),
-                                t.getSubjectData(), t.getId()));
+                                t.getDescription(), t.getGroup(), t.getCreator(),
+                                t.getSubject(), t.getId()));
                         adapter.notifyDataSetChanged();
-                        Log.e("hey", t.getId() + " " + t.getGroupData().getId());
+                        Log.e("hey", t.getId() + " " + t.getGroup().getId());
                     }
                     Log.e("hey", "got response");
                 }
@@ -123,7 +123,7 @@ public class MainAnnouncementFragment extends Fragment{
             public void onSuccessfulResponse() { }
             @Override
             public void onNoConnection() {
-                textView_noContent.setText("Nincs internet kapcsolat");
+                textView_noContent.setText(R.string.info_noInternetAccess);
                 textView_noContent.setVisibility(View.VISIBLE);
                 sRefreshLayout.setRefreshing(false);
             }
@@ -131,15 +131,4 @@ public class MainAnnouncementFragment extends Fragment{
         //  MiddleMan.request.getTasksFromGroup(this.getActivity(), null, responseHandler, vars);
         MiddleMan.newRequest(this.getActivity(),"getMyAnnouncements", null, responseHandler, null);
     }
-
-    public void toAnnouncementEditor(FragmentManager fm){
-      /* groupId = getArguments().getInt("groupId");
-        groupName = getArguments().getString("groupName");
-        Transactor.fragmentAnnouncementEditor(fm.beginTransaction(),groupId, groupName); */
-
-    }
-
-
-
-
 }

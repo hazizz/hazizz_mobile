@@ -8,12 +8,12 @@ android:background="@color/colorBackground"
 android:orientation="vertical">
 
 
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:text="Belépés egy csoportba"
-    android:textSize="28sp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/title_fragment_joingroup"
+        android:textSize="28sp" />
 
 <android.support.constraint.ConstraintLayout
     android:layout_width="match_parent"
@@ -39,7 +39,7 @@ android:orientation="vertical">
         android:layout_marginStart="8dp"
         android:layout_marginTop="72dp"
         android:ems="10"
-        android:hint="Csoport név"
+        android:hint="@string/hint_fragment_joingroup"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
@@ -55,7 +55,7 @@ android:orientation="vertical">
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Csatlakozás"
+        android:text="@string/button_join"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_error" />

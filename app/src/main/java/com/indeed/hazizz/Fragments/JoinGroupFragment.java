@@ -22,6 +22,7 @@ import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOauth;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.POJO.Response.POJOgroup;
+import com.indeed.hazizz.Communication.Strings;
 import com.indeed.hazizz.Listviews.GroupList.CustomAdapter;
 import com.indeed.hazizz.Listviews.GroupList.GroupItem;
 import com.indeed.hazizz.R;
@@ -29,6 +30,7 @@ import com.indeed.hazizz.SharedPrefs;
 import com.indeed.hazizz.Transactor;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 
@@ -59,7 +61,7 @@ public class JoinGroupFragment extends Fragment {
 
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
-            textView_error.setText("Nincs internet kapcsolat");
+            textView_error.setText(R.string.info_noInternetAccess);
         }
 
         @Override
@@ -67,9 +69,7 @@ public class JoinGroupFragment extends Fragment {
             Log.e("hey", "onErrorResponse");
             Log.e("hey", "error message: " + error.getMessage());
             if(error.getErrorCode() == 55){ // user already in group
-                textView_error.setText("Már tagja vagy a csoportnak");
-            }if(error.getErrorCode() == 1){ // user already in group
-                textView_error.setText("Nem sikerült a csoportba csatlakozás.\nMert a Java úgy döntött hogy most nem működik\nRemélhetőleg hamarosan sikerül megjavítani");
+                textView_error.setText(R.string.error_alreadyMemberOfGroup);
             }
             button_joinGroup.setEnabled(true);
         }
@@ -88,7 +88,7 @@ public class JoinGroupFragment extends Fragment {
 
         @Override
         public void onNoConnection() {
-            textView_error.setText("Nincs internet kapcsolat");
+            textView_error.setText(R.string.info_noInternetAccess);
             button_joinGroup.setEnabled(true);
         }
     };
@@ -107,20 +107,20 @@ public class JoinGroupFragment extends Fragment {
                 if(g.getName().equals(groupName)) {
                     if (g.getGroupType().equals("OPEN")) {
                         groupId = g.getId();
-                        HashMap<String, Object> vars = new HashMap<>();
-                        vars.put("groupId", Integer.toString(groupId));
+                        EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
+                        vars.put(Strings.Path.GROUPID, Integer.toString(groupId));
                         MiddleMan.newRequest(getActivity(),"joinGroup", null, rh_joinGroup, vars);
                         found = true;
                         break;
                     } else {
-                        textView_error.setText("Nincs jogod belépni");
+                        textView_error.setText(R.string.error_noPermissionToJoinGroup);
                         button_joinGroup.setEnabled(true);
                         break;
                     }
                 }
             }
             if(!found){
-                textView_error.setText("Nem létezik ilyen csoport");
+                textView_error.setText(R.string.error_noSuchGroup);
                 button_joinGroup.setEnabled(true);
             }
         }
@@ -128,7 +128,7 @@ public class JoinGroupFragment extends Fragment {
         public void onFailure(Call<ResponseBody> call, Throwable t) {
             Log.e("hey", "4");
             Log.e("hey", "got here onFailure");
-            textView_error.setText("Nincs internet kapcsolat");
+            textView_error.setText(R.string.info_noInternetAccess);
             button_joinGroup.setEnabled(true);
         }
 
@@ -150,7 +150,7 @@ public class JoinGroupFragment extends Fragment {
 
         @Override
         public void onNoConnection() {
-            textView_error.setText("Nincs internet kapcsolat");
+            textView_error.setText(R.string.info_noInternetAccess);
             button_joinGroup.setEnabled(true);
         }
     };

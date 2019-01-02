@@ -18,16 +18,18 @@ import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOMembersProfilePic;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
-import com.indeed.hazizz.Communication.POJO.Response.POJOgroup;
 import com.indeed.hazizz.Communication.POJO.Response.POJOsubject;
+import com.indeed.hazizz.Communication.POJO.Response.PojoType;
 import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTaskDetailed;
 
+import com.indeed.hazizz.Communication.Strings;
 import com.indeed.hazizz.Manager;
 import com.indeed.hazizz.MeInfo;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 
@@ -40,15 +42,15 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
     private Button button_delete;
     private Button button_edit;
 
-    private int taskId;
-    private int groupId;
+    private int taskId, announcementId, groupId;
+    private int subjectId = 0;
+
     private String groupName;
-    private String type;
+    private PojoType type;
     private String subjectName;
-    private int subjectId;
     private String title;
     private String descripiton;
-    private int[] date;
+    private String date;
 
 
 
@@ -67,6 +69,8 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
     private CustomResponseHandler rh;
 
     private ArrayList<POJOsubject> subjectList = new ArrayList<POJOsubject>();
+
+    private POJOsubject subject;
 
     private boolean goBackToMain;
     private int commentId;
@@ -98,32 +102,38 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
         button_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(gotResponse){
-                 //   Transactor.fragmentCommentSection(getFragmentManager().beginTransaction(), commentId);//commentId);
-                    HashMap<String, Object> vars = new HashMap<>();
-                    vars.put("groupId", groupId);
-                    vars.put("taskId", taskId);
-                    CustomResponseHandler rh = new CustomResponseHandler() {
-                        @Override
-                        public void onSuccessfulResponse() {
-                            if(Manager.DestManager.getDest() == Manager.DestManager.TOGROUP) {
-                                Transactor.fragmentGroupTask(getFragmentManager().beginTransaction(), Manager.GroupManager.getGroupId(), Manager.GroupManager.getGroupName());
-                            } else{
-                                Transactor.fragmentMainTask(getFragmentManager().beginTransaction());
-                            }
+
+                CustomResponseHandler rh = new CustomResponseHandler() {
+                    @Override
+                    public void onSuccessfulResponse() {
+                        if(Manager.DestManager.getDest() == Manager.DestManager.TOGROUP) {
+                            Transactor.fragmentGroupTask(getFragmentManager().beginTransaction(), Manager.GroupManager.getGroupId(), Manager.GroupManager.getGroupName());
+                        } else{
+                            Transactor.fragmentMainTask(getFragmentManager().beginTransaction());
                         }
-                    };
-                    MiddleMan.newRequest(getActivity(),"deleteTask", null, rh, vars);
-                }
+                    }
+                    @Override
+                    public void onErrorResponse(POJOerror error) {
+                        button_delete.setEnabled(true);
+                    }
+                };
+                button_delete.setEnabled(false);
+
+                EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
+                vars.put(Strings.Path.TASKID, taskId);
+                if(subjectId != 0){vars.put(Strings.Path.SUBJECTID, subjectId);}
+                else{vars.put(Strings.Path.GROUPID, groupId);}
+
+                MiddleMan.newRequest(getActivity(),"deleteAT", null, rh, vars);
+
             }
         });
 
-        button_edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(gotResponse){
-                    Transactor.fragmentEditTask(getFragmentManager().beginTransaction(), Manager.GroupManager.getGroupId(), Manager.GroupManager.getGroupName(), taskId,type, subjectId, title, descripiton, date);//commentId);
-                }
+        button_edit.setOnClickListener(view -> {
+            if(gotResponse) {
+                Transactor.fragmentEditTask(getFragmentManager().beginTransaction(), Manager.GroupManager.getGroupId(),
+                        Manager.GroupManager.getGroupName(), taskId, type, subjectId, title, descripiton, date,
+                        Manager.DestManager.TOGROUP);
             }
         });
 
@@ -131,8 +141,10 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
         button_comments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(gotResponse){
-                    Transactor.fragmentCommentSection(getFragmentManager().beginTransaction(), commentId);//commentId);
+                if(subject == null){
+                    Transactor.fragmentTaskCommentsByGroup(getFragmentManager().beginTransaction(), groupId, taskId);
+                }else{
+                    Transactor.fragmentTaskCommentsBySubject(getFragmentManager().beginTransaction(), subject.getId(), taskId);
                 }
             }
         });
@@ -141,10 +153,9 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
         if (bundle != null) {
             taskId =  bundle.getInt("taskId");
             groupId = bundle.getInt("groupId");
-            if(Manager.ProfilePicManager.getCurrentGroupId() != groupId){
+            subjectId = bundle.getInt("subjectId");
+            if(Manager.ProfilePicManager.getCurrentGroupId() != groupId || Manager.DestManager.getDest() == Manager.DestManager.TOMAIN){
                 CustomResponseHandler responseHandler = new CustomResponseHandler() {
-                    @Override
-                    public void onResponse(HashMap<String, Object> response) { }
                     @Override
                     public void onPOJOResponse(Object response) {
                         Manager.ProfilePicManager.setCurrentGroupMembersProfilePic((HashMap<Integer, POJOMembersProfilePic>)response, groupId);
@@ -154,19 +165,9 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
                         Log.e("hey", "4");
                         Log.e("hey", "got here onFailure");
                     }
-                    @Override
-                    public void onErrorResponse(POJOerror error) {
-                        Log.e("hey", "onErrorResponse");
-                    }
-                    @Override
-                    public void onEmptyResponse() { }
-                    @Override
-                    public void onSuccessfulResponse() { }
-                    @Override
-                    public void onNoConnection() { }
                 };
-                HashMap<String, Object> vars = new HashMap<>();
-                vars.put("groupId", Integer.toString(groupId));
+                EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
+                vars.put(Strings.Path.GROUPID, Integer.toString(groupId));
                 MiddleMan.newRequest(this.getActivity(),"getGroupMembersProfilePic", null, responseHandler, vars);
             }
             groupName = bundle.getString("groupName");
@@ -177,12 +178,6 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
         }else{Log.e("hey", "bundle is null");}
         rh = new CustomResponseHandler() {
             @Override
-            public void onResponse(HashMap<String, Object> response) {
-                Log.e("hey", "got regular response");
-
-            }
-
-            @Override
             public void onPOJOResponse(Object response) {
 
                 POJOgetTaskDetailed pojoResponse = (POJOgetTaskDetailed)response;
@@ -192,69 +187,63 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
 
                 groupId = pojoResponse.getGroup().getId();
                 taskId = (int)pojoResponse.getId();
-
                 type = pojoResponse.getType();
-                subjectName = pojoResponse.getSubjectData().getName();
-                subjectId = (int)pojoResponse.getSubjectData().getId();
+                subject = pojoResponse.getSubject();
+
+                if(subject != null) {
+                    subjectName = subject.getName();
+                    subjectId = subject.getId();
+                }
+
                 type = pojoResponse.getType();
                 title = pojoResponse.getTitle();
                 descripiton = pojoResponse.getDescription();
                 date = pojoResponse.getDueDate();
+                groupName = pojoResponse.getGroup().getName();
 
-
-                commentId = (int)pojoResponse.getSections().get(0).getId();
                 gotResponse = true;
+
                 if(pojoResponse.getType().equals("test")){
                     textView_type.setText("teszt");
                 }else{
                     textView_type.setText("házi feladat");
                 }
-                textView_title.setText("Cím: " + pojoResponse.getTitle());
-                textView_description.setText(pojoResponse.getDescription());
+                textView_title.setText(title);
+                textView_description.setText(descripiton);
                 String creatorUsername = pojoResponse.getCreator().getUsername();
                 textView_creatorName.setText(creatorUsername);
 
-                //  subject.setText(pojoResponse.getSubjectData().getName());
-                textView_subject.setText(pojoResponse.getSubjectData().getName());
-                textView_group.setText(pojoResponse.getGroup().getName());
+                textView_subject.setText(subjectName);
+                textView_group.setText(groupName);
 
-                textView_deadLine.setText(pojoResponse.getDueDate()[0] + "." +
+                textView_deadLine.setText(date);
+
+             /*   textView_deadLine.setText(pojoResponse.getDueDate()[0] + "." +
                         pojoResponse.getDueDate()[1] + "." +
-                        pojoResponse.getDueDate()[2]);
+                        pojoResponse.getDueDate()[2]); */
 
                 if(MeInfo.getProfileName().equals(creatorUsername)){
                     button_delete.setVisibility(View.VISIBLE);
                     button_edit.setVisibility(View.VISIBLE);
                 }
             }
-
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Log.e("hey", "4");
                 Log.e("hey", "got here onFailure");
                 Log.e("hey", "task created");
             }
-
-            @Override
-            public void onErrorResponse(POJOerror error) {
-                Log.e("hey", "onErrorResponse");
-            }
-
-            @Override
-            public void onEmptyResponse() { }
-            @Override
-            public void onSuccessfulResponse() { }
-
-            @Override
-            public void onNoConnection() {
-            //    textView_noContent.setText("Nincs internet kapcsolat");
-
-            }
         };
-        HashMap<String, Object> vars = new HashMap<>();
-        vars.put("taskId", Integer.toString(taskId));
-        vars.put("groupId", Integer.toString(groupId));
-        MiddleMan.newRequest(this.getActivity(), "getTask", null, rh, vars);
+        EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
+        vars.put(Strings.Path.TASKID, Integer.toString(taskId));
+
+        if(subjectId == 0) {
+            vars.put(Strings.Path.GROUPID, Integer.toString(groupId));
+            MiddleMan.newRequest(this.getActivity(), "getTaskBy", null, rh, vars);
+        }else{
+            vars.put(Strings.Path.SUBJECTID, subjectId);
+            MiddleMan.newRequest(this.getActivity(), "getTaskBy", null, rh, vars);
+        }
 
         return v;
     }
@@ -267,11 +256,6 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
     public void onNothingSelected(AdapterView<?> adapterView) {
     }
 
-  /*  public void toTaskEditor(){
-        Transactor.fragmentTaskEditor(getFragmentManager().beginTransaction(),groupID, groupName);
-        Log.e("hey", "called 123");
-    } */
-
     public int getGroupId(){
         return groupId;
     }
@@ -281,6 +265,4 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
     public boolean getGoBackToMain(){
         return goBackToMain;
     }
-
-
 }

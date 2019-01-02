@@ -41,8 +41,8 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
         String[] dates = { "Everyday", "June 20, 2012", "September 10, 2014", "August 9, 2014", "November 10, 2014" };
 
         for(int i = 0; i < 5; i++) {
-            data.add(new POJOgetTask(1, "type", titles[i], "descripto", new POJOsubjectData(1, "asd"),
-                    dates[i], new POJOcreator(1, "usernaem", "2"), new POJOgroupData(1, "name", "OPen asd", 2)));
+            data.add(new POJOgetTask(1, "type", titles[i], "descripto", new POJOsubject(1, "asd"),
+                    dates[i], new POJOcreator(1, "usernaem", "2"), new POJOgroup(1, "name", "OPen asd", 2)));
         } */
     }
     @Override public int getCount() {
@@ -57,18 +57,21 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
     @Override
     public RemoteViews getViewAt(int position) {
 
-        POJOgetTask article = data.get(position);
+        POJOgetTask task = data.get(position);
 
         RemoteViews itemView = new RemoteViews(mContext.getPackageName(), R.layout.widget_task_item);
 
-        itemView.setTextViewText(R.id.task_title, article.getTitle());
-        itemView.setTextViewText(R.id.task_description, article.getDescription());
-        itemView.setTextViewText(R.id.textView_creator, article.getCreator().getUsername());
-        itemView.setTextViewText(R.id.textView_subject, article.getSubjectData().getName());
-        itemView.setTextViewText(R.id.textView_deadline, article.getDueDate());
+        itemView.setTextViewText(R.id.task_title, task.getTitle());
+        itemView.setTextViewText(R.id.task_description, task.getDescription());
+        itemView.setTextViewText(R.id.textView_creator, task.getCreator().getUsername());
+
+        if(task.getSubject() != null) {
+            itemView.setTextViewText(R.id.textView_subject, task.getSubject().getName());
+        }
+        itemView.setTextViewText(R.id.textView_deadline, task.getDueDate());
 
         Intent intent = new Intent();
-        intent.putExtra(CollectionWidgetProvider.EXTRA_ITEM, article);
+        intent.putExtra(CollectionWidgetProvider.EXTRA_ITEM, task);
         itemView.setOnClickFillInIntent(R.layout.widget_task_item, intent);
 
         return itemView;
@@ -86,11 +89,8 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
     public void onDataSetChanged() {
         RemoteViews widgetView = new RemoteViews(mContext.getPackageName(), R.layout.hazizz_widget);
         if(Network.isConnectedOrConnecting(mContext)) {
-            //contentInfo = "Betöltés...";
             contentInfo = "";
             CustomResponseHandler rh = new CustomResponseHandler() {
-                @Override
-                public void onResponse(HashMap<String, Object> response) {}
                 @Override
                 public void onPOJOResponse(Object response) {
                     ArrayList<POJOgetTask> r = (ArrayList<POJOgetTask>) response;

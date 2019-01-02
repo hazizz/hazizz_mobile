@@ -4,16 +4,17 @@ import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
+import com.crashlytics.android.answers.SignUpEvent;
 import com.google.gson.Gson;
 import com.indeed.hazizz.Activities.AuthActivity;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
-import com.indeed.hazizz.Communication.POJO.Response.POJORefreshToken;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.Requests.Request;
 import com.indeed.hazizz.ErrorHandler;
 import com.indeed.hazizz.Manager;
 import com.indeed.hazizz.SharedPrefs;
-import com.indeed.hazizz.Transactor;
 
 import java.util.HashMap;
 
@@ -32,7 +33,6 @@ public interface RequestInterface {
      }
 
      default void callAgain(Activity act, Request request, Call<ResponseBody> call, CustomResponseHandler cOnResponse, Gson gson){
-         // setupCall();
           call.clone().enqueue(buildCallback(act, request, call, cOnResponse, gson));
           Log.e("hey", "CALL AGAIN");
      }
@@ -43,14 +43,12 @@ public interface RequestInterface {
                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     Log.e("hey", "gotResponse");
                     Log.e("hey", response.raw().toString());
-                  //  boolean callAgain = false;
 
                     if(response.body() == null){
                          Log.e("hey", "response is null ");
                     }
                     if(response.isSuccessful()){ // response != null
                          Log.e("hey", "response.isSuccessful()");
-                         // callAgain = false;
                          callIsSuccessful(response);
                     }
 
@@ -58,7 +56,8 @@ public interface RequestInterface {
                          POJOerror pojoError = gson.fromJson(response.errorBody().charStream(),POJOerror.class);
                          Log.e("hey", "errorCOde is: " + pojoError.getErrorCode());
                          Log.e("hey", "errorMessage is: " + pojoError.getMessage());
-                         if(pojoError.getErrorCode() == 1) {
+                         if(pojoError.getErrorCode() == 1){
+                              Manager.CrashManager.setCrashData(pojoError, call);
                               ErrorHandler.unExpectedResponseDialog(act);
                          }
 
@@ -70,46 +69,49 @@ public interface RequestInterface {
                               }
                          }
 
-                         else if(pojoError.getErrorCode() == 18 || pojoError.getErrorCode() == 17){
-                              Manager.ThreadManager.freezeThread();
-                              MiddleMan.addToCallAgain(request);
-                            //  Log.e("hey", "the refresh token is: " + SharedPrefs.TokenManager.getRefreshToken(act));
-                            //  Log.e("hey", "the access token is: " + SharedPrefs.TokenManager.getToken(act));
-                              HashMap<String, Object> body = new HashMap<>();
-                              body.put("username", SharedPrefs.getString(act.getBaseContext(), "userInfo", "username"));
-                              body.put("refreshToken", SharedPrefs.TokenManager.getRefreshToken(act.getBaseContext()));
+                         else if(pojoError.getErrorCode() == 18 || pojoError.getErrorCode() == 17) {
+                              if(!Manager.ThreadManager.isFreezed()) {
+                                   Manager.ThreadManager.freezeThread();
+                                   MiddleMan.addToCallAgain(request);
+                                   HashMap<String, Object> body = new HashMap<>();
+                                   body.put("username", SharedPrefs.getString(act.getBaseContext(), "userInfo", "username"));
+                                   body.put("refreshToken", SharedPrefs.TokenManager.getRefreshToken(act.getBaseContext()));
 
-                              Log.e("hey", "the username is: " + body.get("username"));
-                              Log.e("hey", "the refreshToken is: " + body.get("refreshToken"));
+                                   Log.e("hey", "the username is: " + body.get("username"));
+                                   Log.e("hey", "the refreshToken is: " + body.get("refreshToken"));
 
-                             // HashMap<String, Object> vars = new HashMap<>();
-                             // vars.put("requestAgain", request);
+                                   Request r = new Request(act, "refreshToken", body, null, null);
+                                   r.requestType.setupCall();
+                                   r.requestType.makeCall();
 
-                          //    MiddleMan.newRequest(act, "refreshToken", body, null, vars);
-                              Request r = new Request(act, "refreshToken", body, null, null);
-                              r.requestType.setupCall();
-                              r.requestType.makeCall();
-
-                             /*  if(TokenManager.getRefreshToken(act).equals("used")){
-
-                              }else{
-                                   MiddleMan.cancelAllRequest();
-                                   Log.e("hey", "refresh toke is fine");
-                                   TokenManager.setUseTokenToRefresh(act);
-                                   callAgain = true;
-                              } */
+                                   Answers.getInstance().logCustom(new CustomEvent("Token")
+                                           .putCustomAttribute("token", "refresh the token")
+                                   );
+                              }
+                              // too many requests
+                         }else if(pojoError.getErrorCode() == 19){
+                              if(!Manager.ThreadManager.isDelayed()) {
+                                   Manager.ThreadManager.startDelay();
+                                   MiddleMan.cancelAndSaveAllRequests();
+                              }else {
+                                   MiddleMan.addToCallAgain(request);
+                              }
+                              Answers.getInstance().logCustom(new CustomEvent("Request")
+                                      .putCustomAttribute("request", "to many requests")
+                              );
 
                          }else {
                               cOnResponse.onErrorResponse(pojoError);
-                         }
-                    }
-                    /*if(callAgain){
-                         MiddleMan.callAgain(request);
-                    }else{ */
-                    MiddleMan.gotRequestResponse(request);
-                   // }
 
-                    //   else{cOnResponse.onEmptyResponse();}
+                         }
+                         String errorMessage =  pojoError.getMessage().substring(0, Math.min(pojoError.getMessage().length(), 100));;
+                         Answers.getInstance().logCustom(new CustomEvent("Request error")
+                                 .putCustomAttribute("error code: ", pojoError.getErrorCode())
+                                 .putCustomAttribute("error message: ", errorMessage)
+                                 .putCustomAttribute("time: ", pojoError.getTime())
+                         );
+                    }
+                    MiddleMan.gotRequestResponse(request);
                }
                @Override
                public void onFailure(Call<ResponseBody> call, Throwable t) {

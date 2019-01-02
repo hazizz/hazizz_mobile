@@ -6,6 +6,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
 
+import com.indeed.hazizz.Communication.Strings;
+
 public class PagerAdapter extends FragmentStatePagerAdapter {
     int mNumOfTabs;
 
@@ -21,14 +23,14 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
 
-        Bundle bundle = new Bundle();
+        Bundle bundle;
         Fragment frag;
 
         switch (position) {
             case 0:
                 bundle = new Bundle();
                 Log.e("hey", "pagerAdapter groupId: " + groupId);
-                bundle.putInt("groupId", groupId);
+                bundle.putInt(Strings.Path.GROUPID.toString(), groupId);
                 bundle.putString("groupName", groupName);
                 frag = new GroupMainFragment();
                 frag.setArguments(bundle);
@@ -37,7 +39,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
 
             case 1:
                 bundle = new Bundle();
-                bundle.putInt("groupId", groupId);
+                bundle.putInt(Strings.Path.GROUPID.toString(), groupId);
                 bundle.putString("groupName", groupName);
                 frag= new GroupAnnouncementFragment();
                 frag.setArguments(bundle);
@@ -45,15 +47,16 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
                 return frag;
             case 2:
                 bundle = new Bundle();
-                bundle.putInt("groupId", groupId);
+                bundle.putInt(Strings.Path.GROUPID.toString(), groupId);
                 frag = new SubjectsFragment();
                 frag.setArguments(bundle);
 
                 currentFrag = frag;
                 return frag;
             case 3:
+            default:
                 bundle = new Bundle();
-                bundle.putInt("groupId", groupId);
+                bundle.putInt(Strings.Path.GROUPID.toString(), groupId);
                 bundle.putString("groupName", groupName);
                 frag = new GetGroupMembersFragment();
                 frag.setArguments(bundle);
@@ -61,15 +64,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
                 currentFrag = frag;
                 return frag;
 
-            default:
-                bundle = new Bundle();
-                Log.e("hey", "pagerAdapter groupId: " + groupId);
-                bundle.putInt("groupId", groupId);
-                bundle.putString("groupName", groupName);
-                frag = new GroupMainFragment();
-                frag.setArguments(bundle);
-                currentFrag = frag;
-                return frag;
+
         }
     }
 

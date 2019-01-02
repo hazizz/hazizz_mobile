@@ -1,8 +1,8 @@
 package com.indeed.hazizz.Listviews.TaskList;
 
+import com.indeed.hazizz.Communication.POJO.Response.POJOgroup;
+import com.indeed.hazizz.Communication.POJO.Response.POJOsubject;
 import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOcreator;
-import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgroupData;
-import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOsubjectData;
 
 import lombok.Data;
 
@@ -13,17 +13,17 @@ public class TaskItem {
     String taskTitle;
     String taskDescription;
     String taskDueDate;
-    POJOgroupData groupData;
+    POJOgroup group;
     POJOcreator creator;
-    POJOsubjectData subject;
+    POJOsubject subject;
     int taskId;
 
-    public TaskItem(int taskPic, String taskTitle, String taskDescription, String taskDueDate, POJOgroupData groupData, POJOcreator creator, POJOsubjectData subject, int taskId){
+    public TaskItem(int taskPic, String taskTitle, String taskDescription, String taskDueDate, POJOgroup group, POJOcreator creator, POJOsubject subject, int taskId){
         this.taskPic = taskPic;
         this.taskTitle = taskTitle;
         this.taskDescription = taskDescription;
         this.taskDueDate = taskDueDate;
-        this.groupData = groupData;
+        this.group = group;
         this.creator = creator;
         this.subject = subject;
         this.taskId = taskId;
