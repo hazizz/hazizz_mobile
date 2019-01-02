@@ -29,9 +29,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="50dp"
-                android:text="Nincs még házi"
+                android:text="@string/no_task"
                 android:visibility="invisible" />
         </RelativeLayout>
-
-
 </LinearLayout>

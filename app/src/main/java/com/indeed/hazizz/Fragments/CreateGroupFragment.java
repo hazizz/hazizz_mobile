@@ -68,7 +68,7 @@ public class CreateGroupFragment extends Fragment {
         }
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
-            textView_error.setText("Nincs internet kapcsolat");
+            textView_error.setText(R.string.info_noInternetAccess);
         }
 
 
@@ -87,14 +87,14 @@ public class CreateGroupFragment extends Fragment {
         public void onErrorResponse(POJOerror error) {
             //  textView.append("\n errorCode: " + error.getErrorCode());
             if(error.getErrorCode() == 2){ // validation failed
-                textView_error.setText("Helytelen csoport név");
+                textView_error.setText(R.string.error_groupNameNotAcceptable);
             }
             else if(error.getErrorCode() == 31){ // no such user
                 //  textView_error.setText("Felhasználó nem található");
             }
 
             else if(error.getErrorCode() == 52){ // group already exists
-                textView_error.setText("A csoport már létezik");
+                textView_error.setText(R.string.error_groupAlreadyExists);
             }
             Log.e("hey", "errodCOde is " + error.getErrorCode() + "");
             Log.e("hey", "got here onErrorResponse");
@@ -128,7 +128,7 @@ public class CreateGroupFragment extends Fragment {
 
         @Override
         public void onNoConnection() {
-            textView_error.setText("Nincs internet kapcsolat");
+            textView_error.setText(R.string.info_noInternetAccess);
             button_createGroup.setEnabled(true);
         }
 
@@ -136,7 +136,7 @@ public class CreateGroupFragment extends Fragment {
         public void getHeaders(Headers headers) {
             int groupId = Integer.parseInt(headers.get("Location").split("groups/")[1]);
          //   HashMap<String, Object> vars = new HashMap<>();
-          //  vars.put("groupId", groupId);
+          //  vars.put(Strings.Id.GROUP.toString(), groupId);
            // MiddleMan.newRequest(getActivity(), "getGroupsFromMe", null, rh_getGroups, null);
             Transactor.fragmentMainGroup(getFragmentManager().beginTransaction(), groupId, newGroupName);
         }
@@ -145,14 +145,14 @@ public class CreateGroupFragment extends Fragment {
         public void onErrorResponse(POJOerror error) {
             //  textView.append("\n errorCode: " + error.getErrorCode());
             if(error.getErrorCode() == 2){ // validation failed
-                  textView_error.setText("Helytelen csoport név");
+                  textView_error.setText(R.string.error_groupNameNotAcceptable);
             }
             else if(error.getErrorCode() == 31){ // no such user
                 //  textView_error.setText("Felhasználó nem található");
             }
 
             else if(error.getErrorCode() == 52){ // group already exists
-                  textView_error.setText("A csoport már létezik");
+                  textView_error.setText(R.string.error_groupAlreadyExists);
             }
             Log.e("hey", "errodCOde is " + error.getErrorCode() + "");
             Log.e("hey", "got here onErrorResponse");

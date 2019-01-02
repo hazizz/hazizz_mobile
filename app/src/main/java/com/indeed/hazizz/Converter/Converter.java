@@ -10,12 +10,13 @@ import android.graphics.Rect;
 import android.util.Base64;
 
 import com.google.common.hash.Hashing;
-import com.indeed.hazizz.Communication.POJO.Response.PojoPicSmall;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.Charset;
 
 public abstract class Converter {
+
+    private Converter(){}
 
     public static Bitmap imageFromText(String encodedImage){
         if(encodedImage != null && !encodedImage.equals("")) {
@@ -37,11 +38,14 @@ public abstract class Converter {
     }
 
     public static String hashString(String input) {
-        if(input != null || !input.equals("")) {
-            return Hashing.sha256()
-                    .hashString(input, Charset.forName("UTF-8"))
-                    .toString();
-        }else{return null;}
+        if (input != null) {
+            if (!input.equals("")) {
+                return Hashing.sha256()
+                        .hashString(input, Charset.forName("UTF-8"))
+                        .toString();
+            }
+        }
+        return null;
     }
 
     public static Bitmap scaleBitmapToRegular(Bitmap bitmap){

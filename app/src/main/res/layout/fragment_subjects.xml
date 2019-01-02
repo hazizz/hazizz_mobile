@@ -38,7 +38,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="49dp"
-            android:text="Nincs még téma"
+            android:text="@string/no_subject"
             android:visibility="invisible" />
     </RelativeLayout>
 </LinearLayout>

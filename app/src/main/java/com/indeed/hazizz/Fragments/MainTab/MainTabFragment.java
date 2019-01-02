@@ -72,8 +72,8 @@ public class MainTabFragment extends Fragment{
 
         TabLayout tabLayout = (TabLayout) v.findViewById(R.id.tab_layout);
 
-        tabLayout.addTab(tabLayout.newTab().setText("Feladatok"));
-        tabLayout.addTab(tabLayout.newTab().setText("Bejegyzések"));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.tasks));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.announcements));
        // tabLayout.addTab(tabLayout.newTab().setText("Csoportok"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         //  tabLayout.setcur

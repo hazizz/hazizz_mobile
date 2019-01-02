@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Visszajelzés" />
+        android:text="@string/title_activity_feedback" />
 
     <EditText
         android:id="@+id/editText_feedback"
@@ -28,7 +28,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
         android:gravity="top|left"
-        android:hint="Visszajelzés"
+        android:hint="@string/hint_description_feedback"
         android:inputType="textMultiLine" />
 
     <TextView
@@ -46,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="8dp"
-        android:text="Küldés" />
+        android:text="@string/button_send" />
 
     <include layout="@layout/content_feedback" />
 

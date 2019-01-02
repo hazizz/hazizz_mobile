@@ -19,11 +19,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.indeed.hazizz.Communication.Strings;
 import com.indeed.hazizz.Manager;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
 
 import okhttp3.ResponseBody;
@@ -68,24 +70,27 @@ public class GroupTabFragment extends Fragment {
         v = inflater.inflate(R.layout.fragment_tabgroup, container, false);
         Log.e("hey", "GroupTab fragment created");
 
-        Manager.DestManager.resetDest();
+       // Manager.DestManager.resetDest();
+
 
         groupId = getArguments().getInt("groupId");
         getGroupMemberProfilePics();
         groupName = getArguments().getString("groupName");
+        Manager.GroupManager.setGroupId(groupId);
+        Manager.GroupManager.setGroupName(groupName);
         startingTab = getArguments().getInt("startingTab");
 
         textView_title = v.findViewById(R.id.textView_title);
-        textView_title.setText("Csoport: " + groupName);
+        textView_title.append(" " + groupName);
      //   ((MainActivity)getActivity()).onFragmentCreated();
 
         TabLayout tabLayout = (TabLayout) v.findViewById(R.id.tab_layout);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 
-        tabLayout.addTab(tabLayout.newTab().setText("Feladatok"));
-        tabLayout.addTab(tabLayout.newTab().setText("Bejegyzések"));
-        tabLayout.addTab(tabLayout.newTab().setText("Témák"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tagok"));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.tasks));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.announcements));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.subjects));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.groupMembers));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
       //  tabLayout.setcur
        // tabLayout.setCu
@@ -136,8 +141,8 @@ public class GroupTabFragment extends Fragment {
     }
 
     public void leaveGroup(){
-        HashMap<String, Object> vars = new HashMap<>();
-        vars.put("groupId", Integer.toString(groupId));
+        EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
+        vars.put(Strings.Path.GROUPID, Integer.toString(groupId));
         MiddleMan.newRequest(getActivity(), "leaveGroup", null, rh, vars);
     }
 
@@ -166,8 +171,8 @@ public class GroupTabFragment extends Fragment {
             @Override
             public void onNoConnection() { }
         };
-        HashMap<String, Object> vars = new HashMap<>();
-        vars.put("groupId", Integer.toString(groupId));
+        EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
+        vars.put(Strings.Path.GROUPID, Integer.toString(groupId));
         MiddleMan.newRequest(this.getActivity(),"getGroupMembersProfilePic", null, responseHandler, vars);
     }
 }

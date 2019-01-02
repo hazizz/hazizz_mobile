@@ -17,9 +17,9 @@ import java.util.List;
 
 public class CustomAdapter extends ArrayAdapter<TaskItem> {
 
-    Context context;
-    int picID;
-    List<TaskItem> data = null;
+    private Context context;
+    private int picID;
+    private List<TaskItem> data;
 
 
     public CustomAdapter(@NonNull Context context, int resource, @NonNull List<TaskItem> objects) {
@@ -31,7 +31,6 @@ public class CustomAdapter extends ArrayAdapter<TaskItem> {
     }
 
     static class DataHolder{
-       // ImageView taskPic;
         TextView taskTitle;
         TextView taskDescription;
         TextView taskDueDate;
@@ -65,12 +64,11 @@ public class CustomAdapter extends ArrayAdapter<TaskItem> {
         holder.taskTitle.setText(taskItem.getTaskTitle());
         holder.taskDescription.setText(taskItem.getTaskDescription());
         holder.taskDueDate.setText(taskItem.getTaskDueDate());
-     //   holder.taskCreator.setText(taskItem.getCreator().getUsername());
         holder.taskCreator.setText(taskItem.getCreator().getUsername());
-        holder.taskSubject.setText(taskItem.getSubject().getName());
-      //  holder.taskPic.setImageResource(taskItem.taskPic);
+        if(taskItem.getSubject() != null) {
+            holder.taskSubject.setText(taskItem.getSubject().getName());
+        }
 
         return convertView;
-        // return super.getView(position, convertView, parent);
     }
 }

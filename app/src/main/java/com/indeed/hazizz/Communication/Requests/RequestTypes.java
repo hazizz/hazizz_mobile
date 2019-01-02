@@ -1,12 +1,5 @@
 package com.indeed.hazizz.Communication.Requests;
 
-import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
-import com.indeed.hazizz.Communication.POJO.Response.POJOgroup;
-import com.indeed.hazizz.Communication.POJO.Response.POJOme;
-import com.indeed.hazizz.Communication.POJO.Response.POJOregister;
-import com.indeed.hazizz.Communication.POJO.Response.POJOsubject;
-import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
-import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTaskDetailed;
 
 import org.json.JSONObject;
 
@@ -102,9 +95,16 @@ public interface RequestTypes{
 
     );
 
-    @GET("groups/{id}/tasks")
+    @GET("tasks/types")  // /groups/{id}/subjects
+    Call<ResponseBody> getTaskTypes(
+            @HeaderMap Map<String, String> headers
+    );
+
+
+
+    @GET("me/tasks/groups/{groupId}")
     Call<ResponseBody> getTasksFromGroup(
-            @Path("id") String id,
+            @Path("groupId") String groupId,
             @HeaderMap Map<String, String> headers
     );
 
@@ -113,12 +113,41 @@ public interface RequestTypes{
             @HeaderMap Map<String, String> headers
     );
 
-    @GET("groups/{groupId}/tasks/{taskId}")
-    Call<ResponseBody> getTask(
+
+
+    @PATCH("{whereName}/{byName}/{byId}/{whereId}")
+    Call<ResponseBody> editAT(
+            @Path("whereName") String whereName,
+            @Path("byName") String byName,
+            @Path("byId") String byId,
+            @Path("whereId") String whereId,
+            @HeaderMap Map<String, String> headers,
+            @Body HashMap<String, Object> body
+    );
+
+    @GET("tasks/groups/{groupId}/{taskId}")
+    Call<ResponseBody> getTaskByGroup(
             @Path("groupId") String groupId,
             @Path("taskId") String taskId,
             @HeaderMap Map<String, String> headers
+
     );
+
+    @GET("tasks/{byName}/{byId}/{taskId}")
+    Call<ResponseBody> getTaskBy(
+            @Path("byName") String byName,
+            @Path("byId") String groupId,
+            @Path("taskId") String taskId,
+            @HeaderMap Map<String, String> headers
+    );
+
+    @GET("tasks/subjects/{subjectId}/{taskId}")
+    Call<ResponseBody> getTaskBySubject(
+            @Path("subjectId") String subjectId,
+            @Path("taskId") String taskId,
+            @HeaderMap Map<String, String> headers
+    );
+
 
     @POST("groups/{id}/tasks")
     Call<ResponseBody> TaskEditor(
@@ -193,20 +222,66 @@ public interface RequestTypes{
             @Body HashMap<String, Object> body
     );
 
-    @GET("comments/{commentId}")
+    @GET("{whereName}/{byName}/{byId}/{whereId}/comments")
     Call<ResponseBody> getCommentSection(
-            @Path("commentId") String commentId,
+            @Path("whereName") String whereName,
+            @Path("byName") String byName,
+            @Path("byId") String byId,
+            @Path("whereId") String whereId,
             @HeaderMap Map<String, String> headers
     );
 
-    @POST("comments/{commentId}")
+    @GET("tasks/groups/{groupId}/{taskId}/comments")
+    Call<ResponseBody> getTaskCommentsByGroup(
+            @Path("groupId") String groupId,
+            @Path("taskId") String taskId,
+            @HeaderMap Map<String, String> headers
+    );
+
+    @GET("tasks/subjects/{subjectId}/{taskId}/comments")
+    Call<ResponseBody> getTaskCommentsBySubject(
+            @Path("subjectId") String groupId,
+            @Path("taskId") String taskId,
+            @HeaderMap Map<String, String> headers
+    );
+
+
+
+    @POST("tasks/groups/{groupId}/{taskId}/comments")
+    Call<ResponseBody> addTaskComment(
+            @Path("groupId") String groupId,
+            @Path("taskId") String taskId,
+            @Body HashMap<String, Object> body,
+            @HeaderMap Map<String, String> headers
+    );
+
+    @POST("{whereName}/{byName}/{byId}/{whereId}/comments")
     Call<ResponseBody> addComment(
-            @Path("commentId") String commentId,
+            @Path("whereName") String whereName,
+            @Path("byName") String byName,
+            @Path("byId") String byId,
+            @Path("whereId") String whereId,
             @HeaderMap Map<String, String> headers,
             @Body HashMap<String, Object> body
     );
 
-    @GET("announcements/{groupId}")
+    @DELETE("{whereName}/{byName}/{byId}/{whereId}")
+    Call<ResponseBody> DeleteAT(
+            @Path("whereName") String whereName,
+            @Path("byName") String byName,
+            @Path("byId") String byId,
+            @Path("whereId") String whereId,
+            @HeaderMap Map<String, String> headers
+    );
+
+ /*   @POST("comments/{commentId}")
+    Call<ResponseBody> addComment(
+            @Path("commentId") String commentId,
+            @HeaderMap Map<String, String> headers,
+            @Body HashMap<String, Object> body
+    ); */
+
+    @GET("me/announcements/groups/{groupId}")  // announcements/{groupId}
     Call<ResponseBody> getAnnouncementsFromGroup(
             @Path("groupId") String groupId,
             @HeaderMap Map<String, String> headers
@@ -239,7 +314,7 @@ public interface RequestTypes{
             @HeaderMap Map<String, String> headers
     );
 
-    @GET("announcements/{groupId}/{announcementId}")
+    @GET("announcements/groups/{groupId}/{announcementId}")
     Call<ResponseBody> getAnnouncement(
             @Path("groupId") String groupId,
             @Path("announcementId") String announcementId,

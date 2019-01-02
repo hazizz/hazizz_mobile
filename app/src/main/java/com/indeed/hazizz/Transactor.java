@@ -3,6 +3,7 @@ package com.indeed.hazizz;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -12,6 +13,8 @@ import android.util.Log;
 import com.indeed.hazizz.Activities.AuthActivity;
 import com.indeed.hazizz.Activities.FeedbackActivity;
 import com.indeed.hazizz.Activities.MainActivity;
+import com.indeed.hazizz.Communication.POJO.Response.PojoType;
+import com.indeed.hazizz.Communication.Strings;
 import com.indeed.hazizz.Fragments.AuthFrags.FirstFragment;
 import com.indeed.hazizz.Fragments.AuthFrags.LoginFragment;
 import com.indeed.hazizz.Fragments.AuthFrags.RegisterFragment;
@@ -29,10 +32,11 @@ import com.indeed.hazizz.Fragments.MainTab.MainTabFragment;
 import com.indeed.hazizz.Fragments.ViewAnnouncementFragment;
 import com.indeed.hazizz.Fragments.ViewTaskFragment;
 
+import javax.annotation.Nonnull;
+
 public abstract class Transactor extends FragmentActivity {
     private static boolean backStack = true;
 
-    private static Fragment frag;
 
     public static Fragment getCurrentFragment(FragmentManager fManager, boolean asd){
         Fragment currentF = fManager.findFragmentById(R.id.fragment_container);
@@ -51,20 +55,20 @@ public abstract class Transactor extends FragmentActivity {
         }
     }
 
-    public static void fragmentFirst(FragmentTransaction fTransaction){
+    public static void fragmentFirst(@Nonnull FragmentTransaction fTransaction){
         FirstFragment frag = new FirstFragment();
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }
         fTransaction.commit();
     }
 
-    public static void fragmentRegister(FragmentTransaction fTransaction){
+    public static void fragmentRegister(@Nonnull FragmentTransaction fTransaction){
         RegisterFragment frag = new RegisterFragment();
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }
         fTransaction.commit();
     }
-    public static void fragmentLogin(FragmentTransaction fTransaction){
+    public static void fragmentLogin(@Nonnull FragmentTransaction fTransaction){
         LoginFragment frag = new LoginFragment();
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }
@@ -72,23 +76,24 @@ public abstract class Transactor extends FragmentActivity {
     }
 
 
-    public static void fragmentMain(FragmentTransaction fTransaction){
+    public static void fragmentMain(@Nonnull FragmentTransaction fTransaction){
         fragmentMainTab(fTransaction, 0);
     }
-    public static void fragmentGroups(FragmentTransaction fTransaction){
+    public static void fragmentGroups(@NonNull FragmentTransaction fTransaction){
         Fragment frag = new GroupsFragment();
         fTransaction.replace(R.id.fragment_container, frag);
         fTransaction.commit();
       // fragmentMainTab(fTransaction, 2);
     }
-    public static void fragmentMainGroup(FragmentTransaction fTransaction, int groupId, String groupName){
+    public static void fragmentMainGroup(@Nonnull FragmentTransaction fTransaction, int groupId, String groupName){
         fragmentGroupTab(fTransaction, groupId, groupName, 0);
     }
-    public static void fragmentViewTask(FragmentTransaction fTransaction, int groupId, int taskId, String groupName, boolean goBackToMain, int dest){
+    public static void fragmentViewTask(@Nonnull FragmentTransaction fTransaction, int groupId, int subjectId, int taskId, String groupName, boolean goBackToMain, int dest){
         Manager.DestManager.setDest(dest);
 
         Bundle bundle = new Bundle();
-        bundle.putInt("groupId", groupId);
+        bundle.putInt(Strings.Path.GROUPID.toString(), groupId);
+        bundle.putInt(Strings.Path.SUBJECTID.toString(), subjectId);
         bundle.putInt("taskId", taskId);
         bundle.putString("groupName", groupName);
         bundle.putBoolean("goBackToMain", goBackToMain);
@@ -98,10 +103,10 @@ public abstract class Transactor extends FragmentActivity {
         if(backStack){ fTransaction.addToBackStack(null); }
         fTransaction.commit();
     }
-    public static void fragmentCreateTask(FragmentTransaction fTransaction, int groupId, String groupName){
+    public static void fragmentCreateTask(@Nonnull FragmentTransaction fTransaction, int groupId, String groupName, int dest){
+        Manager.DestManager.setDest(dest);
         Bundle bundle = new Bundle();
-        bundle.putInt("groupId", groupId);
-        bundle.putInt("groupId", groupId);
+        bundle.putInt(Strings.Path.GROUPID.toString(), groupId);
         bundle.putString("groupName", groupName);
         TaskEditorFragment frag = new TaskEditorFragment();
         frag.setArguments(bundle);
@@ -110,18 +115,21 @@ public abstract class Transactor extends FragmentActivity {
         fTransaction.commit();
     }
 
-    public static void fragmentEditTask(FragmentTransaction fTransaction, int groupId, String groupName,
-                                        int taskId, String groupType, int taskSubjectId, String taskTitle,
-                                        String taskDescription, int[] date){
+    public static void fragmentEditTask(@Nonnull FragmentTransaction fTransaction, int groupId, String groupName,
+                                        int taskId, PojoType type, int taskSubjectId, String taskTitle,
+                                        String taskDescription, String date, int dest){
+        Manager.DestManager.setDest(dest);
         Bundle bundle = new Bundle();
         bundle.putInt("taskId", taskId);
-        bundle.putInt("groupId", groupId);
+        bundle.putInt(Strings.Path.GROUPID.toString(), groupId);
         bundle.putString("groupName", groupName);
-        bundle.putString("type", groupType);
+      //  bundle.putString("typeName", type.getName());
+        bundle.putLong("typeId", type.getId());
+        bundle.putString("typeName", type.getName());
         bundle.putInt("subject", taskSubjectId);
         bundle.putString("title", taskTitle);
         bundle.putString("description", taskDescription);
-        bundle.putIntArray("date", date);
+        bundle.putString("date", date);
         TaskEditorFragment frag = new TaskEditorFragment();
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
@@ -129,9 +137,10 @@ public abstract class Transactor extends FragmentActivity {
         fTransaction.commit();
     }
 
-    public static void fragmentCreateAnnouncement(FragmentTransaction fTransaction, int groupId, String groupName){
+    public static void fragmentCreateAnnouncement(@Nonnull FragmentTransaction fTransaction, int groupId, String groupName, int dest){
+        Manager.DestManager.setDest(dest);
         Bundle bundle = new Bundle();
-        bundle.putInt("groupId", groupId);
+        bundle.putInt(Strings.Path.GROUPID.toString(), groupId);
         bundle.putString("groupName", groupName);
         AnnouncementEditorFragment frag = new AnnouncementEditorFragment();
         frag.setArguments(bundle);
@@ -140,10 +149,11 @@ public abstract class Transactor extends FragmentActivity {
         fTransaction.commit();
     }
 
-    public static void fragmentEditAnnouncement(FragmentTransaction fTransaction, int groupId, int announcementId, String groupName, String title, String description){
+    public static void fragmentEditAnnouncement(@Nonnull FragmentTransaction fTransaction, int groupId, int announcementId, String groupName, String title, String description, int dest){
+        Manager.DestManager.setDest(dest);
         Bundle bundle = new Bundle();
         bundle.putInt("announcementId", announcementId);
-        bundle.putInt("groupId", groupId);
+        bundle.putInt(Strings.Path.GROUPID.toString(), groupId);
         bundle.putString("groupName", groupName);
         bundle.putString("title", title);
         bundle.putString("description", description);
@@ -152,16 +162,15 @@ public abstract class Transactor extends FragmentActivity {
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }
         fTransaction.commit();
-
     }
 
 
 
-    public static void fragmentViewAnnouncement(FragmentTransaction fTransaction, int groupId, int announcementId, String groupName, boolean goBackToMain, int dest){
+    public static void fragmentViewAnnouncement(@Nonnull FragmentTransaction fTransaction, int groupId, int announcementId, String groupName, boolean goBackToMain, int dest){
         Manager.DestManager.setDest(dest);
 
         Bundle bundle = new Bundle();
-        bundle.putInt("groupId", groupId);
+        bundle.putInt(Strings.Path.GROUPID.toString(), groupId);
         bundle.putInt("announcementId", announcementId);
         bundle.putString("groupName", groupName);
         bundle.putBoolean("goBackToMain", goBackToMain);
@@ -172,17 +181,17 @@ public abstract class Transactor extends FragmentActivity {
         fTransaction.commit();
     }
 
-    public static void fragmentChat(FragmentTransaction fTransaction){
+    public static void fragmentChat(@Nonnull FragmentTransaction fTransaction){
         ChatFragment frag = new ChatFragment();
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }
         fTransaction.commit();
     }
 
-    public static void fragmentCreateSubject(FragmentTransaction fTransaction, int groupId, String groupName){
+    public static void fragmentCreateSubject(@Nonnull FragmentTransaction fTransaction, int groupId, String groupName){
         Bundle bundle = new Bundle();
         CreateSubjectFragment frag = new CreateSubjectFragment();
-        bundle.putInt("groupId", groupId);
+        bundle.putInt(Strings.Path.GROUPID.toString(), groupId);
         bundle.putString("groupName", groupName);
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);
@@ -191,7 +200,7 @@ public abstract class Transactor extends FragmentActivity {
     }
 
 
-    public static void fragmentSubjects(FragmentTransaction fTransaction, int groupId, String groupName){
+    public static void fragmentSubjects(@Nonnull FragmentTransaction fTransaction, int groupId, String groupName){
     /*    Bundle bundle = new Bundle();
         frag = new SubjectsFragment();
         frag.setArguments(bundle);
@@ -201,27 +210,27 @@ public abstract class Transactor extends FragmentActivity {
         fragmentGroupTab(fTransaction, groupId, groupName, 2);
     }
 
-    public static void fragmentCreateGroup(FragmentTransaction fTransaction){
+    public static void fragmentCreateGroup(@Nonnull FragmentTransaction fTransaction){
         CreateGroupFragment frag = new CreateGroupFragment();
         fTransaction.replace(R.id.fragment_container, frag);
         if(backStack){ fTransaction.addToBackStack(null); }
         fTransaction.commit();
     }
 
-    public static void fragmentJoinGroup(FragmentTransaction fTransaction){
+    public static void fragmentJoinGroup(@Nonnull FragmentTransaction fTransaction){
         JoinGroupFragment frag = new JoinGroupFragment();
         fTransaction.replace(R.id.fragment_container, frag);
         if(backStack){ fTransaction.addToBackStack(null); }
         fTransaction.commit();
     }
 
-    public static void fragmentGetGroupMembers(FragmentTransaction fTransaction, int groupId, String groupName){
+    public static void fragmentGetGroupMembers(@Nonnull FragmentTransaction fTransaction, int groupId, String groupName){
         fragmentGroupTab(fTransaction, groupId, groupName, 3);
     }
 
-    public static void fragmentGroupTab(FragmentTransaction fTransaction, int groupId, String groupName, int startingTab){
+    public static void fragmentGroupTab(@Nonnull FragmentTransaction fTransaction, int groupId, String groupName, int startingTab){
         Bundle bundle = new Bundle();
-        bundle.putInt("groupId", groupId);
+        bundle.putInt(Strings.Path.GROUPID.toString(), groupId);
         bundle.putString("groupName", groupName);
         bundle.putInt("startingTab", startingTab);
         GroupTabFragment frag = new GroupTabFragment();
@@ -231,7 +240,7 @@ public abstract class Transactor extends FragmentActivity {
         fTransaction.commit();
     }
 
-    public static void fragmentMainTab(FragmentTransaction fTransaction,int startingTab){
+    public static void fragmentMainTab(@Nonnull FragmentTransaction fTransaction,int startingTab){
         Bundle bundle = new Bundle();
         bundle.putInt("startingTab", startingTab);
         MainTabFragment frag = new MainTabFragment();
@@ -241,29 +250,75 @@ public abstract class Transactor extends FragmentActivity {
         fTransaction.commit();
     }
 
-    public static void fragmentCommentSection(FragmentTransaction fTransaction, int commentId){
+    public static void fragmentCommentSection(@Nonnull FragmentTransaction fTransaction, int groupId, int subjectId, int taskId, int announcementId){
         Bundle bundle = new Bundle();
-        Log.e("hey", "id1.1 : " + commentId);
-        bundle.putString("commentId", Integer.toString(commentId));
-        Log.e("hey", "id1.2 : " + Integer.toString(commentId));
+        if(taskId != 0){bundle.putInt(Strings.Path.TASKID.toString(), taskId);
+        }else{bundle.putInt(Strings.Path.ANNOUNCEMENTID.toString(), announcementId);}
+        if(groupId != 0){ bundle.putInt(Strings.Path.GROUPID.toString(), groupId);
+        }else{bundle.putInt(Strings.Path.SUBJECTID.toString(), subjectId);}
+
         CommentSectionFragment frag = new CommentSectionFragment();
         frag.setArguments(bundle);
-        fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
+        fTransaction.replace(R.id.fragment_container, frag);
         if(backStack){ fTransaction.addToBackStack(null); }
         fTransaction.commit();
     }
 
+    public static void fragmentTaskCommentsByGroup(@Nonnull FragmentTransaction fTransaction, int groupId,int taskId){
+        Bundle bundle = new Bundle();
+        bundle.putInt(Strings.Path.GROUPID.toString(), groupId);
+        bundle.putInt(Strings.Path.TASKID.toString(), taskId);
+        CommentSectionFragment frag = new CommentSectionFragment();
+        frag.setArguments(bundle);
+        fTransaction.replace(R.id.fragment_container, frag);
+        if(backStack){fTransaction.addToBackStack(null);}
+        fTransaction.commit();
+    }
 
-    public static void fragmentGroupAnnouncement(FragmentTransaction fTransaction, int groupId, String groupName){
+    public static void fragmentTaskCommentsBySubject(@Nonnull FragmentTransaction fTransaction, int subjectId, int taskId){
+        Bundle bundle = new Bundle();
+        bundle.putInt(Strings.Path.SUBJECTID.toString(), subjectId);
+        bundle.putInt(Strings.Path.TASKID.toString(), taskId);
+        CommentSectionFragment frag = new CommentSectionFragment();
+        frag.setArguments(bundle);
+        fTransaction.replace(R.id.fragment_container, frag);
+        if(backStack){fTransaction.addToBackStack(null);}
+        fTransaction.commit();
+    }
+
+    public static void fragmentAnnouncementCommentsByGroup(@Nonnull FragmentTransaction fTransaction, int groupId, int taskId){
+        Bundle bundle = new Bundle();
+        bundle.putInt(Strings.Path.GROUPID.toString(), groupId);
+        bundle.putInt(Strings.Path.TASKID.toString(), taskId);
+        CommentSectionFragment frag = new CommentSectionFragment();
+        frag.setArguments(bundle);
+        fTransaction.replace(R.id.fragment_container, frag);
+        if(backStack){fTransaction.addToBackStack(null);}
+        fTransaction.commit();
+    }
+
+    public static void fragmentAnnouncementCommentsBySubject(@Nonnull FragmentTransaction fTransaction, int subjectId, int taskId){
+        Bundle bundle = new Bundle();
+        bundle.putInt("subjectId", subjectId);
+        bundle.putInt(Strings.Path.TASKID.toString(), taskId);
+        CommentSectionFragment frag = new CommentSectionFragment();
+        frag.setArguments(bundle);
+        fTransaction.replace(R.id.fragment_container, frag);
+        if(backStack){fTransaction.addToBackStack(null);}
+        fTransaction.commit();
+    }
+
+
+    public static void fragmentGroupAnnouncement(@Nonnull FragmentTransaction fTransaction, int groupId, String groupName){
         fragmentGroupTab(fTransaction, groupId, groupName, 1);
     }
-    public static void fragmentMainAnnouncement(FragmentTransaction fTransaction){
+    public static void fragmentMainAnnouncement(@Nonnull FragmentTransaction fTransaction){
         fragmentMainTab(fTransaction,1);
     }
-    public static void fragmentGroupTask(FragmentTransaction fTransaction, int groupId, String groupName){
+    public static void fragmentGroupTask(@Nonnull FragmentTransaction fTransaction, int groupId, String groupName){
         fragmentGroupTab(fTransaction, groupId, groupName, 0);
     }
-    public static void fragmentMainTask(FragmentTransaction fTransaction){
+    public static void fragmentMainTask(@Nonnull FragmentTransaction fTransaction){
         fragmentMainTab(fTransaction,0);
     }
 

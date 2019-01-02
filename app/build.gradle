@@ -22,8 +22,8 @@ android {
         applicationId "com.indeed.hazizz"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 5
-        versionName "0.7.5"
+        versionCode 7
+        versionName "0.7.5B"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
 
@@ -61,7 +61,7 @@ dependencies {
 
         
     implementation 'org.projectlombok:lombok:1.16.20'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.7'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.8'
 
 
    // ompileOnly "org.projectlombok:lombok:1.16.20"

@@ -121,7 +121,7 @@
                 android:clickable="true"
                 android:gravity="center"
                 android:onClick="logoutPressed"
-                android:text="Kijelentkezés" />
+                android:text="@string/textview_logout_drawer" />
         </LinearLayout>
     </android.support.design.widget.NavigationView>
 

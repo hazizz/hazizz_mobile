@@ -62,12 +62,12 @@ public class CustomAdapter extends ArrayAdapter<AnnouncementItem> {
         holder.taskTitle.setText(announcementItem.getAnnouncementTitle());
         holder.taskDescription.setText(announcementItem.getAnnouncementDescription());
         //   holder.taskCreator.setText(announcementItem.getCreator().getUsername());
-        holder.taskGroup.setText(announcementItem.getGroupData().getName());
-       /* if(announcementItem.getSubjectData() == null) {
+        holder.taskGroup.setText(announcementItem.getGroup().getName());
+       /* if(announcementItem.getSubject() == null) {
             holder.taskSubject.setVisibility(View.INVISIBLE);
             holder.taskSubject_.setVisibility(View.INVISIBLE);
         }else{
-            holder.taskSubject.setText(announcementItem.getSubjectData().getName());
+            holder.taskSubject.setText(announcementItem.getSubject().getName());
         } */
         //  holder.taskPic.setImageResource(announcementItem.taskPic);
 

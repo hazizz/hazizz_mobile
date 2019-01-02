@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public abstract class D8 {
+
+    private D8(){}
+
     static LocalDate today = LocalDate.now();
 
     static LocalDate tomorrow = today.plusDays(1);
@@ -39,11 +42,10 @@ public abstract class D8 {
     }
 
     public static ArrayList<POJOgetTask> sortTasksByDate(ArrayList<POJOgetTask> data) {
-        ArrayList<POJOgetTask> helper = data;
+
 
         ArrayList<DateTime> dates = new ArrayList<>();
         for (int i = 0; i <= data.size() - 1; i++) {
-            // dates.add(casted.get(i).getDueDate());
             dates.add(D8.dtf.parseDateTime(data.get(i).getDueDate()));
             Log.e("hey", "dates: " + data.get(i).getDueDate());
         }
@@ -52,8 +54,6 @@ public abstract class D8 {
     }
 
     public static ArrayList<POJOgetTask> sortCommentsByDate(ArrayList<POJOgetTask> data) {
-        ArrayList<POJOgetTask> helper = data;
-
         ArrayList<DateTime> dates = new ArrayList<>();
         for (int i = 0; i <= data.size() - 1; i++) {
             dates.add(D8.dtf.parseDateTime(data.get(i).getDueDate()));

@@ -7,7 +7,6 @@
     android:background="@color/colorBackground"
     android:orientation="vertical">
 
-
     <TextView
         android:id="@+id/textView_title"
         android:layout_width="wrap_content"
@@ -16,15 +15,12 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:singleLine="true"
-        android:text="Cím: "
         android:textSize="30sp" />
-
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/button_comment"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
 
         <TextView
             android:id="@+id/editText_description"
@@ -79,7 +75,7 @@
             android:layout_marginLeft="32dp"
             android:layout_marginStart="32dp"
             android:layout_marginTop="8dp"
-            android:text="Létrehozó:"
+            android:text="@string/creator_"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView1" />
@@ -91,7 +87,7 @@
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
-            android:text="Leírás:"
+            android:text="@string/description_"
             android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/editText_description"
             app:layout_constraintStart_toStartOf="parent" />
@@ -103,7 +99,7 @@
             android:layout_marginLeft="32dp"
             android:layout_marginStart="32dp"
             android:layout_marginTop="32dp"
-            android:text="Csoport:"
+            android:text="@string/group_"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -127,7 +123,7 @@
             android:layout_marginEnd="6dp"
             android:layout_marginRight="6dp"
             android:background="#0000"
-            android:text="Szerkesztés"
+            android:text="@string/edit"
             android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@+id/button_delete"
             app:layout_constraintEnd_toEndOf="parent" />
@@ -141,7 +137,7 @@
             android:layout_marginRight="6dp"
             android:background="#0000"
             android:gravity="fill_vertical|end"
-            android:text="Törlés"
+            android:text="@string/delete"
             android:textColor="@color/colorAccent"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -155,7 +151,7 @@
             android:layout_marginLeft="4dp"
             android:layout_marginStart="4dp"
             android:background="#0000"
-            android:text="Megjegyzések"
+            android:text="@string/comments"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
     </android.support.constraint.ConstraintLayout>

@@ -17,12 +17,14 @@ import com.indeed.hazizz.AndroidThings;
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
+import com.indeed.hazizz.Communication.Strings;
 import com.indeed.hazizz.Fragments.GroupTabs.GroupTabFragment;
 import com.indeed.hazizz.Listviews.GroupList.CustomAdapter;
 import com.indeed.hazizz.Manager;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 
 import okhttp3.ResponseBody;
@@ -61,7 +63,7 @@ public class CreateSubjectFragment extends Fragment {
 
         @Override
         public void onNoConnection() {
-            textView_error.setText("Nincs internet kapcsolat");
+            textView_error.setText(R.string.info_noInternetAccess);
             button_addSubject.setEnabled(true);
         }
 
@@ -99,13 +101,13 @@ public class CreateSubjectFragment extends Fragment {
                 if(subjectName.length() >= 2 || subjectName.length() <= 20) {
                     HashMap<String, Object> body = new HashMap<>();
                     body.put("name", subjectName);
-                    HashMap<String, Object> vars = new HashMap<>();
-                    vars.put("groupId", Integer.toString(groupId));
+                    EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
+                    vars.put(Strings.Path.GROUPID, Integer.toString(groupId));
                     button_addSubject.setEnabled(false);
 
                     MiddleMan.newRequest(getActivity(),"createSubject", body, rh, vars);
                 }else{
-                    textView_error.setText("A téma 2-20 karakter hosszú lehet");
+                    textView_error.setText(R.string.error_subjectLength);
                 }
             }
         });
@@ -114,7 +116,7 @@ public class CreateSubjectFragment extends Fragment {
 
     public void goBack(){
         if(Manager.DestManager.getDest() == Manager.DestManager.TOCREATETASK) {
-            Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(), GroupTabFragment.groupId, GroupTabFragment.groupName);
+            Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(), GroupTabFragment.groupId, GroupTabFragment.groupName, Manager.DestManager.TOGROUP);
         }else if(Manager.DestManager.getDest() == Manager.DestManager.TOSUBJECTS){
             Transactor.fragmentSubjects(getFragmentManager().beginTransaction(), GroupTabFragment.groupId, GroupTabFragment.groupName);
         }else{

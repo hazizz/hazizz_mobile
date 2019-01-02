@@ -20,11 +20,12 @@ import com.indeed.hazizz.AndroidThings;
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
-import com.indeed.hazizz.ErrorHandler;
+import com.indeed.hazizz.Communication.Strings;
 import com.indeed.hazizz.Manager;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 
 import okhttp3.ResponseBody;
@@ -45,20 +46,9 @@ public class AnnouncementEditorFragment extends Fragment{
     private Button button_send;
     private TextView textView_error;
 
-    private CustomResponseHandler rh_subjects;
-    private CustomResponseHandler rh_taskTypes;
-
     private View v;
 
     CustomResponseHandler rh = new CustomResponseHandler() {
-        @Override
-        public void onResponse(HashMap<String, Object> response) {
-            Log.e("hey", "got regular response"); }
-        @Override
-        public void onPOJOResponse(Object response) {
-            Log.e("hey", "got POJOresponse");
-
-        }
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
             Log.e("hey", "4");
@@ -69,7 +59,7 @@ public class AnnouncementEditorFragment extends Fragment{
         public void onErrorResponse(POJOerror error) {
             int errorCode = error.getErrorCode();
             if(errorCode == 2){ // cím túl hosszú (2-20 karatket)
-                textView_error.setText("A cím nem megfelelő");
+                textView_error.setText(R.string.error_titleNotAcceptable);
             }
             button_send.setEnabled(true);
         }
@@ -77,12 +67,20 @@ public class AnnouncementEditorFragment extends Fragment{
         public void onEmptyResponse() { }
         @Override
         public void onSuccessfulResponse() {
-            toMainGroupFrag();
+            if(Manager.DestManager.getDest() == Manager.DestManager.TOGROUP){
+                Transactor.fragmentGroupAnnouncement(getFragmentManager().beginTransaction(),groupId, groupName);
+            }else if(Manager.DestManager.getDest() == Manager.DestManager.TOMAIN){
+                Transactor.fragmentMainAnnouncement(getFragmentManager().beginTransaction());
+            }else{
+                Transactor.fragmentMainAnnouncement(getFragmentManager().beginTransaction());
+            }
+
+
             button_send.setEnabled(true);
         }
         @Override
         public void onNoConnection() {
-            textView_error.setText("Nincs internet kapcsolat");
+            textView_error.setText(R.string.info_noInternetAccess);
             button_send.setEnabled(true);
         }
     };
@@ -92,7 +90,7 @@ public class AnnouncementEditorFragment extends Fragment{
         Log.e("hey", "im here lol");
         ((MainActivity)getActivity()).onFragmentCreated();
 
-        Manager.DestManager.resetDest();
+
 
 
         Log.e("hey", "in TaskEditorFrag construvtor: " + groupId);
@@ -109,10 +107,8 @@ public class AnnouncementEditorFragment extends Fragment{
             @Override
             public void onClick(View view) {
                 String title = editText_announcementTitle.getText().toString();
-                if (title.length() < 2) {
-                    textView_error.setText("A cím túl rövid (minimum 2 karakter)");
-                } else if (title.length() > 20) {
-                    textView_error.setText("A cím túl hosszú (maximum 20 karakter)");
+                if (title.length() < 2 || title.length() > 20) {
+                    textView_error.setText(R.string.error_titleLentgh);
                 } else {
                     button_send.setEnabled(false);
                     if(editMode) {
@@ -126,8 +122,8 @@ public class AnnouncementEditorFragment extends Fragment{
             }
         });
 
-        groupId = getArguments().getInt("groupId");
-        groupName = getArguments().getString("groupName");
+        groupId = Manager.GroupManager.getGroupId();
+        groupName = Manager.GroupManager.getGroupName();
         announcementId = getArguments().getInt("announcementId");
 
         if(announcementId != 0) {
@@ -152,9 +148,9 @@ public class AnnouncementEditorFragment extends Fragment{
         requestBody.put("description", editText_description.getText().toString());
         requestBody.put("subjectId", null);
 
-        HashMap<String, Object> vars = new HashMap<>();
-        vars.put("groupId", Integer.toString(groupId));
-        vars.put("announcementId", Integer.toString(announcementId));
+        EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
+        vars.put(Strings.Path.GROUPID, Integer.toString(groupId));
+        vars.put(Strings.Path.ANNOUNCEMENTID, Integer.toString(announcementId));
 
         MiddleMan.newRequest(this.getActivity(), "editAnnouncement", requestBody, rh, vars);
     }
@@ -166,17 +162,10 @@ public class AnnouncementEditorFragment extends Fragment{
         requestBody.put("description", editText_description.getText().toString());
         requestBody.put("subjectId", null);
 
-        HashMap<String, Object> vars = new HashMap<>();
-        vars.put("groupId", Integer.toString(groupId));
+        EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
+        vars.put(Strings.Path.GROUPID, Integer.toString(groupId));
 
         MiddleMan.newRequest(this.getActivity(), "createAnnouncement", requestBody, rh, vars);
-    }
-
-    void toMainGroupFrag(){
-        Transactor.fragmentMainGroup(getFragmentManager().beginTransaction(),groupId, groupName);
-    }
-    void toCreateSubjectFrag(){
-        Transactor.fragmentCreateSubject(getFragmentManager().beginTransaction(), groupId, groupName);
     }
     public int getGroupId(){
         return groupId;

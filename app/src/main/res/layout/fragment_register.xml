@@ -22,7 +22,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:gravity="center_horizontal"
-            android:text="Regisztráció"
+            android:text="@string/register"
             android:textSize="30sp"
             android:textStyle="bold" />
 
@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
-            android:hint="Felhasználónév"
+            android:hint="@string/username"
             android:inputType="text"
             android:maxLines="1" />
 
@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
-            android:hint="Email"
+            android:hint="@string/email"
             android:inputType="text"
             android:maxLines="1" />
 
@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
-            android:hint="Jelszó"
+            android:hint="@string/password"
             android:inputType="textPassword"
             android:maxLines="1" />
 
@@ -64,7 +64,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="20dp"
-            android:hint="Jelszó mégegyszer"
+            android:hint="@string/passwordagain_fragment_register"
             android:inputType="textPassword"
             android:maxLines="1" />
 
@@ -92,7 +92,7 @@
                 android:layout_alignParentTop="true"
                 android:gravity="left"
 
-                android:text="@string/TermsAndConditions"
+                android:text="@string/termsAndConditions"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/checkBox_termsAndConditions"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -114,7 +114,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
-            android:text="Regisztráció" />
+            android:text="@string/register" />
 
 
     </LinearLayout>
@@ -140,7 +140,7 @@
             android:clickable="true"
             android:onClick="onClick"
             android:paddingBottom="10dp"
-            android:text="Bejelentkezés"
+            android:text="@string/login"
             android:textSize="20sp" />
     </RelativeLayout>
 </LinearLayout>

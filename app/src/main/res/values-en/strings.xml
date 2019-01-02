@@ -1,0 +1,154 @@
+<resources>
+    <string name="app_name">Hazizz</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+
+
+    <string-array name="taskTypes">
+        <item>homework</item>
+        <item>assignment</item>
+        <item>test</item>
+        <item>oral test</item>
+    </string-array>
+
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="configure">Configure</string>
+    <string name="add_widget">Add widget</string>
+
+    <string name="button_send">Send</string>
+    <string name="button_add">Add</string>
+    <string name="button_create">Create</string>
+    <string name="button_join">Join</string>
+
+
+    <string name="mainpage_menu">Home page</string>
+
+    <string name="createGroup_menu">Create new group</string>
+    <string name="joinGroup_menu">Join group</string>
+    <string name="leaveGroup_menu">Leave group</string>
+    <string name="uploadProfilePic_menu">Upload profile picture</string>
+
+    <string name="no_task">No tasks</string>
+    <string name="no_announcement">No announcements</string>
+    <string name="no_subject">No subjects</string>
+    <string name="no_comment">No comments</string>
+
+    <string name="feedback">Feedback</string>
+    <string name="groups">Groups</string>
+    <string name="task">Task</string>
+    <string name="tasks">Tasks</string>
+    <string name="announcement">Entry</string>
+    <string name="announcements">Announcements</string>
+    <string name="subject">Subject</string>
+    <string name="subjects">Subjects</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="autologin">Automatic login</string>
+    <string name="comments">Comments</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+
+    <string name="groupMembers">Members</string>
+
+    <string name="deadline_">Deadline:</string>
+    <string name="group_">Group:</string>
+    <string name="creator_">Creator:</string>
+    <string name="description_">Description:</string>
+    <string name="subject_">Subject:</string>
+    <string name="tasktype_">Type of task:</string>
+
+
+    <string name="termsAndConditions">I accept<a href="https://hazizz.github.io/privacy-hu.txt"> the privacy policy</a></string>
+    <string name="passwordagain_fragment_register">Confirm password</string>
+
+
+    <string name="hint_description_feedback">Feedback</string>
+    <string name="hint_fragment_joingroup">Group name</string>
+    <string name="hint_add_subject">New subject</string>
+    <string name="hint_newgroup">New group</string>
+    <string name="title_fragment_tabgroup">Group:</string>
+
+    <string name="title_activity_feedback">Feedback</string>
+    <string name="title_fragment_groups">Your groups</string>
+    <string name="title_fragment_joingroup">Join group</string>
+    <string name="title_fragment_taskeditor">New task</string>
+    <string name="title_newannouncement">New entry</string>
+    <string name="title_fragment_comments">Comments</string>
+    <string name="title_fragment_creategroup">Create new group</string>
+
+
+    <string name="tasktype_fragment_taskeditor">Type of task:</string>
+    <string name="choose_deadline_fragment_taskeditor">Choose deadline!</string>
+    <string name="subject_fragment_taskeditor">Subject:</string>
+
+
+    <string name="textview_logout_drawer">Logout</string>
+
+    <string name="add_subject">Add subject</string>
+
+    <string name="info_serverNotResponding">Server not responding</string>
+    <string name="info_noInternetAccess">No internet connection</string>
+
+
+
+    <string name="error">Hiba</string>
+    <string name="error_termsAndConditionsNotAccepted">Privacy policy not accepted</string>
+
+    <string name="error_accountLocked">Account is locked</string>
+    <string name="error_accountExpired">Account is expired</string>
+    <string name="error_accountBanned">Account is banned</string>
+    <string name="error_accountNotFound">Couldn\'t find account</string>
+
+
+    <string name="error_usernameNotFound">Username can only contain numbers, letters, underscores and dashes</string>
+    <string name="error_usernameFormat">Username can only contain numbers, letters, underscores and dashes</string>
+    <string name="error_usernameTaken">Username already taken</string>
+    <string name="error_username">Username must be at least 4 characters long</string>
+    <string name="error_usernameLength">Username must be 4\-8 characters long</string>
+
+    <string name="error_emailWrong">Incorrect email</string>
+    <string name="error_emailTaken">Email already in use</string>
+
+    <string name="error_registrationLocked">Registration is locked</string>
+
+    <string name="error_titleLentgh">Title must be 2\-20 characters long</string>
+    <string name="error_titleNotAcceptable">Incorrect title</string>
+
+    <string name="error_alreadyMemberOfGroup">You\'re already a member of the group</string>
+    <string name="error_noPermissionToJoinGroup">You don\'t have permission to login</string>
+    <string name="error_groupNameNotAcceptable">Incorrect group name</string>
+    <string name="error_groupAlreadyExists">Group already exists</string>
+    <string name="error_noSuchGroup">Group does not exist</string>
+    <string name="error_notMemberOfGroup">You\'re not a member of any groups</string>
+
+    <string name="error_subjectNotSelected">No subject selected</string>
+
+    <string name="error_deadlineNotSet">No deadline set</string>
+
+    <string name="error_subjectLength">Subject length must be 2\-20 characters long</string>
+
+    <string name="error_wrongPassword">Incorrect password</string>
+    <string name="error_passwordDoesntMatch">Password do not match</string>
+    <string name="error_passwordNotLongEnough">Password must be at least 8 characters long</string>
+    <string name="error_givenDataWrong">Incorrect date</string>
+
+
+
+    <string name="taskType_homework">homework</string>
+    <string name="taskType_assigment">assigment</string>
+    <string name="taskType_test">test</string>
+    <string name="taskType_oraltest">oral test</string>
+
+</resources>

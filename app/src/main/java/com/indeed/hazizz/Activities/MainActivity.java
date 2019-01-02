@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.crashlytics.android.answers.Answers;
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
@@ -76,8 +77,6 @@ public class MainActivity extends AppCompatActivity
     FloatingActionButton fab_action;
 
     private Menu menu_options;
-    private MenuItem menuItem_createGroup;
-    private MenuItem menuItem_joinGroup;
     private MenuItem menuItem_leaveGroup;
     private MenuItem menuItem_profilePic;
     private MenuItem menuItem_feedback;
@@ -160,21 +159,19 @@ public class MainActivity extends AppCompatActivity
             String motd = (String)response;
             Log.e("hey", "MOTD: " + motd);
             if(!motd.equals("") && !SharedPrefs.getString(getBaseContext(), "motd", "message").equals(motd)) {
-             //   try {
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
                     alertDialogBuilder.setTitle("Napi üzenet");
                     alertDialogBuilder
                         .setMessage(motd)
                         .setCancelable(true)
                         .setPositiveButton("Oké", (dialog, id) -> {
-                            SharedPrefs.save(getBaseContext(), "motd", "message", "");
+                            //SharedPrefs.save(getBaseContext(), "motd", "message", "");
+                            SharedPrefs.save(getBaseContext(), "motd", "message", motd);
                             dialog.cancel();
                         })
                         .setNegativeButton("Ne mutasd többé", (dialog, id) -> {
-                            SharedPrefs.save(getBaseContext(), "motd", "message", motd);
-                            dialog.cancel();
+
                         });
-                    ;
                     AlertDialog alertDialog = alertDialogBuilder.create();
                     alertDialog.show();
             }else{
@@ -204,8 +201,9 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Fabric.with(this, new Crashlytics());
 
+        Fabric.with(this, new Crashlytics());
+        Fabric.with(this, new Answers());
 
         setContentView(R.layout.activity_main);
 
@@ -309,15 +307,10 @@ public class MainActivity extends AppCompatActivity
         menu_options = menu;
         getMenuInflater().inflate(R.menu.main, menu_options);
 
-        menuItem_createGroup = menu_options.findItem(R.id.action_createGroup);
-        menuItem_joinGroup = menu_options.findItem(R.id.action_joinGroup);
         menuItem_leaveGroup = menu_options.findItem(R.id.action_leaveGroup);
         menuItem_profilePic = menu_options.findItem(R.id.action_profilePic);
         menuItem_feedback = menu_options.findItem(R.id.action_feedback);
 
-        if(menuItem_createGroup == null || menuItem_joinGroup == null ){// || menuItem_leaveGroup == null){
-            Log.e("hey", "menu items are null");
-        }
 
         if(toMainFrag) {
             toMainFrag();
@@ -336,12 +329,6 @@ public class MainActivity extends AppCompatActivity
             return true;
         }
         switch (item.getItemId()){
-            case R.id.action_createGroup:
-                Transactor.fragmentCreateGroup(getSupportFragmentManager().beginTransaction());
-                return true;
-            case R.id.action_joinGroup:
-                Transactor.fragmentJoinGroup(getSupportFragmentManager().beginTransaction());
-                return true;
             case R.id.action_leaveGroup:
                 ((GroupTabFragment)cFrag).leaveGroup();
                 return true;
@@ -396,7 +383,7 @@ public class MainActivity extends AppCompatActivity
         Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction());
     }
     void toAnnouncementEditorFrag(){
-        Manager.DestManager.setDest(Manager.DestManager.TOAnnouncementEditor);
+        Manager.DestManager.setDest(Manager.DestManager.TOCREATEANNOUNCEMENT);
         Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction());
     }
 
@@ -436,16 +423,12 @@ public class MainActivity extends AppCompatActivity
         if (currentFrag instanceof GroupAnnouncementFragment || currentFrag instanceof GroupMainFragment
             || currentFrag instanceof MainAnnouncementFragment || currentFrag instanceof MainFragment ) {
             fab_action.setVisibility(View.VISIBLE);
-            if(menuItem_createGroup != null && menuItem_feedback != null && menuItem_joinGroup != null
-                    && menuItem_leaveGroup != null && menuItem_profilePic != null) {
+            if(menuItem_feedback != null && menuItem_leaveGroup != null
+                    && menuItem_profilePic != null) {
                 if (currentFrag instanceof MainFragment) {
                     navView.getMenu().getItem(0).setChecked(true);
-                    menuItem_createGroup.setVisible(true);
-                    menuItem_joinGroup.setVisible(true);
                 } else {
                     navView.getMenu().getItem(0).setChecked(false);
-                    menuItem_createGroup.setVisible(false);
-                    menuItem_joinGroup.setVisible(false);
                 }
             }
         } else {
@@ -462,8 +445,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void onTabSelected(Fragment currentFrag){
-        if(menuItem_createGroup != null && menuItem_feedback != null && menuItem_joinGroup != null
-                && menuItem_leaveGroup != null && menuItem_profilePic != null) {
+        if(menuItem_feedback != null && menuItem_leaveGroup != null
+                && menuItem_profilePic != null) {
             if (currentFrag instanceof GroupAnnouncementFragment || currentFrag instanceof GroupMainFragment
                     || currentFrag instanceof MainAnnouncementFragment || currentFrag instanceof SubjectsFragment
                     || currentFrag instanceof MainFragment || currentFrag instanceof GroupsFragment) {
@@ -477,12 +460,8 @@ public class MainActivity extends AppCompatActivity
                 }
                 if (currentFrag instanceof MainFragment) {
                     navView.getMenu().getItem(0).setChecked(true);
-                    menuItem_createGroup.setVisible(true);
-                    menuItem_joinGroup.setVisible(true);
                 } else {
                     navView.getMenu().getItem(0).setChecked(false);
-                    menuItem_createGroup.setVisible(false);
-                    menuItem_joinGroup.setVisible(false);
                 }
             } else {
                 fab_action.setVisibility(View.INVISIBLE);

@@ -12,10 +12,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
-        android:text="Bejelentkezés"
+        android:gravity="center"
+        android:text="@string/login"
         android:textSize="30sp"
-        android:textStyle="bold"
-        android:gravity="center"/>
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/editText_username"
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
-        android:hint="Felhasználónév"
+        android:hint="@string/username"
         android:inputType="text"
         android:maxLines="1" />
 
@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
-        android:hint="Jelszó"
+        android:hint="@string/password"
         android:inputType="textPassword"
         android:maxLines="1" />
 
@@ -44,7 +44,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_margin="3dp"
         android:checked="true"
-        android:text="Automatikus bejelentkezés"
+        android:text="@string/autologin"
         android:visibility="visible" />
 
     <TextView
@@ -60,7 +60,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="10dp"
-        android:text="Bejelentkezés" />
+        android:text="@string/login" />
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -75,7 +75,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:text="Regisztráció"
+            android:text="@string/register"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

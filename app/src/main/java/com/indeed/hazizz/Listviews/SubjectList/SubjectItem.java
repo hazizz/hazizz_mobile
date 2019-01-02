@@ -1,8 +1,6 @@
 package com.indeed.hazizz.Listviews.SubjectList;
 
 import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOcreator;
-import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgroupData;
-import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOsubjectData;
 
 import lombok.Data;
 
@@ -10,16 +8,16 @@ import lombok.Data;
 public class SubjectItem {
 
     String subjectName;
-   /* POJOgroupData groupData;
-    POJOsubjectData subjectData;*/
+   /* POJOgroup group;
+    POJOsubject subject;*/
     int subjectId;
 
-    public SubjectItem(String subjectName,/* String taskDescription, POJOgroupData groupData, POJOcreator creator, POJOsubjectData subjectData,*/ int subjectId){
+    public SubjectItem(String subjectName,/* String taskDescription, POJOgroup group, POJOcreator creator, POJOsubject subject,*/ int subjectId){
         this.subjectName = subjectName;
        /* this.announcementDescription = taskDescription;
-        this.groupData = groupData;
+        this.group = group;
         this.creator = creator;
-        this.subjectData = subjectData; */
+        this.subject = subject; */
         this.subjectId = subjectId;
     }
 }

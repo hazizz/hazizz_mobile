@@ -43,10 +43,10 @@
     <RelativeLayout
         android:id="@+id/relativeLayout4"
         android:layout_width="wrap_content"
-        android:layout_height="55dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="12dp"
+        android:layout_height="47dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintStart_toEndOf="@+id/announcement_description"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -54,7 +54,7 @@
             android:id="@+id/textView_info_from"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Létrehozó:"
+            android:text="@string/creator_"
             tools:layout_editor_absoluteX="244dp"
             tools:layout_editor_absoluteY="38dp" />
 
@@ -66,7 +66,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerVertical="true"
             android:layout_marginBottom="0dp"
-            android:text="Téma:"
+            android:text="@string/subject_"
             tools:layout_editor_absoluteX="244dp"
             tools:layout_editor_absoluteY="104dp" />
     </RelativeLayout>
@@ -74,10 +74,10 @@
     <RelativeLayout
         android:id="@+id/relativeLayout3"
         android:layout_width="wrap_content"
-        android:layout_height="54dp"
+        android:layout_height="47dp"
         android:layout_marginLeft="2dp"
         android:layout_marginStart="2dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintStart_toEndOf="@+id/relativeLayout4"
         app:layout_constraintTop_toTopOf="parent">
 

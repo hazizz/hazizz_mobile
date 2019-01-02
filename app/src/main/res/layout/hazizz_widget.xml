@@ -39,7 +39,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:layout_gravity="center"
-                android:text="Feladatok"
+                android:text="@string/task"
                 android:textColor="#363636"
                 android:textSize="24sp" />
 

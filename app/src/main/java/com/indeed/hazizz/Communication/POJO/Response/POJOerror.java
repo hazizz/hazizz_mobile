@@ -1,11 +1,9 @@
 package com.indeed.hazizz.Communication.POJO.Response;
 
-import com.indeed.hazizz.Communication.POJO.Response.*;
-
 import lombok.Data;
 
 @Data
-public class POJOerror{// implements ResponseInterface {
+public class POJOerror{
 
     private String time;
     private int errorCode;
@@ -18,5 +16,4 @@ public class POJOerror{// implements ResponseInterface {
         this.title = title;
         this.message = message;
     }
-
 }

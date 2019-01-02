@@ -18,10 +18,13 @@ import com.indeed.hazizz.AndroidThings;
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
+import com.indeed.hazizz.Communication.Strings;
 import com.indeed.hazizz.Listviews.GroupList.CustomAdapter;
+import com.indeed.hazizz.Manager;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 
 import okhttp3.Headers;
@@ -73,7 +76,7 @@ public class AddToGroupFragment extends Fragment {
 
         @Override
         public void onNoConnection() {
-            textView_error.setText("Nincs internet kapcsolat");
+            textView_error.setText(R.string.info_noInternetAccess);
             button_addMember.setEnabled(true);
         }
 
@@ -89,7 +92,7 @@ public class AddToGroupFragment extends Fragment {
                 //  textView_error.setText("Helytelen jelszó");
             }
             if(error.getErrorCode() == 31){ // no such user
-                textView_error.setText("Felhasználó nem található");
+                textView_error.setText(R.string.error_accountNotFound);
             }
             Log.e("hey", "errodCOde is " + error.getErrorCode() + "");
             Log.e("hey", "got here onErrorResponse");
@@ -121,8 +124,8 @@ public class AddToGroupFragment extends Fragment {
                     HashMap<String, Object> body = new HashMap<>();
                     body.put("userId", editText_memberName.getText().toString());
 
-                    HashMap<String, Object> vars = new HashMap<>();
-                    vars.put("groupId", groupId);
+                    EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
+                    vars.put(Strings.Path.GROUPID, groupId);
                     button_addMember.setEnabled(false);
 
                //     MiddleMan.request.inviteUserToGroup(getContext(), body, rh, vars);
@@ -136,6 +139,6 @@ public class AddToGroupFragment extends Fragment {
     }
 
     public void goBack(){
-        Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(), groupId, groupName);
+        Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(), groupId, groupName, Manager.DestManager.TOGROUP);
     }
 }

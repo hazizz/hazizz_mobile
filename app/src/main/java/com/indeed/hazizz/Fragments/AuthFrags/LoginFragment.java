@@ -76,7 +76,7 @@ public class LoginFragment extends Fragment {
         public void onFailure(Call<ResponseBody> call, Throwable t) {
             Log.e("hey", "got here onFailure");
             button_login.setEnabled(true);
-            textView_error.setText("Szerver nem válaszol");
+            textView_error.setText(R.string.info_serverNotResponding);
         }
         @Override
         public void onEmptyResponse() {
@@ -87,7 +87,7 @@ public class LoginFragment extends Fragment {
 
         @Override
         public void onNoConnection() {
-            textView_error.setText("Nincs internet kapcsolat");
+            textView_error.setText(R.string.info_noInternetAccess);
             button_login.setEnabled(true);
         }
 
@@ -100,19 +100,19 @@ public class LoginFragment extends Fragment {
         public void onErrorResponse(POJOerror error) {
             //  textView.append("\n errorCode: " + error.getErrorCode());
             if(error.getErrorCode() == 12){ // wrong password
-                textView_error.setText("Helytelen jelszó");
+                textView_error.setText(R.string.error_wrongPassword);
             }
             if(error.getErrorCode() == 13){ // no such user
-                textView_error.setText("A fiók zárolva van");
+                textView_error.setText(R.string.error_accountLocked);
             }
-            if(error.getErrorCode() == 14){ // no such user
-                textView_error.setText("A fiók lejárt");
+            if(error.getErrorCode() == 14){
+                textView_error.setText(R.string.error_accountExpired);
             }
             if(error.getErrorCode() == 15){ // no such user
-                textView_error.setText("A fiók le van tiltva");
+                textView_error.setText(R.string.error_accountBanned);
             }
             if(error.getErrorCode() == 31){ // no such user
-                textView_error.setText("Felhasználó nem található");
+                textView_error.setText(R.string.error_accountNotFound);
             }
 
             Log.e("hey", "errodCOde is " + error.getErrorCode() + "");
@@ -148,9 +148,9 @@ public class LoginFragment extends Fragment {
 
                 //   Log.e("hey", "password: " + editText_password.getText().toString() + ", passwordCheck: " + editText_passwordCheck.getText().toString() + " and they equal: " + editText_password.getText().toString().equals(editText_passwordCheck.getText().toString()));
                 if(editText_password.getText().toString().length() < 8) {
-                    textView_error.setText("Jelszó nem elég hosszú");
+                    textView_error.setText(R.string.error_passwordNotLongEnough);
                 }else if(editText_username.getText().toString().length() < 4) {
-                    textView_error.setText("Felhasználónév nem elég hosszú");
+                    textView_error.setText(R.string.error_usernameLength);
                 }
                 else{
                     username = editText_username.getText().toString();

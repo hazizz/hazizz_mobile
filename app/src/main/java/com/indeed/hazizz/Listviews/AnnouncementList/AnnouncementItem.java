@@ -1,8 +1,8 @@
 package com.indeed.hazizz.Listviews.AnnouncementList;
 
+import com.indeed.hazizz.Communication.POJO.Response.POJOgroup;
+import com.indeed.hazizz.Communication.POJO.Response.POJOsubject;
 import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOcreator;
-import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgroupData;
-import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOsubjectData;
 
 import lombok.Data;
 
@@ -11,17 +11,17 @@ public class AnnouncementItem {
 
     String announcementTitle;
     String announcementDescription;
-    POJOgroupData groupData;
+    POJOgroup group;
     POJOcreator creator;
-    POJOsubjectData subjectData;
+    POJOsubject subject;
     int announcementId;
 
-    public AnnouncementItem(String taskTitle, String taskDescription, POJOgroupData groupData, POJOcreator creator, POJOsubjectData subjectData, int announcementId){
+    public AnnouncementItem(String taskTitle, String taskDescription, POJOgroup group, POJOcreator creator, POJOsubject subject, int announcementId){
         this.announcementTitle = taskTitle;
         this.announcementDescription = taskDescription;
-        this.groupData = groupData;
+        this.group = group;
         this.creator = creator;
-        this.subjectData = subjectData;
+        this.subject = subject;
         this.announcementId = announcementId;
     }
 }
