@@ -8,7 +8,6 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
     <string name="open">Open</string>
-    <string name="close">Close</string>
 
 
     <string-array name="taskTypes">
@@ -18,10 +17,22 @@
         <item>oral test</item>
     </string-array>
 
+
+    <string-array name="options_array">
+        <item>Edit Account</item>
+        <item>Change Password</item>
+        <item>Théra Settings</item>
+    </string-array>
+
+    <string name="group_type_open">Open</string>
+    <string name="group_type_invite_only">Invite only</string>
+    <string name="group_type_password">Password</string>
+
     <string name="appwidget_text">EXAMPLE</string>
     <string name="configure">Configure</string>
     <string name="add_widget">Add widget</string>
 
+    <string name="button_save">Save</string>
     <string name="button_send">Send</string>
     <string name="button_add">Add</string>
     <string name="button_create">Create</string>
@@ -35,16 +46,30 @@
     <string name="leaveGroup_menu">Leave group</string>
     <string name="uploadProfilePic_menu">Upload profile picture</string>
 
+
+    <string name="fragment_title_new_task">New task</string>
+    <string name="fragment_title_edit_task">Edit task</string>
+
+    <string name="empty_field">Empty field</string>
+    <string name="empty_field_password">Empty password field</string>
+
+
     <string name="no_task">No tasks</string>
     <string name="no_announcement">No announcements</string>
     <string name="no_subject">No subjects</string>
+    <string name="subject_none">&lt;None&gt;</string>
     <string name="no_comment">No comments</string>
 
+
+    <string name="ok">OK</string>
+    <string name="close">Close</string>
+    <string name="thera">Théra</string>
+    <string name="settings">Settings</string>
     <string name="feedback">Feedback</string>
     <string name="groups">Groups</string>
     <string name="task">Task</string>
     <string name="tasks">Tasks</string>
-    <string name="announcement">Entry</string>
+    <string name="announcement">Announcement</string>
     <string name="announcements">Announcements</string>
     <string name="subject">Subject</string>
     <string name="subjects">Subjects</string>
@@ -73,6 +98,8 @@
     <string name="termsAndConditions">I accept<a href="https://hazizz.github.io/privacy-hu.txt"> the privacy policy</a></string>
     <string name="passwordagain_fragment_register">Confirm password</string>
 
+    <string name="error_passwordRequiredForGroup">Password is required to join group</string>
+
 
     <string name="hint_description_feedback">Feedback</string>
     <string name="hint_fragment_joingroup">Group name</string>
@@ -84,7 +111,8 @@
     <string name="title_fragment_groups">Your groups</string>
     <string name="title_fragment_joingroup">Join group</string>
     <string name="title_fragment_taskeditor">New task</string>
-    <string name="title_newannouncement">New entry</string>
+    <string name="title_newannouncement">New announcement</string>
+    <string name="title_editannouncement">Edit announcement</string>
     <string name="title_fragment_comments">Comments</string>
     <string name="title_fragment_creategroup">Create new group</string>
 
@@ -101,7 +129,7 @@
     <string name="info_serverNotResponding">Server not responding</string>
     <string name="info_noInternetAccess">No internet connection</string>
 
-
+    <string name="select_school">Choose school</string>
 
     <string name="error">Hiba</string>
     <string name="error_termsAndConditionsNotAccepted">Privacy policy not accepted</string>
@@ -123,6 +151,8 @@
 
     <string name="error_registrationLocked">Registration is locked</string>
 
+    <string name="error_displayNameLength">Display name length must be 4\-20 characters long</string>
+
     <string name="error_titleLentgh">Title must be 2\-20 characters long</string>
     <string name="error_titleNotAcceptable">Incorrect title</string>
 
@@ -139,10 +169,21 @@
 
     <string name="error_subjectLength">Subject length must be 2\-20 characters long</string>
 
+    <string name="changePassword">Change password</string>
+
+    <string name="currentPassword">Current password</string>
+    <string name="newPassword">New password</string>
+    <string name="newPasswordAgain">New password again</string>
+    <string name="password_notMatch">Password doesn\'t match</string>
+
+
+
+
     <string name="error_wrongPassword">Incorrect password</string>
     <string name="error_passwordDoesntMatch">Password do not match</string>
     <string name="error_passwordNotLongEnough">Password must be at least 8 characters long</string>
     <string name="error_givenDataWrong">Incorrect date</string>
+
 
 
 

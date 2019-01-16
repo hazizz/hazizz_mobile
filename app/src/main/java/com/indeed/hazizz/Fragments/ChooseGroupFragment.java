@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,9 +23,6 @@ import com.indeed.hazizz.Manager;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -61,7 +56,7 @@ public class ChooseGroupFragment extends Fragment{
         createViewList();
         getGroups();
         textView_noContent = v.findViewById(R.id.textView_noContent);
-        textView_title = v.findViewById(R.id.textView_title);
+        textView_title = v.findViewById(R.id.textView_subject);
         return v;
     }
 

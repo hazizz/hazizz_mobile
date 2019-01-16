@@ -3,6 +3,7 @@ package com.indeed.hazizz;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -67,6 +68,9 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
 
         if(task.getSubject() != null) {
             itemView.setTextViewText(R.id.textView_subject, task.getSubject().getName());
+        }else{
+            itemView.setViewVisibility(R.id.textView_subject, View.INVISIBLE);
+            itemView.setViewVisibility(R.id.textView_subject_info, View.INVISIBLE);
         }
         itemView.setTextViewText(R.id.textView_deadline, task.getDueDate());
 
@@ -94,7 +98,7 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
                 @Override
                 public void onPOJOResponse(Object response) {
                     ArrayList<POJOgetTask> r = (ArrayList<POJOgetTask>) response;
-                    if (r == null || r.size() == 0) {
+                    if (r == null || r.isEmpty()) {
                         data.clear();
                         contentInfo = "Nincs feladat";
                     } else {
@@ -106,12 +110,10 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
                     Log.e("hey", "timeout maybe");
-                  //  contentInfo = "A szerver nem fut";
                     contentInfo = "";
                 }
                 @Override
                 public void onErrorResponse(POJOerror error) {
-                   // Log.e("hey", "error message: " + error.getMessage() + " error code: " + error.getErrorCode());
                     if(error.getErrorCode() == 17) {
                         data.clear();
                         contentInfo = "Nem vagy bejelentkezve";
@@ -119,17 +121,6 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
                         data.clear();
                         contentInfo ="Nem sikerült betölteni";
                     }
-                }
-                @Override
-                public void onEmptyResponse() { }
-                @Override
-                public void onSuccessfulResponse() { }
-                @Override
-                public void onNoConnection() { }
-
-                @Override
-                public void getHeaders(Headers headers) {
-
                 }
             };
 

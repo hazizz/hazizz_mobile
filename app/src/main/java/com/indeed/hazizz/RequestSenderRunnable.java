@@ -1,9 +1,6 @@
 package com.indeed.hazizz;
 
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.util.Log;
 
 import com.indeed.hazizz.Communication.MiddleMan;
 
@@ -35,7 +32,6 @@ public class RequestSenderRunnable implements Runnable{
                     if (Network.getActiveNetwork(context) != null && Network.isConnectedOrConnecting(context)) {
                         if (!MiddleMan.requestQueue.isEmpty()) {
                             MiddleMan.sendRequestsFromQ();
-                            Log.e("hey", "sent request");
                         }
                     }
                 }

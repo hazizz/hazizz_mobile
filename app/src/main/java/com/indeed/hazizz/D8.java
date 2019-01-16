@@ -47,7 +47,6 @@ public abstract class D8 {
         ArrayList<DateTime> dates = new ArrayList<>();
         for (int i = 0; i <= data.size() - 1; i++) {
             dates.add(D8.dtf.parseDateTime(data.get(i).getDueDate()));
-            Log.e("hey", "dates: " + data.get(i).getDueDate());
         }
         Collections.sort(data, ( POJOgetTask a1, POJOgetTask a2) -> a1.getDueDate().compareTo(a2.getDueDate()));
         return data;

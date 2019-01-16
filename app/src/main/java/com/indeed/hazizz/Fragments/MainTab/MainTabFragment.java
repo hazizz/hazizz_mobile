@@ -14,17 +14,9 @@ import android.widget.TextView;
 
 import com.indeed.hazizz.Activities.MainActivity;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
-import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
-import com.indeed.hazizz.Fragments.MainTab.GroupsFragment;
-import com.indeed.hazizz.Fragments.MainTab.PagerAdapter;
 import com.indeed.hazizz.Manager;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
-
-import java.util.HashMap;
-
-import okhttp3.ResponseBody;
-import retrofit2.Call;
 
 public class MainTabFragment extends Fragment{
 
@@ -41,20 +33,9 @@ public class MainTabFragment extends Fragment{
 
     CustomResponseHandler rh = new CustomResponseHandler() {
         @Override
-        public void onResponse(HashMap<String, Object> response) { }
-        @Override
-        public void onPOJOResponse(Object response) { }
-        @Override
-        public void onFailure(Call<ResponseBody> call, Throwable t) { }
-        @Override
-        public void onErrorResponse(POJOerror error) { }
-        @Override
-        public void onEmptyResponse() { }
-        @Override
         public void onSuccessfulResponse() {
-            Transactor.fragmentGroups(getFragmentManager().beginTransaction());        }
-        @Override
-        public void onNoConnection() { }
+            Transactor.fragmentGroups(getFragmentManager().beginTransaction());
+        }
     };
 
     @Nullable
@@ -63,11 +44,9 @@ public class MainTabFragment extends Fragment{
         v = inflater.inflate(R.layout.fragment_tabmain, container, false);
         Log.e("hey", "GroupTab fragment created");
 
-       // savedInstanceState.putBoolean();
-
         startingTab = getArguments().getInt("startingTab");
 
-        textView_title = v.findViewById(R.id.textView_title);
+        textView_title = v.findViewById(R.id.textView_subject);
         //   ((MainActivity)getActivity()).onFragmentCreated();
 
         TabLayout tabLayout = (TabLayout) v.findViewById(R.id.tab_layout);

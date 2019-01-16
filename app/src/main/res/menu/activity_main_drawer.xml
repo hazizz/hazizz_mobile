@@ -13,10 +13,14 @@
             android:id="@+id/nav_groups"
             android:icon="@drawable/ic_group_black"
             android:title="@string/groups" />
-    <!--    <item
-            android:id="@+id/nav_new_task"
+        <item
+            android:id="@+id/nav_thera"
             android:icon="@drawable/ic_create_black"
-            android:title="Új feladat" /> -->
+            android:title="@string/thera" />
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_settings_black"
+            android:title="@string/settings" />
     </group>
 
     <item android:title="@string/groups"

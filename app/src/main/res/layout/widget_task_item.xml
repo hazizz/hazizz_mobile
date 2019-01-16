@@ -62,7 +62,7 @@
                 android:id="@+id/textView9"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/creator_"
+                android:text="@string/deadline_"
                 android:textColor="#363636" />
 
             <TextView
@@ -70,16 +70,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:text="@string/subject_"
+                android:text="@string/creator_"
                 android:textColor="#363636" />
 
             <TextView
-                android:id="@+id/textView15"
+                android:id="@+id/textView_subject_info"
                 android:layout_width="wrap_content"
                 android:layout_height="18dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="0dp"
-                android:text="@string/deadline_"
+                android:text="@string/subject_"
                 android:textColor="#363636" />
         </RelativeLayout>
 
@@ -90,22 +90,12 @@
             android:layout_alignBaseline="@+id/task_title">
 
             <TextView
-                android:id="@+id/textView_deadline"
+                android:id="@+id/textView_subject"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:text="date"
-                android:textColor="#363636" />
-
-            <TextView
-                android:id="@+id/textView_subject"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:ellipsize="end"
-                android:maxLines="1"
                 android:text="subject"
                 android:textColor="#363636" />
 
@@ -113,9 +103,19 @@
                 android:id="@+id/textView_creator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="creator"
+                android:textColor="#363636" />
+
+            <TextView
+                android:id="@+id/textView_deadline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="date"
                 android:textColor="#363636" />
         </RelativeLayout>
 

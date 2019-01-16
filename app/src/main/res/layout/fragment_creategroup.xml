@@ -37,7 +37,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="72dp"
+            android:layout_marginTop="68dp"
             android:ems="10"
             android:hint="@string/hint_newgroup"
             android:inputType="textPersonName"
@@ -45,6 +45,23 @@
             app:layout_constraintHorizontal_bias="0.503"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/editText_password"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:ems="10"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.503"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editText_createGroup" />
 
         <Button
             android:id="@+id/button_createGroup"
@@ -54,15 +71,15 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="4dp"
             android:text="@string/button_create"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.501"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_error" />
+            app:layout_constraintTop_toBottomOf="@+id/textView_error_currentPassword" />
 
         <TextView
-            android:id="@+id/textView_error"
+            android:id="@+id/textView_error_currentPassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
@@ -73,7 +90,50 @@
             android:text=" "
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editText_createGroup" />
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="215dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="84dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="84dp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editText_password">
+
+            <RadioButton
+                android:id="@+id/radioButton_open"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:checked="true"
+                android:text="@string/group_type_open"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <RadioButton
+                android:id="@+id/radioButton_password"
+                android:layout_width="113dp"
+                android:layout_height="wrap_content"
+                android:text="@string/group_type_password"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/radioButton_invite_only" />
+
+            <RadioButton
+                android:id="@+id/radioButton_invite_only"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/group_type_invite_only"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/radioButton_open" />
+
+        </RadioGroup>
+
 
     </android.support.constraint.ConstraintLayout>
 </LinearLayout>

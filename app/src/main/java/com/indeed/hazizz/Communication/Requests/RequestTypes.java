@@ -125,6 +125,15 @@ public interface RequestTypes{
             @Body HashMap<String, Object> body
     );
 
+    @POST("{whereName}/{byName}/{byId}")
+    Call<ResponseBody> createAT(
+            @Path("whereName") String whereName,
+            @Path("byName") String byName,
+            @Path("byId") String byId,
+            @HeaderMap Map<String, String> headers,
+            @Body HashMap<String, Object> body
+    );
+
     @GET("tasks/groups/{groupId}/{taskId}")
     Call<ResponseBody> getTaskByGroup(
             @Path("groupId") String groupId,
@@ -184,6 +193,13 @@ public interface RequestTypes{
     @GET("me/joingroup/{groupId}")
     Call<ResponseBody> joinGroup(
             @Path("groupId") String groupId,
+            @HeaderMap Map<String, String> headers
+    );
+
+    @GET("me/joingroup/{groupId}/{grouppass}")
+    Call<ResponseBody> joinGroupByPassword(
+            @Path("groupId") String groupId,
+            @Path("grouppass") String grouppass,
             @HeaderMap Map<String, String> headers
     );
 
@@ -314,6 +330,12 @@ public interface RequestTypes{
             @HeaderMap Map<String, String> headers
     );
 
+    @POST("me/displayname")
+    Call<ResponseBody> setDisplayName(
+            @HeaderMap Map<String, String> headers,
+            @Body HashMap<String, Object> body
+    );
+
     @GET("announcements/groups/{groupId}/{announcementId}")
     Call<ResponseBody> getAnnouncement(
             @Path("groupId") String groupId,
@@ -321,6 +343,17 @@ public interface RequestTypes{
             @HeaderMap Map<String, String> headers
     );
 
+
+
     @GET("information/motd")
     Call<ResponseBody> messageOfTheDay();
+
+
+
+    @GET("thera/schools")
+    Call<ResponseBody> getSchools(
+            @HeaderMap Map<String, String> headers
+    );
+
+
 }

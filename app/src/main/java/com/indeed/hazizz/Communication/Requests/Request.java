@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Headers;
@@ -161,6 +162,9 @@ public class Request {
             case "editAT":
                 requestType = new EditAT();
                 break;
+            case "createAT":
+                requestType = new CreateAT();
+                break;
             case "deleteAnnouncement":
                 requestType = new DeleteAnnouncement();
                 break;
@@ -203,7 +207,9 @@ public class Request {
             case "joinGroup":
                 requestType = new JoinGroup();
                 break;
-
+            case "joinGroupByPassword":
+                requestType = new JoinGroupByPassword();
+                break;
             case "getGroupMembers":
                 requestType = new GetGroupMembers();
                 break;
@@ -267,6 +273,16 @@ public class Request {
             case "getTaskTypes":
                 requestType = new GetTaskTypes();
                 break;
+            case "setDisplayName":
+                requestType = new SetDisplayName();
+                break;
+
+
+            case "thSchools":
+                requestType = new ThSchools();
+                break;
+
+
             default:
                 Log.e("hey", "DEFAULT!!!");
                 break;
@@ -468,7 +484,6 @@ public class Request {
     }
 
     public class CreateTask implements RequestInterface {
-        //   public String name = "register";
         CreateTask() {
             Log.e("hey", "created TaskEditor object");
         }
@@ -485,6 +500,32 @@ public class Request {
             headerMap.put("Content-Type", "application/json");
             headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
             call = aRequest.createTask(vars.get(Strings.Path.GROUPID).toString(), headerMap, body); //Integer.toString(groupID)
+        }
+        @Override
+        public void callIsSuccessful(Response<ResponseBody> response) {
+            cOnResponse.onSuccessfulResponse();
+        }
+    }
+
+    public class CreateAT implements RequestInterface {
+        CreateAT() {
+            Log.e("hey", "created CreateAT object");
+        }
+        @Override
+        public void makeCall() {
+            call(act,  thisRequest, call, cOnResponse, gson);
+        }
+        @Override
+        public void makeCallAgain() {
+            callAgain(act,  thisRequest, call, cOnResponse, gson);
+        }
+        public void setupCall() {
+            HashMap<String, String> headerMap = new HashMap<String, String>();
+            headerMap.put("Content-Type", "application/json");
+            headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));
+            call = aRequest.createAT(vars.get(Strings.Path.WHERENAME).toString(), vars.get(Strings.Path.BYNAME).toString(),
+                    vars.get(Strings.Path.BYID).toString(), headerMap, body);
+
         }
         @Override
         public void callIsSuccessful(Response<ResponseBody> response) {
@@ -966,6 +1007,30 @@ public class Request {
         }
     }
 
+    public class SetDisplayName implements RequestInterface {
+        SetDisplayName() {
+            Log.e("hey", "created setDisplayName object");
+        }
+        public void setupCall() {
+            HashMap<String, String> headerMap = new HashMap<String, String>();
+            headerMap.put("Content-Type", "application/json");
+            headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
+            call = aRequest.setDisplayName(headerMap, body);
+        }
+        @Override
+        public void makeCall() {
+            call(act,  thisRequest, call, cOnResponse, gson);
+        }
+        @Override
+        public void makeCallAgain() {
+            callAgain(act,  thisRequest, call, cOnResponse, gson);
+        }
+        @Override
+        public void callIsSuccessful(Response<ResponseBody> response) {
+            cOnResponse.onSuccessfulResponse();
+        }
+    }
+
     public class inviteUserToGroup implements RequestInterface {
         inviteUserToGroup() {
             Log.e("hey", "created inviteUserToGroup object");
@@ -998,6 +1063,29 @@ public class Request {
             HashMap<String, String> headerMap = new HashMap<String, String>();
             headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
             call = aRequest.joinGroup(vars.get(Strings.Path.GROUPID).toString(), headerMap);
+        }
+        @Override
+        public void makeCall() {
+            call(act,  thisRequest, call, cOnResponse, gson);
+        }
+        @Override
+        public void makeCallAgain() {
+            callAgain(act,  thisRequest, call, cOnResponse, gson);
+        }
+        @Override
+        public void callIsSuccessful(Response<ResponseBody> response) {
+            cOnResponse.onSuccessfulResponse();
+        }
+    }
+
+    public class JoinGroupByPassword implements RequestInterface {
+        JoinGroupByPassword() {
+            Log.e("hey", "created JoinGroupByPassword object");
+        }
+        public void setupCall() {
+            HashMap<String, String> headerMap = new HashMap<String, String>();
+            headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
+            call = aRequest.joinGroupByPassword(vars.get(Strings.Path.GROUPID).toString(), vars.get(Strings.Path.PASSWORD).toString(), headerMap);
         }
         @Override
         public void makeCall() {
@@ -1315,7 +1403,7 @@ public class Request {
             headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
             headerMap.put("Content-Type", "application/json");
             String whereName, whereId, byName, byId;
-            if(vars.get(Strings.Path.TASKID) != null || (int)vars.get(Strings.Path.TASKID) != 0){
+            if(vars.get(Strings.Path.TASKID) != null){
                 whereName = Strings.Path.TASKS.toString();
                 whereId = vars.get(Strings.Path.TASKID).toString();
             }else{
@@ -1583,6 +1671,39 @@ public class Request {
             }
         }
     }
+
+
+
+
+    // Théra time
+
+    public class ThSchools implements RequestInterface {
+        ThSchools() {
+            Log.e("hey", "created ThSchools object");
+        }
+        public void setupCall() {
+            HashMap<String, String> headerMap = new HashMap<String, String>();
+            headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
+
+            call = aRequest.getSchools(headerMap);
+        }
+        @Override
+        public void makeCall() {
+            call(act,  thisRequest, call, cOnResponse, gson);
+        }
+        @Override
+        public void makeCallAgain() {
+            callAgain(act,  thisRequest, call, cOnResponse, gson);
+        }
+        @Override
+        public void callIsSuccessful(Response<ResponseBody> response) {
+            Type listType = new TypeToken<HashMap<String, String>>(){}.getType();
+            HashMap<String, String> castedMap = gson.fromJson(response.body().charStream(), listType);
+
+            cOnResponse.onPOJOResponse(castedMap);
+        }
+    }
+
 }
 
 //TODO java.lang.IllegalStateException: Already executed. at retrofit2.OkHttpCall.enqueue(OkHttpCall.java:84)

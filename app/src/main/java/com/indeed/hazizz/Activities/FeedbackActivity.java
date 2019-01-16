@@ -22,10 +22,6 @@ import com.indeed.hazizz.Transactor;
 
 import java.util.HashMap;
 
-import okhttp3.Headers;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-
 public class FeedbackActivity extends AppCompatActivity {
 
     EditText editText_feedback;
@@ -58,7 +54,7 @@ public class FeedbackActivity extends AppCompatActivity {
 
         Activity act = this;
 
-        textView_error = findViewById(R.id.textView_error);
+        textView_error = findViewById(R.id.textView_error_currentPassword);
         editText_feedback = findViewById(R.id.editText_feedback);
         button_feedback = findViewById(R.id.button_feedback);
         button_feedback.setOnClickListener(new View.OnClickListener() {

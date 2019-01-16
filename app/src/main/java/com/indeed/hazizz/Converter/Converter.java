@@ -12,6 +12,7 @@ import android.util.Base64;
 import com.google.common.hash.Hashing;
 
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 
 public abstract class Converter {
@@ -26,6 +27,11 @@ public abstract class Converter {
             byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
             return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
         }else{return null;}
+    }
+
+    public static Bitmap imageFromText(InputStream inputStream){
+         return BitmapFactory.decodeStream(inputStream);
+
     }
 
     public static String imageToText(Bitmap bitmap){

@@ -30,9 +30,10 @@
         android:layout_marginLeft="6dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="2dp"
         android:ellipsize="end"
         android:maxLines="5"
+        android:minHeight="52dp"
         android:text="description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.046"
@@ -44,9 +45,9 @@
         android:id="@+id/relativeLayout4"
         android:layout_width="wrap_content"
         android:layout_height="70dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="12dp"
         app:layout_constraintStart_toEndOf="@+id/task_description"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -54,7 +55,7 @@
             android:id="@+id/textView9"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/group_"
+            android:text="@string/deadline_"
             tools:layout_editor_absoluteX="244dp"
             tools:layout_editor_absoluteY="38dp" />
 
@@ -63,18 +64,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="@string/subject_"
+            android:text="@string/group_"
             tools:layout_editor_absoluteX="244dp"
             tools:layout_editor_absoluteY="64dp" />
 
         <TextView
-            android:id="@+id/textView15"
+            android:id="@+id/textView_subject_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerVertical="true"
             android:layout_marginBottom="0dp"
-            android:text="@string/deadline_"
+            android:text="@string/subject_"
             tools:layout_editor_absoluteX="244dp"
             tools:layout_editor_absoluteY="104dp" />
     </RelativeLayout>
@@ -83,36 +84,36 @@
         android:id="@+id/relativeLayout3"
         android:layout_width="wrap_content"
         android:layout_height="70dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginLeft="1dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="12dp"
         app:layout_constraintStart_toEndOf="@+id/relativeLayout4"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textView_dueDate"
+            android:id="@+id/textView_subject"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="0dp"
-            android:text="date"
-            app:layout_constraintTop_toBottomOf="@+id/textView_title" />
-
-        <TextView
-            android:id="@+id/textView_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-
             android:text="subject"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView_creator" />
 
         <TextView
             android:id="@+id/textView_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="creator"
+            android:layout_centerVertical="true"
+
+            android:text="group"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_subject" />
+
+        <TextView
+            android:id="@+id/textView_dueDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="date"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </RelativeLayout>

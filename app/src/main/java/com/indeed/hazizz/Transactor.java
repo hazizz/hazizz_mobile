@@ -23,12 +23,15 @@ import com.indeed.hazizz.Fragments.CommentSectionFragment;
 import com.indeed.hazizz.Fragments.AnnouncementEditorFragment;
 import com.indeed.hazizz.Fragments.CreateGroupFragment;
 import com.indeed.hazizz.Fragments.CreateSubjectFragment;
+import com.indeed.hazizz.Fragments.Options.MainOptionsFragment;
+import com.indeed.hazizz.Fragments.Options.PasswordFragment;
 import com.indeed.hazizz.Fragments.TaskEditorFragment;
 import com.indeed.hazizz.Fragments.GroupTabs.GroupTabFragment;
 
 import com.indeed.hazizz.Fragments.JoinGroupFragment;
 import com.indeed.hazizz.Fragments.MainTab.GroupsFragment;
 import com.indeed.hazizz.Fragments.MainTab.MainTabFragment;
+import com.indeed.hazizz.Fragments.ThéraFrags.Setup.ThChooseSchool;
 import com.indeed.hazizz.Fragments.ViewAnnouncementFragment;
 import com.indeed.hazizz.Fragments.ViewTaskFragment;
 
@@ -75,6 +78,22 @@ public abstract class Transactor extends FragmentActivity {
         fTransaction.commit();
     }
 
+    public static void fragmentPassword(@Nonnull FragmentTransaction fTransaction){
+        PasswordFragment frag = new PasswordFragment();
+        fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
+        if(backStack){ fTransaction.addToBackStack(null); }
+        fTransaction.commit();
+    }
+
+    public static void fragmentOptions(@Nonnull FragmentTransaction fTransaction){
+        Bundle bundle = new Bundle();
+        Fragment frag = new MainOptionsFragment();
+        frag.setArguments(bundle);
+        fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
+        if(backStack){ fTransaction.addToBackStack(null); }
+        fTransaction.commit();
+    }
+
 
     public static void fragmentMain(@Nonnull FragmentTransaction fTransaction){
         fragmentMainTab(fTransaction, 0);
@@ -116,7 +135,7 @@ public abstract class Transactor extends FragmentActivity {
     }
 
     public static void fragmentEditTask(@Nonnull FragmentTransaction fTransaction, int groupId, String groupName,
-                                        int taskId, PojoType type, int taskSubjectId, String taskTitle,
+                                        int taskId, PojoType type, int taskSubjectId, String subjectName, String taskTitle,
                                         String taskDescription, String date, int dest){
         Manager.DestManager.setDest(dest);
         Bundle bundle = new Bundle();
@@ -126,13 +145,14 @@ public abstract class Transactor extends FragmentActivity {
       //  bundle.putString("typeName", type.getName());
         bundle.putLong("typeId", type.getId());
         bundle.putString("typeName", type.getName());
-        bundle.putInt("subject", taskSubjectId);
+        bundle.putInt("subjectId", taskSubjectId);
+        bundle.putString("subjectName", subjectName);
         bundle.putString("title", taskTitle);
         bundle.putString("description", taskDescription);
         bundle.putString("date", date);
         TaskEditorFragment frag = new TaskEditorFragment();
         frag.setArguments(bundle);
-        fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
+        fTransaction.replace(R.id.fragment_container, frag);
         if(backStack){ fTransaction.addToBackStack(null); }
         fTransaction.commit();
     }
@@ -321,6 +341,17 @@ public abstract class Transactor extends FragmentActivity {
     public static void fragmentMainTask(@Nonnull FragmentTransaction fTransaction){
         fragmentMainTab(fTransaction,0);
     }
+
+
+    public static void fragmentThSchool(@Nonnull FragmentTransaction fTransaction){
+        ThChooseSchool frag = new ThChooseSchool();
+        fTransaction.replace(R.id.fragment_container, frag);
+        if(backStack){fTransaction.addToBackStack(null);}
+        fTransaction.commit();
+    }
+
+
+
 
 
     public static void feedbackActivity(Activity thisActivity){ //, Fragment goBackFragment){

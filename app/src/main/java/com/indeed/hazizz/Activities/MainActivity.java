@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.crashlytics.android.answers.Answers;
+import com.indeed.hazizz.BuildConfig;
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
@@ -37,9 +38,10 @@ import com.indeed.hazizz.Fragments.GroupTabs.SubjectsFragment;
 import com.indeed.hazizz.Fragments.MainTab.GroupsFragment;
 import com.indeed.hazizz.Fragments.MainTab.MainAnnouncementFragment;
 import com.indeed.hazizz.Fragments.MainTab.MainFragment;
+import com.indeed.hazizz.Fragments.Options.MainOptionsFragment;
 import com.indeed.hazizz.Fragments.ViewTaskFragment;
 import com.indeed.hazizz.Manager;
-import com.indeed.hazizz.MeInfo;
+import com.indeed.hazizz.Manager.MeInfo;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.SharedPrefs;
 import com.indeed.hazizz.Transactor;
@@ -52,7 +54,6 @@ import okhttp3.Headers;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
-//import com.crashlytics.android.ndk.CrashlyticsNdk;
 import com.crashlytics.android.Crashlytics;
 import io.fabric.sdk.android.Fabric;
 
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity
 
     public static String strNavUsername;
     public static String strNavEmail;
+    public static String strNavDisplayName;
 
     FloatingActionButton fab_joinGroup;
     FloatingActionButton fab_action;
@@ -80,6 +82,8 @@ public class MainActivity extends AppCompatActivity
     private MenuItem menuItem_leaveGroup;
     private MenuItem menuItem_profilePic;
     private MenuItem menuItem_feedback;
+    private MenuItem menuItem_settings;
+
 
     private Menu menu_nav;
 
@@ -93,28 +97,14 @@ public class MainActivity extends AppCompatActivity
     private boolean toMainFrag = false;
     CustomResponseHandler rh_profilePic = new CustomResponseHandler() {
         @Override
-        public void onResponse(HashMap<String, Object> response) { }
-
-        @Override
-        public void getHeaders(Headers headers) {
-
-        }
-
-        @Override
         public void onPOJOResponse(Object response) {
             Bitmap bitmap = Converter.imageFromText(
                     ((PojoPicSmall)response).getData().split(",")[1]);
             bitmap = Converter.scaleBitmapToRegular(bitmap);
             bitmap = Converter.getCroppedBitmap(bitmap);
-
-            navProfilePic.setImageBitmap(bitmap);
-            Log.e("hey", "got profile pic response");
+            Manager.MeInfo.setProfilePic(Converter.imageToText(bitmap));
+            setProfileImageInNav(bitmap);
         }
-        @Override public void onFailure(Call<ResponseBody> call, Throwable t) { }
-        @Override public void onErrorResponse(POJOerror error) { }
-        @Override public void onEmptyResponse() { }
-        @Override public void onSuccessfulResponse() {}
-        @Override public void onNoConnection() {}
     };
 
     CustomResponseHandler responseHandler = new CustomResponseHandler() {
@@ -126,9 +116,11 @@ public class MainActivity extends AppCompatActivity
             SharedPrefs.save(getApplicationContext(),"userInfo", "username",((POJOme) response).getUsername());
             strNavEmail = ((POJOme) response).getEmailAddress();
             strNavUsername = ((POJOme) response).getUsername();
-            MeInfo.setProfileName(strNavUsername);
-            MeInfo.setProfileEmail(strNavEmail);
-            navUsername.setText(strNavUsername);
+            strNavDisplayName = ((POJOme) response).getDisplayName();
+            Manager.MeInfo.setProfileName(strNavUsername);
+            Manager.MeInfo.setDisplayName(strNavDisplayName);
+            Manager.MeInfo.setProfileEmail(strNavEmail);
+            setDisplayNameInNav(strNavDisplayName);
             navEmail.setText(strNavEmail);
         }
         @Override
@@ -139,21 +131,9 @@ public class MainActivity extends AppCompatActivity
         @Override public void onEmptyResponse() {
             Log.e("hey", "NO RESPONSE");
         }
-        @Override public void onSuccessfulResponse() { }
-        @Override public void onNoConnection() { }
-
-        @Override
-        public void getHeaders(Headers headers) {
-
-        }
-
-        @Override public void onErrorResponse(POJOerror error) {
-            Log.e("hey", "onErrorResponse");
-        }
     };
 
     CustomResponseHandler rh_motd = new CustomResponseHandler() {
-        @Override public void onResponse(HashMap<String, Object> response) { }
         @Override
         public void onPOJOResponse(Object response) {
             String motd = (String)response;
@@ -165,7 +145,6 @@ public class MainActivity extends AppCompatActivity
                         .setMessage(motd)
                         .setCancelable(true)
                         .setPositiveButton("Oké", (dialog, id) -> {
-                            //SharedPrefs.save(getBaseContext(), "motd", "message", "");
                             SharedPrefs.save(getBaseContext(), "motd", "message", motd);
                             dialog.cancel();
                         })
@@ -178,31 +157,15 @@ public class MainActivity extends AppCompatActivity
                 Log.e("hey", "Message of the day is not");
             }
         }
-        @Override public void onFailure(Call<ResponseBody> call, Throwable t) {
-            Log.e("hey", "4");
-            Log.e("hey", "got here onFailure");
-        }
-        @Override public void onEmptyResponse() {
-        }
-        @Override public void onSuccessfulResponse() { }
-        @Override public void onNoConnection() { }
-
-        @Override
-        public void getHeaders(Headers headers) {
-
-        }
-
-        @Override public void onErrorResponse(POJOerror error) {
-            Log.e("hey", "onErrorResponse");
-        }
     };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-        Fabric.with(this, new Crashlytics());
+        if (!BuildConfig.DEBUG) { // only enable bug tracking in release version
+            Fabric.with(this, new Crashlytics());
+        }
         Fabric.with(this, new Answers());
 
         setContentView(R.layout.activity_main);
@@ -295,7 +258,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResume(){
         super.onResume();
-      //  setHasOp
         invalidateOptionsMenu();
         Log.e("hey", "onResume is trigered");
     }
@@ -310,7 +272,7 @@ public class MainActivity extends AppCompatActivity
         menuItem_leaveGroup = menu_options.findItem(R.id.action_leaveGroup);
         menuItem_profilePic = menu_options.findItem(R.id.action_profilePic);
         menuItem_feedback = menu_options.findItem(R.id.action_feedback);
-
+        menuItem_settings = menu_options.findItem(R.id.action_settings);
 
         if(toMainFrag) {
             toMainFrag();
@@ -338,6 +300,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.action_feedback:
                 Transactor.feedbackActivity(this);
                 return true;
+            case R.id.action_settings:
+                Transactor.fragmentOptions(getSupportFragmentManager().beginTransaction());
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -345,7 +310,6 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        Log.e("hey", "chechk1");
         currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager(), false);
         switch (item.getItemId()) {
             case R.id.nav_home:
@@ -357,14 +321,11 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_newGroup:
                 Transactor.fragmentCreateGroup(getSupportFragmentManager().beginTransaction());
                 break;
-            case R.id.nav_joinGroup:
-                Transactor.fragmentJoinGroup(getSupportFragmentManager().beginTransaction());
+            case R.id.nav_thera:
+                Transactor.fragmentThSchool(getSupportFragmentManager().beginTransaction());
                 break;
-            case R.id.nav_tasks:
-                ((GroupTabFragment) currentFrag).setTab(2);
-                break;
-            case R.id.nav_groupMembers:
-                ((GroupTabFragment) currentFrag).setTab(1);
+            case R.id.nav_settings:
+                Transactor.fragmentOptions(getSupportFragmentManager().beginTransaction());
                 break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -385,11 +346,6 @@ public class MainActivity extends AppCompatActivity
     void toAnnouncementEditorFrag(){
         Manager.DestManager.setDest(Manager.DestManager.TOCREATEANNOUNCEMENT);
         Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction());
-    }
-
-    void logout(){
-        Intent i = new Intent(this, AuthActivity.class);
-        startActivity(i);
     }
     @Override
     public void onBackPressed() {
@@ -417,8 +373,6 @@ public class MainActivity extends AppCompatActivity
     }
     public void onFragmentCreated(){
         currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager(), false);
-
-
 
         if (currentFrag instanceof GroupAnnouncementFragment || currentFrag instanceof GroupMainFragment
             || currentFrag instanceof MainAnnouncementFragment || currentFrag instanceof MainFragment ) {
@@ -477,6 +431,16 @@ public class MainActivity extends AppCompatActivity
         startActivityForResult(intent, PICK_PHOTO_FOR_AVATAR);
     }
 
+    public void setProfileImageInNav(Bitmap bitmap){
+        navProfilePic.setImageBitmap(bitmap);
+    }
+
+    public void setDisplayNameInNav(String newDisplayName){
+        navUsername.setText(newDisplayName);
+    }
+
+
+ /*
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -485,38 +449,17 @@ public class MainActivity extends AppCompatActivity
                 return;
             }try {
                 InputStream inputStream = this.getContentResolver().openInputStream(data.getData());
-                Uri imageUri = data.getData();
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                 bitmap = Bitmap.createScaledBitmap(bitmap, 300, 300, true);
                 bitmap=Bitmap.createBitmap(bitmap, 0,0,300, 300);
-                HashMap<String, Object> body = new HashMap<>();
-                body.put("data", "data:image/jpeg;base64," + Converter.imageToText(bitmap));
-                body.put("type", "ppfull");
 
-                MiddleMan.newRequest(this, "setMyProfilePic", body, new CustomResponseHandler() {
-                    @Override public void onResponse(HashMap<String, Object> response) { }
-                    @Override public void onPOJOResponse(Object response) { }
-                    @Override public void onFailure(Call<ResponseBody> call, Throwable t) { }
-                    @Override
-                    public void onErrorResponse(POJOerror error) {
-                        Log.e("hey", "couldnt set profile pic");
-                    }
-                    @Override public void onEmptyResponse() { }
-                    @Override
-                    public void onSuccessfulResponse() {
-                        MiddleMan.newRequest(thisActivity, "getMyProfilePic", null, rh_profilePic, null);
-                    }
-                    @Override public void onNoConnection() { }
+                ((MainOptionsFragment)(Transactor.getCurrentFragment(getSupportFragmentManager(), false))).setProfilePic(bitmap);
 
-                    @Override
-                    public void getHeaders(Headers headers) {
 
-                    }
-                }, null);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 Log.e("hey", "file not found!");
             }
         }
-    }
+    } */
 }

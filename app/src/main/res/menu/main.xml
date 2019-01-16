@@ -24,11 +24,11 @@
         android:visible="true"
         app:showAsAction="never" />
 
- <!--   <item
-        android:id="@+id/action_leaveGroup"
+    <item
+        android:id="@+id/action_settings"
         android:orderInCategory="100"
-        android:title="Kilépés csoportból"
+        android:title="@string/settings"
         android:visible="true"
-        app:showAsAction="never" /> -->
+        app:showAsAction="never" />
 
 </menu>

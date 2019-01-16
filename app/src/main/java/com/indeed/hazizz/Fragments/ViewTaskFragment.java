@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
 import com.indeed.hazizz.Activities.MainActivity;
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
@@ -24,7 +26,7 @@ import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTaskDet
 
 import com.indeed.hazizz.Communication.Strings;
 import com.indeed.hazizz.Manager;
-import com.indeed.hazizz.MeInfo;
+import com.indeed.hazizz.Manager.MeInfo;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
@@ -52,8 +54,6 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
     private String descripiton;
     private String date;
 
-
-
     private Spinner subject_spinner;
 
     private TextView textView_type;
@@ -64,24 +64,14 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
     private TextView textView_group;
     private TextView textView_deadLine;
 
-    private List<POJOsubject> subjects = new ArrayList<>();
-
     private CustomResponseHandler rh;
-
-    private ArrayList<POJOsubject> subjectList = new ArrayList<POJOsubject>();
 
     private POJOsubject subject;
 
     private boolean goBackToMain;
-    private int commentId;
     private boolean gotResponse = false;
 
-
-
     private View v;
-
-    public ViewTaskFragment(){
-    }
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_viewtask, container, false);
@@ -111,10 +101,16 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
                         } else{
                             Transactor.fragmentMainTask(getFragmentManager().beginTransaction());
                         }
+                        Answers.getInstance().logCustom(new CustomEvent("delete task")
+                                .putCustomAttribute("status", "success")
+                        );
                     }
                     @Override
                     public void onErrorResponse(POJOerror error) {
                         button_delete.setEnabled(true);
+                        Answers.getInstance().logCustom(new CustomEvent("delete task")
+                                .putCustomAttribute("status", error.getErrorCode())
+                        );
                     }
                 };
                 button_delete.setEnabled(false);
@@ -132,11 +128,10 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
         button_edit.setOnClickListener(view -> {
             if(gotResponse) {
                 Transactor.fragmentEditTask(getFragmentManager().beginTransaction(), Manager.GroupManager.getGroupId(),
-                        Manager.GroupManager.getGroupName(), taskId, type, subjectId, title, descripiton, date,
+                        Manager.GroupManager.getGroupName(), taskId, type, subjectId, subjectName, title, descripiton, date,
                         Manager.DestManager.TOGROUP);
             }
         });
-
         button_comments = v.findViewById(R.id.button_comments);
         button_comments.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,8 +168,6 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
             groupName = bundle.getString("groupName");
             goBackToMain = bundle.getBoolean("goBackToMain");
 
-            Log.e("hey", "got IDs");
-            Log.e("hey", taskId + ", " + groupId);
         }else{Log.e("hey", "bundle is null");}
         rh = new CustomResponseHandler() {
             @Override
@@ -193,6 +186,8 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
                 if(subject != null) {
                     subjectName = subject.getName();
                     subjectId = subject.getId();
+                }else{
+                    subjectName = getString(R.string.subject_none);
                 }
 
                 type = pojoResponse.getType();
@@ -203,11 +198,12 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
 
                 gotResponse = true;
 
-                if(pojoResponse.getType().equals("test")){
-                    textView_type.setText("teszt");
-                }else{
-                    textView_type.setText("házi feladat");
-                }
+                int typeId = (int)pojoResponse.getType().getId();
+
+                String[] taskTypeArray = getResources().getStringArray(R.array.taskTypes);
+                textView_type.setText(taskTypeArray[typeId-1]);
+
+
                 textView_title.setText(title);
                 textView_description.setText(descripiton);
                 String creatorUsername = pojoResponse.getCreator().getUsername();
@@ -218,11 +214,7 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
 
                 textView_deadLine.setText(date);
 
-             /*   textView_deadLine.setText(pojoResponse.getDueDate()[0] + "." +
-                        pojoResponse.getDueDate()[1] + "." +
-                        pojoResponse.getDueDate()[2]); */
-
-                if(MeInfo.getProfileName().equals(creatorUsername)){
+                if(Manager.MeInfo.getProfileName().equals(creatorUsername)){
                     button_delete.setVisibility(View.VISIBLE);
                     button_edit.setVisibility(View.VISIBLE);
                 }
@@ -244,7 +236,6 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
             vars.put(Strings.Path.SUBJECTID, subjectId);
             MiddleMan.newRequest(this.getActivity(), "getTaskBy", null, rh, vars);
         }
-
         return v;
     }
 
@@ -256,13 +247,7 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
     public void onNothingSelected(AdapterView<?> adapterView) {
     }
 
-    public int getGroupId(){
-        return groupId;
-    }
-    public String getGroupName(){
-        return groupName;
-    }
-    public boolean getGoBackToMain(){
-        return goBackToMain;
-    }
+    public int getGroupId(){ return groupId; }
+    public String getGroupName(){ return groupName; }
+    public boolean getGoBackToMain(){ return goBackToMain; }
 }

@@ -8,8 +8,9 @@ import lombok.Data;
 public class POJOme {
 
     private final int id;
-    public final String username;
-    public final String emailAddress;
+    private final String username;
+    private final String displayName;
+    private final String emailAddress;
     private final List<String> permissions;
     private final List<POJOgroup> groups;
     private final Boolean locked;
@@ -18,9 +19,10 @@ public class POJOme {
     private final String registrationDate;
     private final String lastPasswordReset;
 
-    public POJOme(int id, String username, String emailAddress, List<String> permissions, List<POJOgroup> groups, Boolean locked, Boolean disabled, Boolean expired, String registrationDate, String lastPasswordReset) {
+    public POJOme(int id, String username, String displayName, String emailAddress, List<String> permissions, List<POJOgroup> groups, Boolean locked, Boolean disabled, Boolean expired, String registrationDate, String lastPasswordReset) {
         this.id = id;
         this.username = username;
+        this.displayName = displayName;
         this.emailAddress = emailAddress;
         this.permissions = permissions;
         this.groups = groups;
