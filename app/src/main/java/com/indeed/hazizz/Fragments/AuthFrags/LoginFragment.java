@@ -24,11 +24,9 @@ import com.indeed.hazizz.Converter.Converter;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.SharedPrefs;
 import com.indeed.hazizz.Transactor;
-import com.snatik.storage.Storage;
 
 import java.util.HashMap;
 
-import okhttp3.Headers;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
@@ -52,17 +50,9 @@ public class LoginFragment extends Fragment {
     //  private MyCallback<ResponseBodies.Error> errorCallback;
 
     CustomResponseHandler responseHandler = new CustomResponseHandler() {
-
-        @Override
-        public void onResponse(HashMap<String, Object> response) {
-
-        }
         @Override
         public void onPOJOResponse(Object response) {
-            Log.e("hey", "got here onResponse");
-          //  SharedPrefs.save(getContext(), "token", "token", (String) ((POJOauth)response).getToken());
-           // SharedPrefs.save(getContext(), "token", "refreshToken", (String) ((POJOauth)response).getRefresh());
-            if(checkBox_autoLogin.isChecked()){
+           if(checkBox_autoLogin.isChecked()){
                 SharedPrefs.savePref(getContext(), "autoLogin", "autoLogin", true);
             }
             SharedPrefs.TokenManager.setToken(getContext() ,((POJOauth)response).getToken());
@@ -79,23 +69,10 @@ public class LoginFragment extends Fragment {
             textView_error.setText(R.string.info_serverNotResponding);
         }
         @Override
-        public void onEmptyResponse() {
-        }
-        @Override
-        public void onSuccessfulResponse() {
-        }
-
-        @Override
         public void onNoConnection() {
             textView_error.setText(R.string.info_noInternetAccess);
             button_login.setEnabled(true);
         }
-
-        @Override
-        public void getHeaders(Headers headers) {
-
-        }
-
         @Override
         public void onErrorResponse(POJOerror error) {
             //  textView.append("\n errorCode: " + error.getErrorCode());
@@ -115,7 +92,6 @@ public class LoginFragment extends Fragment {
                 textView_error.setText(R.string.error_accountNotFound);
             }
 
-            Log.e("hey", "errodCOde is " + error.getErrorCode() + "");
             button_login.setEnabled(true);
         }
     };
@@ -136,7 +112,7 @@ public class LoginFragment extends Fragment {
             }
         });
 
-        textView_error = (TextView) v.findViewById(R.id.textView_error);
+        textView_error = (TextView) v.findViewById(R.id.textView_error_currentPassword);
         textView_error.setTextColor(Color.rgb(255, 0, 0));
 
         button_login = (Button) v.findViewById(R.id.button_login);
@@ -144,9 +120,6 @@ public class LoginFragment extends Fragment {
         button_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-                //   Log.e("hey", "password: " + editText_password.getText().toString() + ", passwordCheck: " + editText_passwordCheck.getText().toString() + " and they equal: " + editText_password.getText().toString().equals(editText_passwordCheck.getText().toString()));
                 if(editText_password.getText().toString().length() < 8) {
                     textView_error.setText(R.string.error_passwordNotLongEnough);
                 }else if(editText_username.getText().toString().length() < 4) {

@@ -107,13 +107,10 @@ public class MainFragment extends Fragment {
         adapter.clear();
         CustomResponseHandler responseHandler = new CustomResponseHandler() {
             @Override
-            public void onResponse(HashMap<String, Object> response) { }
-            @Override
             public void onPOJOResponse(Object response) {
                 ArrayList<POJOgetTask> sorted = D8.sortTasksByDate((ArrayList<POJOgetTask>) response);
 
-
-                if(sorted.size() == 0) {
+                if(sorted.isEmpty()) {
                     textView_noContent.setVisibility(v.VISIBLE);
                 }else {
                     textView_noContent.setVisibility(v.INVISIBLE);
@@ -136,10 +133,6 @@ public class MainFragment extends Fragment {
                 Log.e("hey", "onErrorResponse");
                 sRefreshLayout.setRefreshing(false);
             }
-            @Override
-            public void onEmptyResponse() { }
-            @Override
-            public void onSuccessfulResponse() { }
             @Override
             public void onNoConnection() {
                 textView_noContent.setText(R.string.info_noInternetAccess);

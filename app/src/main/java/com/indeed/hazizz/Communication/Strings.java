@@ -22,6 +22,11 @@ public abstract class Strings {
         BYID("byId"),
         WHEREID("whereId"),
 
+        GROUPTYPE_OPEN("OPEN"),
+        GROUPTYPE_INVITE_ONLY("INVITE_ONLY"),
+        GROUPTYPE_PASSWORD("PASSWORD"),
+
+        PASSWORD("password"),
 
         ;
 
@@ -36,19 +41,4 @@ public abstract class Strings {
             return value;
         }
     }
-
-    /*
-    public enum Id {
-        TASKID ("taskId"),
-        ANNOUNCEMENTID("announcementId"),
-        SUBJECTID("subjectId"),
-        GROUPID("groupId")
-        ;
-
-        private String text;
-
-        Id(String text){
-            this.text = text;
-        }
-    } */
 }

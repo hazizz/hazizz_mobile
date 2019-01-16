@@ -8,7 +8,6 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
     <string name="open">Open</string>
-    <string name="close">Close</string>
 
 
     <string-array name="taskTypes">
@@ -18,11 +17,22 @@
         <item>felelés</item>
     </string-array>
 
+    <string-array name="options_array">
+        <item>Fiók Szerkesztés</item>
+        <item>Jelszó Beállítás</item>
+        <item>Théra Beállítások</item>
+    </string-array>
+
+    <string name="group_type_open">Nyitott</string>
+    <string name="group_type_invite_only">Meghívás alapú</string>
+    <string name="group_type_password">Jelszó alapú</string>
+
 
     <string name="appwidget_text">EXAMPLE</string>
     <string name="configure">Configure</string>
     <string name="add_widget">Add widget</string>
 
+    <string name="button_save">Mentés</string>
     <string name="button_send">Küldés</string>
     <string name="button_add">Hozzáad</string>
     <string name="button_create">Létrehozás</string>
@@ -37,7 +47,16 @@
     <string name="uploadProfilePic_menu">Profilkép feltöltése</string>
 
 
+    <string name="fragment_title_new_task">Új feladat</string>
+    <string name="fragment_title_edit_task">Feladat szerkesztés</string>
 
+    <string name="empty_field">Üres mező</string>
+    <string name="empty_field_password">Üres jelszó</string>
+
+    <string name="ok">OK</string>
+    <string name="close">Bezár</string>
+    <string name="thera">Théra</string>
+    <string name="settings">Beállítások</string>
     <string name="feedback">Visszajelzés</string>
     <string name="groups">Csoportok</string>
     <string name="task">Feladat</string>
@@ -61,6 +80,7 @@
     <string name="no_task">Nincs feladat</string>
     <string name="no_announcement">Nincs bejegyzés</string>
     <string name="no_subject">Nincs téma</string>
+    <string name="subject_none">&lt;Nincs&gt;</string>
     <string name="no_comment">Nincs hozzászólás</string>
 
     <string name="groupMembers">Tagok</string>
@@ -77,6 +97,10 @@
     <string name="termsAndConditions">Elfogadom az<a href="https://hazizz.github.io/privacy-hu.txt"> adatvédelmi nyilatkozatot</a></string>
     <string name="passwordagain_fragment_register">Jelszó mégegyszer</string>
 
+    <string name="error_passwordRequiredForGroup">Jelszó szükséges a csoporthoz belépéshez</string>
+
+
+
 
     <string name="hint_description_feedback">Visszajelzés</string>
     <string name="hint_fragment_joingroup">Csoport név</string>
@@ -89,6 +113,7 @@
     <string name="title_fragment_joingroup">Belépés egy csoportba</string>
     <string name="title_fragment_taskeditor">Új feladat</string>
     <string name="title_newannouncement">Új bejegyzés</string>
+    <string name="title_editannouncement">Bejegyzés szerkesztés</string>
     <string name="title_fragment_comments">Megjegyzések</string>
     <string name="title_fragment_creategroup">Új csoport létrehozása</string>
 
@@ -105,7 +130,7 @@
     <string name="info_serverNotResponding">Szerver nem válaszol</string>
     <string name="info_noInternetAccess">Nincs internet kapcsolat</string>
 
-
+    <string name="select_school">Iskola kiválasztás</string>
 
     <string name="error">Hiba</string>
     <string name="error_termsAndConditionsNotAccepted">Nem fogadtad el az adatvédelmi nyilatkozatot</string>
@@ -127,6 +152,8 @@
 
     <string name="error_registrationLocked">A regisztráció zárolva van</string>
 
+    <string name="error_displayNameLength">A becenévnek 4\-20 karakternek kell lennie!</string>
+
     <string name="error_titleLentgh">A cím 2\-20 karakter között lehet</string>
     <string name="error_titleNotAcceptable">A cím nem megfelelő</string>
 
@@ -142,6 +169,14 @@
     <string name="error_deadlineNotSet">Nem állítottál be határidőt</string>
 
     <string name="error_subjectLength">A téma 2\-20 karakter hosszú lehet</string>
+
+    <string name="changePassword">Jelszó módosítás</string>
+
+    <string name="currentPassword">Mostani jelszó</string>
+    <string name="newPassword">Új jelszó</string>
+    <string name="newPasswordAgain">Új jelszó mégegyszer</string>
+    <string name="password_notMatch">Jelszó nem egyezik</string>
+
 
     <string name="error_wrongPassword">Helytelen jelszó</string>
     <string name="error_passwordDoesntMatch">Jelszó nem egyezik</string>

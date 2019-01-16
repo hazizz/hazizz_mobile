@@ -36,6 +36,7 @@ public class CustomAdapter extends ArrayAdapter<TaskItem> {
         TextView taskDueDate;
         TextView taskCreator;
         TextView taskSubject;
+        TextView taskSubject_info;
     }
     @NonNull
     @Override
@@ -53,8 +54,8 @@ public class CustomAdapter extends ArrayAdapter<TaskItem> {
             holder.taskDescription = (TextView) convertView.findViewById(R.id.task_description);
             holder.taskDueDate = (TextView) convertView.findViewById(R.id.textView_dueDate);
             holder.taskCreator = (TextView) convertView.findViewById(R.id.textView_creator);
-            holder.taskSubject = (TextView) convertView.findViewById(R.id.textView_title);
-
+            holder.taskSubject = (TextView) convertView.findViewById(R.id.textView_subject);
+            holder.taskSubject_info = convertView.findViewById(R.id.textView_subject_info);
             convertView.setTag(holder);
         }else{
             holder = (DataHolder)convertView.getTag();
@@ -67,6 +68,9 @@ public class CustomAdapter extends ArrayAdapter<TaskItem> {
         holder.taskCreator.setText(taskItem.getCreator().getUsername());
         if(taskItem.getSubject() != null) {
             holder.taskSubject.setText(taskItem.getSubject().getName());
+        }else{
+            holder.taskSubject.setVisibility(View.INVISIBLE);
+            holder.taskSubject_info.setVisibility(View.INVISIBLE);
         }
 
         return convertView;

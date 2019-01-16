@@ -56,7 +56,7 @@ public class GroupsFragment extends Fragment {
 
         createViewList();
         textView_noContent = v.findViewById(R.id.textView_noContent);
-        textView_title = v.findViewById(R.id.textView_title);
+        textView_title = v.findViewById(R.id.textView_subject);
         sRefreshLayout = v.findViewById(R.id.swipe_refresh_layout); sRefreshLayout.bringToFront();
         sRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -81,7 +81,7 @@ public class GroupsFragment extends Fragment {
                 textView_noContent.setVisibility(v.INVISIBLE);
                 ArrayList<POJOgroup> castedListFullOfPojos = (ArrayList<POJOgroup>)response;
                 listGroup.clear();
-                if(castedListFullOfPojos.size() != 0) {
+                if(!castedListFullOfPojos.isEmpty()) {
                     for (POJOgroup g : castedListFullOfPojos) {
                         listGroup.add(new GroupItem(R.drawable.ic_launcher_background, g.getName(), g.getId()));
                     }
@@ -110,17 +110,10 @@ public class GroupsFragment extends Fragment {
                 sRefreshLayout.setRefreshing(false);
             }
             @Override
-            public void onSuccessfulResponse() { }
-            @Override
             public void onNoConnection() {
                 textView_noContent.setText(R.string.info_noInternetAccess);
                 textView_noContent.setVisibility(View.VISIBLE);
                 sRefreshLayout.setRefreshing(false);
-            }
-
-            @Override
-            public void getHeaders(Headers headers) {
-
             }
         };
         MiddleMan.newRequest(this.getActivity(),"getGroupsFromMe", null, responseHandler, null);

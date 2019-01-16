@@ -9,113 +9,99 @@ import com.indeed.hazizz.Communication.Requests.Request;
 import com.indeed.hazizz.Network;
 
 import java.util.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
 
 public abstract class MiddleMan{
 
-    public static  final List<Request> requestQueue = Collections.synchronizedList(new LinkedList<>());
-    private static final  List<Request> waitingForResponse = Collections.synchronizedList(new LinkedList<>());
-    private static final List<Request> waitingForCallAgain = Collections.synchronizedList(new LinkedList<>());
-    private static final List<Request> canceledCalls = Collections.synchronizedList(new LinkedList<>());
+    public static BlockingQueue<Request> requestQueue = new LinkedBlockingDeque<>(10);
+    public static BlockingQueue<Request> waitingForResponseQueue = new LinkedBlockingDeque<>(10);
 
     public static void cancelAllRequest(){
-        synchronized (requestQueue){
-            for (Request r : requestQueue) {
-                r.cancelRequest();
-            }
-        } // TODO egész thread küldését le kell állitani
-        synchronized (waitingForResponse) {
-            for (Request r : waitingForResponse) {
-                r.cancelRequest();
+        for (Request r : requestQueue) {
+            r.cancelRequest();
+        }
+        for (Request r : waitingForResponseQueue) {
+            r.cancelRequest();
+        }
+    }
+
+    public static void cancelAndSaveAllRequests() {
+        for (Request r : requestQueue) {
+            r.cancelRequest();
+            try {
+                requestQueue.put(r);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }
 
-    public static void cancelAndSaveAllRequests(){
-        synchronized (requestQueue){
-            for (Request r : requestQueue) {
-                r.cancelRequest();
-                waitingForCallAgain.add(r);
-            }
-        }
-    }
-
-    public static void addToCallAgain(Request r){
-        synchronized (waitingForCallAgain){
-            waitingForCallAgain.add(r);
-            for(Request a : waitingForCallAgain) {
-                Log.e("hey", "add to" + "call again list: " + a.requestType);
-            }
+    public static void addToCallAgain(Request r) {
+        try {
+            requestQueue.put(r);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
     public static void newRequest(Activity act, String requestType, HashMap<String, Object>  body, CustomResponseHandler cOnResponse, EnumMap<Strings.Path, Object> vars) {
         Request newRequest = new Request(act, requestType, body, cOnResponse, vars);
-        List<Request> duplicateRequest = Collections.synchronizedList(new ArrayList<Request>());
         for (Request r : requestQueue)
             if (r.requestType.getClass() == newRequest.requestType.getClass()) {
-                duplicateRequest.add(r);
-                Log.e("hey", "removed1 a request");
+                requestQueue.remove(r);
             }
-
         if(Network.getActiveNetwork(act) == null || !Network.isConnectedOrConnecting(act)) {
             newRequest.cOnResponse.onNoConnection();
         }
-        synchronized (requestQueue){
-            for(Request r : duplicateRequest){
-                requestQueue.remove(r);
-            }
-            requestQueue.add(newRequest);
+        try {
+            requestQueue.put(newRequest);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
     public static void newRequest(Context context, String requestType, HashMap<String, Object>  body, CustomResponseHandler cOnResponse, EnumMap<Strings.Path, Object> vars) {
         Request newRequest = new Request(context, requestType, body, cOnResponse, vars);
-        List<Request> duplicateRequest = Collections.synchronizedList(new ArrayList<Request>());
         for (Request r : requestQueue) {
             if(r.requestType.getClass() == newRequest.requestType.getClass()){
-                duplicateRequest.add(r);
-                Log.e("hey", "removed2 a request");
+                requestQueue.remove(r);
             }
         }
         if(Network.getActiveNetwork(context) == null || !Network.isConnectedOrConnecting(context)) {
             newRequest.cOnResponse.onNoConnection();
         }
-        synchronized (requestQueue){
-            for(Request r : duplicateRequest){
-                requestQueue.remove(r);
-            }
-            requestQueue.add(newRequest);
+        try {
+            requestQueue.put(newRequest);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
     public static void gotRequestResponse(Request r){
-        synchronized (waitingForCallAgain) {
-            waitingForResponse.remove(r);
-        }
+        waitingForResponseQueue.remove(r);
     }
 
     public static void callAgain(){
-        synchronized (waitingForCallAgain){
-            for(Request r : waitingForCallAgain) {
-                Log.e("hey", "call again: " + r.requestType);
-                r.requestType.setupCall();
-                r.requestType.makeCallAgain();
-            }
+        for(Request r : requestQueue) {
+            Log.e("hey", "call again: " + r.requestType);
+            r.requestType.setupCall();
+            r.requestType.makeCallAgain();
         }
     }
 
     public static void sendRequestsFromQ() {
-        synchronized (waitingForResponse){
-            synchronized (requestQueue){
-                for (Request request : requestQueue) {
-                    request.requestType.setupCall();
-                    request.requestType.makeCall();
-                    waitingForResponse.add(request);
-                }
-                for(Request r : waitingForResponse){
-                    requestQueue.remove(r);
-                }
+        for (Request request : requestQueue) {
+            request.requestType.setupCall();
+            request.requestType.makeCall();
+            try {
+                waitingForResponseQueue.put(request);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+        }
+        for(Request r : waitingForResponseQueue){
+            requestQueue.remove(r);
         }
     }
 }

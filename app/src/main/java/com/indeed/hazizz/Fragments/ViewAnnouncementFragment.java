@@ -13,16 +13,17 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
 import com.indeed.hazizz.Activities.MainActivity;
 import com.indeed.hazizz.Communication.MiddleMan;
 import com.indeed.hazizz.Communication.POJO.Response.AnnouncementPOJOs.POJODetailedAnnouncement;
 import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOMembersProfilePic;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
-import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTaskDetailed;
 import com.indeed.hazizz.Communication.Strings;
 import com.indeed.hazizz.Manager;
-import com.indeed.hazizz.MeInfo;
+import com.indeed.hazizz.Manager.MeInfo;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
@@ -69,7 +70,6 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
     };
 
     private boolean goBackToMain;
-    private int commentId;
     private boolean gotResponse = false;
 
     private View v;
@@ -79,7 +79,7 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
         Log.e("hey", "im here lol");
         ((MainActivity)getActivity()).onFragmentCreated();
         type = v.findViewById(R.id.textView_tasktype);
-        textView_title = v.findViewById(R.id.textView_title);
+        textView_title = v.findViewById(R.id.textView_subject);
         textView_description = v.findViewById(R.id.editText_description);
         creatorName = v.findViewById(R.id.textView_creator);
         group = v.findViewById(R.id.textView_group);
@@ -99,7 +99,6 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
             @Override
             public void onClick(View view) {
                 if(gotResponse){
-                    //   Transactor.fragmentCommentSection(getFragmentManager().beginTransaction(), commentId);//commentId);
                     EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
                     vars.put(Strings.Path.GROUPID, groupId);
                     vars.put(Strings.Path.ANNOUNCEMENTID, announcementId);
@@ -111,10 +110,16 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
                             } else{
                                 Transactor.fragmentMainAnnouncement(getFragmentManager().beginTransaction());
                             }
+                            Answers.getInstance().logCustom(new CustomEvent("delete announcement")
+                                    .putCustomAttribute("status", "success")
+                            );
                         }
                         @Override
                         public void onErrorResponse(POJOerror error) {
                             button_delete.setEnabled(true);
+                            Answers.getInstance().logCustom(new CustomEvent("delete announcement")
+                                    .putCustomAttribute("status", error.getErrorCode())
+                            );
                         }
                     };
                     button_delete.setEnabled(false);
@@ -136,8 +141,6 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
             subjectId = bundle.getInt("subjectId");
             if(Manager.ProfilePicManager.getCurrentGroupId() != groupId || Manager.DestManager.getDest() == Manager.DestManager.TOMAIN){
                 CustomResponseHandler responseHandler = new CustomResponseHandler() {
-                    @Override
-                    public void onResponse(HashMap<String, Object> response) { }
                     @Override
                     public void onPOJOResponse(Object response) {
                         Manager.ProfilePicManager.setCurrentGroupMembersProfilePic((HashMap<Integer, POJOMembersProfilePic>)response, groupId);
@@ -179,21 +182,17 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
                 groupId = pojoResponse.getGroup().getId();
                 announcementId = pojoResponse.getId();
 
-           //     commentId = (int)pojoResponse.getSections().get(0).getId();
-                Log.e("hey", "id1 is: " +commentId );
                 gotResponse = true;
-              //  type.setText(((POJOAnnouncement)response).getType());
                 title = pojoResponse.getTitle();
                 descripiton = pojoResponse.getDescription();
                 textView_title.setText(title);
                 textView_description.setText(descripiton);
                 String creatorUsername = pojoResponse.getCreator().getUsername();
                 creatorName.setText(creatorUsername);
-                //  subject.setText(((POJOgetTaskDetailed)response).getSubject().getName());
                 group.setText(pojoResponse.getGroup().getName());
 
 
-                if(MeInfo.getProfileName().equals(creatorUsername)){
+                if(Manager.MeInfo.getProfileName().equals(creatorUsername)){
                     button_delete.setVisibility(View.VISIBLE);
                     button_edit.setVisibility(View.VISIBLE);
                 }

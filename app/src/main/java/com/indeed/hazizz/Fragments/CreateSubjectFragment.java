@@ -1,5 +1,6 @@
 package com.indeed.hazizz.Fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,6 +13,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
 import com.indeed.hazizz.Activities.MainActivity;
 import com.indeed.hazizz.AndroidThings;
 import com.indeed.hazizz.Communication.MiddleMan;
@@ -46,30 +49,24 @@ public class CreateSubjectFragment extends Fragment {
 
     CustomResponseHandler rh = new CustomResponseHandler() {
         @Override
-        public void onPOJOResponse(Object response) {}
-        @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
-            Log.e("hey", "4");
-            Log.e("hey", "got here onFailure");
             button_addSubject.setEnabled(true);
         }
-        @Override
-        public void onEmptyResponse() { }
         @Override
         public void onSuccessfulResponse() {
             AndroidThings.closeKeyboard(getContext(), v);
             goBack();
+            Answers.getInstance().logCustom(new CustomEvent("create subject")
+                    .putCustomAttribute("status", "success")
+            );
         }
-
         @Override
         public void onNoConnection() {
             textView_error.setText(R.string.info_noInternetAccess);
             button_addSubject.setEnabled(true);
         }
-
         @Override
         public void onErrorResponse(POJOerror error) {
-            //  textView.append("\n errorCode: " + error.getErrorCode());
             if(error.getErrorCode() == 2){ // validation failed
 
             }
@@ -79,6 +76,9 @@ public class CreateSubjectFragment extends Fragment {
             Log.e("hey", "errodCOde is " + error.getErrorCode() + "");
             Log.e("hey", "got here onErrorResponse");
             button_addSubject.setEnabled(true);
+            Answers.getInstance().logCustom(new CustomEvent("create subject")
+                    .putCustomAttribute("status", error.getErrorCode())
+            );
         }
     };
 
@@ -90,7 +90,8 @@ public class CreateSubjectFragment extends Fragment {
         groupId = getArguments().getInt("groupId");
         groupName = getArguments().getString("groupName");
 
-        textView_error = v.findViewById(R.id.textView_error);
+        textView_error = v.findViewById(R.id.textView_error_currentPassword);
+        textView_error.setTextColor(Color.rgb(255, 0, 0));
         editText_newSubject = v.findViewById(R.id.editText_newSubject);
         button_addSubject = v.findViewById(R.id.button_addSubject);
 
@@ -98,7 +99,7 @@ public class CreateSubjectFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String subjectName = editText_newSubject.getText().toString().trim();
-                if(subjectName.length() >= 2 || subjectName.length() <= 20) {
+                if(subjectName.length() >= 2 && subjectName.length() <= 20) {
                     HashMap<String, Object> body = new HashMap<>();
                     body.put("name", subjectName);
                     EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);

@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +14,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
 import com.indeed.hazizz.Activities.MainActivity;
 import com.indeed.hazizz.AndroidThings;
 import com.indeed.hazizz.Communication.MiddleMan;
@@ -27,9 +28,6 @@ import com.indeed.hazizz.Transactor;
 
 import java.util.EnumMap;
 import java.util.HashMap;
-
-import okhttp3.ResponseBody;
-import retrofit2.Call;
 
 public class AnnouncementEditorFragment extends Fragment{
 
@@ -45,16 +43,11 @@ public class AnnouncementEditorFragment extends Fragment{
     private EditText editText_description;
     private Button button_send;
     private TextView textView_error;
+    private TextView textView_fragment_title;
 
     private View v;
 
     CustomResponseHandler rh = new CustomResponseHandler() {
-        @Override
-        public void onFailure(Call<ResponseBody> call, Throwable t) {
-            Log.e("hey", "4");
-            Log.e("hey", "got here onFailure");
-            Log.e("hey", "task created");
-        }
         @Override
         public void onErrorResponse(POJOerror error) {
             int errorCode = error.getErrorCode();
@@ -62,9 +55,10 @@ public class AnnouncementEditorFragment extends Fragment{
                 textView_error.setText(R.string.error_titleNotAcceptable);
             }
             button_send.setEnabled(true);
+            Answers.getInstance().logCustom(new CustomEvent("create/edit announcement")
+                    .putCustomAttribute("status", errorCode)
+            );
         }
-        @Override
-        public void onEmptyResponse() { }
         @Override
         public void onSuccessfulResponse() {
             if(Manager.DestManager.getDest() == Manager.DestManager.TOGROUP){
@@ -74,9 +68,10 @@ public class AnnouncementEditorFragment extends Fragment{
             }else{
                 Transactor.fragmentMainAnnouncement(getFragmentManager().beginTransaction());
             }
-
-
             button_send.setEnabled(true);
+            Answers.getInstance().logCustom(new CustomEvent("create/edit announcement")
+                    .putCustomAttribute("status", "success")
+            );
         }
         @Override
         public void onNoConnection() {
@@ -87,21 +82,17 @@ public class AnnouncementEditorFragment extends Fragment{
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_announcementeditor, container, false);
-        Log.e("hey", "im here lol");
         ((MainActivity)getActivity()).onFragmentCreated();
-
-
-
-
-        Log.e("hey", "in TaskEditorFrag construvtor: " + groupId);
 
         editText_announcementTitle = v.findViewById(R.id.editText_announcementTitle);
         button_send = (Button)v.findViewById(R.id.button_send);
         editText_description = v.findViewById(R.id.editText_description);
         editText_description.setImeOptions(EditorInfo.IME_ACTION_DONE);
         editText_description.setRawInputType(InputType.TYPE_CLASS_TEXT);
-        textView_error = v.findViewById(R.id.textView_error);
+        textView_error = v.findViewById(R.id.textView_error_currentPassword);
         textView_error.setTextColor(Color.rgb(255, 0, 0));
+
+        textView_fragment_title = v.findViewById(R.id.textView_title);
 
         button_send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,11 +124,12 @@ public class AnnouncementEditorFragment extends Fragment{
             editText_announcementTitle.setText(title);
             editText_description.setText(description);
 
+            textView_fragment_title.setText(getString(R.string.title_editannouncement));
             editMode = true;
         }else{
+            textView_fragment_title.setText(getString(R.string.title_newannouncement));
             editMode = false;
         }
-
         return v;
     }
 

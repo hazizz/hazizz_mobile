@@ -167,4 +167,56 @@ public class Manager {
             return groupName;
         }
     }
+
+    public static class MeInfo {
+
+        private static String profileName = "";
+        private static String displayName = "";
+        private static String profileEmail = "";
+        private static String profilePic = "";
+        private static String password = "";
+
+
+        public static void setPassword(String p){
+            password = p;
+        }
+        public static String getPassword(){
+            return password;
+        }
+
+        public static void setProfileName(String pName){
+            if(pName != null){
+                profileName = pName;
+            }else{
+                profileName = "username";
+            }
+        }
+
+        public static String getProfileName(){
+            return profileName;
+        }
+
+        public static void setDisplayName(String dName){
+            displayName = dName;
+        }
+        public static String getDisplayName(){
+            return displayName;
+        }
+
+        public static void setProfileEmail(String pEmail){
+            profileEmail = pEmail;
+        }
+        public static String getProfileEmail(){
+            return profileEmail;
+        }
+
+        public static void setProfilePic(String base64_pic){
+            profilePic = base64_pic;
+        }
+        public static String getProfilePic(){
+            return profilePic;
+        }
+    }
+
+
 }

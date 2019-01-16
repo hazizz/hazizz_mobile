@@ -24,7 +24,6 @@ import com.indeed.hazizz.Manager;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
-import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
 
@@ -80,7 +79,7 @@ public class GroupTabFragment extends Fragment {
         Manager.GroupManager.setGroupName(groupName);
         startingTab = getArguments().getInt("startingTab");
 
-        textView_title = v.findViewById(R.id.textView_title);
+        textView_title = v.findViewById(R.id.textView_subject);
         textView_title.append(" " + groupName);
      //   ((MainActivity)getActivity()).onFragmentCreated();
 

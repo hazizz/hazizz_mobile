@@ -88,13 +88,10 @@ public class RegisterFragment extends Fragment {
             button_signup.setEnabled(true);
         }
         @Override
-        public void onEmptyResponse() { }
-        @Override
         public void onSuccessfulResponse() {
-            Answers.getInstance().logSignUp(new SignUpEvent().putSuccess(true));
+            Answers.getInstance().logSignUp(new SignUpEvent().putSuccess(true).putCustomAttribute("signed up", "true"));
             Transactor.fragmentLogin(getFragmentManager().beginTransaction());
         }
-
         @Override
         public void onNoConnection() {
             textView_error.setText(R.string.info_noInternetAccess);
@@ -112,8 +109,6 @@ public class RegisterFragment extends Fragment {
         checkBox_termsAndConditions = v.findViewById(R.id.checkBox_termsAndConditions);
         textView_termsAndConditions = v.findViewById(R.id.textView_termsAndConditions);
 
-    //    textView_termsAndConditions.setText(SafeURLSpan.parseSafeHtml(<<YOUR STRING GOES HERE>>));
-
         textView_termsAndConditions.setMovementMethod(LinkMovementMethod.getInstance());
         textView_termsAndConditions.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,8 +116,7 @@ public class RegisterFragment extends Fragment {
                 checkBox_termsAndConditions.setChecked(!checkBox_termsAndConditions.isChecked());
             }
         });
-
-        textView_error = v.findViewById(R.id.textView_error);
+        textView_error = v.findViewById(R.id.textView_error_currentPassword);
         textView_error.setTextColor(Color.rgb(255, 0, 0));
 
         button_signup = (Button) v.findViewById(R.id.button_signup);
@@ -140,19 +134,16 @@ public class RegisterFragment extends Fragment {
                     return;
                 }if (!emailRegex.matcher(email).matches()){
                     textView_error.setText(R.string.error_emailWrong);
-                }
-                else {
+                }else {
                     if (password.length() < 8) {
                         textView_error.setText(R.string.error_passwordNotLongEnough);
                     } else if (username.length() < 4) {
                         textView_error.setText(R.string.error_usernameLength);
                     } else if (!(password.equals(editText_passwordCheck.getText().toString()))) {
                         textView_error.setText(R.string.error_passwordDoesntMatch);
-
                     } else {
                         if (checkBox_termsAndConditions.isChecked()) {
                             password = Converter.hashString(editText_password.getText().toString());
-
 
                             HashMap<String, Object> requestBody = new HashMap<>();
 
@@ -163,10 +154,8 @@ public class RegisterFragment extends Fragment {
                             button_signup.setEnabled(false);
 
                             MiddleMan.newRequest(getActivity(), "register", requestBody, responseHandler, null);
-
                         }else {
                             textView_error.setText(R.string.error_termsAndConditionsNotAccepted);
-
                         }
                     }
                 }

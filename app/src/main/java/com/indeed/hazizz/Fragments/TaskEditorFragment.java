@@ -20,6 +20,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
 import com.indeed.hazizz.Activities.MainActivity;
 import com.indeed.hazizz.AndroidThings;
 import com.indeed.hazizz.Communication.MiddleMan;
@@ -28,7 +30,6 @@ import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.POJO.Response.POJOsubject;
 import com.indeed.hazizz.Communication.Strings;
 import com.indeed.hazizz.D8;
-import com.indeed.hazizz.ErrorHandler;
 import com.indeed.hazizz.Manager;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
@@ -40,7 +41,6 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 
-import okhttp3.Headers;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
@@ -59,6 +59,8 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
     private int taskId;
 
     private Spinner spinner_subject;
+    private TextView textView_subject;
+    private TextView textView_fragment_title;
 
     private Spinner spinner_taskType;
     private EditText editText_taskTitle;
@@ -73,7 +75,6 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
     private long typeId = 0;
     private String typeName, date;
 
-
     private List<POJOsubject> subjects = new ArrayList<>();
 
     private View v;
@@ -86,12 +87,6 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
             Log.e("hey", "got POJOresponse");
         }
         @Override
-        public void onFailure(Call<ResponseBody> call, Throwable t) {
-            Log.e("hey", "4");
-            Log.e("hey", "got here onFailure");
-            Log.e("hey", "task created");
-        }
-        @Override
         public void onErrorResponse(POJOerror error) {
             Log.e("hey", error.getMessage());
             int errorCode = error.getErrorCode();
@@ -99,6 +94,9 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
                 textView_error.setText(R.string.error_titleNotAcceptable);
             }
             button_send.setEnabled(true);
+            Answers.getInstance().logCustom(new CustomEvent("create/edit task")
+                    .putCustomAttribute("status", errorCode)
+            );
         }
         @Override
         public void onSuccessfulResponse() {
@@ -107,11 +105,12 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
             }else if(Manager.DestManager.getDest() == Manager.DestManager.TOMAIN){
                 Transactor.fragmentMainTask(getFragmentManager().beginTransaction());
             }
-
             else{
                 Transactor.fragmentMainTask(getFragmentManager().beginTransaction());
             }
-            button_send.setEnabled(true);
+            Answers.getInstance().logCustom(new CustomEvent("create/edit task")
+                    .putCustomAttribute("status", "success")
+            );
         }
         @Override
         public void onNoConnection() {
@@ -124,6 +123,7 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
         public void onPOJOResponse(Object response) {
             subjects = (ArrayList<POJOsubject>)response;
             s_adapter.clear();
+            s_adapter.add(new POJOsubject(0, getString(R.string.subject_none)));
             if(subjects.size() != 0) {
                 int emSubjectId = 0;
                 for (POJOsubject s : subjects) {
@@ -153,10 +153,11 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_taskeditor, container, false);
-        Log.e("hey", "im here lol");
+
         ((MainActivity)getActivity()).onFragmentCreated();
 
         spinner_subject = (Spinner)v.findViewById(R.id.subject_spinner);
+        textView_subject = v.findViewById(R.id.textView_subject);
         button_send = (Button)v.findViewById(R.id.button_send);
         button_add = v.findViewById(R.id.add_button);
         spinner_taskType = (Spinner)v.findViewById(R.id.taskType_spinner);
@@ -164,8 +165,10 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
         editText_description = v.findViewById(R.id.editText_description);
         editText_description.setImeOptions(EditorInfo.IME_ACTION_DONE);
         editText_description.setRawInputType(InputType.TYPE_CLASS_TEXT);
-        textView_error = v.findViewById(R.id.textView_error);
+        textView_error = v.findViewById(R.id.textView_error_currentPassword);
         textView_error.setTextColor(Color.rgb(255, 0, 0));
+
+        textView_fragment_title = v.findViewById(R.id.fragment_info);
 
         textView_deadline = v.findViewById(R.id.textView_deadline);
 
@@ -187,35 +190,51 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_taskType.setAdapter(adapter);
 
-        // subject spinner
-        s_adapter = new ArrayAdapter<POJOsubject>(getContext(), android.R.layout.simple_spinner_item);
-        s_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_subject.setAdapter(s_adapter);
-        s_adapter.notifyDataSetChanged();
-        spinner_subject.setOnItemSelectedListener(this);
+
 
         groupId = Manager.GroupManager.getGroupId();
         groupName = Manager.GroupManager.getGroupName();
         taskId = getArguments().getInt("taskId");
 
         if(taskId != 0 || typeName != null) {
-            subject = getArguments().getInt("subject");
+            subject = getArguments().getInt("subjectId");
             date = getArguments().getString("date");
             textView_deadline.setText(R.string.deadline_ );
             textView_deadline.append(" " + date);
             editText_taskTitle.setText(getArguments().getString("title"));
             editText_description.setText(getArguments().getString("description"));
             typeId = getArguments().getLong("typeId");
-            typeName = getArguments().getString("typeName");
+     //       typeName = getArguments().getString("typeName");
 
-            for(int i = 0 ; i <= taskTypeArray.length-1; i++){
+            textView_subject.setText(getArguments().getString("subjectName"));
+
+          /*  for(int i = 0 ; i <= taskTypeArray.length-1; i++){
                 if(typeName.equals(taskTypeArray[i])){
                     spinner_taskType.setSelection(i);
                     break;
                 }
-            }
+            } */
+            spinner_subject.setVisibility(View.INVISIBLE);
+            button_add.setVisibility(View.INVISIBLE);
+
+            textView_fragment_title.setText(R.string.fragment_title_edit_task);
+
+            String[] taskTypeArray = getResources().getStringArray(R.array.taskTypes);
+            spinner_taskType.setSelection((int)typeId-1);
+
             editMode = true;
         }else{
+            // subject spinner
+            s_adapter = new ArrayAdapter<POJOsubject>(getContext(), android.R.layout.simple_spinner_item);
+            s_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner_subject.setAdapter(s_adapter);
+            spinner_subject.setOnItemSelectedListener(this);
+            EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
+            vars.put(Strings.Path.GROUPID, Integer.toString(groupId));
+            MiddleMan.newRequest(this.getActivity(),"getSubjects", null, rh_subjects, vars);
+
+            textView_fragment_title.setText(R.string.fragment_title_new_task);
+
             editMode = false;
         }
 
@@ -234,7 +253,11 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
                     if (title.length() < 2 || title.length() > 20) {
                         textView_error.setText(R.string.error_titleLentgh);
                     }else if (spinner_subject.getSelectedItem() == null){
-                        textView_error.setText(R.string.error_subjectNotSelected);
+                        if(editMode){
+                            editTask();
+                        }else {
+                            textView_error.setText(R.string.error_subjectNotSelected);
+                        }
                     } else {
                         button_send.setEnabled(false);
                         if(editMode){
@@ -267,35 +290,19 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
         //dpd.getDatePicker().setMaxDate(Calendar.getInstance().getTimeInMillis() - 1000);
         dpd.getDatePicker().setMinDate(Calendar.getInstance().getTimeInMillis() - 1000);
 
-        EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
-        vars.put(Strings.Path.GROUPID, Integer.toString(groupId));
-        MiddleMan.newRequest(this.getActivity(),"getSubjects", null, rh_subjects, vars);
-
-      //  MiddleMan.newRequest(this.getActivity(),"getTaskType", null, rh_subjects, vars);
-
         return v;
     }
 
     private void editTask() {
         HashMap<String, Object> requestBody = new HashMap<>();
 
-        int tType;
-        String s = spinner_taskType.getSelectedItem().toString();
-        if        (s.equals(taskTypeArray[0])) {
-            tType = 1;
-        } else if (s.equals(taskTypeArray[1])) {
-            tType = 2;
-        } else if (s.equals(taskTypeArray[2])) {
-            tType = 3;
-        } else if (s.equals(taskTypeArray[3])) {
-            tType = 4;
-        } else {
-            tType = 1;
-        }
-        requestBody.put("taskType", Integer.toString(tType));
+        int tTypeId = spinner_taskType.getSelectedItemPosition() + 1;
+
+        Log.e("hey", "task type: "+tTypeId);
+
+        requestBody.put("taskType", tTypeId);
         requestBody.put("taskTitle", editText_taskTitle.getText().toString().trim());
         requestBody.put("description", editText_description.getText().toString());
-    //    requestBody.put("subjectId", ((POJOsubject) spinner_subject.getSelectedItem()).getId());//((POJOsubject) subject_spinner.getSelectedItem()).getId());
         Log.e("hey", "date: " + year + "-" + month + "-" + day);
         if(str_day != null && str_month != null && str_year != null) {
             requestBody.put("dueDate", str_year + "-" + str_month + "-" + str_day);
@@ -320,21 +327,29 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
         HashMap<String, Object> requestBody = new HashMap<>();
 
         int tTypeId = spinner_taskType.getSelectedItemPosition() + 1;
-
+        Log.e("hey", "task type: "+tTypeId);
         requestBody.put("taskType", tTypeId);
         requestBody.put("taskTitle", editText_taskTitle.getText().toString().trim());
         requestBody.put("description", editText_description.getText().toString());
-        requestBody.put("subjectId", ((POJOsubject) spinner_subject.getSelectedItem()).getId());//((POJOsubject) subject_spinner.getSelectedItem()).getId());
         Log.e("hey", "date: " + year + "-" + month + "-" + day);
         requestBody.put("dueDate", str_year + "-" + str_month + "-" + str_day);
 
         EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
-        vars.put(Strings.Path.GROUPID, Integer.toString(groupId));
+        vars.put(Strings.Path.WHERENAME, Strings.Path.TASKS.toString());
 
-        MiddleMan.newRequest(this.getActivity(), "createTask", requestBody, rh_task, vars);
+        int subjectId = ((POJOsubject) spinner_subject.getSelectedItem()).getId();
+
+        if(subjectId == 0){
+            vars.put(Strings.Path.BYNAME, Strings.Path.GROUPS.toString());
+            vars.put(Strings.Path.BYID, Integer.toString(groupId));
+        }else{
+            vars.put(Strings.Path.BYNAME, Strings.Path.SUBJECTS.toString());
+            vars.put(Strings.Path.BYID, subjectId);
+        }
+
+        MiddleMan.newRequest(this.getActivity(), "createAT", requestBody, rh_task, vars);
 
     }
-
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
     }

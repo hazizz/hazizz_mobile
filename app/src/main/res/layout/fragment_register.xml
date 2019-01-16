@@ -26,6 +26,7 @@
             android:textSize="30sp"
             android:textStyle="bold" />
 
+
         <EditText
             android:id="@+id/editText_username"
             android:layout_width="300dp"
@@ -99,7 +100,7 @@
         </android.support.constraint.ConstraintLayout>
 
         <TextView
-            android:id="@+id/textView_error"
+            android:id="@+id/textView_error_currentPassword"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

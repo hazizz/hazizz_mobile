@@ -70,9 +70,9 @@ public interface RequestInterface {
                          }
 
                          else if(pojoError.getErrorCode() == 18 || pojoError.getErrorCode() == 17) {
+                              MiddleMan.addToCallAgain(request);
                               if(!Manager.ThreadManager.isFreezed()) {
                                    Manager.ThreadManager.freezeThread();
-                                   MiddleMan.addToCallAgain(request);
                                    HashMap<String, Object> body = new HashMap<>();
                                    body.put("username", SharedPrefs.getString(act.getBaseContext(), "userInfo", "username"));
                                    body.put("refreshToken", SharedPrefs.TokenManager.getRefreshToken(act.getBaseContext()));

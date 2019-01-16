@@ -15,6 +15,9 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
+import com.crashlytics.android.answers.SignUpEvent;
 import com.indeed.hazizz.Activities.MainActivity;
 import com.indeed.hazizz.AndroidThings;
 import com.indeed.hazizz.Communication.MiddleMan;
@@ -141,6 +144,9 @@ public class CommentSectionFragment extends Fragment {
                         @Override
                         public void onErrorResponse(POJOerror error) {
                             button_send.setEnabled(true);
+                            Answers.getInstance().logCustom(new CustomEvent("add comment")
+                                    .putCustomAttribute("status", error.getErrorCode())
+                            );
                         }
                         @Override
                         public void onSuccessfulResponse() {
@@ -148,6 +154,9 @@ public class CommentSectionFragment extends Fragment {
                             AndroidThings.closeKeyboard(getContext(), v);
                             editText_commentBody.setText("");
                             button_send.setEnabled(true);
+                            Answers.getInstance().logCustom(new CustomEvent("add comment")
+                                    .putCustomAttribute("status", "success")
+                            );
                         }
                         @Override
                         public void onNoConnection() {

@@ -45,7 +45,6 @@ public class CustomAdapter extends ArrayAdapter<GroupItem> {
             convertView = inflater.inflate(picID, parent, false);
 
             holder = new DataHolder();
-         //   holder.profilePic = (ImageView) convertView.findViewById(R.id.profile_pic);
             holder.groupName = (TextView) convertView.findViewById(R.id.group_name);
 
             convertView.setTag(holder);

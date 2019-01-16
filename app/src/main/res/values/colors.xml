@@ -4,12 +4,16 @@
     <color name="colorPrimaryDarkerBlue">#2b909b</color>
     <color name="colorPrimaryDarkBlue">#36B1BF</color>
     <color name="colorPrimaryLightBlue">#46D9D9</color>
-    <color name="colorBackground">#FFFFFF</color>
+    <color name="colorBackground">#ffffff</color>
     <color name="colorBackground1">#E9F1DF</color>
     <color name="colorYellow">#FFCB05</color>
     <color name="colorAccent">#f23c50</color>
-    <color name="colorError">#F23C50</color>
+    <color name="colorError">#f23c50</color>
     <color name="colorTitleText">#8c8c8c</color>
+
+    <color name="colorDarkText">#DE000000</color>
+    <color name="colorDefaultBackColor">#FAFAFA</color>
+
 
 
 
