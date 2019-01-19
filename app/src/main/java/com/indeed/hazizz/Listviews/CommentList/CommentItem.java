@@ -8,12 +8,12 @@ import lombok.Data;
 public class CommentItem {
 
     String commentProfilePic;
-    String commentName;
+    POJOcreator creator;
     String commentContent;
 
-    public CommentItem(String commentProfilePic, String commentName, String commentContent){
+    public CommentItem(String commentProfilePic, POJOcreator creator, String commentContent){
         this.commentProfilePic = commentProfilePic;
-        this.commentName = commentName;
+        this.creator = creator;
         this.commentContent = commentContent;
     }
 }

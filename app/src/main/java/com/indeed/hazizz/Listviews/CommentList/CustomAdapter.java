@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.indeed.hazizz.Communication.POJO.Response.CommentSectionPOJOs.POJOComment;
 import com.indeed.hazizz.Converter.Converter;
 import com.indeed.hazizz.R;
 
@@ -57,16 +58,12 @@ public class CustomAdapter extends ArrayAdapter<CommentItem>  {
         }else{
             holder = (DataHolder)convertView.getTag();
         }
-
         CommentItem commentItem = data.get(position);
-        holder.commentProfilePic.setImageBitmap(Converter.getCroppedBitmap(Converter.scaleBitmapToRegular(Converter.imageFromText(commentItem.commentProfilePic))));
-        holder.commentName.setText(commentItem.getCommentName());
+        holder.commentProfilePic.setImageBitmap(Converter.getCroppedBitmap(Converter.scaleBitmapToRegular(Converter.imageFromText(commentItem.getCommentProfilePic()))));
+        holder.commentName.setText(commentItem.getCreator().getDisplayName());
         holder.commentContent.setText(commentItem.getCommentContent());
-        //   holder.taskCreator.setText(taskItem.getCreator().getUsername());
-        //  holder.taskPic.setImageResource(taskItem.taskPic);
 
         return convertView;
-        // return super.getView(position, convertView, parent);
     }
 
 }

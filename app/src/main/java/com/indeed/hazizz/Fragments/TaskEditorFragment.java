@@ -157,7 +157,7 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
         ((MainActivity)getActivity()).onFragmentCreated();
 
         spinner_subject = (Spinner)v.findViewById(R.id.subject_spinner);
-        textView_subject = v.findViewById(R.id.textView_subject);
+        textView_subject = v.findViewById(R.id.textView_title);
         button_send = (Button)v.findViewById(R.id.button_send);
         button_add = v.findViewById(R.id.add_button);
         spinner_taskType = (Spinner)v.findViewById(R.id.taskType_spinner);

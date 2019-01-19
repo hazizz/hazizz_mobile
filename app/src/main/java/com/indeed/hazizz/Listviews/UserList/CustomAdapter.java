@@ -8,9 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.indeed.hazizz.Communication.Strings;
 import com.indeed.hazizz.Converter.Converter;
 import com.indeed.hazizz.R;
 
@@ -34,6 +36,7 @@ public class CustomAdapter extends ArrayAdapter<UserItem> {
     static class DataHolder{
         ImageView userProfilePic;
         TextView userName;
+        FrameLayout badge_owner;
     }
     @NonNull
     @Override
@@ -48,6 +51,7 @@ public class CustomAdapter extends ArrayAdapter<UserItem> {
             holder = new DataHolder();
             holder.userProfilePic = (ImageView) convertView.findViewById(R.id.imageView_memberProfilePic);
             holder.userName = (TextView) convertView.findViewById(R.id.subject_name);
+            holder.badge_owner = convertView.findViewById(R.id.badge_owner);
 
             convertView.setTag(holder);
         }else{
@@ -61,9 +65,17 @@ public class CustomAdapter extends ArrayAdapter<UserItem> {
             holder.userProfilePic.setImageResource(R.mipmap.ic_launcher_round);
         }
         holder.userName.setText(userItem.getUserName());
-      //  holder.taskPic.setImageResource(taskItem.taskPic);
+
+
+        if(userItem.userRank == Strings.Rank.OWNER.getValue()){
+            holder.badge_owner.setVisibility(View.VISIBLE);
+        }else if(userItem.userRank == Strings.Rank.MODERATOR.getValue()){
+
+        }else if(userItem.userRank == Strings.Rank.USER.getValue()){
+
+        }else{
+        }
 
         return convertView;
-        // return super.getView(position, convertView, parent);
     }
 }

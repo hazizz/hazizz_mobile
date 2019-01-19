@@ -46,7 +46,7 @@ public class MainTabFragment extends Fragment{
 
         startingTab = getArguments().getInt("startingTab");
 
-        textView_title = v.findViewById(R.id.textView_subject);
+        textView_title = v.findViewById(R.id.textView_title);
         //   ((MainActivity)getActivity()).onFragmentCreated();
 
         TabLayout tabLayout = (TabLayout) v.findViewById(R.id.tab_layout);

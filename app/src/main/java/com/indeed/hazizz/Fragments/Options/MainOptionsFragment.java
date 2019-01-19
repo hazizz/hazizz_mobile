@@ -42,6 +42,7 @@ public class MainOptionsFragment extends Fragment {
     public List<POJOgroup> groups;
     private View v;
 
+    private TextView textView_title;
     private ImageView imageView_profilePic;
     private EditText editText_displayName;
     private ImageButton fab_profilePicCheck;
@@ -62,6 +63,14 @@ public class MainOptionsFragment extends Fragment {
         ((MainActivity)getActivity()).onFragmentCreated();
 
         createViewList();
+
+        textView_title = v.findViewById(R.id.textView_title);
+        textView_title.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override public boolean onLongClick(View v) {
+                ((MainActivity) getActivity()).activateThéra();
+                return true;
+            }
+        });
 
         textView_error = v.findViewById(R.id.textView_error_currentPassword);
         textView_error.setTextColor(Color.rgb(255, 0, 0));

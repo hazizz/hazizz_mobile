@@ -21,6 +21,7 @@ import com.indeed.hazizz.Communication.POJO.Response.POJOgroup;
 import com.indeed.hazizz.Communication.POJO.Response.POJOme;
 import com.indeed.hazizz.Communication.POJO.Response.POJOsubject;
 import com.indeed.hazizz.Communication.POJO.Response.POJOuser;
+import com.indeed.hazizz.Communication.POJO.Response.PojoPermisionUsers;
 import com.indeed.hazizz.Communication.POJO.Response.PojoPicSmall;
 import com.indeed.hazizz.Communication.POJO.Response.PojoType;
 import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
@@ -213,6 +214,10 @@ public class Request {
             case "getGroupMembers":
                 requestType = new GetGroupMembers();
                 break;
+            case "getGroupMemberPermisions":
+                requestType = new GetGroupMemberPermisions();
+                break;
+
 
             case "leaveGroup":
                 requestType = new LeaveGroup();
@@ -1123,6 +1128,28 @@ public class Request {
             Type listType = new TypeToken<ArrayList<POJOuser>>(){}.getType();
             List<POJOuser> castedList = gson.fromJson(response.body().charStream(), listType);
             cOnResponse.onPOJOResponse(castedList);
+        }
+    }
+    public class GetGroupMemberPermisions implements RequestInterface {
+        GetGroupMemberPermisions() {
+            Log.e("hey", "created GetGroupMemberPermisions object");
+        }
+        @Override public void makeCall() {
+            call(act,  thisRequest, call, cOnResponse, gson);
+        }
+        @Override
+        public void makeCallAgain() {
+            callAgain(act,  thisRequest, call, cOnResponse, gson);
+        }
+        public void setupCall() {
+            HashMap<String, String> headerMap = new HashMap<String, String>();
+            headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
+            call = aRequest.getGroupMemberPermissions(vars.get(Strings.Path.GROUPID).toString(), headerMap);
+        }
+        @Override
+        public void callIsSuccessful(Response<ResponseBody> response) {
+            PojoPermisionUsers pojo = gson.fromJson(response.body().charStream(), PojoPermisionUsers.class);
+            cOnResponse.onPOJOResponse(pojo);
         }
     }
 

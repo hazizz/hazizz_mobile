@@ -41,4 +41,23 @@ public abstract class Strings {
             return value;
         }
     }
+
+    public enum Rank {
+        OWNER(3),
+        MODERATOR(2),
+        USER(1),
+        NULL(0);
+
+        private int value;
+
+        Rank(int value){
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
+
+
 }

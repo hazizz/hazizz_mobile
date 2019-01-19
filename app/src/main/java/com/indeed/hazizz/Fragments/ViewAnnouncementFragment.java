@@ -23,7 +23,6 @@ import com.indeed.hazizz.Communication.POJO.Response.POJOMembersProfilePic;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.Strings;
 import com.indeed.hazizz.Manager;
-import com.indeed.hazizz.Manager.MeInfo;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
@@ -79,7 +78,7 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
         Log.e("hey", "im here lol");
         ((MainActivity)getActivity()).onFragmentCreated();
         type = v.findViewById(R.id.textView_tasktype);
-        textView_title = v.findViewById(R.id.textView_subject);
+        textView_title = v.findViewById(R.id.textView_title);
         textView_description = v.findViewById(R.id.editText_description);
         creatorName = v.findViewById(R.id.textView_creator);
         group = v.findViewById(R.id.textView_group);

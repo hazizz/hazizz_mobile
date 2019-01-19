@@ -24,6 +24,11 @@
         <item>Théra Settings</item>
     </string-array>
 
+
+    <string name="badge_owner">OWNER</string>
+
+
+
     <string name="group_type_open">Open</string>
     <string name="group_type_invite_only">Invite only</string>
     <string name="group_type_password">Password</string>

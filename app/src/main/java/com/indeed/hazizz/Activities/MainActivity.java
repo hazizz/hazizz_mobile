@@ -439,6 +439,9 @@ public class MainActivity extends AppCompatActivity
         navUsername.setText(newDisplayName);
     }
 
+    public void activateThéra(){
+        menu_nav.getItem(2).setVisible(true);
+    }
 
  /*
     @Override
