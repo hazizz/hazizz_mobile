@@ -13,9 +13,7 @@ import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
 import com.indeed.hazizz.Communication.Requests.Request;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import okhttp3.Headers;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
@@ -67,9 +65,9 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
         itemView.setTextViewText(R.id.textView_creator, task.getCreator().getUsername());
 
         if(task.getSubject() != null) {
-            itemView.setTextViewText(R.id.textView_subject, task.getSubject().getName());
+            itemView.setTextViewText(R.id.textView_title, task.getSubject().getName());
         }else{
-            itemView.setViewVisibility(R.id.textView_subject, View.INVISIBLE);
+            itemView.setViewVisibility(R.id.textView_title, View.INVISIBLE);
             itemView.setViewVisibility(R.id.textView_subject_info, View.INVISIBLE);
         }
         itemView.setTextViewText(R.id.textView_deadline, task.getDueDate());

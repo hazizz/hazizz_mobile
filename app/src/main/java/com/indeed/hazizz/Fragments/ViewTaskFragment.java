@@ -26,14 +26,11 @@ import com.indeed.hazizz.Communication.POJO.Response.getTaskPOJOs.POJOgetTaskDet
 
 import com.indeed.hazizz.Communication.Strings;
 import com.indeed.hazizz.Manager;
-import com.indeed.hazizz.Manager.MeInfo;
 import com.indeed.hazizz.R;
 import com.indeed.hazizz.Transactor;
 
-import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
-import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -81,7 +78,7 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
         textView_title = v.findViewById(R.id.textView_title);
         textView_description = v.findViewById(R.id.editText_description);
         textView_creatorName = v.findViewById(R.id.textView_creator);
-        textView_subject = v.findViewById(R.id.textView_subject);
+        textView_subject = v.findViewById(R.id.textView_title);
         textView_group = v.findViewById(R.id.textView_group);
         textView_deadLine = v.findViewById(R.id.textview_deadline);
 

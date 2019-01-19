@@ -100,7 +100,7 @@ public class WidgetService extends RemoteViewsService {
             views.setTextViewText(R.id.task_title, data.get(i).getTitle());
             views.setTextViewText(R.id.task_description, data.get(i).getDescription());
             views.setTextViewText(R.id.textView_creator, data.get(i).getCreator().getUsername());
-            views.setTextViewText(R.id.textView_subject, data.get(i).getSubject().getName());
+            views.setTextViewText(R.id.textView_title, data.get(i).getSubject().getName());
             views.setTextViewText(R.id.textView_deadline, data.get(i).getDueDate());
 
             Log.e("hey", "getViewAt happened");

@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import okhttp3.Headers;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
@@ -56,7 +55,7 @@ public class GroupsFragment extends Fragment {
 
         createViewList();
         textView_noContent = v.findViewById(R.id.textView_noContent);
-        textView_title = v.findViewById(R.id.textView_subject);
+        textView_title = v.findViewById(R.id.textView_title);
         sRefreshLayout = v.findViewById(R.id.swipe_refresh_layout); sRefreshLayout.bringToFront();
         sRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

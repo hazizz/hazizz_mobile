@@ -56,7 +56,7 @@ public class ChooseGroupFragment extends Fragment{
         createViewList();
         getGroups();
         textView_noContent = v.findViewById(R.id.textView_noContent);
-        textView_title = v.findViewById(R.id.textView_subject);
+        textView_title = v.findViewById(R.id.textView_title);
         return v;
     }
 

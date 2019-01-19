@@ -19,6 +19,7 @@ import com.indeed.hazizz.Communication.POJO.Response.CustomResponseHandler;
 import com.indeed.hazizz.Communication.POJO.Response.POJOMembersProfilePic;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.POJO.Response.POJOuser;
+import com.indeed.hazizz.Communication.POJO.Response.PojoPermisionUsers;
 import com.indeed.hazizz.Communication.Strings;
 import com.indeed.hazizz.Listviews.UserList.CustomAdapter;
 import com.indeed.hazizz.Listviews.UserList.UserItem;
@@ -73,45 +74,52 @@ public class GetGroupMembersFragment extends Fragment {
         adapter.clear();
         CustomResponseHandler responseHandler = new CustomResponseHandler() {
             @Override
-            public void onResponse(HashMap<String, Object> response) { }
-            @Override
             public void onPOJOResponse(Object response) {
                 textView_noContent.setVisibility(v.INVISIBLE);
-                ArrayList<POJOuser> castedListFullOfPojos = (ArrayList<POJOuser>)response;
+                PojoPermisionUsers pojoPermisionUser = (PojoPermisionUsers)response;
                 HashMap<Integer, POJOMembersProfilePic> profilePicMap = Manager.ProfilePicManager.getCurrentGroupMembersProfilePic();
-                if(castedListFullOfPojos != null && castedListFullOfPojos.size() != 0) {
-                    for (POJOuser u : castedListFullOfPojos) {
-                        try {
-                            Log.e("hey", "GETDATA, userId: " + u.getId() + ", data is: " + profilePicMap.get(u.getId()).getData());
-                            listUser.add(new UserItem(u.getUsername(), profilePicMap.get(u.getId()).getData()));
-                        } catch (NullPointerException e) {
-                            listUser.add(new UserItem(u.getUsername(), null));
+                if(pojoPermisionUser != null) {
+                    if(pojoPermisionUser.getOWNER() != null) {
+                        for (POJOuser u : pojoPermisionUser.getOWNER()) {
+                            try {
+                                listUser.add(new UserItem(u.getDisplayName(), profilePicMap.get(u.getId()).getData(), Strings.Rank.OWNER.getValue()));
+                            } catch (NullPointerException e) {
+                                listUser.add(new UserItem(u.getUsername(), null, Strings.Rank.OWNER.getValue()));
+                            }
                         }
                     }
+                    if(pojoPermisionUser.getMODERATOR() != null) {
+                        for (POJOuser u : pojoPermisionUser.getMODERATOR()) {
+                            try {
+                                listUser.add(new UserItem(u.getUsername(), profilePicMap.get(u.getId()).getData(), Strings.Rank.MODERATOR.getValue()));
+                            } catch (NullPointerException e) {
+                                listUser.add(new UserItem(u.getUsername(), null, Strings.Rank.MODERATOR.getValue()));
+                            }
+                        }
+                    }
+                    if(pojoPermisionUser.getUSER() != null) {
+                        for (POJOuser u : pojoPermisionUser.getUSER()) {
+                            try {
+                                listUser.add(new UserItem(u.getUsername(), profilePicMap.get(u.getId()).getData(), Strings.Rank.USER.getValue()));
+                            } catch (NullPointerException e) {
+                                listUser.add(new UserItem(u.getUsername(), null, Strings.Rank.USER.getValue()));
+                            }
+                        }
+                    }
+
                 }else{
                     textView_noContent.setVisibility(View.VISIBLE);
                 }
                 adapter.notifyDataSetChanged();
                 sRefreshLayout.setRefreshing(false);
-                Log.e("hey", "got response");
-            }
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.e("hey", "4");
-                Log.e("hey", "got here onFailure");
             }
 
-            @Override
-            public void onErrorResponse(POJOerror error) {
+            @Override public void onErrorResponse(POJOerror error) {
                 Log.e("hey", "onErrorResponse");
                 sRefreshLayout.setRefreshing(false);
             }
-            @Override
-            public void onEmptyResponse(){sRefreshLayout.setRefreshing(false);}
-            @Override
-            public void onSuccessfulResponse(){}
-            @Override
-            public void onNoConnection(){
+            @Override public void onEmptyResponse(){sRefreshLayout.setRefreshing(false);}
+            @Override public void onNoConnection(){
                 textView_noContent.setText(R.string.info_noInternetAccess);
                 textView_noContent.setVisibility(View.VISIBLE);
                 sRefreshLayout.setRefreshing(false);
@@ -119,7 +127,7 @@ public class GetGroupMembersFragment extends Fragment {
         };
         EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
         vars.put(Strings.Path.GROUPID, Integer.toString(groupId));
-        MiddleMan.newRequest(this.getActivity(),"getGroupMembers", null, responseHandler, vars);
+        MiddleMan.newRequest(this.getActivity(),"getGroupMemberPermisions", null, responseHandler, vars);
     }
 
     void createViewList(){

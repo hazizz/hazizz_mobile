@@ -79,7 +79,7 @@ public class GroupTabFragment extends Fragment {
         Manager.GroupManager.setGroupName(groupName);
         startingTab = getArguments().getInt("startingTab");
 
-        textView_title = v.findViewById(R.id.textView_subject);
+        textView_title = v.findViewById(R.id.textView_title);
         textView_title.append(" " + groupName);
      //   ((MainActivity)getActivity()).onFragmentCreated();
 

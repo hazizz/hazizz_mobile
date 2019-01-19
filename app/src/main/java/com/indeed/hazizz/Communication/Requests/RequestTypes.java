@@ -209,6 +209,14 @@ public interface RequestTypes{
             @HeaderMap Map<String, String> headers
     );
 
+    @GET("groups/{groupId}/permissions")
+    Call<ResponseBody> getGroupMemberPermissions(
+            @Path("groupId") String groupId,
+            @HeaderMap Map<String, String> headers
+    );
+
+
+
     @GET("me/leavegroup/{groupId}")
     Call<ResponseBody> leaveGroup(
             @Path("groupId") String groupId,

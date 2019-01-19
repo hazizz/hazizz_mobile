@@ -66,7 +66,7 @@ public class CommentSectionFragment extends Fragment {
             }else {
                 adapter.clear();
                 for (POJOComment t : comments) {
-                    listComment.add(new CommentItem(profilePicMap.get((int)t.getCreator().getId()).getData(), t.getCreator().getUsername(), t.getContent()));
+                    listComment.add(new CommentItem(profilePicMap.get((int)t.getCreator().getId()).getData(), t.getCreator(), t.getContent()));
                 }
                 adapter.notifyDataSetChanged();
                 textView_noContent.setVisibility(v.INVISIBLE);

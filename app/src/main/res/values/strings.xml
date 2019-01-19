@@ -23,6 +23,10 @@
         <item>Théra Beállítások</item>
     </string-array>
 
+
+    <string name="badge_owner">TULAJDONOS</string>
+
+
     <string name="group_type_open">Nyitott</string>
     <string name="group_type_invite_only">Meghívás alapú</string>
     <string name="group_type_password">Jelszó alapú</string>

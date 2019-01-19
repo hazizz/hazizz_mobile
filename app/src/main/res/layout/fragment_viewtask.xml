@@ -114,7 +114,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView_subject"
+            android:id="@+id/textView_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -203,7 +203,7 @@
             android:text="           "
             android:textSize="17sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_subject" />
+            app:layout_constraintTop_toBottomOf="@+id/textView_title" />
 
         <Button
             android:id="@+id/button_edit"
