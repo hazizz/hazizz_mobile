@@ -36,7 +36,7 @@ public class FeedbackActivity extends AppCompatActivity {
         }
         @Override
         public void onSuccessfulResponse() {
-            Toast.makeText(getApplicationContext(), "Köszönjük a visszajelzésedet",
+            Toast.makeText(getApplicationContext(), getString(R.string.toast_feedback_thanks),
                     Toast.LENGTH_LONG).show();
             goBackToFrag();
         }

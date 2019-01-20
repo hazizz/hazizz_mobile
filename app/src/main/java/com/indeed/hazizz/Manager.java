@@ -2,10 +2,12 @@ package com.indeed.hazizz;
 
 import android.content.Context;
 import android.util.Log;
+import android.util.SparseArray;
 
 import com.indeed.hazizz.Communication.POJO.Response.POJOMembersProfilePic;
 import com.indeed.hazizz.Communication.POJO.Response.POJOerror;
 import com.indeed.hazizz.Communication.Requests.Request;
+import com.indeed.hazizz.Communication.Strings;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -100,8 +102,8 @@ public class Manager {
 
     public static class CrashManager{
 
-        private static POJOerror error;
-        private static Call<ResponseBody> lastCall;
+        private static POJOerror error = null;
+        private static Call<ResponseBody> lastCall = null;
 
         public static void setCrashData(POJOerror e, Call<ResponseBody> c){
             error = e;
@@ -143,6 +145,28 @@ public class Manager {
             dest = TOMAIN;
         }
 
+    }
+
+    @Data
+    public static class GroupRankManager{
+
+        private static SparseArray<Strings.Rank> groupRanks = new SparseArray<>();
+
+        public static Strings.Rank getRank(Integer userId){
+            Strings.Rank rank = groupRanks.get(userId);
+            if(rank != null){
+                return rank;
+            }
+            return Strings.Rank.NULL;
+        }
+
+        public static void setRank(Integer userId, Strings.Rank rank){
+            groupRanks.put(userId, rank);
+        }
+
+        public static void clear(){
+            groupRanks.clear();
+        }
     }
 
     @Data

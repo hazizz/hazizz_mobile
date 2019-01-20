@@ -86,6 +86,7 @@ public class GetGroupMembersFragment extends Fragment {
                             } catch (NullPointerException e) {
                                 listUser.add(new UserItem(u.getUsername(), null, Strings.Rank.OWNER.getValue()));
                             }
+                            Manager.GroupRankManager.setRank(u.getId(), Strings.Rank.OWNER);
                         }
                     }
                     if(pojoPermisionUser.getMODERATOR() != null) {
@@ -95,6 +96,7 @@ public class GetGroupMembersFragment extends Fragment {
                             } catch (NullPointerException e) {
                                 listUser.add(new UserItem(u.getUsername(), null, Strings.Rank.MODERATOR.getValue()));
                             }
+                            Manager.GroupRankManager.setRank(u.getId(), Strings.Rank.MODERATOR);
                         }
                     }
                     if(pojoPermisionUser.getUSER() != null) {
@@ -104,6 +106,7 @@ public class GetGroupMembersFragment extends Fragment {
                             } catch (NullPointerException e) {
                                 listUser.add(new UserItem(u.getUsername(), null, Strings.Rank.USER.getValue()));
                             }
+                            Manager.GroupRankManager.setRank(u.getId(), Strings.Rank.USER);
                         }
                     }
 

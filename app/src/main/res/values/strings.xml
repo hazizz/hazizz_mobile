@@ -105,6 +105,8 @@
 
 
 
+    <string name="toast_feedback_thanks">Köszönjük a visszajelzésedet</string>
+
 
     <string name="hint_description_feedback">Visszajelzés</string>
     <string name="hint_fragment_joingroup">Csoport név</string>

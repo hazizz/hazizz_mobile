@@ -19,9 +19,9 @@
 
 
     <string-array name="options_array">
-        <item>Edit Account</item>
+     <!--   <item>Edit Account</item>
         <item>Change Password</item>
-        <item>Théra Settings</item>
+        <item>Théra Settings</item> -->
     </string-array>
 
 
@@ -104,6 +104,11 @@
     <string name="passwordagain_fragment_register">Confirm password</string>
 
     <string name="error_passwordRequiredForGroup">Password is required to join group</string>
+
+
+    <string name="toast_feedback_thanks">Thanks you for your feedback</string>
+
+
 
 
     <string name="hint_description_feedback">Feedback</string>
