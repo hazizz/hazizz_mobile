@@ -52,12 +52,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Request {
     private Gson gson = new Gson();
     private final String BASE_URL = "https://hazizz.duckdns.org:8081/";
+    private final String THERA_URL = "https://hazizz.duckdns.org:9000/thera-server/";
     public RequestInterface requestType;
     private HashMap<String, Object> body;
     private Retrofit retrofit;
+    private Retrofit thera_retrofit;
 
     Call<ResponseBody> call;
     RequestTypes aRequest;
+    RequestTypes tRequest;
 
     public CustomResponseHandler cOnResponse;
     Context context;
@@ -92,8 +95,15 @@ public class Request {
                 //  .setEndpoint(endPoint)F
                 .build();
 
+        thera_retrofit = new Retrofit.Builder()
+                .baseUrl(THERA_URL)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(okHttpClient)
+                .build();
+
         findRequestType(reqType);
         aRequest = retrofit.create(RequestTypes.class);
+        tRequest = thera_retrofit.create(RequestTypes.class);
     }
 
     public void cancelRequest(){
@@ -123,8 +133,15 @@ public class Request {
                 //  .setEndpoint(endPoint)F
                 .build();
 
+        thera_retrofit = new Retrofit.Builder()
+                .baseUrl(THERA_URL)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(okHttpClient)
+                .build();
+
         findRequestType(reqType);
         aRequest = retrofit.create(RequestTypes.class);
+        tRequest = thera_retrofit.create(RequestTypes.class);
     }
 
     //called int the constructor
@@ -1712,7 +1729,7 @@ public class Request {
             HashMap<String, String> headerMap = new HashMap<String, String>();
             headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
 
-            call = aRequest.getSchools(headerMap);
+            call = tRequest.getSchools(headerMap);
         }
         @Override
         public void makeCall() {

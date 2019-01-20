@@ -17,6 +17,18 @@
         app:layout_constraintStart_toEndOf="@+id/imageView_memberProfilePic"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <include
+        android:id="@+id/badge_owner"
+        layout="@layout/badge_owner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:visibility="invisible"
+        app:layout_constraintStart_toEndOf="@+id/subject_name"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/imageView_memberProfilePic"
         android:layout_width="wrap_content"

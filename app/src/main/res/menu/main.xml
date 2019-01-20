@@ -14,7 +14,7 @@
         android:id="@+id/action_profilePic"
         android:orderInCategory="100"
         android:title="@string/uploadProfilePic_menu"
-        android:visible="true"
+        android:visible="false"
         app:showAsAction="never" />
 
     <item

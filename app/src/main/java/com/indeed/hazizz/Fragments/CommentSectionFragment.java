@@ -57,10 +57,8 @@ public class CommentSectionFragment extends Fragment {
     private CustomResponseHandler responseHandler = new CustomResponseHandler() {
         @Override
         public void onPOJOResponse(Object response) {
-            //  ArrayList<POJOCommentSection> sorted = D8.sortTasksByDate((ArrayList<POJOCommentSection>) response);
             ArrayList<POJOComment> comments = (ArrayList<POJOComment>) response;
             HashMap<Integer, POJOMembersProfilePic> profilePicMap = Manager.ProfilePicManager.getCurrentGroupMembersProfilePic();
-         //   List<POJOComment> comments = pojo.getComments();
             if(comments.isEmpty()) {
                 textView_noContent.setVisibility(v.VISIBLE);
             }else {

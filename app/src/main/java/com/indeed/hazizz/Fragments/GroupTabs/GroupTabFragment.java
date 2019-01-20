@@ -47,20 +47,9 @@ public class GroupTabFragment extends Fragment {
 
     CustomResponseHandler rh = new CustomResponseHandler() {
         @Override
-        public void onResponse(HashMap<String, Object> response) { }
-        @Override
-        public void onPOJOResponse(Object response) { }
-        @Override
-        public void onFailure(Call<ResponseBody> call, Throwable t) { }
-        @Override
-        public void onErrorResponse(POJOerror error) { }
-        @Override
-        public void onEmptyResponse() { }
-        @Override
         public void onSuccessfulResponse() {
-            Transactor.fragmentGroups(getFragmentManager().beginTransaction());        }
-        @Override
-        public void onNoConnection() { }
+            Transactor.fragmentGroups(getFragmentManager().beginTransaction());
+        }
     };
 
     @Nullable
@@ -69,7 +58,7 @@ public class GroupTabFragment extends Fragment {
         v = inflater.inflate(R.layout.fragment_tabgroup, container, false);
         Log.e("hey", "GroupTab fragment created");
 
-       // Manager.DestManager.resetDest();
+        Manager.GroupRankManager.clear();
 
 
         groupId = getArguments().getInt("groupId");
@@ -81,7 +70,6 @@ public class GroupTabFragment extends Fragment {
 
         textView_title = v.findViewById(R.id.textView_title);
         textView_title.append(" " + groupName);
-     //   ((MainActivity)getActivity()).onFragmentCreated();
 
         TabLayout tabLayout = (TabLayout) v.findViewById(R.id.tab_layout);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
@@ -154,21 +142,6 @@ public class GroupTabFragment extends Fragment {
                 Manager.ProfilePicManager.setCurrentGroupMembersProfilePic((HashMap<Integer, POJOMembersProfilePic>)response, groupId);
                 Log.e("hey", "got response");
             }
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.e("hey", "4");
-                Log.e("hey", "got here onFailure");
-            }
-            @Override
-            public void onErrorResponse(POJOerror error) {
-                Log.e("hey", "onErrorResponse");
-            }
-            @Override
-            public void onEmptyResponse() { }
-            @Override
-            public void onSuccessfulResponse() { }
-            @Override
-            public void onNoConnection() { }
         };
         EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
         vars.put(Strings.Path.GROUPID, Integer.toString(groupId));
