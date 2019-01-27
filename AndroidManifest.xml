@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.indeed.hazizz">
+    package="com.hazizz.droid">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -35,7 +35,7 @@
             tools:ignore="DuplicateActivity"></activity>
         -->
         <activity
-            android:name="com.indeed.hazizz.Activities.MainActivity"
+            android:name="com.hazizz.droid.Activities.MainActivity"
             android:noHistory="true"
             android:windowSoftInputMode="adjustPan"
             android:configChanges="orientation|screenSize"
@@ -88,8 +88,8 @@
 
         <receiver android:name=".CollectionWidgetProvider">
             <intent-filter>
-                <action android:name="com.indeed.hazizz.WIDGET_OPENAPPBUTTON" />
-                <action android:name="com.indeed.hazizz.WIDGET_REFRESHBUTTON" />
+                <action android:name="com.hazizz.droid.WIDGET_OPENAPPBUTTON" />
+                <action android:name="com.hazizz.droid.WIDGET_REFRESHBUTTON" />
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="android.intent.action.SCREEN_ON" />
                 <action android:name="android.intent.action.SCREEN_OFF" />

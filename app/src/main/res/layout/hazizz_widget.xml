@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                app:srcCompat="@drawable/ic_open_app_grey" />
+                app:srcCompat="@drawable/ic_add_black_24dp" />
         </RelativeLayout>
 
         <FrameLayout
@@ -73,7 +73,8 @@
                 android:id="@+id/widget_stack"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                >
+                android:clickable="true"
+                android:focusable="true">
             </ListView>
 
             <TextView
