@@ -29,6 +29,7 @@ import com.hazizz.droid.Listviews.CommentList.CustomAdapter;
 import com.hazizz.droid.Manager;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
+import com.hazizz.droid.Transactor;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -181,7 +182,7 @@ public class CommentSectionFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+                Transactor.fragmentDialogShowUserDetailDialog(getFragmentManager().beginTransaction(), (long)adapter.getItem(i).getCreator().getId(), adapter.getItem(i).getCommentProfilePic());
             }
         });
     }

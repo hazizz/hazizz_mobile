@@ -22,6 +22,8 @@ import com.hazizz.droid.Communication.POJO.Response.POJOsubject;
 import com.hazizz.droid.Communication.POJO.Response.POJOuser;
 import com.hazizz.droid.Communication.POJO.Response.PojoPermisionUsers;
 import com.hazizz.droid.Communication.POJO.Response.PojoPicSmall;
+import com.hazizz.droid.Communication.POJO.Response.PojoPublicUserData;
+import com.hazizz.droid.Communication.POJO.Response.PojoToken;
 import com.hazizz.droid.Communication.POJO.Response.PojoType;
 import com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
 import com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs.POJOgetTaskDetailed;
@@ -152,12 +154,23 @@ public class Request {
             case "login":
                 requestType = new Login();
                 break;
+
             case "refreshToken":
                 requestType = new RefreshToken();
                 break;
+            case "elevationToken":
+                requestType = new ElevationToken();
+                break;
+
             case "me":
                 requestType = new Me();
                 break;
+
+            case "changePassword":
+                requestType = new ChangePassword();
+                break;
+
+
             case "getGroup":
                 requestType = new GetGroup();
                 break;
@@ -297,6 +310,9 @@ public class Request {
             case "setDisplayName":
                 requestType = new SetDisplayName();
                 break;
+            case "getPublicUserDetail":
+                requestType = new GetPublicUserDetail();
+                break;
 
 
             case "thSchools":
@@ -365,8 +381,6 @@ public class Request {
     public class RefreshToken implements RequestInterface {
         CustomResponseHandler customResponseHandler = new CustomResponseHandler() {
             @Override
-            public void onResponse(HashMap<String, Object> response) { }
-            @Override
             public void onPOJOResponse(Object response) {
                // MiddleMan.cancelAllRequest();
                 POJORefreshToken pojoRefreshToken = (POJORefreshToken)response;
@@ -381,25 +395,12 @@ public class Request {
                 //  POJORefreshToken asd = new POJORefreshToken();
             }
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) { }
-            @Override
             public void onErrorResponse(POJOerror error) {
                 if(error.getErrorCode() == 21){
                     MiddleMan.cancelAllRequest();
                     Log.e("hey", "aut activity opened");
                     Transactor.AuthActivity(act);
                 }
-            }
-            @Override
-            public void onEmptyResponse() { }
-            @Override
-            public void onSuccessfulResponse() { }
-            @Override
-            public void onNoConnection() { }
-
-            @Override
-            public void getHeaders(Headers headers) {
-
             }
         };
 
@@ -425,8 +426,62 @@ public class Request {
         }
     }
 
+
+
+    public class ElevationToken implements RequestInterface {
+        ElevationToken() {
+            Log.e("hey", "created ElevationToken object");
+        }
+        public void setupCall() {
+            HashMap<String, String> headerMap = new HashMap<String, String>();
+            headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
+            headerMap.put("Content-Type", "application/json");
+            call = aRequest.elevationToken(headerMap, body);
+        }
+        @Override
+        public void makeCall() {
+            callSpec(act,  thisRequest, call, cOnResponse, gson);
+        }
+        @Override
+        public void makeCallAgain() {
+            callAgainSpec(act,  thisRequest, call, cOnResponse, gson);
+        }
+        @Override
+        public void callIsSuccessful(Response<ResponseBody> response) {
+            PojoToken pojoToken = gson.fromJson(response.body().charStream(), PojoToken.class);
+            cOnResponse.onPOJOResponse(pojoToken);
+        }
+    }
+
+
     public Call<ResponseBody> getCall(){
         return call;
+    }
+
+
+
+    public class ChangePassword implements RequestInterface {
+        ChangePassword() {
+            Log.e("hey", "created Me object");
+        }
+        public void setupCall() {
+            HashMap<String, String> headerMap = new HashMap<String, String>();
+            headerMap.put("Content-Type", "application/json");
+            headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
+            call = aRequest.changePassword(headerMap, body);
+        }
+        @Override
+        public void makeCall() {
+            call(act,  thisRequest, call, cOnResponse, gson);
+        }
+        @Override
+        public void makeCallAgain() {
+            callAgain(act,  thisRequest, call, cOnResponse, gson);
+        }
+        @Override
+        public void callIsSuccessful(Response<ResponseBody> response) {
+            cOnResponse.onSuccessfulResponse();
+        }
     }
 
     public class Me implements RequestInterface {
@@ -1631,6 +1686,31 @@ public class Request {
             HashMap<Integer, POJOMembersProfilePic> castedMap = gson.fromJson(response.body().charStream(), listType);
             cOnResponse.onPOJOResponse(castedMap);
             Log.e("hey", "size of response map: " + castedMap.size());
+        }
+    }
+
+
+    public class GetPublicUserDetail implements RequestInterface {
+        GetPublicUserDetail() {
+            Log.e("hey", "created getPublicUserDetail object");
+        }
+        public void setupCall() {
+            HashMap<String, String> headerMap = new HashMap<String, String>();
+            headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
+            call = aRequest.getPublicUserDetail(vars.get(Strings.Path.USERID).toString(),headerMap);
+        }
+        @Override
+        public void makeCall() {
+            call(act,  thisRequest, call, cOnResponse, gson);
+        }
+        @Override
+        public void makeCallAgain() {
+            callAgain(act,  thisRequest, call, cOnResponse, gson);
+        }
+        @Override
+        public void callIsSuccessful(Response<ResponseBody> response) {
+            PojoPublicUserData castedObject = gson.fromJson(response.body().charStream(), PojoPublicUserData.class);
+            cOnResponse.onPOJOResponse(castedObject);
         }
     }
 

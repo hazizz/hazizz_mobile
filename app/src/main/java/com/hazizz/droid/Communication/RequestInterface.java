@@ -118,6 +118,81 @@ public interface RequestInterface {
           };
           return callback;
      }
+
+
+     default void callSpec(Activity act, Request request, Call<ResponseBody> call, CustomResponseHandler cOnResponse, Gson gson){
+          call.enqueue(buildCallbackSpec(act, request, call, cOnResponse, gson));
+     }
+
+     default void callAgainSpec(Activity act, Request request, Call<ResponseBody> call, CustomResponseHandler cOnResponse, Gson gson){
+          call.clone().enqueue(buildCallbackSpec(act, request, call, cOnResponse, gson));
+          Log.e("hey", "CALL AGAIN");
+     }
+
+     default Callback<ResponseBody> buildCallbackSpec(Activity act, Request request, Call<ResponseBody> call, CustomResponseHandler cOnResponse, Gson gson){
+          Callback<ResponseBody> callback = new Callback<ResponseBody>() {
+               @Override
+               public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    Log.e("hey", "gotResponse");
+                    Log.e("hey", response.raw().toString());
+
+                    if(response.body() == null){
+                         Log.e("hey", "response is null ");
+                    }
+                    if(response.isSuccessful()){ // response != null
+                         Log.e("hey", "response.isSuccessful()");
+                         callIsSuccessful(response);
+                    }
+
+                    else if(!response.isSuccessful()){ // response != null
+                         POJOerror pojoError = gson.fromJson(response.errorBody().charStream(),POJOerror.class);
+                         Log.e("hey", "errorCOde is: " + pojoError.getErrorCode());
+                         Log.e("hey", "errorMessage is: " + pojoError.getMessage());
+                         if(pojoError.getErrorCode() == 1){
+                              Manager.CrashManager.setCrashData(pojoError, call);
+                              ErrorHandler.unExpectedResponseDialog(act);
+                         }
+
+                         if(pojoError.getErrorCode() == 0) {
+                              if(SharedPrefs.TokenManager.tokenInvalidated(act)){
+                                   Intent i = new Intent(act, AuthActivity.class);
+
+                                   act.startActivity(i);
+                              }
+
+                         }else if(pojoError.getErrorCode() == 19){
+                              if(!Manager.ThreadManager.isDelayed()) {
+                                   Manager.ThreadManager.startDelay();
+                                   MiddleMan.cancelAndSaveAllRequests();
+                              }else {
+                                   MiddleMan.addToCallAgain(request);
+                              }
+                              Answers.getInstance().logCustom(new CustomEvent("Request")
+                                      .putCustomAttribute("request", "to many requests")
+                              );
+
+                         }else {
+                              cOnResponse.onErrorResponse(pojoError);
+
+                         }
+                         String errorMessage =  pojoError.getMessage().substring(0, Math.min(pojoError.getMessage().length(), 100));;
+                         Answers.getInstance().logCustom(new CustomEvent("Request error")
+                                 .putCustomAttribute("error code: ", pojoError.getErrorCode())
+                                 .putCustomAttribute("error message: ", errorMessage)
+                                 .putCustomAttribute("time: ", pojoError.getTime())
+                         );
+                    }
+                    MiddleMan.gotRequestResponse(request);
+               }
+               @Override
+               public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    cOnResponse.onFailure(call, t);
+               }
+          };
+          return callback;
+     }
+
+
      void makeCall();
 
      void makeCallAgain();

@@ -7,6 +7,7 @@ import lombok.Data;
 @Data
 public class CommentItem {
 
+
     String commentProfilePic;
     POJOcreator creator;
     String commentContent;

@@ -28,15 +28,29 @@ public interface RequestTypes{
             @Body HashMap<String, Object> register
     );
 
+    @POST("auth/")
+    Call<ResponseBody> login(
+            @HeaderMap Map<String, String> headers,
+            @Body HashMap<String, Object> registerBody
+    );
+
+    @POST("elevation/")
+    Call<ResponseBody> elevationToken(
+            @HeaderMap Map<String, String> headers,
+            @Body HashMap<String, Object> newPasswordBody
+    );
+
+
     @GET("users/")
     Call<ResponseBody> getUsers(
             @HeaderMap Map<String, String> headers
     );
 
-    @POST("auth/")
-    Call<ResponseBody> login(
+
+    @PATCH("me/password")
+    Call<ResponseBody> changePassword(
             @HeaderMap Map<String, String> headers,
-            @Body HashMap<String, Object> registerBody
+            @Body HashMap<String, Object> changePasswordBody
     );
 
     @GET("me/details")
@@ -346,6 +360,13 @@ public interface RequestTypes{
     Call<ResponseBody> getAnnouncement(
             @Path("groupId") String groupId,
             @Path("announcementId") String announcementId,
+            @HeaderMap Map<String, String> headers
+    );
+
+
+    @GET("users/{userId}")
+    Call<ResponseBody> getPublicUserDetail(
+            @Path("userId") String userId,
             @HeaderMap Map<String, String> headers
     );
 

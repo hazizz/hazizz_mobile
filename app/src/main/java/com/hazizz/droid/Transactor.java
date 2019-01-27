@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -23,6 +24,7 @@ import com.hazizz.droid.Fragments.ChatFragment;
 import com.hazizz.droid.Fragments.CommentSectionFragment;
 import com.hazizz.droid.Fragments.CreateGroupFragment;
 import com.hazizz.droid.Fragments.CreateSubjectFragment;
+import com.hazizz.droid.Fragments.Dialog.UserDetailDialogFragment;
 import com.hazizz.droid.Fragments.GroupTabs.GroupTabFragment;
 import com.hazizz.droid.Fragments.JoinGroupFragment;
 import com.hazizz.droid.Fragments.MainTab.GroupsFragment;
@@ -57,6 +59,18 @@ public abstract class Transactor extends FragmentActivity {
             return fManager.findFragmentById(R.id.fragment_container);
         }
     }
+
+    public static void fragmentDialogShowUserDetailDialog(@Nonnull FragmentTransaction fTransaction, long userId, String userProfilePic){
+        Bundle bundle = new Bundle();
+        bundle.putLong(Strings.Path.USERID.toString(), userId);
+        bundle.putString(Strings.Other.PROFILEPIC.toString(), userProfilePic);
+        DialogFragment dialogFragment = new UserDetailDialogFragment();
+        dialogFragment.setArguments(bundle);
+        dialogFragment.show(fTransaction, "dialog");
+
+    }
+
+
 
     public static void fragmentFirst(@Nonnull FragmentTransaction fTransaction){
         FirstFragment frag = new FirstFragment();

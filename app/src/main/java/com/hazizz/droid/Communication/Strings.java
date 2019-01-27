@@ -59,5 +59,19 @@ public abstract class Strings {
         }
     }
 
+    public enum Other{
+        PROFILEPIC("profilepic");
+
+        private String value;
+
+        Other(String value){
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+    }
+
 
 }
