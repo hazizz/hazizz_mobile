@@ -17,7 +17,7 @@ repositories {
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "com.indeed.hazizz"
+        applicationId "com.hazizz.droid"
         minSdkVersion 16
         targetSdkVersion 27
         versionCode 14
@@ -60,18 +60,15 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-
         
     implementation 'org.projectlombok:lombok:1.16.20'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.8'
 
     implementation 'com.toptoche.searchablespinner:searchablespinnerlibrary:1.3.1'
 
-
-   // ompileOnly "org.projectlombok:lombok:1.16.20"
     annotationProcessor "org.projectlombok:lombok:1.16.20"
-   // implementation 'com.crashlytics.sdk.android:crashlytics-ndk:2.0.5'
 
+    implementation 'com.google.firebase:firebase-core:16.0.1'
 }
 
 crashlytics {
@@ -79,3 +76,5 @@ crashlytics {
     androidNdkOut 'src/main/obj'
     androidNdkLibsOut 'src/main/libs'
 }
+
+apply plugin: 'com.google.gms.google-services'
