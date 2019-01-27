@@ -130,7 +130,9 @@
                 android:layout_height="wrap_content"
                 android:text="@string/group_type_invite_only"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/radioButton_open" />
+                app:layout_constraintTop_toBottomOf="@+id/radioButton_open"
+                android:visibility="gone"
+                />
 
         </RadioGroup>
 

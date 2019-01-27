@@ -60,7 +60,6 @@ public class LoginFragment extends Fragment {
             switchToMain();
             button_login.setEnabled(true);
             Transactor.fragmentFirst(getFragmentManager().beginTransaction());
-
         }
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {

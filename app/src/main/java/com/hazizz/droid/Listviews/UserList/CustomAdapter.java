@@ -64,7 +64,7 @@ public class CustomAdapter extends ArrayAdapter<UserItem> {
         }else{
             holder.userProfilePic.setImageResource(R.mipmap.ic_launcher_round);
         }
-        holder.userName.setText(userItem.getUserName());
+        holder.userName.setText(userItem.getDisplayName());
 
 
         if(userItem.userRank == Strings.Rank.OWNER.getValue()){

@@ -180,10 +180,12 @@ public class MainOptionsFragment extends Fragment {
                 switch (i){
                     case 0:
                         //Fiók Szerkesztés
+                        // átmenetileg
+                        Transactor.fragmentPassword(getFragmentManager().beginTransaction());
                         break;
                     case 1:
                         //Jelszó Beállítás
-                        Transactor.fragmentPassword(getFragmentManager().beginTransaction());
+
                         break;
                     case 2:
                     default:

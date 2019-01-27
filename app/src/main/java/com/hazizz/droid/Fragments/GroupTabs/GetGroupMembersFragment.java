@@ -25,6 +25,7 @@ import com.hazizz.droid.Listviews.UserList.UserItem;
 import com.hazizz.droid.Manager;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
+import com.hazizz.droid.Transactor;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -78,9 +79,9 @@ public class GetGroupMembersFragment extends Fragment {
                     if(pojoPermisionUser.getOWNER() != null) {
                         for (POJOuser u : pojoPermisionUser.getOWNER()) {
                             try {
-                                listUser.add(new UserItem(u.getDisplayName(), profilePicMap.get(u.getId()).getData(), Strings.Rank.OWNER.getValue()));
+                                listUser.add(new UserItem(u.getId(),u.getDisplayName(), u.getUsername(), profilePicMap.get(u.getId()).getData(), Strings.Rank.OWNER.getValue()));
                             } catch (NullPointerException e) {
-                                listUser.add(new UserItem(u.getUsername(), null, Strings.Rank.OWNER.getValue()));
+                                listUser.add(new UserItem(u.getId(),u.getDisplayName(), u.getUsername(), null, Strings.Rank.OWNER.getValue()));
                             }
                             Manager.GroupRankManager.setRank(u.getId(), Strings.Rank.OWNER);
                         }
@@ -88,9 +89,9 @@ public class GetGroupMembersFragment extends Fragment {
                     if(pojoPermisionUser.getMODERATOR() != null) {
                         for (POJOuser u : pojoPermisionUser.getMODERATOR()) {
                             try {
-                                listUser.add(new UserItem(u.getUsername(), profilePicMap.get(u.getId()).getData(), Strings.Rank.MODERATOR.getValue()));
+                                listUser.add(new UserItem(u.getId(),u.getDisplayName(),u.getUsername(), profilePicMap.get(u.getId()).getData(), Strings.Rank.MODERATOR.getValue()));
                             } catch (NullPointerException e) {
-                                listUser.add(new UserItem(u.getUsername(), null, Strings.Rank.MODERATOR.getValue()));
+                                listUser.add(new UserItem(u.getId(),u.getDisplayName(),u.getUsername(), null, Strings.Rank.MODERATOR.getValue()));
                             }
                             Manager.GroupRankManager.setRank(u.getId(), Strings.Rank.MODERATOR);
                         }
@@ -98,9 +99,9 @@ public class GetGroupMembersFragment extends Fragment {
                     if(pojoPermisionUser.getUSER() != null) {
                         for (POJOuser u : pojoPermisionUser.getUSER()) {
                             try {
-                                listUser.add(new UserItem(u.getUsername(), profilePicMap.get(u.getId()).getData(), Strings.Rank.USER.getValue()));
+                                listUser.add(new UserItem(u.getId(),u.getDisplayName(),u.getUsername(), profilePicMap.get(u.getId()).getData(), Strings.Rank.USER.getValue()));
                             } catch (NullPointerException e) {
-                                listUser.add(new UserItem(u.getUsername(), null, Strings.Rank.USER.getValue()));
+                                listUser.add(new UserItem(u.getId(),u.getDisplayName(),u.getUsername(), null, Strings.Rank.USER.getValue()));
                             }
                             Manager.GroupRankManager.setRank(u.getId(), Strings.Rank.USER);
                         }
@@ -140,7 +141,8 @@ public class GetGroupMembersFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+                Transactor.fragmentDialogShowUserDetailDialog(getFragmentManager().beginTransaction(), adapter.getItem(i).getId(),
+                        Manager.ProfilePicManager.getCurrentGroupMembersProfilePic().get((int)adapter.getItem(i).getId()).getData());
             }
         });
     }

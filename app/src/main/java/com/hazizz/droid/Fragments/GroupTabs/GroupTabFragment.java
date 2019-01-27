@@ -130,8 +130,6 @@ public class GroupTabFragment extends Fragment {
     public void getGroupMemberProfilePics() {
         CustomResponseHandler responseHandler = new CustomResponseHandler() {
             @Override
-            public void onResponse(HashMap<String, Object> response) { }
-            @Override
             public void onPOJOResponse(Object response) {
                 Manager.ProfilePicManager.setCurrentGroupMembersProfilePic((HashMap<Integer, POJOMembersProfilePic>)response, groupId);
                 Log.e("hey", "got response");
