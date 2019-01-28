@@ -49,6 +49,10 @@ public abstract class MiddleMan{
         }
     }
 
+  /*  public static Request instantiateRequest(){
+        return new Request();
+    } */
+
     public static void newRequest(Activity act, String requestType, HashMap<String, Object>  body, CustomResponseHandler cOnResponse, EnumMap<Strings.Path, Object> vars) {
         Request newRequest = new Request(act, requestType, body, cOnResponse, vars);
         for (Request r : requestQueue)

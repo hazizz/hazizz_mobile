@@ -34,24 +34,19 @@ import retrofit2.Call;
 
 public class GroupsFragment extends Fragment {
 
-    public List<POJOgroup> groups;
     private List<GroupItem> listGroup;
     private View v;
     private CustomAdapter adapter;
     private TextView textView_noContent;
     private TextView textView_title;
 
-    private String dest;
-
     private SwipeRefreshLayout sRefreshLayout;
-
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_group, container, false);
         ((MainActivity)getActivity()).onFragmentCreated();
-        groups = new ArrayList<POJOgroup>();
 
         createViewList();
         textView_noContent = v.findViewById(R.id.textView_noContent);
@@ -65,16 +60,12 @@ public class GroupsFragment extends Fragment {
 
         getGroups();
 
-
         return v;
     }
 
     public void getGroups() {
-        Log.e("hey", "atleast here 2");
         adapter.clear();
         CustomResponseHandler responseHandler = new CustomResponseHandler() {
-            @Override
-            public void onResponse(HashMap<String, Object> response) { }
             @Override
             public void onPOJOResponse(Object response) {
                 textView_noContent.setVisibility(v.INVISIBLE);
@@ -82,25 +73,20 @@ public class GroupsFragment extends Fragment {
                 listGroup.clear();
                 if(!castedListFullOfPojos.isEmpty()) {
                     for (POJOgroup g : castedListFullOfPojos) {
-                        listGroup.add(new GroupItem(R.drawable.ic_launcher_background, g.getName(), g.getId()));
+                        listGroup.add(new GroupItem(R.drawable.ic_launcher_background, g.getUniqueName(), g.getId()));
                     }
-
                     adapter.notifyDataSetChanged();
                 }else{
                     textView_noContent.setText(R.string.error_notMemberOfGroup);
                 }
                 sRefreshLayout.setRefreshing(false);
-                Log.e("hey", "got response");
             }
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.e("hey", "4");
-                Log.e("hey", "got here onFailure");
                 sRefreshLayout.setRefreshing(false);
             }
             @Override
             public void onErrorResponse(POJOerror error) {
-                Log.e("hey", "onErrorResponse");
                 sRefreshLayout.setRefreshing(false);
             }
             @Override
@@ -150,11 +136,6 @@ public class GroupsFragment extends Fragment {
             }
         });
     }
-
-    public void toJoinGroup(){
-        Transactor.fragmentCreateGroup(getFragmentManager().beginTransaction());
-    }
-
     public void toCreateGroup(FragmentManager fm){
         Transactor.fragmentCreateGroup(fm.beginTransaction());
     }

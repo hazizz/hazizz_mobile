@@ -202,15 +202,16 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
 
                 textView_title.setText(title);
                 textView_description.setText(descripiton);
-                String creatorUsername = pojoResponse.getCreator().getUsername();
-                textView_creatorName.setText(creatorUsername);
+
+                textView_creatorName.setText(pojoResponse.getCreator().getDisplayName());
 
                 textView_subject.setText(subjectName);
                 textView_group.setText(groupName);
 
                 textView_deadLine.setText(date);
 
-                if(Manager.MeInfo.getProfileName().equals(creatorUsername)){
+                String creatorUsername = pojoResponse.getCreator().getUsername();
+                if(Manager.MeInfo.getProfileName().equals(creatorUsername) || Manager.MeInfo.getRankInCurrentGroup().getValue() >= Strings.Rank.MODERATOR.getValue() ){
                     button_delete.setVisibility(View.VISIBLE);
                     button_edit.setVisibility(View.VISIBLE);
                 }

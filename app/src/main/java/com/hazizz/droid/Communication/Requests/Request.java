@@ -145,6 +145,39 @@ public class Request {
         tRequest = thera_retrofit.create(RequestTypes.class);
     }
 
+    public Request(Context context, RequestInterface reqType, HashMap<String, Object> body, CustomResponseHandler cOnResponse, EnumMap<Strings.Path, Object> vars) {
+        this.cOnResponse = cOnResponse;
+        this.body = body;
+        this.context = context;
+        this.vars = vars;
+
+        //.excludeFieldsWithModifiers(Modifier.FINAL, Modifier.TRANSIENT, Modifier.STATIC)
+        Gson gson = new GsonBuilder().serializeNulls().excludeFieldsWithoutExposeAnnotation().create();
+
+        okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(5, TimeUnit.SECONDS)
+                .writeTimeout(5, TimeUnit.SECONDS)
+                .readTimeout(5, TimeUnit.SECONDS)
+                .build();
+
+        retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(okHttpClient)
+                //  .setEndpoint(endPoint)F
+                .build();
+
+        thera_retrofit = new Retrofit.Builder()
+                .baseUrl(THERA_URL)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(okHttpClient)
+                .build();
+
+        findRequestType("");
+        aRequest = retrofit.create(RequestTypes.class);
+        tRequest = thera_retrofit.create(RequestTypes.class);
+    }
+
     //called int the constructor
     private void findRequestType(String reqType) {
         switch (reqType) {

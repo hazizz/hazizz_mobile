@@ -83,10 +83,6 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
 
     CustomResponseHandler rh_task = new CustomResponseHandler() {
         @Override
-        public void onPOJOResponse(Object response) {
-            Log.e("hey", "got POJOresponse");
-        }
-        @Override
         public void onErrorResponse(POJOerror error) {
             Log.e("hey", error.getMessage());
             int errorCode = error.getErrorCode();
