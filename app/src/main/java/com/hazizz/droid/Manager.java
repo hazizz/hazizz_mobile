@@ -220,7 +220,16 @@ public class Manager {
         private static String profileEmail = "";
         private static String profilePic = "";
         private static String password = "";
+        private static Strings.Rank rankInCurrentGroup = Strings.Rank.NULL;
 
+
+        public static void setRankInCurrentGroup(Strings.Rank rank){
+            rankInCurrentGroup = rank;
+        }
+
+        public static Strings.Rank getRankInCurrentGroup(){
+            return rankInCurrentGroup;
+        }
 
         public static void setPassword(String p){
             password = p;

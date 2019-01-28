@@ -27,8 +27,13 @@
             android:layout_width="175dp"
 
             android:layout_height="84dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
-            app:layout_constraintStart_toEndOf="@+id/textView5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
 
@@ -114,22 +119,22 @@
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginEnd="54dp"
+            android:layout_marginRight="54dp"
+            android:layout_marginTop="25dp"
             android:text="@string/subject_fragment_taskeditor"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/relativeLayout2"
             app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
         <TextView
             android:id="@+id/textView5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginStart="10dp"
+            android:layout_marginEnd="2dp"
+            android:layout_marginRight="2dp"
             android:layout_marginTop="16dp"
             android:text="@string/tasktype_fragment_taskeditor"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/relativeLayout2"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
@@ -159,12 +164,16 @@
             android:id="@+id/textView_deadline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:layout_marginLeft="24dp"
+            android:layout_marginRight="8dp"
             android:layout_marginStart="24dp"
             android:clickable="true"
             android:onClick="onClick"
             android:text="@string/choose_deadline_fragment_taskeditor"
             android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.027"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editText_description" />
 

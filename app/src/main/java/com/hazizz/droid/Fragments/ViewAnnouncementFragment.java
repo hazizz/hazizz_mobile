@@ -166,11 +166,6 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
         }else{Log.e("hey", "bundle is null");}
         rh = new CustomResponseHandler() {
             @Override
-            public void onResponse(HashMap<String, Object> response) {
-                Log.e("hey", "got regular response");
-
-            }
-            @Override
             public void onPOJOResponse(Object response) {
 
                 POJODetailedAnnouncement pojoResponse = (POJODetailedAnnouncement)response;
@@ -191,7 +186,7 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
                 group.setText(pojoResponse.getGroup().getName());
 
 
-                if(Manager.MeInfo.getProfileName().equals(creatorUsername)){
+                if(Manager.MeInfo.getProfileName().equals(creatorUsername) || Manager.MeInfo.getRankInCurrentGroup().getValue() >= Strings.Rank.MODERATOR.getValue() ){
                     button_delete.setVisibility(View.VISIBLE);
                     button_edit.setVisibility(View.VISIBLE);
                 }
@@ -201,19 +196,6 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
                 Log.e("hey", "4");
                 Log.e("hey", "got here onFailure");
                 Log.e("hey", "task created");
-            }
-            @Override
-            public void onErrorResponse(POJOerror error) {
-                Log.e("hey", "onErrorResponse");
-            }
-            @Override
-            public void onEmptyResponse() { }
-            @Override
-            public void onSuccessfulResponse() { }
-            @Override
-            public void onNoConnection() {
-                //    textView_noContent.setText(R.string.info_noInternetAccess);
-
             }
         };
         EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);

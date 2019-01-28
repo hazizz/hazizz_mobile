@@ -9,19 +9,10 @@ public class POJOgroup {
 
     private int id;
     private String name;
+    private String uniqueName;
     private String groupType;
-    private List<POJOgroupUsers> users;
-    private List<POJOpost> posts;
-    private String creationDate;
-    private String lastUpdated;
+    private long userCount;
 
     public POJOgroup(){
-        this.id = id;
-        this.name = name;
-        this.groupType = groupType;
-        this.users = users;
-        this.posts = posts;
-        this.creationDate = creationDate;
-        this.lastUpdated = lastUpdated;
     }
 }
