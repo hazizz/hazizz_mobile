@@ -6,10 +6,8 @@ import android.content.Context;
 import com.hazizz.droid.Network;
 import android.util.Log;
 
-
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.Requests.Request;
-
 
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -49,9 +47,9 @@ public abstract class MiddleMan{
         }
     }
 
-  /*  public static Request instantiateRequest(){
-        return new Request();
-    } */
+    public static void instantiateNewRequest(Context c, RequestInterface r){
+        new Request(c, r);
+    }
 
     public static void newRequest(Activity act, String requestType, HashMap<String, Object>  body, CustomResponseHandler cOnResponse, EnumMap<Strings.Path, Object> vars) {
         Request newRequest = new Request(act, requestType, body, cOnResponse, vars);
@@ -96,6 +94,9 @@ public abstract class MiddleMan{
             r.requestType.setupCall();
             r.requestType.makeCallAgain();
         }
+
+
+
     }
 
     public static void sendRequestsFromQ() {

@@ -154,11 +154,12 @@ public interface RequestTypes{
 
     );
 
-    @GET("tasks/{byName}/{byId}/{taskId}")
-    Call<ResponseBody> getTaskBy(
+    @GET("{whereName}/{byName}/{byId}/{whereId}")
+    Call<ResponseBody> getATBy(
+            @Path("whereName") String whereName,
             @Path("byName") String byName,
-            @Path("byId") String groupId,
-            @Path("taskId") String taskId,
+            @Path("byId") String byId,
+            @Path("whereId") String whereId,
             @HeaderMap Map<String, String> headers
     );
 

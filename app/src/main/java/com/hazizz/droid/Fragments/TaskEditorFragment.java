@@ -323,11 +323,9 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
         HashMap<String, Object> requestBody = new HashMap<>();
 
         int tTypeId = spinner_taskType.getSelectedItemPosition() + 1;
-        Log.e("hey", "task type: "+tTypeId);
         requestBody.put("taskType", tTypeId);
         requestBody.put("taskTitle", editText_taskTitle.getText().toString().trim());
         requestBody.put("description", editText_description.getText().toString());
-        Log.e("hey", "date: " + year + "-" + month + "-" + day);
         requestBody.put("dueDate", str_year + "-" + str_month + "-" + str_day);
 
         EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);

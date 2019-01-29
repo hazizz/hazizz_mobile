@@ -144,15 +144,6 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
                     public void onPOJOResponse(Object response) {
                         Manager.ProfilePicManager.setCurrentGroupMembersProfilePic((HashMap<Integer, POJOMembersProfilePic>)response, groupId);
                     }
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Log.e("hey", "4");
-                        Log.e("hey", "got here onFailure");
-                    }
-                    @Override
-                    public void onErrorResponse(POJOerror error) {
-                        Log.e("hey", "onErrorResponse");
-                    }
                 };
                 EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
                 vars.put(Strings.Path.GROUPID, Integer.toString(groupId));
