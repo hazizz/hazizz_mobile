@@ -71,14 +71,11 @@ public interface RequestInterface {
                               MiddleMan.addToCallAgain(request);
                               if(!Manager.ThreadManager.isFreezed()) {
                                    Manager.ThreadManager.freezeThread();
-                                   HashMap<String, Object> body = new HashMap<>();
+
                                    body.put("username", SharedPrefs.getString(act.getBaseContext(), "userInfo", "username"));
                                    body.put("refreshToken", SharedPrefs.TokenManager.getRefreshToken(act.getBaseContext()));
 
-                                   Log.e("hey", "the username is: " + body.get("username"));
-                                   Log.e("hey", "the refreshToken is: " + body.get("refreshToken"));
-
-                                   Request r = new Request(act, "refreshToken", body, null, null);
+                                   Request r = new Request(act, new Request.RefreshToken());
                                    r.requestType.setupCall();
                                    r.requestType.makeCall();
 

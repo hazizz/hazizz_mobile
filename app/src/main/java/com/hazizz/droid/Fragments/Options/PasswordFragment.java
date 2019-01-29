@@ -83,10 +83,7 @@ public class PasswordFragment extends Fragment {
         public void onPOJOResponse(Object response) {
             String elevationToken = ((PojoToken)response).getToken();
 
-            HashMap<String, Object> body = new HashMap<>();
-            // new password
-            body.put("password", hashedNewPassword);
-            body.put("token", elevationToken);
+
             MiddleMan.newRequest(getActivity(), "changePassword", body, changePassRh, null);
         }
 
@@ -181,8 +178,7 @@ public class PasswordFragment extends Fragment {
                     if(newPassword.length() >= 8) {
                         String hashedOldPassword = Converter.hashString(oldPassword);
                         hashedNewPassword = Converter.hashString(newPassword);
-                        HashMap<String, Object> body = new HashMap<>();
-                        body.put("password", hashedOldPassword);
+
 
                         MiddleMan.newRequest(getActivity(), "elevationToken", body, elevationRh, null);
                     }else{

@@ -145,12 +145,7 @@ public class RegisterFragment extends Fragment {
                         if (checkBox_termsAndConditions.isChecked()) {
                             password = Converter.hashString(editText_password.getText().toString());
 
-                            HashMap<String, Object> requestBody = new HashMap<>();
 
-                            requestBody.put("username", username);
-                            requestBody.put("password", password);
-                            requestBody.put("emailAddress", email);
-                            requestBody.put("consent", true);
                             button_signup.setEnabled(false);
 
                             MiddleMan.newRequest(getActivity(), "register", requestBody, responseHandler, null);
