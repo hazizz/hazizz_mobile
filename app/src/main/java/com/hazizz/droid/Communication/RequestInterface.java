@@ -11,6 +11,7 @@ import com.hazizz.droid.Activities.AuthActivity;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.Requests.Request;
+import com.hazizz.droid.Communication.Requests.RequestType.Login;
 import com.hazizz.droid.ErrorHandler;
 import com.hazizz.droid.Manager;
 import com.hazizz.droid.SharedPrefs;
@@ -72,12 +73,11 @@ public interface RequestInterface {
                               if(!Manager.ThreadManager.isFreezed()) {
                                    Manager.ThreadManager.freezeThread();
 
-                                   body.put("username", SharedPrefs.getString(act.getBaseContext(), "userInfo", "username"));
-                                   body.put("refreshToken", SharedPrefs.TokenManager.getRefreshToken(act.getBaseContext()));
 
-                                   Request r = new Request(act, new Request.RefreshToken());
-                                   r.requestType.setupCall();
-                                   r.requestType.makeCall();
+                                   Request r = new Login(act, null, SharedPrefs.getString(act.getBaseContext(), "userInfo", "username"),
+                                                         SharedPrefs.TokenManager.getRefreshToken(act.getBaseContext()));
+                                   r.setupCall();
+                                   r.makeCall();
 
                                    Answers.getInstance().logCustom(new CustomEvent("Token")
                                            .putCustomAttribute("token", "refresh the token")

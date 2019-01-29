@@ -47,35 +47,14 @@ public abstract class MiddleMan{
         }
     }
 
-    public static void instantiateNewRequest(Context c, RequestInterface r){
-        new Request(c, r);
-    }
 
-    public static void newRequest(Activity act, String requestType, HashMap<String, Object>  body, CustomResponseHandler cOnResponse, EnumMap<Strings.Path, Object> vars) {
-        Request newRequest = new Request(act, requestType, body, cOnResponse, vars);
+    public static void newRequest(Request newRequest) {
         for (Request r : requestQueue)
             if (r.requestType.getClass() == newRequest.requestType.getClass()) {
                 requestQueue.remove(r);
             }
-        if(Network.getActiveNetwork(act) == null || !Network.isConnectedOrConnecting(act)) {
-            newRequest.cOnResponse.onNoConnection();
-        }
-        try {
-            requestQueue.put(newRequest);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void newRequest(Context context, String requestType, HashMap<String, Object>  body, CustomResponseHandler cOnResponse, EnumMap<Strings.Path, Object> vars) {
-        Request newRequest = new Request(context, requestType, body, cOnResponse, vars);
-        for (Request r : requestQueue) {
-            if(r.requestType.getClass() == newRequest.requestType.getClass()){
-                requestQueue.remove(r);
-            }
-        }
-        if(Network.getActiveNetwork(context) == null || !Network.isConnectedOrConnecting(context)) {
-            newRequest.cOnResponse.onNoConnection();
+        if(Network.getActiveNetwork(newRequest.getActivity()) == null || !Network.isConnectedOrConnecting(newRequest.getActivity())) {
+            newRequest.getResponseHandler().onNoConnection();
         }
         try {
             requestQueue.put(newRequest);
