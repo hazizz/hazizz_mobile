@@ -1,8 +1,10 @@
 package com.hazizz.droid.Communication.Requests.RequestType.Thera;
 
+import android.app.Activity;
 import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
+import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.Requests.Request;
 import com.hazizz.droid.SharedPrefs;
 
@@ -13,7 +15,8 @@ import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 public class ThSchools extends Request {
-    ThSchools() {
+    public ThSchools(Activity act, CustomResponseHandler rh) {
+        super(act, rh);
         Log.e("hey", "created ThSchools object");
     }
     public void setupCall() {

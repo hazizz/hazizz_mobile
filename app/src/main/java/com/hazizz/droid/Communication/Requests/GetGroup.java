@@ -1,5 +1,6 @@
 package com.hazizz.droid.Communication.Requests;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -14,8 +15,8 @@ import retrofit2.Response;
 
 public class GetGroup extends Request {
     private int p_groupId;
-    GetGroup(Context c, CustomResponseHandler rh, int p_groupId) {
-        super(c, rh);
+    GetGroup(Activity act, CustomResponseHandler rh, int p_groupId) {
+        super(act, rh);
         Log.e("hey", "created GetGroup object");
         this.p_groupId = p_groupId;
     }

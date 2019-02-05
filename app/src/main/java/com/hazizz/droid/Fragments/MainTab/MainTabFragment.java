@@ -22,7 +22,6 @@ public class MainTabFragment extends Fragment{
 
     private View v;
 
-    private TextView textView_title;
     public PagerAdapter adapter;
 
     private int startingTab;
@@ -44,9 +43,9 @@ public class MainTabFragment extends Fragment{
         v = inflater.inflate(R.layout.fragment_tabmain, container, false);
         Log.e("hey", "GroupTab fragment created");
 
+        getActivity().setTitle(R.string.app_name);
         startingTab = getArguments().getInt("startingTab");
 
-        textView_title = v.findViewById(R.id.textView_title);
         //   ((MainActivity)getActivity()).onFragmentCreated();
 
         TabLayout tabLayout = (TabLayout) v.findViewById(R.id.tab_layout);

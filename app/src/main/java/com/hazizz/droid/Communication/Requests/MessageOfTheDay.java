@@ -1,5 +1,6 @@
 package com.hazizz.droid.Communication.Requests;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -11,8 +12,8 @@ import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 public class MessageOfTheDay extends Request {
-    MessageOfTheDay(Context c, CustomResponseHandler rh) {
-        super(c, rh);
+    public MessageOfTheDay(Activity act, CustomResponseHandler rh) {
+        super(act, rh);
         Log.e("hey", "created MessageOfTheDay object");
     }
 

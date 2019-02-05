@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,11 +66,13 @@ public class CustomAdapter extends ArrayAdapter<CommentItem>  {
         holder.commentName.setText(commentItem.getCreator().getDisplayName());
         holder.commentContent.setText(commentItem.getCommentContent());
 
-        if(Manager.GroupRankManager.getRank((int)commentItem.getCreator().getId()).equals(Strings.Rank.OWNER)){
+        Strings.Rank rank = Manager.GroupRankManager.getRank((int)commentItem.getCreator().getId());
+        Log.e("hey", "hehjó: " + rank.toString() + ", " + rank.getValue() + ", " + commentItem.getCreator().getId());
+        if(rank.getValue() == Strings.Rank.OWNER.getValue()){
             holder.badge_owner.setVisibility(View.VISIBLE);
-        }else if(Manager.GroupRankManager.getRank((int)commentItem.getCreator().getId()).equals(Strings.Rank.MODERATOR)){
+        }else if(rank.getValue() == Strings.Rank.MODERATOR.getValue()){
 
-        }else if(Manager.GroupRankManager.getRank((int)commentItem.getCreator().getId()).equals(Strings.Rank.USER)){
+        }else if(rank.getValue() == Strings.Rank.USER.getValue()){
 
         }
         return convertView;

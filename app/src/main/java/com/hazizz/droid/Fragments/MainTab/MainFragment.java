@@ -17,6 +17,8 @@ import com.hazizz.droid.Activities.MainActivity;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
+import com.hazizz.droid.Communication.Requests.GetTasksFromMe;
+import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.D8;
 import com.hazizz.droid.Listviews.TaskList.Main.CustomAdapter;
 import com.hazizz.droid.Listviews.TaskList.TaskItem;
@@ -83,14 +85,19 @@ public class MainFragment extends Fragment {
                 vars.put(Strings.Id.TASK.toString(), ((TaskItem)listView.getItemAtPosition(i)).getTaskId());
                 vars.put(Strings.Id.GROUP.toString(), ((TaskItem)listView.getItemAtPosition(i)).getGroup().getId()); */
              //   Log.e("hey", "asd: " + vars.get("taskId") + ", " + vars.get("groupId"));
-                int subjectId;
-                if(((TaskItem)listView.getItemAtPosition(i)).getSubject() != null){
-                    subjectId = ((TaskItem)listView.getItemAtPosition(i)).getSubject().getId();
-                }else{subjectId=0;}
+                int byId;
+                String byName;
+                int groupId = ((TaskItem)listView.getItemAtPosition(i)).getGroup().getId();
+              /*  if(((TaskItem)listView.getItemAtPosition(i)).getSubject() != null){
+                    byId = ((TaskItem)listView.getItemAtPosition(i)).getSubject().getId();
+                    byName = Strings.Path.SUBJECTS.toString();
+                }else{ */
+                    byId = groupId;
+                    byName = Strings.Path.GROUPS.toString();
+            //    }
 
-                Transactor.fragmentViewTask(getFragmentManager().beginTransaction(),((TaskItem)listView.getItemAtPosition(i)).getGroup().getId(),
-                        subjectId, ((TaskItem)listView.getItemAtPosition(i)).getTaskId(),
-                        ((TaskItem)listView.getItemAtPosition(i)).getGroup().getName(),
+                Transactor.fragmentViewTask(getFragmentManager().beginTransaction(),
+                        ((TaskItem)listView.getItemAtPosition(i)).getTaskId(),
                         true, Manager.DestManager.TOMAIN);
             }
         });
@@ -133,6 +140,6 @@ public class MainFragment extends Fragment {
                 sRefreshLayout.setRefreshing(false);
             }
         };
-        MiddleMan.newRequest(this.getActivity(), "getTasksFromMe", null, responseHandler, null);
+        MiddleMan.newRequest(new GetTasksFromMe(getActivity(), responseHandler));
     }
 }

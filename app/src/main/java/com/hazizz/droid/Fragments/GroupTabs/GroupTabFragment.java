@@ -15,6 +15,8 @@ import android.widget.TextView;
 import com.hazizz.droid.Activities.MainActivity;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOMembersProfilePic;
+import com.hazizz.droid.Communication.Requests.GetGroupMembersProfilePic;
+import com.hazizz.droid.Communication.Requests.LeaveGroup;
 import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.Manager;
 import com.hazizz.droid.Transactor;
@@ -30,7 +32,6 @@ public class GroupTabFragment extends Fragment {
 
    // ArrayList<POJOMembersProfilePic> userProfilePics;
 
-    private TextView textView_title;
     public PagerAdapter adapter;
 
     public static int groupId;
@@ -54,16 +55,14 @@ public class GroupTabFragment extends Fragment {
 
         Manager.GroupRankManager.clear();
 
-
         groupId = getArguments().getInt("groupId");
         getGroupMemberProfilePics();
         groupName = getArguments().getString("groupName");
+        getActivity().setTitle(getResources().getString(R.string.group_)+ " " + groupName);
         Manager.GroupManager.setGroupId(groupId);
         Manager.GroupManager.setGroupName(groupName);
         startingTab = getArguments().getInt("startingTab");
 
-        textView_title = v.findViewById(R.id.textView_title);
-        textView_title.append(" " + groupName);
 
         TabLayout tabLayout = (TabLayout) v.findViewById(R.id.tab_layout);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
@@ -106,6 +105,13 @@ public class GroupTabFragment extends Fragment {
         return v;
     }
 
+    @Override
+    public void onDestroyView() {
+        Log.e("hey", "left group");
+        super.onDestroyView();
+        Manager.GroupManager.leftGroup();
+    }
+
     public Fragment getCurrentFrag(){
         if(viewPager != null){
             return adapter.getItem(viewPager.getCurrentItem());
@@ -122,9 +128,7 @@ public class GroupTabFragment extends Fragment {
     }
 
     public void leaveGroup(){
-        EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
-        vars.put(Strings.Path.GROUPID, Integer.toString(groupId));
-        MiddleMan.newRequest(getActivity(), "leaveGroup", null, rh, vars);
+        MiddleMan.newRequest(new LeaveGroup(getActivity(), rh, groupId));
     }
 
     public void getGroupMemberProfilePics() {
@@ -137,6 +141,6 @@ public class GroupTabFragment extends Fragment {
         };
         EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
         vars.put(Strings.Path.GROUPID, Integer.toString(groupId));
-        MiddleMan.newRequest(this.getActivity(),"getGroupMembersProfilePic", null, responseHandler, vars);
+        MiddleMan.newRequest(new GetGroupMembersProfilePic(getActivity(),responseHandler, groupId));
     }
 }

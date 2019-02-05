@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.hazizz.droid.AndroidThings;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
+import com.hazizz.droid.Communication.Requests.Feedback;
 import com.hazizz.droid.Manager;
 import com.hazizz.droid.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
@@ -51,7 +52,7 @@ public class FeedbackActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback);
-
+        setTitle(R.string.title_activity_feedback);
         Activity act = this;
 
         textView_error = findViewById(R.id.textView_error_currentPassword);
@@ -67,15 +68,17 @@ public class FeedbackActivity extends AppCompatActivity {
                 body.put("version", AndroidThings.getAppVersion());
                 body.put("message", editText_feedback.getText().toString());
 
-                data.put("lastCall", Manager.CrashManager.getLastCall().toString());
-                data.put("time", Manager.CrashManager.getError().getTime());
-                data.put("errorCode", Integer.toString(Manager.CrashManager.getError().getErrorCode()));
-                data.put("title", Manager.CrashManager.getError().getTitle());
-                data.put("message", Manager.CrashManager.getError().getMessage());
-
+                try {
+                    data.put("lastCall", Manager.CrashManager.getLastCall().toString());
+                    data.put("time", Manager.CrashManager.getError().getTime());
+                    data.put("errorCode", Integer.toString(Manager.CrashManager.getError().getErrorCode()));
+                    data.put("title", Manager.CrashManager.getError().getTitle());
+                    data.put("message", Manager.CrashManager.getError().getMessage());
+                }catch(Exception e){}
                 body.put("data", data);
 
-                MiddleMan.newRequest(act, "feedback", body, rh, null);
+                MiddleMan.newRequest(new Feedback(act, rh,"android", AndroidThings.getAppVersion(),
+                        editText_feedback.getText().toString(), data));
                 button_feedback.setEnabled(false);
             }
         });

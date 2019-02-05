@@ -1,5 +1,6 @@
 package com.hazizz.droid.Communication.Requests;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -18,21 +19,30 @@ import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 public class GetCommentSection extends Request {
-    String p_whereName,p_whereId, p_byName, p_byId;
-    GetCommentSection(Context c, CustomResponseHandler rh, Strings.Rank whereName, int whereId, Strings.Rank byName, int byId) {
-        super(c, rh);
-        Log.e("hey", "created GetMyProfilePic object");
+    String p_whereName,p_whereId;
+    public GetCommentSection(Activity act, CustomResponseHandler rh, String whereName, int whereId) {
+        super(act, rh);
+        Log.e("hey", "created GetCommentSection object");
         this.p_whereName = whereName.toString();
         this.p_whereId = Integer.toString(whereId);
-        this.p_byName = byName.toString();
+    }
+
+    /*
+    public GetCommentSection(Activity act, CustomResponseHandler rh, String whereName, int whereId, String byName, int byId) {
+        super(act, rh);
+        Log.e("hey", "created GetMyProfilePic object");
+        this.p_whereName = whereName;
+        this.p_whereId = Integer.toString(whereId);
+        this.p_byName = byName;
         this.p_byId = Integer.toString(byId);
     }
+    */
 
     public void setupCall() {
         HashMap<String, String> headerMap = new HashMap<String, String>();
         headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));
 
-        call = aRequest.getCommentSection(p_whereName,p_byName, p_byId, p_whereId, headerMap);
+        call = aRequest.getCommentSection(p_whereName, p_whereId, headerMap);
     }
 
     @Override

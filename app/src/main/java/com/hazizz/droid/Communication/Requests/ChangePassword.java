@@ -1,5 +1,6 @@
 package com.hazizz.droid.Communication.Requests;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -12,8 +13,8 @@ import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 public class ChangePassword extends Request {
-    ChangePassword(Context c, CustomResponseHandler rh, String hashedNewPassword, String elevationToken) {
-        super(c, rh);
+    public ChangePassword(Activity act, CustomResponseHandler rh, String hashedNewPassword, String elevationToken) {
+        super(act, rh);
         Log.e("hey", "created Me object");
         body.put("password", hashedNewPassword);
         body.put("token", elevationToken);

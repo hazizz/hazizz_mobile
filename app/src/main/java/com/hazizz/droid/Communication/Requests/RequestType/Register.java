@@ -1,5 +1,6 @@
 package com.hazizz.droid.Communication.Requests.RequestType;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -13,8 +14,8 @@ import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 public class Register extends Request {
-    Register(Context c, CustomResponseHandler rh, String b_username, String b_password, String b_emailAddress) {
-        super(c, rh);
+    public Register(Activity act, CustomResponseHandler rh, String b_username, String b_password, String b_emailAddress) {
+        super(act, rh);
         Log.e("hey", "created");
         body.put("username", b_username);
         body.put("password", b_password);

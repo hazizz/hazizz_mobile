@@ -18,6 +18,8 @@ import com.hazizz.droid.Activities.MainActivity;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
+import com.hazizz.droid.Communication.Requests.GetTasksFromGroup;
+import com.hazizz.droid.Communication.Requests.LeaveGroup;
 import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.D8;
 import com.hazizz.droid.Listviews.TaskList.Group.CustomAdapter;
@@ -46,7 +48,7 @@ public class GroupMainFragment extends Fragment {
     private SwipeRefreshLayout sRefreshLayout;
 
 
-    private int groupID;
+    private int groupId;
     private String groupName;
 
     FragmentManager fg;
@@ -58,7 +60,7 @@ public class GroupMainFragment extends Fragment {
         v = inflater.inflate(R.layout.fragment_maingroup, container, false);
         Log.e("hey", "mainGroup fragment created");
         ((MainActivity)getActivity()).onFragmentCreated();
-        groupID = Manager.GroupManager.getGroupId();
+        groupId = Manager.GroupManager.getGroupId();
         groupName = Manager.GroupManager.getGroupName();
 
         textView_noContent = v.findViewById(R.id.textView_noContent);
@@ -90,22 +92,26 @@ public class GroupMainFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+/*
                 EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
                 vars.put(Strings.Path.TASKID, ((TaskItem)listView.getItemAtPosition(i)).getTaskId());
-                vars.put(Strings.Path.GROUPID,((TaskItem)listView.getItemAtPosition(i)).getGroup().getId());
+                vars.put(Strings.Path.GROUPID,((TaskItem)listView.getItemAtPosition(i)).getGroup().getId()); */
                 groupName = ((TaskItem)listView.getItemAtPosition(i)).getGroup().getName();
-                Log.e("hey", "asd: " + vars.get("taskId") + ", " + vars.get("groupId"));
 
 
-                int subjectId;
+                int byId;
+                String byName;
+
+                /*
                 if(((TaskItem)listView.getItemAtPosition(i)).getSubject() != null){
-                    subjectId = ((TaskItem)listView.getItemAtPosition(i)).getSubject().getId();
-                }else{subjectId=0;}
+                    byId = ((TaskItem)listView.getItemAtPosition(i)).getSubject().getId();
+                    byName = Strings.Path.SUBJECTS.toString();
+                }else{ */
+                    byId = ((TaskItem)listView.getItemAtPosition(i)).getGroup().getId();
+                    byName = Strings.Path.GROUPS.toString();
+               // }
                 Transactor.fragmentViewTask(getFragmentManager().beginTransaction(),
-                        ((TaskItem)listView.getItemAtPosition(i)).getGroup().getId(),
-                        subjectId, ((TaskItem)listView.getItemAtPosition(i)).getTaskId(),
-                        ((TaskItem)listView.getItemAtPosition(i)).getGroup().getName(),
+                         ((TaskItem)listView.getItemAtPosition(i)).getTaskId(),
                         false, Manager.DestManager.TOGROUP);
             }
         });
@@ -115,8 +121,6 @@ public class GroupMainFragment extends Fragment {
         adapter.clear();
         Log.e("hey", "atleast here 2");
         CustomResponseHandler responseHandler = new CustomResponseHandler() {
-            @Override
-            public void onResponse(HashMap<String, Object> response) { }
             @Override
             public void onPOJOResponse(Object response) {
                 ArrayList<POJOgetTask> sorted = D8.sortTasksByDate((ArrayList<POJOgetTask>) response);
@@ -157,45 +161,26 @@ public class GroupMainFragment extends Fragment {
                 sRefreshLayout.setRefreshing(false);
             }
         };
-        EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
-        vars.put(Strings.Path.GROUPID, Integer.toString(groupID));
       //  MiddleMan.request.getTasksFromGroup(this.getActivity(), null, responseHandler, vars);
-        MiddleMan.newRequest(this.getActivity(),"getTasksFromGroup", null, responseHandler, vars);
+        MiddleMan.newRequest(new GetTasksFromGroup(getActivity(), responseHandler, groupId));
 
     }
 
     public void toTaskEditor(FragmentManager fm){
-        Log.e("hey", "GROUPID: " + groupID);
-        Transactor.fragmentCreateTask(fm.beginTransaction(), groupID, groupName, Manager.DestManager.TOGROUP);
+        Log.e("hey", "GROUPID: " + groupId);
+        Transactor.fragmentCreateTask(fm.beginTransaction(), groupId, groupName, Manager.DestManager.TOGROUP);
 
     }
 
     public void leaveGroup(){
         EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
-        vars.put(Strings.Path.GROUPID, Integer.toString(groupID));
-        MiddleMan.newRequest(this.getActivity(), "leaveGroup", null, new CustomResponseHandler() {
-            @Override
-            public void onResponse(HashMap<String, Object> response) { }
-            @Override
-            public void onPOJOResponse(Object response) { }
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) { }
-            @Override
-            public void onErrorResponse(POJOerror error) { }
-            @Override
-            public void onEmptyResponse() { }
+        vars.put(Strings.Path.GROUPID, Integer.toString(groupId));
+        MiddleMan.newRequest(new LeaveGroup( getActivity(), new CustomResponseHandler() {
             @Override
             public void onSuccessfulResponse() {
                 Transactor.fragmentGroups(getFragmentManager().beginTransaction());
             }
-            @Override
-            public void onNoConnection() { }
-
-            @Override
-            public void getHeaders(Headers headers) {
-
-            }
-        }, vars);
+        }, groupId));
     }
 }
 

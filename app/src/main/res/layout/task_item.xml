@@ -12,31 +12,43 @@
         android:id="@+id/task_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginLeft="1dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="2dp"
+        android:ellipsize="end"
         android:text="Title"
         android:textSize="18sp"
-        android:ellipsize="end"
+        app:layout_constraintStart_toEndOf="@+id/textView_subject"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView_subject"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="1dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="2dp"
+        android:text="subject"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/task_description"
         android:layout_width="196dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_height="39dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginLeft="6dp"
+        android:layout_marginLeft="2dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
         android:ellipsize="end"
         android:maxLines="5"
         android:minHeight="52dp"
         android:text="description"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.046"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/task_title" />
 
@@ -44,7 +56,7 @@
     <RelativeLayout
         android:id="@+id/relativeLayout4"
         android:layout_width="wrap_content"
-        android:layout_height="70dp"
+        android:layout_height="50dp"
         android:layout_marginLeft="2dp"
         android:layout_marginStart="2dp"
         android:layout_marginTop="12dp"
@@ -63,51 +75,37 @@
             android:id="@+id/textView10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:text="@string/creator_"
-            tools:layout_editor_absoluteX="244dp"
-            tools:layout_editor_absoluteY="64dp" />
-
-        <TextView
-            android:id="@+id/textView_subject_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerVertical="true"
             android:layout_marginBottom="0dp"
-            android:text="@string/subject_"
+            android:text="@string/creator_"
+            app:layout_constraintEnd_toEndOf="parent"
             tools:layout_editor_absoluteX="244dp"
-            tools:layout_editor_absoluteY="104dp" />
+            tools:layout_editor_absoluteY="64dp" />
+
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/relativeLayout3"
         android:layout_width="wrap_content"
-        android:layout_height="70dp"
+        android:layout_height="50dp"
         android:layout_marginLeft="1dp"
         android:layout_marginStart="1dp"
         android:layout_marginTop="12dp"
         app:layout_constraintStart_toEndOf="@+id/relativeLayout4"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/textView_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="0dp"
-            android:text="subject"
-            app:layout_constraintTop_toBottomOf="@+id/textView_creator" />
 
         <TextView
             android:id="@+id/textView_creator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+            android:layout_alignParentBottom="true"
 
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="0dp"
             android:text="creator"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_title" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <TextView
             android:id="@+id/textView_dueDate"

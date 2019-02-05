@@ -12,13 +12,13 @@ import android.widget.TextView;
 
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
+import com.hazizz.droid.Communication.POJO.Response.PojoPicSmall;
 import com.hazizz.droid.Communication.POJO.Response.PojoPublicUserData;
+import com.hazizz.droid.Communication.Requests.GetPublicUserDetail;
+import com.hazizz.droid.Communication.Requests.GetUserProfilePic;
 import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.Converter.Converter;
 import com.hazizz.droid.R;
-
-import java.util.EnumMap;
-import java.util.HashMap;
 
 public class UserDetailDialogFragment extends DialogFragment {
 
@@ -33,7 +33,6 @@ public class UserDetailDialogFragment extends DialogFragment {
     CustomResponseHandler rh = new CustomResponseHandler() {
         @Override
         public void onPOJOResponse(Object response) {
-
             PojoPublicUserData pojoObject = (PojoPublicUserData)response;
 
 
@@ -70,10 +69,19 @@ public class UserDetailDialogFragment extends DialogFragment {
             }
         });
 
-        EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
-        vars.put(Strings.Path.USERID, userId);
+        MiddleMan.newRequest(new GetUserProfilePic(getActivity(), new CustomResponseHandler() {
+            @Override
+            public void onPOJOResponse(Object response) {
+                Bitmap bitmap = Converter.imageFromText(
+                        ((PojoPicSmall)response).getData().split(",")[1]);
+                //  bitmap = Converter.scaleBitmapToRegular(bitmap);
+                bitmap = Converter.getCroppedBitmap(bitmap);
 
-        MiddleMan.newRequest(getActivity(), "getPublicUserDetail", null, rh, vars);
+                imageView_userProfilePic.setImageBitmap(bitmap);
+            }
+        }, userId).full());
+
+        MiddleMan.newRequest(new GetPublicUserDetail(getActivity(),  rh, (int)userId));
 
         return v;
     }

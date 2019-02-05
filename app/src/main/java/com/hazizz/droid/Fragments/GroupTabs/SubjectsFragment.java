@@ -18,6 +18,7 @@ import com.hazizz.droid.Activities.MainActivity;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.POJO.Response.POJOsubject;
+import com.hazizz.droid.Communication.Requests.GetSubjects;
 import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.Listviews.SubjectList.CustomAdapter;
 import com.hazizz.droid.Listviews.SubjectList.SubjectItem;
@@ -52,7 +53,7 @@ public class SubjectsFragment extends Fragment {
         v = inflater.inflate(R.layout.fragment_subjects, container, false);
         Log.e("hey", "subject group fragment created");
         ((MainActivity)getActivity()).onFragmentCreated();
-       // groupId = getArguments().getInt("groupId");
+        groupId = getArguments().getInt(Strings.Path.GROUPID.toString());
 
         textView_noContent = v.findViewById(R.id.textView_noContent);
         sRefreshLayout = v.findViewById(R.id.swipe_refresh_layout); sRefreshLayout.bringToFront();
@@ -89,8 +90,6 @@ public class SubjectsFragment extends Fragment {
         adapter.clear();
         CustomResponseHandler responseHandler = new CustomResponseHandler() {
             @Override
-            public void onResponse(HashMap<String, Object> response) { }
-            @Override
             public void onPOJOResponse(Object response) {
                 ArrayList<POJOsubject> pojoList = (ArrayList<POJOsubject>) response;
                 if(pojoList.size() == 0){
@@ -121,8 +120,6 @@ public class SubjectsFragment extends Fragment {
                 sRefreshLayout.setRefreshing(false);
             }
             @Override
-            public void onSuccessfulResponse() { }
-            @Override
             public void onNoConnection() {
                 textView_noContent.setText(R.string.info_noInternetAccess);
                 textView_noContent.setVisibility(View.VISIBLE);
@@ -130,9 +127,7 @@ public class SubjectsFragment extends Fragment {
                 //    textView_noContent.
             }
         };
-        EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
-        vars.put(Strings.Path.GROUPID, Integer.toString(GroupTabFragment.groupId));
-        MiddleMan.newRequest(this.getActivity(),"getSubjects", null, responseHandler, vars);
+        MiddleMan.newRequest(new GetSubjects(getActivity(), responseHandler, groupId));
     }
 
     public void toCreateSubject(FragmentManager fm){

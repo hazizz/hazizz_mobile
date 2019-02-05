@@ -23,6 +23,8 @@ import com.hazizz.droid.Communication.POJO.Response.CommentSectionPOJOs.POJOComm
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOMembersProfilePic;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
+import com.hazizz.droid.Communication.Requests.AddComment;
+import com.hazizz.droid.Communication.Requests.GetCommentSection;
 import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.Listviews.CommentList.CommentItem;
 import com.hazizz.droid.Listviews.CommentList.CustomAdapter;
@@ -44,8 +46,10 @@ public class CommentSectionFragment extends Fragment {
     private CustomAdapter adapter;
     private List<CommentItem> listComment;
 
-    private int taskId, announcementId, groupId, subjectId;
-    private String commentId;
+
+    private int whereId, byId;
+    private String whereName, byName;
+
 
     private EditText editText_commentBody;
     private ImageButton button_send;
@@ -100,12 +104,10 @@ public class CommentSectionFragment extends Fragment {
         v = inflater.inflate(R.layout.fragment_commentsection, container, false);
         Log.e("hey", "main fragment created");
 
-        commentId = getArguments().getString(Strings.Path.COMMENTID.toString());
-        groupId = getArguments().getInt(Strings.Path.GROUPID.toString());
-        subjectId = getArguments().getInt(Strings.Path.SUBJECTID.toString());
-        taskId = getArguments().getInt(Strings.Path.TASKID.toString());
-        announcementId = getArguments().getInt(Strings.Path.ANNOUNCEMENTID.toString());
+        getActivity().setTitle(R.string.title_fragment_comments);
 
+        whereId = getArguments().getInt(Strings.Path.WHEREID.toString());
+        whereName = getArguments().getString(Strings.Path.WHERENAME.toString());
 
         editText_commentBody = v.findViewById(R.id.editText_comment_body);
         textView_noContent = v.findViewById(R.id.textView_noContent);
@@ -122,18 +124,7 @@ public class CommentSectionFragment extends Fragment {
                     HashMap<String, Object> body = new HashMap<>();
                     body.put("content", commentBody);
 
-
-                    EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
-                    if(taskId != 0){
-                        vars.put(Strings.Path.TASKID, taskId);
-                    }else{
-                        vars.put(Strings.Path.ANNOUNCEMENTID, announcementId);
-                    }if(groupId != 0){
-                        vars.put(Strings.Path.GROUPID, groupId);
-                    }else{
-                        vars.put(Strings.Path.SUBJECTID, subjectId);
-                    }
-                    MiddleMan.newRequest(getActivity(), "addComment", body, new CustomResponseHandler() {
+                    MiddleMan.newRequest(new AddComment(getActivity(),new CustomResponseHandler() {
                         @Override
                         public void onFailure(Call<ResponseBody> call, Throwable t) {
                             button_send.setEnabled(true);
@@ -159,7 +150,7 @@ public class CommentSectionFragment extends Fragment {
                         public void onNoConnection() {
                             button_send.setEnabled(true);
                         }
-                    }, vars);
+                    }, whereName, whereId, commentBody));
                 }
             }
         });
@@ -191,12 +182,9 @@ public class CommentSectionFragment extends Fragment {
         adapter.clear();
         EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
 
-        vars.put(Strings.Path.TASKID, taskId);
-        vars.put(Strings.Path.ANNOUNCEMENTID, announcementId);
-        vars.put(Strings.Path.GROUPID, groupId);
-        vars.put(Strings.Path.SUBJECTID, subjectId);
 
-        MiddleMan.newRequest(this.getActivity(), "getCommentSection", null, responseHandler, vars);
+
+        MiddleMan.newRequest(new GetCommentSection(getActivity(), responseHandler, whereName, whereId));
 
     }
 }

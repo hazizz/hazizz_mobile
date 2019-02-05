@@ -25,6 +25,9 @@ import com.crashlytics.android.answers.Answers;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOme;
 import com.hazizz.droid.Communication.POJO.Response.PojoPicSmall;
+import com.hazizz.droid.Communication.Requests.GetMyProfilePic;
+import com.hazizz.droid.Communication.Requests.Me;
+import com.hazizz.droid.Communication.Requests.MessageOfTheDay;
 import com.hazizz.droid.Converter.Converter;
 import com.hazizz.droid.Fragments.CreateSubjectFragment;
 import com.hazizz.droid.Fragments.GroupTabs.GroupAnnouncementFragment;
@@ -93,6 +96,7 @@ public class MainActivity extends AppCompatActivity
                     ((PojoPicSmall)response).getData().split(",")[1]);
             bitmap = Converter.scaleBitmapToRegular(bitmap);
             bitmap = Converter.getCroppedBitmap(bitmap);
+
             Manager.MeInfo.setProfilePic(Converter.imageToText(bitmap));
             setProfileImageInNav(bitmap);
         }
@@ -100,27 +104,18 @@ public class MainActivity extends AppCompatActivity
 
     CustomResponseHandler responseHandler = new CustomResponseHandler() {
         @Override
-        public void onResponse(HashMap<String, Object> response) { }
-        @Override
         public void onPOJOResponse(Object response) {
-            Log.e("hey", "got pojo response");
-            SharedPrefs.save(getApplicationContext(),"userInfo", "username",((POJOme) response).getUsername());
-            strNavEmail = ((POJOme) response).getEmailAddress();
-            strNavUsername = ((POJOme) response).getUsername();
-            strNavDisplayName = ((POJOme) response).getDisplayName();
+            POJOme pojo = (POJOme) response;
+            SharedPrefs.save(getApplicationContext(),"userInfo", "username",pojo.getUsername());
+            strNavEmail = (pojo.getEmailAddress());
+            strNavUsername = (pojo.getUsername());
+            strNavDisplayName = (pojo.getDisplayName());
+            Manager.MeInfo.setId(pojo.getId());
             Manager.MeInfo.setProfileName(strNavUsername);
             Manager.MeInfo.setDisplayName(strNavDisplayName);
             Manager.MeInfo.setProfileEmail(strNavEmail);
             setDisplayNameInNav(strNavDisplayName);
             navEmail.setText(strNavEmail);
-        }
-        @Override
-        public void onFailure(Call<ResponseBody> call, Throwable t) {
-            Log.e("hey", "4");
-            Log.e("hey", "got here onFailure");
-        }
-        @Override public void onEmptyResponse() {
-            Log.e("hey", "NO RESPONSE");
         }
     };
 
@@ -138,9 +133,6 @@ public class MainActivity extends AppCompatActivity
                         .setPositiveButton("Oké", (dialog, id) -> {
                             SharedPrefs.save(getBaseContext(), "motd", "message", motd);
                             dialog.cancel();
-                        })
-                        .setNegativeButton("Ne mutasd többé", (dialog, id) -> {
-
                         });
                     AlertDialog alertDialog = alertDialogBuilder.create();
                     alertDialog.show();
@@ -244,11 +236,11 @@ public class MainActivity extends AppCompatActivity
 
 
 
-        MiddleMan.newRequest(this, "messageOfTheDay", null, rh_motd, null);
+        MiddleMan.newRequest(new MessageOfTheDay(this, rh_motd));
 
-        MiddleMan.newRequest(this, "getMyProfilePic", null, rh_profilePic, null);
+        MiddleMan.newRequest(new GetMyProfilePic(this, rh_profilePic));
 
-        MiddleMan.newRequest(this, "me", null, responseHandler, null);
+        MiddleMan.newRequest(new Me(this, responseHandler));
     }
 
     @Override
@@ -439,5 +431,7 @@ public class MainActivity extends AppCompatActivity
     public void activateThéra(){
         menu_nav.getItem(2).setVisible(true);
     }
+
+
 
 }

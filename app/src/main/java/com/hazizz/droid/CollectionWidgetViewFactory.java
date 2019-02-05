@@ -10,8 +10,8 @@ import android.widget.RemoteViewsService;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
+import com.hazizz.droid.Communication.Requests.GetTasksFromMeSync;
 import com.hazizz.droid.Communication.Requests.Request;
-import com.hazizz.droid.R;
 
 import java.util.ArrayList;
 
@@ -68,9 +68,9 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
         itemView.setTextViewText(R.id.textView_creator, task.getCreator().getUsername());
 
         if(task.getSubject() != null) {
-            itemView.setTextViewText(R.id.textView_title, task.getSubject().getName());
+            itemView.setTextViewText(R.id.textView_subject, task.getSubject().getName());
         }else{
-            itemView.setViewVisibility(R.id.textView_title, View.INVISIBLE);
+            itemView.setViewVisibility(R.id.textView_subject, View.INVISIBLE);
             itemView.setViewVisibility(R.id.textView_subject_info, View.INVISIBLE);
         }
         itemView.setTextViewText(R.id.textView_deadline, task.getDueDate());
@@ -129,9 +129,9 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
             };
 
             if (!SharedPrefs.TokenManager.getToken(mContext).equals("")) {
-                Request request = new Request(mContext, "getTasksFromMeSync", null, rh, null);
-                request.requestType.setupCall();
-                request.requestType.makeCall();
+                Request request = new GetTasksFromMeSync(mContext, rh);
+                request.setupCall();
+                request.makeCall();
             } else {
                 data.clear();
                 contentInfo = "Nem vagy bejelentkezve";

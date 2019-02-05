@@ -21,6 +21,9 @@ import com.hazizz.droid.AndroidThings;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.POJO.Response.POJOgroup;
+import com.hazizz.droid.Communication.Requests.GetGroups;
+import com.hazizz.droid.Communication.Requests.JoinGroup;
+import com.hazizz.droid.Communication.Requests.JoinGroupByPassword;
 import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
@@ -95,9 +98,7 @@ public class JoinGroupFragment extends Fragment {
                     found = true;
                     if (g.getGroupType().equals(Strings.Path.GROUPTYPE_OPEN.toString())) {
                         groupId = g.getId();
-                        EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
-                        vars.put(Strings.Path.GROUPID, Integer.toString(groupId));
-                        MiddleMan.newRequest(getActivity(),"joinGroup", null, rh_joinGroup, vars);
+                        MiddleMan.newRequest(new JoinGroup(getActivity(), rh_joinGroup, groupId));
                     }
                     else if (g.getGroupType().equals(Strings.Path.GROUPTYPE_PASSWORD.toString())) {
                         if(password != null) {
@@ -105,7 +106,7 @@ public class JoinGroupFragment extends Fragment {
                             EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
                             vars.put(Strings.Path.GROUPID, Integer.toString(groupId));
                             vars.put(Strings.Path.PASSWORD, password);
-                            MiddleMan.newRequest(getActivity(), "joinGroupByPassword", null, rh_joinGroup, vars);
+                            MiddleMan.newRequest(new JoinGroupByPassword(getActivity(), rh_joinGroup, groupId, password));
 
                         }else{
                             editText_password.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -212,7 +213,7 @@ public class JoinGroupFragment extends Fragment {
                 groupName = editText_joinGroup.getText().toString();
                 editText_joinGroup.setEnabled(false);
                 editText_password.setEnabled(false);
-                MiddleMan.newRequest(getActivity(),"getGroups", null, rh_getGroups, null);
+                MiddleMan.newRequest(new GetGroups(getActivity(),rh_getGroups));
             }
         });
         return v;

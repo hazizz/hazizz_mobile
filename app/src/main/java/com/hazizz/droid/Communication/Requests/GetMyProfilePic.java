@@ -1,5 +1,6 @@
 package com.hazizz.droid.Communication.Requests;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -13,14 +14,27 @@ import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 public class GetMyProfilePic extends Request {
-    GetMyProfilePic(Context c, CustomResponseHandler rh) {
-        super(c, rh);
+    private boolean full = false;
+    public GetMyProfilePic(Activity act, CustomResponseHandler rh) {
+        super(act, rh);
         Log.e("hey", "created GetMyProfilePic object");
     }
+
+    public GetMyProfilePic full(){
+        full = true;
+        return this;
+    }
+
     public void setupCall() {
         HashMap<String, String> headerMap = new HashMap<String, String>();
         headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
-        call = aRequest.getMyProfilePic(headerMap);
+
+        if(full){
+            call = aRequest.getMyProfilePic("full", headerMap);
+        }else{
+            call = aRequest.getMyProfilePic("",headerMap);
+        }
+
         Log.e("hey", "setup call on getMyProfilePic");
     }
     @Override

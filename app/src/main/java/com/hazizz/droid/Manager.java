@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import android.util.SparseArray;
 
+import com.google.android.gms.stats.internal.G;
 import com.hazizz.droid.Communication.POJO.Response.POJOMembersProfilePic;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.RequestSenderRunnable;
@@ -76,7 +77,7 @@ public class Manager {
 
     public static class ProfilePicManager {
 
-        private static HashMap<Integer, POJOMembersProfilePic> pics;
+        private static HashMap<Integer, POJOMembersProfilePic> pics = new HashMap<>();
         private static int currentGroupId;
 
         public static void setCurrentGroupMembersProfilePic(HashMap<Integer, POJOMembersProfilePic> pics1, int groupId){
@@ -88,11 +89,7 @@ public class Manager {
         }
 
         public static HashMap<Integer, POJOMembersProfilePic> getCurrentGroupMembersProfilePic(){
-            if(pics == null){
-                return null;
-            }else {
-                return pics;
-            }
+            return pics;
         }
         public static int getCurrentGroupId(){
             return currentGroupId;
@@ -173,16 +170,28 @@ public class Manager {
 
         private static SparseArray<Strings.Rank> groupRanks = new SparseArray<>();
 
-        public static Strings.Rank getRank(Integer userId){
+        public static Strings.Rank getRank(int userId){
             Strings.Rank rank = groupRanks.get(userId);
+
+            for(int i = 0; i < groupRanks.size(); i++) {
+                int key = groupRanks.keyAt(i);
+                // get the object by the key.
+                Log.e("hey", "rank: " + groupRanks.get(key).toString());
+            }
+
             if(rank != null){
                 return rank;
             }
             return Strings.Rank.NULL;
         }
 
-        public static void setRank(Integer userId, Strings.Rank rank){
+        public static void setRank(int userId, Strings.Rank rank){
             groupRanks.put(userId, rank);
+            for(int i = 0; i < groupRanks.size(); i++) {
+                int key = groupRanks.keyAt(i);
+                // get the object by the key.
+            }
+            Log.e("hey", "rank3: " + groupRanks.get(userId).toString());
         }
 
         public static void clear(){
@@ -211,10 +220,18 @@ public class Manager {
         public static String getGroupName() {
             return groupName;
         }
+
+        public static void leftGroup() {
+            setGroupName("");
+            setGroupId(0);
+            MeInfo.setRankInCurrentGroup(Strings.Rank.NULL);
+        }
+
     }
 
     public static class MeInfo {
 
+        private static long userId = 0;
         private static String profileName = "";
         private static String displayName = "";
         private static String profileEmail = "";
@@ -223,10 +240,17 @@ public class Manager {
         private static Strings.Rank rankInCurrentGroup = Strings.Rank.NULL;
 
 
+        public static long getId(){
+            return userId;
+        }
+
+        public static void setId(long id){
+            userId = id;
+        }
+
         public static void setRankInCurrentGroup(Strings.Rank rank){
             rankInCurrentGroup = rank;
         }
-
         public static Strings.Rank getRankInCurrentGroup(){
             return rankInCurrentGroup;
         }

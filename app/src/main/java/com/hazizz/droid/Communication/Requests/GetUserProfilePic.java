@@ -1,5 +1,6 @@
 package com.hazizz.droid.Communication.Requests;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -14,15 +15,28 @@ import retrofit2.Response;
 
 public class GetUserProfilePic extends Request {
     private String p_userId;
-    GetUserProfilePic(Context c, CustomResponseHandler rh, int p_userId) {
-        super(c, rh);
+    private boolean full = false;
+    public GetUserProfilePic(Activity act, CustomResponseHandler rh, long p_userId) {
+        super(act, rh);
         Log.e("hey", "created LeaveGroup object");
-        this.p_userId = Integer.toString(p_userId);
+        this.p_userId = Long.toString(p_userId);
     }
+
+    public GetUserProfilePic full(){
+        full = true;
+        return this;
+    }
+
     public void setupCall() {
         HashMap<String, String> headerMap = new HashMap<String, String>();
         headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
-        call = aRequest.getUserProfilePic(p_userId, headerMap);
+
+
+        if(full){
+            call = aRequest.getUserProfilePic(p_userId,"full", headerMap);
+        }else{
+            call = aRequest.getUserProfilePic(p_userId,"",headerMap);
+        }
     }
     @Override
     public void makeCall() {

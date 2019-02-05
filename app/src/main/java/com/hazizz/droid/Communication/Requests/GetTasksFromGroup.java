@@ -1,5 +1,6 @@
 package com.hazizz.droid.Communication.Requests;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -18,8 +19,8 @@ import retrofit2.Response;
 
 public class GetTasksFromGroup extends Request {
     String p_groupId;
-    GetTasksFromGroup(Context c, CustomResponseHandler rh, int p_groupId) {
-        super(c, rh);
+    public GetTasksFromGroup(Activity act, CustomResponseHandler rh, int p_groupId) {
+        super(act, rh);
         Log.e("hey", "created GetTasksFromGroup object");
         this.p_groupId = Integer.toString(p_groupId);
     }

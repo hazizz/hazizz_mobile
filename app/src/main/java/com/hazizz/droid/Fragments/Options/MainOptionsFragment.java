@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -25,11 +27,17 @@ import com.hazizz.droid.Activities.MainActivity;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.POJO.Response.POJOgroup;
+import com.hazizz.droid.Communication.POJO.Response.PojoPicSmall;
+import com.hazizz.droid.Communication.Requests.GetMyProfilePic;
+import com.hazizz.droid.Communication.Requests.SetDisplayName;
+import com.hazizz.droid.Communication.Requests.SetMyProfilePic;
 import com.hazizz.droid.Converter.Converter;
 import com.hazizz.droid.Manager;
 import com.hazizz.droid.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -61,19 +69,20 @@ public class MainOptionsFragment extends Fragment {
         v = inflater.inflate(R.layout.fragment_options, container, false);
         ((MainActivity)getActivity()).onFragmentCreated();
 
-        createViewList();
+        getActivity().setTitle(R.string.settings);
 
-        textView_title = v.findViewById(R.id.textView_title);
-        textView_title.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override public boolean onLongClick(View v) {
-                ((MainActivity) getActivity()).activateThéra();
-                return true;
-            }
-        });
-
-        textView_error = v.findViewById(R.id.textView_error_currentPassword);
-        textView_error.setTextColor(Color.rgb(255, 0, 0));
         imageView_profilePic = v.findViewById(R.id.imageView_profilePic);
+        MiddleMan.newRequest(new GetMyProfilePic(getActivity(), new CustomResponseHandler() {
+            @Override
+            public void onPOJOResponse(Object response) {
+                Bitmap bitmap = Converter.imageFromText(
+                        ((PojoPicSmall)response).getData().split(",")[1]);
+              //  bitmap = Converter.scaleBitmapToRegular(bitmap);
+                bitmap = Converter.getCroppedBitmap(bitmap);
+
+                imageView_profilePic.setImageBitmap(bitmap);
+            }
+        }).full());
         imageView_profilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,6 +90,22 @@ public class MainOptionsFragment extends Fragment {
                 pickImage();
             }
         });
+
+        createViewList();
+
+        /*
+        textView_title = v.findViewById(R.id.textView_title);
+        textView_title.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override public boolean onLongClick(View v) {
+                ((MainActivity) getActivity()).activateThéra();
+                return true;
+            }
+        });
+        */
+
+        textView_error = v.findViewById(R.id.textView_error_currentPassword);
+        textView_error.setTextColor(Color.rgb(255, 0, 0));
+
         editText_displayName = v.findViewById(R.id.editText_displayName);
         editText_displayName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -117,18 +142,13 @@ public class MainOptionsFragment extends Fragment {
                     body.put("data", "data:image/jpeg;base64," + Manager.MeInfo.getProfilePic());
                     body.put("type", "ppfull");
 
-                    MiddleMan.newRequest(getActivity(), "setMyProfilePic", body, new CustomResponseHandler() {
-                        @Override
-                        public void onErrorResponse(POJOerror error) {
-                            Log.e("hey", "couldnt set profile pic");
-                        }
-
+                    MiddleMan.newRequest(new SetMyProfilePic(getActivity(), new CustomResponseHandler() {
                         @Override
                         public void onSuccessfulResponse() {
                             fab_profilePicCheck.setImageResource(R.drawable.ic_camera_black);
                             changedPic = false;
                         }
-                    }, null);
+                    }, "data:image/jpeg;base64," + Manager.MeInfo.getProfilePic(), "ppfull"));
                 }else{
                     pickImage();
                 }
@@ -140,9 +160,7 @@ public class MainOptionsFragment extends Fragment {
             public void onClick(View v) {
                 if(changedDisplayName) {
                     String newDisplayName = editText_displayName.getText().toString();
-                    HashMap<String, Object> body = new HashMap<>();
-                    body.put("displayName", newDisplayName);
-                    MiddleMan.newRequest(getActivity(), "setDisplayName", body, new CustomResponseHandler() {
+                    MiddleMan.newRequest(new SetDisplayName(getActivity(), new CustomResponseHandler() {
                         @Override
                         public void onErrorResponse(POJOerror error) {
                             Log.e("hey", "couldnt set profile pic");
@@ -156,7 +174,7 @@ public class MainOptionsFragment extends Fragment {
                             editText_displayName.clearFocus();
                             changedDisplayName = false;
                         }
-                    }, null);
+                    }, newDisplayName));
                 }else{
                     editText_displayName.requestFocus();
                 }
@@ -167,6 +185,12 @@ public class MainOptionsFragment extends Fragment {
         imageButton_displayNameCheck.setImageResource(R.drawable.ic_create_black);
 
         fab_profilePicCheck.setImageResource(R.drawable.ic_camera_black);
+
+
+
+
+
+
 
         return v;
     }
@@ -207,14 +231,23 @@ public class MainOptionsFragment extends Fragment {
         Manager.MeInfo.setProfilePic(base64_profilePic);
         fab_profilePicCheck.setImageResource(R.drawable.ic_check_black);
     }
+
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_PHOTO_FOR_AVATAR && resultCode == Activity.RESULT_OK) {
-            if (data == null) {
-                return;
-            }try {
-                InputStream inputStream = getActivity().getContentResolver().openInputStream(data.getData());
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == Activity.RESULT_OK) {
+                Uri resultUri = result.getUri();
+
+                InputStream inputStream = null;
+                try {
+                    inputStream = getActivity().getContentResolver().openInputStream(resultUri);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
                 Bitmap bitmap = Converter.imageFromText(inputStream);
                 bitmap = Converter.scaleBitmapToRegular(bitmap);
                 bitmap = Converter.getCroppedBitmap(bitmap);
@@ -223,7 +256,43 @@ public class MainOptionsFragment extends Fragment {
                 ((MainActivity) getActivity()).setProfileImageInNav(bitmap);
                 changedPic = true;
 
-            } catch (FileNotFoundException e) {
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+        }
+
+        if (requestCode == PICK_PHOTO_FOR_AVATAR && resultCode == Activity.RESULT_OK) {
+            if (data == null) {
+                return;
+            }try {
+/*
+                CropImageView cropImageView = (CropImageView) v.findViewById(R.id.cropImageView);
+                cropImageView.setAspectRatio(5, 10);
+                cropImageView.setFixedAspectRatio(true);
+                cropImageView.setCropShape(CropImageView.CropShape.OVAL);
+                cropImageView.setScaleType(CropImageView.ScaleType.FIT_CENTER);
+                cropImageView.setAutoZoomEnabled(true);
+                cropImageView.setShowProgressBar(true);
+                cropImageView.setCropRect(new Rect(0, 0, 800, 500));
+*/
+
+
+
+                CropImage.activity(data.getData())
+                        .setActivityMenuIconColor(getResources().getColor(R.color.colorDarkText))
+                        .setAspectRatio(1,1)
+                        .setFixAspectRatio(true)
+                        .setGuidelines(CropImageView.Guidelines.ON)
+                        .setCropShape(CropImageView.CropShape.OVAL)
+                        .setBorderLineThickness(8)
+                        .start(getContext(), this);
+
+              //  bitmap = cropImageView.getCroppedImage();
+
+
+
+
+            } catch (Exception e) {
                 e.printStackTrace();
                 Log.e("hey", "file not found!");
             }

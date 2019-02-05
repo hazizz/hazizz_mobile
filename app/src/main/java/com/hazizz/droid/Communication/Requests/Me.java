@@ -1,5 +1,6 @@
 package com.hazizz.droid.Communication.Requests;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -13,8 +14,8 @@ import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 public class Me extends Request {
-    Me(Context c, CustomResponseHandler rh) {
-        super(c, rh);
+    public Me(Activity act, CustomResponseHandler rh) {
+        super(act, rh);
         Log.e("hey", "created Me object");
     }
     public void setupCall() {

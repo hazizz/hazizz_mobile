@@ -10,6 +10,16 @@
     <string name="open">Open</string>
 
 
+    <string-array name="days">
+      <item>Monday</item>
+      <item>Tuesday</item>
+      <item>Wednesday</item>
+      <item>Thursday</item>
+      <item>Friday</item>
+      <item>Saturday</item>
+      <item>Sunday</item>
+    </string-array>
+
     <string-array name="taskTypes">
         <item>homework</item>
         <item>assignment</item>
@@ -101,6 +111,7 @@
       <string name="subject_">Subject:</string>
       <string name="tasktype_">Type of task:</string>
 
+      <string name="daysLeft">days left</string>
       <string name="displayName_">Display name:</string>
       <string name="registrationDate_">Registration date:</string>
       <string name="username_">Username:</string>
@@ -131,6 +142,8 @@
       <string name="title_editannouncement">Edit announcement</string>
       <string name="title_fragment_comments">Comments</string>
       <string name="title_fragment_creategroup">Create new group</string>
+      <string name="title_fragment_view_announcement">View Announcement</string>
+      <string name="title_fragment_view_task">View Task</string>
 
 
       <string name="tasktype_fragment_taskeditor">Type of task:</string>
@@ -212,6 +225,11 @@
       <string name="taskType_oraltest">oral test</string>
 
 
+  <string name="crop_image_activity_title"> </string>
+  <string name="crop_image_menu_rotate_right">Rotate</string>
+  <string name="crop_image_menu_crop">Crop</string>
+  <string name="crop_image_menu_flip_horizontally">Flip horizontally</string>
+  <string name="crop_image_menu_flip_vertically">Flip vertically</string>
 
 
 

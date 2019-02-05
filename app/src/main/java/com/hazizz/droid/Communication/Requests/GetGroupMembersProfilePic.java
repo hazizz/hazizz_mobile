@@ -1,5 +1,6 @@
 package com.hazizz.droid.Communication.Requests;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -16,8 +17,8 @@ import retrofit2.Response;
 
 public class GetGroupMembersProfilePic extends Request {
     String groupId;
-    GetGroupMembersProfilePic(Context c, CustomResponseHandler rh, int groupId) {
-        super(c, rh);
+    public GetGroupMembersProfilePic(Activity act, CustomResponseHandler rh, int groupId) {
+        super(act, rh);
         Log.e("hey", "created GetAnnouncements object");
         this.groupId = Integer.toString(groupId);
     }

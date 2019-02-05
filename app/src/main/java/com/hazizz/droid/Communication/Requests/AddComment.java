@@ -1,9 +1,12 @@
 package com.hazizz.droid.Communication.Requests;
 
+import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.IntegerRes;
 import android.util.Log;
 
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
+import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.SharedPrefs;
 
 import java.util.HashMap;
@@ -12,11 +15,14 @@ import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 public class AddComment extends Request {
-    String p_whereName, p_whereId, p_byName, p_byId;
-    AddComment(Context c, CustomResponseHandler rh, String content) {
-        super(c, rh);
+    String p_whereName, p_whereId;
+    public AddComment(Activity act, CustomResponseHandler rh, String p_whereName, int p_whereId,
+                      String b_content) {
+        super(act, rh);
+        this.p_whereId = Integer.toString(p_whereId);
+        this.p_whereName = p_whereName;
+        body.put("content", b_content);
         Log.e("hey", "created AddComment object");
-        body.put("content", content);
     }
 
     public void setupCall() {
@@ -24,7 +30,7 @@ public class AddComment extends Request {
         headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
         headerMap.put("Content-Type", "application/json");
 
-        call = aRequest.addComment(p_whereName, p_byName, p_byId, p_whereId, headerMap, body);
+        call = aRequest.addComment(p_whereName, p_whereId, headerMap, body);
         Log.e("hey", "setup call on AddComment");
     }
 

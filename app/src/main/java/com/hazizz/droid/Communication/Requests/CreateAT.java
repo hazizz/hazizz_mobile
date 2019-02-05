@@ -1,5 +1,6 @@
 package com.hazizz.droid.Communication.Requests;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -13,14 +14,14 @@ import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 public class CreateAT extends Request {
-    private Strings.Path p_whereName, p_byName;
+    private String p_whereName, p_byName;
     private int p_byId;
-    CreateAT(Context c, CustomResponseHandler rh, Strings.Path p_whereName, Strings.Path p_byName, int p_byId,
+    public CreateAT(Activity act, CustomResponseHandler rh, Strings.Path p_whereName, String p_byName, int p_byId,
              int b_taskType, String b_taskTitle, String b_description, String b_dueDate) {
-        super(c, rh);
+        super(act, rh);
         Log.e("hey", "created CreateAT object");
 
-        this.p_whereName = p_whereName;
+        this.p_whereName = p_whereName.toString();
         this.p_byName = p_byName;
         this.p_byId = p_byId;
 
@@ -31,12 +32,12 @@ public class CreateAT extends Request {
 
     }
 
-    CreateAT(Context c, CustomResponseHandler rh, Strings.Path p_whereName, Strings.Path p_byName, int p_byId,
-             String b_announcementTitle, String b_description) {
-        super(c, rh);
+    public CreateAT(Activity act, CustomResponseHandler rh, Strings.Path p_whereName, Strings.Path p_byName, int p_byId,
+                    String b_announcementTitle, String b_description) {
+        super(act, rh);
         Log.e("hey", "created CreateAT object");
-        this.p_whereName = p_whereName;
-        this.p_byName = p_byName;
+        this.p_whereName = p_whereName.toString();
+        this.p_byName = p_byName.toString();
         this.p_byId = p_byId;
 
         body.put("announcementTitle", b_announcementTitle);

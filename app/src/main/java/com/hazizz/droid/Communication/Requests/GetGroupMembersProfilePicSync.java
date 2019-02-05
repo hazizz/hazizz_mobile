@@ -1,5 +1,6 @@
 package com.hazizz.droid.Communication.Requests;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -19,8 +20,8 @@ import retrofit2.Response;
 
 public class GetGroupMembersProfilePicSync extends Request {
     String groupId;
-    GetGroupMembersProfilePicSync(Context c, CustomResponseHandler rh, int groupId) {
-        super(c, rh);
+    GetGroupMembersProfilePicSync(Activity act, CustomResponseHandler rh, int groupId) {
+        super(act, rh);
         Log.e("hey", "created GetGroupMembersProfilePicSync object");
         this.groupId = Integer.toString(groupId);
     }

@@ -1,5 +1,6 @@
 package com.hazizz.droid.Communication.Requests;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -21,13 +22,15 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 public class GetTasksFromMeSync extends Request {
-    GetTasksFromMeSync(Context c, CustomResponseHandler rh) {
-        super(c, rh);
+    private Context c;
+    public GetTasksFromMeSync(Context c, CustomResponseHandler rh) {
+        super(null, rh);
+        this.c = c;
         Log.e("hey", "created GetTasksFromMeSync object");
     }
     public void setupCall() {
         HashMap<String, String> headerMap = new HashMap<String, String>();
-        headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(context));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
+        headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(c));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
         call = aRequest.getTasksFromMe(headerMap);
     }
     @Override

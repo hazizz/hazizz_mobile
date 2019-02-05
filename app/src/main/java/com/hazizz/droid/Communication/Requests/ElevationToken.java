@@ -1,5 +1,6 @@
 package com.hazizz.droid.Communication.Requests;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -13,8 +14,8 @@ import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 public class ElevationToken extends Request {
-    ElevationToken(Context c, CustomResponseHandler rh, String b_hashedOldPassword) {
-        super(c, rh);
+    public ElevationToken(Activity act, CustomResponseHandler rh, String b_hashedOldPassword) {
+        super(act, rh);
         Log.e("hey", "created ElevationToken object");
         body.put("password", b_hashedOldPassword);
     }

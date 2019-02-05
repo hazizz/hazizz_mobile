@@ -19,6 +19,7 @@ import com.hazizz.droid.Communication.POJO.Response.POJOMembersProfilePic;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.POJO.Response.POJOuser;
 import com.hazizz.droid.Communication.POJO.Response.PojoPermisionUsers;
+import com.hazizz.droid.Communication.Requests.GetGroupMemberPermisions;
 import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.Listviews.UserList.CustomAdapter;
 import com.hazizz.droid.Listviews.UserList.UserItem;
@@ -49,7 +50,7 @@ public class GetGroupMembersFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_getgroupmembers, container, false);
         ((MainActivity)getActivity()).onFragmentCreated();
-
+        getActivity().setTitle(R.string.title_fragment_groups);
         groupId = getArguments().getInt("groupId");
         textView_noContent = v.findViewById(R.id.textView_noContent);
 
@@ -83,6 +84,10 @@ public class GetGroupMembersFragment extends Fragment {
                             } catch (NullPointerException e) {
                                 listUser.add(new UserItem(u.getId(),u.getDisplayName(), u.getUsername(), null, Strings.Rank.OWNER.getValue()));
                             }
+                            if(u.getId() == Manager.MeInfo.getId()){
+                                Manager.MeInfo.setRankInCurrentGroup(Strings.Rank.OWNER);
+                            }
+                            Log.e("hey", "555: OWNER");
                             Manager.GroupRankManager.setRank(u.getId(), Strings.Rank.OWNER);
                         }
                     }
@@ -93,6 +98,10 @@ public class GetGroupMembersFragment extends Fragment {
                             } catch (NullPointerException e) {
                                 listUser.add(new UserItem(u.getId(),u.getDisplayName(),u.getUsername(), null, Strings.Rank.MODERATOR.getValue()));
                             }
+                            if(u.getId() == Manager.MeInfo.getId()){
+                                Manager.MeInfo.setRankInCurrentGroup(Strings.Rank.MODERATOR);
+                            }
+                            Log.e("hey", "555: MODI");
                             Manager.GroupRankManager.setRank(u.getId(), Strings.Rank.MODERATOR);
                         }
                     }
@@ -103,6 +112,10 @@ public class GetGroupMembersFragment extends Fragment {
                             } catch (NullPointerException e) {
                                 listUser.add(new UserItem(u.getId(),u.getDisplayName(),u.getUsername(), null, Strings.Rank.USER.getValue()));
                             }
+                            if(u.getId() == Manager.MeInfo.getId()){
+                                Manager.MeInfo.setRankInCurrentGroup(Strings.Rank.USER);
+                            }
+                            Log.e("hey", "555: USER");
                             Manager.GroupRankManager.setRank(u.getId(), Strings.Rank.USER);
                         }
                     }
@@ -125,9 +138,7 @@ public class GetGroupMembersFragment extends Fragment {
                 sRefreshLayout.setRefreshing(false);
             }
         };
-        EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
-        vars.put(Strings.Path.GROUPID, Integer.toString(groupId));
-        MiddleMan.newRequest(this.getActivity(),"getGroupMemberPermisions", null, responseHandler, vars);
+        MiddleMan.newRequest(new GetGroupMemberPermisions(getActivity(), responseHandler, groupId));
     }
 
     void createViewList(){

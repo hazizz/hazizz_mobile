@@ -1,5 +1,6 @@
 package com.hazizz.droid.Communication.Requests;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -16,8 +17,8 @@ import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 public class GetTaskTypes extends Request {
-    GetTaskTypes(Context c, CustomResponseHandler rh) {
-        super(c, rh);
+    GetTaskTypes(Activity act, CustomResponseHandler rh) {
+        super(act, rh);
         Log.e("hey", "created GetTaskTypes object");
     }
     @Override

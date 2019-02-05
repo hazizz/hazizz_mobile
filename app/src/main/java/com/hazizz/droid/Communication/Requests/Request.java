@@ -64,7 +64,7 @@ public class Request implements RequestInterface {
     protected RequestTypes tRequest;
 
     protected CustomResponseHandler cOnResponse;
-    protected Context context;
+   // protected Context context;
     protected Activity act;
 
     protected Request thisRequest = this;
@@ -74,6 +74,11 @@ public class Request implements RequestInterface {
     public Activity getActivity(){
         return act;
     }
+
+   /* public Context getContext(){
+        return context;
+    } */
+
     public CustomResponseHandler getResponseHandler(){
         return cOnResponse;
     }
@@ -83,8 +88,8 @@ public class Request implements RequestInterface {
         this.call.cancel();
     }
 
-    public Request(Context context, CustomResponseHandler cOnResponse) {
-        this.context = context;
+    public Request(Activity act, CustomResponseHandler cOnResponse) {
+        this.act = act;
         this.cOnResponse = cOnResponse;
         Gson gson = new GsonBuilder().serializeNulls().excludeFieldsWithoutExposeAnnotation().create();
         okHttpClient = new OkHttpClient.Builder()
@@ -108,6 +113,9 @@ public class Request implements RequestInterface {
 
         aRequest = retrofit.create(RequestTypes.class);
         tRequest = thera_retrofit.create(RequestTypes.class);
+
+        body = new HashMap<>();
+
     }
 
 

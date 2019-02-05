@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.hazizz.droid.D8;
 import com.hazizz.droid.Listviews.TaskList.TaskItem;
 import com.hazizz.droid.R;
 
@@ -36,7 +37,6 @@ public class CustomAdapter extends ArrayAdapter<TaskItem> {
         TextView taskDueDate;
         TextView taskCreator;
         TextView taskSubject;
-        TextView taskSubject_info;
     }
     @NonNull
     @Override
@@ -54,23 +54,26 @@ public class CustomAdapter extends ArrayAdapter<TaskItem> {
             holder.taskDescription = (TextView) convertView.findViewById(R.id.task_description);
             holder.taskDueDate = (TextView) convertView.findViewById(R.id.textView_dueDate);
             holder.taskCreator = (TextView) convertView.findViewById(R.id.textView_creator);
-            holder.taskSubject = (TextView) convertView.findViewById(R.id.textView_title);
-            holder.taskSubject_info = convertView.findViewById(R.id.textView_subject_info);
+            holder.taskSubject = (TextView) convertView.findViewById(R.id.textView_subject);
             convertView.setTag(holder);
         }else{
             holder = (DataHolder)convertView.getTag();
         }
 
         TaskItem taskItem = data.get(position);
+
+        D8.Date deadLineDate = D8.textToDate(taskItem.getTaskDueDate());
+        holder.taskDueDate.setText(deadLineDate.getMainFormat());
+
+
         holder.taskTitle.setText(taskItem.getTaskTitle());
         holder.taskDescription.setText(taskItem.getTaskDescription());
-        holder.taskDueDate.setText(taskItem.getTaskDueDate());
+
         holder.taskCreator.setText(taskItem.getCreator().getUsername());
         if(taskItem.getSubject() != null) {
-            holder.taskSubject.setText(taskItem.getSubject().getName());
+            holder.taskSubject.setText(taskItem.getSubject().getName() + ":");
         }else{
-            holder.taskSubject.setVisibility(View.INVISIBLE);
-            holder.taskSubject_info.setVisibility(View.INVISIBLE);
+            holder.taskSubject.setVisibility(View.GONE);
         }
 
         return convertView;
