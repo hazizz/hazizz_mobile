@@ -10,8 +10,10 @@ import com.google.gson.Gson;
 import com.hazizz.droid.Activities.AuthActivity;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
+import com.hazizz.droid.Communication.Requests.LoginWithRefresh;
 import com.hazizz.droid.Communication.Requests.Request;
 import com.hazizz.droid.Communication.Requests.RequestType.Login;
+import com.hazizz.droid.Communication.Requests.RequestType.Tokens.RefreshToken;
 import com.hazizz.droid.ErrorHandler;
 import com.hazizz.droid.Manager;
 import com.hazizz.droid.SharedPrefs;
@@ -74,8 +76,7 @@ public interface RequestInterface {
                                    Manager.ThreadManager.freezeThread();
 
 
-                                   Request r = new Login(act, null, SharedPrefs.getString(act.getBaseContext(), "userInfo", "username"),
-                                                         SharedPrefs.TokenManager.getRefreshToken(act.getBaseContext()));
+                                   Request r = new RefreshToken(act);
                                    r.setupCall();
                                    r.makeCall();
 

@@ -11,14 +11,6 @@
         android:layout_height="wrap_content"
         />
 
-    <TextView
-        android:id="@+id/textView_feedback"
-        style="@style/TitleText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="@string/title_activity_feedback" />
-
     <EditText
         android:id="@+id/editText_feedback"
         android:layout_width="300dp"

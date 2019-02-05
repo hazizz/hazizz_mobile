@@ -10,8 +10,6 @@ import android.widget.RemoteViewsService;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
-import com.hazizz.droid.Communication.MiddleMan;
-import com.hazizz.droid.R;
 
 import java.util.HashMap;
 import java.util.List;
@@ -82,7 +80,7 @@ public class WidgetService extends RemoteViewsService {
                 }
             };
 
-            MiddleMan.newRequest(null, "getTasksFromMe", null, rh, null);
+         //   MiddleMan.newRequest(null, "getTasksFromMe", null, rh, null);
         }
 
         @Override
@@ -101,7 +99,7 @@ public class WidgetService extends RemoteViewsService {
             views.setTextViewText(R.id.task_title, data.get(i).getTitle());
             views.setTextViewText(R.id.task_description, data.get(i).getDescription());
             views.setTextViewText(R.id.textView_creator, data.get(i).getCreator().getUsername());
-            views.setTextViewText(R.id.textView_title, data.get(i).getSubject().getName());
+            views.setTextViewText(R.id.textView_subject, data.get(i).getSubject().getName());
             views.setTextViewText(R.id.textView_deadline, data.get(i).getDueDate());
 
             Log.e("hey", "getViewAt happened");

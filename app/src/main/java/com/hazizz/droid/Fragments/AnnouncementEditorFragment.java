@@ -20,6 +20,8 @@ import com.hazizz.droid.Activities.MainActivity;
 import com.hazizz.droid.AndroidThings;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
+import com.hazizz.droid.Communication.Requests.CreateAT;
+import com.hazizz.droid.Communication.Requests.EditAT;
 import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.Manager;
 import com.hazizz.droid.Transactor;
@@ -92,7 +94,7 @@ public class AnnouncementEditorFragment extends Fragment{
         textView_error = v.findViewById(R.id.textView_error_currentPassword);
         textView_error.setTextColor(Color.rgb(255, 0, 0));
 
-        textView_fragment_title = v.findViewById(R.id.textView_title);
+        textView_fragment_title = v.findViewById(R.id.textView_subject);
 
         button_send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,6 +116,10 @@ public class AnnouncementEditorFragment extends Fragment{
         });
 
         groupId = Manager.GroupManager.getGroupId();
+
+
+
+
         groupName = Manager.GroupManager.getGroupName();
         announcementId = getArguments().getInt("announcementId");
 
@@ -124,27 +130,22 @@ public class AnnouncementEditorFragment extends Fragment{
             editText_announcementTitle.setText(title);
             editText_description.setText(description);
 
-            textView_fragment_title.setText(getString(R.string.title_editannouncement));
+            getActivity().setTitle(R.string.title_editannouncement);
             editMode = true;
         }else{
-            textView_fragment_title.setText(getString(R.string.title_newannouncement));
+            getActivity().setTitle(R.string.title_newannouncement);
+
             editMode = false;
         }
         return v;
     }
 
     private void editAnnouncement(){
-        HashMap<String, Object> requestBody = new HashMap<>();
+        String announcementTitle = editText_announcementTitle.getText().toString().trim();
+        String description = editText_description.getText().toString();
 
-        requestBody.put("announcementTitle", editText_announcementTitle.getText().toString().trim());
-        requestBody.put("description", editText_description.getText().toString());
-        requestBody.put("subjectId", null);
-
-        EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
-        vars.put(Strings.Path.GROUPID, Integer.toString(groupId));
-        vars.put(Strings.Path.ANNOUNCEMENTID, Integer.toString(announcementId));
-
-        MiddleMan.newRequest(this.getActivity(), "editAnnouncement", requestBody, rh, vars);
+        MiddleMan.newRequest(new EditAT(getActivity(), rh, Strings.Path.ANNOUNCEMENTS, announcementId,
+                announcementTitle, description));
     }
 
     private void createAnnouncement(){
@@ -157,7 +158,8 @@ public class AnnouncementEditorFragment extends Fragment{
         EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
         vars.put(Strings.Path.GROUPID, Integer.toString(groupId));
 
-        MiddleMan.newRequest(this.getActivity(), "createAnnouncement", requestBody, rh, vars);
+        MiddleMan.newRequest(new CreateAT(getActivity(), rh, Strings.Path.ANNOUNCEMENTS, Strings.Path.GROUPS, groupId,
+                editText_announcementTitle.getText().toString().trim(),editText_description.getText().toString()));
     }
     public int getGroupId(){
         return groupId;

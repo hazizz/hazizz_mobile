@@ -1,6 +1,5 @@
 package com.hazizz.droid.Communication.Requests;
 
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -127,11 +126,9 @@ public interface RequestTypes{
 
 
 
-    @PATCH("{whereName}/{byName}/{byId}/{whereId}")
+    @PATCH("{whereName}/{whereId}")
     Call<ResponseBody> editAT(
             @Path("whereName") String whereName,
-            @Path("byName") String byName,
-            @Path("byId") String byId,
             @Path("whereId") String whereId,
             @HeaderMap Map<String, String> headers,
             @Body HashMap<String, Object> body
@@ -159,6 +156,14 @@ public interface RequestTypes{
             @Path("whereName") String whereName,
             @Path("byName") String byName,
             @Path("byId") String byId,
+            @Path("whereId") String whereId,
+            @HeaderMap Map<String, String> headers
+    );
+
+
+    @GET("{whereName}/{whereId}")
+    Call<ResponseBody> getAT(
+            @Path("whereName") String whereName,
             @Path("whereId") String whereId,
             @HeaderMap Map<String, String> headers
     );
@@ -228,6 +233,12 @@ public interface RequestTypes{
             @HeaderMap Map<String, String> headers
     );
 
+    @GET("groups/{groupId}/permissions/{userId}")
+    Call<ResponseBody> getUserPermissionInGroup(
+            @Path("groupId") String groupId,
+            @Path("userId") String userId,
+            @HeaderMap Map<String, String> headers
+    );
 
 
     @GET("me/leavegroup/{groupId}")
@@ -236,14 +247,16 @@ public interface RequestTypes{
             @HeaderMap Map<String, String> headers
     );
 
-    @GET("users/{userId}/picture")
+    @GET("users/{userId}/picture/{size}")
     Call<ResponseBody> getUserProfilePic(
             @Path("userId") String userId,
+            @Path("size") String size,
             @HeaderMap Map<String, String> headers
     );
 
-    @GET("me/picture")
+    @GET("me/picture/{size}")
     Call<ResponseBody> getMyProfilePic(
+            @Path("size") String size,
             @HeaderMap Map<String, String> headers
     );
 
@@ -259,11 +272,9 @@ public interface RequestTypes{
             @Body HashMap<String, Object> body
     );
 
-    @GET("{whereName}/{byName}/{byId}/{whereId}/comments")
+    @GET("{whereName}/{whereId}/comments")
     Call<ResponseBody> getCommentSection(
             @Path("whereName") String whereName,
-            @Path("byName") String byName,
-            @Path("byId") String byId,
             @Path("whereId") String whereId,
             @HeaderMap Map<String, String> headers
     );
@@ -292,21 +303,17 @@ public interface RequestTypes{
             @HeaderMap Map<String, String> headers
     );
 
-    @POST("{whereName}/{byName}/{byId}/{whereId}/comments")
+    @POST("{whereName}/{whereId}/comments")
     Call<ResponseBody> addComment(
             @Path("whereName") String whereName,
-            @Path("byName") String byName,
-            @Path("byId") String byId,
             @Path("whereId") String whereId,
             @HeaderMap Map<String, String> headers,
             @Body HashMap<String, Object> body
     );
 
-    @DELETE("{whereName}/{byName}/{byId}/{whereId}")
-    Call<ResponseBody> DeleteAT(
+    @DELETE("{whereName}/{whereId}")
+    Call<ResponseBody> deleteAT(
             @Path("whereName") String whereName,
-            @Path("byName") String byName,
-            @Path("byId") String byId,
             @Path("whereId") String whereId,
             @HeaderMap Map<String, String> headers
     );

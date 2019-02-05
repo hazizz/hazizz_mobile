@@ -14,22 +14,20 @@ import java.util.HashMap;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 
-public class GetATBy extends Request {
-    private String p_whereName, p_byName;
-    private String p_byId, p_whereId;
-    public GetATBy(Activity act, CustomResponseHandler rh, Strings.Path p_whereName, int p_whereId, String p_byName, int p_byId) {
+public class GetAT extends Request {
+    private String p_whereName;
+    private String p_whereId;
+    public GetAT(Activity act, CustomResponseHandler rh, Strings.Path p_whereName, int p_whereId) {
         super(act, rh);
-        Log.e("hey", "created GetATBy object");
+        Log.e("hey", "created GetAT object");
         this.p_whereName = p_whereName.toString();
-        this.p_byName = p_byName;
-        this.p_byId = Integer.toString(p_byId);
         this.p_whereId = Integer.toString(p_whereId);
     }
     public void setupCall() {
         HashMap<String, String> headerMap = new HashMap<String, String>();
         headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));
 
-        call = aRequest.getATBy(p_whereName, p_byName, p_byId, p_whereId, headerMap);
+        call = aRequest.getAT(p_whereName, p_whereId, headerMap);
     }
     @Override
     public void makeCall() {

@@ -1,5 +1,6 @@
 package com.hazizz.droid.Communication.Requests;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -14,8 +15,8 @@ import retrofit2.Response;
 
 public class GetPublicUserDetail extends Request {
     String userId;
-    GetPublicUserDetail(Context c, CustomResponseHandler rh, int userId) {
-        super(c, rh);
+    public GetPublicUserDetail(Activity act, CustomResponseHandler rh, int userId) {
+        super(act, rh);
         Log.e("hey", "created getPublicUserDetail object");
         this.userId = Integer.toString(userId);
     }

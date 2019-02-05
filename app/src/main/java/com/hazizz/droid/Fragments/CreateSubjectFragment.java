@@ -19,6 +19,7 @@ import com.hazizz.droid.Activities.MainActivity;
 import com.hazizz.droid.AndroidThings;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
+import com.hazizz.droid.Communication.Requests.CreateSubject;
 import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.Fragments.GroupTabs.GroupTabFragment;
 import com.hazizz.droid.Listviews.GroupList.CustomAdapter;
@@ -100,13 +101,10 @@ public class CreateSubjectFragment extends Fragment {
             public void onClick(View v) {
                 String subjectName = editText_newSubject.getText().toString().trim();
                 if(subjectName.length() >= 2 && subjectName.length() <= 20) {
-                    HashMap<String, Object> body = new HashMap<>();
-                    body.put("name", subjectName);
-                    EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
-                    vars.put(Strings.Path.GROUPID, Integer.toString(groupId));
+
                     button_addSubject.setEnabled(false);
 
-                    MiddleMan.newRequest(getActivity(),"createSubject", body, rh, vars);
+                    MiddleMan.newRequest(new CreateSubject(getActivity(), rh, groupId, subjectName));
                 }else{
                     textView_error.setText(R.string.error_subjectLength);
                 }

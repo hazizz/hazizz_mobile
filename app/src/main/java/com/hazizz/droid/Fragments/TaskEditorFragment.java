@@ -27,6 +27,9 @@ import com.hazizz.droid.AndroidThings;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.POJO.Response.POJOsubject;
+import com.hazizz.droid.Communication.Requests.CreateAT;
+import com.hazizz.droid.Communication.Requests.EditAT;
+import com.hazizz.droid.Communication.Requests.GetSubjects;
 import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.D8;
 import com.hazizz.droid.Manager;
@@ -37,7 +40,6 @@ import com.hazizz.droid.R;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 
@@ -60,13 +62,11 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
 
     private Spinner spinner_subject;
     private TextView textView_subject;
-    private TextView textView_fragment_title;
 
     private Spinner spinner_taskType;
     private EditText editText_taskTitle;
     private EditText editText_description;
     private Button button_send;
-    private Button button_add;
     private TextView textView_error;
     private TextView textView_deadline;
 
@@ -153,9 +153,8 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
         ((MainActivity)getActivity()).onFragmentCreated();
 
         spinner_subject = (Spinner)v.findViewById(R.id.subject_spinner);
-        textView_subject = v.findViewById(R.id.textView_title);
+        textView_subject = v.findViewById(R.id.textView_subject);
         button_send = (Button)v.findViewById(R.id.button_send);
-        button_add = v.findViewById(R.id.add_button);
         spinner_taskType = (Spinner)v.findViewById(R.id.taskType_spinner);
         editText_taskTitle = v.findViewById(R.id.taskTitle);
         editText_description = v.findViewById(R.id.editText_description);
@@ -164,7 +163,6 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
         textView_error = v.findViewById(R.id.textView_error_currentPassword);
         textView_error.setTextColor(Color.rgb(255, 0, 0));
 
-        textView_fragment_title = v.findViewById(R.id.fragment_info);
 
         textView_deadline = v.findViewById(R.id.textView_deadline);
 
@@ -172,6 +170,17 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
             @Override
             public void onClick(View view) {
                 dpd.show();
+            }
+        });
+
+        textView_deadline.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if(date != null){
+                    Transactor.fragmentDialogDateViewer(getFragmentManager().beginTransaction(), date);
+                }
+
+                return true;
             }
         });
 
@@ -188,7 +197,11 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
 
 
 
-        groupId = Manager.GroupManager.getGroupId();
+        groupId = getArguments().getInt(Strings.Path.GROUPID.toString());
+
+
+
+
         groupName = Manager.GroupManager.getGroupName();
         taskId = getArguments().getInt("taskId");
 
@@ -196,7 +209,7 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
             subject = getArguments().getInt("subjectId");
             date = getArguments().getString("date");
             textView_deadline.setText(R.string.deadline_ );
-            textView_deadline.append(" " + date);
+            textView_deadline.setText(D8.textToDate(date).getMainFormat());
             editText_taskTitle.setText(getArguments().getString("title"));
             editText_description.setText(getArguments().getString("description"));
             typeId = getArguments().getLong("typeId");
@@ -211,9 +224,8 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
                 }
             } */
             spinner_subject.setVisibility(View.INVISIBLE);
-            button_add.setVisibility(View.INVISIBLE);
 
-            textView_fragment_title.setText(R.string.fragment_title_edit_task);
+            (getActivity()).setTitle(R.string.fragment_title_edit_task);
 
             String[] taskTypeArray = getResources().getStringArray(R.array.taskTypes);
             spinner_taskType.setSelection((int)typeId-1);
@@ -225,21 +237,13 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
             s_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner_subject.setAdapter(s_adapter);
             spinner_subject.setOnItemSelectedListener(this);
-            EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
-            vars.put(Strings.Path.GROUPID, Integer.toString(groupId));
-            MiddleMan.newRequest(this.getActivity(),"getSubjects", null, rh_subjects, vars);
+            MiddleMan.newRequest(new GetSubjects(getActivity(),rh_subjects, groupId));
 
-            textView_fragment_title.setText(R.string.fragment_title_new_task);
+            (getActivity()).setTitle(R.string.fragment_title_new_task);
 
             editMode = false;
         }
 
-        button_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toCreateSubjectFrag();
-            }
-        });
 
         button_send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -279,8 +283,8 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
                 str_year = "" + year;
                 if(month < 10) { str_month = "0" + month; }else{ str_month = month + ""; }
                 if(day < 10){str_day = "0" + day;}else{str_day = day + "";}
-                textView_deadline.setText(R.string.deadline_ );
-                textView_deadline.append(" " + str_year + "." + str_month + "."+ str_day);
+                date = year + "-" + month + "-" + day;
+                textView_deadline.setText(str_year + "." + str_month + "."+ str_day);
             }
         }, Integer.parseInt(D8.getYear()), Integer.parseInt(D8.getMonth()) -2, Integer.parseInt(D8.getDay()));
         //dpd.getDatePicker().setMaxDate(Calendar.getInstance().getTimeInMillis() - 1000);
@@ -294,54 +298,49 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
 
         int tTypeId = spinner_taskType.getSelectedItemPosition() + 1;
 
-        Log.e("hey", "task type: "+tTypeId);
-
-        requestBody.put("taskType", tTypeId);
-        requestBody.put("taskTitle", editText_taskTitle.getText().toString().trim());
-        requestBody.put("description", editText_description.getText().toString());
-        Log.e("hey", "date: " + year + "-" + month + "-" + day);
+        int taskType = tTypeId;
+        String taskTitle = editText_taskTitle.getText().toString().trim();
+        String description = editText_description.getText().toString();
+        String dueDate;
         if(str_day != null && str_month != null && str_year != null) {
-            requestBody.put("dueDate", str_year + "-" + str_month + "-" + str_day);
+            dueDate = str_year + "-" + str_month + "-" + str_day;
         }else{
-            requestBody.put("dueDate", date);
+            dueDate = date;
         }
-        EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
-        vars.put(Strings.Path.WHERENAME, Strings.Path.TASKS.toString());
+        String byName;
+        int byId;
         if(subject == 0) {
-            vars.put(Strings.Path.BYNAME, Strings.Path.GROUPS.toString());
-            vars.put(Strings.Path.BYID, groupId);
+            byName = Strings.Path.GROUPS.toString();
+            byId = groupId;
         }else{
-            vars.put(Strings.Path.BYNAME, Strings.Path.SUBJECTS.toString());
-            vars.put(Strings.Path.BYID, subject);
+            byName =  Strings.Path.SUBJECTS.toString();
+            byId = subject;
         }
-        vars.put(Strings.Path.WHEREID, taskId);
 
-        MiddleMan.newRequest(this.getActivity(), "editAT", requestBody, rh_task, vars);
+        MiddleMan.newRequest(new EditAT(getActivity(),rh_task, Strings.Path.TASKS,taskId,
+                taskType, taskTitle, description, dueDate));
     }
 
     private void createTask() {
-        HashMap<String, Object> requestBody = new HashMap<>();
 
         int tTypeId = spinner_taskType.getSelectedItemPosition() + 1;
-        requestBody.put("taskType", tTypeId);
-        requestBody.put("taskTitle", editText_taskTitle.getText().toString().trim());
-        requestBody.put("description", editText_description.getText().toString());
-        requestBody.put("dueDate", str_year + "-" + str_month + "-" + str_day);
-
-        EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
-        vars.put(Strings.Path.WHERENAME, Strings.Path.TASKS.toString());
+        String title = editText_taskTitle.getText().toString().trim();
+        String description = editText_description.getText().toString();
+        String dueDate = str_year + "-" + str_month + "-" + str_day;
 
         int subjectId = ((POJOsubject) spinner_subject.getSelectedItem()).getId();
-
+        String byName;
+        int byId;
         if(subjectId == 0){
-            vars.put(Strings.Path.BYNAME, Strings.Path.GROUPS.toString());
-            vars.put(Strings.Path.BYID, Integer.toString(groupId));
+            byName = Strings.Path.GROUPS.toString();
+            byId = groupId;
         }else{
-            vars.put(Strings.Path.BYNAME, Strings.Path.SUBJECTS.toString());
-            vars.put(Strings.Path.BYID, subjectId);
+            byName = Strings.Path.SUBJECTS.toString();
+            byId = subjectId;
         }
 
-        MiddleMan.newRequest(this.getActivity(), "createAT", requestBody, rh_task, vars);
+        MiddleMan.newRequest(new CreateAT(getActivity(),rh_task, Strings.Path.TASKS, byName, byId,
+                tTypeId, title, description, dueDate));
 
     }
     @Override
@@ -349,10 +348,6 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
     }
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
-    }
-    void toCreateSubjectFrag(){
-        Manager.DestManager.setDest(Manager.DestManager.TOCREATETASK);
-        Transactor.fragmentCreateSubject(getFragmentManager().beginTransaction(), groupId, groupName);
     }
     public int getGroupId(){
         return groupId;

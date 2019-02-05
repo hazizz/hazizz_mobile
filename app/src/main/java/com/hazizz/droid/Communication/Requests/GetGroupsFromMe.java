@@ -1,5 +1,6 @@
 package com.hazizz.droid.Communication.Requests;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -17,8 +18,8 @@ import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 public class GetGroupsFromMe extends Request {
-    GetGroupsFromMe(Context c, CustomResponseHandler rh) {
-        super(c, rh);
+    public GetGroupsFromMe(Activity act, CustomResponseHandler rh) {
+        super(act, rh);
         Log.e("hey", "created GetGroupsFromMe object");
     }
     public void setupCall() {

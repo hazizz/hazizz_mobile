@@ -17,22 +17,26 @@ import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
 import com.hazizz.droid.Activities.MainActivity;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
+import com.hazizz.droid.Communication.POJO.Response.GetUserPermissionInGroup;
 import com.hazizz.droid.Communication.POJO.Response.POJOMembersProfilePic;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.POJO.Response.POJOsubject;
+import com.hazizz.droid.Communication.POJO.Response.POJOuser;
+import com.hazizz.droid.Communication.POJO.Response.PojoPermisionUsers;
 import com.hazizz.droid.Communication.POJO.Response.PojoType;
 import com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs.POJOgetTaskDetailed;
+import com.hazizz.droid.Communication.Requests.DeleteAT;
+import com.hazizz.droid.Communication.Requests.GetAT;
+import com.hazizz.droid.Communication.Requests.GetGroupMemberPermisions;
+import com.hazizz.droid.Communication.Requests.GetGroupMembersProfilePic;
 import com.hazizz.droid.Communication.Strings;
+import com.hazizz.droid.D8;
 import com.hazizz.droid.Manager;
 import com.hazizz.droid.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
 
-import java.util.EnumMap;
 import java.util.HashMap;
-
-import okhttp3.ResponseBody;
-import retrofit2.Call;
 
 public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSelectedListener{
 
@@ -40,7 +44,10 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
     private Button button_delete;
     private Button button_edit;
 
-    private int taskId, announcementId, groupId;
+    private String byName;
+
+    private short enable_button_comment = 0;
+    private int creatorId, groupId, taskId;
     private int subjectId = 0;
 
     private String groupName;
@@ -62,6 +69,31 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
 
     private CustomResponseHandler rh;
 
+    CustomResponseHandler permissionRh = new CustomResponseHandler() {
+        @Override
+        public void onPOJOResponse(Object response) {
+            String rank = ((String)response);
+
+            Log.e("hey", "talicska: " + rank);
+            Strings.Rank r = Strings.Rank.NULL;
+            if(Strings.Rank.USER.toString().equals(rank)){
+                r = Strings.Rank.USER;
+            }else if(Strings.Rank.MODERATOR.toString().equals(rank)){
+                r = Strings.Rank.MODERATOR;
+            }else if(Strings.Rank.OWNER.toString().equals(rank)) {
+                r = Strings.Rank.OWNER;
+            }
+            Manager.MeInfo.setRankInCurrentGroup(r);
+
+            Log.e("hey", "talicska 2: " + Manager.MeInfo.getRankInCurrentGroup().getValue() + " " + Manager.MeInfo.getRankInCurrentGroup().toString());
+
+            if(Manager.MeInfo.getId() == creatorId || Manager.MeInfo.getRankInCurrentGroup().getValue() >= Strings.Rank.MODERATOR.getValue() ){
+                button_delete.setVisibility(View.VISIBLE);
+                button_edit.setVisibility(View.VISIBLE);
+            }
+        }
+    };
+
     private POJOsubject subject;
 
     private boolean goBackToMain;
@@ -73,6 +105,7 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
         v = inflater.inflate(R.layout.fragment_viewtask, container, false);
         Log.e("hey", "im here lol");
         ((MainActivity)getActivity()).onFragmentCreated();
+        getActivity().setTitle(R.string.title_fragment_view_task);
         textView_type = v.findViewById(R.id.textView_tasktype);
         textView_title = v.findViewById(R.id.textView_title);
         textView_description = v.findViewById(R.id.editText_description);
@@ -80,6 +113,12 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
         textView_subject = v.findViewById(R.id.textView_subject);
         textView_group = v.findViewById(R.id.textView_group);
         textView_deadLine = v.findViewById(R.id.textview_deadline);
+        textView_deadLine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Transactor.fragmentDialogDateViewer(getFragmentManager().beginTransaction(), date);
+            }
+        });
 
         button_delete = v.findViewById(R.id.button_delete);
         button_edit = v.findViewById(R.id.button_edit);
@@ -111,19 +150,14 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
                 };
                 button_delete.setEnabled(false);
 
-                EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
-                vars.put(Strings.Path.TASKID, taskId);
-                if(subjectId != 0){vars.put(Strings.Path.SUBJECTID, subjectId);}
-                else{vars.put(Strings.Path.GROUPID, groupId);}
-
-                MiddleMan.newRequest(getActivity(),"deleteAT", null, rh, vars);
+                MiddleMan.newRequest(new DeleteAT(getActivity(), rh, Strings.Path.TASKS, taskId));
 
             }
         });
 
         button_edit.setOnClickListener(view -> {
             if(gotResponse) {
-                Transactor.fragmentEditTask(getFragmentManager().beginTransaction(), Manager.GroupManager.getGroupId(),
+                Transactor.fragmentEditTask(getFragmentManager().beginTransaction(), groupId,
                         Manager.GroupManager.getGroupName(), taskId, type, subjectId, subjectName, title, descripiton, date,
                         Manager.DestManager.TOGROUP);
             }
@@ -132,35 +166,16 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
         button_comments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(subject == null){
-                    Transactor.fragmentTaskCommentsByGroup(getFragmentManager().beginTransaction(), groupId, taskId);
-                }else{
-                    Transactor.fragmentTaskCommentsBySubject(getFragmentManager().beginTransaction(), subject.getId(), taskId);
-                }
+                Transactor.fragmentCommentSection(getFragmentManager().beginTransaction(), Strings.Path.TASKS.toString(), taskId);
+
             }
         });
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            taskId =  bundle.getInt("taskId");
-            groupId = bundle.getInt("groupId");
-            subjectId = bundle.getInt("subjectId");
-            if(Manager.ProfilePicManager.getCurrentGroupId() != groupId || Manager.DestManager.getDest() == Manager.DestManager.TOMAIN){
-                CustomResponseHandler responseHandler = new CustomResponseHandler() {
-                    @Override
-                    public void onPOJOResponse(Object response) {
-                        Manager.ProfilePicManager.setCurrentGroupMembersProfilePic((HashMap<Integer, POJOMembersProfilePic>)response, groupId);
-                    }
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Log.e("hey", "4");
-                        Log.e("hey", "got here onFailure");
-                    }
-                };
-                EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
-                vars.put(Strings.Path.GROUPID, Integer.toString(groupId));
-                MiddleMan.newRequest(this.getActivity(),"getGroupMembersProfilePic", null, responseHandler, vars);
-            }
+            taskId = bundle.getInt(Strings.Path.TASKID.toString());
+
+
             groupName = bundle.getString("groupName");
             goBackToMain = bundle.getBoolean("goBackToMain");
 
@@ -175,6 +190,54 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
                 Manager.GroupManager.setGroupName(pojoResponse.getGroup().getName());
 
                 groupId = pojoResponse.getGroup().getId();
+
+                CustomResponseHandler r1 = new CustomResponseHandler() {
+                    @Override
+                    public void onPOJOResponse(Object response) {
+                        PojoPermisionUsers pojoPermisionUser = (PojoPermisionUsers)response;
+                        if(pojoPermisionUser != null) {
+                            if(pojoPermisionUser.getOWNER() != null) {
+                                for (POJOuser u : pojoPermisionUser.getOWNER()) {
+                                    Manager.GroupRankManager.setRank(u.getId(), Strings.Rank.OWNER);
+                                }
+                            }if(pojoPermisionUser.getMODERATOR() != null) {
+                                for (POJOuser u : pojoPermisionUser.getMODERATOR()) {
+                                    Log.e("hey", "555: MODI");
+                                    Manager.GroupRankManager.setRank(u.getId(), Strings.Rank.MODERATOR);
+                                }
+                            }if(pojoPermisionUser.getUSER() != null) {
+                                for (POJOuser u : pojoPermisionUser.getUSER()) {
+                                    Log.e("hey", "555: USER");
+                                    Manager.GroupRankManager.setRank(u.getId(), Strings.Rank.USER);
+                                }
+                            }
+                        }
+                        enable_button_comment++;
+                        visibleIfEnabled_button_comment();
+                    }
+                };
+                MiddleMan.newRequest(new GetGroupMemberPermisions(getActivity(), r1, groupId));
+
+
+                creatorId = (int)pojoResponse.getCreator().getId();
+
+                MiddleMan.newRequest(new GetUserPermissionInGroup(getActivity(), permissionRh, groupId, (int)Manager.MeInfo.getId()));
+
+                if(Manager.ProfilePicManager.getCurrentGroupId() != groupId || Manager.DestManager.getDest() == Manager.DestManager.TOMAIN){
+                    CustomResponseHandler responseHandler = new CustomResponseHandler() {
+                        @Override
+                        public void onPOJOResponse(Object response) {
+                            Manager.ProfilePicManager.setCurrentGroupMembersProfilePic((HashMap<Integer, POJOMembersProfilePic>)response, groupId);
+                            enable_button_comment++;
+                            visibleIfEnabled_button_comment();
+                        }
+                    };
+                    MiddleMan.newRequest(new GetGroupMembersProfilePic(getActivity(), responseHandler, groupId));
+                }else{
+                    enable_button_comment++;
+                    visibleIfEnabled_button_comment();
+                }
+
                 taskId = (int)pojoResponse.getId();
                 type = pojoResponse.getType();
                 subject = pojoResponse.getSubject();
@@ -208,32 +271,19 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
                 textView_subject.setText(subjectName);
                 textView_group.setText(groupName);
 
-                textView_deadLine.setText(date);
+                textView_deadLine.setText(D8.textToDate(date).getMainFormat());
 
-                String creatorUsername = pojoResponse.getCreator().getUsername();
-                if(Manager.MeInfo.getProfileName().equals(creatorUsername) || Manager.MeInfo.getRankInCurrentGroup().getValue() >= Strings.Rank.MODERATOR.getValue() ){
-                    button_delete.setVisibility(View.VISIBLE);
-                    button_edit.setVisibility(View.VISIBLE);
-                }
-            }
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.e("hey", "4");
-                Log.e("hey", "got here onFailure");
-                Log.e("hey", "task created");
             }
         };
-        EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
-        vars.put(Strings.Path.TASKID, Integer.toString(taskId));
+        MiddleMan.newRequest(new GetAT(getActivity(), rh, Strings.Path.TASKS, taskId));
 
-        if(subjectId == 0) {
-            vars.put(Strings.Path.GROUPID, Integer.toString(groupId));
-            MiddleMan.newRequest(this.getActivity(), "getTaskBy", null, rh, vars);
-        }else{
-            vars.put(Strings.Path.SUBJECTID, subjectId);
-            MiddleMan.newRequest(this.getActivity(), "getTaskBy", null, rh, vars);
-        }
         return v;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Manager.GroupManager.leftGroup();
     }
 
     @Override
@@ -247,4 +297,11 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
     public int getGroupId(){ return groupId; }
     public String getGroupName(){ return groupName; }
     public boolean getGoBackToMain(){ return goBackToMain; }
+
+
+    public void visibleIfEnabled_button_comment(){
+        if(enable_button_comment > 1){
+            button_comments.setVisibility(View.VISIBLE);
+        }
+    }
 }

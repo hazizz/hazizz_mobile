@@ -37,8 +37,9 @@
         <activity
             android:name=".Activities.MainActivity"
             android:noHistory="false"
-            android:windowSoftInputMode="adjustPan"
+
             android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="adjustResize"
             />
         <activity
             android:name=".Activities.AuthActivity"
@@ -60,6 +61,9 @@
             android:name=".Activities.FeedbackActivity"
             android:noHistory="true"
             android:windowSoftInputMode="adjustPan" />
+
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/ImageCropTheme"/>
 
 
 

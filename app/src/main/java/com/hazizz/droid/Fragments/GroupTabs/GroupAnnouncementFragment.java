@@ -18,6 +18,7 @@ import com.hazizz.droid.Activities.MainActivity;
 import com.hazizz.droid.Communication.POJO.Response.AnnouncementPOJOs.POJOAnnouncement;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
+import com.hazizz.droid.Communication.Requests.GetAnnouncementsFromGroup;
 import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.Listviews.AnnouncementList.AnnouncementItem;
 import com.hazizz.droid.Listviews.AnnouncementList.Group.CustomAdapter;
@@ -79,9 +80,7 @@ public class GroupAnnouncementFragment extends Fragment{
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 groupName = ((AnnouncementItem)listView.getItemAtPosition(i)).getGroup().getName();
                     Transactor.fragmentViewAnnouncement(getFragmentManager().beginTransaction(),
-                        ((AnnouncementItem)listView.getItemAtPosition(i)).getGroup().getId(),
                         ((AnnouncementItem)listView.getItemAtPosition(i)).getAnnouncementId(),
-                        ((AnnouncementItem)listView.getItemAtPosition(i)).getGroup().getName(),
                             false, Manager.DestManager.TOGROUP);
             }
         });
@@ -139,9 +138,7 @@ public class GroupAnnouncementFragment extends Fragment{
                 //    textView_noContent.
             }
         };
-        EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
-        vars.put(Strings.Path.GROUPID, Integer.toString(groupId));
-        MiddleMan.newRequest(this.getActivity(),"getAnnouncementsFromGroup", null, responseHandler, vars);
+        MiddleMan.newRequest(new GetAnnouncementsFromGroup(getActivity(),responseHandler, groupId));
     }
 
     public void toAnnouncementEditor(FragmentManager fm){

@@ -1,21 +1,14 @@
 package com.hazizz.droid.Communication;
 
-import android.app.Activity;
-import android.content.Context;
-
 import com.hazizz.droid.Network;
 import android.util.Log;
 
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.Requests.Request;
 
-import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
 public abstract class MiddleMan{
-
     public static BlockingQueue<Request> requestQueue = new LinkedBlockingDeque<>(10);
     public static BlockingQueue<Request> waitingForResponseQueue = new LinkedBlockingDeque<>(10);
 
@@ -47,10 +40,9 @@ public abstract class MiddleMan{
         }
     }
 
-
     public static void newRequest(Request newRequest) {
         for (Request r : requestQueue)
-            if (r.requestType.getClass() == newRequest.requestType.getClass()) {
+            if (r.getClass() == newRequest.getClass()) {
                 requestQueue.remove(r);
             }
         if(Network.getActiveNetwork(newRequest.getActivity()) == null || !Network.isConnectedOrConnecting(newRequest.getActivity())) {
@@ -69,24 +61,19 @@ public abstract class MiddleMan{
 
     public static void callAgain(){
         for(Request r : requestQueue) {
-            Log.e("hey", "call again: " + r.requestType);
-            r.requestType.setupCall();
-            r.requestType.makeCallAgain();
+            Log.e("hey", "call again: " + r);
+            r.setupCall();
+            r.makeCallAgain();
         }
-
-
-
     }
 
     public static void sendRequestsFromQ() {
         for (Request request : requestQueue) {
-            request.requestType.setupCall();
-            request.requestType.makeCall();
+            request.setupCall();
+            request.makeCall();
             try {
                 waitingForResponseQueue.put(request);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            } catch (InterruptedException e) { e.printStackTrace(); }
         }
         for(Request r : waitingForResponseQueue){
             requestQueue.remove(r);

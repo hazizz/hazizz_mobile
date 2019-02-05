@@ -1,5 +1,6 @@
 package com.hazizz.droid.Communication.Requests;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -13,11 +14,11 @@ import retrofit2.Response;
 
 public class CreateSubject extends Request {
     String p_groupId, b_subjectName;
-    CreateSubject(Context c, CustomResponseHandler rh, int p_groupId, String b_subjectName) {
-        super(c, rh);
+    public CreateSubject(Activity act, CustomResponseHandler rh, int p_groupId, String b_subjectName) {
+        super(act, rh);
         Log.e("hey", "created CreateSubject object");
         this.p_groupId = Integer.toString(p_groupId);
-        this.b_subjectName = b_subjectName;
+        body.put("name", b_subjectName);
     }
     public void setupCall() {
         HashMap<String, String> headerMap = new HashMap<String, String>();

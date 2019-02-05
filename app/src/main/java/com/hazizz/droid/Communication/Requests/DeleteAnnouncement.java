@@ -1,5 +1,6 @@
 package com.hazizz.droid.Communication.Requests;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -13,8 +14,8 @@ import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 public class DeleteAnnouncement extends Request {
-    public DeleteAnnouncement(Context c, CustomResponseHandler rh) {
-        super(c, rh);
+    public DeleteAnnouncement(Activity act, CustomResponseHandler rh) {
+        super(act, rh);
         Log.e("hey", "created UpdateTask object");
     }
     @Override
@@ -28,7 +29,7 @@ public class DeleteAnnouncement extends Request {
     public void setupCall() {
         HashMap<String, String> headerMap = new HashMap<String, String>();
         headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
-        call = aRequest.deleteAnnouncement(vars.get(Strings.Path.GROUPID).toString(), vars.get(Strings.Path.ANNOUNCEMENTID).toString(), headerMap); //Integer.toString(groupID)
+     //   call = aRequest.deleteAnnouncement(vars.get(Strings.Path.GROUPID).toString(), vars.get(Strings.Path.ANNOUNCEMENTID).toString(), headerMap); //Integer.toString(groupID)
     }
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {

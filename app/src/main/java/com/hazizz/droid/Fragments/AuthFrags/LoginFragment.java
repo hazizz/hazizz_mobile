@@ -19,6 +19,7 @@ import com.hazizz.droid.Activities.MainActivity;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOauth;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
+import com.hazizz.droid.Communication.Requests.RequestType.Login;
 import com.hazizz.droid.Converter.Converter;
 import com.hazizz.droid.SharedPrefs;
 import com.hazizz.droid.Transactor;
@@ -127,13 +128,10 @@ public class LoginFragment extends Fragment {
                 else{
                     username = editText_username.getText().toString();
                     password = editText_password.getText().toString();
-                    HashMap<String, Object> requestBody = new HashMap<>();
-
-                    requestBody.put("username", username);
-                    requestBody.put("password", Converter.hashString(password));
+                    password = Converter.hashString(password);
 
                     button_login.setEnabled(false);
-                    MiddleMan.newRequest(getActivity(), "login", requestBody, responseHandler, null);
+                    MiddleMan.newRequest(new Login(getActivity(), responseHandler, username, password));
                 }
             }
         });

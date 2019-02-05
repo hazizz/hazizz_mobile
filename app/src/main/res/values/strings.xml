@@ -10,6 +10,17 @@
     <string name="open">Open</string>
 
 
+
+    <string-array name="days">
+      <item>Hétfő</item>
+      <item>Kedd</item>
+      <item>Szerda</item>
+      <item>Csütörtök</item>
+      <item>Péntek</item>
+      <item>Szombar</item>
+      <item>Vasárnap</item>
+    </string-array>
+
     <string-array name="taskTypes">
         <item>házi feladat</item>
         <item>beadandó</item>
@@ -103,6 +114,8 @@
       <string name="subject_">Téma:</string>
       <string name="tasktype_">Feladat típusa:</string>
 
+
+      <string name="daysLeft">nap múlva</string>
       <string name="displayName_">Becenév:</string>
       <string name="registrationDate_">Regisztráció időpontja:</string>
       <string name="username_">Felhasználónév:</string>
@@ -132,7 +145,8 @@
       <string name="title_editannouncement">Bejegyzés szerkesztés</string>
       <string name="title_fragment_comments">Megjegyzések</string>
       <string name="title_fragment_creategroup">Új csoport létrehozása</string>
-
+      <string name="title_fragment_view_announcement">Bejegyzés Megtekintés</string>
+      <string name="title_fragment_view_task">Feladat Megtekintés</string>
 
       <string name="tasktype_fragment_taskeditor">Feladat típusa:</string>
       <string name="choose_deadline_fragment_taskeditor">Válasz határidőt!</string>
@@ -205,7 +219,11 @@
 
 
 
-
+      <string name="crop_image_activity_title"> </string>
+      <string name="crop_image_menu_rotate_right">Forgatás</string>
+      <string name="crop_image_menu_crop">Kivág</string>
+      <string name="crop_image_menu_flip_horizontlaly">Forgatás vízszintesen</string>
+      <string name="crop_image_menu_flip_vertically">Forgatás függőlegesen</string>
 
 
 

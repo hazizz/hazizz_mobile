@@ -17,6 +17,7 @@ import com.hazizz.droid.Activities.MainActivity;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.POJO.Response.POJOgroup;
+import com.hazizz.droid.Communication.Requests.GetGroupsFromMe;
 import com.hazizz.droid.Listviews.GroupList.CustomAdapter;
 import com.hazizz.droid.Listviews.GroupList.GroupItem;
 import com.hazizz.droid.Manager;
@@ -36,7 +37,6 @@ public class GroupsFragment extends Fragment {
     private View v;
     private CustomAdapter adapter;
     private TextView textView_noContent;
-    private TextView textView_title;
 
     private SwipeRefreshLayout sRefreshLayout;
 
@@ -45,10 +45,9 @@ public class GroupsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_group, container, false);
         ((MainActivity)getActivity()).onFragmentCreated();
-
+        getActivity().setTitle(R.string.title_fragment_groups);
         createViewList();
         textView_noContent = v.findViewById(R.id.textView_noContent);
-        textView_title = v.findViewById(R.id.textView_title);
         sRefreshLayout = v.findViewById(R.id.swipe_refresh_layout); sRefreshLayout.bringToFront();
         sRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -62,6 +61,8 @@ public class GroupsFragment extends Fragment {
     }
 
     public void getGroups() {
+
+
         adapter.clear();
         CustomResponseHandler responseHandler = new CustomResponseHandler() {
             @Override
@@ -71,7 +72,7 @@ public class GroupsFragment extends Fragment {
                 listGroup.clear();
                 if(!castedListFullOfPojos.isEmpty()) {
                     for (POJOgroup g : castedListFullOfPojos) {
-                        listGroup.add(new GroupItem(R.drawable.ic_launcher_background, g.getUniqueName(), g.getId()));
+                        listGroup.add(new GroupItem(R.drawable.ic_launcher_background, g.getName(), g.getId()));
                     }
                     adapter.notifyDataSetChanged();
                 }else{
@@ -99,7 +100,7 @@ public class GroupsFragment extends Fragment {
                 sRefreshLayout.setRefreshing(false);
             }
         };
-        MiddleMan.newRequest(this.getActivity(),"getGroupsFromMe", null, responseHandler, null);
+        MiddleMan.newRequest(new GetGroupsFromMe(getActivity(),responseHandler));
     }
 
     void createViewList(){

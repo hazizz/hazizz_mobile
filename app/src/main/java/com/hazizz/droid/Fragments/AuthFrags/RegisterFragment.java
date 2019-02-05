@@ -19,6 +19,7 @@ import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.SignUpEvent;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
+import com.hazizz.droid.Communication.Requests.RequestType.Register;
 import com.hazizz.droid.Converter.Converter;
 import com.hazizz.droid.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
@@ -148,7 +149,9 @@ public class RegisterFragment extends Fragment {
 
                             button_signup.setEnabled(false);
 
-                            MiddleMan.newRequest(getActivity(), "register", requestBody, responseHandler, null);
+                            MiddleMan.newRequest(new Register(getActivity(), responseHandler, username, password, email));
+
+
                         }else {
                             textView_error.setText(R.string.error_termsAndConditionsNotAccepted);
                         }

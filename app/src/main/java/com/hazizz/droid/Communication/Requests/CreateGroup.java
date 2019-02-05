@@ -1,5 +1,6 @@
 package com.hazizz.droid.Communication.Requests;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -12,14 +13,14 @@ import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 public class CreateGroup extends Request {
-    CreateGroup(Context c, CustomResponseHandler rh, String b_groupName, String b_groupType) {
-        super(c, rh);
+    public CreateGroup(Activity act, CustomResponseHandler rh, String b_groupName, String b_groupType) {
+        super(act, rh);
         Log.e("hey", "created CreateGroup object");
         body.put("groupName", b_groupName);
         body.put("type", b_groupType);
     }
-    CreateGroup(Context c, CustomResponseHandler rh, String b_groupName, String b_groupType, String b_password) {
-        super(c, rh);
+    public CreateGroup(Activity act, CustomResponseHandler rh, String b_groupName, String b_groupType, String b_password) {
+        super(act, rh);
         Log.e("hey", "created CreateGroup object");
         body.put("groupName", b_groupName);
         body.put("password", b_password);

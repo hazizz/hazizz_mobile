@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.hazizz.droid.Activities.MainActivity;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
+import com.hazizz.droid.Communication.Requests.RequestType.Thera.ThSchools;
 import com.hazizz.droid.CustomSearchableSpinner;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
@@ -65,7 +66,7 @@ public class ThChooseSchool extends Fragment {
         spinner_schools.setPositiveButton(getString(R.string.close));
 
 
-        MiddleMan.newRequest(getActivity(), "thSchools", null, rh, null);
+        MiddleMan.newRequest(new ThSchools(getActivity(), rh));
 
         button_ok = v.findViewById(R.id.button_ok);
         button_ok.setOnClickListener(new View.OnClickListener() {

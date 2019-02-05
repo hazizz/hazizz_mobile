@@ -22,6 +22,7 @@ import com.hazizz.droid.AndroidThings;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.POJO.Response.POJOgroup;
+import com.hazizz.droid.Communication.Requests.CreateGroup;
 import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
@@ -155,10 +156,9 @@ public class CreateGroupFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 button_createGroup.setEnabled(false);
+                String password = "";
                 if(button_createGroup.getTextSize() != 0) {
                     newGroupName = editText_createGroup.getText().toString().toLowerCase();
-                    HashMap<String, Object> body = new HashMap<>();
-                    body.put("groupName", newGroupName);
 
                     String groupType = Strings.Path.GROUPTYPE_OPEN.toString();
                     if(radioButton_open.isChecked()){
@@ -166,20 +166,20 @@ public class CreateGroupFragment extends Fragment {
                     }else if(radioButton_invite_only.isChecked()){
                         groupType = Strings.Path.GROUPTYPE_INVITE_ONLY.toString();
                     }else if(radioButton_password.isChecked()){
-                        String password = editText_password.getText().toString();
+                        password = editText_password.getText().toString();
                         if(password.isEmpty()){
                             textView_error.setText(getString(R.string.empty_field_password));
                             button_createGroup.setEnabled(true);
                             return;
                         }
                         groupType = Strings.Path.GROUPTYPE_PASSWORD.toString();
-                        body.put("password", password);
                     }
-                    body.put("type", groupType);
-                    MiddleMan.newRequest(getActivity(),"createGroup", body, rh, null);
+                    if(!groupType.equals(Strings.Path.GROUPTYPE_PASSWORD.toString())){
+                        MiddleMan.newRequest(new CreateGroup(getActivity(),rh, newGroupName, groupType));
+                    }else{
+                        MiddleMan.newRequest(new CreateGroup(getActivity(),rh, newGroupName, password, groupType));
+                    }
                 }else{
-                    // TODO subject name not long enough
-                    Log.e("hey", "else 123");
                 }
             }
         });

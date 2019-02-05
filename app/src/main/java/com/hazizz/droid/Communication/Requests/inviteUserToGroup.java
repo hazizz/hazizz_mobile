@@ -1,5 +1,6 @@
 package com.hazizz.droid.Communication.Requests;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -13,15 +14,17 @@ import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 public class inviteUserToGroup extends Request {
-    inviteUserToGroup(Context c, CustomResponseHandler rh) {
-        super(c, rh);
+    String groupId;
+    inviteUserToGroup(Activity act, CustomResponseHandler rh, int groupId) {
+        super(act, rh);
+        this.groupId = Integer.toString(groupId);
         Log.e("hey", "created inviteUserToGroup object");
     }
     public void setupCall() {
         HashMap<String, String> headerMap = new HashMap<String, String>();
         headerMap.put("Content-Type", "application/json");
         headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
-        call = aRequest.inviteUserToGroup(vars.get(Strings.Path.GROUPID).toString(), headerMap, body);
+       // call = aRequest.inviteUserToGroup(vars.get(Strings.Path.GROUPID).toString(), headerMap, body);
     }
     @Override
     public void makeCall() {

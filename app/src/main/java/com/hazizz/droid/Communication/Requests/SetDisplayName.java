@@ -1,5 +1,6 @@
 package com.hazizz.droid.Communication.Requests;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -12,8 +13,8 @@ import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 public class SetDisplayName extends Request {
-    SetDisplayName(Context c, CustomResponseHandler rh, String b_displayName) {
-        super(c, rh);
+    public SetDisplayName(Activity act, CustomResponseHandler rh, String b_displayName) {
+        super(act, rh);
         Log.e("hey", "created setDisplayName object");
         body.put("displayName", b_displayName);
     }

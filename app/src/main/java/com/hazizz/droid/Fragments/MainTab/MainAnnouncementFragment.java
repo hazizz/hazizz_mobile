@@ -17,6 +17,8 @@ import com.hazizz.droid.Activities.MainActivity;
 import com.hazizz.droid.Communication.POJO.Response.AnnouncementPOJOs.POJOAnnouncement;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
+import com.hazizz.droid.Communication.Requests.GetMyAnnouncements;
+import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.Listviews.AnnouncementList.AnnouncementItem;
 import com.hazizz.droid.Listviews.AnnouncementList.Main.CustomAdapter;
 import com.hazizz.droid.Manager;
@@ -72,9 +74,7 @@ public class MainAnnouncementFragment extends Fragment{
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                // groupName = ((AnnouncementItem)listView.getItemAtPosition(i)).getGroup().getName();
                 Transactor.fragmentViewAnnouncement(getFragmentManager().beginTransaction(),
-                        ((AnnouncementItem)listView.getItemAtPosition(i)).getGroup().getId(),
                         ((AnnouncementItem)listView.getItemAtPosition(i)).getAnnouncementId(),
-                        ((AnnouncementItem)listView.getItemAtPosition(i)).getGroup().getName(),
                         false, Manager.DestManager.TOMAIN);
 
             }
@@ -128,6 +128,6 @@ public class MainAnnouncementFragment extends Fragment{
             }
         };
         //  MiddleMan.request.getTasksFromGroup(this.getActivity(), null, responseHandler, vars);
-        MiddleMan.newRequest(this.getActivity(),"getMyAnnouncements", null, responseHandler, null);
+        MiddleMan.newRequest(new GetMyAnnouncements(getActivity(),responseHandler));
     }
 }

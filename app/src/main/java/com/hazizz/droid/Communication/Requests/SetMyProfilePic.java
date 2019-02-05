@@ -1,5 +1,6 @@
 package com.hazizz.droid.Communication.Requests;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -12,12 +13,12 @@ import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 public class SetMyProfilePic extends Request {
-    SetMyProfilePic(Context c, CustomResponseHandler rh, String data) {
-        super(c, rh);
+    public SetMyProfilePic(Activity act, CustomResponseHandler rh, String b_data, String b_type) {
+        super(act, rh);
         Log.e("hey", "created GetMyProfilePic object");
-        String finalString = data.replaceAll("\\s","");
+        String finalString = b_data.replaceAll("\\s","");
         body.put("data", finalString);
-        body.put("type", "ppfull");
+        body.put("type", b_type);
     }
 
     public void setupCall() {

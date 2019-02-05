@@ -31,10 +31,11 @@ public class CustomAdapter extends ArrayAdapter<AnnouncementItem> {
     }
 
     static class DataHolder{
-        // ImageView taskPic;
         TextView taskTitle;
         TextView taskDescription;
         TextView taskGroup;
+        TextView subject_;
+        TextView subject;
     }
     @NonNull
     @Override
@@ -47,12 +48,11 @@ public class CustomAdapter extends ArrayAdapter<AnnouncementItem> {
             convertView = inflater.inflate(picID, parent, false);
 
             holder = new DataHolder();
-            // holder.taskPic = (ImageView) convertView.findViewById(R.id.task_pic);
             holder.taskTitle = (TextView) convertView.findViewById(R.id.announcement_title);
             holder.taskDescription = (TextView) convertView.findViewById(R.id.announcement_description);
             holder.taskGroup = (TextView) convertView.findViewById(R.id.textView_creator);
-         //   holder.taskSubject = (TextView) convertView.findViewById(R.id.textView_title);
-        //    holder.taskSubject_ = (TextView) convertView.findViewById(R.id.textView_subject_);
+            holder.subject_ = (TextView) convertView.findViewById(R.id.textView_subject_);
+            holder.subject = (TextView) convertView.findViewById(R.id.textView_subject);
             convertView.setTag(holder);
         }else{
             holder = (DataHolder)convertView.getTag();
@@ -61,17 +61,15 @@ public class CustomAdapter extends ArrayAdapter<AnnouncementItem> {
         AnnouncementItem announcementItem = data.get(position);
         holder.taskTitle.setText(announcementItem.getAnnouncementTitle());
         holder.taskDescription.setText(announcementItem.getAnnouncementDescription());
-        //   holder.taskCreator.setText(announcementItem.getCreator().getUsername());
         holder.taskGroup.setText(announcementItem.getGroup().getName());
-       /* if(announcementItem.getSubject() == null) {
-            holder.taskSubject.setVisibility(View.INVISIBLE);
-            holder.taskSubject_.setVisibility(View.INVISIBLE);
+
+        if(announcementItem.getSubject() != null){
+            holder.subject.setText(announcementItem.getSubject().getName());
         }else{
-            holder.taskSubject.setText(announcementItem.getSubject().getName());
-        } */
-        //  holder.taskPic.setImageResource(announcementItem.taskPic);
+            holder.subject.setVisibility(View.GONE);
+            holder.subject_.setVisibility(View.GONE);
+        }
 
         return convertView;
-        // return super.getView(position, convertView, parent);
     }
 }

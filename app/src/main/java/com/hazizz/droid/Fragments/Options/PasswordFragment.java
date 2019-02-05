@@ -1,6 +1,7 @@
 package com.hazizz.droid.Fragments.Options;
 
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,6 +24,9 @@ import com.hazizz.droid.Communication.POJO.Response.POJOauth;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.POJO.Response.POJOgroup;
 import com.hazizz.droid.Communication.POJO.Response.PojoToken;
+import com.hazizz.droid.Communication.Requests.ChangePassword;
+import com.hazizz.droid.Communication.Requests.ElevationToken;
+import com.hazizz.droid.Communication.Requests.RequestType.Login;
 import com.hazizz.droid.Converter.Converter;
 import com.hazizz.droid.Manager;
 import com.hazizz.droid.R;
@@ -64,12 +68,8 @@ public class PasswordFragment extends Fragment {
     private CustomResponseHandler changePassRh = new CustomResponseHandler() {
         @Override
         public void onSuccessfulResponse() {
-            HashMap<String, Object> requestBody = new HashMap<>();
 
-            requestBody.put("username", Manager.MeInfo.getProfileName());
-            requestBody.put("password", hashedNewPassword);
-
-            MiddleMan.newRequest(getActivity(), "login", requestBody, authRh, null);
+            MiddleMan.newRequest(new Login(getActivity(), authRh, Manager.MeInfo.getProfileName(), hashedNewPassword));
         }
 
         @Override
@@ -84,7 +84,7 @@ public class PasswordFragment extends Fragment {
             String elevationToken = ((PojoToken)response).getToken();
 
 
-            MiddleMan.newRequest(getActivity(), "changePassword", body, changePassRh, null);
+            MiddleMan.newRequest(new ChangePassword(getActivity(), changePassRh, hashedNewPassword, elevationToken));
         }
 
         @Override
@@ -180,7 +180,7 @@ public class PasswordFragment extends Fragment {
                         hashedNewPassword = Converter.hashString(newPassword);
 
 
-                        MiddleMan.newRequest(getActivity(), "elevationToken", body, elevationRh, null);
+                        MiddleMan.newRequest(new ElevationToken(getActivity(), elevationRh, hashedNewPassword));
                     }else{
                         textView_errorPasswordNotLongEnough.setVisibility(View.VISIBLE);
                     }

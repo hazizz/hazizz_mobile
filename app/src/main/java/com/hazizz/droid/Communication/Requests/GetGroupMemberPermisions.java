@@ -1,5 +1,6 @@
 package com.hazizz.droid.Communication.Requests;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -14,8 +15,8 @@ import retrofit2.Response;
 
 public class GetGroupMemberPermisions extends Request {
     private String p_groupId;
-    GetGroupMemberPermisions(Context c, CustomResponseHandler rh, int p_groupId) {
-        super(c, rh);
+    public GetGroupMemberPermisions(Activity act, CustomResponseHandler rh, int p_groupId) {
+        super(act, rh);
         Log.e("hey", "created GetGroupMemberPermisions object");
         this.p_groupId = Integer.toString(p_groupId);
     }

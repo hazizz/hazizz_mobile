@@ -4,13 +4,12 @@ import android.util.Log;
 
 import lombok.Data;
 
-@Data
 public class POJOerror{
 
-    private String time;
-    private int errorCode;
-    private String title;
-    private String message;
+    private String time = "null";
+    private int errorCode = 0;
+    private String title = "null";
+    private String message = "null";
 
     public POJOerror(String time, int errorCode, String title, String message){
         Log.e("hey", "the time: " + time + "|");
@@ -20,4 +19,30 @@ public class POJOerror{
         if(message == null || message.length() == 0){this.message = "null";}else{this.message = message;}
 
     }
+    public String getTime(){
+        if(time != null){
+            return time;
+        }else{
+            return "empty";
+        }
+    }
+    public int getErrorCode(){
+        return errorCode;
+    }
+    public String getTitle(){
+        if(title != null){
+            return title;
+        }else{
+            return "empty";
+        }
+    }
+    public String getMessage(){
+        if(message != null){
+            return message;
+        }else{
+            return "empty";
+        }
+    }
+
+
 }

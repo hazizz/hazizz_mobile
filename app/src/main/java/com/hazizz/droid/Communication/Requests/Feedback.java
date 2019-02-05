@@ -1,5 +1,6 @@
 package com.hazizz.droid.Communication.Requests;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -12,8 +13,8 @@ import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 public class Feedback extends Request {
-    Feedback(Context c, CustomResponseHandler rh, String b_platform, String b_version, String b_message, Object b_data) {
-        super(c, rh);
+    public Feedback(Activity act, CustomResponseHandler rh, String b_platform, String b_version, String b_message, Object b_data) {
+        super(act, rh);
         Log.e("hey", "created Feedback object");
         body.put("platform", b_platform);
         body.put("version", b_version);

@@ -1,5 +1,6 @@
 package com.hazizz.droid.Communication.Requests;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -19,15 +20,15 @@ import retrofit2.Response;
 
 public class GetAnnouncementsFromGroup extends Request {
     String groupId;
-    GetAnnouncementsFromGroup(Context c, CustomResponseHandler rh, int groupId) {
-        super(c, rh);
+    public GetAnnouncementsFromGroup(Activity act, CustomResponseHandler rh, int groupId) {
+        super(act, rh);
         Log.e("hey", "created GetAnnouncements object");
         this.groupId = Integer.toString(groupId);
     }
     public void setupCall() {
         HashMap<String, String> headerMap = new HashMap<String, String>();
         headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
-        call = aRequest.getAnnouncementsFromGroup(vars.get(Strings.Path.GROUPID).toString(), headerMap);
+        call = aRequest.getAnnouncementsFromGroup(groupId, headerMap);
     }
     @Override
     public void makeCall() {

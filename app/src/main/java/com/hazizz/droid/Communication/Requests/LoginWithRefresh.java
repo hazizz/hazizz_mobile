@@ -1,32 +1,29 @@
-package com.hazizz.droid.Communication.Requests.RequestType;
+package com.hazizz.droid.Communication.Requests;
 
 import android.app.Activity;
-import android.content.Context;
 import android.util.Log;
 
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOauth;
-import com.hazizz.droid.Communication.RequestInterface;
-import com.hazizz.droid.Communication.Requests.Request;
 
 import java.util.HashMap;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 
-public class Login extends Request  {
-    String b_username, b_password;
-    public Login(Activity act, CustomResponseHandler rh, String b_username, String b_password) {
+public class LoginWithRefresh extends Request  {
+    String b_username, refreshToken;
+    public LoginWithRefresh(Activity act, CustomResponseHandler rh, String b_username, String refreshToken) {
         super(act, rh);
         Log.e("hey", "created Login object");
         this.b_username = b_username;
-        this.b_password = b_password;
+        this.refreshToken = refreshToken;
     }
     public void setupCall() {
         HashMap<String, String> headerMap = new HashMap<>();
         headerMap.put("Content-Type", "application/json");
         body.put("username", b_username);
-        body.put("password", b_password);
+        body.put("refreshToken", refreshToken);
         call = aRequest.login(headerMap, body);
     }
     @Override

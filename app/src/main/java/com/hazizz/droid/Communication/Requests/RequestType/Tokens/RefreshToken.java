@@ -1,5 +1,6 @@
 package com.hazizz.droid.Communication.Requests.RequestType.Tokens;
 
+import android.app.Activity;
 import android.util.Log;
 
 import com.hazizz.droid.Communication.MiddleMan;
@@ -35,13 +36,13 @@ public class RefreshToken extends Request {
         }
     };
 
-    RefreshToken() {
+    public RefreshToken(Activity act) {
+        super(act, null);
         Log.e("hey", "created RefreshToken");
     }
     public void setupCall() {
         HashMap<String, String> headerMap = new HashMap<String, String>();
         headerMap.put("Content-Type", "application/json");
-
         HashMap<String, Object> body = new HashMap<>();
         body.put("username", SharedPrefs.getString(act.getBaseContext(), "userInfo", "username"));
         body.put("refreshToken", SharedPrefs.TokenManager.getRefreshToken(act.getBaseContext()));

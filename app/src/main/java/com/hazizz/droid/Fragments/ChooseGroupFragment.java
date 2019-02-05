@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.hazizz.droid.Activities.MainActivity;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOgroup;
+import com.hazizz.droid.Communication.Requests.GetGroupsFromMe;
 import com.hazizz.droid.Listviews.GroupList.CustomAdapter;
 import com.hazizz.droid.Listviews.GroupList.GroupItem;
 import com.hazizz.droid.Manager;
@@ -50,7 +51,7 @@ public class ChooseGroupFragment extends Fragment{
         createViewList();
         getGroups();
         textView_noContent = v.findViewById(R.id.textView_noContent);
-        textView_title = v.findViewById(R.id.textView_title);
+        textView_title = v.findViewById(R.id.textView_subject);
         return v;
     }
 
@@ -72,7 +73,7 @@ public class ChooseGroupFragment extends Fragment{
                 textView_noContent.setVisibility(v.VISIBLE);
             }
         };
-        MiddleMan.newRequest(this.getActivity(),"getGroupsFromMe", null, responseHandler, null);
+        MiddleMan.newRequest(new GetGroupsFromMe(getActivity(), responseHandler));
     }
 
     void createViewList(){

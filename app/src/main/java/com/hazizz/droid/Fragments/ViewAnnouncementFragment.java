@@ -18,19 +18,22 @@ import com.crashlytics.android.answers.CustomEvent;
 import com.hazizz.droid.Activities.MainActivity;
 import com.hazizz.droid.Communication.POJO.Response.AnnouncementPOJOs.POJODetailedAnnouncement;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
+import com.hazizz.droid.Communication.POJO.Response.GetUserPermissionInGroup;
 import com.hazizz.droid.Communication.POJO.Response.POJOMembersProfilePic;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
+import com.hazizz.droid.Communication.POJO.Response.POJOuser;
+import com.hazizz.droid.Communication.POJO.Response.PojoPermisionUsers;
+import com.hazizz.droid.Communication.Requests.DeleteAT;
+import com.hazizz.droid.Communication.Requests.GetAT;
+import com.hazizz.droid.Communication.Requests.GetGroupMemberPermisions;
+import com.hazizz.droid.Communication.Requests.GetGroupMembersProfilePic;
 import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.Manager;
 import com.hazizz.droid.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
 
-import java.util.EnumMap;
 import java.util.HashMap;
-
-import okhttp3.ResponseBody;
-import retrofit2.Call;
 
 public class ViewAnnouncementFragment extends Fragment implements AdapterView.OnItemSelectedListener{
 
@@ -39,7 +42,8 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
     private Button button_delete;
     private Button button_edit;
 
-    private int groupId, subjectId, announcementId;
+    private short enable_button_comment = 0;
+    private int groupId, announcementId, creatorId;
     private String groupName;
     private String title;
     private String descripiton;
@@ -53,18 +57,32 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
     private CustomResponseHandler rh;
     private CustomResponseHandler rh_delete = new CustomResponseHandler() {
         @Override
-        public void onFailure(Call<ResponseBody> call, Throwable t) {
-            Log.e("hey", "4");
-            Log.e("hey", "got here onFailure");
-            Log.e("hey", "task created");
-        }
-        @Override
-        public void onErrorResponse(POJOerror error) {
-            Log.e("hey", "onErrorResponse");
-        }
-        @Override
         public void onSuccessfulResponse() {
             button_delete.setEnabled(false);
+        }
+    };
+
+    CustomResponseHandler permissionRh = new CustomResponseHandler() {
+        @Override
+        public void onPOJOResponse(Object response) {
+            String rank = ((String)response);
+            Log.e("hey", "talicska: " + rank);
+            Strings.Rank r = Strings.Rank.NULL;
+            if(Strings.Rank.USER.toString().equals(rank)){
+                r = Strings.Rank.USER;
+            }else if(Strings.Rank.MODERATOR.toString().equals(rank)){
+                r = Strings.Rank.MODERATOR;
+            }else if(Strings.Rank.OWNER.toString().equals(rank)) {
+                r = Strings.Rank.OWNER;
+            }
+            Manager.MeInfo.setRankInCurrentGroup(r);
+
+            Log.e("hey", "talicska 2: " + Manager.MeInfo.getRankInCurrentGroup().getValue() + " " + Manager.MeInfo.getRankInCurrentGroup().toString());
+
+            if(Manager.MeInfo.getId() == creatorId || Manager.MeInfo.getRankInCurrentGroup().getValue() >= Strings.Rank.MODERATOR.getValue() ){
+                button_delete.setVisibility(View.VISIBLE);
+                button_edit.setVisibility(View.VISIBLE);
+            }
         }
     };
 
@@ -77,8 +95,11 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
         v = inflater.inflate(R.layout.fragment_viewannouncement, container, false);
         Log.e("hey", "im here lol");
         ((MainActivity)getActivity()).onFragmentCreated();
+
+        getActivity().setTitle(R.string.title_fragment_view_announcement);
+
         type = v.findViewById(R.id.textView_tasktype);
-        textView_title = v.findViewById(R.id.textView_title);
+        textView_title = v.findViewById(R.id.textView_subject);
         textView_description = v.findViewById(R.id.editText_description);
         creatorName = v.findViewById(R.id.textView_creator);
         group = v.findViewById(R.id.textView_group);
@@ -98,9 +119,6 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
             @Override
             public void onClick(View view) {
                 if(gotResponse){
-                    EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
-                    vars.put(Strings.Path.GROUPID, groupId);
-                    vars.put(Strings.Path.ANNOUNCEMENTID, announcementId);
                     CustomResponseHandler rh = new CustomResponseHandler() {
                         @Override
                         public void onSuccessfulResponse() {
@@ -122,7 +140,7 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
                         }
                     };
                     button_delete.setEnabled(false);
-                    MiddleMan.newRequest(getActivity(),"deleteAnnouncement", null, rh, vars);
+                    MiddleMan.newRequest(new DeleteAT(getActivity(), rh, Strings.Path.ANNOUNCEMENTS, announcementId));
                 }
             }
         });
@@ -130,25 +148,15 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
         button_comments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Transactor.fragmentCommentSection(getFragmentManager().beginTransaction(), groupId, subjectId, 0, announcementId);
+                Transactor.fragmentCommentSection(getFragmentManager().beginTransaction(), Strings.Path.ANNOUNCEMENTS.toString(), announcementId);
             }
         });
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            announcementId =  bundle.getInt("announcementId");
-            groupId = bundle.getInt("groupId");
-            subjectId = bundle.getInt("subjectId");
-            if(Manager.ProfilePicManager.getCurrentGroupId() != groupId || Manager.DestManager.getDest() == Manager.DestManager.TOMAIN){
-                CustomResponseHandler responseHandler = new CustomResponseHandler() {
-                    @Override
-                    public void onPOJOResponse(Object response) {
-                        Manager.ProfilePicManager.setCurrentGroupMembersProfilePic((HashMap<Integer, POJOMembersProfilePic>)response, groupId);
-                    }
-                };
-                EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
-                vars.put(Strings.Path.GROUPID, Integer.toString(groupId));
-                MiddleMan.newRequest(this.getActivity(),"getGroupMembersProfilePic", null, responseHandler, vars);
-            }
+            announcementId =  bundle.getInt(Strings.Path.ANNOUNCEMENTID.toString());
+            groupId = bundle.getInt(Strings.Path.GROUPID.toString());
+
+
             groupName = bundle.getString("groupName");
             goBackToMain = bundle.getBoolean("goBackToMain");
 
@@ -158,13 +166,62 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
         rh = new CustomResponseHandler() {
             @Override
             public void onPOJOResponse(Object response) {
-
                 POJODetailedAnnouncement pojoResponse = (POJODetailedAnnouncement)response;
 
                 Manager.GroupManager.setGroupId(pojoResponse.getGroup().getId());
                 Manager.GroupManager.setGroupName(pojoResponse.getGroup().getName());
 
                 groupId = pojoResponse.getGroup().getId();
+
+                CustomResponseHandler r2 = new CustomResponseHandler() {
+                    @Override
+                    public void onPOJOResponse(Object response) {
+                        PojoPermisionUsers pojoPermisionUser = (PojoPermisionUsers)response;
+                        if(pojoPermisionUser != null) {
+                            if(pojoPermisionUser.getOWNER() != null) {
+                                for (POJOuser u : pojoPermisionUser.getOWNER()) {
+                                    Manager.GroupRankManager.setRank(u.getId(), Strings.Rank.OWNER);
+                                }
+                            }if(pojoPermisionUser.getMODERATOR() != null) {
+                                for (POJOuser u : pojoPermisionUser.getMODERATOR()) {
+                                    Log.e("hey", "555: MODI");
+                                    Manager.GroupRankManager.setRank(u.getId(), Strings.Rank.MODERATOR);
+                                }
+                            }if(pojoPermisionUser.getUSER() != null) {
+                                for (POJOuser u : pojoPermisionUser.getUSER()) {
+                                    Log.e("hey", "555: USER");
+                                    Manager.GroupRankManager.setRank(u.getId(), Strings.Rank.USER);
+                                }
+                            }
+                        }
+                        enable_button_comment++;
+                        visibleIfEnabled_button_comment();
+                    }
+                };
+                MiddleMan.newRequest(new GetGroupMemberPermisions(getActivity(), r2, groupId));
+
+
+                creatorId = (int)pojoResponse.getCreator().getId();
+
+                MiddleMan.newRequest(new GetUserPermissionInGroup(getActivity(), permissionRh, groupId, (int)Manager.MeInfo.getId()));
+
+
+
+                if(Manager.ProfilePicManager.getCurrentGroupId() != groupId || Manager.DestManager.getDest() == Manager.DestManager.TOMAIN){
+                    CustomResponseHandler responseHandler = new CustomResponseHandler() {
+                        @Override
+                        public void onPOJOResponse(Object response) {
+                            Manager.ProfilePicManager.setCurrentGroupMembersProfilePic((HashMap<Integer, POJOMembersProfilePic>)response, groupId);
+                            enable_button_comment++;
+                            visibleIfEnabled_button_comment();
+                        }
+                    };
+                    MiddleMan.newRequest(new GetGroupMembersProfilePic(getActivity(),responseHandler, groupId));
+                }else{
+                    enable_button_comment++;
+                    visibleIfEnabled_button_comment();
+                }
+
                 announcementId = pojoResponse.getId();
 
                 gotResponse = true;
@@ -172,29 +229,20 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
                 descripiton = pojoResponse.getDescription();
                 textView_title.setText(title);
                 textView_description.setText(descripiton);
-                String creatorUsername = pojoResponse.getCreator().getUsername();
-                creatorName.setText(creatorUsername);
+                creatorName.setText(pojoResponse.getCreator().getDisplayName());
                 group.setText(pojoResponse.getGroup().getName());
 
-
-                if(Manager.MeInfo.getProfileName().equals(creatorUsername) || Manager.MeInfo.getRankInCurrentGroup().getValue() >= Strings.Rank.MODERATOR.getValue() ){
-                    button_delete.setVisibility(View.VISIBLE);
-                    button_edit.setVisibility(View.VISIBLE);
-                }
-            }
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.e("hey", "4");
-                Log.e("hey", "got here onFailure");
-                Log.e("hey", "task created");
             }
         };
-        EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
-        vars.put(Strings.Path.GROUPID, Integer.toString(groupId));
-        vars.put(Strings.Path.ANNOUNCEMENTID, Integer.toString(announcementId));
-        MiddleMan.newRequest(this.getActivity(), "getAnnouncement", null, rh, vars);
+        MiddleMan.newRequest(new GetAT(getActivity(),rh, Strings.Path.ANNOUNCEMENTS, announcementId));
 
         return v;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Manager.GroupManager.leftGroup();
     }
 
     @Override
@@ -212,6 +260,12 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
     }
     public boolean getGoBackToMain(){
         return goBackToMain;
+    }
+
+    public void visibleIfEnabled_button_comment(){
+        if(enable_button_comment > 1){
+            button_comments.setVisibility(View.VISIBLE);
+        }
     }
 
 
