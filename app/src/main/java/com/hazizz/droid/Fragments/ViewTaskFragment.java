@@ -44,11 +44,15 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
     private Button button_delete;
     private Button button_edit;
 
-    private String byName;
 
     private short enable_button_comment = 0;
     private int creatorId, groupId, taskId;
     private int subjectId = 0;
+
+    public static final boolean myMode = true;
+    public static final boolean publicMode = false;
+
+    private boolean isMyMode;
 
     private String groupName;
     private PojoType type;
@@ -65,6 +69,7 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
     private TextView textView_creatorName;
     private TextView textView_subject;
     private TextView textView_group;
+    private TextView textView_group_;
     private TextView textView_deadLine;
 
     private CustomResponseHandler rh;
@@ -109,9 +114,10 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
         textView_type = v.findViewById(R.id.textView_tasktype);
         textView_title = v.findViewById(R.id.textView_title);
         textView_description = v.findViewById(R.id.editText_description);
-        textView_creatorName = v.findViewById(R.id.textView_creator);
+        textView_creatorName = v.findViewById(R.id.textView_creator_);
         textView_subject = v.findViewById(R.id.textView_subject);
         textView_group = v.findViewById(R.id.textView_group);
+        textView_group_ = v.findViewById(R.id.textView_group_);
         textView_deadLine = v.findViewById(R.id.textview_deadline);
         textView_deadLine.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,8 +181,7 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
         if (bundle != null) {
             taskId = bundle.getInt(Strings.Path.TASKID.toString());
 
-
-            groupName = bundle.getString("groupName");
+            isMyMode = bundle.getBoolean("mode");
             goBackToMain = bundle.getBoolean("goBackToMain");
 
         }else{Log.e("hey", "bundle is null");}
@@ -184,58 +189,66 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
             @Override
             public void onPOJOResponse(Object response) {
 
-                POJOgetTaskDetailed pojoResponse = (POJOgetTaskDetailed)response;
+                POJOgetTaskDetailed pojoResponse = (POJOgetTaskDetailed) response;
 
-                Manager.GroupManager.setGroupId(pojoResponse.getGroup().getId());
-                Manager.GroupManager.setGroupName(pojoResponse.getGroup().getName());
-
-                groupId = pojoResponse.getGroup().getId();
-
-                CustomResponseHandler r1 = new CustomResponseHandler() {
-                    @Override
-                    public void onPOJOResponse(Object response) {
-                        PojoPermisionUsers pojoPermisionUser = (PojoPermisionUsers)response;
-                        if(pojoPermisionUser != null) {
-                            if(pojoPermisionUser.getOWNER() != null) {
-                                for (POJOuser u : pojoPermisionUser.getOWNER()) {
-                                    Manager.GroupRankManager.setRank(u.getId(), Strings.Rank.OWNER);
-                                }
-                            }if(pojoPermisionUser.getMODERATOR() != null) {
-                                for (POJOuser u : pojoPermisionUser.getMODERATOR()) {
-                                    Log.e("hey", "555: MODI");
-                                    Manager.GroupRankManager.setRank(u.getId(), Strings.Rank.MODERATOR);
-                                }
-                            }if(pojoPermisionUser.getUSER() != null) {
-                                for (POJOuser u : pojoPermisionUser.getUSER()) {
-                                    Log.e("hey", "555: USER");
-                                    Manager.GroupRankManager.setRank(u.getId(), Strings.Rank.USER);
-                                }
-                            }
-                        }
-                        enable_button_comment++;
-                        visibleIfEnabled_button_comment();
+                if(!isMyMode){
+                    if (pojoResponse.getGroup() != null) {
+                        groupName = pojoResponse.getGroup().getName();
+                        groupId = pojoResponse.getGroup().getId();
+                        Manager.GroupManager.setGroupId(groupId);
+                        Manager.GroupManager.setGroupName(groupName);
                     }
-                };
-                MiddleMan.newRequest(new GetGroupMemberPermisions(getActivity(), r1, groupId));
 
-
-                creatorId = (int)pojoResponse.getCreator().getId();
-
-                MiddleMan.newRequest(new GetUserPermissionInGroup(getActivity(), permissionRh, groupId, (int)Manager.MeInfo.getId()));
-
-                if(Manager.ProfilePicManager.getCurrentGroupId() != groupId || Manager.DestManager.getDest() == Manager.DestManager.TOMAIN){
-                    CustomResponseHandler responseHandler = new CustomResponseHandler() {
+                    CustomResponseHandler r1 = new CustomResponseHandler() {
                         @Override
                         public void onPOJOResponse(Object response) {
-                            Manager.ProfilePicManager.setCurrentGroupMembersProfilePic((HashMap<Integer, POJOMembersProfilePic>)response, groupId);
+                            PojoPermisionUsers pojoPermisionUser = (PojoPermisionUsers) response;
+                            if (pojoPermisionUser != null) {
+                                if (pojoPermisionUser.getOWNER() != null) {
+                                    for (POJOuser u : pojoPermisionUser.getOWNER()) {
+                                        Manager.GroupRankManager.setRank(u.getId(), Strings.Rank.OWNER);
+                                    }
+                                }
+                                if (pojoPermisionUser.getMODERATOR() != null) {
+                                    for (POJOuser u : pojoPermisionUser.getMODERATOR()) {
+                                        Log.e("hey", "555: MODI");
+                                        Manager.GroupRankManager.setRank(u.getId(), Strings.Rank.MODERATOR);
+                                    }
+                                }
+                                if (pojoPermisionUser.getUSER() != null) {
+                                    for (POJOuser u : pojoPermisionUser.getUSER()) {
+                                        Log.e("hey", "555: USER");
+                                        Manager.GroupRankManager.setRank(u.getId(), Strings.Rank.USER);
+                                    }
+                                }
+                            }
                             enable_button_comment++;
                             visibleIfEnabled_button_comment();
                         }
                     };
-                    MiddleMan.newRequest(new GetGroupMembersProfilePic(getActivity(), responseHandler, groupId));
-                }else{
-                    enable_button_comment++;
-                    visibleIfEnabled_button_comment();
+                    MiddleMan.newRequest(new GetGroupMemberPermisions(getActivity(), r1, groupId));
+
+                    creatorId = (int) pojoResponse.getCreator().getId();
+
+                    MiddleMan.newRequest(new GetUserPermissionInGroup(getActivity(), permissionRh, groupId, (int) Manager.MeInfo.getId()));
+
+                    if (Manager.ProfilePicManager.getCurrentGroupId() != groupId || Manager.DestManager.getDest() == Manager.DestManager.TOMAIN) {
+                        CustomResponseHandler responseHandler = new CustomResponseHandler() {
+                            @Override
+                            public void onPOJOResponse(Object response) {
+                                Manager.ProfilePicManager.setCurrentGroupMembersProfilePic((HashMap<Integer, POJOMembersProfilePic>) response, groupId);
+                                enable_button_comment++;
+                                visibleIfEnabled_button_comment();
+                            }
+                        };
+                        MiddleMan.newRequest(new GetGroupMembersProfilePic(getActivity(), responseHandler, groupId));
+                    } else {
+                        enable_button_comment++;
+                        visibleIfEnabled_button_comment();
+                    }
+                }else{// is my task
+                    getActivity().setTitle(R.string.view_mytask);
+                    textView_group_.setVisibility(View.GONE);
                 }
 
                 taskId = (int)pojoResponse.getId();
@@ -253,7 +266,7 @@ public class ViewTaskFragment extends Fragment implements AdapterView.OnItemSele
                 title = pojoResponse.getTitle();
                 descripiton = pojoResponse.getDescription();
                 date = pojoResponse.getDueDate();
-                groupName = pojoResponse.getGroup().getName();
+
 
                 gotResponse = true;
 

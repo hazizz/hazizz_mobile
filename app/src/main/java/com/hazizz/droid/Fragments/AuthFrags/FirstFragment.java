@@ -40,6 +40,8 @@ public class FirstFragment extends Fragment {
                 Transactor.fragmentRegister(getFragmentManager().beginTransaction());
             }
         });
+
+
         return v;
     }
 }

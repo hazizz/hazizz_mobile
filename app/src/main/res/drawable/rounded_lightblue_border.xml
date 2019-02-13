@@ -4,10 +4,10 @@
 
     <stroke
         android:width="4dp"
-        android:color="@color/colorPrimaryLightBlue" />
+        android:color="@color/colorPrimaryDarkBlue" />
 
     <solid
-        android:color="@color/colorPrimaryLightBlue"
+        android:color="@color/colorPrimaryDarkBlue"
         />
 
     <corners android:radius="360dp" />

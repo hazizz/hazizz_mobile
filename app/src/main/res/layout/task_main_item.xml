@@ -1,98 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:background="@color/colorYellow"
+
+    android:paddingBottom="0dp"
     >
 
-    <TextView
-        android:id="@+id/task_title"
-        android:layout_width="wrap_content"
+    <android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="2dp"
-        android:layout_marginTop="4dp"
-        android:ellipsize="end"
-        android:text="Title"
-        android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/textView_subject"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="vertical"
+        android:background="@color/colorBackground"
 
-    <TextView
-        android:id="@+id/textView_subject"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginLeft="1dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="4dp"
-        android:text="subject"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/task_description"
-        android:layout_width="196dp"
-        android:layout_height="36dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:ellipsize="end"
-        android:maxLines="5"
-        android:minHeight="52dp"
-        android:text="description"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/task_title" />
-
-
-    <RelativeLayout
-        android:id="@+id/relativeLayout4"
-        android:layout_width="wrap_content"
-        android:layout_height="44dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintStart_toEndOf="@+id/task_description"
-        app:layout_constraintTop_toTopOf="parent">
+        >
 
         <TextView
-            android:id="@+id/textView9"
+            android:id="@+id/task_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/deadline_"
-            tools:layout_editor_absoluteX="244dp"
-            tools:layout_editor_absoluteY="38dp" />
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:text="Title"
+            android:textColor="@color/colorDarkText"
+            android:textSize="18sp"
+            app:layout_constraintStart_toEndOf="@+id/textView_subject"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView10"
+            android:id="@+id/textView_subject"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="1dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:text="subject"
+            android:textColor="@color/colorDarkText"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/task_description"
+            android:layout_width="196dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:ellipsize="end"
+            android:maxLines="5"
+            android:minHeight="24dp"
+            android:text="description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/task_title" />
+
+
+        <TextView
+            android:id="@+id/textView_creator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
 
             android:layout_centerVertical="true"
-            android:layout_marginBottom="0dp"
+            android:layout_marginEnd="100dp"
+            android:layout_marginRight="100dp"
+            android:layout_marginTop="10dp"
             android:text="@string/group_"
-            tools:layout_editor_absoluteX="244dp"
-            tools:layout_editor_absoluteY="64dp" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/relativeLayout3"
-        android:layout_width="wrap_content"
-        android:layout_height="44dp"
-        android:layout_marginLeft="1dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintStart_toEndOf="@+id/relativeLayout4"
-        app:layout_constraintTop_toTopOf="parent">
-
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/textView_group"
@@ -101,18 +89,14 @@
             android:layout_alignParentBottom="true"
 
             android:layout_centerVertical="true"
-            android:layout_marginBottom="0dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="10dp"
             android:text="group"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <TextView
-            android:id="@+id/textView_dueDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="date"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView_creator"
             app:layout_constraintTop_toTopOf="parent" />
-    </RelativeLayout>
 
 
-</android.support.constraint.ConstraintLayout>
+
+    </android.support.constraint.ConstraintLayout>
+</LinearLayout>

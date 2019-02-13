@@ -3,6 +3,7 @@ package com.hazizz.droid.Communication;
 import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
@@ -16,6 +17,7 @@ import com.hazizz.droid.Communication.Requests.RequestType.Login;
 import com.hazizz.droid.Communication.Requests.RequestType.Tokens.RefreshToken;
 import com.hazizz.droid.ErrorHandler;
 import com.hazizz.droid.Manager;
+import com.hazizz.droid.R;
 import com.hazizz.droid.SharedPrefs;
 
 import java.util.HashMap;
@@ -112,6 +114,7 @@ public interface RequestInterface {
                @Override
                public void onFailure(Call<ResponseBody> call, Throwable t) {
                     cOnResponse.onFailure(call, t);
+                    Toast.makeText(act, R.string.info_serverNotResponding, Toast.LENGTH_LONG).show();
                }
           };
           return callback;

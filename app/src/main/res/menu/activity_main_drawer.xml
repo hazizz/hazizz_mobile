@@ -14,6 +14,10 @@
             android:icon="@drawable/ic_group_black"
             android:title="@string/groups" />
         <item
+            android:id="@+id/nav_mytasks"
+            android:icon="@drawable/ic_person_black"
+            android:title="@string/my_tasks" />
+        <item
             android:visible="false"
             android:id="@+id/nav_thera"
             android:icon="@drawable/ic_create_black"
@@ -22,9 +26,14 @@
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_settings_black"
             android:title="@string/settings" />
+        <item
+            android:visible="false"
+            android:id="@+id/nav_logs"
+            android:icon="@drawable/ic_create_black"
+            android:title="Log" />
     </group>
 
-    <item android:title="@string/groups"
+   <!-- <item android:title="@string/groups"
         android:id="@+id/nav_item_groups"
         android:checkableBehavior="single"
         android:visible="false">
@@ -38,7 +47,7 @@
                 android:icon="@drawable/ic_group_add_black"
                 android:title="Csatlakozás csoportba" />
         </menu>
-    </item>
+    </item> -->
 
     <item android:title="Csoport: "
         android:id="@+id/nav_item_mainGroup"

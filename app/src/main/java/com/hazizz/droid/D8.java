@@ -47,8 +47,8 @@ public abstract class D8 {
             return getYear() + "." + getMonth() + "." +getDay();
         }
 
-        public String daysLeft(){
-            return Integer.toString(Days.daysBetween(LocalDate.now(), localDate).getDays()); //end.toLocalDate()).getDays()
+        public int daysLeft(){
+            return Days.daysBetween(LocalDate.now(), localDate).getDays(); //end.toLocalDate()).getDays()
         }
 
         public String dayOfWeek(Context c){

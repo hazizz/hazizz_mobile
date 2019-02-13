@@ -15,4 +15,9 @@ public class POJOgroup {
 
     public POJOgroup(){
     }
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
 }

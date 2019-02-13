@@ -37,19 +37,15 @@ import com.hazizz.droid.Fragments.GroupTabs.SubjectsFragment;
 import com.hazizz.droid.Fragments.MainTab.GroupsFragment;
 import com.hazizz.droid.Fragments.MainTab.MainAnnouncementFragment;
 import com.hazizz.droid.Fragments.MainTab.MainFragment;
+import com.hazizz.droid.Fragments.MyTasksFragment;
 import com.hazizz.droid.Fragments.ViewTaskFragment;
 import com.hazizz.droid.Manager;
 import com.hazizz.droid.SharedPrefs;
 import com.hazizz.droid.Transactor;
-import com.hazizz.droid.BuildConfig;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
 
-import java.util.HashMap;
-
 import io.fabric.sdk.android.Fabric;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -72,16 +68,13 @@ public class MainActivity extends AppCompatActivity
     FloatingActionButton fab_joinGroup;
     FloatingActionButton fab_action;
 
-    private Menu menu_options;
-    private MenuItem menuItem_leaveGroup;
-    private MenuItem menuItem_profilePic;
-    private MenuItem menuItem_feedback;
-    private MenuItem menuItem_settings;
-
-
     private Menu menu_nav;
-
-    private MenuItem menu_mainGroup;
+    private MenuItem menuItem_home;
+    private MenuItem menuItem_groups;
+    private MenuItem menuItem_myTasks;
+    private MenuItem menuItem_thera;
+    private MenuItem menuItem_settings;
+    private MenuItem menuItem_logs;
 
     private Toolbar toolbar;
     private Fragment currentFrag;
@@ -123,7 +116,6 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void onPOJOResponse(Object response) {
             String motd = (String)response;
-            Log.e("hey", "MOTD: " + motd);
             if(!motd.equals("") && !SharedPrefs.getString(getBaseContext(), "motd", "message").equals(motd)) {
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
                     alertDialogBuilder.setTitle("Napi üzenet");
@@ -136,8 +128,6 @@ public class MainActivity extends AppCompatActivity
                         });
                     AlertDialog alertDialog = alertDialogBuilder.create();
                     alertDialog.show();
-            }else{
-                Log.e("hey", "Message of the day is not");
             }
         }
     };
@@ -146,9 +136,9 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!BuildConfig.DEBUG) { // only enable bug tracking in release version
-            Fabric.with(this, new Crashlytics());
-        }
+        //if (!BuildConfig.DEBUG) { // only enable bug tracking in release version
+        Fabric.with(this, new Crashlytics());
+       // }
         Fabric.with(this, new Answers());
 
         setContentView(R.layout.activity_main);
@@ -173,28 +163,22 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Log.e("hey", "fab_action CLICKed");
-
                 currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager(), false);
 
                 if (currentFrag instanceof GroupMainFragment) {
-                    Log.e("hey", "instance of groupmain fragment");
                     ((GroupMainFragment)currentFrag).toTaskEditor(getSupportFragmentManager());
-                }
-                else if (currentFrag instanceof GroupAnnouncementFragment) {
+                } else if (currentFrag instanceof GroupAnnouncementFragment) {
                     ((GroupAnnouncementFragment)currentFrag).toAnnouncementEditor(getSupportFragmentManager());
                 }else if (currentFrag instanceof MainAnnouncementFragment) {
                     toAnnouncementEditorFrag();
-                }
-                else if (currentFrag instanceof SubjectsFragment) {
+                } else if (currentFrag instanceof SubjectsFragment) {
                     ((SubjectsFragment)currentFrag).toCreateSubject(getSupportFragmentManager());
-                }
-             //   else if(currentFrag instanceof TaskEditorFragment || currentFrag instanceof GroupsFragment){}
-                else if (currentFrag instanceof MainFragment) {
+                } else if (currentFrag instanceof MainFragment) {
                     toCreateTaskFrag();
-                }
-                else if (currentFrag instanceof GroupsFragment) {
-                    Log.e("hey", "instance of groupmain fragment111");
+                } else if (currentFrag instanceof GroupsFragment) {
                     ((GroupsFragment)currentFrag).toCreateGroup(getSupportFragmentManager());
+                }else if (currentFrag instanceof MyTasksFragment) {
+                    ((MyTasksFragment)currentFrag).toCreateTask();
                 }
             }
         });
@@ -204,13 +188,18 @@ public class MainActivity extends AppCompatActivity
 
         View headerView = navView.getHeaderView(0);
         navProfilePic = (ImageView) headerView.findViewById(R.id.imageView_memberProfilePic);
-        navUsername = (TextView) headerView.findViewById(R.id.subject_name);
+        navUsername = (TextView) headerView.findViewById(R.id.textView_name);
         navEmail = (TextView) headerView.findViewById(R.id.textView_email);
         navLogout = findViewById(R.id.textView_logout);
 
         menu_nav = navView.getMenu();
+        menuItem_home     = menu_nav.getItem(0);
+        menuItem_groups   = menu_nav.getItem(1);
+        menuItem_myTasks  = menu_nav.getItem(2);
+        menuItem_thera    = menu_nav.getItem(3);
+        menuItem_settings = menu_nav.getItem(4);
+        menuItem_logs     = menu_nav.getItem(5);
 
-        menu_mainGroup = menu_nav.getItem(3);
 
         drawerLayout = findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
@@ -232,10 +221,6 @@ public class MainActivity extends AppCompatActivity
              }
              });
 
-
-
-
-
         MiddleMan.newRequest(new MessageOfTheDay(this, rh_motd));
 
         MiddleMan.newRequest(new GetMyProfilePic(this, rh_profilePic));
@@ -254,13 +239,13 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         Log.e("hey", "onCreateOptionsMenu asdasd");
 
-        menu_options = menu;
-        getMenuInflater().inflate(R.menu.main, menu_options);
+      //  menu_options = menu;
+      //  getMenuInflater().inflate(R.menu.main, menu_options);
 
-        menuItem_leaveGroup = menu_options.findItem(R.id.action_leaveGroup);
-        menuItem_profilePic = menu_options.findItem(R.id.action_profilePic);
-        menuItem_feedback = menu_options.findItem(R.id.action_feedback);
-        menuItem_settings = menu_options.findItem(R.id.action_settings);
+      //  menuItem_leaveGroup = menu_options.findItem(R.id.action_leaveGroup);
+      //  menuItem_profilePic = menu_options.findItem(R.id.action_profilePic);
+      //  menuItem_feedback = menu_options.findItem(R.id.action_feedback);
+      //  menuItem_settings = menu_options.findItem(R.id.action_settings);
 
         if(Manager.WidgetManager.getDest() == Manager.WidgetManager.TOATCHOOSER){
             Transactor.fragmentATChooser(getSupportFragmentManager().beginTransaction());
@@ -310,8 +295,8 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_groups:
                 toGroupsFrag();
                 break;
-            case R.id.nav_newGroup:
-                Transactor.fragmentCreateGroup(getSupportFragmentManager().beginTransaction());
+            case R.id.nav_mytasks:
+                Transactor.fragmentMyTasks(getSupportFragmentManager().beginTransaction());
                 break;
             case R.id.nav_thera:
                 Transactor.fragmentThSchool(getSupportFragmentManager().beginTransaction());
@@ -319,6 +304,10 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_settings:
                 Transactor.fragmentOptions(getSupportFragmentManager().beginTransaction());
                 break;
+            case R.id.nav_logs:
+                Transactor.fragmentLogs(getSupportFragmentManager().beginTransaction());
+                break;
+
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -332,12 +321,15 @@ public class MainActivity extends AppCompatActivity
     }
 
     void toCreateTaskFrag(){
-        Manager.DestManager.setDest(Manager.DestManager.TOCREATETASK);
-        Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction());
+        Transactor.fragmentCreateTask(getSupportFragmentManager().beginTransaction(), Manager.DestManager.TOMAIN);
+       // Manager.DestManager.setDest(Manager.DestManager.TOCREATETASK);
+       // Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction());
     }
     void toAnnouncementEditorFrag(){
-        Manager.DestManager.setDest(Manager.DestManager.TOCREATEANNOUNCEMENT);
-        Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction());
+       // Manager.DestManager.setDest(Manager.DestManager.TOCREATEANNOUNCEMENT);
+       // Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction());
+        Transactor.fragmentCreateAnnouncement(getSupportFragmentManager().beginTransaction(), Manager.DestManager.TOMAIN);
+
     }
     @Override
     public void onBackPressed() {
@@ -367,16 +359,16 @@ public class MainActivity extends AppCompatActivity
         currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager(), false);
 
         if (currentFrag instanceof GroupAnnouncementFragment || currentFrag instanceof GroupMainFragment
-            || currentFrag instanceof MainAnnouncementFragment || currentFrag instanceof MainFragment) {
+            || currentFrag instanceof MainAnnouncementFragment || currentFrag instanceof MainFragment
+            || currentFrag instanceof MyTasksFragment) {
             fab_action.setVisibility(View.VISIBLE);
-            if(menuItem_feedback != null && menuItem_leaveGroup != null
-                    && menuItem_profilePic != null) {
+           // if(menuItem_feedback != null && menuItem_leaveGroup != null
+          //         && menuItem_profilePic != null) {
                 if (currentFrag instanceof MainFragment) {
                     navView.getMenu().getItem(0).setChecked(true);
                 } else {
                     navView.getMenu().getItem(0).setChecked(false);
                 }
-            }
         } else {
             fab_action.setVisibility(View.INVISIBLE);
         }
@@ -391,8 +383,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void onTabSelected(Fragment currentFrag){
-        if(menuItem_feedback != null && menuItem_leaveGroup != null
-                && menuItem_profilePic != null) {
+     //   if(menuItem_feedback != null && menuItem_leaveGroup != null
+     //           && menuItem_profilePic != null) {
             if (currentFrag instanceof GroupAnnouncementFragment || currentFrag instanceof GroupMainFragment
                     || currentFrag instanceof MainAnnouncementFragment || currentFrag instanceof SubjectsFragment
                     || currentFrag instanceof MainFragment || currentFrag instanceof GroupsFragment) {
@@ -412,7 +404,7 @@ public class MainActivity extends AppCompatActivity
             } else {
                 fab_action.setVisibility(View.INVISIBLE);
             }
-        }
+      //  }
     }
     public void pickImage() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -428,10 +420,9 @@ public class MainActivity extends AppCompatActivity
         navUsername.setText(newDisplayName);
     }
 
-    public void activateThéra(){
-        menu_nav.getItem(2).setVisible(true);
+    public void activateHiddenFeatures(){
+        menuItem_thera.setVisible(true);
+        menuItem_logs.setVisible(true);
     }
-
-
 
 }

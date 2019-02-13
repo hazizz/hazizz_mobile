@@ -22,6 +22,8 @@ import com.hazizz.droid.Communication.Requests.GetTasksFromGroup;
 import com.hazizz.droid.Communication.Requests.LeaveGroup;
 import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.D8;
+import com.hazizz.droid.Fragments.ViewTaskFragment;
+import com.hazizz.droid.Listviews.HeaderItem;
 import com.hazizz.droid.Listviews.TaskList.Group.CustomAdapter;
 import com.hazizz.droid.Listviews.TaskList.TaskItem;
 import com.hazizz.droid.Manager;
@@ -42,7 +44,7 @@ public class GroupMainFragment extends Fragment {
 
     private View v;
     private CustomAdapter adapter;
-    private List<TaskItem> listTask;
+    private List<Object> itemList;
 
     private TextView textView_noContent;
     private SwipeRefreshLayout sRefreshLayout;
@@ -57,7 +59,7 @@ public class GroupMainFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.fragment_maingroup, container, false);
+        v = inflater.inflate(R.layout.fragment_main, container, false);
         Log.e("hey", "mainGroup fragment created");
         ((MainActivity)getActivity()).onFragmentCreated();
         groupId = Manager.GroupManager.getGroupId();
@@ -82,59 +84,56 @@ public class GroupMainFragment extends Fragment {
     }
 
     void createViewList(){
-        listTask = new ArrayList<>();
+        itemList = new ArrayList<>();
 
-        ListView listView = (ListView)v.findViewById(R.id.listView_mainGroupFrag);
+        ListView listView = (ListView)v.findViewById(R.id.listView2);
 
-        adapter = new CustomAdapter(getActivity(), R.layout.task_item, listTask);
+        adapter = new CustomAdapter(getActivity(), itemList);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-/*
-                EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
-                vars.put(Strings.Path.TASKID, ((TaskItem)listView.getItemAtPosition(i)).getTaskId());
-                vars.put(Strings.Path.GROUPID,((TaskItem)listView.getItemAtPosition(i)).getGroup().getId()); */
-                groupName = ((TaskItem)listView.getItemAtPosition(i)).getGroup().getName();
-
-
-                int byId;
-                String byName;
-
-                /*
-                if(((TaskItem)listView.getItemAtPosition(i)).getSubject() != null){
-                    byId = ((TaskItem)listView.getItemAtPosition(i)).getSubject().getId();
-                    byName = Strings.Path.SUBJECTS.toString();
-                }else{ */
-                    byId = ((TaskItem)listView.getItemAtPosition(i)).getGroup().getId();
-                    byName = Strings.Path.GROUPS.toString();
-               // }
-                Transactor.fragmentViewTask(getFragmentManager().beginTransaction(),
-                         ((TaskItem)listView.getItemAtPosition(i)).getTaskId(),
-                        false, Manager.DestManager.TOGROUP);
+                Object item = listView.getItemAtPosition(i);
+                if(item instanceof TaskItem){
+                    Transactor.fragmentViewTask(getFragmentManager().beginTransaction(),
+                            ((TaskItem) item).getTaskId(),
+                            true, Manager.DestManager.TOGROUP, ViewTaskFragment.publicMode);
+                }
             }
         });
     }
 
     private void getTask(){
-        adapter.clear();
-        Log.e("hey", "atleast here 2");
         CustomResponseHandler responseHandler = new CustomResponseHandler() {
             @Override
             public void onPOJOResponse(Object response) {
+                adapter.clear();
                 ArrayList<POJOgetTask> sorted = D8.sortTasksByDate((ArrayList<POJOgetTask>) response);
-                if(sorted.size() == 0){
+                if(sorted.isEmpty()){
                     textView_noContent.setVisibility(v.VISIBLE);
                 }else {
-
+                    textView_noContent.setVisibility(v.INVISIBLE);
+                    int lastDaysLeft = -1;//D8.textToDate(sorted.get(0).getDueDate()).daysLeft();
                     for (POJOgetTask t : sorted) {
-                        listTask.add(new TaskItem(R.drawable.ic_launcher_background, t.getTitle(),
-                                t.getDescription(), t.getDueDate(), t.getGroup(), t.getCreator(), t.getSubject(), t.getId()));
-                        adapter.notifyDataSetChanged();
-                        Log.e("hey", t.getId() + " " + t.getGroup().getId());
+                        int daysLeft = D8.textToDate(t.getDueDate()).daysLeft();
+
+                        if(daysLeft > lastDaysLeft) {
+                            String title;
+                            String deadline = D8.textToDate(t.getDueDate()).getMainFormat();
+                            if(daysLeft == 0){
+                                title = getResources().getString(R.string.today);
+                            }else {
+                                title = daysLeft + " " + getResources().getString(R.string.day);
+                            }
+                            itemList.add(new HeaderItem(title, deadline));
+                            lastDaysLeft = daysLeft;
+                        }
+                        Log.e("hey",  "id task: " + t.getDueDate());
+                        itemList.add(new TaskItem(R.drawable.ic_launcher_background, t.getTitle(),
+                                t.getDescription(), t.getGroup(), t.getCreator(), t.getSubject(), t.getId()));
                     }
-                    Log.e("hey", "got response");
+                    adapter.notifyDataSetChanged();
                 }
                 sRefreshLayout.setRefreshing(false);
             }

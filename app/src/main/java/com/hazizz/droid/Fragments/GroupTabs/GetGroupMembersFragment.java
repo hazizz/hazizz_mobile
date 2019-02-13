@@ -50,7 +50,7 @@ public class GetGroupMembersFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_getgroupmembers, container, false);
         ((MainActivity)getActivity()).onFragmentCreated();
-        getActivity().setTitle(R.string.title_fragment_groups);
+
         groupId = getArguments().getInt("groupId");
         textView_noContent = v.findViewById(R.id.textView_noContent);
 
@@ -69,10 +69,10 @@ public class GetGroupMembersFragment extends Fragment {
     }
 
     public void getUser() {
-        adapter.clear();
         CustomResponseHandler responseHandler = new CustomResponseHandler() {
             @Override
             public void onPOJOResponse(Object response) {
+                adapter.clear();
                 textView_noContent.setVisibility(v.INVISIBLE);
                 PojoPermisionUsers pojoPermisionUser = (PojoPermisionUsers)response;
                 HashMap<Integer, POJOMembersProfilePic> profilePicMap = Manager.ProfilePicManager.getCurrentGroupMembersProfilePic();

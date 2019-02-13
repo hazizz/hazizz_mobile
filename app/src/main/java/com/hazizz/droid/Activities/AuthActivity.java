@@ -29,13 +29,12 @@ public class AuthActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!BuildConfig.DEBUG) { // only enable bug tracking in release version
-            Fabric.with(this, new Crashlytics());
-        }
+        // only enable bug tracking in release version
+        Fabric.with(this, new Crashlytics());
+
         Fabric.with(this, new Answers());
 
         setContentView(R.layout.activity_auth);
-
 
         Manager.ThreadManager.startThreadIfNotRunning(this);
 
@@ -45,8 +44,6 @@ public class AuthActivity extends AppCompatActivity {
         if(SharedPrefs.getBoolean(this, "autoLogin", "autoLogin") && !SharedPrefs.TokenManager.getRefreshToken(this).equals("used")){
             Intent i = new Intent(this, MainActivity.class);
             startActivity(i);
-
-
         }else {
             Transactor.fragmentFirst(getSupportFragmentManager().beginTransaction());
         }

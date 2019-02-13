@@ -20,6 +20,8 @@ import com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
 import com.hazizz.droid.Communication.Requests.GetTasksFromMe;
 import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.D8;
+import com.hazizz.droid.Fragments.ViewTaskFragment;
+import com.hazizz.droid.Listviews.HeaderItem;
 import com.hazizz.droid.Listviews.TaskList.Main.CustomAdapter;
 import com.hazizz.droid.Listviews.TaskList.TaskItem;
 import com.hazizz.droid.Manager;
@@ -37,21 +39,16 @@ public class MainFragment extends Fragment {
 
     private View v;
     private CustomAdapter adapter;
-    private List<TaskItem> listTask;
-    private ArrayList<Integer> groupIDs;
+    private List<Object> itemList;
 
     private TextView textView_noContent;
     private SwipeRefreshLayout sRefreshLayout;
-
-
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_main, container, false);
-        Log.e("hey", "main fragment created");
-
-
+        Log.e("hey", "main task fragment created");
 
         textView_noContent = v.findViewById(R.id.textView_noContent);
         sRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refresh_layout); sRefreshLayout.bringToFront();
@@ -69,68 +66,72 @@ public class MainFragment extends Fragment {
     }
 
     void createViewList(){
-        listTask = new ArrayList<>();
+        itemList = new ArrayList<>();
 
         ListView listView = (ListView)v.findViewById(R.id.listView2);
 
-
-        adapter = new CustomAdapter(getActivity(), R.layout.task_main_item, listTask);
+        adapter = new CustomAdapter(getActivity(), itemList);
         listView.setAdapter(adapter);
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-              /*  HashMap<String, Object> vars = new HashMap<>();
-                vars.put(Strings.Id.TASK.toString(), ((TaskItem)listView.getItemAtPosition(i)).getTaskId());
-                vars.put(Strings.Id.GROUP.toString(), ((TaskItem)listView.getItemAtPosition(i)).getGroup().getId()); */
-             //   Log.e("hey", "asd: " + vars.get("taskId") + ", " + vars.get("groupId"));
-                int byId;
-                String byName;
-                int groupId = ((TaskItem)listView.getItemAtPosition(i)).getGroup().getId();
-              /*  if(((TaskItem)listView.getItemAtPosition(i)).getSubject() != null){
-                    byId = ((TaskItem)listView.getItemAtPosition(i)).getSubject().getId();
-                    byName = Strings.Path.SUBJECTS.toString();
-                }else{ */
-                    byId = groupId;
-                    byName = Strings.Path.GROUPS.toString();
-            //    }
-
-                Transactor.fragmentViewTask(getFragmentManager().beginTransaction(),
-                        ((TaskItem)listView.getItemAtPosition(i)).getTaskId(),
-                        true, Manager.DestManager.TOMAIN);
+                TaskItem item = (TaskItem)listView.getItemAtPosition(i);
+                if(item != null){
+                    boolean mode;
+                    if(item.getGroup() != null){
+                        mode = ViewTaskFragment.publicMode;
+                    }else{
+                        mode = ViewTaskFragment.myMode;
+                    }
+                    Transactor.fragmentViewTask(getFragmentManager().beginTransaction(),
+                            ((TaskItem) item).getTaskId(),
+                            true, Manager.DestManager.TOMAIN, mode);
+                }
             }
         });
     }
 
     private void getTasks(){
-        adapter.clear();
         CustomResponseHandler responseHandler = new CustomResponseHandler() {
             @Override
             public void onPOJOResponse(Object response) {
+                adapter.clear();
+
                 ArrayList<POJOgetTask> sorted = D8.sortTasksByDate((ArrayList<POJOgetTask>) response);
 
                 if(sorted.isEmpty()) {
                     textView_noContent.setVisibility(v.VISIBLE);
                 }else {
                     textView_noContent.setVisibility(v.INVISIBLE);
+                    int lastDaysLeft = -1;//D8.textToDate(sorted.get(0).getDueDate()).daysLeft();
                     for (POJOgetTask t : sorted) {
-                        listTask.add(new TaskItem(R.drawable.ic_launcher_background, t.getTitle(),
-                                t.getDescription(), t.getDueDate(), t.getGroup(), t.getCreator(), t.getSubject(), t.getId()));
-                        adapter.notifyDataSetChanged();
+                        int daysLeft = D8.textToDate(t.getDueDate()).daysLeft();
+
+                        if(daysLeft > lastDaysLeft) {
+                            String title;
+                            String deadline = D8.textToDate(t.getDueDate()).getMainFormat();
+                            if(daysLeft == 0){
+                                title = getResources().getString(R.string.today);
+                            }else {
+                                title = daysLeft + " " + getResources().getString(R.string.day);
+                            }
+                            itemList.add(new HeaderItem(title, deadline));
+                            lastDaysLeft = daysLeft;
+                        }
+                        Log.e("hey",  "id task: " + t.getDueDate());
+                        itemList.add(new TaskItem(R.drawable.ic_launcher_background, t.getTitle(),
+                                t.getDescription(), t.getGroup(), t.getCreator(), t.getSubject(), t.getId()));
                     }
+                    adapter.notifyDataSetChanged();
                 }
                 sRefreshLayout.setRefreshing(false);
             }
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.e("hey", "4");
-                Log.e("hey", "got here onFailure");
                 sRefreshLayout.setRefreshing(false);
             }
             @Override
             public void onErrorResponse(POJOerror error) {
-                Log.e("hey", "onErrorResponse");
                 sRefreshLayout.setRefreshing(false);
             }
             @Override

@@ -9,6 +9,20 @@
     <string name="action_settings">Settings</string>
     <string name="open">Open</string>
 
+    <string name="days">day</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="days2">In 2 days</string>
+    <string name="today">Today</string>
+    <string name="overdays7">More than 7 days</string>
+
+
+    <string-array name="filterTypes">
+      <item>New</item>
+      <item>Subject</item>
+      <item>Group</item>
+      <item>Done</item>
+      <item>Undone</item>
+    </string-array>
 
     <string-array name="days">
       <item>Monday</item>
@@ -54,7 +68,7 @@
       <string name="button_join">Join</string>
 
 
-      <string name="mainpage_menu">Home page</string>
+      <string name="mainpage_menu">Home</string>
 
       <string name="createGroup_menu">Create new group</string>
       <string name="joinGroup_menu">Join group</string>
@@ -62,6 +76,7 @@
       <string name="uploadProfilePic_menu">Upload profile picture</string>
 
 
+      <string name="fragment_title_new_mytask">New my task</string>
       <string name="fragment_title_new_task">New task</string>
       <string name="fragment_title_edit_task">Edit task</string>
 
@@ -101,6 +116,8 @@
       <string name="comments">Comments</string>
       <string name="edit">Edit</string>
       <string name="delete">Delete</string>
+      <string name="my_tasks">My tasks</string>
+      <string name="view_mytask">View my task</string>
 
       <string name="groupMembers">Members</string>
 
@@ -133,6 +150,7 @@
       <string name="hint_add_subject">New subject</string>
       <string name="hint_newgroup">New group</string>
       <string name="title_fragment_tabgroup">Group:</string>
+
 
       <string name="title_activity_feedback">Feedback</string>
       <string name="title_fragment_groups">Your groups</string>

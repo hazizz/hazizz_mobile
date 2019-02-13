@@ -46,10 +46,7 @@ public class AddToGroupFragment extends Fragment {
 
     CustomResponseHandler rh = new CustomResponseHandler() {
 
-        @Override
-        public void onResponse(HashMap<String, Object> response) {
 
-        }
 
         @Override
         public void onPOJOResponse(Object response) {

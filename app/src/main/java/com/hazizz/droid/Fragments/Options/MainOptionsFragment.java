@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -49,7 +50,7 @@ public class MainOptionsFragment extends Fragment {
     public List<POJOgroup> groups;
     private View v;
 
-    private TextView textView_title;
+    private Button button_thera;
     private ImageView imageView_profilePic;
     private EditText editText_displayName;
     private ImageButton fab_profilePicCheck;
@@ -92,16 +93,13 @@ public class MainOptionsFragment extends Fragment {
         });
 
         createViewList();
-
-        /*
-        textView_title = v.findViewById(R.id.textView_title);
-        textView_title.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override public boolean onLongClick(View v) {
-                ((MainActivity) getActivity()).activateThéra();
-                return true;
+        button_thera = v.findViewById(R.id.button_thera);
+        button_thera.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                ((MainActivity) getActivity()).activateHiddenFeatures();
             }
         });
-        */
+
 
         textView_error = v.findViewById(R.id.textView_error_currentPassword);
         textView_error.setTextColor(Color.rgb(255, 0, 0));

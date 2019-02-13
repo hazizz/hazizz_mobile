@@ -1,5 +1,7 @@
 package com.hazizz.droid.Communication.Requests;
 
+import com.google.gson.JsonElement;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,6 +14,7 @@ import retrofit2.http.HeaderMap;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface RequestTypes{
 
@@ -165,6 +168,33 @@ public interface RequestTypes{
     Call<ResponseBody> getAT(
             @Path("whereName") String whereName,
             @Path("whereId") String whereId,
+            @HeaderMap Map<String, String> headers
+    );
+
+    @GET("tasks/me")
+    Call<ResponseBody> getMyTasks(
+            @HeaderMap Map<String, String> headers
+    );
+
+    @GET("tasks/me")
+    Call<ResponseBody> getMyTaskDetailed(
+            @HeaderMap Map<String, String> headers
+    );
+
+    @POST("tasks/me")
+    Call<ResponseBody> createMyTask(
+            @Body HashMap<String, Object> body,
+            @HeaderMap Map<String, String> headers
+    );
+    @PATCH("tasks/me/{taskId}")
+    Call<ResponseBody> updateMyTask(
+            @Path("taskId") String taskId,
+            @Body HashMap<String, Object> body,
+            @HeaderMap Map<String, String> headers
+    );
+    @GET("tasks/me/{taskId}")
+    Call<ResponseBody> deleteMyTask(
+            @Path("taskId") String taskId,
             @HeaderMap Map<String, String> headers
     );
 
@@ -382,6 +412,12 @@ public interface RequestTypes{
 
     @GET("information/motd")
     Call<ResponseBody> messageOfTheDay();
+
+    @GET("admin/log")
+    Call<ResponseBody> getLog(
+            @Query("size") String logSize,
+            @HeaderMap Map<String, String> headers
+    );
 
 
 

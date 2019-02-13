@@ -38,7 +38,6 @@ import retrofit2.Call;
 public class CreateSubjectFragment extends Fragment {
 
     private View v;
-    private CustomAdapter adapter;
     private EditText editText_newSubject;
     private Button button_addSubject;
     private TextView textView_error;
@@ -88,6 +87,9 @@ public class CreateSubjectFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_addsubject, container, false);
         ((MainActivity)getActivity()).onFragmentCreated();
+
+        getActivity().setTitle(R.string.add_subject);
+
         groupId = getArguments().getInt("groupId");
         groupName = getArguments().getString("groupName");
 
