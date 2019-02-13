@@ -3,10 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+
+    android:background="@color/colorBackground"
+    >
 
     <TextView
-        android:id="@+id/subject_name"
+        android:id="@+id/textView_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="2dp"
@@ -26,7 +29,7 @@
         android:layout_marginStart="4dp"
         android:layout_marginTop="4dp"
         android:visibility="invisible"
-        app:layout_constraintStart_toEndOf="@+id/subject_name"
+        app:layout_constraintStart_toEndOf="@+id/textView_name"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
@@ -54,5 +57,5 @@
         android:textIsSelectable="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView_memberProfilePic"
-        app:layout_constraintTop_toBottomOf="@+id/subject_name" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_name" />
 </android.support.constraint.ConstraintLayout>

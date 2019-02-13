@@ -72,7 +72,7 @@ public class GroupTabFragment extends Fragment {
         tabLayout.addTab(tabLayout.newTab().setText(R.string.subjects));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.groupMembers));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-      //  tabLayout.setcur
+      //  tabLayout.setcurff
        // tabLayout.setCu
 
         viewPager = (ViewPager) v.findViewById(R.id.pager);

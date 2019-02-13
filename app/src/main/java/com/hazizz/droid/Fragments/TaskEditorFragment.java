@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,10 +25,15 @@ import com.hazizz.droid.Activities.MainActivity;
 import com.hazizz.droid.AndroidThings;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
+import com.hazizz.droid.Communication.POJO.Response.POJOgroup;
 import com.hazizz.droid.Communication.POJO.Response.POJOsubject;
 import com.hazizz.droid.Communication.Requests.CreateAT;
 import com.hazizz.droid.Communication.Requests.EditAT;
+import com.hazizz.droid.Communication.Requests.GetGroupsFromMe;
 import com.hazizz.droid.Communication.Requests.GetSubjects;
+import com.hazizz.droid.Communication.Requests.MyTask.CreateMyTask;
+import com.hazizz.droid.Communication.Requests.MyTask.EditMyTask;
+import com.hazizz.droid.Communication.Requests.Request;
 import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.D8;
 import com.hazizz.droid.Manager;
@@ -40,17 +44,21 @@ import com.hazizz.droid.R;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 
-import okhttp3.ResponseBody;
-import retrofit2.Call;
 
-public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSelectedListener{
+public class TaskEditorFragment extends Fragment {//implements AdapterView.OnItemSelectedListener{
+    public static final short GROUPMODE = 0;
+    public static final short MYMODE = 1;
+
+    public static final short EDITMODE = 1;
+    public static final short CREATEMODE = 0;
+
+    private short where = 0;
+    private short type = 0;
 
     private String[] taskTypeArray;
 
-    private boolean editMode = false;
 
     private Integer year, month, day;
     private String str_year, str_month, str_day;
@@ -60,8 +68,12 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
     private int subject;
     private int taskId;
 
+    private TextView textView_group_;
+    private TextView textView_group;
+    private Spinner spinner_group;
     private Spinner spinner_subject;
     private TextView textView_subject;
+    private TextView textView_subject_;
 
     private Spinner spinner_taskType;
     private EditText editText_taskTitle;
@@ -76,15 +88,17 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
     private String typeName, date;
 
     private List<POJOsubject> subjects = new ArrayList<>();
+    private List<POJOgroup> groups = new ArrayList<>();
 
     private View v;
 
+
+    ArrayAdapter<POJOgroup> g_adapter;
     ArrayAdapter<POJOsubject> s_adapter;
 
     CustomResponseHandler rh_task = new CustomResponseHandler() {
         @Override
         public void onErrorResponse(POJOerror error) {
-            Log.e("hey", error.getMessage());
             int errorCode = error.getErrorCode();
             if(errorCode == 2){ // cím túl hosszú (2-20 karatket)
                 textView_error.setText(R.string.error_titleNotAcceptable);
@@ -120,7 +134,7 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
             subjects = (ArrayList<POJOsubject>)response;
             s_adapter.clear();
             s_adapter.add(new POJOsubject(0, getString(R.string.subject_none)));
-            if(subjects.size() != 0) {
+            if(!subjects.isEmpty()) {
                 int emSubjectId = 0;
                 for (POJOsubject s : subjects) {
                     s_adapter.add(s);
@@ -129,16 +143,11 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
                     }
                 }
                 s_adapter.notifyDataSetChanged();
-                if (editMode) {
+                if (type == EDITMODE) {
                     spinner_subject.setSelection(emSubjectId);
                 }
             }
             s_adapter.notifyDataSetChanged();
-        }
-        @Override
-        public void onFailure(Call<ResponseBody> call, Throwable t) {
-            Log.e("hey", "got here onFailure");
-            Log.e("hey", "subject fail");
         }
         @Override
         public void onNoConnection() {
@@ -149,11 +158,14 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_taskeditor, container, false);
-
         ((MainActivity)getActivity()).onFragmentCreated();
 
+        textView_group = (TextView)v.findViewById(R.id.textView_subject);
+        textView_group_ = (TextView)v.findViewById(R.id.textView_creator);
+        spinner_group = (Spinner)v.findViewById(R.id.group_spinner);
         spinner_subject = (Spinner)v.findViewById(R.id.subject_spinner);
-        textView_subject = v.findViewById(R.id.textView_subject);
+        textView_subject = v.findViewById(R.id.textView_group);
+        textView_subject_ = v.findViewById(R.id.textView_subject_);
         button_send = (Button)v.findViewById(R.id.button_send);
         spinner_taskType = (Spinner)v.findViewById(R.id.taskType_spinner);
         editText_taskTitle = v.findViewById(R.id.taskTitle);
@@ -162,7 +174,6 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
         editText_description.setRawInputType(InputType.TYPE_CLASS_TEXT);
         textView_error = v.findViewById(R.id.textView_error_currentPassword);
         textView_error.setTextColor(Color.rgb(255, 0, 0));
-
 
         textView_deadline = v.findViewById(R.id.textView_deadline);
 
@@ -179,7 +190,6 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
                 if(date != null){
                     Transactor.fragmentDialogDateViewer(getFragmentManager().beginTransaction(), date);
                 }
-
                 return true;
             }
         });
@@ -195,72 +205,102 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_taskType.setAdapter(adapter);
 
+        groupId = Manager.GroupManager.getGroupId();//getArguments().getInt(Strings.Path.GROUPID.toString());
 
+        if(getArguments() != null) {
+            groupName = Manager.GroupManager.getGroupName();
+            taskId = getArguments().getInt("taskId");
 
-        groupId = getArguments().getInt(Strings.Path.GROUPID.toString());
+            where = getArguments().getShort("where");
+            type = getArguments().getShort("type");
 
+            if( type == EDITMODE ){//taskId != 0 || typeName != null) {
+                subject = getArguments().getInt("subjectId");
+                date = getArguments().getString("date");
+                textView_deadline.setText(D8.textToDate(date).getMainFormat());
+                editText_taskTitle.setText(getArguments().getString("title"));
+                editText_description.setText(getArguments().getString("description"));
+                typeId = getArguments().getLong("typeId");
+                textView_subject.setText(getArguments().getString("subjectName"));
+                textView_group.setText(getArguments().getString("groupName"));
 
+                spinner_group.setVisibility(View.INVISIBLE);
+                spinner_subject.setVisibility(View.INVISIBLE);
 
+                spinner_taskType.setSelection((int)typeId-1);
+                (getActivity()).setTitle(R.string.fragment_title_edit_task);
+        }
 
-        groupName = Manager.GroupManager.getGroupName();
-        taskId = getArguments().getInt("taskId");
-
-        if(taskId != 0 || typeName != null) {
-            subject = getArguments().getInt("subjectId");
-            date = getArguments().getString("date");
-            textView_deadline.setText(R.string.deadline_ );
-            textView_deadline.setText(D8.textToDate(date).getMainFormat());
-            editText_taskTitle.setText(getArguments().getString("title"));
-            editText_description.setText(getArguments().getString("description"));
-            typeId = getArguments().getLong("typeId");
-     //       typeName = getArguments().getString("typeName");
-
-            textView_subject.setText(getArguments().getString("subjectName"));
-
-          /*  for(int i = 0 ; i <= taskTypeArray.length-1; i++){
-                if(typeName.equals(taskTypeArray[i])){
-                    spinner_taskType.setSelection(i);
-                    break;
-                }
-            } */
-            spinner_subject.setVisibility(View.INVISIBLE);
-
-            (getActivity()).setTitle(R.string.fragment_title_edit_task);
-
-            String[] taskTypeArray = getResources().getStringArray(R.array.taskTypes);
-            spinner_taskType.setSelection((int)typeId-1);
-
-            editMode = true;
         }else{
-            // subject spinner
+            g_adapter = new ArrayAdapter<POJOgroup>(getContext(), android.R.layout.simple_spinner_item);
+            g_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner_group.setAdapter(g_adapter);
+            spinner_group.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    groupId = ((POJOgroup)spinner_group.getItemAtPosition(position)).getId();
+                    MiddleMan.newRequest(new GetSubjects(getActivity(),rh_subjects, groupId));
+                }
+                @Override public void onNothingSelected(AdapterView<?> parent) { }
+            });
+            MiddleMan.newRequest(new GetGroupsFromMe(getActivity(), new CustomResponseHandler() {
+                @Override public void onPOJOResponse(Object response) {
+                    groups = (ArrayList<POJOgroup>) response;
+                    g_adapter.clear();
+                    //  g_adapter.add(new POJOsubject(0, getString(R.string.subject_none)));
+                    if (!groups.isEmpty()) {
+                        int emGroupId = 0;
+                        for (POJOgroup s : groups) {
+                            g_adapter.add(s);
+                            if (groupId == s.getId()) {
+                                emGroupId = s.getId();
+                            }
+                        }
+                        s_adapter.notifyDataSetChanged();
+                        if (type == EDITMODE) {
+                            spinner_group.setSelection(emGroupId);
+                        }
+                    }
+                    s_adapter.notifyDataSetChanged();
+                }
+            }));
+
             s_adapter = new ArrayAdapter<POJOsubject>(getContext(), android.R.layout.simple_spinner_item);
             s_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner_subject.setAdapter(s_adapter);
-            spinner_subject.setOnItemSelectedListener(this);
-            MiddleMan.newRequest(new GetSubjects(getActivity(),rh_subjects, groupId));
+       //     MiddleMan.newRequest(new GetSubjects(getActivity(),rh_subjects, groupId));
 
             (getActivity()).setTitle(R.string.fragment_title_new_task);
-
-            editMode = false;
         }
 
+        if(where == MYMODE){
+            spinner_group.setVisibility(View.GONE);
+            spinner_subject.setVisibility(View.GONE);
+            textView_subject_.setVisibility(View.GONE);
+            textView_group_.setVisibility(View.GONE);
+            textView_subject.setVisibility(View.GONE);
+            (getActivity()).setTitle(R.string.fragment_title_new_mytask);
+        }
 
         button_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String title = editText_taskTitle.getText().toString().trim();
-                if (str_year != null && str_month != null && str_day != null || editMode) {
+                if (str_year != null && str_month != null && str_day != null || type == EDITMODE) {
                     if (title.length() < 2 || title.length() > 20) {
                         textView_error.setText(R.string.error_titleLentgh);
                     }else if (spinner_subject.getSelectedItem() == null){
-                        if(editMode){
+                        if(type == EDITMODE){
                             editTask();
-                        }else {
+                        }else if(where == MYMODE){
+                            createTask();
+                        }
+                        else {
                             textView_error.setText(R.string.error_subjectNotSelected);
                         }
                     } else {
                         button_send.setEnabled(false);
-                        if(editMode){
+                        if(type == EDITMODE){
                             editTask();
                         }else{
                             createTask();
@@ -272,7 +312,6 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
                 AndroidThings.closeKeyboard(getContext(), v);
             }
     });
-
 
         dpd = new DatePickerDialog(this.getActivity(), new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -294,8 +333,6 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
     }
 
     private void editTask() {
-        HashMap<String, Object> requestBody = new HashMap<>();
-
         int tTypeId = spinner_taskType.getSelectedItemPosition() + 1;
 
         int taskType = tTypeId;
@@ -307,18 +344,15 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
         }else{
             dueDate = date;
         }
-        String byName;
-        int byId;
-        if(subject == 0) {
-            byName = Strings.Path.GROUPS.toString();
-            byId = groupId;
+        Request r;
+        if(where == GROUPMODE){
+            r = new EditAT(getActivity(),rh_task, Strings.Path.TASKS,taskId,
+                    taskType, taskTitle, description, dueDate);
         }else{
-            byName =  Strings.Path.SUBJECTS.toString();
-            byId = subject;
+            r = new EditMyTask(getActivity(),rh_task,
+                    taskId, taskType, taskTitle, description, dueDate);
         }
-
-        MiddleMan.newRequest(new EditAT(getActivity(),rh_task, Strings.Path.TASKS,taskId,
-                taskType, taskTitle, description, dueDate));
+        MiddleMan.newRequest(r);
     }
 
     private void createTask() {
@@ -328,26 +362,25 @@ public class TaskEditorFragment extends Fragment implements AdapterView.OnItemSe
         String description = editText_description.getText().toString();
         String dueDate = str_year + "-" + str_month + "-" + str_day;
 
-        int subjectId = ((POJOsubject) spinner_subject.getSelectedItem()).getId();
-        String byName;
-        int byId;
-        if(subjectId == 0){
-            byName = Strings.Path.GROUPS.toString();
-            byId = groupId;
+        Request r;
+        if(where == GROUPMODE){
+            int subjectId = ((POJOsubject) spinner_subject.getSelectedItem()).getId();
+            String byName;
+            int byId;
+            if (subjectId == 0) {
+                byName = Strings.Path.GROUPS.toString();
+                byId = groupId;
+            } else {
+                byName = Strings.Path.SUBJECTS.toString();
+                byId = subjectId;
+            }
+            r = new CreateAT(getActivity(),rh_task, Strings.Path.TASKS, byName, byId,
+                    tTypeId, title, description, dueDate);
         }else{
-            byName = Strings.Path.SUBJECTS.toString();
-            byId = subjectId;
+            r = new CreateMyTask(getActivity(),rh_task,
+                    tTypeId, title, description, dueDate);
         }
-
-        MiddleMan.newRequest(new CreateAT(getActivity(),rh_task, Strings.Path.TASKS, byName, byId,
-                tTypeId, title, description, dueDate));
-
-    }
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-    }
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
+        MiddleMan.newRequest(r);
     }
     public int getGroupId(){
         return groupId;

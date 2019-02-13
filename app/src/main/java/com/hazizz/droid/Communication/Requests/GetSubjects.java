@@ -38,8 +38,7 @@ public class GetSubjects extends Request {
     }
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
-        Type listType = new TypeToken<ArrayList<POJOsubject>>() {
-        }.getType();
+        Type listType = new TypeToken<ArrayList<POJOsubject>>(){}.getType();
         ArrayList<POJOsubject> castedList = gson.fromJson(response.body().charStream(), listType);
         cOnResponse.onPOJOResponse(castedList);
     }

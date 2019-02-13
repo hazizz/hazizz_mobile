@@ -81,12 +81,12 @@ public class MainAnnouncementFragment extends Fragment{
         });
     }
     private void getAnnouncements(){
-        adapter.clear();
+
         CustomResponseHandler responseHandler = new CustomResponseHandler() {
-            @Override
-            public void onResponse(HashMap<String, Object> response) { }
+
             @Override
             public void onPOJOResponse(Object response) {
+                adapter.clear();
                 ArrayList<POJOAnnouncement> pojoList = (ArrayList<POJOAnnouncement>) response;
                 if(pojoList.size() == 0){
                     textView_noContent.setVisibility(v.VISIBLE);

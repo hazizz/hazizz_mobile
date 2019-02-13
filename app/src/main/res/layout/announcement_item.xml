@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/colorBackground"
     >
 
     <TextView
@@ -17,6 +18,7 @@
         android:layout_marginStart="16dp"
         android:ellipsize="end"
         android:text="Title"
+        android:textColor="@color/colorDarkText"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -30,11 +32,10 @@
         android:layout_marginLeft="6dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="2dp"
         android:ellipsize="end"
         android:maxLines="5"
-        android:text="description"
         android:minHeight="30dp"
+        android:text="description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.046"
         app:layout_constraintStart_toStartOf="parent"
@@ -61,7 +62,7 @@
 
 
         <TextView
-            android:id="@+id/textView_subject_"
+            android:id="@+id/textView_creator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -92,7 +93,7 @@
 
 
         <TextView
-            android:id="@+id/textView_creator"
+            android:id="@+id/textView_creator_"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="creator"

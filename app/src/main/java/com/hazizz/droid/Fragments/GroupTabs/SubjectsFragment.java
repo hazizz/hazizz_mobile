@@ -87,10 +87,10 @@ public class SubjectsFragment extends Fragment {
         });
     }
     private void getSubjects(){
-        adapter.clear();
         CustomResponseHandler responseHandler = new CustomResponseHandler() {
             @Override
             public void onPOJOResponse(Object response) {
+                adapter.clear();
                 ArrayList<POJOsubject> pojoList = (ArrayList<POJOsubject>) response;
                 if(pojoList.size() == 0){
                     textView_noContent.setVisibility(v.VISIBLE);
@@ -132,7 +132,7 @@ public class SubjectsFragment extends Fragment {
 
     public void toCreateSubject(FragmentManager fm){
         Manager.DestManager.setDest(Manager.DestManager.TOSUBJECTS);
-        Transactor.fragmentCreateSubject(fm.beginTransaction(), GroupTabFragment.groupId, GroupTabFragment.groupName);
+        Transactor.fragmentCreateSubject(fm.beginTransaction(), Manager.GroupManager.getGroupId(), Manager.GroupManager.getGroupName());//GroupTabFragment.groupName);
     }
 
 }

@@ -25,7 +25,6 @@ public class CreateSubject extends Request {
         headerMap.put("Content-Type", "application/json");
         headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
 
-        body.put("name", b_subjectName);
         call = aRequest.createSubject(p_groupId, headerMap, body);
     }
     @Override

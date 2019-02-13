@@ -18,6 +18,7 @@ import com.hazizz.droid.Communication.Requests.GetPublicUserDetail;
 import com.hazizz.droid.Communication.Requests.GetUserProfilePic;
 import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.Converter.Converter;
+import com.hazizz.droid.D8;
 import com.hazizz.droid.R;
 
 public class UserDetailDialogFragment extends DialogFragment {
@@ -35,10 +36,9 @@ public class UserDetailDialogFragment extends DialogFragment {
         public void onPOJOResponse(Object response) {
             PojoPublicUserData pojoObject = (PojoPublicUserData)response;
 
-
             textView_username.setText(pojoObject.getUsername());
             textView_displayName.setText(pojoObject.getDisplayName());
-            textView_registrationDate.setText(pojoObject.getRegistrationDate());
+            textView_registrationDate.setText(D8.textToDate(pojoObject.getRegistrationDate()).getMainFormat());
         }
     };
 

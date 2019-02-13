@@ -44,7 +44,7 @@ public class CustomAdapter extends ArrayAdapter<SubjectItem> {
             convertView = inflater.inflate(picID, parent, false);
 
             holder = new DataHolder();
-            holder.subjectName = (TextView) convertView.findViewById(R.id.subject_name);
+            holder.subjectName = (TextView) convertView.findViewById(R.id.textView_name);
             convertView.setTag(holder);
         }else{
             holder = (DataHolder)convertView.getTag();

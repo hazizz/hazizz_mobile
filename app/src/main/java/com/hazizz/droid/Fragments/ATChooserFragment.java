@@ -32,7 +32,7 @@ public class ATChooserFragment extends Fragment {
             @Override
             public void onClick(View view) {
             //    Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(), Manager.GroupManager.getGroupId(), Manager.GroupManager.getGroupName(), Manager.DestManager.TOMAIN);
-                Transactor.fragmentToATChooser(getFragmentManager().beginTransaction(), Manager.DestManager.TOCREATETASK);
+                Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(), Manager.DestManager.TOMAIN);
             }
         });
         textView_announcement = v.findViewById(R.id.textView_announcement);
@@ -40,8 +40,7 @@ public class ATChooserFragment extends Fragment {
             @Override
             public void onClick(View view) {
               //  Transactor.fragmentCreateAnnouncement(getFragmentManager().beginTransaction(), Manager.GroupManager.getGroupId(), Manager.GroupManager.getGroupName(), Manager.DestManager.TOMAIN);
-                Transactor.fragmentToATChooser(getFragmentManager().beginTransaction(), Manager.DestManager.TOCREATEANNOUNCEMENT);
-
+                Transactor.fragmentCreateAnnouncement(getFragmentManager().beginTransaction(), Manager.DestManager.TOMAIN);
             }
         });
         return v;

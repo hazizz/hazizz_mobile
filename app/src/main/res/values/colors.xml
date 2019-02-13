@@ -4,6 +4,12 @@
     <color name="colorPrimaryDarkerBlue">#2b909b</color>
     <color name="colorPrimaryDarkBlue">#36B1BF</color>
     <color name="colorPrimaryLightBlue">#46D9D9</color>
+
+    <color name="color_hazizz_background_blue">#d4f7f7</color>
+    <color name="color_hazizz_list_item_blue">#edffff</color>
+
+    <color name="white">#ffffff</color>
+
     <color name="colorBackground">#ffffff</color>
     <color name="colorBackground1">#E9F1DF</color>
     <color name="colorYellow">#FFCB05</color>
@@ -16,6 +22,11 @@
 
     <color name="color_badge_owner">#d9a849</color>
     <color name="color_badge_owner_stroke">#a47f38</color>
+
+
+    <color name="color_light_gray">#e8e8e8</color>
+    <color name="color_light_darker_gray">#bababa</color>
+
 
 
 

@@ -43,6 +43,8 @@ public class MainTabFragment extends Fragment{
         v = inflater.inflate(R.layout.fragment_tabmain, container, false);
         Log.e("hey", "GroupTab fragment created");
 
+
+
         getActivity().setTitle(R.string.app_name);
         startingTab = getArguments().getInt("startingTab");
 

@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,8 +21,10 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
     public static final String WIDGET_REFRESHBUTTON = "com.hazizz.droid.WIDGET_REFRESHBUTTON";
     public static final String WIDGET_OPENAPPBUTTON = "com.hazizz.droid.WIDGET_OPENAPPBUTTON";
 
+    public static final String EXTRA_STRING = "extraString";
     public static final String ACTION_TOAST = "actionToast";
     public static final String EXTRA_ITEM_POSITION = "extraItemPosition";
+
 
     public static final String ACTION_VIEW_DETAILS =
             "com.company.android.ACTION_VIEW_DETAILS";
@@ -112,10 +115,21 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
             clickIntent.setAction(ACTION_TOAST);
             PendingIntent clickPendingIntent = PendingIntent.getBroadcast(context,
                     0, clickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-
-
             widgetViewList.setPendingIntentTemplate(R.id.widget_stack, clickPendingIntent);
+
+
+            final Intent onItemClick = new Intent(context, CollectionWidgetProvider.class);
+            onItemClick.setAction(ACTION_TOAST);
+            onItemClick.setData(Uri.parse(onItemClick
+                    .toUri(Intent.URI_INTENT_SCHEME)));
+            final PendingIntent onClickPendingIntent = PendingIntent
+                    .getBroadcast(context, 0, onItemClick,
+                            PendingIntent.FLAG_UPDATE_CURRENT);
+            widgetViewList.setPendingIntentTemplate(R.id.widget_stack,
+                    onClickPendingIntent);
+
+            Log.e("hey", "On update");
+
 
             appWidgetManager.updateAppWidget(widgetId, widgetViewList);
             appWidgetManager.updateAppWidget(widgetId, widgetView);
@@ -128,7 +142,6 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-
       /*  if(intent.getAction().equals(ACTION_VIEW_DETAILS)) {
             POJOgetTask article = (POJOgetTask)intent.getSerializableExtra(EXTRA_ITEM);
             if(article != null) {
@@ -152,7 +165,6 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
                 widgetView.setViewVisibility(R.id.widget_textView_content, View.INVISIBLE);
             }else {
                 widgetView.setViewVisibility(R.id.widget_textView_content, View.VISIBLE);
-
                 widgetView.setTextViewText(R.id.widget_textView_content, contentInfo);
             }
             mgr.updateAppWidget(mgr.getAppWidgetIds(cn),widgetView);
@@ -168,8 +180,15 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
         }
 
         if (ACTION_TOAST.equals(intent.getAction())) {
-            int clickedPosition = intent.getIntExtra(EXTRA_ITEM_POSITION, 0);
+         //   int clickedPosition = intent.getIntExtra(EXTRA_ITEM_POSITION, 0);
+            int clickedPosition = intent.getIntExtra(EXTRA_STRING, 0);
             Toast.makeText(context, "Clicked position: " + clickedPosition, Toast.LENGTH_SHORT).show();
+            Log.e("hey", "click wdiget");
+        }
+
+        if  (intent.getAction().equals(ACTION_TOAST)) {
+            String item = intent.getExtras().getString(EXTRA_STRING);
+            Toast.makeText(context, item, Toast.LENGTH_LONG).show();
         }
 
         super.onReceive(context, intent);

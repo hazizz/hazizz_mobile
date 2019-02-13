@@ -2,6 +2,7 @@ package com.hazizz.droid;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
@@ -22,7 +23,7 @@ import static com.hazizz.droid.CollectionWidgetProvider.EXTRA_ITEM_POSITION;
 
 public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteViewsFactory {
 
-    private static final int ID_CONSTANT = 0x0101010;
+   // private static final int ID_CONSTANT = 0x0101010;
 
     private static String contentInfo = "";
 
@@ -47,11 +48,12 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
                     dates[i], new POJOcreator(1, "usernaem", "2"), new POJOgroup(1, "name", "OPen asd", 2)));
         } */
     }
+
     @Override public int getCount() {
         return data.size();
     }
     @Override public long getItemId(int position) {
-        return ID_CONSTANT + position;
+        return position;//ID_CONSTANT + position;
     }
     @Override public RemoteViews getLoadingView() {
         return null;
@@ -65,7 +67,7 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
 
         itemView.setTextViewText(R.id.task_title, task.getTitle());
         itemView.setTextViewText(R.id.task_description, task.getDescription());
-        itemView.setTextViewText(R.id.textView_creator, task.getCreator().getUsername());
+        itemView.setTextViewText(R.id.textView_creator_, task.getCreator().getDisplayName());
 
         if(task.getSubject() != null) {
             itemView.setTextViewText(R.id.textView_subject, task.getSubject().getName());
@@ -82,11 +84,25 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
 
 
 
+        final Intent fillInIntent = new Intent();
+        fillInIntent.setAction(CollectionWidgetProvider.ACTION_TOAST);
+        final Bundle bundle = new Bundle();
+        bundle.putInt(CollectionWidgetProvider.EXTRA_STRING,
+                position);
+        fillInIntent.putExtras(bundle);
+        itemView.setOnClickFillInIntent(R.id.task_title, fillInIntent);
+        itemView.setOnClickFillInIntent(R.layout.widget_task_item, fillInIntent);
+        itemView.setOnClickFillInIntent(R.id.widget_stack, fillInIntent);
+        itemView.setOnClickFillInIntent(R.id.widget_item_linearLayout, fillInIntent);
+
+
+
+
         return itemView;
     }
 
     @Override public int getViewTypeCount() {
-        return 1;
+        return 2;
     }
 
     @Override public boolean hasStableIds() {

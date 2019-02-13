@@ -121,8 +121,10 @@ public class AnnouncementEditorFragment extends Fragment{
 
 
         groupName = Manager.GroupManager.getGroupName();
-        announcementId = getArguments().getInt("announcementId");
 
+        if(getArguments() != null) {
+            announcementId = getArguments().getInt("announcementId");
+        }
         if(announcementId != 0) {
             title = getArguments().getString("title");
             description = getArguments().getString("description");

@@ -52,32 +52,27 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Request implements RequestInterface {
     protected Gson gson = new Gson();
-    protected final String BASE_URL = "https://hazizz.duckdns.org:8081/";
-    protected final String THERA_URL = "https://hazizz.duckdns.org:9000/thera-server/";
-    public RequestInterface requestType;
+    private static final String BASE_URL = "https://hazizz.duckdns.org:8081/";
+    private static final String THERA_URL = "https://hazizz.duckdns.org:9000/thera-server/";
+   // public RequestInterface requestType;
     protected HashMap<String, Object> body;
-    protected Retrofit retrofit;
-    protected Retrofit thera_retrofit;
+    private Retrofit retrofit;
+    private Retrofit thera_retrofit;
 
     protected Call<ResponseBody> call;
     protected RequestTypes aRequest;
     protected RequestTypes tRequest;
 
     protected CustomResponseHandler cOnResponse;
-   // protected Context context;
     protected Activity act;
 
     protected Request thisRequest = this;
 
-    protected OkHttpClient okHttpClient;
+    private OkHttpClient okHttpClient;
 
     public Activity getActivity(){
         return act;
     }
-
-   /* public Context getContext(){
-        return context;
-    } */
 
     public CustomResponseHandler getResponseHandler(){
         return cOnResponse;
@@ -131,6 +126,5 @@ public class Request implements RequestInterface {
     public void callIsSuccessful(Response<ResponseBody> response) {
     }
 
-    //called int the constructor
 }
 

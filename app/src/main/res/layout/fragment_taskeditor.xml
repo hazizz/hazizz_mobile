@@ -32,37 +32,41 @@
             android:fitsSystemWindows="true"
             >
 
-            <RelativeLayout
-                android:id="@+id/relativeLayout2"
+
+            <Spinner
+                android:id="@+id/group_spinner"
                 android:layout_width="175dp"
-
-                android:layout_height="84dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="4dp"
+                android:layout_height="43dp"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="left"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.958"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toBottomOf="@+id/taskType_spinner" />
+
+            <Spinner
+                android:id="@+id/taskType_spinner"
+                android:layout_width="175dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_gravity="left"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
-                <Spinner
-                    android:id="@+id/subject_spinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_gravity="left" />
-
-                <Spinner
-                    android:id="@+id/taskType_spinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center_horizontal" />
-
-
-            </RelativeLayout>
+            <Spinner
+                android:id="@+id/subject_spinner"
+                android:layout_width="175dp"
+                android:layout_height="40dp"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="left"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/group_spinner" />
 
             <TextView
                 android:id="@+id/textView_subject"
@@ -70,12 +74,10 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginLeft="100dp"
-                android:layout_marginStart="100dp"
                 android:layout_marginTop="28dp"
                 android:text="          "
                 android:visibility="visible"
-                app:layout_constraintStart_toEndOf="@+id/textView4"
+                app:layout_constraintStart_toStartOf="@+id/group_spinner"
                 app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
 
@@ -88,14 +90,14 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="68dp"
+                android:layout_marginTop="24dp"
                 android:hint="@string/title"
                 android:inputType="text"
                 android:maxLines="1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/relativeLayout2" />
+                app:layout_constraintTop_toBottomOf="@+id/textView_deadline" />
 
             <EditText
                 android:id="@+id/editText_description"
@@ -113,6 +115,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/taskTitle" />
 
             <Button
+
                 android:id="@+id/button_send"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -122,19 +125,22 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
+                android:background="@drawable/rounded_lightblue_border"
                 android:text="@string/button_send"
+                android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.502"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/textView_creator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="28dp"
-                android:text="@string/subject_fragment_taskeditor"
+                android:text="@string/group_"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
@@ -166,27 +172,47 @@
                 android:id="@+id/textView_deadline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="152dp"
-                android:layout_marginStart="152dp"
-                android:layout_marginTop="13dp"
+                android:layout_marginLeft="154dp"
+                android:layout_marginStart="154dp"
+                android:layout_marginTop="16dp"
                 android:clickable="true"
                 android:onClick="onClick"
                 android:text="@string/choose_deadline_fragment_taskeditor"
                 android:textColor="@color/colorDarkText"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/relativeLayout2" />
+                app:layout_constraintTop_toBottomOf="@+id/subject_spinner" />
 
             <TextView
-                android:id="@+id/textView16"
+                android:id="@+id/textView_subject_"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="22dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/subject_fragment_taskeditor"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_creator" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="26dp"
                 android:text="@string/deadline_"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView4" />
+                app:layout_constraintTop_toBottomOf="@+id/textView_subject_" />
+
+            <TextView
+                android:id="@+id/textView_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="          "
+                app:layout_constraintStart_toStartOf="@+id/subject_spinner"
+                app:layout_constraintTop_toBottomOf="@+id/group_spinner" />
 
 
         </android.support.constraint.ConstraintLayout>

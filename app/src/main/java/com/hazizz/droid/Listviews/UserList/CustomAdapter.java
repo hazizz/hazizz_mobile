@@ -50,7 +50,7 @@ public class CustomAdapter extends ArrayAdapter<UserItem> {
 
             holder = new DataHolder();
             holder.userProfilePic = (ImageView) convertView.findViewById(R.id.imageView_memberProfilePic);
-            holder.userName = (TextView) convertView.findViewById(R.id.subject_name);
+            holder.userName = (TextView) convertView.findViewById(R.id.textView_name);
             holder.badge_owner = convertView.findViewById(R.id.badge_owner);
 
             convertView.setTag(holder);

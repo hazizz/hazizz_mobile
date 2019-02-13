@@ -29,15 +29,16 @@ import com.hazizz.droid.Fragments.Dialog.DateViewerDialogFragment;
 import com.hazizz.droid.Fragments.Dialog.UserDetailDialogFragment;
 import com.hazizz.droid.Fragments.GroupTabs.GroupTabFragment;
 import com.hazizz.droid.Fragments.JoinGroupFragment;
+import com.hazizz.droid.Fragments.LogFragment;
 import com.hazizz.droid.Fragments.MainTab.GroupsFragment;
 import com.hazizz.droid.Fragments.MainTab.MainTabFragment;
+import com.hazizz.droid.Fragments.MyTasksFragment;
 import com.hazizz.droid.Fragments.Options.MainOptionsFragment;
 import com.hazizz.droid.Fragments.Options.PasswordFragment;
 import com.hazizz.droid.Fragments.TaskEditorFragment;
 import com.hazizz.droid.Fragments.ThéraFrags.Setup.ThChooseSchool;
 import com.hazizz.droid.Fragments.ViewAnnouncementFragment;
 import com.hazizz.droid.Fragments.ViewTaskFragment;
-import com.hazizz.droid.R;
 
 import javax.annotation.Nonnull;
 
@@ -82,6 +83,12 @@ public abstract class Transactor extends FragmentActivity {
     }
 
 
+    public static void fragmentLogs(@Nonnull FragmentTransaction fTransaction){
+        LogFragment frag = new LogFragment();
+        fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
+        if(backStack){ fTransaction.addToBackStack(null); }
+        fTransaction.commit();
+    }
 
     public static void fragmentFirst(@Nonnull FragmentTransaction fTransaction){
         FirstFragment frag = new FirstFragment();
@@ -135,8 +142,9 @@ public abstract class Transactor extends FragmentActivity {
 
 
     public static void fragmentToATChooser(@Nonnull FragmentTransaction fTransaction, int where){
-        Manager.DestManager.setDest(where);
-        fragmentGroups(fTransaction);
+       //  Manager.DestManager.setDest(where);
+       //  fragmentGroups(fTransaction);
+        fragmentATChooser(fTransaction);
     }
 
     public static void fragmentATChooser(@Nonnull FragmentTransaction fTransaction){
@@ -146,27 +154,70 @@ public abstract class Transactor extends FragmentActivity {
         fTransaction.commit();
     }
 
+    public static void fragmentMyTasks(@Nonnull FragmentTransaction fTransaction){
+
+        MyTasksFragment frag = new MyTasksFragment();
+        fTransaction.replace(R.id.fragment_container, frag);
+        fTransaction.commit();
+    }
+
 
     public static void fragmentViewTask(@Nonnull FragmentTransaction fTransaction,
-                                        int taskId, boolean goBackToMain, int dest){
+                                        int taskId, boolean goBackToMain, int dest, boolean mode){
         Manager.DestManager.setDest(dest);
 
         Bundle bundle = new Bundle();
         bundle.putInt(Strings.Path.TASKID.toString(), taskId);
         bundle.putBoolean("goBackToMain", goBackToMain);
+        bundle.putBoolean("mode", mode);
         ViewTaskFragment frag = new ViewTaskFragment();
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }
         fTransaction.commit();
     }
+
+
+    public static void fragmentCreateMyTask(@Nonnull FragmentTransaction fTransaction){
+        Bundle bundle = new Bundle();
+        TaskEditorFragment frag = new TaskEditorFragment();
+        bundle.putShort("where", TaskEditorFragment.MYMODE);
+        bundle.putShort("type", TaskEditorFragment.CREATEMODE);
+        frag.setArguments(bundle);
+        fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
+        if(backStack){ fTransaction.addToBackStack(null); }
+        fTransaction.commit();
+    }
+
+    public static void fragmentEditMyTask(@Nonnull FragmentTransaction fTransaction){
+        Bundle bundle = new Bundle();
+        TaskEditorFragment frag = new TaskEditorFragment();
+        bundle.putShort("where", TaskEditorFragment.MYMODE);
+        bundle.putShort("type", TaskEditorFragment.EDITMODE);
+        frag.setArguments(bundle);
+        fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
+        if(backStack){ fTransaction.addToBackStack(null); }
+        fTransaction.commit();
+    }
+
     public static void fragmentCreateTask(@Nonnull FragmentTransaction fTransaction, int groupId, String groupName, int dest){
         Manager.DestManager.setDest(dest);
         Bundle bundle = new Bundle();
-        bundle.putInt(Strings.Path.GROUPID.toString(), groupId);
+      //  bundle.putInt(Strings.Path.GROUPID.toString(), groupId);
+        Manager.GroupManager.setGroupId(groupId);
         bundle.putString("groupName", groupName);
+        bundle.putShort("where", TaskEditorFragment.GROUPMODE);
+        bundle.putShort("type", TaskEditorFragment.CREATEMODE);
         TaskEditorFragment frag = new TaskEditorFragment();
         frag.setArguments(bundle);
+        fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
+        if(backStack){ fTransaction.addToBackStack(null); }
+        fTransaction.commit();
+    }
+
+    public static void fragmentCreateTask(@Nonnull FragmentTransaction fTransaction, int dest){
+        Manager.DestManager.setDest(dest);
+        TaskEditorFragment frag = new TaskEditorFragment();
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }
         fTransaction.commit();
@@ -177,6 +228,8 @@ public abstract class Transactor extends FragmentActivity {
                                         String taskDescription, String date, int dest){
         Manager.DestManager.setDest(dest);
         Bundle bundle = new Bundle();
+        bundle.putShort("where", TaskEditorFragment.GROUPMODE);
+        bundle.putShort("type", TaskEditorFragment.EDITMODE);
         bundle.putInt("taskId", taskId);
         bundle.putInt(Strings.Path.GROUPID.toString(), groupId);
         bundle.putString("groupName", groupName);
@@ -204,6 +257,12 @@ public abstract class Transactor extends FragmentActivity {
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }
+        fTransaction.commit();
+    }
+    public static void fragmentCreateAnnouncement(@Nonnull FragmentTransaction fTransaction, int dest){
+        Manager.DestManager.setDest(dest);
+        AnnouncementEditorFragment frag = new AnnouncementEditorFragment();
+        fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         fTransaction.commit();
     }
 

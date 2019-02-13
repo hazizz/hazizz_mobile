@@ -2,8 +2,10 @@ package com.hazizz.droid.Communication;
 
 import com.hazizz.droid.Network;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.hazizz.droid.Communication.Requests.Request;
+import com.hazizz.droid.R;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -47,6 +49,7 @@ public abstract class MiddleMan{
             }
         if(Network.getActiveNetwork(newRequest.getActivity()) == null || !Network.isConnectedOrConnecting(newRequest.getActivity())) {
             newRequest.getResponseHandler().onNoConnection();
+            Toast.makeText(newRequest.getActivity(), R.string.info_noInternetAccess, Toast.LENGTH_LONG).show();
         }
         try {
             requestQueue.put(newRequest);
