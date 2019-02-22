@@ -25,6 +25,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.hazizz.droid.Activities.MainActivity;
+import com.hazizz.droid.AndroidThings;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.POJO.Response.POJOgroup;
@@ -163,6 +164,7 @@ public class MainOptionsFragment extends Fragment {
                         public void onErrorResponse(POJOerror error) {
                             Log.e("hey", "couldnt set profile pic");
                             editText_displayName.setText(lastDisplayName);
+                            AndroidThings.closeKeyboard(getContext(), v);
                         }
 
                         @Override
@@ -171,6 +173,7 @@ public class MainOptionsFragment extends Fragment {
                             ((MainActivity) getActivity()).setDisplayNameInNav(newDisplayName);
                             editText_displayName.clearFocus();
                             changedDisplayName = false;
+                            AndroidThings.closeKeyboard(getContext(), v);
                         }
                     }, newDisplayName));
                 }else{
@@ -185,11 +188,6 @@ public class MainOptionsFragment extends Fragment {
         fab_profilePicCheck.setImageResource(R.drawable.ic_camera_black);
 
 
-
-
-
-
-
         return v;
     }
 
@@ -201,13 +199,12 @@ public class MainOptionsFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i){
                     case 0:
-                        //Fiók Szerkesztés
-                        // átmenetileg
-                        Transactor.fragmentPassword(getFragmentManager().beginTransaction());
+                        Transactor.fragmentNotificationSettings(getFragmentManager().beginTransaction());
+
                         break;
                     case 1:
                         //Jelszó Beállítás
-
+                        Transactor.fragmentPassword(getFragmentManager().beginTransaction());
                         break;
                     case 2:
                     default:
@@ -273,27 +270,27 @@ public class MainOptionsFragment extends Fragment {
                 cropImageView.setShowProgressBar(true);
                 cropImageView.setCropRect(new Rect(0, 0, 800, 500));
 */
-
-
-
                 CropImage.activity(data.getData())
-                        .setActivityMenuIconColor(getResources().getColor(R.color.colorDarkText))
-                        .setAspectRatio(1,1)
-                        .setFixAspectRatio(true)
-                        .setGuidelines(CropImageView.Guidelines.ON)
-                        .setCropShape(CropImageView.CropShape.OVAL)
-                        .setBorderLineThickness(8)
-                        .start(getContext(), this);
+                    .setActivityMenuIconColor(getResources().getColor(R.color.colorDarkText))
+                    .setAspectRatio(1,1)
+                    .setFixAspectRatio(true)
+                    .setGuidelines(CropImageView.Guidelines.ON)
+                    .setCropShape(CropImageView.CropShape.OVAL)
+                    .setBorderLineThickness(8)
+                    .start(getContext(), this);
 
               //  bitmap = cropImageView.getCroppedImage();
-
-
-
 
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.e("hey", "file not found!");
             }
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        AndroidThings.closeKeyboard(getContext(), v);
     }
 }

@@ -59,7 +59,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="10dp"                android:background="@drawable/rounded_lightblue_border"
+        android:textColor="@color/white"
+
         android:text="@string/login" />
 
     <android.support.constraint.ConstraintLayout

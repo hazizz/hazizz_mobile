@@ -34,6 +34,7 @@ import com.hazizz.droid.Fragments.MainTab.GroupsFragment;
 import com.hazizz.droid.Fragments.MainTab.MainTabFragment;
 import com.hazizz.droid.Fragments.MyTasksFragment;
 import com.hazizz.droid.Fragments.Options.MainOptionsFragment;
+import com.hazizz.droid.Fragments.Options.NotificationSettingsFragment;
 import com.hazizz.droid.Fragments.Options.PasswordFragment;
 import com.hazizz.droid.Fragments.TaskEditorFragment;
 import com.hazizz.droid.Fragments.ThéraFrags.Setup.ThChooseSchool;
@@ -42,9 +43,8 @@ import com.hazizz.droid.Fragments.ViewTaskFragment;
 
 import javax.annotation.Nonnull;
 
-public abstract class Transactor extends FragmentActivity {
+public class Transactor extends FragmentActivity {
     private static boolean backStack = true;
-
 
     public static Fragment getCurrentFragment(FragmentManager fManager, boolean asd){
         Fragment currentF = fManager.findFragmentById(R.id.fragment_container);
@@ -115,6 +115,13 @@ public abstract class Transactor extends FragmentActivity {
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }
         fTransaction.commit();
+    }
+
+    public static void fragmentNotificationSettings(@Nonnull FragmentTransaction fTransaction){
+        NotificationSettingsFragment frag = new NotificationSettingsFragment();
+        fTransaction.replace(R.id.fragment_container, frag);
+        fTransaction.commit();
+
     }
 
     public static void fragmentOptions(@Nonnull FragmentTransaction fTransaction){
@@ -255,7 +262,7 @@ public abstract class Transactor extends FragmentActivity {
         bundle.putString("groupName", groupName);
         AnnouncementEditorFragment frag = new AnnouncementEditorFragment();
         frag.setArguments(bundle);
-        fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
+        fTransaction.replace(R.id.fragment_container, frag);
         if(backStack){ fTransaction.addToBackStack(null); }
         fTransaction.commit();
     }
@@ -415,7 +422,7 @@ public abstract class Transactor extends FragmentActivity {
 
 
 
-    public static void feedbackActivity(Activity thisActivity){ //, Fragment goBackFragment){
+    public static void feedbackActivity(Activity thisActivity){
         Intent i = new Intent(thisActivity, FeedbackActivity.class);
         thisActivity.startActivity(i);
     }

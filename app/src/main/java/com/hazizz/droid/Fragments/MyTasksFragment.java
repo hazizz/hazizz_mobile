@@ -52,7 +52,7 @@ public class MyTasksFragment extends Fragment{
             public void onRefresh() {
                 getTasks();
             }});
-
+        sRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimaryDarkBlue), getResources().getColor(R.color.colorPrimaryLightBlue), getResources().getColor(R.color.colorPrimaryDarkBlue));
         ((MainActivity)getActivity()).onFragmentCreated();
         createViewList();
         getTasks();
@@ -100,7 +100,7 @@ public class MyTasksFragment extends Fragment{
 
                         if(daysLeft > lastDaysLeft) {
                             String title;
-                            String deadline = t.getDueDate();
+                            String deadline = D8.textToDate(t.getDueDate()).getMainFormat();
                             if(daysLeft == 0){
                                 title = getResources().getString(R.string.today);
                             }else {

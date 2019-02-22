@@ -7,12 +7,13 @@ import lombok.Data;
 @Data
 public class CommentItem {
 
-
+    long commentId;
     String commentProfilePic;
     POJOcreator creator;
     String commentContent;
 
-    public CommentItem(String commentProfilePic, POJOcreator creator, String commentContent){
+    public CommentItem(long commentId, String commentProfilePic, POJOcreator creator, String commentContent){
+        this.commentId = commentId;
         this.commentProfilePic = commentProfilePic;
         this.creator = creator;
         this.commentContent = commentContent;

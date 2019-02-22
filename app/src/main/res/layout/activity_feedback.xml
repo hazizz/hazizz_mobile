@@ -37,7 +37,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="8dp"                android:background="@drawable/rounded_lightblue_border"
+        android:textColor="@color/white"
+
         android:text="@string/button_send" />
 
     <include layout="@layout/content_feedback" />

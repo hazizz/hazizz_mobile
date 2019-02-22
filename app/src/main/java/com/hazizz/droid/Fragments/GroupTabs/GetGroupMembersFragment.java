@@ -61,7 +61,7 @@ public class GetGroupMembersFragment extends Fragment {
             public void onRefresh() {
                 getUser();
             }});
-
+        sRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimaryDarkBlue), getResources().getColor(R.color.colorPrimaryLightBlue), getResources().getColor(R.color.colorPrimaryDarkBlue));
         createViewList();
         getUser();
 

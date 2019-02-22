@@ -170,7 +170,7 @@ public class TaskEditorFragment extends Fragment {//implements AdapterView.OnIte
         spinner_taskType = (Spinner)v.findViewById(R.id.taskType_spinner);
         editText_taskTitle = v.findViewById(R.id.taskTitle);
         editText_description = v.findViewById(R.id.editText_description);
-        editText_description.setImeOptions(EditorInfo.IME_ACTION_DONE);
+     //   editText_description.setImeOptions(EditorInfo.IME_ACTION_DONE);
         editText_description.setRawInputType(InputType.TYPE_CLASS_TEXT);
         textView_error = v.findViewById(R.id.textView_error_currentPassword);
         textView_error.setTextColor(Color.rgb(255, 0, 0));
@@ -214,22 +214,26 @@ public class TaskEditorFragment extends Fragment {//implements AdapterView.OnIte
             where = getArguments().getShort("where");
             type = getArguments().getShort("type");
 
-            if( type == EDITMODE ){//taskId != 0 || typeName != null) {
-                subject = getArguments().getInt("subjectId");
-                date = getArguments().getString("date");
-                textView_deadline.setText(D8.textToDate(date).getMainFormat());
-                editText_taskTitle.setText(getArguments().getString("title"));
-                editText_description.setText(getArguments().getString("description"));
-                typeId = getArguments().getLong("typeId");
-                textView_subject.setText(getArguments().getString("subjectName"));
-                textView_group.setText(getArguments().getString("groupName"));
 
-                spinner_group.setVisibility(View.INVISIBLE);
-                spinner_subject.setVisibility(View.INVISIBLE);
-
-                spinner_taskType.setSelection((int)typeId-1);
-                (getActivity()).setTitle(R.string.fragment_title_edit_task);
         }
+        if( type == EDITMODE ){//taskId != 0 || typeName != null) {
+            subject = getArguments().getInt("subjectId");
+            date = getArguments().getString("date");
+            textView_deadline.setText(D8.textToDate(date).getMainFormat());
+            editText_taskTitle.setText(getArguments().getString("title"));
+            editText_description.setText(getArguments().getString("description"));
+            typeId = getArguments().getLong("typeId");
+            textView_subject.setText(getArguments().getString("subjectName"));
+            textView_group.setText(getArguments().getString("groupName"));
+
+            spinner_group.setVisibility(View.INVISIBLE);
+            spinner_subject.setVisibility(View.INVISIBLE);
+
+            spinner_taskType.setSelection((int)typeId-1);
+
+
+
+            (getActivity()).setTitle(R.string.fragment_title_edit_task);
 
         }else{
             g_adapter = new ArrayAdapter<POJOgroup>(getContext(), android.R.layout.simple_spinner_item);
@@ -307,11 +311,12 @@ public class TaskEditorFragment extends Fragment {//implements AdapterView.OnIte
                         }
                     }
                 }else{
-                    textView_error.setText(R.string.error_deadlineNotSet);
+                   // textView_error.setText(R.string.error_deadlineNotSet);
+                    dpd.show();
                 }
                 AndroidThings.closeKeyboard(getContext(), v);
             }
-    });
+        });
 
         dpd = new DatePickerDialog(this.getActivity(), new DatePickerDialog.OnDateSetListener() {
             @Override

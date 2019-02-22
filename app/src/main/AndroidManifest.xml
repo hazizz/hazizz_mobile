@@ -52,11 +52,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".HazizzWidgetConfigureActivity">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
-            </intent-filter>
-        </activity>
+
         <activity
             android:name=".Activities.FeedbackActivity"
             android:noHistory="true"
@@ -104,6 +100,13 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/hazizz_widget_info" />
         </receiver>
+
+      <!--  <service
+            android:name="com.hazizz.droid.Notification.NotificationIntentService"
+            android:exported="false" >
+        </service> -->
+
+        <receiver android:name="com.hazizz.droid.Notification.NotificationReciever" />
 
         <meta-data
             android:name="io.fabric.ApiKey"

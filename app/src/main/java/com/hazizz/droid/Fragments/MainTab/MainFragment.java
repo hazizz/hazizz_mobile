@@ -57,7 +57,7 @@ public class MainFragment extends Fragment {
             public void onRefresh() {
                 getTasks();
             }});
-
+        sRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimaryDarkBlue), getResources().getColor(R.color.colorPrimaryLightBlue), getResources().getColor(R.color.colorPrimaryDarkBlue));
         ((MainActivity)getActivity()).onFragmentCreated();
         createViewList();
         getTasks();
@@ -75,16 +75,17 @@ public class MainFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                TaskItem item = (TaskItem)listView.getItemAtPosition(i);
-                if(item != null){
+                Object item = listView.getItemAtPosition(i);
+                if(item instanceof TaskItem){
                     boolean mode;
-                    if(item.getGroup() != null){
+                    TaskItem taskItem = (TaskItem)item;
+                    if(taskItem.getGroup() != null){
                         mode = ViewTaskFragment.publicMode;
                     }else{
                         mode = ViewTaskFragment.myMode;
                     }
                     Transactor.fragmentViewTask(getFragmentManager().beginTransaction(),
-                            ((TaskItem) item).getTaskId(),
+                            taskItem.getTaskId(),
                             true, Manager.DestManager.TOMAIN, mode);
                 }
             }

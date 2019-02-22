@@ -27,6 +27,11 @@
             android:icon="@drawable/ic_settings_black"
             android:title="@string/settings" />
         <item
+            android:visible="true"
+            android:id="@+id/nav_feedback"
+            android:icon="@drawable/ic_feedback_black"
+            android:title="@string/feedback" />
+        <item
             android:visible="false"
             android:id="@+id/nav_logs"
             android:icon="@drawable/ic_create_black"

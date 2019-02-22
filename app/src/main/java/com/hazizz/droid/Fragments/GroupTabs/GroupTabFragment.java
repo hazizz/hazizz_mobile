@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.hazizz.droid.Activities.MainActivity;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
@@ -29,9 +28,6 @@ import java.util.HashMap;
 public class GroupTabFragment extends Fragment {
 
     private View v;
-
-   // ArrayList<POJOMembersProfilePic> userProfilePics;
-
     public PagerAdapter adapter;
 
     public static int groupId;

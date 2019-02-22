@@ -1,10 +1,17 @@
 package com.hazizz.droid.Activities;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -40,10 +47,15 @@ import com.hazizz.droid.Fragments.MainTab.MainFragment;
 import com.hazizz.droid.Fragments.MyTasksFragment;
 import com.hazizz.droid.Fragments.ViewTaskFragment;
 import com.hazizz.droid.Manager;
+import com.hazizz.droid.Notification.NotificationReciever;
+import com.hazizz.droid.Notification.TaskReporterNotification;
 import com.hazizz.droid.SharedPrefs;
 import com.hazizz.droid.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
+
+import java.util.Calendar;
+import java.util.TimeZone;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -226,6 +238,86 @@ public class MainActivity extends AppCompatActivity
         MiddleMan.newRequest(new GetMyProfilePic(this, rh_profilePic));
 
         MiddleMan.newRequest(new Me(this, responseHandler));
+
+
+
+        TaskReporterNotification.setNotification(getApplicationContext(), 8, 5);
+
+    }
+
+    private void scheduleNotification(Context context, Notification notification, int delay) {
+
+     //   Intent notificationIntent = new Intent(MainActivity.this, NotificationReciever.class);
+      //  notificationIntent.putExtra(NotificationReciever.NOTIFICATION_ID, 1);
+    //    notificationIntent.putExtra(NotificationReciever.NOTIFICATION, notification);
+      //  PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+    //    long futureInMillis = SystemClock.elapsedRealtime() + delay;
+     //   AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+
+      //  alarmManager.set(AlarmManager.ELAPSED_REALTIME, futureInMillis, pendingIntent);
+
+        Calendar updateTime = Calendar.getInstance();
+        updateTime.setTimeZone(TimeZone.getTimeZone("GMT"));
+        updateTime.set(Calendar.HOUR_OF_DAY, 20);
+        updateTime.set(Calendar.MINUTE, 2);
+
+        Intent notificationIntent = new Intent(context, NotificationReciever.class);
+        notificationIntent.putExtra(NotificationReciever.NOTIFICATION_ID, 1);
+        notificationIntent.putExtra(NotificationReciever.NOTIFICATION, notification);
+
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager alarms = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+                updateTime.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, pendingIntent);
+
+       // alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, futureInMillis,
+        //        AlarmManager.INTERVAL_DAY, pendingIntent);
+
+    }
+
+    private Notification getNotification(Context context, String content) {
+      //  Notification.Builder builder = new Notification.Builder(MainActivity.this);
+       // builder.setContentTitle("Scheduled Notification");
+       // builder.setContentText(content);
+       // Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+       // builder.setSound(soundUri);
+       // builder.setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND);
+
+        /*
+        Notification notification = new Notification.BigTextStyle(builder)
+                .setContentTitle("Scheduled Notification")
+                .setContentText(content)
+                .bigText(myText).build()
+                */
+        if(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) == null){
+            Log.e("hey", "88 sound is null");
+        }else{
+            Log.e("hey", "88 sound is NOT null");
+        }
+
+        Notification noti = new Notification.Builder(context)
+                .setStyle(new Notification.BigTextStyle().bigText("big text big text big text big text big text big text big text big text " +
+                        "big text big text big text big text big text big text big text big text big text " +
+                        "big text big text big text big text big text big text big text big text big text " +
+                        "big text big text big text big text big text big text "))
+                .setContentTitle("Feladataid:")
+                .setContentText("3 befejezetlen feladat holnapra")
+                .setSmallIcon(R.mipmap.ic_launcher2)
+
+               // .setDefaults(Notification.DEFAULT_ALL)
+
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+
+              //  .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
+
+                .build();
+        if(noti == null){
+            Log.e("hey", "88 Notif is null");
+        }else{Log.e("hey", "88 Notif is NOT null");}
+        return noti;
     }
 
     @Override
@@ -304,6 +396,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_settings:
                 Transactor.fragmentOptions(getSupportFragmentManager().beginTransaction());
                 break;
+            case R.id.nav_feedback:
+                Transactor.feedbackActivity(this);
+                break;
             case R.id.nav_logs:
                 Transactor.fragmentLogs(getSupportFragmentManager().beginTransaction());
                 break;
@@ -326,9 +421,9 @@ public class MainActivity extends AppCompatActivity
        // Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction());
     }
     void toAnnouncementEditorFrag(){
-       // Manager.DestManager.setDest(Manager.DestManager.TOCREATEANNOUNCEMENT);
-       // Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction());
-        Transactor.fragmentCreateAnnouncement(getSupportFragmentManager().beginTransaction(), Manager.DestManager.TOMAIN);
+        Manager.DestManager.setDest(Manager.DestManager.TOCREATEANNOUNCEMENT);
+        Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction());
+       // Transactor.fragmentCreateAnnouncement(getSupportFragmentManager().beginTransaction(), Manager.DestManager.TOMAIN);
 
     }
     @Override

@@ -10,7 +10,7 @@ import com.hazizz.droid.R;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
-public abstract class MiddleMan{
+public class MiddleMan{
     public static BlockingQueue<Request> requestQueue = new LinkedBlockingDeque<>(10);
     public static BlockingQueue<Request> waitingForResponseQueue = new LinkedBlockingDeque<>(10);
 

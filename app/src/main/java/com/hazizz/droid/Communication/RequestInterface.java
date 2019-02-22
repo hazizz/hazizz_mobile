@@ -99,8 +99,9 @@ public interface RequestInterface {
                               );
 
                          }else {
-                              cOnResponse.onErrorResponse(pojoError);
-
+                              if(cOnResponse != null){
+                                   cOnResponse.onErrorResponse(pojoError);
+                              }
                          }
                          String errorMessage =  pojoError.getMessage().substring(0, Math.min(pojoError.getMessage().length(), 100));;
                          Answers.getInstance().logCustom(new CustomEvent("Request error")
@@ -113,7 +114,9 @@ public interface RequestInterface {
                }
                @Override
                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    cOnResponse.onFailure(call, t);
+                    if(cOnResponse != null) {
+                         cOnResponse.onFailure(call, t);
+                    }
                     Toast.makeText(act, R.string.info_serverNotResponding, Toast.LENGTH_LONG).show();
                }
           };

@@ -1,6 +1,6 @@
 package com.hazizz.droid.Communication;
 
-public abstract class Strings {
+public class Strings {
 
     public enum Path {
         TASKS ("tasks"),
@@ -55,6 +55,22 @@ public abstract class Strings {
         }
 
         public int getValue() {
+            return value;
+        }
+    }
+
+    public enum GroupType {
+        OPEN("OPEN"),
+        INVITE_ONLY("INVITE_ONLY"),
+        PASSWORD("PASSWORD");
+
+        private String value;
+
+        GroupType(String value){
+            this.value = value;
+        }
+
+        public String getValue() {
             return value;
         }
     }

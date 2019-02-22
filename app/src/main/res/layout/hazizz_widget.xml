@@ -14,8 +14,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="85dp"
         android:background="@drawable/rounded_lightblue_border"
+        android:textColor="@color/white"
         android:text="       "
-        android:textColor="#363636"
         android:textSize="18sp"
         android:visibility="invisible" />
 

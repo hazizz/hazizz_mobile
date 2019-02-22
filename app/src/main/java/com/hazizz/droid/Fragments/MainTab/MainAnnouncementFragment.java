@@ -56,7 +56,7 @@ public class MainAnnouncementFragment extends Fragment{
             @Override
             public void onRefresh() {
                 getAnnouncements();
-            }});
+            }});sRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimaryDarkBlue), getResources().getColor(R.color.colorPrimaryLightBlue), getResources().getColor(R.color.colorPrimaryDarkBlue));
         //  ((MainActivity)getActivity()).setGroupName(groupName);
         createViewList();
         getAnnouncements();

@@ -15,7 +15,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 
-public abstract class Converter {
+public class Converter {
 
     private Converter(){}
 

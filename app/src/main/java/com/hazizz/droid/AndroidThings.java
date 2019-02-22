@@ -6,7 +6,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.hazizz.droid.BuildConfig;
 
-public interface AndroidThings {
+public class AndroidThings {
 
     public static void closeKeyboard(Context c, View view){
         InputMethodManager imm = (InputMethodManager)c.getSystemService(Context.INPUT_METHOD_SERVICE);
