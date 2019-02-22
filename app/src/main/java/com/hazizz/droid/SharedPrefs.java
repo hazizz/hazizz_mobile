@@ -112,7 +112,7 @@ public class SharedPrefs {
         return getPrefs(context, fileName).getStringSet(key, defaultValue);
     }
 
-    public static abstract class ProfileImageManager {
+    public static class ProfileImageManager {
 
         static HashMap<Integer , HashMap<Integer, String>> groups = new HashMap<>();
 
@@ -136,7 +136,7 @@ public class SharedPrefs {
         }
     }
 
-    public static abstract class TokenManager {
+    public static class TokenManager {
 
         // SharedPrefs.save(getContext(), "token", "token", (String) ((POJOauth)response).getToken());
         //SharedPrefs.save(getContext(), "token", "refreshToken", (String) ((POJOauth)response).getRefresh());

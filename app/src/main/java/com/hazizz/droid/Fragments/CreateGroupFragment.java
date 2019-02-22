@@ -46,8 +46,6 @@ public class CreateGroupFragment extends Fragment {
     private RadioButton radioButton_invite_only;
     private RadioButton radioButton_password;
 
-    private int groupId;
-    private String groupName;
     private String newGroupName;
 
     CustomResponseHandler rh_getGroups = new CustomResponseHandler() {
@@ -160,11 +158,11 @@ public class CreateGroupFragment extends Fragment {
                 if(button_createGroup.getTextSize() != 0) {
                     newGroupName = editText_createGroup.getText().toString().toLowerCase();
 
-                    String groupType = Strings.Path.GROUPTYPE_OPEN.toString();
+                    Strings.GroupType groupType = Strings.GroupType.OPEN;
                     if(radioButton_open.isChecked()){
-                        groupType = Strings.Path.GROUPTYPE_OPEN.toString();
+                        groupType = Strings.GroupType.OPEN;
                     }else if(radioButton_invite_only.isChecked()){
-                        groupType = Strings.Path.GROUPTYPE_INVITE_ONLY.toString();
+                        groupType = Strings.GroupType.INVITE_ONLY;
                     }else if(radioButton_password.isChecked()){
                         password = editText_password.getText().toString();
                         if(password.isEmpty()){
@@ -172,17 +170,23 @@ public class CreateGroupFragment extends Fragment {
                             button_createGroup.setEnabled(true);
                             return;
                         }
-                        groupType = Strings.Path.GROUPTYPE_PASSWORD.toString();
+                        groupType = Strings.GroupType.PASSWORD;
                     }
-                    if(!groupType.equals(Strings.Path.GROUPTYPE_PASSWORD.toString())){
+                    if(!groupType.equals(Strings.GroupType.PASSWORD)){
                         MiddleMan.newRequest(new CreateGroup(getActivity(),rh, newGroupName, groupType));
                     }else{
-                        MiddleMan.newRequest(new CreateGroup(getActivity(),rh, newGroupName, password, groupType));
+                        MiddleMan.newRequest(new CreateGroup(getActivity(),rh, newGroupName, password));
                     }
                 }else{
                 }
             }
         });
         return v;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        AndroidThings.closeKeyboard(getContext(), v);
     }
 }

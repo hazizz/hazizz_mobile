@@ -180,7 +180,7 @@ public class PasswordFragment extends Fragment {
                         hashedNewPassword = Converter.hashString(newPassword);
 
 
-                        MiddleMan.newRequest(new ElevationToken(getActivity(), elevationRh, hashedNewPassword));
+                        MiddleMan.newRequest(new ElevationToken(getActivity(), elevationRh, hashedOldPassword));
                     }else{
                         textView_errorPasswordNotLongEnough.setVisibility(View.VISIBLE);
                     }

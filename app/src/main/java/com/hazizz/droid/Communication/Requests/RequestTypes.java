@@ -348,6 +348,15 @@ public interface RequestTypes{
             @HeaderMap Map<String, String> headers
     );
 
+
+    @DELETE("{whereName}/{whereId}/comments/{commentId}")
+    Call<ResponseBody> deleteATComment(
+            @Path("whereName") String whereName,
+            @Path("whereId") String whereId,
+            @Path("commentId") String commentId,
+            @HeaderMap Map<String, String> headers
+    );
+
  /*   @POST("comments/{commentId}")
     Call<ResponseBody> addComment(
             @Path("commentId") String commentId,

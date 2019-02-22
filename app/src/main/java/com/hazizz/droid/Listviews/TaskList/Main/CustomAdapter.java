@@ -47,9 +47,7 @@ public class CustomAdapter extends BaseAdapter{
         DataHolder holder = null;
         HeaderHolder headerHolder = null;
 
-        Log.e("hey", "get View called");
         if(convertView == null) {
-            Log.e("hey", "get convert view is null");
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             if(getItemViewType(position) == NORMAL_ITEM){
                // convertView = inflater.inflate(picID, parent, false);
@@ -78,7 +76,6 @@ public class CustomAdapter extends BaseAdapter{
             }else{
                 headerHolder = (HeaderHolder)convertView.getTag();
             }
-            Log.e("hey", "else happened");
         }
 
         if(holder != null){

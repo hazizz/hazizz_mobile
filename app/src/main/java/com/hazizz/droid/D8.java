@@ -14,7 +14,7 @@ import org.joda.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public abstract class D8 {
+public class D8 {
 
     public static class Date{
         String year, month, day;

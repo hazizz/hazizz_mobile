@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimaryDarkBlue</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDarkBlue</item>
         <item name="colorAccent">@color/colorAccent</item>
+
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -24,6 +25,11 @@
         <item name="actionMenuTextColor">@color/colorDarkText</item>
         <item name="android:itemBackground">@color/colorBackground1</item>
         app:popupTheme
+    </style>
+
+    <style name="popupMenuStyle" parent="@android:style/Widget.PopupMenu">
+        <item name="android:itemPadding">25dp</item>
+        <item name="android:listPreferredItemHeightSmall">70dp</item>
     </style>
 
 </resources>

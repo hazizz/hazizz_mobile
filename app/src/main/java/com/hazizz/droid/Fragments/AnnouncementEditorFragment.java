@@ -89,7 +89,7 @@ public class AnnouncementEditorFragment extends Fragment{
         editText_announcementTitle = v.findViewById(R.id.editText_announcementTitle);
         button_send = (Button)v.findViewById(R.id.button_send);
         editText_description = v.findViewById(R.id.editText_description);
-        editText_description.setImeOptions(EditorInfo.IME_ACTION_DONE);
+    //    editText_description.setImeOptions(EditorInfo.IME_ACTION_DONE);
         editText_description.setRawInputType(InputType.TYPE_CLASS_TEXT);
         textView_error = v.findViewById(R.id.textView_error_currentPassword);
         textView_error.setTextColor(Color.rgb(255, 0, 0));
@@ -115,17 +115,13 @@ public class AnnouncementEditorFragment extends Fragment{
             }
         });
 
-        groupId = Manager.GroupManager.getGroupId();
-
-
-
-
-        groupName = Manager.GroupManager.getGroupName();
-
         if(getArguments() != null) {
             announcementId = getArguments().getInt("announcementId");
+            groupId = getArguments().getInt(Strings.Path.GROUPID.toString());
         }
         if(announcementId != 0) {
+
+            groupName = getArguments().getString("groupName");
             title = getArguments().getString("title");
             description = getArguments().getString("description");
 
@@ -156,9 +152,6 @@ public class AnnouncementEditorFragment extends Fragment{
         requestBody.put("announcementTitle", editText_announcementTitle.getText().toString().trim());
         requestBody.put("description", editText_description.getText().toString());
         requestBody.put("subjectId", null);
-
-        EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
-        vars.put(Strings.Path.GROUPID, Integer.toString(groupId));
 
         MiddleMan.newRequest(new CreateAT(getActivity(), rh, Strings.Path.ANNOUNCEMENTS, Strings.Path.GROUPS, groupId,
                 editText_announcementTitle.getText().toString().trim(),editText_description.getText().toString()));

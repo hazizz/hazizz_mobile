@@ -62,23 +62,8 @@ public class FeedbackActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Send feedback
-                HashMap<String, String> data = new HashMap<>();
-                HashMap<String, Object> body = new HashMap<>();
-                body.put("platform", "android");
-                body.put("version", AndroidThings.getAppVersion());
-                body.put("message", editText_feedback.getText().toString());
-
-                try {
-                    data.put("lastCall", Manager.CrashManager.getLastCall().toString());
-                    data.put("time", Manager.CrashManager.getError().getTime());
-                    data.put("errorCode", Integer.toString(Manager.CrashManager.getError().getErrorCode()));
-                    data.put("title", Manager.CrashManager.getError().getTitle());
-                    data.put("message", Manager.CrashManager.getError().getMessage());
-                }catch(Exception e){}
-                body.put("data", data);
-
                 MiddleMan.newRequest(new Feedback(act, rh,"android", AndroidThings.getAppVersion(),
-                        editText_feedback.getText().toString(), data));
+                        editText_feedback.getText().toString()));
                 button_feedback.setEnabled(false);
             }
         });
@@ -90,14 +75,6 @@ public class FeedbackActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // back button pressed
                 goBackToFrag();
-            }
-        });
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
             }
         });
     }

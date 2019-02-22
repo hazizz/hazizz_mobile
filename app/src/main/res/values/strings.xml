@@ -11,7 +11,7 @@
 
 
     <string name="day">nap</string>
-    <string name="tomorrow">Holnap</string>
+    <string name="tomorrow">Holnap</string>S
     <string name="days2">2 nap múlva</string>
     <string name="today">Ma</string>
     <string name="overdays7">Több mint 7 nap múlva</string>
@@ -43,8 +43,9 @@
     </string-array>
 
     <string-array name="options_array">
-        <!--   <item>Fiók Szerkesztés</item> -->
-          <item>Jelszó Beállítás</item>
+         <item>Értesítés beállítások</item>
+
+         <item>Jelszó Beállítás</item>
        <!--   <item>Théra Beállítások</item> -->
       </string-array>
 
@@ -113,6 +114,10 @@
       <string name="delete">Törlés</string>
       <string name="my_tasks">Feladataim</string>
       <string name="view_mytask">Én feladatom megtekintése</string>
+      <string name="notification_settings">Értesítés beállítások</string>
+      <string name="notification">Értesítés</string>
+      <string name="notifications">Értesítések</string>
+      <string name="go_back">Vissza</string>
 
 
       <string name="no_task">Nincs feladat</string>
@@ -175,6 +180,8 @@
 
       <string name="add_subject">Téma hozzáadás</string>
 
+      <string name="report_bug">Hiba jelentése</string>
+      <string name="info_serverUnexpectedResponse">Nem megszokott válasz a szervertől</string>
       <string name="info_serverNotResponding">Szerver nem válaszol</string>
       <string name="info_noInternetAccess">Nincs internet kapcsolat</string>
 

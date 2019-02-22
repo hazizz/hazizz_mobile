@@ -221,6 +221,7 @@ android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:text="@string/close"
             android:textSize="14sp"
+            android:textColor="@color/colorAccent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

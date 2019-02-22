@@ -47,8 +47,8 @@ public class CommentSectionFragment extends Fragment {
     private List<CommentItem> listComment;
 
 
-    private int whereId, byId;
-    private String whereName, byName;
+    private int whereId;
+    private String whereName;
 
 
     private EditText editText_commentBody;
@@ -60,6 +60,7 @@ public class CommentSectionFragment extends Fragment {
     private CustomResponseHandler responseHandler = new CustomResponseHandler() {
         @Override
         public void onPOJOResponse(Object response) {
+            adapter.clear();
             ArrayList<POJOComment> comments = (ArrayList<POJOComment>) response;
             HashMap<Integer, POJOMembersProfilePic> profilePicMap = Manager.ProfilePicManager.getCurrentGroupMembersProfilePic();
             if(comments.isEmpty()) {
@@ -67,7 +68,7 @@ public class CommentSectionFragment extends Fragment {
             }else {
                 adapter.clear();
                 for (POJOComment t : comments) {
-                    listComment.add(new CommentItem(profilePicMap.get((int)t.getCreator().getId()).getData(), t.getCreator(), t.getContent()));
+                    listComment.add(new CommentItem(t.getId(), profilePicMap.get((int)t.getCreator().getId()).getData(), t.getCreator(), t.getContent()));
                 }
                 adapter.notifyDataSetChanged();
                 textView_noContent.setVisibility(v.INVISIBLE);
@@ -76,10 +77,7 @@ public class CommentSectionFragment extends Fragment {
         }
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
-            Log.e("hey", "4");
-            Log.e("hey", "got here onFailure");
             sRefreshLayout.setRefreshing(false);
-
         }
         @Override
         public void onErrorResponse(POJOerror error) {
@@ -102,7 +100,6 @@ public class CommentSectionFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_commentsection, container, false);
-        Log.e("hey", "main fragment created");
 
         getActivity().setTitle(R.string.title_fragment_comments);
 
@@ -112,7 +109,7 @@ public class CommentSectionFragment extends Fragment {
         editText_commentBody = v.findViewById(R.id.editText_comment_body);
         textView_noContent = v.findViewById(R.id.textView_noContent);
         sRefreshLayout = v.findViewById(R.id.swipe_refresh_layout); sRefreshLayout.bringToFront();
-        sRefreshLayout.setOnRefreshListener(() -> getComments());
+        sRefreshLayout.setOnRefreshListener(() -> getComments());sRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimaryDarkBlue), getResources().getColor(R.color.colorPrimaryLightBlue), getResources().getColor(R.color.colorPrimaryDarkBlue));
 
         button_send = v.findViewById(R.id.button_send_comment);
         button_send.setOnClickListener(new View.OnClickListener() {
@@ -158,7 +155,6 @@ public class CommentSectionFragment extends Fragment {
         createViewList();
         getComments();
 
-
         return v;
     }
 
@@ -179,12 +175,6 @@ public class CommentSectionFragment extends Fragment {
     }
 
     private void getComments(){
-        adapter.clear();
-        EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
-
-
-
         MiddleMan.newRequest(new GetCommentSection(getActivity(), responseHandler, whereName, whereId));
-
     }
 }

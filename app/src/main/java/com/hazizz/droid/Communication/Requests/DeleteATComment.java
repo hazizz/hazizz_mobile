@@ -1,10 +1,10 @@
 package com.hazizz.droid.Communication.Requests;
 
 import android.app.Activity;
-import android.content.Context;
 import android.util.Log;
 
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
+import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.SharedPrefs;
 
 import java.util.HashMap;
@@ -12,22 +12,22 @@ import java.util.HashMap;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 
-public class Feedback extends Request {
-    public Feedback(Activity act, CustomResponseHandler rh, String b_platform, String b_version, String b_message) {
+public class DeleteATComment extends Request {
+    String whereName, whereId, commentId;
+    public DeleteATComment(Activity act, CustomResponseHandler rh, Strings.Path whereName, int whereId, long commentId) {
         super(act, rh);
-        Log.e("hey", "created Feedback object");
-        body.put("platform", b_platform);
-        body.put("version", b_version);
-        body.put("message", b_message);
+        Log.e("hey", "created DeleteATComment object");
+        this.whereName = whereName.toString();
+        this.whereId = Integer.toString(whereId);
+        this.commentId = Long.toString(commentId);
     }
+
+
     public void setupCall() {
         HashMap<String, String> headerMap = new HashMap<String, String>();
-        headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
-        headerMap.put("Content-Type", "application/json");
+        headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));
 
-
-        call = aRequest.feedback(headerMap, body);
-        Log.e("hey", "setup call on Feedback");
+        call = aRequest.deleteATComment(whereName, whereId, commentId,headerMap);
     }
     @Override
     public void makeCall() {

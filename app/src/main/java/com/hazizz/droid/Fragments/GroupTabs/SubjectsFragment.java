@@ -62,7 +62,7 @@ public class SubjectsFragment extends Fragment {
             public void onRefresh() {
                 getSubjects();
             }});
-
+        sRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimaryDarkBlue), getResources().getColor(R.color.colorPrimaryLightBlue), getResources().getColor(R.color.colorPrimaryDarkBlue));
         createViewList();
         getSubjects();
 

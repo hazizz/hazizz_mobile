@@ -72,7 +72,7 @@ public class GroupMainFragment extends Fragment {
             public void onRefresh() {
                 getTask();
             }});
-
+        sRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimaryDarkBlue), getResources().getColor(R.color.colorPrimaryLightBlue), getResources().getColor(R.color.colorPrimaryDarkBlue));
        // ((MainActivity)getActivity()).setGroupName(groupName);
 
         fg = getFragmentManager();

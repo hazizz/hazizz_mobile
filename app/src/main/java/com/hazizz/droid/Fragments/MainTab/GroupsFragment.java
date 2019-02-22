@@ -54,20 +54,18 @@ public class GroupsFragment extends Fragment {
             public void onRefresh() {
                 getGroups();
             }});
-
+        sRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimaryDarkBlue), getResources().getColor(R.color.colorPrimaryLightBlue), getResources().getColor(R.color.colorPrimaryDarkBlue));
         getGroups();
 
         return v;
     }
 
     public void getGroups() {
-
-
-        adapter.clear();
         CustomResponseHandler responseHandler = new CustomResponseHandler() {
             @Override
             public void onPOJOResponse(Object response) {
-                textView_noContent.setVisibility(v.INVISIBLE);
+                adapter.clear();
+                textView_noContent.setVisibility(View.INVISIBLE);
                 ArrayList<POJOgroup> castedListFullOfPojos = (ArrayList<POJOgroup>)response;
                 listGroup.clear();
                 if(!castedListFullOfPojos.isEmpty()) {
@@ -90,7 +88,7 @@ public class GroupsFragment extends Fragment {
             }
             @Override
             public void onEmptyResponse() {
-                textView_noContent.setVisibility(v.VISIBLE);
+                textView_noContent.setVisibility(View.VISIBLE);
                 sRefreshLayout.setRefreshing(false);
             }
             @Override
@@ -106,7 +104,7 @@ public class GroupsFragment extends Fragment {
     void createViewList(){
         listGroup = new ArrayList<>();
 
-        ListView listView = (ListView)v.findViewById(R.id.listView1);
+        ListView listView = v.findViewById(R.id.listView1);
 
         adapter = new CustomAdapter(getActivity(), R.layout.list_item, listGroup);
         listView.setAdapter(adapter);
