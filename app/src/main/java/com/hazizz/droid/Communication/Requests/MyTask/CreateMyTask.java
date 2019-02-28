@@ -23,18 +23,12 @@ public class CreateMyTask extends Request{
         body.put("description", b_description);
         body.put("dueDate", b_dueDate);
     }
-    @Override
-    public void makeCall() {
-        call(act,  thisRequest, call, cOnResponse, gson);
-    }
-    @Override
-    public void makeCallAgain() {
-        callAgain(act,  thisRequest, call, cOnResponse, gson);
-    }
+
+
     public void setupCall() {
-        HashMap<String, String> headerMap = new HashMap<String, String>();
+
         headerMap.put("Content-Type", "application/json");
-        headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));
+        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
         call = aRequest.createMyTask(body,headerMap);
 
     }

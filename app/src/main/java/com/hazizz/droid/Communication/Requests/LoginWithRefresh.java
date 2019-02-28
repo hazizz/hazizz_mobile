@@ -26,14 +26,8 @@ public class LoginWithRefresh extends Request  {
         body.put("refreshToken", refreshToken);
         call = aRequest.login(headerMap, body);
     }
-    @Override
-    public void makeCall() {
-        call(act,  thisRequest, call, cOnResponse, gson);
-    }
-    @Override
-    public void makeCallAgain() {
-        callAgain(act,  thisRequest, call, cOnResponse, gson);
-    }
+
+
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
         POJOauth pojoAuth = gson.fromJson(response.body().charStream(), POJOauth.class);

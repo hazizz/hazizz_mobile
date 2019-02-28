@@ -23,23 +23,15 @@ public class GetGroupMembersProfilePic extends Request {
         this.groupId = Integer.toString(groupId);
     }
     public void setupCall() {
-        HashMap<String, String> headerMap = new HashMap<String, String>();
-        headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
+        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
         call = aRequest.getGroupMembersProfilePic(groupId ,headerMap);
     }
-    @Override
-    public void makeCall() {
-        call(act,  thisRequest, call, cOnResponse, gson);
-    }
-    @Override
-    public void makeCallAgain() {
-        callAgain(act,  thisRequest, call, cOnResponse, gson);
-    }
+
+
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
         Type listType = new TypeToken<HashMap<Integer, POJOMembersProfilePic>>(){}.getType();
         HashMap<Integer, POJOMembersProfilePic> castedMap = gson.fromJson(response.body().charStream(), listType);
         cOnResponse.onPOJOResponse(castedMap);
-        Log.e("hey", "size of response map: " + castedMap.size());
     }
 }

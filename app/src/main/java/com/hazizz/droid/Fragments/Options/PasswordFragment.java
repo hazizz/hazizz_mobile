@@ -1,7 +1,6 @@
 package com.hazizz.droid.Fragments.Options;
 
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,7 +18,6 @@ import android.widget.Toast;
 import com.hazizz.droid.Activities.MainActivity;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.POJOMembersProfilePic;
 import com.hazizz.droid.Communication.POJO.Response.POJOauth;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.POJO.Response.POJOgroup;
@@ -33,7 +31,6 @@ import com.hazizz.droid.R;
 import com.hazizz.droid.SharedPrefs;
 import com.hazizz.droid.Transactor;
 
-import java.util.HashMap;
 import java.util.List;
 
 public class PasswordFragment extends Fragment {
@@ -50,7 +47,6 @@ public class PasswordFragment extends Fragment {
     private TextView textView_errorPasswordNotLongEnough;
 
     private String hashedNewPassword;
-
 
     private CustomResponseHandler authRh = new CustomResponseHandler() {
         @Override

@@ -21,22 +21,16 @@ public class Feedback extends Request {
         body.put("message", b_message);
     }
     public void setupCall() {
-        HashMap<String, String> headerMap = new HashMap<String, String>();
-        headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
+
+        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
         headerMap.put("Content-Type", "application/json");
 
 
         call = aRequest.feedback(headerMap, body);
         Log.e("hey", "setup call on Feedback");
     }
-    @Override
-    public void makeCall() {
-        call(act,  thisRequest, call, cOnResponse, gson);
-    }
-    @Override
-    public void makeCallAgain() {
-        callAgain(act,  thisRequest, call, cOnResponse, gson);
-    }
+
+
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
         cOnResponse.onSuccessfulResponse();

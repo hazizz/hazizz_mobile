@@ -28,8 +28,8 @@ public class GetUserProfilePic extends Request {
     }
 
     public void setupCall() {
-        HashMap<String, String> headerMap = new HashMap<String, String>();
-        headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
+
+        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
 
 
         if(full){
@@ -38,14 +38,8 @@ public class GetUserProfilePic extends Request {
             call = aRequest.getUserProfilePic(p_userId,"",headerMap);
         }
     }
-    @Override
-    public void makeCall() {
-        call(act,  thisRequest, call, cOnResponse, gson);
-    }
-    @Override
-    public void makeCallAgain() {
-        callAgain(act,  thisRequest, call, cOnResponse, gson);
-    }
+
+
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
         PojoPicSmall pojoPicSmall = gson.fromJson(response.body().charStream(), PojoPicSmall.class);

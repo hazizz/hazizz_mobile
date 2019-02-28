@@ -39,7 +39,7 @@ public class JoinGroupFragment extends Fragment {
 
     private View v;
 
-    private EditText editText_joinGroup;
+    private EditText editText_groupName;
     private EditText editText_password;
     private Button button_joinGroup;
     private TextView textView_error;
@@ -57,7 +57,7 @@ public class JoinGroupFragment extends Fragment {
         public void onFailure(Call<ResponseBody> call, Throwable t) {
             textView_error.setText(R.string.info_noInternetAccess);
             button_joinGroup.setEnabled(true);
-            editText_joinGroup.setEnabled(true);
+            editText_groupName.setEnabled(true);
             editText_password.setEnabled(true);
             radioGroup_groupTypes.setEnabled(true);
         }
@@ -69,7 +69,7 @@ public class JoinGroupFragment extends Fragment {
                 textView_error.setText(R.string.error_wrongPassword);
             }
             button_joinGroup.setEnabled(true);
-            editText_joinGroup.setEnabled(true);
+            editText_groupName.setEnabled(true);
             editText_password.setEnabled(true);
             radioGroup_groupTypes.setEnabled(true);
         }
@@ -82,7 +82,7 @@ public class JoinGroupFragment extends Fragment {
         public void onNoConnection() {
             textView_error.setText(R.string.info_noInternetAccess);
             button_joinGroup.setEnabled(true);
-            editText_joinGroup.setEnabled(true);
+            editText_groupName.setEnabled(true);
             editText_password.setEnabled(true);
             radioGroup_groupTypes.setEnabled(true);
         }
@@ -111,12 +111,14 @@ public class JoinGroupFragment extends Fragment {
                         }else{
                             editText_password.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
                             textView_error.setText(getString(R.string.error_passwordRequiredForGroup));
+                            editText_groupName.setEnabled(true);
+                            editText_password.setEnabled(true);
                         }
                     } else {
                         textView_error.setText(R.string.error_noPermissionToJoinGroup);
                         button_joinGroup.setEnabled(true);
                         editText_password.setEnabled(true);
-                        editText_joinGroup.setEnabled(true);
+                        editText_groupName.setEnabled(true);
                         radioGroup_groupTypes.setEnabled(true);
                     }
                     break;
@@ -125,7 +127,7 @@ public class JoinGroupFragment extends Fragment {
             if(!found){
                 textView_error.setText(R.string.error_noSuchGroup);
                 button_joinGroup.setEnabled(true);
-                editText_joinGroup.setEnabled(true);
+                editText_groupName.setEnabled(true);
                 editText_password.setEnabled(true);
                 radioGroup_groupTypes.setEnabled(true);
             }
@@ -136,7 +138,7 @@ public class JoinGroupFragment extends Fragment {
             Log.e("hey", "got here onFailure");
             textView_error.setText(R.string.info_noInternetAccess);
             button_joinGroup.setEnabled(true);
-            editText_joinGroup.setEnabled(true);
+            editText_groupName.setEnabled(true);
             editText_password.setEnabled(true);
             radioGroup_groupTypes.setEnabled(true);
 
@@ -145,7 +147,7 @@ public class JoinGroupFragment extends Fragment {
         @Override
         public void onErrorResponse(POJOerror error) {
             button_joinGroup.setEnabled(true);
-            editText_joinGroup.setEnabled(true);
+            editText_groupName.setEnabled(true);
             editText_password.setEnabled(true);
             radioGroup_groupTypes.setEnabled(true);
 
@@ -155,7 +157,7 @@ public class JoinGroupFragment extends Fragment {
         public void onNoConnection() {
             textView_error.setText(R.string.info_noInternetAccess);
             button_joinGroup.setEnabled(true);
-            editText_joinGroup.setEnabled(true);
+            editText_groupName.setEnabled(true);
             editText_password.setEnabled(true);
             radioGroup_groupTypes.setEnabled(true);
         }
@@ -167,9 +169,10 @@ public class JoinGroupFragment extends Fragment {
         v = inflater.inflate(R.layout.fragment_joingroup, container, false);
         ((MainActivity)getActivity()).onFragmentCreated();
 
+        getActivity().setTitle(R.string.title_fragment_joingroup);
         textView_error = v.findViewById(R.id.textView_error_currentPassword);
         textView_error.setTextColor(Color.rgb(255, 0, 0));
-        editText_joinGroup = v.findViewById(R.id.editText_joinGroup);
+        editText_groupName = v.findViewById(R.id.editText_groupName);
         editText_password = v.findViewById(R.id.editText_password);
 
         radioGroup_groupTypes = v.findViewById(R.id.radioGroup);
@@ -210,8 +213,8 @@ public class JoinGroupFragment extends Fragment {
                     radioGroup_groupTypes.setEnabled(false);
                 }
 
-                groupName = editText_joinGroup.getText().toString();
-                editText_joinGroup.setEnabled(false);
+                groupName = editText_groupName.getText().toString();
+                editText_groupName.setEnabled(false);
                 editText_password.setEnabled(false);
                 MiddleMan.newRequest(new GetGroups(getActivity(),rh_getGroups));
             }

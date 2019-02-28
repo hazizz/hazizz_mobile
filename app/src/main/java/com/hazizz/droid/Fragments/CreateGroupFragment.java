@@ -124,6 +124,7 @@ public class CreateGroupFragment extends Fragment {
         v = inflater.inflate(R.layout.fragment_creategroup, container, false);
 
         ((MainActivity)getActivity()).onFragmentCreated();
+        getActivity().setTitle(R.string.title_fragment_creategroup);
 
         textView_error = v.findViewById(R.id.textView_error_currentPassword);
         textView_error.setTextColor(Color.rgb(255, 0, 0));

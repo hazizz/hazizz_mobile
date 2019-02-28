@@ -20,8 +20,8 @@ public class ElevationToken extends Request {
         body.put("password", b_hashedOldPassword);
     }
     public void setupCall() {
-        HashMap<String, String> headerMap = new HashMap<String, String>();
-        headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
+
+        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
         headerMap.put("Content-Type", "application/json");
 
         call = aRequest.elevationToken(headerMap, body);

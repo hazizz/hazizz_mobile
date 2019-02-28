@@ -24,19 +24,13 @@ public class Register extends Request {
     }
 
     public void setupCall() {
-        HashMap<String, String> headerMap = new HashMap<String, String>();
+
         headerMap.put("Content-Type", "application/json");
 
         call = aRequest.register(headerMap, body);
     }
-    @Override
-    public void makeCall() {
-        call(act,  thisRequest, call, cOnResponse, gson);
-    }
-    @Override
-    public void makeCallAgain() {
-        callAgain(act,  thisRequest, call, cOnResponse, gson);
-    }
+
+
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
         cOnResponse.onSuccessfulResponse();

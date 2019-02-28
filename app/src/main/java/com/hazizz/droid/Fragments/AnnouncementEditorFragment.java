@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.crashlytics.android.answers.Answers;
@@ -28,7 +29,6 @@ import com.hazizz.droid.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
 
-import java.util.EnumMap;
 import java.util.HashMap;
 
 public class AnnouncementEditorFragment extends Fragment{
@@ -95,6 +95,26 @@ public class AnnouncementEditorFragment extends Fragment{
         textView_error.setTextColor(Color.rgb(255, 0, 0));
 
         textView_fragment_title = v.findViewById(R.id.textView_subject);
+
+        ScrollView scrollView =  v.findViewById(R.id.scrollView);
+        editText_announcementTitle.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    scrollView.smoothScrollTo(0, editText_announcementTitle.getTop());
+                }
+            }
+        });
+
+        editText_description.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    scrollView.smoothScrollTo(0, editText_description.getTop());
+                }
+            }
+        });
+
 
         button_send.setOnClickListener(new View.OnClickListener() {
             @Override

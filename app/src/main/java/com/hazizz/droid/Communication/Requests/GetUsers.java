@@ -24,18 +24,15 @@ public class GetUsers extends Request {
         Log.e("hey", "created TaskEditor object");
     }
     public void setupCall() {
-        HashMap<String, String> headerMap = new HashMap<String, String>();
-        headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
+
+        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
         call = aRequest.getUsers(headerMap); //Integer.toString(groupID)
     }
     @Override
     public void makeCall() {
         call(act, thisRequest, call, cOnResponse, gson);
     }
-    @Override
-    public void makeCallAgain() {
-        callAgain(act,  thisRequest, call, cOnResponse, gson);
-    }
+
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
         Type listType = new TypeToken<ArrayList<POJOgetUser>>() {

@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.Requests.DeleteATComment;
+import com.hazizz.droid.Communication.Requests.GetCommentSection;
 import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.Converter.Converter;
 import com.hazizz.droid.Manager;
@@ -42,6 +44,7 @@ public class CustomAdapter extends ArrayAdapter<CommentItem>  {
     }
 
     static class DataHolder{
+        Menu menu;
         ImageView imageView_popup;
         ImageView commentProfilePic;
         TextView commentName;
@@ -96,6 +99,7 @@ public class CustomAdapter extends ArrayAdapter<CommentItem>  {
             });
 
             */
+            holder.imageView_popup = convertView.findViewById(R.id.imageView_popup);
             holder.commentProfilePic = (ImageView) convertView.findViewById(R.id.imageView_memberProfilePic);
             holder.commentName = (TextView) convertView.findViewById(R.id.textView_name);
             holder.commentContent = (TextView) convertView.findViewById(R.id.textView_description);
@@ -110,16 +114,31 @@ public class CustomAdapter extends ArrayAdapter<CommentItem>  {
         holder.commentName.setText(commentItem.getCreator().getDisplayName());
         holder.commentContent.setText(commentItem.getCommentContent());
 
-        Strings.Rank rank = Manager.GroupRankManager.getRank((int)commentItem.getCreator().getId());
+        Strings.Rank rank = commentItem.getGroupRank(); // Manager.GroupRankManager.getRank((int)commentItem.getCreator().getId());
+
         Log.e("hey", "hehjó: " + rank.toString() + ", " + rank.getValue() + ", " + commentItem.getCreator().getId());
         if(rank.getValue() == Strings.Rank.OWNER.getValue()){
             holder.badge_owner.setVisibility(View.VISIBLE);
-        }else if(rank.getValue() == Strings.Rank.MODERATOR.getValue()){
+            commentItem.setCanModify(true);
+            holder.commentName.setText(commentItem.getCreator().getId() + "");
+            holder.commentContent.setText(rank.toString() + "");
+
+
+        } else if(rank.getValue() == Strings.Rank.MODERATOR.getValue()){
 
         }else if(rank.getValue() == Strings.Rank.USER.getValue()){
 
         }
+        if(commentItem.creator.getId() == Manager.MeInfo.getId()){
+            commentItem.setCanModify(true);
+        }
+
         return convertView;
     }
 
+    @Override
+    public void clear() {
+        super.clear();
+        data.clear();
+    }
 }

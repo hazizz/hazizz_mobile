@@ -44,18 +44,12 @@ public class CreateAT extends Request {
         body.put("description", b_description);
 
     }
-    @Override
-    public void makeCall() {
-        call(act,  thisRequest, call, cOnResponse, gson);
-    }
-    @Override
-    public void makeCallAgain() {
-        callAgain(act,  thisRequest, call, cOnResponse, gson);
-    }
+
+
     public void setupCall() {
-        HashMap<String, String> headerMap = new HashMap<String, String>();
+
         headerMap.put("Content-Type", "application/json");
-        headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));
+        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
         call = aRequest.createAT(p_whereName.toString(), p_byName.toString(),
                 Integer.toString(p_byId), headerMap, body);
 

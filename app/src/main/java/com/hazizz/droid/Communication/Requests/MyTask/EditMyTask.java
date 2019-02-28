@@ -33,7 +33,7 @@ public class EditMyTask extends Request {
     public void setupCall() {
         HashMap<String, String> headerMap = new HashMap<>();
         headerMap.put("Content-Type", "application/json");
-        headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));
+        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
         call = aRequest.updateMyTask(p_taskId, body, headerMap);
     }
     @Override public void callIsSuccessful(Response<ResponseBody> response) {

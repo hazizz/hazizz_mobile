@@ -41,7 +41,7 @@ public class RefreshToken extends Request {
         Log.e("hey", "created RefreshToken");
     }
     public void setupCall() {
-        HashMap<String, String> headerMap = new HashMap<String, String>();
+
         headerMap.put("Content-Type", "application/json");
         HashMap<String, Object> body = new HashMap<>();
         body.put("username", SharedPrefs.getString(act.getBaseContext(), "userInfo", "username"));

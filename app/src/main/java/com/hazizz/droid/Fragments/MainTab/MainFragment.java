@@ -113,8 +113,11 @@ public class MainFragment extends Fragment {
                             String deadline = D8.textToDate(t.getDueDate()).getMainFormat();
                             if(daysLeft == 0){
                                 title = getResources().getString(R.string.today);
-                            }else {
-                                title = daysLeft + " " + getResources().getString(R.string.day);
+                            }else if(daysLeft == 1){
+                                title = getResources().getString(R.string.tomorrow);
+                            }
+                            else {
+                                title = daysLeft + " " + getResources().getString(R.string.day) + " " + getResources().getString(R.string.later);
                             }
                             itemList.add(new HeaderItem(title, deadline));
                             lastDaysLeft = daysLeft;

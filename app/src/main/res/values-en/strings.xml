@@ -122,6 +122,9 @@
       <string name="notification">Notification</string>
       <string name="notifications">Notifications</string>
       <string name="go_back">Back</string>
+      <string name="reply">Reply</string>
+      <string name="viewProfile">View profile</string>
+      <string name="later">later</string>
 
       <string name="groupMembers">Members</string>
 

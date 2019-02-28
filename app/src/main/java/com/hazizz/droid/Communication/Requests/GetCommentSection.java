@@ -39,21 +39,15 @@ public class GetCommentSection extends Request {
     */
 
     public void setupCall() {
-        HashMap<String, String> headerMap = new HashMap<String, String>();
-        headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));
+
+        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
 
         call = aRequest.getCommentSection(p_whereName, p_whereId, headerMap);
     }
 
-    @Override
-    public void makeCall() {
-        call(act,  thisRequest, call, cOnResponse, gson);
-    }
 
-    @Override
-    public void makeCallAgain() {
-        callAgain(act,  thisRequest, call, cOnResponse, gson);
-    }
+
+
 
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
