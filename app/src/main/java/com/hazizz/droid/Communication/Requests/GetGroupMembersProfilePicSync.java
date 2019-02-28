@@ -26,8 +26,7 @@ public class GetGroupMembersProfilePicSync extends Request {
         this.groupId = Integer.toString(groupId);
     }
     public void setupCall() {
-        HashMap<String, String> headerMap = new HashMap<String, String>();
-        headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
+        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
         call = aRequest.getGroupMembersProfilePic(groupId ,headerMap);
     }
     @Override
@@ -56,10 +55,7 @@ public class GetGroupMembersProfilePicSync extends Request {
         return castedMap;
     }
 
-    @Override
-    public void makeCallAgain() {
-        callAgain(act,  thisRequest, call, cOnResponse, gson);
-    }
+
     public void call(Context act, Request r, Call<ResponseBody> call, CustomResponseHandler cOnResponse, Gson gson){
 
     }

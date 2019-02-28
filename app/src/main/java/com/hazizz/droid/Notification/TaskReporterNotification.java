@@ -20,8 +20,12 @@ public class TaskReporterNotification {
         SharedPrefs.savePref(context, fileName, "enabled", state);
     }
 
+    public static boolean isEnabled(Context context){
+        return SharedPrefs.getBoolean(context, fileName, "enabled");
+    }
+
     public static void setSchedule(Context context, int hour, int minute){
-        if(SharedPrefs.getBoolean(context, fileName, "enabled")){
+        if(isEnabled(context)){
             SharedPrefs.save(context, fileName, "hour", hour);
             SharedPrefs.save(context, fileName, "minute", minute);
             SharedPrefs.savePref(context, fileName, "setOnce", true);
@@ -38,7 +42,7 @@ public class TaskReporterNotification {
 
     public static void setNotification(Context context, int hour, int minute){
        // setEnabled(context, true);
-        if(SharedPrefs.getBoolean(context, fileName, "enabled")) {
+        if(isEnabled(context)) {
             setSchedule(context, hour, minute);
             scheduleNotification(context, getNotification(context));
         }
@@ -47,7 +51,7 @@ public class TaskReporterNotification {
 
     public static Notification getNotification(Context context) {
         Notification noti = null;
-        if(SharedPrefs.getBoolean(context, fileName, "enabled")) {
+        if(isEnabled(context)) {
             noti = new Notification.Builder(context)
                     .setStyle(new Notification.BigTextStyle().bigText("big text big text big text big text big text big text big text big text " +
                             "big text big text big text big text big text big text big text big text big text " +
@@ -65,7 +69,7 @@ public class TaskReporterNotification {
     }
 
     public static void scheduleNotification(Context context, Notification notification) {
-        if(SharedPrefs.getBoolean(context, fileName, "enabled")) {
+        if(isEnabled(context)) {
             int hour, minute;
             if (SharedPrefs.getBoolean(context, fileName, "setOnce")) {
                 hour = getScheduleHour(context);

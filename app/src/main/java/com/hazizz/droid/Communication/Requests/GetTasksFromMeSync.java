@@ -29,8 +29,8 @@ public class GetTasksFromMeSync extends Request {
         Log.e("hey", "created GetTasksFromMeSync object");
     }
     public void setupCall() {
-        HashMap<String, String> headerMap = new HashMap<String, String>();
-        headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(c));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
+
+        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
         call = aRequest.getTasksFromMe(headerMap);
     }
     @Override
@@ -51,10 +51,7 @@ public class GetTasksFromMeSync extends Request {
             Log.e("hey", "exception");
         }
     }
-    @Override
-    public void makeCallAgain() {
-        callAgain(act,  thisRequest, call, cOnResponse, gson);
-    }
+
     public void call(Context act, Request r, Call<ResponseBody> call, CustomResponseHandler cOnResponse, Gson gson){
         try {
             Response<ResponseBody> response = call.execute();

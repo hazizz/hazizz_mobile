@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,6 +30,8 @@ public class UserDetailDialogFragment extends DialogFragment {
     TextView textView_registrationDate;
 
     Button button_close;
+
+    int rank;
 
 
     CustomResponseHandler rh = new CustomResponseHandler() {
@@ -53,7 +56,11 @@ public class UserDetailDialogFragment extends DialogFragment {
 
         long userId = getArguments().getLong(Strings.Path.USERID.toString());
         Bitmap profilePic = Converter.getCroppedBitmap(Converter.imageFromText(getArguments().getString(Strings.Other.PROFILEPIC.toString())));
-
+        rank = getArguments().getInt("rank");
+        if(rank == Strings.Rank.OWNER.getValue()){
+            FrameLayout badge = v.findViewById(R.id.badge_owner);
+            badge.setVisibility(View.VISIBLE);
+        }
             // Do all the stuff to initialize your custom view
         imageView_userProfilePic = v.findViewById(R.id.imageView_profilePic);
         imageView_userProfilePic.setImageBitmap(profilePic);

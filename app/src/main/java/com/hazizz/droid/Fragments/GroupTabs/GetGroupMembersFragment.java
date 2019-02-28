@@ -152,7 +152,7 @@ public class GetGroupMembersFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Transactor.fragmentDialogShowUserDetailDialog(getFragmentManager().beginTransaction(), adapter.getItem(i).getId(),
+                Transactor.fragmentDialogShowUserDetailDialog(getFragmentManager().beginTransaction(), adapter.getItem(i).getId(), adapter.getItem(i).getUserRank(),
                         Manager.ProfilePicManager.getCurrentGroupMembersProfilePic().get((int)adapter.getItem(i).getId()).getData());
             }
         });

@@ -68,7 +68,8 @@ public class CommentSectionFragment extends Fragment {
             }else {
                 adapter.clear();
                 for (POJOComment t : comments) {
-                    listComment.add(new CommentItem(t.getId(), profilePicMap.get((int)t.getCreator().getId()).getData(), t.getCreator(), t.getContent()));
+                    Strings.Rank rank = Manager.GroupRankManager.getRank((int)t.getCreator().getId());
+                    listComment.add(new CommentItem(t.getId(), profilePicMap.get((int)t.getCreator().getId()).getData(), rank, t.getCreator(), t.getContent()));
                 }
                 adapter.notifyDataSetChanged();
                 textView_noContent.setVisibility(v.INVISIBLE);
@@ -79,9 +80,7 @@ public class CommentSectionFragment extends Fragment {
         public void onFailure(Call<ResponseBody> call, Throwable t) {
             sRefreshLayout.setRefreshing(false);
         }
-        @Override
-        public void onErrorResponse(POJOerror error) {
-            Log.e("hey", "onErrorResponse");
+        @Override public void onErrorResponse(POJOerror error) {
             sRefreshLayout.setRefreshing(false);
         }
         @Override
@@ -169,7 +168,7 @@ public class CommentSectionFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Transactor.fragmentDialogShowUserDetailDialog(getFragmentManager().beginTransaction(), (long)adapter.getItem(i).getCreator().getId(), adapter.getItem(i).getCommentProfilePic());
+                Transactor.fragmentDialogShowUserDetailDialog(getFragmentManager().beginTransaction(), (long)adapter.getItem(i).getCreator().getId(), adapter.getItem(i).getGroupRank().getValue(), adapter.getItem(i).getCommentProfilePic());
             }
         });
     }

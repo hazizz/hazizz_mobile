@@ -21,20 +21,14 @@ public class CreateSubject extends Request {
         body.put("name", b_subjectName);
     }
     public void setupCall() {
-        HashMap<String, String> headerMap = new HashMap<String, String>();
+
         headerMap.put("Content-Type", "application/json");
-        headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
+        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
 
         call = aRequest.createSubject(p_groupId, headerMap, body);
     }
-    @Override
-    public void makeCall() {
-        call(act,  thisRequest, call, cOnResponse, gson);
-    }
-    @Override
-    public void makeCallAgain() {
-        callAgain(act,  thisRequest, call, cOnResponse, gson);
-    }
+
+
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
         cOnResponse.onSuccessfulResponse();

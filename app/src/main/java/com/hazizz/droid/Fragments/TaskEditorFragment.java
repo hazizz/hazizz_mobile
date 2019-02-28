@@ -5,17 +5,21 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -175,6 +179,27 @@ public class TaskEditorFragment extends Fragment {//implements AdapterView.OnIte
         textView_error = v.findViewById(R.id.textView_error_currentPassword);
         textView_error.setTextColor(Color.rgb(255, 0, 0));
 
+
+        ScrollView scrollView =  v.findViewById(R.id.scrollView);
+        editText_taskTitle.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    scrollView.smoothScrollTo(0, editText_taskTitle.getTop());
+                }
+            }
+        });
+
+        editText_description.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    scrollView.smoothScrollTo(0, editText_description.getTop());
+                }
+            }
+        });
+
+
         textView_deadline = v.findViewById(R.id.textView_deadline);
 
         textView_deadline.setOnClickListener(new View.OnClickListener(){
@@ -213,7 +238,8 @@ public class TaskEditorFragment extends Fragment {//implements AdapterView.OnIte
 
             where = getArguments().getShort("where");
             type = getArguments().getShort("type");
-
+            groupId = getArguments().getInt(Strings.Path.GROUPID.toString());
+            groupName = getArguments().getString("groupName");
 
         }
         if( type == EDITMODE ){//taskId != 0 || typeName != null) {
@@ -275,6 +301,10 @@ public class TaskEditorFragment extends Fragment {//implements AdapterView.OnIte
        //     MiddleMan.newRequest(new GetSubjects(getActivity(),rh_subjects, groupId));
 
             (getActivity()).setTitle(R.string.fragment_title_new_task);
+
+            if(groupId == 0){
+                // ha 
+            }
         }
 
         if(where == MYMODE){
@@ -334,8 +364,33 @@ public class TaskEditorFragment extends Fragment {//implements AdapterView.OnIte
         //dpd.getDatePicker().setMaxDate(Calendar.getInstance().getTimeInMillis() - 1000);
         dpd.getDatePicker().setMinDate(Calendar.getInstance().getTimeInMillis() - 1000);
 
+
+
+
+
         return v;
     }
+    /*
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ConstraintLayout mainLayout = (ConstraintLayout) v.findViewById(R.id.constraintLayout);
+        mainLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                int h = mainLayout.getMeasuredHeight();
+                if(h > 0) {
+                    mainLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    ConstraintLayout mainLayout = (ConstraintLayout) v.findViewById(R.id.constraintLayout);
+                    ViewGroup.LayoutParams params = mainLayout.getLayoutParams();
+                    params.height = h;
+                    mainLayout.setLayoutParams(new LinearLayout.LayoutParams(params));
+                }
+            }
+        });
+    }
+    */
 
     private void editTask() {
         int tTypeId = spinner_taskType.getSelectedItemPosition() + 1;

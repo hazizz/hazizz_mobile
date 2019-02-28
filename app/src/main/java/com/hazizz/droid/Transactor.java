@@ -26,6 +26,7 @@ import com.hazizz.droid.Fragments.CommentSectionFragment;
 import com.hazizz.droid.Fragments.CreateGroupFragment;
 import com.hazizz.droid.Fragments.CreateSubjectFragment;
 import com.hazizz.droid.Fragments.Dialog.DateViewerDialogFragment;
+import com.hazizz.droid.Fragments.Dialog.ManageSubjectDialog;
 import com.hazizz.droid.Fragments.Dialog.UserDetailDialogFragment;
 import com.hazizz.droid.Fragments.GroupTabs.GroupTabFragment;
 import com.hazizz.droid.Fragments.JoinGroupFragment;
@@ -46,9 +47,9 @@ import javax.annotation.Nonnull;
 public class Transactor extends FragmentActivity {
     private static boolean backStack = true;
 
-    public static Fragment getCurrentFragment(FragmentManager fManager, boolean asd){
+    public static Fragment getCurrentFragment(FragmentManager fManager, boolean absolute){
         Fragment currentF = fManager.findFragmentById(R.id.fragment_container);
-        if(asd){
+        if(absolute){
             return fManager.findFragmentById(R.id.fragment_container);
         }
         if(currentF instanceof GroupTabFragment){
@@ -63,15 +64,30 @@ public class Transactor extends FragmentActivity {
         }
     }
 
-    public static void fragmentDialogShowUserDetailDialog(@Nonnull FragmentTransaction fTransaction, long userId, String userProfilePic){
+
+
+    public static void fragmentDialogManageSubject(@Nonnull FragmentTransaction fTransaction, long groupId, long subjectId, String currentSubjectName){
         Bundle bundle = new Bundle();
-        bundle.putLong(Strings.Path.USERID.toString(), userId);
-        bundle.putString(Strings.Other.PROFILEPIC.toString(), userProfilePic);
-        DialogFragment dialogFragment = new UserDetailDialogFragment();
+        bundle.putLong(Strings.Path.GROUPID.toString(), groupId);
+        bundle.putLong(Strings.Path.SUBJECTID.toString(), subjectId);
+        bundle.putString("currentSubjectName", currentSubjectName);
+
+        DialogFragment dialogFragment = new ManageSubjectDialog();
         dialogFragment.setArguments(bundle);
         dialogFragment.show(fTransaction, "dialog");
 
     }
+
+    public static void fragmentDialogShowUserDetailDialog(@Nonnull FragmentTransaction fTransaction, long userId, int userRank, String userProfilePic){
+        Bundle bundle = new Bundle();
+        bundle.putLong(Strings.Path.USERID.toString(), userId);
+        bundle.putString(Strings.Other.PROFILEPIC.toString(), userProfilePic);
+        bundle.putInt("rank", userRank);
+        DialogFragment dialogFragment = new UserDetailDialogFragment();
+        dialogFragment.setArguments(bundle);
+        dialogFragment.show(fTransaction, "dialog");
+    }
+
 
     public static void fragmentDialogDateViewer(@Nonnull FragmentTransaction fTransaction, String date){
         Bundle bundle = new Bundle();

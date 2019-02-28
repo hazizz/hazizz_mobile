@@ -21,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -45,6 +46,7 @@ import com.hazizz.droid.Communication.Requests.GetCommentSection;
 import com.hazizz.droid.Communication.Requests.GetGroupMemberPermisions;
 import com.hazizz.droid.Communication.Requests.GetGroupMembersProfilePic;
 import com.hazizz.droid.Communication.Strings;
+import com.hazizz.droid.Fragments.CommentableFragments.CommentableFragment;
 import com.hazizz.droid.Listviews.CommentList.CommentItem;
 import com.hazizz.droid.Listviews.CommentList.CustomAdapter;
 import com.hazizz.droid.Listviews.NonScrollListView;
@@ -60,7 +62,7 @@ import java.util.List;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
-public class ViewAnnouncementFragment extends Fragment implements AdapterView.OnItemSelectedListener{
+public class ViewAnnouncementFragment extends CommentableFragment implements AdapterView.OnItemSelectedListener{
 
 
     private Button button_comments;
@@ -115,6 +117,8 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
 
     private View v;
 
+    private CommentableFragment self;
+
 
     // Comment part
     private TextView textView_commentTitle;
@@ -139,7 +143,8 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
             }else {
                 adapter.clear();
                 for (POJOComment t : comments) {
-                    listComment.add(new CommentItem(t.getId(), profilePicMap.get((int)t.getCreator().getId()).getData(), t.getCreator(), t.getContent()));
+                    Strings.Rank rank = Manager.GroupRankManager.getRank((int)t.getCreator().getId());
+                    listComment.add(new CommentItem(t.getId(), profilePicMap.get((int)t.getCreator().getId()).getData(),rank, t.getCreator(), t.getContent()));
                 }
                 adapter.notifyDataSetChanged();
                 textView_noContent.setVisibility(v.INVISIBLE);
@@ -381,6 +386,8 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
         createViewList();
         getData();
 
+        self = this;
+
         return v;
     }
 
@@ -457,12 +464,12 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
              //   Transactor.fragmentDialogShowUserDetailDialog(getFragmentManager().beginTransaction(), (long)adapter.getItem(i).getCreator().getId(), adapter.getItem(i).getCommentProfilePic());
 
-                long commentId = adapter.getItem(i).getCommentId();
-                View view_position_popup = view.findViewById(R.id.imageView_popup);
                 //     Transactor.fragmentDialogShowUserDetailDialog(getFragmentManager().beginTransaction(), (long)adapter.getItem(i).getCreator().getId(), adapter.getItem(i).getCommentProfilePic());
+                ImageView imageView_popup = view.findViewById(R.id.imageView_popup);
 
                 // Context wrapper = new ContextThemeWrapper(null, R.style.popupMenuStyle);
-
+                adapter.getItem(i).showMenu(getActivity(), getComments_rh, announcementId, imageView_popup, getFragmentManager().beginTransaction(), self);
+                /*
                 PopupMenu popup = new PopupMenu(getActivity(), view_position_popup);
 
                 popup.getMenuInflater().inflate(R.menu.menu_comment_item_popup, popup.getMenu());
@@ -487,9 +494,16 @@ public class ViewAnnouncementFragment extends Fragment implements AdapterView.On
                     }
                 });
                 popup.show();
+                */
 
             }
         });
+    }
+
+    @Override
+    public void editComment(long commentId, String content) {
+        super.editComment(commentId, content);
+
     }
 
     private void getComments(){

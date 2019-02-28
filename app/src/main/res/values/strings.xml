@@ -118,7 +118,9 @@
       <string name="notification">Értesítés</string>
       <string name="notifications">Értesítések</string>
       <string name="go_back">Vissza</string>
-
+      <string name="reply">Válasz</string>
+      <string name="viewProfile">Profil megtekintése</string>
+      <string name="later">múlva</string>
 
       <string name="no_task">Nincs feladat</string>
       <string name="no_announcement">Nincs bejegyzés</string>
@@ -252,6 +254,4 @@
 
 
 
-
-
-  </resources>
+</resources>

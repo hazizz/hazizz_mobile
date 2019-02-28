@@ -26,19 +26,13 @@ public class GetATBy extends Request {
         this.p_whereId = Integer.toString(p_whereId);
     }
     public void setupCall() {
-        HashMap<String, String> headerMap = new HashMap<String, String>();
-        headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));
+
+        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
 
         call = aRequest.getATBy(p_whereName, p_byName, p_byId, p_whereId, headerMap);
     }
-    @Override
-    public void makeCall() {
-        call(act,  thisRequest, call, cOnResponse, gson);
-    }
-    @Override
-    public void makeCallAgain() {
-        callAgain(act,  thisRequest, call, cOnResponse, gson);
-    }
+
+
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
         if(p_whereName.equals(Strings.Path.TASKS.toString())) {

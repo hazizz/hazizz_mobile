@@ -21,18 +21,12 @@ public class GetPublicUserDetail extends Request {
         this.userId = Integer.toString(userId);
     }
     public void setupCall() {
-        HashMap<String, String> headerMap = new HashMap<String, String>();
-        headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
+
+        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
         call = aRequest.getPublicUserDetail(userId,headerMap);
     }
-    @Override
-    public void makeCall() {
-        call(act,  thisRequest, call, cOnResponse, gson);
-    }
-    @Override
-    public void makeCallAgain() {
-        callAgain(act,  thisRequest, call, cOnResponse, gson);
-    }
+
+
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
         PojoPublicUserData castedObject = gson.fromJson(response.body().charStream(), PojoPublicUserData.class);

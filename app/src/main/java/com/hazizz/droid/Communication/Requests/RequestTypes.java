@@ -224,6 +224,23 @@ public interface RequestTypes{
             @Body HashMap<String, Object> body
     );
 
+
+    @DELETE("subjects/group/{groupId}/{subjectId}")
+    Call<ResponseBody> deleteSubject(
+            @Path("groupId") String groupId,
+            @Path("subjectId") String subjectId,
+            @HeaderMap Map<String, String> headers
+    );
+
+    @PATCH("subjects/group/{groupId}/{subjectId}")
+    Call<ResponseBody> editSubject(
+            @Path("groupId") String groupId,
+            @Path("subjectId") String subjectId,
+            @HeaderMap Map<String, String> headers,
+            @Body HashMap<String, Object> body
+    );
+
+
     @POST("groups")
     Call<ResponseBody> createGroup(
             @HeaderMap Map<String, String> headers,

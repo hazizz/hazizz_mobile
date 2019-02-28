@@ -45,7 +45,7 @@ public class EditAT extends Request {
     public void setupCall() {
         HashMap<String, String> headerMap = new HashMap<>();
         headerMap.put("Content-Type", "application/json");
-        headerMap.put("Authorization", "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext()));//SharedPrefs.TokenManager.getToken(act.getBaseContext()));
+        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
         call = aRequest.editAT(p_whereName, Integer.toString(p_whereId), headerMap, body);
     }
     @Override public void callIsSuccessful(Response<ResponseBody> response) {

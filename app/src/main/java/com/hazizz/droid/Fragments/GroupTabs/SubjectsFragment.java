@@ -83,16 +83,17 @@ public class SubjectsFragment extends Fragment {
                         ((SubjectItem)listView.getItemAtPosition(i)).getAnnouncementId(),
                         ((SubjectItem)listView.getItemAtPosition(i)).getGroup().getName(), false);
                 */
+                Transactor.fragmentDialogManageSubject(getFragmentManager().beginTransaction(), groupId, adapter.getItem(i).getSubjectId(), adapter.getItem(i).getSubjectName());
             }
         });
     }
-    private void getSubjects(){
+    public void getSubjects(){
         CustomResponseHandler responseHandler = new CustomResponseHandler() {
             @Override
             public void onPOJOResponse(Object response) {
                 adapter.clear();
                 ArrayList<POJOsubject> pojoList = (ArrayList<POJOsubject>) response;
-                if(pojoList.size() == 0){
+                if(pojoList.isEmpty()){
                     textView_noContent.setVisibility(v.VISIBLE);
                 }else {
                     textView_noContent.setVisibility(v.INVISIBLE);
@@ -105,8 +106,6 @@ public class SubjectsFragment extends Fragment {
             }
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.e("hey", "4");
-                Log.e("hey", "got here onFailure");
                 textView_noContent.setVisibility(v.VISIBLE);
                 sRefreshLayout.setRefreshing(false);
             }
@@ -134,5 +133,10 @@ public class SubjectsFragment extends Fragment {
         Manager.DestManager.setDest(Manager.DestManager.TOSUBJECTS);
         Transactor.fragmentCreateSubject(fm.beginTransaction(), Manager.GroupManager.getGroupId(), Manager.GroupManager.getGroupName());//GroupTabFragment.groupName);
     }
+
+
+
+
+
 
 }

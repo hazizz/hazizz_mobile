@@ -102,131 +102,61 @@
 -->
 
 <RelativeLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     >
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="171dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:padding="10dp">
 
-        <include
-            android:id="@+id/badge_owner"
-            layout="@layout/badge_owner"
-            android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="2dp"
-            android:visibility="visible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView_profilePic" />
-
-        <ImageView
-            android:id="@+id/imageView_profilePic"
-            android:layout_width="79dp"
-            android:layout_height="76dp"
-            android:layout_above="@+id/textView_daysLeft"
-            android:layout_centerHorizontal="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView_dayOfTheWeek"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/textView_daysLeft"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:text="@string/username_"
-            android:textColor="@color/colorDarkText"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/badge_owner" />
-
-        <TextView
-            android:id="@+id/textView_daysLeft"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/textView_mainFormat"
-            android:layout_alignTop="@+id/textView_displayName"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:text="@string/displayName_"
-            android:textColor="@color/colorDarkText"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_dayOfTheWeek" />
-
-
-        <TextView
-            android:id="@+id/textView_mainFormat"
+            android:id="@+id/textView_subjectName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/textView_dayOfTheWeek"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:text="@string/registrationDate_"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:text="Subjecxz"
             android:textColor="@color/colorDarkText"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_daysLeft" />
-
-        <LinearLayout
-            android:id="@+id/linearLayout2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="14dp"
-            android:layout_marginRight="14dp"
-            android:layout_marginTop="8dp"
-            android:orientation="vertical"
+            android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/badge_owner">
+            app:layout_constraintHorizontal_bias="0.501"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/editText_subjectName" />
 
-            <TextView
-                android:id="@+id/textView_username"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignStart="@+id/textView_displayName"
-                android:layout_centerVertical="true"
-                android:text="           "
-                android:textColor="@color/colorDarkText"
-                android:textSize="16sp" />
+        <EditText
+            android:id="@+id/editText_subjectName"
+            android:layout_width="wrap_content"
+            android:layout_height="46dp"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/textView_dayOfTheWeek"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:text="Subjecxz"
+            android:textColor="@color/colorDarkText"
+            android:textSize="24sp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.501"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
-            <TextView
-                android:id="@+id/textView_displayName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/textView_dayOfTheWeek"
-                android:layout_alignParentEnd="true"
-                android:text="           "
-                android:textColor="@color/colorDarkText"
-                android:textSize="16sp" />
 
-            <TextView
-                android:id="@+id/textView_registrationDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignStart="@+id/textView_displayName"
-                android:layout_below="@+id/textView_dayOfTheWeek"
-                android:text="           "
-                android:textColor="@color/colorDarkText"
-                android:textSize="16sp"
-                app:layout_constraintTop_toBottomOf="@+id/textView_username" />
-        </LinearLayout>
+
 
         <Button
             android:id="@+id/button_close"
@@ -235,13 +165,44 @@ android:layout_height="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="2dp"
             android:text="@string/close"
-            android:textColor="@color/colorAccent"
             android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <Button
+            android:id="@+id/button_delete"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/delete"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/button_edit"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:text="@string/edit"
+            app:layout_constraintBottom_toTopOf="@+id/button_delete"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:visibility="invisible"
+            android:id="@+id/imageButton_check_edit"
+            android:layout_width="36dp"
+            android:layout_height="37dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginStart="4dp"
+            app:layout_constraintStart_toEndOf="@+id/editText_subjectName"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_check_black" />
+
 
     </android.support.constraint.ConstraintLayout>
+
+
 
 </RelativeLayout>
