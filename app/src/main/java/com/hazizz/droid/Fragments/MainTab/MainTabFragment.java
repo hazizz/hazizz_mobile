@@ -85,7 +85,7 @@ public class MainTabFragment extends Fragment{
             public void onTabUnselected(TabLayout.Tab tab) {
              //   Manager.DestManager.setDest(Manager.DestManager.TOMAIN);
                 if(currentTab instanceof GroupsFragment){
-                    Manager.DestManager.setDest(Manager.DestManager.TOMAIN);
+                 //   Manager.DestManager.setDest(Manager.DestManager.TOMAIN);
                 }
 
             }

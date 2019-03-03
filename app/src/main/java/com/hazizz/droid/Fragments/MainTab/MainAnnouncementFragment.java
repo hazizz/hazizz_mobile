@@ -75,7 +75,7 @@ public class MainAnnouncementFragment extends Fragment{
                // groupName = ((AnnouncementItem)listView.getItemAtPosition(i)).getGroup().getName();
                 Transactor.fragmentViewAnnouncement(getFragmentManager().beginTransaction(),
                         ((AnnouncementItem)listView.getItemAtPosition(i)).getAnnouncementId(),
-                        false, Manager.DestManager.TOMAIN);
+                        false, Strings.Dest.TOMAIN);
 
             }
         });

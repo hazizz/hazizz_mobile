@@ -135,6 +135,6 @@ public class AddToGroupFragment extends Fragment {
     }
 
     public void goBack(){
-        Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(), groupId, groupName, Manager.DestManager.TOGROUP);
+        Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(), groupId, groupName, Strings.Dest.TOGROUP);
     }
 }

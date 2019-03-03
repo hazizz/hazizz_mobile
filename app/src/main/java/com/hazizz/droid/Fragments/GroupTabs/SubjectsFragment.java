@@ -1,5 +1,7 @@
 package com.hazizz.droid.Fragments.GroupTabs;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,12 +16,11 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.hazizz.droid.Activities.MainActivity;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.POJO.Response.POJOsubject;
 import com.hazizz.droid.Communication.Requests.GetSubjects;
-import com.hazizz.droid.Communication.Strings;
+import com.hazizz.droid.Fragments.ParentFragment.GroupFragment;
 import com.hazizz.droid.Listviews.SubjectList.CustomAdapter;
 import com.hazizz.droid.Listviews.SubjectList.SubjectItem;
 import com.hazizz.droid.Manager;
@@ -28,14 +29,12 @@ import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
 
 import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
-public class SubjectsFragment extends Fragment {
+public class SubjectsFragment extends GroupFragment {
 
     private View v;
     private CustomAdapter adapter;
@@ -45,15 +44,14 @@ public class SubjectsFragment extends Fragment {
     private SwipeRefreshLayout sRefreshLayout;
 
     private int groupId;
-    private String groupName;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_subjects, container, false);
         Log.e("hey", "subject group fragment created");
-        ((MainActivity)getActivity()).onFragmentCreated();
-        groupId = getArguments().getInt(Strings.Path.GROUPID.toString());
+        fragmentSetup();
+        groupId = GroupTabFragment.groupId;
 
         textView_noContent = v.findViewById(R.id.textView_noContent);
         sRefreshLayout = v.findViewById(R.id.swipe_refresh_layout); sRefreshLayout.bringToFront();
@@ -111,7 +109,6 @@ public class SubjectsFragment extends Fragment {
             }
             @Override
             public void onErrorResponse(POJOerror error) {
-                Log.e("hey", "onErrorResponse");
                 sRefreshLayout.setRefreshing(false);
             }
             @Override
@@ -123,20 +120,58 @@ public class SubjectsFragment extends Fragment {
                 textView_noContent.setText(R.string.info_noInternetAccess);
                 textView_noContent.setVisibility(View.VISIBLE);
                 sRefreshLayout.setRefreshing(false);
-                //    textView_noContent.
             }
         };
         MiddleMan.newRequest(new GetSubjects(getActivity(), responseHandler, groupId));
     }
 
-    public void toCreateSubject(FragmentManager fm){
-        Manager.DestManager.setDest(Manager.DestManager.TOSUBJECTS);
-        Transactor.fragmentCreateSubject(fm.beginTransaction(), Manager.GroupManager.getGroupId(), Manager.GroupManager.getGroupName());//GroupTabFragment.groupName);
+    public void getSubjects(Activity activity){
+        CustomResponseHandler responseHandler = new CustomResponseHandler() {
+            @Override
+            public void onPOJOResponse(Object response) {
+                adapter.clear();
+                ArrayList<POJOsubject> pojoList = (ArrayList<POJOsubject>) response;
+                if(pojoList.isEmpty()){
+                    textView_noContent.setVisibility(v.VISIBLE);
+                }else {
+                    textView_noContent.setVisibility(v.INVISIBLE);
+                    for (POJOsubject t : pojoList) {
+                        listSubject.add(new SubjectItem(t.getName(), t.getId()));
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+                sRefreshLayout.setRefreshing(false);
+            }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                textView_noContent.setVisibility(v.VISIBLE);
+                sRefreshLayout.setRefreshing(false);
+            }
+            @Override
+            public void onErrorResponse(POJOerror error) {
+                sRefreshLayout.setRefreshing(false);
+            }
+            @Override
+            public void onEmptyResponse() {
+                sRefreshLayout.setRefreshing(false);
+            }
+            @Override
+            public void onNoConnection() {
+                textView_noContent.setText(R.string.info_noInternetAccess);
+                textView_noContent.setVisibility(View.VISIBLE);
+                sRefreshLayout.setRefreshing(false);
+            }
+        };
+        MiddleMan.newRequest(new GetSubjects(activity, responseHandler, groupId));
     }
 
+    public void toCreateSubject(FragmentManager fm){
+        Transactor.fragmentCreateSubject(fm.beginTransaction(), groupId, groupName);//GroupTabFragment.groupName);
+    }
 
-
-
-
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        getSubjects();
+    }
 }

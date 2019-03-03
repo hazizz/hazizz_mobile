@@ -22,7 +22,10 @@ import com.hazizz.droid.Communication.Requests.GetTasksFromGroup;
 import com.hazizz.droid.Communication.Requests.LeaveGroup;
 import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.D8;
+import com.hazizz.droid.Fragments.ParentFragment.GroupFragment;
+import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
 import com.hazizz.droid.Fragments.ViewTaskFragment;
+import com.hazizz.droid.Listener.OnBackPressedListener;
 import com.hazizz.droid.Listviews.HeaderItem;
 import com.hazizz.droid.Listviews.TaskList.Group.CustomAdapter;
 import com.hazizz.droid.Listviews.TaskList.TaskItem;
@@ -40,18 +43,14 @@ import okhttp3.Headers;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
-public class GroupMainFragment extends Fragment {
+public class GroupMainFragment extends GroupFragment {
 
-    private View v;
     private CustomAdapter adapter;
     private List<Object> itemList;
 
     private TextView textView_noContent;
     private SwipeRefreshLayout sRefreshLayout;
 
-
-    private int groupId;
-    private String groupName;
 
     FragmentManager fg;
 
@@ -60,10 +59,13 @@ public class GroupMainFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_main, container, false);
+
+        fragmentSetup();
+
         Log.e("hey", "mainGroup fragment created");
-        ((MainActivity)getActivity()).onFragmentCreated();
-        groupId = Manager.GroupManager.getGroupId();
-        groupName = Manager.GroupManager.getGroupName();
+        groupId = GroupTabFragment.groupId;
+      //  groupId = Manager.GroupManager.getGroupId();
+        groupName = GroupTabFragment.groupName;//Manager.GroupManager.getGroupName();
 
         textView_noContent = v.findViewById(R.id.textView_noContent);
         sRefreshLayout = v.findViewById(R.id.swipe_refresh_layout); sRefreshLayout.bringToFront();
@@ -98,7 +100,7 @@ public class GroupMainFragment extends Fragment {
                 if(item instanceof TaskItem){
                     Transactor.fragmentViewTask(getFragmentManager().beginTransaction(),
                             ((TaskItem) item).getTaskId(),
-                            true, Manager.DestManager.TOGROUP, ViewTaskFragment.publicMode);
+                            true, Strings.Dest.TOGROUP, ViewTaskFragment.publicMode);
                 }
             }
         });
@@ -127,7 +129,7 @@ public class GroupMainFragment extends Fragment {
                                 title = getResources().getString(R.string.tomorrow);
                             }
                             else {
-                                title = daysLeft + " " + getResources().getString(R.string.day)+ " " + getResources().getString(R.string.later);
+                                title = daysLeft + " " + getResources().getString(R.string.days)+ " " + getResources().getString(R.string.later);
                             }
                             itemList.add(new HeaderItem(title, deadline));
                             lastDaysLeft = daysLeft;
@@ -142,8 +144,6 @@ public class GroupMainFragment extends Fragment {
             }
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.e("hey", "4");
-                Log.e("hey", "got here onFailure");
                 textView_noContent.setVisibility(v.VISIBLE);
                 sRefreshLayout.setRefreshing(false);
             }
@@ -152,10 +152,6 @@ public class GroupMainFragment extends Fragment {
                 Log.e("hey", "onErrorResponse");
                 sRefreshLayout.setRefreshing(false);
             }
-            @Override
-            public void onEmptyResponse() { }
-            @Override
-            public void onSuccessfulResponse() { }
             @Override
             public void onNoConnection() {
                 textView_noContent.setText(R.string.info_noInternetAccess);
@@ -170,7 +166,7 @@ public class GroupMainFragment extends Fragment {
 
     public void toTaskEditor(FragmentManager fm){
         Log.e("hey", "GROUPID: " + groupId);
-        Transactor.fragmentCreateTask(fm.beginTransaction(), groupId, groupName, Manager.DestManager.TOGROUP);
+        Transactor.fragmentCreateTask(fm.beginTransaction(), groupId, groupName, Strings.Dest.TOGROUP);
 
     }
 

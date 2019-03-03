@@ -25,6 +25,8 @@ import com.hazizz.droid.Communication.Requests.GetGroups;
 import com.hazizz.droid.Communication.Requests.JoinGroup;
 import com.hazizz.droid.Communication.Requests.JoinGroupByPassword;
 import com.hazizz.droid.Communication.Strings;
+import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
+import com.hazizz.droid.Listener.OnBackPressedListener;
 import com.hazizz.droid.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
@@ -35,9 +37,7 @@ import java.util.EnumMap;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
-public class JoinGroupFragment extends Fragment {
-
-    private View v;
+public class JoinGroupFragment extends ParentFragment {
 
     private EditText editText_groupName;
     private EditText editText_password;
@@ -167,9 +167,17 @@ public class JoinGroupFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_joingroup, container, false);
-        ((MainActivity)getActivity()).onFragmentCreated();
 
-        getActivity().setTitle(R.string.title_fragment_joingroup);
+
+        fragmentSetup(R.string.title_fragment_joingroup);
+        setOnBackPressedListener(new OnBackPressedListener() {
+            @Override
+            public void onBackPressed() {
+                clearFragment();
+                Transactor.fragmentGroups(getFragmentManager().beginTransaction());
+            }
+        });
+
         textView_error = v.findViewById(R.id.textView_error_currentPassword);
         textView_error.setTextColor(Color.rgb(255, 0, 0));
         editText_groupName = v.findViewById(R.id.editText_groupName);

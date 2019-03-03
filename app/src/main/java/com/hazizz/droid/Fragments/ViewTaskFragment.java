@@ -1,5 +1,6 @@
 package com.hazizz.droid.Fragments;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -48,6 +49,7 @@ import com.hazizz.droid.Listviews.CommentList.CommentItem;
 import com.hazizz.droid.Listviews.CommentList.CustomAdapter;
 import com.hazizz.droid.Listviews.NonScrollListView;
 import com.hazizz.droid.Manager;
+import com.hazizz.droid.SharedPrefs;
 import com.hazizz.droid.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
@@ -81,6 +83,8 @@ public class ViewTaskFragment extends CommentableFragment implements AdapterView
     private String title;
     private String descripiton;
     private String date;
+
+    private int dest;
 
     private Spinner subject_spinner;
 
@@ -291,31 +295,46 @@ public class ViewTaskFragment extends CommentableFragment implements AdapterView
         button_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(gotResponse) {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+                    alertDialogBuilder.setTitle(R.string.delete);
+                    alertDialogBuilder
+                            .setMessage(R.string.areyousure_delete_task)
+                            .setCancelable(true)
+                            .setPositiveButton(R.string.yes, (dialog, id) -> {
+                                CustomResponseHandler delete_rh = new CustomResponseHandler() {
+                                    @Override
+                                    public void onSuccessfulResponse() {
+                                        if (dest == Strings.Dest.TOGROUP.getValue()) {
+                                            Transactor.fragmentGroupTask(getFragmentManager().beginTransaction(), groupId, groupName);
+                                        } else {
+                                            Transactor.fragmentMainTask(getFragmentManager().beginTransaction());
+                                        }
+                                        Answers.getInstance().logCustom(new CustomEvent("delete task")
+                                                .putCustomAttribute("status", "success")
+                                        );
+                                    }
 
-                CustomResponseHandler delete_rh = new CustomResponseHandler() {
-                    @Override
-                    public void onSuccessfulResponse() {
-                        if(Manager.DestManager.getDest() == Manager.DestManager.TOGROUP) {
-                            Transactor.fragmentGroupTask(getFragmentManager().beginTransaction(), Manager.GroupManager.getGroupId(), Manager.GroupManager.getGroupName());
-                        } else{
-                            Transactor.fragmentMainTask(getFragmentManager().beginTransaction());
-                        }
-                        Answers.getInstance().logCustom(new CustomEvent("delete task")
-                                .putCustomAttribute("status", "success")
-                        );
-                    }
-                    @Override
-                    public void onErrorResponse(POJOerror error) {
-                        button_delete.setEnabled(true);
-                        Answers.getInstance().logCustom(new CustomEvent("delete task")
-                                .putCustomAttribute("status", error.getErrorCode())
-                        );
-                    }
-                };
-                button_delete.setEnabled(false);
+                                    @Override
+                                    public void onErrorResponse(POJOerror error) {
+                                        button_delete.setEnabled(true);
+                                        Answers.getInstance().logCustom(new CustomEvent("delete task")
+                                                .putCustomAttribute("status", error.getErrorCode())
+                                        );
+                                    }
+                                };
+                                button_delete.setEnabled(false);
 
-                MiddleMan.newRequest(new DeleteAT(getActivity(), delete_rh, Strings.Path.TASKS, taskId));
+                                MiddleMan.newRequest(new DeleteAT(getActivity(), delete_rh, Strings.Path.TASKS, taskId));
 
+                                dialog.cancel();
+                            })
+                            .setNegativeButton(R.string.no, (dialog, id) -> {
+                                dialog.cancel();
+                            });
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                }
             }
         });
 
@@ -323,7 +342,7 @@ public class ViewTaskFragment extends CommentableFragment implements AdapterView
             if(gotResponse) {
                 Transactor.fragmentEditTask(getFragmentManager().beginTransaction(), groupId,
                         Manager.GroupManager.getGroupName(), taskId, type, subjectId, subjectName, title, descripiton, date,
-                        Manager.DestManager.TOGROUP);
+                        Strings.Dest.CONVERT.convert(dest));
             }
         });
         /*
@@ -345,6 +364,8 @@ public class ViewTaskFragment extends CommentableFragment implements AdapterView
 
             isMyMode = bundle.getBoolean("mode");
             goBackToMain = bundle.getBoolean("goBackToMain");
+
+            dest = bundle.getInt("dest");
 
         }else{Log.e("hey", "bundle is null");}
         getTask_rh = new CustomResponseHandler() {
@@ -408,7 +429,7 @@ public class ViewTaskFragment extends CommentableFragment implements AdapterView
 
                   //  MiddleMan.newRequest(new GetUserPermissionInGroup(getActivity(), permissionRh, groupId, (int) Manager.MeInfo.getId()));
 
-                    if (Manager.ProfilePicManager.getCurrentGroupId() != groupId || Manager.DestManager.getDest() == Manager.DestManager.TOMAIN) {
+                    if (Manager.ProfilePicManager.getCurrentGroupId() != groupId || dest == Strings.Dest.TOMAIN.getValue()) {
                         CustomResponseHandler responseHandler = new CustomResponseHandler() {
                             @Override
                             public void onPOJOResponse(Object response) {

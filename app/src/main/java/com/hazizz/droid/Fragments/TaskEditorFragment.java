@@ -40,6 +40,8 @@ import com.hazizz.droid.Communication.Requests.MyTask.EditMyTask;
 import com.hazizz.droid.Communication.Requests.Request;
 import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.D8;
+import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
+import com.hazizz.droid.Listener.OnBackPressedListener;
 import com.hazizz.droid.Manager;
 import com.hazizz.droid.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
@@ -51,7 +53,7 @@ import java.util.Calendar;
 import java.util.List;
 
 
-public class TaskEditorFragment extends Fragment {//implements AdapterView.OnItemSelectedListener{
+public class TaskEditorFragment extends ParentFragment {//implements AdapterView.OnItemSelectedListener{
     public static final short GROUPMODE = 0;
     public static final short MYMODE = 1;
 
@@ -71,6 +73,8 @@ public class TaskEditorFragment extends Fragment {//implements AdapterView.OnIte
     private String groupName;
     private int subject;
     private int taskId;
+
+    private int dest;
 
     private TextView textView_group_;
     private TextView textView_group;
@@ -94,8 +98,6 @@ public class TaskEditorFragment extends Fragment {//implements AdapterView.OnIte
     private List<POJOsubject> subjects = new ArrayList<>();
     private List<POJOgroup> groups = new ArrayList<>();
 
-    private View v;
-
 
     ArrayAdapter<POJOgroup> g_adapter;
     ArrayAdapter<POJOsubject> s_adapter;
@@ -114,14 +116,7 @@ public class TaskEditorFragment extends Fragment {//implements AdapterView.OnIte
         }
         @Override
         public void onSuccessfulResponse() {
-            if(Manager.DestManager.getDest() == Manager.DestManager.TOGROUP){
-                Transactor.fragmentGroupTask(getFragmentManager().beginTransaction(),groupId, groupName);
-            }else if(Manager.DestManager.getDest() == Manager.DestManager.TOMAIN){
-                Transactor.fragmentMainTask(getFragmentManager().beginTransaction());
-            }
-            else{
-                Transactor.fragmentMainTask(getFragmentManager().beginTransaction());
-            }
+            goBack();
             Answers.getInstance().logCustom(new CustomEvent("create/edit task")
                     .putCustomAttribute("status", "success")
             );
@@ -164,11 +159,19 @@ public class TaskEditorFragment extends Fragment {//implements AdapterView.OnIte
         v = inflater.inflate(R.layout.fragment_taskeditor, container, false);
         ((MainActivity)getActivity()).onFragmentCreated();
 
-        textView_group = (TextView)v.findViewById(R.id.textView_subject);
+        fragmentSetup();
+        setOnBackPressedListener(new OnBackPressedListener() {
+            @Override
+            public void onBackPressed() {
+                goBack();
+            }
+        });
+
+        textView_group = (TextView)v.findViewById(R.id.textView_group);
         textView_group_ = (TextView)v.findViewById(R.id.textView_creator);
         spinner_group = (Spinner)v.findViewById(R.id.group_spinner);
         spinner_subject = (Spinner)v.findViewById(R.id.subject_spinner);
-        textView_subject = v.findViewById(R.id.textView_group);
+        textView_subject = v.findViewById(R.id.textView_subject);
         textView_subject_ = v.findViewById(R.id.textView_subject_);
         button_send = (Button)v.findViewById(R.id.button_send);
         spinner_taskType = (Spinner)v.findViewById(R.id.taskType_spinner);
@@ -233,13 +236,16 @@ public class TaskEditorFragment extends Fragment {//implements AdapterView.OnIte
         groupId = Manager.GroupManager.getGroupId();//getArguments().getInt(Strings.Path.GROUPID.toString());
 
         if(getArguments() != null) {
-            groupName = Manager.GroupManager.getGroupName();
+            groupName = getArguments().getString("groupName");
             taskId = getArguments().getInt("taskId");
 
             where = getArguments().getShort("where");
             type = getArguments().getShort("type");
             groupId = getArguments().getInt(Strings.Path.GROUPID.toString());
             groupName = getArguments().getString("groupName");
+            textView_group.setText(groupName);
+
+            dest = getArguments().getInt("dest");
 
         }
         if( type == EDITMODE ){//taskId != 0 || typeName != null) {
@@ -259,7 +265,7 @@ public class TaskEditorFragment extends Fragment {//implements AdapterView.OnIte
 
 
 
-            (getActivity()).setTitle(R.string.fragment_title_edit_task);
+            setTitle(R.string.fragment_title_edit_task);
 
         }else{
             g_adapter = new ArrayAdapter<POJOgroup>(getContext(), android.R.layout.simple_spinner_item);
@@ -270,6 +276,7 @@ public class TaskEditorFragment extends Fragment {//implements AdapterView.OnIte
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     groupId = ((POJOgroup)spinner_group.getItemAtPosition(position)).getId();
                     MiddleMan.newRequest(new GetSubjects(getActivity(),rh_subjects, groupId));
+                    textView_group.setText(((POJOgroup)spinner_group.getItemAtPosition(position)).getName());
                 }
                 @Override public void onNothingSelected(AdapterView<?> parent) { }
             });
@@ -278,18 +285,27 @@ public class TaskEditorFragment extends Fragment {//implements AdapterView.OnIte
                     groups = (ArrayList<POJOgroup>) response;
                     g_adapter.clear();
                     //  g_adapter.add(new POJOsubject(0, getString(R.string.subject_none)));
+                    int choosenId;
                     if (!groups.isEmpty()) {
                         int emGroupId = 0;
+                        int index = 0;
                         for (POJOgroup s : groups) {
+
                             g_adapter.add(s);
                             if (groupId == s.getId()) {
                                 emGroupId = s.getId();
+                                spinner_group.setSelection(index);
                             }
+                            index++;
                         }
                         s_adapter.notifyDataSetChanged();
                         if (type == EDITMODE) {
                             spinner_group.setSelection(emGroupId);
                         }
+                      //  }else if(groupId!=0){
+
+                      //  }
+
                     }
                     s_adapter.notifyDataSetChanged();
                 }
@@ -300,7 +316,7 @@ public class TaskEditorFragment extends Fragment {//implements AdapterView.OnIte
             spinner_subject.setAdapter(s_adapter);
        //     MiddleMan.newRequest(new GetSubjects(getActivity(),rh_subjects, groupId));
 
-            (getActivity()).setTitle(R.string.fragment_title_new_task);
+            setTitle(R.string.fragment_title_new_task);
 
             if(groupId == 0){
                 // ha 
@@ -313,7 +329,8 @@ public class TaskEditorFragment extends Fragment {//implements AdapterView.OnIte
             textView_subject_.setVisibility(View.GONE);
             textView_group_.setVisibility(View.GONE);
             textView_subject.setVisibility(View.GONE);
-            (getActivity()).setTitle(R.string.fragment_title_new_mytask);
+            textView_group.setVisibility(View.INVISIBLE);
+            setTitle(R.string.fragment_title_new_mytask);
         }
 
         button_send.setOnClickListener(new View.OnClickListener() {
@@ -447,6 +464,17 @@ public class TaskEditorFragment extends Fragment {//implements AdapterView.OnIte
     }
     public String getGroupName(){
         return groupName;
+    }
+
+    private void goBack(){
+        if(dest == Strings.Dest.TOGROUP.getValue()){
+            Transactor.fragmentGroupTask(getFragmentManager().beginTransaction(),groupId, groupName);
+        }else if(dest == Strings.Dest.TOMAIN.getValue()){
+            Transactor.fragmentMainTask(getFragmentManager().beginTransaction());
+        }
+        else{
+            Transactor.fragmentMainTask(getFragmentManager().beginTransaction());
+        }
     }
 
 }

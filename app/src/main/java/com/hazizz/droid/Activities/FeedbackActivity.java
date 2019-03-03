@@ -85,5 +85,6 @@ public class FeedbackActivity extends AppCompatActivity {
 
     private void goBackToFrag(){
         Transactor.activityMain(this);
+        finish();
     }
 }

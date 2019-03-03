@@ -44,6 +44,7 @@ public class AuthActivity extends AppCompatActivity {
         if(SharedPrefs.getBoolean(this, "autoLogin", "autoLogin") && !SharedPrefs.TokenManager.getRefreshToken(this).equals("used")){
             Intent i = new Intent(this, MainActivity.class);
             startActivity(i);
+            finish();
         }else {
             Transactor.fragmentFirst(getSupportFragmentManager().beginTransaction());
         }

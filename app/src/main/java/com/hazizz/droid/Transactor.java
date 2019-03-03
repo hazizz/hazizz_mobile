@@ -186,10 +186,11 @@ public class Transactor extends FragmentActivity {
 
 
     public static void fragmentViewTask(@Nonnull FragmentTransaction fTransaction,
-                                        int taskId, boolean goBackToMain, int dest, boolean mode){
-        Manager.DestManager.setDest(dest);
+                                        int taskId, boolean goBackToMain, Strings.Dest dest, boolean mode){
+
 
         Bundle bundle = new Bundle();
+        bundle.putInt("dest", dest.getValue());
         bundle.putInt(Strings.Path.TASKID.toString(), taskId);
         bundle.putBoolean("goBackToMain", goBackToMain);
         bundle.putBoolean("mode", mode);
@@ -223,11 +224,12 @@ public class Transactor extends FragmentActivity {
         fTransaction.commit();
     }
 
-    public static void fragmentCreateTask(@Nonnull FragmentTransaction fTransaction, int groupId, String groupName, int dest){
-        Manager.DestManager.setDest(dest);
+    public static void fragmentCreateTask(@Nonnull FragmentTransaction fTransaction, int groupId, String groupName, Strings.Dest dest){
+
         Bundle bundle = new Bundle();
-      //  bundle.putInt(Strings.Path.GROUPID.toString(), groupId);
-        Manager.GroupManager.setGroupId(groupId);
+        bundle.putInt("dest", dest.getValue());
+      //  Manager.GroupManager.setGroupId(groupId);
+        bundle.putInt(Strings.Path.GROUPID.toString(), groupId);
         bundle.putString("groupName", groupName);
         bundle.putShort("where", TaskEditorFragment.GROUPMODE);
         bundle.putShort("type", TaskEditorFragment.CREATEMODE);
@@ -238,9 +240,13 @@ public class Transactor extends FragmentActivity {
         fTransaction.commit();
     }
 
-    public static void fragmentCreateTask(@Nonnull FragmentTransaction fTransaction, int dest){
-        Manager.DestManager.setDest(dest);
+    public static void fragmentCreateTask(@Nonnull FragmentTransaction fTransaction, Strings.Dest dest){
+      //  Manager.DestManager.setDest(dest);
+        Bundle bundle = new Bundle();
+        bundle.putInt("dest", dest.getValue());
+
         TaskEditorFragment frag = new TaskEditorFragment();
+        frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }
         fTransaction.commit();
@@ -248,9 +254,10 @@ public class Transactor extends FragmentActivity {
 
     public static void fragmentEditTask(@Nonnull FragmentTransaction fTransaction, int groupId, String groupName,
                                         int taskId, PojoType type, int taskSubjectId, String subjectName, String taskTitle,
-                                        String taskDescription, String date, int dest){
-        Manager.DestManager.setDest(dest);
+                                        String taskDescription, String date, Strings.Dest dest){
         Bundle bundle = new Bundle();
+        bundle.putInt("dest", dest.getValue());
+        bundle.putShort("where", TaskEditorFragment.GROUPMODE);
         bundle.putShort("where", TaskEditorFragment.GROUPMODE);
         bundle.putShort("type", TaskEditorFragment.EDITMODE);
         bundle.putInt("taskId", taskId);
@@ -271,9 +278,19 @@ public class Transactor extends FragmentActivity {
         fTransaction.commit();
     }
 
-    public static void fragmentCreateAnnouncement(@Nonnull FragmentTransaction fTransaction, int groupId, String groupName, int dest){
-        Manager.DestManager.setDest(dest);
+
+    public static void fragmentCreatorAT(@Nonnull FragmentTransaction fTransaction, GroupsFragment.Dest dest){
+        Fragment frag = new GroupsFragment();
         Bundle bundle = new Bundle();
+        bundle.putInt("dest", dest.getValue());
+        frag.setArguments(bundle);
+        fTransaction.replace(R.id.fragment_container, frag);
+        fTransaction.commit();
+    }
+
+    public static void fragmentCreateAnnouncement(@Nonnull FragmentTransaction fTransaction, int groupId, String groupName, Strings.Dest dest){
+        Bundle bundle = new Bundle();
+        bundle.putInt("dest", dest.getValue());
         bundle.putInt(Strings.Path.GROUPID.toString(), groupId);
         bundle.putString("groupName", groupName);
         AnnouncementEditorFragment frag = new AnnouncementEditorFragment();
@@ -282,16 +299,19 @@ public class Transactor extends FragmentActivity {
         if(backStack){ fTransaction.addToBackStack(null); }
         fTransaction.commit();
     }
-    public static void fragmentCreateAnnouncement(@Nonnull FragmentTransaction fTransaction, int dest){
-        Manager.DestManager.setDest(dest);
+    public static void fragmentCreateAnnouncement(@Nonnull FragmentTransaction fTransaction, Strings.Dest dest){
         AnnouncementEditorFragment frag = new AnnouncementEditorFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("dest", dest.getValue());
+        frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         fTransaction.commit();
     }
 
-    public static void fragmentEditAnnouncement(@Nonnull FragmentTransaction fTransaction, int groupId, int announcementId, String groupName, String title, String description, int dest){
-        Manager.DestManager.setDest(dest);
+    public static void fragmentEditAnnouncement(@Nonnull FragmentTransaction fTransaction, int groupId, int announcementId, String groupName, String title, String description, Strings.Dest dest){
+
         Bundle bundle = new Bundle();
+        bundle.putInt("dest", dest.getValue());
         bundle.putInt("announcementId", announcementId);
         bundle.putInt(Strings.Path.GROUPID.toString(), groupId);
         bundle.putString("groupName", groupName);
@@ -307,10 +327,10 @@ public class Transactor extends FragmentActivity {
 
 
     public static void fragmentViewAnnouncement(@Nonnull FragmentTransaction fTransaction,int announcementId,
-                                                 boolean goBackToMain, int dest){
-        Manager.DestManager.setDest(dest);
+                                                 boolean goBackToMain, Strings.Dest dest){
 
         Bundle bundle = new Bundle();
+        bundle.putInt("dest", dest.getValue());
         bundle.putInt(Strings.Path.ANNOUNCEMENTID.toString(), announcementId);
         bundle.putBoolean("goBackToMain", goBackToMain);
         ViewAnnouncementFragment frag = new ViewAnnouncementFragment();

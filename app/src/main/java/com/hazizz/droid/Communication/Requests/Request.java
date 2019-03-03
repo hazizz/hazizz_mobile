@@ -1,6 +1,7 @@
 package com.hazizz.droid.Communication.Requests;
 
 import android.app.Activity;
+import android.content.Context;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -26,6 +27,8 @@ public class Request implements RequestInterface {
 
     protected static final String HEADER_AUTH = "Authorization";
     protected String getHeaderAuthToken(){return "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext());}
+    protected String getHeaderAuthToken(Context context){return "Bearer " + SharedPrefs.TokenManager.getToken(context);}
+
 
     protected HashMap<String, String> headerMap;
     protected HashMap<String, Object> body;

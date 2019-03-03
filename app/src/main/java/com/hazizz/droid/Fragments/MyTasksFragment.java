@@ -16,6 +16,7 @@ import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
 import com.hazizz.droid.Communication.Requests.GetMyTasks;
+import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.D8;
 import com.hazizz.droid.Listviews.HeaderItem;
 import com.hazizz.droid.Listviews.TaskList.Main.CustomAdapter;
@@ -76,7 +77,7 @@ public class MyTasksFragment extends Fragment{
                 if(item instanceof TaskItem){
                     Transactor.fragmentViewTask(getFragmentManager().beginTransaction(),
                             ((TaskItem) item).getTaskId(),
-                            true, Manager.DestManager.TOMAIN, ViewTaskFragment.myMode);
+                            true, Strings.Dest.TOMAIN, ViewTaskFragment.myMode);
                 }
             }
         });
@@ -107,7 +108,7 @@ public class MyTasksFragment extends Fragment{
                                 title = getResources().getString(R.string.tomorrow);
                             }
                             else {
-                                title = daysLeft + " " + getResources().getString(R.string.day)+ " " + getResources().getString(R.string.later);
+                                title = daysLeft + " " + getResources().getString(R.string.days)+ " " + getResources().getString(R.string.later);
                             }
                             itemList.add(new HeaderItem(title, deadline));
                             lastDaysLeft = daysLeft;

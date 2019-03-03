@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -194,15 +193,18 @@ public class MainOptionsFragment extends Fragment {
     void createViewList(){
         ListView listView = (ListView)v.findViewById(R.id.listView1);
 
+
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i){
-                    case 0:
+                   /* case 0:
                         Transactor.fragmentNotificationSettings(getFragmentManager().beginTransaction());
 
                         break;
-                    case 1:
+                        */
+                    case 0:
                         //Jelszó Beállítás
                         Transactor.fragmentPassword(getFragmentManager().beginTransaction());
                         break;

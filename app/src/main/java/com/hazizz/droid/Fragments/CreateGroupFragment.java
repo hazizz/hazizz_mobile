@@ -24,6 +24,8 @@ import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.POJO.Response.POJOgroup;
 import com.hazizz.droid.Communication.Requests.CreateGroup;
 import com.hazizz.droid.Communication.Strings;
+import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
+import com.hazizz.droid.Listener.OnBackPressedListener;
 import com.hazizz.droid.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
@@ -35,9 +37,8 @@ import okhttp3.Headers;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
-public class CreateGroupFragment extends Fragment {
+public class CreateGroupFragment extends ParentFragment {
 
-    private View v;
     private EditText editText_createGroup;
     private EditText editText_password;
     private Button button_createGroup;
@@ -121,10 +122,21 @@ public class CreateGroupFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         v = inflater.inflate(R.layout.fragment_creategroup, container, false);
 
-        ((MainActivity)getActivity()).onFragmentCreated();
-        getActivity().setTitle(R.string.title_fragment_creategroup);
+        fragmentSetup(R.string.title_fragment_creategroup);
+        setOnBackPressedListener(new OnBackPressedListener() {
+            @Override
+            public void onBackPressed() {
+                clearFragment();
+                Transactor.fragmentGroups(getFragmentManager().beginTransaction());
+            }
+        });
+
+
+      //  ((MainActivity)getActivity()).onFragmentCreated();
+     //   getActivity().setTitle(R.string.title_fragment_creategroup);
 
         textView_error = v.findViewById(R.id.textView_error_currentPassword);
         textView_error.setTextColor(Color.rgb(255, 0, 0));
@@ -189,5 +201,10 @@ public class CreateGroupFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         AndroidThings.closeKeyboard(getContext(), v);
+        Log.e("hey", "22 Child onDestroy called");
     }
+
+
+
+
 }

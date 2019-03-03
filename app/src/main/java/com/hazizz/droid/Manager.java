@@ -142,6 +142,7 @@ public class Manager {
 
     }
 
+    /*
     public static class DestManager{
         public static final int TOGROUP= -1;
         public static final int TOMAIN= 0;
@@ -164,6 +165,7 @@ public class Manager {
         }
 
     }
+    */
 
     @Data
     public static class GroupRankManager{
