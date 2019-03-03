@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -26,6 +27,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
@@ -46,6 +48,7 @@ import com.hazizz.droid.Fragments.MainTab.MainAnnouncementFragment;
 import com.hazizz.droid.Fragments.MainTab.MainFragment;
 import com.hazizz.droid.Fragments.MyTasksFragment;
 import com.hazizz.droid.Fragments.ViewTaskFragment;
+import com.hazizz.droid.Listener.OnBackPressedListener;
 import com.hazizz.droid.Manager;
 import com.hazizz.droid.Notification.NotificationReciever;
 import com.hazizz.droid.Notification.TaskReporterNotification;
@@ -63,6 +66,8 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final int PICK_PHOTO_FOR_AVATAR = 1;
+
+    private boolean doubleBackToExitPressedOnce;
 
     private DrawerLayout drawerLayout;
     private NavigationView navView;
@@ -92,6 +97,9 @@ public class MainActivity extends AppCompatActivity
     private Fragment currentFrag;
 
     private Activity thisActivity = this;
+
+    private OnBackPressedListener currentBackPressedListener;
+
 
     private boolean toMainFrag = false;
     CustomResponseHandler rh_profilePic = new CustomResponseHandler() {
@@ -416,25 +424,58 @@ public class MainActivity extends AppCompatActivity
     }
 
     void toCreateTaskFrag(){
-        Transactor.fragmentCreateTask(getSupportFragmentManager().beginTransaction(), Manager.DestManager.TOMAIN);
+      //  Transactor.fragmentCreateTask(getSupportFragmentManager().beginTransaction(), Manager.DestManager.TOMAIN);
        // Manager.DestManager.setDest(Manager.DestManager.TOCREATETASK);
        // Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction());
-    }
-    void toAnnouncementEditorFrag(){
-        Manager.DestManager.setDest(Manager.DestManager.TOCREATEANNOUNCEMENT);
-        Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction());
-       // Transactor.fragmentCreateAnnouncement(getSupportFragmentManager().beginTransaction(), Manager.DestManager.TOMAIN);
+        Transactor.fragmentCreatorAT(getSupportFragmentManager().beginTransaction(), GroupsFragment.Dest.TOCREATETASK);
 
     }
+    void toAnnouncementEditorFrag(){
+      //  Manager.DestManager.setDest(Manager.DestManager.TOCREATEANNOUNCEMENT);
+      //  Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction());
+        Transactor.fragmentCreatorAT(getSupportFragmentManager().beginTransaction(), GroupsFragment.Dest.TOCREATEANNOUNCEMET);
+
+    }
+
+    public void setOnBackPressedListener(OnBackPressedListener listener){
+        currentBackPressedListener = listener;
+    }
+
+    public void removeOnBackPressedListener(){
+        currentBackPressedListener = null;
+    }
+
     @Override
     public void onBackPressed() {
-        Log.e("hey", "backButton pressed");
-        currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager(), true);
-        if      (currentFrag instanceof MainFragment) {}
-        else if (currentFrag instanceof GroupsFragment) {
+        Fragment currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager(), false);
+        if(currentFrag instanceof MainFragment || currentFrag instanceof MainAnnouncementFragment){
+            if (doubleBackToExitPressedOnce) {
+                // close application
+                if(android.os.Build.VERSION.SDK_INT >= 21){
+                    finishAndRemoveTask();
+                } else {
+                    finish();
+                }
+                return;
+            }
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, R.string.press_again_to_exit, Toast.LENGTH_SHORT).show();
+
+            new Handler().postDelayed(new Runnable() {
+                @Override public void run() {
+                    doubleBackToExitPressedOnce=false;
+                }
+            }, 2000);
+        }
+        else if(currentBackPressedListener != null){
+            currentBackPressedListener.onBackPressed();
+            return;
+        }else{
             Transactor.fragmentMain(getSupportFragmentManager().beginTransaction());
         }
-        else if (currentFrag instanceof GroupTabFragment) {//GroupMainFragment
+      /*  currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager(), true);
+
+        if (currentFrag instanceof GroupTabFragment) {//GroupMainFragment
             Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction());
         }
         else if (currentFrag instanceof ViewTaskFragment) {
@@ -449,7 +490,14 @@ public class MainActivity extends AppCompatActivity
             Log.e("hey", "back button pressed and Else block is being called");
             Transactor.fragmentMain(getSupportFragmentManager().beginTransaction());
         }
+        */
     }
+
+    public void hideFabs(){
+        fab_action.setVisibility(View.INVISIBLE);
+        fab_joinGroup.setVisibility(View.INVISIBLE);
+    }
+
     public void onFragmentCreated(){
         currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager(), false);
 

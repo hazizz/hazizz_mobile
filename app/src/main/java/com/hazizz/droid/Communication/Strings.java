@@ -75,6 +75,38 @@ public class Strings {
         }
     }
 
+
+    public enum Dest {
+        TOMAIN(1),
+        TOGROUP(2),
+        CONVERT(-404);
+
+        private int value;
+
+        Dest(int value){
+            this.value = value;
+        }
+
+        public Dest convert(int number){
+            if(value == Dest.CONVERT.getValue()){
+                Dest[] values = Dest.values();
+                for(int i = 0; i<values.length; i++){
+                    Dest current = values[i];
+                    if(current.getValue() == number ){
+                        return current;
+                    }
+                }
+            }
+            return null;
+        }
+
+
+        public int getValue() {
+            return value;
+        }
+    }
+
+
     public enum Other{
         PROFILEPIC("profilepic");
 
@@ -91,3 +123,4 @@ public class Strings {
 
 
 }
+

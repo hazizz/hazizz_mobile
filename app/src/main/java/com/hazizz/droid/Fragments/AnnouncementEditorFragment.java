@@ -9,7 +9,6 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
@@ -24,6 +23,8 @@ import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.Requests.CreateAT;
 import com.hazizz.droid.Communication.Requests.EditAT;
 import com.hazizz.droid.Communication.Strings;
+import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
+import com.hazizz.droid.Listener.OnBackPressedListener;
 import com.hazizz.droid.Manager;
 import com.hazizz.droid.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
@@ -31,7 +32,7 @@ import com.hazizz.droid.R;
 
 import java.util.HashMap;
 
-public class AnnouncementEditorFragment extends Fragment{
+public class AnnouncementEditorFragment extends ParentFragment {
 
     private boolean editMode = false;
 
@@ -41,13 +42,28 @@ public class AnnouncementEditorFragment extends Fragment{
     private String title;
     private String description;
 
+    private int dest;
+
     private EditText editText_announcementTitle;
     private EditText editText_description;
     private Button button_send;
     private TextView textView_error;
-    private TextView textView_fragment_title;
+    private TextView textView_group;
 
-    private View v;
+    public enum Dest {
+        TOCREATETASK(1),
+        TOCREATEANNOUNCEMET(2);
+
+        private int value;
+
+        Dest(int value){
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
 
     CustomResponseHandler rh = new CustomResponseHandler() {
         @Override
@@ -63,13 +79,7 @@ public class AnnouncementEditorFragment extends Fragment{
         }
         @Override
         public void onSuccessfulResponse() {
-            if(Manager.DestManager.getDest() == Manager.DestManager.TOGROUP){
-                Transactor.fragmentGroupAnnouncement(getFragmentManager().beginTransaction(),groupId, groupName);
-            }else if(Manager.DestManager.getDest() == Manager.DestManager.TOMAIN){
-                Transactor.fragmentMainAnnouncement(getFragmentManager().beginTransaction());
-            }else{
-                Transactor.fragmentMainAnnouncement(getFragmentManager().beginTransaction());
-            }
+            goBack();
             button_send.setEnabled(true);
             Answers.getInstance().logCustom(new CustomEvent("create/edit announcement")
                     .putCustomAttribute("status", "success")
@@ -84,7 +94,15 @@ public class AnnouncementEditorFragment extends Fragment{
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_announcementeditor, container, false);
-        ((MainActivity)getActivity()).onFragmentCreated();
+
+
+        fragmentSetup();
+        setOnBackPressedListener(new OnBackPressedListener() {
+            @Override
+            public void onBackPressed() {
+                goBack();
+            }
+        });
 
         editText_announcementTitle = v.findViewById(R.id.editText_announcementTitle);
         button_send = (Button)v.findViewById(R.id.button_send);
@@ -93,8 +111,8 @@ public class AnnouncementEditorFragment extends Fragment{
         editText_description.setRawInputType(InputType.TYPE_CLASS_TEXT);
         textView_error = v.findViewById(R.id.textView_error_currentPassword);
         textView_error.setTextColor(Color.rgb(255, 0, 0));
+        textView_group = v.findViewById(R.id.textView_group);
 
-        textView_fragment_title = v.findViewById(R.id.textView_subject);
 
         ScrollView scrollView =  v.findViewById(R.id.scrollView);
         editText_announcementTitle.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -138,20 +156,22 @@ public class AnnouncementEditorFragment extends Fragment{
         if(getArguments() != null) {
             announcementId = getArguments().getInt("announcementId");
             groupId = getArguments().getInt(Strings.Path.GROUPID.toString());
+            dest = getArguments().getInt("dest");
+            groupName = getArguments().getString("groupName");
+            textView_group.setText(groupName);
         }
         if(announcementId != 0) {
 
-            groupName = getArguments().getString("groupName");
             title = getArguments().getString("title");
             description = getArguments().getString("description");
 
             editText_announcementTitle.setText(title);
             editText_description.setText(description);
 
-            getActivity().setTitle(R.string.title_editannouncement);
+            setTitle(R.string.title_editannouncement);
             editMode = true;
         }else{
-            getActivity().setTitle(R.string.title_newannouncement);
+            setTitle(R.string.title_newannouncement);
 
             editMode = false;
         }
@@ -183,5 +203,13 @@ public class AnnouncementEditorFragment extends Fragment{
         return groupName;
     }
 
-
+    private void goBack(){
+        if(dest == Strings.Dest.TOGROUP.getValue()){
+            Transactor.fragmentGroupAnnouncement(getFragmentManager().beginTransaction(),groupId, groupName);
+        }else if(dest == Strings.Dest.TOMAIN.getValue()){
+            Transactor.fragmentMainAnnouncement(getFragmentManager().beginTransaction());
+        }else{
+            Transactor.fragmentMainAnnouncement(getFragmentManager().beginTransaction());
+        }
+    }
 }

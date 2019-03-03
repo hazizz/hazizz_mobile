@@ -17,6 +17,8 @@ import com.hazizz.droid.Communication.POJO.Response.POJOMembersProfilePic;
 import com.hazizz.droid.Communication.Requests.GetGroupMembersProfilePic;
 import com.hazizz.droid.Communication.Requests.LeaveGroup;
 import com.hazizz.droid.Communication.Strings;
+import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
+import com.hazizz.droid.Listener.OnBackPressedListener;
 import com.hazizz.droid.Manager;
 import com.hazizz.droid.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
@@ -25,7 +27,7 @@ import com.hazizz.droid.R;
 import java.util.EnumMap;
 import java.util.HashMap;
 
-public class GroupTabFragment extends Fragment {
+public class GroupTabFragment extends ParentFragment {
 
     private View v;
     public PagerAdapter adapter;
@@ -49,14 +51,20 @@ public class GroupTabFragment extends Fragment {
         v = inflater.inflate(R.layout.fragment_tabgroup, container, false);
         Log.e("hey", "GroupTab fragment created");
 
-        Manager.GroupRankManager.clear();
 
         groupId = getArguments().getInt("groupId");
         getGroupMemberProfilePics();
         groupName = getArguments().getString("groupName");
-        getActivity().setTitle(getResources().getString(R.string.group_)+ " " + groupName);
-        Manager.GroupManager.setGroupId(groupId);
-        Manager.GroupManager.setGroupName(groupName);
+        fragmentSetup(getResources().getString(R.string.group_)+ " " + groupName);
+        setOnBackPressedListener(new OnBackPressedListener() {
+            @Override
+            public void onBackPressed() {
+                Transactor.fragmentMain(getFragmentManager().beginTransaction());
+            }
+        });
+
+        Manager.GroupRankManager.clear();
+
         startingTab = getArguments().getInt("startingTab");
 
 
@@ -76,7 +84,7 @@ public class GroupTabFragment extends Fragment {
                 (getActivity().getSupportFragmentManager(), tabLayout.getTabCount());
         adapter.giveArgs(groupId, groupName);
 
-        viewPager.setOffscreenPageLimit(3);
+        viewPager.setOffscreenPageLimit(5);
     //    viewPager.setCurrent
        // bottomBar.setDefaultTab(R.id.tab_default);
         viewPager.setAdapter(adapter);

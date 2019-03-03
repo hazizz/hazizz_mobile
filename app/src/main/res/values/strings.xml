@@ -10,7 +10,7 @@
     <string name="open">Open</string>
 
 
-    <string name="day">nap</string>
+    <string name="days">napok</string>
     <string name="tomorrow">Holnap</string>S
     <string name="days2">2 nap múlva</string>
     <string name="today">Ma</string>
@@ -43,7 +43,7 @@
     </string-array>
 
     <string-array name="options_array">
-         <item>Értesítés beállítások</item>
+      <!--   <item>Értesítés beállítások</item> -->
 
          <item>Jelszó Beállítás</item>
        <!--   <item>Théra Beállítások</item> -->
@@ -121,6 +121,9 @@
       <string name="reply">Válasz</string>
       <string name="viewProfile">Profil megtekintése</string>
       <string name="later">múlva</string>
+      <string name="no">Nem</string>
+      <string name="yes">Igen</string>
+      <string name="choose_group">Choose group</string>
 
       <string name="no_task">Nincs feladat</string>
       <string name="no_announcement">Nincs bejegyzés</string>
@@ -144,6 +147,8 @@
       <string name="displayName_">Becenév:</string>
       <string name="registrationDate_">Regisztráció időpontja:</string>
       <string name="username_">Felhasználónév:</string>
+
+      <string name="press_again_to_exit">Nyomd meg mégegyszer a VISSZA gombot hogy kilépj</string>
 
 
       <string name="termsAndConditions">Elfogadom az<a href="https://hazizz.github.io/privacy-hu.txt"> adatvédelmi nyilatkozatot</a></string>

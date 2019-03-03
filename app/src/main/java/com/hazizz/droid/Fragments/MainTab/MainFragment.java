@@ -86,7 +86,7 @@ public class MainFragment extends Fragment {
                     }
                     Transactor.fragmentViewTask(getFragmentManager().beginTransaction(),
                             taskItem.getTaskId(),
-                            true, Manager.DestManager.TOMAIN, mode);
+                            true, Strings.Dest.TOMAIN, mode);
                 }
             }
         });
@@ -117,7 +117,7 @@ public class MainFragment extends Fragment {
                                 title = getResources().getString(R.string.tomorrow);
                             }
                             else {
-                                title = daysLeft + " " + getResources().getString(R.string.day) + " " + getResources().getString(R.string.later);
+                                title = daysLeft + " " + getResources().getString(R.string.days) + " " + getResources().getString(R.string.later);
                             }
                             itemList.add(new HeaderItem(title, deadline));
                             lastDaysLeft = daysLeft;

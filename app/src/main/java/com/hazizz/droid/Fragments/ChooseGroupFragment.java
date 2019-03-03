@@ -87,19 +87,21 @@ public class ChooseGroupFragment extends Fragment{
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (Manager.DestManager.getDest() == Manager.DestManager.TOCREATETASK) {
+              /*  if (Manager.DestManager.getDest() == Manager.DestManager.TOCREATETASK) {
                     Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(), ((GroupItem) listView.getItemAtPosition(i)).getGroupId(), ((GroupItem) listView.getItemAtPosition(i)).getGroupName(), Manager.DestManager.TOMAIN);
                 }else if(Manager.DestManager.getDest() == Manager.DestManager.TOCREATEANNOUNCEMENT) {
                     Transactor.fragmentCreateAnnouncement(getFragmentManager().beginTransaction(), ((GroupItem) listView.getItemAtPosition(i)).getGroupId(), ((GroupItem) listView.getItemAtPosition(i)).getGroupName(), Manager.DestManager.TOMAIN);
               /*  }else if(Manager.DestManager.getDest() == Manager.DestManager.TOATCHOOSER){
-                    Transactor.fragmentATChooser(getFragmentManager().beginTransaction(), ((GroupItem) listView.getItemAtPosition(i)).getGroupId()); */
+                    Transactor.fragmentATChooser(getFragmentManager().beginTransaction(), ((GroupItem) listView.getItemAtPosition(i)).getGroupId());
 
                 }else{
                     Transactor.fragmentMainGroup(getFragmentManager().beginTransaction(), ((GroupItem) listView.getItemAtPosition(i)).getGroupId(), ((GroupItem) listView.getItemAtPosition(i)).getGroupName());
                 //    Transactor.fragmentGroupTab(getFragmentManager().beginTransaction(), ((GroupItem) listView.getItemAtPosition(i)).getGroupId(), ((GroupItem) listView.getItemAtPosition(i)).getGroupName());
 
                 }
+                */
             }
+
         });
     }
 

@@ -1,5 +1,6 @@
 package com.hazizz.droid.Fragments.Dialog;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -128,8 +129,8 @@ public class ManageSubjectDialog extends DialogFragment {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ((SubjectsFragment)Transactor.getCurrentFragment(getFragmentManager(), false)).getSubjects();
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+    //    ((SubjectsFragment)Transactor.getCurrentFragment(getFragmentManager(), false)).getSubjects(getActivity());
     }
 }

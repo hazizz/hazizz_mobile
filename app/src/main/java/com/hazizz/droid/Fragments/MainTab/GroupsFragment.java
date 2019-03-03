@@ -18,6 +18,8 @@ import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.POJO.Response.POJOgroup;
 import com.hazizz.droid.Communication.Requests.GetGroupsFromMe;
+import com.hazizz.droid.Communication.Strings;
+import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
 import com.hazizz.droid.Listviews.GroupList.CustomAdapter;
 import com.hazizz.droid.Listviews.GroupList.GroupItem;
 import com.hazizz.droid.Manager;
@@ -31,21 +33,39 @@ import java.util.List;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
-public class GroupsFragment extends Fragment {
+public class GroupsFragment extends ParentFragment {
 
     private List<GroupItem> listGroup;
     private View v;
     private CustomAdapter adapter;
     private TextView textView_noContent;
 
+    private int dest;
+
     private SwipeRefreshLayout sRefreshLayout;
+
+
+    public enum Dest {
+        TOCREATETASK(1),
+        TOCREATEANNOUNCEMET(2);
+
+        private int value;
+
+        Dest(int value){
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_group, container, false);
-        ((MainActivity)getActivity()).onFragmentCreated();
-        getActivity().setTitle(R.string.title_fragment_groups);
+        fragmentSetup();
+
         createViewList();
         textView_noContent = v.findViewById(R.id.textView_noContent);
         sRefreshLayout = v.findViewById(R.id.swipe_refresh_layout); sRefreshLayout.bringToFront();
@@ -56,6 +76,17 @@ public class GroupsFragment extends Fragment {
             }});
         sRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimaryDarkBlue), getResources().getColor(R.color.colorPrimaryLightBlue), getResources().getColor(R.color.colorPrimaryDarkBlue));
         getGroups();
+
+        if(getArguments() != null){
+            dest = getArguments().getInt("dest");
+            if(dest != 0){
+                ((MainActivity) getActivity()).hideFabs();
+                setTitle(R.string.choose_group);
+                return v;
+            }
+        }
+        setTitle(R.string.title_fragment_groups);
+
 
         return v;
     }
@@ -112,7 +143,7 @@ public class GroupsFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                switch (Manager.DestManager.getDest()) {
+               /* switch (Manager.DestManager.getDest()) {
                     case Manager.DestManager.TOCREATETASK:
                         Manager.GroupManager.setGroupId(((GroupItem) listView.getItemAtPosition(i)).getGroupId());
                         Manager.GroupManager.setGroupName(((GroupItem) listView.getItemAtPosition(i)).getGroupName());
@@ -130,6 +161,19 @@ public class GroupsFragment extends Fragment {
                         Transactor.fragmentMainGroup(getFragmentManager().beginTransaction(), ((GroupItem) listView.getItemAtPosition(i)).getGroupId(), ((GroupItem) listView.getItemAtPosition(i)).getGroupName());
                         break;
                 }
+                */
+                    int groupId = ((GroupItem) listView.getItemAtPosition(i)).getGroupId();
+                    String groupName = ((GroupItem) listView.getItemAtPosition(i)).getGroupName();
+                    if(Dest.TOCREATETASK.getValue() == dest) {
+                      //  Manager.GroupManager.setGroupName(((GroupItem) listView.getItemAtPosition(i)).getGroupName());
+                        Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(), groupId, groupName, Strings.Dest.TOMAIN);
+                    }else if(Dest.TOCREATEANNOUNCEMET.getValue() == dest){
+                     //   Manager.GroupManager.setGroupId(((GroupItem) listView.getItemAtPosition(i)).getGroupId());
+                      //  Manager.GroupManager.setGroupName(((GroupItem) listView.getItemAtPosition(i)).getGroupName());
+                        Transactor.fragmentCreateAnnouncement(getFragmentManager().beginTransaction(), groupId, groupName, Strings.Dest.TOMAIN);
+                    }else{
+                        Transactor.fragmentMainGroup(getFragmentManager().beginTransaction(), groupId, groupName);
+                    }
             }
         });
     }

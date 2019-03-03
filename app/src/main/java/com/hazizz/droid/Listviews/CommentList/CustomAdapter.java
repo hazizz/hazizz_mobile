@@ -120,8 +120,8 @@ public class CustomAdapter extends ArrayAdapter<CommentItem>  {
         if(rank.getValue() == Strings.Rank.OWNER.getValue()){
             holder.badge_owner.setVisibility(View.VISIBLE);
             commentItem.setCanModify(true);
-            holder.commentName.setText(commentItem.getCreator().getId() + "");
-            holder.commentContent.setText(rank.toString() + "");
+          //  holder.commentName.setText(commentItem.getCreator().getId() + "");
+          //  holder.commentContent.setText(rank.toString() + "");
 
 
         } else if(rank.getValue() == Strings.Rank.MODERATOR.getValue()){

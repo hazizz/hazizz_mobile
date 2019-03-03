@@ -1,6 +1,7 @@
 package com.hazizz.droid.Fragments;
 
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -74,6 +75,8 @@ public class ViewAnnouncementFragment extends CommentableFragment implements Ada
     private String groupName;
     private String title;
     private String descripiton;
+
+    private int dest;
 
     private TextView type;
     private TextView textView_title;
@@ -193,7 +196,7 @@ public class ViewAnnouncementFragment extends CommentableFragment implements Ada
             @Override
             public void onClick(View view) {
                 if(gotResponse){
-                    Transactor.fragmentEditAnnouncement(getFragmentManager().beginTransaction(), Manager.GroupManager.getGroupId(), announcementId, Manager.GroupManager.getGroupName(), title, descripiton, Manager.DestManager.TOGROUP);//commentId);
+                    Transactor.fragmentEditAnnouncement(getFragmentManager().beginTransaction(), Manager.GroupManager.getGroupId(), announcementId, Manager.GroupManager.getGroupName(), title, descripiton, Strings.Dest.TOGROUP);//commentId);
                 }
             }});
 
@@ -203,28 +206,42 @@ public class ViewAnnouncementFragment extends CommentableFragment implements Ada
             @Override
             public void onClick(View view) {
                 if(gotResponse){
-                    CustomResponseHandler rh = new CustomResponseHandler() {
-                        @Override
-                        public void onSuccessfulResponse() {
-                            if(Manager.DestManager.getDest() == Manager.DestManager.TOGROUP) {
-                                Transactor.fragmentGroupAnnouncement(getFragmentManager().beginTransaction(), Manager.GroupManager.getGroupId(), Manager.GroupManager.getGroupName());
-                            } else{
-                                Transactor.fragmentMainAnnouncement(getFragmentManager().beginTransaction());
-                            }
-                            Answers.getInstance().logCustom(new CustomEvent("delete announcement")
-                                    .putCustomAttribute("status", "success")
-                            );
-                        }
-                        @Override
-                        public void onErrorResponse(POJOerror error) {
-                            button_delete.setEnabled(true);
-                            Answers.getInstance().logCustom(new CustomEvent("delete announcement")
-                                    .putCustomAttribute("status", error.getErrorCode())
-                            );
-                        }
-                    };
-                    button_delete.setEnabled(false);
-                    MiddleMan.newRequest(new DeleteAT(getActivity(), rh, Strings.Path.ANNOUNCEMENTS, announcementId));
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+                    alertDialogBuilder.setTitle(R.string.delete);
+                    alertDialogBuilder
+                            .setMessage(R.string.areyousure_delete_announcement)
+                            .setCancelable(true)
+                            .setPositiveButton(R.string.yes, (dialog, id) -> {
+                                CustomResponseHandler rh = new CustomResponseHandler() {
+                                    @Override
+                                    public void onSuccessfulResponse() {
+                                        if(dest == Strings.Dest.TOGROUP.getValue()) {
+                                            Transactor.fragmentGroupAnnouncement(getFragmentManager().beginTransaction(), Manager.GroupManager.getGroupId(), Manager.GroupManager.getGroupName());
+                                        } else{
+                                            Transactor.fragmentMainAnnouncement(getFragmentManager().beginTransaction());
+                                        }
+                                        Answers.getInstance().logCustom(new CustomEvent("delete announcement")
+                                                .putCustomAttribute("status", "success")
+                                        );
+                                    }
+                                    @Override
+                                    public void onErrorResponse(POJOerror error) {
+                                        button_delete.setEnabled(true);
+                                        Answers.getInstance().logCustom(new CustomEvent("delete announcement")
+                                                .putCustomAttribute("status", error.getErrorCode())
+                                        );
+                                    }
+                                };
+                                button_delete.setEnabled(false);
+                                MiddleMan.newRequest(new DeleteAT(getActivity(), rh, Strings.Path.ANNOUNCEMENTS, announcementId));
+
+                                dialog.cancel();
+                            })
+                            .setNegativeButton(R.string.no, (dialog, id) -> {
+                                dialog.cancel();
+                            });
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
                 }
             }
         });
@@ -312,6 +329,8 @@ public class ViewAnnouncementFragment extends CommentableFragment implements Ada
             groupName = bundle.getString("groupName");
             goBackToMain = bundle.getBoolean("goBackToMain");
 
+            dest = bundle.getInt("dest");
+
         }else{Log.e("hey", "bundle is null");}
         rh = new CustomResponseHandler() {
             @Override
@@ -355,7 +374,7 @@ public class ViewAnnouncementFragment extends CommentableFragment implements Ada
                 MiddleMan.newRequest(new GetUserPermissionInGroup(getActivity(), permissionRh, groupId, (int)Manager.MeInfo.getId()));
 
 
-                if(Manager.ProfilePicManager.getCurrentGroupId() != groupId || Manager.DestManager.getDest() == Manager.DestManager.TOMAIN){
+                if(Manager.ProfilePicManager.getCurrentGroupId() != groupId || dest == Strings.Dest.TOMAIN.getValue()){
                     CustomResponseHandler responseHandler = new CustomResponseHandler() {
                         @Override
                         public void onPOJOResponse(Object response) {

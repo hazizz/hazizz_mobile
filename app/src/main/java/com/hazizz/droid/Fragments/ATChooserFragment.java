@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.Manager;
 import com.hazizz.droid.Transactor;
 import com.hazizz.droid.R;
@@ -32,7 +33,7 @@ public class ATChooserFragment extends Fragment {
             @Override
             public void onClick(View view) {
             //    Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(), Manager.GroupManager.getGroupId(), Manager.GroupManager.getGroupName(), Manager.DestManager.TOMAIN);
-                Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(), Manager.DestManager.TOMAIN);
+                Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(), Strings.Dest.TOMAIN);
             }
         });
         textView_announcement = v.findViewById(R.id.textView_announcement);
@@ -40,7 +41,7 @@ public class ATChooserFragment extends Fragment {
             @Override
             public void onClick(View view) {
               //  Transactor.fragmentCreateAnnouncement(getFragmentManager().beginTransaction(), Manager.GroupManager.getGroupId(), Manager.GroupManager.getGroupName(), Manager.DestManager.TOMAIN);
-                Transactor.fragmentCreateAnnouncement(getFragmentManager().beginTransaction(), Manager.DestManager.TOMAIN);
+                Transactor.fragmentCreateAnnouncement(getFragmentManager().beginTransaction(), Strings.Dest.TOMAIN);
             }
         });
         return v;

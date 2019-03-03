@@ -20,6 +20,7 @@ import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.Requests.GetAnnouncementsFromGroup;
 import com.hazizz.droid.Communication.Strings;
+import com.hazizz.droid.Fragments.ParentFragment.GroupFragment;
 import com.hazizz.droid.Listviews.AnnouncementList.AnnouncementItem;
 import com.hazizz.droid.Listviews.AnnouncementList.Group.CustomAdapter;
 import com.hazizz.droid.Manager;
@@ -35,9 +36,8 @@ import java.util.List;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
-public class GroupAnnouncementFragment extends Fragment{
+public class GroupAnnouncementFragment extends GroupFragment {
 
-    private View v;
     private CustomAdapter adapter;
     private List<AnnouncementItem> listAnnouncement;
 
@@ -52,9 +52,10 @@ public class GroupAnnouncementFragment extends Fragment{
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_announcements, container, false);
         Log.e("hey", "announcement group fragment created");
-        ((MainActivity)getActivity()).onFragmentCreated();
-        groupId = getArguments().getInt("groupId");
-        groupName = getArguments().getString("groupName");
+
+        fragmentSetup();
+        groupId = GroupTabFragment.groupId;
+        groupName = GroupTabFragment.groupName;
 
         textView_noContent = v.findViewById(R.id.textView_noContent);
         sRefreshLayout = v.findViewById(R.id.swipe_refresh_layout); sRefreshLayout.bringToFront();
@@ -81,7 +82,7 @@ public class GroupAnnouncementFragment extends Fragment{
                 groupName = ((AnnouncementItem)listView.getItemAtPosition(i)).getGroup().getName();
                     Transactor.fragmentViewAnnouncement(getFragmentManager().beginTransaction(),
                         ((AnnouncementItem)listView.getItemAtPosition(i)).getAnnouncementId(),
-                            false, Manager.DestManager.TOGROUP);
+                            false, Strings.Dest.TOGROUP);
             }
         });
     }
@@ -107,28 +108,22 @@ public class GroupAnnouncementFragment extends Fragment{
                         adapter.notifyDataSetChanged();
                         Log.e("hey", t.getId() + " " + t.getGroup().getId());
                     }
-                    Log.e("hey", "got response");
                 }
                 sRefreshLayout.setRefreshing(false);
             }
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.e("hey", "4");
-                Log.e("hey", "got here onFailure");
                 textView_noContent.setVisibility(v.VISIBLE);
                 sRefreshLayout.setRefreshing(false);
             }
             @Override
             public void onErrorResponse(POJOerror error) {
-                Log.e("hey", "onErrorResponse");
                 sRefreshLayout.setRefreshing(false);
             }
             @Override
             public void onEmptyResponse() {
                 sRefreshLayout.setRefreshing(false);
             }
-            @Override
-            public void onSuccessfulResponse() { }
             @Override
             public void onNoConnection() {
                 textView_noContent.setText(R.string.info_noInternetAccess);
@@ -141,7 +136,7 @@ public class GroupAnnouncementFragment extends Fragment{
     }
 
     public void toAnnouncementEditor(FragmentManager fm){
-        Transactor.fragmentCreateAnnouncement(fm.beginTransaction(),groupId, groupName, Manager.DestManager.TOGROUP);
+        Transactor.fragmentCreateAnnouncement(fm.beginTransaction(),groupId, groupName, Strings.Dest.TOGROUP);
 
     }
 }

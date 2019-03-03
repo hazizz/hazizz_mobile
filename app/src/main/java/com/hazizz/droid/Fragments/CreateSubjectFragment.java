@@ -22,6 +22,8 @@ import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.Requests.CreateSubject;
 import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.Fragments.GroupTabs.GroupTabFragment;
+import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
+import com.hazizz.droid.Listener.OnBackPressedListener;
 import com.hazizz.droid.Listviews.GroupList.CustomAdapter;
 import com.hazizz.droid.Manager;
 import com.hazizz.droid.Transactor;
@@ -35,9 +37,8 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 
 
-public class CreateSubjectFragment extends Fragment {
+public class CreateSubjectFragment extends ParentFragment {
 
-    private View v;
     private EditText editText_newSubject;
     private Button button_addSubject;
     private TextView textView_error;
@@ -73,8 +74,6 @@ public class CreateSubjectFragment extends Fragment {
             if(error.getErrorCode() == 31){ // no such user
               //  textView_error.setText("Felhasználó nem található");
             }
-            Log.e("hey", "errodCOde is " + error.getErrorCode() + "");
-            Log.e("hey", "got here onErrorResponse");
             button_addSubject.setEnabled(true);
             Answers.getInstance().logCustom(new CustomEvent("create subject")
                     .putCustomAttribute("status", error.getErrorCode())
@@ -86,9 +85,15 @@ public class CreateSubjectFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_addsubject, container, false);
-        ((MainActivity)getActivity()).onFragmentCreated();
 
-        getActivity().setTitle(R.string.add_subject);
+        fragmentSetup(R.string.add_subject);
+        setOnBackPressedListener(new OnBackPressedListener() {
+            @Override
+            public void onBackPressed() {
+                Transactor.fragmentSubjects(getFragmentManager().beginTransaction(), groupId, groupName);
+            }
+        });
+
 
         groupId = getArguments().getInt("groupId");
         groupName = getArguments().getString("groupName");
@@ -116,12 +121,7 @@ public class CreateSubjectFragment extends Fragment {
     }
 
     public void goBack(){
-        if(Manager.DestManager.getDest() == Manager.DestManager.TOCREATETASK) {
-            Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(), GroupTabFragment.groupId, GroupTabFragment.groupName, Manager.DestManager.TOGROUP);
-        }else if(Manager.DestManager.getDest() == Manager.DestManager.TOSUBJECTS){
-            Transactor.fragmentSubjects(getFragmentManager().beginTransaction(), GroupTabFragment.groupId, GroupTabFragment.groupName);
-        }else{
-            Transactor.fragmentSubjects(getFragmentManager().beginTransaction(), GroupTabFragment.groupId, GroupTabFragment.groupName);
-        }
+         Transactor.fragmentSubjects(getFragmentManager().beginTransaction(), GroupTabFragment.groupId, GroupTabFragment.groupName);
+
     }
 }

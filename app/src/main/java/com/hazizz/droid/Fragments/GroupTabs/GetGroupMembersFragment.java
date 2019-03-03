@@ -21,6 +21,7 @@ import com.hazizz.droid.Communication.POJO.Response.POJOuser;
 import com.hazizz.droid.Communication.POJO.Response.PojoPermisionUsers;
 import com.hazizz.droid.Communication.Requests.GetGroupMemberPermisions;
 import com.hazizz.droid.Communication.Strings;
+import com.hazizz.droid.Fragments.ParentFragment.GroupFragment;
 import com.hazizz.droid.Listviews.UserList.CustomAdapter;
 import com.hazizz.droid.Listviews.UserList.UserItem;
 import com.hazizz.droid.Manager;
@@ -33,7 +34,7 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 
-public class GetGroupMembersFragment extends Fragment {
+public class GetGroupMembersFragment extends GroupFragment {
 
     private List<UserItem> listUser;
     private View v;
@@ -49,9 +50,10 @@ public class GetGroupMembersFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_getgroupmembers, container, false);
-        ((MainActivity)getActivity()).onFragmentCreated();
 
-        groupId = getArguments().getInt("groupId");
+        fragmentSetup();
+
+        groupId = GroupTabFragment.groupId;
         textView_noContent = v.findViewById(R.id.textView_noContent);
 
         sRefreshLayout = v.findViewById(R.id.swipe_refresh_layout);
