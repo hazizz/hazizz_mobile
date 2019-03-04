@@ -47,6 +47,7 @@ import com.hazizz.droid.Communication.Requests.GetCommentSection;
 import com.hazizz.droid.Communication.Requests.GetGroupMemberPermisions;
 import com.hazizz.droid.Communication.Requests.GetGroupMembersProfilePic;
 import com.hazizz.droid.Communication.Strings;
+import com.hazizz.droid.Enum.EnumAT;
 import com.hazizz.droid.Fragments.CommentableFragments.CommentableFragment;
 import com.hazizz.droid.Listviews.CommentList.CommentItem;
 import com.hazizz.droid.Listviews.CommentList.CustomAdapter;
@@ -125,6 +126,7 @@ public class ViewAnnouncementFragment extends CommentableFragment implements Ada
 
     // Comment part
     private TextView textView_commentTitle;
+    private LinearLayout box_comment;
 
     private NestedScrollView scrollView;
 
@@ -259,6 +261,7 @@ public class ViewAnnouncementFragment extends CommentableFragment implements Ada
 
 
         editText_commentBody = v.findViewById(R.id.editText_comment_body);
+        box_comment = v.findViewById(R.id.box_comment);
         textView_noContent = v.findViewById(R.id.textView_noContent);
         sRefreshLayout = v.findViewById(R.id.swipe_refresh_layout);
         sRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimaryDarkBlue), getResources().getColor(R.color.colorPrimaryLightBlue), getResources().getColor(R.color.colorPrimaryDarkBlue));
@@ -322,14 +325,14 @@ public class ViewAnnouncementFragment extends CommentableFragment implements Ada
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            announcementId =  bundle.getInt(Strings.Path.ANNOUNCEMENTID.toString());
-            groupId = bundle.getInt(Strings.Path.GROUPID.toString());
+            announcementId =  bundle.getInt(Transactor.KEY_ANNOUNCEMENTID);
+            groupId = bundle.getInt(Transactor.KEY_GROUPID);
 
 
-            groupName = bundle.getString("groupName");
-            goBackToMain = bundle.getBoolean("goBackToMain");
+            groupName = bundle.getString(Transactor.KEY_GROUPNAME);
+            goBackToMain = bundle.getBoolean(Transactor.KEY_GOBACKTOMAIN);
 
-            dest = bundle.getInt("dest");
+            dest = bundle.getInt(Transactor.KEY_DEST);
 
         }else{Log.e("hey", "bundle is null");}
         rh = new CustomResponseHandler() {
@@ -454,8 +457,9 @@ public class ViewAnnouncementFragment extends CommentableFragment implements Ada
     public void visibleIfEnabled_button_comment(){
         if(enable_button_comment > 1){
             button_send.setVisibility(View.VISIBLE);
-            editText_commentBody.setVisibility(View.VISIBLE);
+          //  editText_commentBody.setVisibility(View.VISIBLE);
             textView_commentTitle.setVisibility(View.VISIBLE);
+            box_comment.setVisibility(View.VISIBLE);
         }
     }
 
@@ -487,7 +491,7 @@ public class ViewAnnouncementFragment extends CommentableFragment implements Ada
                 ImageView imageView_popup = view.findViewById(R.id.imageView_popup);
 
                 // Context wrapper = new ContextThemeWrapper(null, R.style.popupMenuStyle);
-                adapter.getItem(i).showMenu(getActivity(), getComments_rh, announcementId, imageView_popup, getFragmentManager().beginTransaction(), self);
+                adapter.getItem(i).showMenu(getActivity(), getComments_rh, EnumAT.ANNOUNCEMENTS, announcementId, imageView_popup, getFragmentManager().beginTransaction(), self);
                 /*
                 PopupMenu popup = new PopupMenu(getActivity(), view_position_popup);
 

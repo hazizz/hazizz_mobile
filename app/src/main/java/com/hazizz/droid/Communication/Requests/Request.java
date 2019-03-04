@@ -26,6 +26,12 @@ public class Request implements RequestInterface {
     private static final String THERA_URL = "https://hazizz.duckdns.org:9000/thera-server/";
 
     protected static final String HEADER_AUTH = "Authorization";
+    protected static final String HEADER_CONTENTTYPE = "Content-Type";
+    protected static final String HEADER_VALUE_CONTENTTYPE = "application/json";
+
+
+
+
     protected String getHeaderAuthToken(){return "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext());}
     protected String getHeaderAuthToken(Context context){return "Bearer " + SharedPrefs.TokenManager.getToken(context);}
 

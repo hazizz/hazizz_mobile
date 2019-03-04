@@ -9,6 +9,9 @@
     <string name="action_settings">Settings</string>
     <string name="open">Open</string>
 
+    <string name="header_item_in"></string>
+    <string name="header_item_day">nap</string>
+    <string name="header_later">múlva</string>
 
     <string name="days">napok</string>
     <string name="tomorrow">Holnap</string>S
@@ -123,7 +126,10 @@
       <string name="later">múlva</string>
       <string name="no">Nem</string>
       <string name="yes">Igen</string>
-      <string name="choose_group">Choose group</string>
+      <string name="choose_group">Válasz csoportot</string>
+      <string name="write_comment">Írj egy kommentet!</string>
+
+      <string name="add_user">Új felhasználó</string>
 
       <string name="no_task">Nincs feladat</string>
       <string name="no_announcement">Nincs bejegyzés</string>
@@ -258,5 +264,7 @@
       <string name="crop_image_menu_flip_vertically">Forgatás függőlegesen</string>
 
 
+       <string name="title_thera_users">Théra felhasználók</string>
+       <string name="title_thera_login">Théra bejelentkezés</string>
 
 </resources>

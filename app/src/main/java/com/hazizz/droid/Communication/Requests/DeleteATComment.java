@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.Strings;
+import com.hazizz.droid.Enum.EnumAT;
 import com.hazizz.droid.SharedPrefs;
 
 import java.util.HashMap;
@@ -14,7 +15,7 @@ import retrofit2.Response;
 
 public class DeleteATComment extends Request {
     String whereName, whereId, commentId;
-    public DeleteATComment(Activity act, CustomResponseHandler rh, Strings.Path whereName, int whereId, long commentId) {
+    public DeleteATComment(Activity act, CustomResponseHandler rh, EnumAT whereName, int whereId, long commentId) {
         super(act, rh);
         Log.e("hey", "created DeleteATComment object");
         this.whereName = whereName.toString();

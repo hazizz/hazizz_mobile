@@ -41,8 +41,7 @@
                 <android.support.constraint.ConstraintLayout
                     android:id="@+id/constraintLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    >
+                    android:layout_height="match_parent">
 
 
                     <TextView
@@ -61,7 +60,7 @@
                         android:scrollbars="vertical"
                         android:singleLine="false"
                         android:text="      "
-                        android:textSize="17dp"
+                        android:textSize="20sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.512"
                         app:layout_constraintStart_toStartOf="parent"
@@ -70,13 +69,13 @@
                     <TextView
                         android:id="@+id/textView_creator_"
                         android:layout_width="wrap_content"
-                        android:layout_height="22dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginEnd="32dp"
                         android:layout_marginRight="32dp"
                         android:layout_marginTop="8dp"
                         android:maxWidth="80dp"
                         android:text="             "
-                        android:textSize="17sp"
+                        android:textSize="20sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView_group" />
 
@@ -98,7 +97,7 @@
                         android:layout_marginRight="32dp"
                         android:layout_marginTop="8dp"
                         android:text="     "
-                        android:textSize="17sp"
+                        android:textSize="20sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView_tasktype" />
 
@@ -112,7 +111,7 @@
                         android:layout_marginTop="8dp"
                         android:maxLines="1"
                         android:text="@string/tasktype_"
-                        android:textSize="17sp"
+                        android:textSize="20sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
@@ -129,7 +128,7 @@
                         android:layout_marginTop="16dp"
                         android:maxLines="1"
                         android:text="@string/subject_"
-                        android:textSize="17sp"
+                        android:textSize="20sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -145,7 +144,7 @@
                         android:maxLines="1"
                         android:singleLine="true"
                         android:text="           "
-                        android:textSize="17sp"
+                        android:textSize="20sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -160,7 +159,7 @@
                         android:maxLines="1"
                         android:singleLine="true"
                         android:text="          "
-                        android:textSize="17sp"
+                        android:textSize="20sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView_creator_" />
 
@@ -173,7 +172,7 @@
                         android:layout_marginStart="32dp"
                         android:layout_marginTop="8dp"
                         android:text="@string/creator_"
-                        android:textSize="17sp"
+                        android:textSize="20sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView_group_" />
 
@@ -183,9 +182,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="16dp"
                         android:layout_marginStart="16dp"
-                        android:layout_marginTop="32dp"
+                        android:layout_marginTop="16dp"
                         android:text="@string/description_"
-                        android:textSize="20sp"
+                        android:textSize="24sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
@@ -197,7 +196,7 @@
                         android:layout_marginStart="32dp"
                         android:layout_marginTop="8dp"
                         android:text="@string/deadline_"
-                        android:textSize="17sp"
+                        android:textSize="20sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
@@ -209,7 +208,7 @@
                         android:layout_marginStart="32dp"
                         android:layout_marginTop="8dp"
                         android:text="@string/group_"
-                        android:textSize="17sp"
+                        android:textSize="20sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
@@ -221,7 +220,7 @@
                         android:layout_marginRight="32dp"
                         android:layout_marginTop="8dp"
                         android:text="           "
-                        android:textSize="17sp"
+                        android:textSize="20sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView_subject" />
 
@@ -311,6 +310,7 @@
                     android:focusable="false"
                     />
 
+                <!--
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -338,6 +338,15 @@
                         app:srcCompat="@drawable/ic_send"
                         />
                 </LinearLayout>
+                -->
+
+                <include
+                    android:id="@+id/box_comment"
+                    android:visibility="gone"
+                    layout="@layout/fragment_chat"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView >
     </android.support.v4.widget.SwipeRefreshLayout>

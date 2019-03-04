@@ -21,6 +21,7 @@ import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.Converter.Converter;
 import com.hazizz.droid.D8;
 import com.hazizz.droid.R;
+import com.hazizz.droid.Transactor;
 
 public class UserDetailDialogFragment extends DialogFragment {
 
@@ -54,9 +55,9 @@ public class UserDetailDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.dialog_fragment_user_detail, container, false);
 
-        long userId = getArguments().getLong(Strings.Path.USERID.toString());
+        long userId = getArguments().getLong(Transactor.KEY_USERID);
         Bitmap profilePic = Converter.getCroppedBitmap(Converter.imageFromText(getArguments().getString(Strings.Other.PROFILEPIC.toString())));
-        rank = getArguments().getInt("rank");
+        rank = getArguments().getInt(Transactor.KEY_RANK);
         if(rank == Strings.Rank.OWNER.getValue()){
             FrameLayout badge = v.findViewById(R.id.badge_owner);
             badge.setVisibility(View.VISIBLE);

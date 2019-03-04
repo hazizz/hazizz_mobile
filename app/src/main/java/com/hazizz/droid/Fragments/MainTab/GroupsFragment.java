@@ -78,7 +78,7 @@ public class GroupsFragment extends ParentFragment {
         getGroups();
 
         if(getArguments() != null){
-            dest = getArguments().getInt("dest");
+            dest = getArguments().getInt(Transactor.KEY_DEST);
             if(dest != 0){
                 ((MainActivity) getActivity()).hideFabs();
                 setTitle(R.string.choose_group);

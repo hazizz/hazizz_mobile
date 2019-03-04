@@ -44,6 +44,7 @@ import com.hazizz.droid.Communication.Requests.GetGroupMemberPermisions;
 import com.hazizz.droid.Communication.Requests.GetGroupMembersProfilePic;
 import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.D8;
+import com.hazizz.droid.Enum.EnumAT;
 import com.hazizz.droid.Fragments.CommentableFragments.CommentableFragment;
 import com.hazizz.droid.Listviews.CommentList.CommentItem;
 import com.hazizz.droid.Listviews.CommentList.CustomAdapter;
@@ -136,6 +137,7 @@ public class ViewTaskFragment extends CommentableFragment implements AdapterView
     NonScrollListView listView;
     private NestedScrollView scrollView;
 
+    private LinearLayout box_comment;
     private CustomAdapter adapter;
     private List<CommentItem> listComment;
     private EditText editText_commentBody;
@@ -246,6 +248,7 @@ public class ViewTaskFragment extends CommentableFragment implements AdapterView
                 });
             }
         });
+        box_comment = v.findViewById(R.id.box_comment);
         editText_commentBody = v.findViewById(R.id.editText_comment_body);
         textView_noContent = v.findViewById(R.id.textView_noContent);
         sRefreshLayout = v.findViewById(R.id.swipe_refresh_layout); sRefreshLayout.bringToFront();
@@ -362,10 +365,10 @@ public class ViewTaskFragment extends CommentableFragment implements AdapterView
         if (bundle != null) {
             taskId = bundle.getInt(Strings.Path.TASKID.toString());
 
-            isMyMode = bundle.getBoolean("mode");
-            goBackToMain = bundle.getBoolean("goBackToMain");
+            isMyMode = bundle.getBoolean(Transactor.KEY_MODE);
+            goBackToMain = bundle.getBoolean(Transactor.KEY_GOBACKTOMAIN);
 
-            dest = bundle.getInt("dest");
+            dest = bundle.getInt(Transactor.KEY_DEST);
 
         }else{Log.e("hey", "bundle is null");}
         getTask_rh = new CustomResponseHandler() {
@@ -536,8 +539,9 @@ public class ViewTaskFragment extends CommentableFragment implements AdapterView
     public void visibleIfEnabled_comment_send(){
         if(enable_button_comment > 1){
             button_send.setVisibility(View.VISIBLE);
-            editText_commentBody.setVisibility(View.VISIBLE);
+         //   editText_commentBody.setVisibility(View.VISIBLE);
             textView_commentTitle.setVisibility(View.VISIBLE);
+            box_comment.setVisibility(View.VISIBLE);
         }
     }
 
@@ -565,7 +569,7 @@ public class ViewTaskFragment extends CommentableFragment implements AdapterView
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 ImageView imageView_popup = view.findViewById(R.id.imageView_popup);
 
-                adapter.getItem(i).showMenu(getActivity(), getComments_rh, taskId, imageView_popup, getFragmentManager().beginTransaction(), self);
+                adapter.getItem(i).showMenu(getActivity(), getComments_rh, EnumAT.TASKS, taskId, imageView_popup, getFragmentManager().beginTransaction(), self);
 
             }
         });

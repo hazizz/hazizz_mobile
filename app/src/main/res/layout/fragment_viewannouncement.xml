@@ -74,7 +74,7 @@
                         android:layout_marginTop="8dp"
                         android:maxWidth="80dp"
                         android:text="             "
-                        android:textSize="18sp"
+                        android:textSize="20sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView_group" />
 
@@ -97,7 +97,7 @@
                         android:layout_marginStart="32dp"
                         android:layout_marginTop="8dp"
                         android:text="@string/creator_"
-                        android:textSize="18sp"
+                        android:textSize="20sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView_group_" />
 
@@ -107,9 +107,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="16dp"
                         android:layout_marginStart="16dp"
-                        android:layout_marginTop="110dp"
+                        android:layout_marginTop="90dp"
                         android:text="@string/description_"
-                        android:textSize="20sp"
+                        android:textSize="24sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
@@ -119,9 +119,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="32dp"
                         android:layout_marginStart="32dp"
-                        android:layout_marginTop="32dp"
+                        android:layout_marginTop="40dp"
                         android:text="@string/group_"
-                        android:textSize="18sp"
+                        android:textSize="20sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -131,9 +131,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="32dp"
                         android:layout_marginRight="32dp"
-                        android:layout_marginTop="32dp"
+                        android:layout_marginTop="40dp"
                         android:text="           "
-                        android:textSize="18sp"
+                        android:textSize="20sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -213,6 +213,7 @@
                     android:layout_height="wrap_content"
                     />
 
+                <!--
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -240,6 +241,15 @@
                         app:srcCompat="@drawable/ic_send"
                         />
                 </LinearLayout>
+                -->
+
+                <include
+                    android:id="@+id/box_comment"
+                    android:visibility="gone"
+                    layout="@layout/fragment_chat"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView >
     </android.support.v4.widget.SwipeRefreshLayout>

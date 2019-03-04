@@ -447,10 +447,23 @@ public interface RequestTypes{
 
 
 
-    @GET("thera/schools")
-    Call<ResponseBody> getSchools(
+    @GET("kreta/schools")
+    Call<ResponseBody> th_getSchools(
             @HeaderMap Map<String, String> headers
     );
+
+    @POST("kreta/sessions")
+    Call<ResponseBody> th_createSession(
+            @HeaderMap Map<String, String> headers,
+            @Body Map<String, Object> body
+    );
+
+    @GET("kreta/sessions")
+    Call<ResponseBody> th_returnSessions(
+            @HeaderMap Map<String, String> headers
+    );
+
+
 
 
 }

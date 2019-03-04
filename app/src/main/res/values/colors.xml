@@ -4,6 +4,7 @@
     <color name="colorPrimaryDarkerBlue">#2b909b</color>
     <color name="colorPrimaryDarkBlue">#36B1BF</color>
     <color name="colorPrimaryLightBlue">#46D9D9</color>
+    <color name="colorPrimaryLightestBlue">#8946d9d9</color>
 
     <color name="color_hazizz_background_blue">#d4f7f7</color>
     <color name="color_hazizz_list_item_blue">#edffff</color>

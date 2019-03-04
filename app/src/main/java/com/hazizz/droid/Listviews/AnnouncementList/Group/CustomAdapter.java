@@ -48,8 +48,8 @@ public class CustomAdapter extends ArrayAdapter<AnnouncementItem> {
             convertView = inflater.inflate(picID, parent, false);
 
             holder = new DataHolder();
-            holder.taskTitle = (TextView) convertView.findViewById(R.id.announcement_title);
-            holder.taskDescription = (TextView) convertView.findViewById(R.id.announcement_description);
+            holder.taskTitle = (TextView) convertView.findViewById(R.id.textView_id);
+            holder.taskDescription = (TextView) convertView.findViewById(R.id.textView_url);
             holder.taskCreator = (TextView) convertView.findViewById(R.id.textView_creator_);
             holder.subject_ = (TextView) convertView.findViewById(R.id.textView_creator);
             holder.subject = (TextView) convertView.findViewById(R.id.textView_subject);

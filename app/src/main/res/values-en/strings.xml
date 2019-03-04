@@ -9,6 +9,11 @@
     <string name="action_settings">Settings</string>
     <string name="open">Open</string>
 
+
+    <string name="header_item_in">In</string>
+    <string name="header_item_day">days</string>
+    <string name="header_item_later"></string>
+
     <string name="days">days</string>
     <string name="tomorrow">Tomorrow</string>
     <string name="days2">In 2 days</string>
@@ -128,6 +133,9 @@
       <string name="no">No</string>
       <string name="yes">Yes</string>
       <string name="choose_group">Choose group</string>
+      <string name="write_comment">Write a comment!</string>
+
+      <string name="add_user">Add user</string>
 
 
       <string name="groupMembers">Members</string>
@@ -266,6 +274,10 @@
   <string name="crop_image_menu_flip_horizontally">Flip horizontally</string>
   <string name="crop_image_menu_flip_vertically">Flip vertically</string>
 
+
+
+  <string name="title_thera_users">Thera users</string>
+  <string name="title_thera_login">Thera login</string>
 
 
   </resources>

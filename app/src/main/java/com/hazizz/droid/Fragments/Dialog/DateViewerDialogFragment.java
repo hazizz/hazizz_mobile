@@ -20,6 +20,7 @@ import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.Converter.Converter;
 import com.hazizz.droid.D8;
 import com.hazizz.droid.R;
+import com.hazizz.droid.Transactor;
 
 public class DateViewerDialogFragment extends DialogFragment {
 
@@ -39,7 +40,7 @@ public class DateViewerDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.dialog_fragment_date_viewer, container, false);
 
-        D8.Date dateText = D8.textToDate(getArguments().getString("date"));
+        D8.Date dateText = D8.textToDate(getArguments().getString(Transactor.KEY_DATE));
 
         // Do all the stuff to initialize your custom view
         textView_mainFormat = v.findViewById(R.id.textView_mainFormat);

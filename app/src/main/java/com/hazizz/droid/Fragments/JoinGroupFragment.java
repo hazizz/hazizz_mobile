@@ -134,8 +134,6 @@ public class JoinGroupFragment extends ParentFragment {
         }
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
-            Log.e("hey", "4");
-            Log.e("hey", "got here onFailure");
             textView_error.setText(R.string.info_noInternetAccess);
             button_joinGroup.setEnabled(true);
             editText_groupName.setEnabled(true);

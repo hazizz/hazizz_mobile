@@ -154,16 +154,16 @@ public class AnnouncementEditorFragment extends ParentFragment {
         });
 
         if(getArguments() != null) {
-            announcementId = getArguments().getInt("announcementId");
-            groupId = getArguments().getInt(Strings.Path.GROUPID.toString());
-            dest = getArguments().getInt("dest");
-            groupName = getArguments().getString("groupName");
+            announcementId = getArguments().getInt(Transactor.KEY_ANNOUNCEMENTID);
+            groupId = getArguments().getInt(Transactor.KEY_GROUPID);
+            dest = getArguments().getInt(Transactor.KEY_DEST);
+            groupName = getArguments().getString(Transactor.KEY_GROUPNAME);
             textView_group.setText(groupName);
         }
         if(announcementId != 0) {
 
-            title = getArguments().getString("title");
-            description = getArguments().getString("description");
+            title = getArguments().getString(Transactor.KEY_TITLE);
+            description = getArguments().getString(Transactor.KEY_DESCRIPTION);
 
             editText_announcementTitle.setText(title);
             editText_description.setText(description);

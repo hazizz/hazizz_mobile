@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
 
 import com.hazizz.droid.Communication.Strings;
+import com.hazizz.droid.Transactor;
 
 public class PagerAdapter extends FragmentStatePagerAdapter {
     int mNumOfTabs;
@@ -30,8 +31,8 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
             case 0:
                 bundle = new Bundle();
                 Log.e("hey", "pagerAdapter groupId: " + groupId);
-                bundle.putInt(Strings.Path.GROUPID.toString(), groupId);
-                bundle.putString("groupName", groupName);
+                bundle.putInt(Transactor.KEY_GROUPID, groupId);
+                bundle.putString(Transactor.KEY_GROUPNAME, groupName);
                 frag = new GroupMainFragment();
                 frag.setArguments(bundle);
                 currentFrag = frag;
@@ -39,15 +40,15 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
 
             case 1:
                 bundle = new Bundle();
-                bundle.putInt(Strings.Path.GROUPID.toString(), groupId);
-                bundle.putString("groupName", groupName);
+                bundle.putInt(Transactor.KEY_GROUPID, groupId);
+                bundle.putString(Transactor.KEY_GROUPNAME, groupName);
                 frag= new GroupAnnouncementFragment();
                 frag.setArguments(bundle);
                 currentFrag = frag;
                 return frag;
             case 2:
                 bundle = new Bundle();
-                bundle.putInt(Strings.Path.GROUPID.toString(), groupId);
+                bundle.putInt(Transactor.KEY_GROUPID, groupId);
                 frag = new SubjectsFragment();
                 frag.setArguments(bundle);
 
@@ -56,8 +57,8 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
             case 3:
             default:
                 bundle = new Bundle();
-                bundle.putInt(Strings.Path.GROUPID.toString(), groupId);
-                bundle.putString("groupName", groupName);
+                bundle.putInt(Transactor.KEY_GROUPID, groupId);
+                bundle.putString(Transactor.KEY_GROUPNAME, groupName);
                 frag = new GetGroupMembersFragment();
                 frag.setArguments(bundle);
 

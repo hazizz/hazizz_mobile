@@ -95,8 +95,8 @@ public class CreateSubjectFragment extends ParentFragment {
         });
 
 
-        groupId = getArguments().getInt("groupId");
-        groupName = getArguments().getString("groupName");
+        groupId = getArguments().getInt(Transactor.KEY_GROUPID);
+        groupName = getArguments().getString(Transactor.KEY_GROUPNAME);
 
         textView_error = v.findViewById(R.id.textView_error_currentPassword);
         textView_error.setTextColor(Color.rgb(255, 0, 0));
