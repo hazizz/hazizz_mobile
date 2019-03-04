@@ -29,7 +29,6 @@ import java.util.HashMap;
 
 public class GroupTabFragment extends ParentFragment {
 
-    private View v;
     public PagerAdapter adapter;
 
     public static int groupId;
@@ -51,10 +50,9 @@ public class GroupTabFragment extends ParentFragment {
         v = inflater.inflate(R.layout.fragment_tabgroup, container, false);
         Log.e("hey", "GroupTab fragment created");
 
-
-        groupId = getArguments().getInt("groupId");
+        groupId = getArguments().getInt(Transactor.KEY_GROUPID);
         getGroupMemberProfilePics();
-        groupName = getArguments().getString("groupName");
+        groupName = getArguments().getString(Transactor.KEY_GROUPNAME);
         fragmentSetup(getResources().getString(R.string.group_)+ " " + groupName);
         setOnBackPressedListener(new OnBackPressedListener() {
             @Override
@@ -65,7 +63,7 @@ public class GroupTabFragment extends ParentFragment {
 
         Manager.GroupRankManager.clear();
 
-        startingTab = getArguments().getInt("startingTab");
+        startingTab = getArguments().getInt(Transactor.KEY_STARTINGTAB);
 
 
         TabLayout tabLayout = (TabLayout) v.findViewById(R.id.tab_layout);

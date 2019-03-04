@@ -102,8 +102,8 @@ public class AddToGroupFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_addtogroup, container, false);
         ((MainActivity)getActivity()).onFragmentCreated();
-        groupId = getArguments().getInt("groupId");
-        groupName = getArguments().getString("groupName");
+        groupId = getArguments().getInt(Transactor.KEY_GROUPID);
+        groupName = getArguments().getString(Transactor.KEY_GROUPNAME);
 
         editText_memberName = v.findViewById(R.id.editText_memberName);
         button_addMember = v.findViewById(R.id.button_addMember);

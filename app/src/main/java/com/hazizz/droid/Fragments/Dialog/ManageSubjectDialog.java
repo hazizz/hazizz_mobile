@@ -44,9 +44,9 @@ public class ManageSubjectDialog extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.dialog_fragment_manager_subject, container, false);
 
-        groupId = getArguments().getLong(Strings.Path.GROUPID.toString());
-        subjectId = getArguments().getLong(Strings.Path.SUBJECTID.toString());
-        currentSubjectName = getArguments().getString("currentSubjectName");
+        groupId = getArguments().getLong(Transactor.KEY_GROUPID);
+        subjectId = getArguments().getLong(Transactor.KEY_SUBJECTID);
+        currentSubjectName = getArguments().getString(Transactor.KEY_CURRENTSUBJECTNAME);
 
 
         textView_subjectName = v.findViewById(R.id.textView_subjectName);

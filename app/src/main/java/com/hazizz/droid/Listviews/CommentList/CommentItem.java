@@ -12,6 +12,7 @@ import com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs.POJOcreator;
 import com.hazizz.droid.Communication.Requests.DeleteATComment;
 import com.hazizz.droid.Communication.Requests.GetCommentSection;
 import com.hazizz.droid.Communication.Strings;
+import com.hazizz.droid.Enum.EnumAT;
 import com.hazizz.droid.Fragments.CommentableFragments.CommentableFragment;
 import com.hazizz.droid.R;
 import com.hazizz.droid.Transactor;
@@ -40,7 +41,7 @@ public class CommentItem {
         this.commentContent = commentContent;
     }
 
-    public void showMenu(Activity act, CustomResponseHandler rh, int taskId, View v, FragmentTransaction ft, CommentableFragment commentableFragment){
+    public void showMenu(Activity act, CustomResponseHandler rh, EnumAT whereName, int typeId, View v, FragmentTransaction ft, CommentableFragment commentableFragment){
 
 
 
@@ -49,7 +50,7 @@ public class CommentItem {
         popup.getMenuInflater().inflate(R.menu.menu_comment_item_popup, popup.getMenu());
 
         if(canModify){
-            popup.getMenu().getItem(2).setVisible(true);
+         //   popup.getMenu().getItem(2).setVisible(true);
             popup.getMenu().getItem(3).setVisible(true);
         }
 
@@ -66,12 +67,13 @@ public class CommentItem {
                         commentableFragment.editComment(commentId, commentContent);
                         break;
                     case R.id.popupitem_delete:
+
                         MiddleMan.newRequest(new DeleteATComment(act, new CustomResponseHandler(){
                             @Override
                             public void onSuccessfulResponse() {
-                                MiddleMan.newRequest(new GetCommentSection(act, rh, Strings.Path.TASKS.toString(), (int)taskId));
+                                MiddleMan.newRequest(new GetCommentSection(act, rh, whereName.toString(), (int)typeId));
                             }
-                        }, Strings.Path.TASKS, (int)taskId, commentId));
+                        }, whereName, (int)typeId, commentId));
                         break;
                 }
                 popup.dismiss();

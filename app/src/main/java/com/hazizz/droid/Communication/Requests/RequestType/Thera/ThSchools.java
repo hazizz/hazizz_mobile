@@ -23,7 +23,7 @@ public class ThSchools extends Request {
 
         headerMap.put(HEADER_AUTH, getHeaderAuthToken());
 
-        call = tRequest.getSchools(headerMap);
+        call = tRequest.th_getSchools(headerMap);
     }
 
 

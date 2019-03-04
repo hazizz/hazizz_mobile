@@ -38,7 +38,7 @@ import com.hazizz.droid.Fragments.Options.MainOptionsFragment;
 import com.hazizz.droid.Fragments.Options.NotificationSettingsFragment;
 import com.hazizz.droid.Fragments.Options.PasswordFragment;
 import com.hazizz.droid.Fragments.TaskEditorFragment;
-import com.hazizz.droid.Fragments.ThéraFrags.Setup.ThChooseSchool;
+import com.hazizz.droid.Fragments.ThéraFrags.Setup.TheraLoginFragment;
 import com.hazizz.droid.Fragments.ViewAnnouncementFragment;
 import com.hazizz.droid.Fragments.ViewTaskFragment;
 
@@ -46,6 +46,32 @@ import javax.annotation.Nonnull;
 
 public class Transactor extends FragmentActivity {
     private static boolean backStack = true;
+
+    public static final String KEY_GROUPID = Strings.Path.GROUPID.toString();
+    public static final String KEY_SUBJECTID = Strings.Path.SUBJECTID.toString();
+    public static final String KEY_TASKID = Strings.Path.TASKID.toString();
+    public static final String KEY_ANNOUNCEMENTID = Strings.Path.ANNOUNCEMENTID.toString();
+    public static final String KEY_TYPEID = "typeId";
+    public static final String KEY_USERID = Strings.Path.USERID.toString();
+    public static final String KEY_RANK = "rank";
+    public static final String KEY_DATE = "date";
+    public static final String KEY_GROUPNAME = "groupName";
+    public static final String KEY_SUBJECTNAME = "subjectName";
+    public static final String KEY_TYPENAME = "typeName";
+    public static final String KEY_WHERE = "where";
+    public static final String KEY_TYPE = "type";
+    public static final String KEY_DEST = "dest";
+    public static final String KEY_MODE = "mode";
+    public static final String KEY_TITLE = "title";
+    public static final String KEY_DESCRIPTION = "description";
+
+    public static final String KEY_STARTINGTAB = "startingTab";
+    public static final String KEY_GOBACKTOMAIN = "goBackToMain";
+    public static final String KEY_CURRENTSUBJECTNAME = "currentSubjectName";
+    
+
+
+
 
     public static Fragment getCurrentFragment(FragmentManager fManager, boolean absolute){
         Fragment currentF = fManager.findFragmentById(R.id.fragment_container);
@@ -68,9 +94,9 @@ public class Transactor extends FragmentActivity {
 
     public static void fragmentDialogManageSubject(@Nonnull FragmentTransaction fTransaction, long groupId, long subjectId, String currentSubjectName){
         Bundle bundle = new Bundle();
-        bundle.putLong(Strings.Path.GROUPID.toString(), groupId);
-        bundle.putLong(Strings.Path.SUBJECTID.toString(), subjectId);
-        bundle.putString("currentSubjectName", currentSubjectName);
+        bundle.putLong(KEY_GROUPID, groupId);
+        bundle.putLong(KEY_SUBJECTID, subjectId);
+        bundle.putString(KEY_CURRENTSUBJECTNAME, currentSubjectName);
 
         DialogFragment dialogFragment = new ManageSubjectDialog();
         dialogFragment.setArguments(bundle);
@@ -80,9 +106,9 @@ public class Transactor extends FragmentActivity {
 
     public static void fragmentDialogShowUserDetailDialog(@Nonnull FragmentTransaction fTransaction, long userId, int userRank, String userProfilePic){
         Bundle bundle = new Bundle();
-        bundle.putLong(Strings.Path.USERID.toString(), userId);
+        bundle.putLong(KEY_USERID, userId);
         bundle.putString(Strings.Other.PROFILEPIC.toString(), userProfilePic);
-        bundle.putInt("rank", userRank);
+        bundle.putInt(KEY_RANK, userRank);
         DialogFragment dialogFragment = new UserDetailDialogFragment();
         dialogFragment.setArguments(bundle);
         dialogFragment.show(fTransaction, "dialog");
@@ -91,7 +117,7 @@ public class Transactor extends FragmentActivity {
 
     public static void fragmentDialogDateViewer(@Nonnull FragmentTransaction fTransaction, String date){
         Bundle bundle = new Bundle();
-        bundle.putString("date", date);
+        bundle.putString(KEY_DATE , date);
         DialogFragment dialogFragment = new DateViewerDialogFragment();
         dialogFragment.setArguments(bundle);
         dialogFragment.show(fTransaction, "dialog");
@@ -190,10 +216,10 @@ public class Transactor extends FragmentActivity {
 
 
         Bundle bundle = new Bundle();
-        bundle.putInt("dest", dest.getValue());
+        bundle.putInt(KEY_DEST, dest.getValue());
         bundle.putInt(Strings.Path.TASKID.toString(), taskId);
-        bundle.putBoolean("goBackToMain", goBackToMain);
-        bundle.putBoolean("mode", mode);
+        bundle.putBoolean(KEY_GOBACKTOMAIN, goBackToMain);
+        bundle.putBoolean(KEY_MODE, mode);
         ViewTaskFragment frag = new ViewTaskFragment();
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
@@ -205,8 +231,8 @@ public class Transactor extends FragmentActivity {
     public static void fragmentCreateMyTask(@Nonnull FragmentTransaction fTransaction){
         Bundle bundle = new Bundle();
         TaskEditorFragment frag = new TaskEditorFragment();
-        bundle.putShort("where", TaskEditorFragment.MYMODE);
-        bundle.putShort("type", TaskEditorFragment.CREATEMODE);
+        bundle.putShort(KEY_WHERE, TaskEditorFragment.MYMODE);
+        bundle.putShort(KEY_TYPE, TaskEditorFragment.CREATEMODE);
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }
@@ -216,8 +242,8 @@ public class Transactor extends FragmentActivity {
     public static void fragmentEditMyTask(@Nonnull FragmentTransaction fTransaction){
         Bundle bundle = new Bundle();
         TaskEditorFragment frag = new TaskEditorFragment();
-        bundle.putShort("where", TaskEditorFragment.MYMODE);
-        bundle.putShort("type", TaskEditorFragment.EDITMODE);
+        bundle.putShort(KEY_WHERE, TaskEditorFragment.MYMODE);
+        bundle.putShort(KEY_TYPE, TaskEditorFragment.EDITMODE);
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }
@@ -227,12 +253,12 @@ public class Transactor extends FragmentActivity {
     public static void fragmentCreateTask(@Nonnull FragmentTransaction fTransaction, int groupId, String groupName, Strings.Dest dest){
 
         Bundle bundle = new Bundle();
-        bundle.putInt("dest", dest.getValue());
+        bundle.putInt(KEY_DEST, dest.getValue());
       //  Manager.GroupManager.setGroupId(groupId);
         bundle.putInt(Strings.Path.GROUPID.toString(), groupId);
-        bundle.putString("groupName", groupName);
-        bundle.putShort("where", TaskEditorFragment.GROUPMODE);
-        bundle.putShort("type", TaskEditorFragment.CREATEMODE);
+        bundle.putString(KEY_GROUPNAME, groupName);
+        bundle.putShort(KEY_WHERE, TaskEditorFragment.GROUPMODE);
+        bundle.putShort(KEY_TYPE, TaskEditorFragment.CREATEMODE);
         TaskEditorFragment frag = new TaskEditorFragment();
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
@@ -243,7 +269,7 @@ public class Transactor extends FragmentActivity {
     public static void fragmentCreateTask(@Nonnull FragmentTransaction fTransaction, Strings.Dest dest){
       //  Manager.DestManager.setDest(dest);
         Bundle bundle = new Bundle();
-        bundle.putInt("dest", dest.getValue());
+        bundle.putInt(KEY_DEST, dest.getValue());
 
         TaskEditorFragment frag = new TaskEditorFragment();
         frag.setArguments(bundle);
@@ -256,21 +282,20 @@ public class Transactor extends FragmentActivity {
                                         int taskId, PojoType type, int taskSubjectId, String subjectName, String taskTitle,
                                         String taskDescription, String date, Strings.Dest dest){
         Bundle bundle = new Bundle();
-        bundle.putInt("dest", dest.getValue());
-        bundle.putShort("where", TaskEditorFragment.GROUPMODE);
-        bundle.putShort("where", TaskEditorFragment.GROUPMODE);
-        bundle.putShort("type", TaskEditorFragment.EDITMODE);
-        bundle.putInt("taskId", taskId);
+        bundle.putInt(KEY_DEST, dest.getValue());
+        bundle.putShort(KEY_WHERE, TaskEditorFragment.GROUPMODE);
+        bundle.putShort(KEY_TYPE, TaskEditorFragment.EDITMODE);
+        bundle.putInt(KEY_TASKID, taskId);
         bundle.putInt(Strings.Path.GROUPID.toString(), groupId);
-        bundle.putString("groupName", groupName);
-      //  bundle.putString("typeName", type.getName());
-        bundle.putLong("typeId", type.getId());
-        bundle.putString("typeName", type.getName());
-        bundle.putInt("subjectId", taskSubjectId);
-        bundle.putString("subjectName", subjectName);
-        bundle.putString("title", taskTitle);
-        bundle.putString("description", taskDescription);
-        bundle.putString("date", date);
+        bundle.putString(KEY_GROUPNAME, groupName);
+      //  bundle.putString(KEY_TYPENAME, type.getName());
+        bundle.putLong(KEY_TYPEID, type.getId());
+        bundle.putString(KEY_TYPENAME, type.getName());
+        bundle.putInt(KEY_SUBJECTID, taskSubjectId);
+        bundle.putString(KEY_SUBJECTNAME, subjectName);
+        bundle.putString(KEY_TITLE, taskTitle);
+        bundle.putString(KEY_DESCRIPTION, taskDescription);
+        bundle.putString(KEY_DATE, date);
         TaskEditorFragment frag = new TaskEditorFragment();
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);
@@ -282,7 +307,7 @@ public class Transactor extends FragmentActivity {
     public static void fragmentCreatorAT(@Nonnull FragmentTransaction fTransaction, GroupsFragment.Dest dest){
         Fragment frag = new GroupsFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt("dest", dest.getValue());
+        bundle.putInt(KEY_DEST, dest.getValue());
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);
         fTransaction.commit();
@@ -290,9 +315,9 @@ public class Transactor extends FragmentActivity {
 
     public static void fragmentCreateAnnouncement(@Nonnull FragmentTransaction fTransaction, int groupId, String groupName, Strings.Dest dest){
         Bundle bundle = new Bundle();
-        bundle.putInt("dest", dest.getValue());
+        bundle.putInt(KEY_DEST, dest.getValue());
         bundle.putInt(Strings.Path.GROUPID.toString(), groupId);
-        bundle.putString("groupName", groupName);
+        bundle.putString(KEY_GROUPNAME, groupName);
         AnnouncementEditorFragment frag = new AnnouncementEditorFragment();
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);
@@ -302,7 +327,7 @@ public class Transactor extends FragmentActivity {
     public static void fragmentCreateAnnouncement(@Nonnull FragmentTransaction fTransaction, Strings.Dest dest){
         AnnouncementEditorFragment frag = new AnnouncementEditorFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt("dest", dest.getValue());
+        bundle.putInt(KEY_DEST, dest.getValue());
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         fTransaction.commit();
@@ -311,12 +336,12 @@ public class Transactor extends FragmentActivity {
     public static void fragmentEditAnnouncement(@Nonnull FragmentTransaction fTransaction, int groupId, int announcementId, String groupName, String title, String description, Strings.Dest dest){
 
         Bundle bundle = new Bundle();
-        bundle.putInt("dest", dest.getValue());
-        bundle.putInt("announcementId", announcementId);
+        bundle.putInt(KEY_DEST, dest.getValue());
+        bundle.putInt(KEY_ANNOUNCEMENTID, announcementId);
         bundle.putInt(Strings.Path.GROUPID.toString(), groupId);
-        bundle.putString("groupName", groupName);
-        bundle.putString("title", title);
-        bundle.putString("description", description);
+        bundle.putString(KEY_GROUPNAME, groupName);
+        bundle.putString(KEY_TITLE, title);
+        bundle.putString(KEY_DESCRIPTION, description);
         AnnouncementEditorFragment frag = new AnnouncementEditorFragment();
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
@@ -330,9 +355,9 @@ public class Transactor extends FragmentActivity {
                                                  boolean goBackToMain, Strings.Dest dest){
 
         Bundle bundle = new Bundle();
-        bundle.putInt("dest", dest.getValue());
+        bundle.putInt(KEY_DEST, dest.getValue());
         bundle.putInt(Strings.Path.ANNOUNCEMENTID.toString(), announcementId);
-        bundle.putBoolean("goBackToMain", goBackToMain);
+        bundle.putBoolean(KEY_GOBACKTOMAIN, goBackToMain);
         ViewAnnouncementFragment frag = new ViewAnnouncementFragment();
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);
@@ -351,7 +376,7 @@ public class Transactor extends FragmentActivity {
         Bundle bundle = new Bundle();
         CreateSubjectFragment frag = new CreateSubjectFragment();
         bundle.putInt(Strings.Path.GROUPID.toString(), groupId);
-        bundle.putString("groupName", groupName);
+        bundle.putString(KEY_GROUPNAME, groupName);
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);
         if(backStack){ fTransaction.addToBackStack(null); }
@@ -390,8 +415,8 @@ public class Transactor extends FragmentActivity {
     public static void fragmentGroupTab(@Nonnull FragmentTransaction fTransaction, int groupId, String groupName, int startingTab){
         Bundle bundle = new Bundle();
         bundle.putInt(Strings.Path.GROUPID.toString(), groupId);
-        bundle.putString("groupName", groupName);
-        bundle.putInt("startingTab", startingTab);
+        bundle.putString(KEY_GROUPNAME, groupName);
+        bundle.putInt(KEY_STARTINGTAB, startingTab);
         GroupTabFragment frag = new GroupTabFragment();
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
@@ -401,7 +426,7 @@ public class Transactor extends FragmentActivity {
 
     public static void fragmentMainTab(@Nonnull FragmentTransaction fTransaction,int startingTab){
         Bundle bundle = new Bundle();
-        bundle.putInt("startingTab", startingTab);
+        bundle.putInt(KEY_STARTINGTAB, startingTab);
         MainTabFragment frag = new MainTabFragment();
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
@@ -448,7 +473,7 @@ public class Transactor extends FragmentActivity {
 
 
     public static void fragmentThSchool(@Nonnull FragmentTransaction fTransaction){
-        ThChooseSchool frag = new ThChooseSchool();
+        TheraLoginFragment frag = new TheraLoginFragment();
         fTransaction.replace(R.id.fragment_container, frag);
         if(backStack){fTransaction.addToBackStack(null);}
         fTransaction.commit();

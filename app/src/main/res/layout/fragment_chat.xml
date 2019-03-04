@@ -1,29 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/holo_blue_dark"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:background="@drawable/border_comment_box_back"
+    android:paddingLeft="2dp"
+    android:paddingTop="4dp"
+    android:visibility="visible"
 
-    <TextView
-        android:id="@+id/textView_info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Beszélgetés"
-        android:textSize="28sp" />
+    >
 
+        <EditText
 
-    <RelativeLayout
-        android:layout_height="match_parent"
-        android:layout_width="match_parent">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Chat Fragment"
-            android:layout_centerInParent="true"
+            android:id="@+id/editText_comment_body"
+            android:layout_width="287dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+
+            android:inputType="text"
+            android:maxLength="150"
+            android:maxLines="6"
+            android:visibility="visible"
+            android:paddingLeft="10dp"
+            android:background="@drawable/border_comment_box"
+            android:hint="@string/write_comment"
             />
-    </RelativeLayout>
+
+        <ImageButton
+            android:visibility="visible"
+            android:id="@+id/button_send_comment"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="54dp"
+            android:layout_height="wrap_content"
+            android:padding="0dp"
+            app:srcCompat="@drawable/ic_send"
+
+            />
 
 
 

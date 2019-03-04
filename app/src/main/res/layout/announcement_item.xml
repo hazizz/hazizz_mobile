@@ -10,7 +10,7 @@
     >
 
     <TextView
-        android:id="@+id/announcement_title"
+        android:id="@+id/textView_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
@@ -24,7 +24,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/announcement_description"
+        android:id="@+id/textView_url"
         android:layout_width="196dp"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
@@ -39,7 +39,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.046"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/announcement_title" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_id" />
 
 
     <RelativeLayout
@@ -49,7 +49,7 @@
         android:layout_marginLeft="2dp"
         android:layout_marginStart="2dp"
         android:layout_marginTop="16dp"
-        app:layout_constraintStart_toEndOf="@+id/announcement_description"
+        app:layout_constraintStart_toEndOf="@+id/textView_url"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView

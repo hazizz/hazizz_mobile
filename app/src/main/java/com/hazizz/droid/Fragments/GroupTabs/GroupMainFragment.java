@@ -118,20 +118,11 @@ public class GroupMainFragment extends GroupFragment {
                     textView_noContent.setVisibility(v.INVISIBLE);
                     int lastDaysLeft = -1;//D8.textToDate(sorted.get(0).getDueDate()).daysLeft();
                     for (POJOgetTask t : sorted) {
-                        int daysLeft = D8.textToDate(t.getDueDate()).daysLeft();
+                        String date = t.getDueDate();
+                        int daysLeft = D8.textToDate(date).daysLeft();
 
                         if(daysLeft > lastDaysLeft) {
-                            String title;
-                            String deadline = D8.textToDate(t.getDueDate()).getMainFormat();
-                            if(daysLeft == 0){
-                                title = getResources().getString(R.string.today);
-                            }else if(daysLeft == 1){
-                                title = getResources().getString(R.string.tomorrow);
-                            }
-                            else {
-                                title = daysLeft + " " + getResources().getString(R.string.days)+ " " + getResources().getString(R.string.later);
-                            }
-                            itemList.add(new HeaderItem(title, deadline));
+                            itemList.add(new HeaderItem(date));
                             lastDaysLeft = daysLeft;
                         }
                         Log.e("hey",  "id task: " + t.getDueDate());

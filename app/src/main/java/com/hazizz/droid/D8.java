@@ -65,7 +65,12 @@ public class D8 {
     static LocalDate today = LocalDate.now();
 
     static LocalDate tomorrow = today.plusDays(1);
-    public static DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyy-MM-dd");
+    public static DateTimeFormatter dtf_date = DateTimeFormat.forPattern("yyyy-MM-dd");
+
+    public static DateTimeFormatter dtf_time = DateTimeFormat.forPattern("yyyy-MM-dd'T'hh:mm:ss'S'");
+
+
+
 
 
     public static Date textToDate(String text){
@@ -96,7 +101,7 @@ public class D8 {
 
         ArrayList<DateTime> dates = new ArrayList<>();
         for (int i = 0; i <= data.size() - 1; i++) {
-            dates.add(D8.dtf.parseDateTime(data.get(i).getDueDate()));
+            dates.add(D8.dtf_date.parseDateTime(data.get(i).getDueDate()));
         }
         Collections.sort(data, (POJOgetTask a1, POJOgetTask a2) -> a1.getDueDate().compareTo(a2.getDueDate()));
         return data;
@@ -105,7 +110,7 @@ public class D8 {
     public static ArrayList<POJOgetTask> sortCommentsByDate(ArrayList<POJOgetTask> data) {
         ArrayList<DateTime> dates = new ArrayList<>();
         for (int i = 0; i <= data.size() - 1; i++) {
-            dates.add(D8.dtf.parseDateTime(data.get(i).getDueDate()));
+            dates.add(D8.dtf_time.parseDateTime(data.get(i).getDueDate()));
             Log.e("hey", "dates: " + data.get(i).getDueDate());
         }
         Collections.sort(data, (POJOgetTask a1, POJOgetTask a2) -> a1.getDueDate().compareTo(a2.getDueDate()));

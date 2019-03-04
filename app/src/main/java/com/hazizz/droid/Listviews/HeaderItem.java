@@ -4,11 +4,9 @@ import lombok.Data;
 
 @Data
 public class HeaderItem {
-    String title;
-    String deadline;
+    String date;
 
-    public HeaderItem(String title, String deadline){
-        this.title = title;
-        this.deadline = deadline;
+    public HeaderItem(String date){
+        this.date = date;
     }
 }

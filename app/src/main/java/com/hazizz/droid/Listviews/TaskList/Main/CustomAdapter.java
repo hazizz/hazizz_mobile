@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.hazizz.droid.D8;
 import com.hazizz.droid.Listviews.HeaderHolder;
 import com.hazizz.droid.Listviews.HeaderItem;
 import com.hazizz.droid.Listviews.TaskList.TaskItem;
@@ -98,9 +99,23 @@ public class CustomAdapter extends BaseAdapter{
             }
         }
         else if(headerHolder != null){
-            HeaderItem headerItem = (HeaderItem) data.get(position);
-            headerHolder.title.setText(headerItem.getTitle());
-            headerHolder.deadline.setText(headerItem.getDeadline());
+            String date = ((HeaderItem) data.get(position)).getDate();
+
+            int daysLeft = D8.textToDate(date).daysLeft();
+            String deadline = D8.textToDate(date).getMainFormat();
+
+            String title;
+            if(daysLeft == 0){
+                title = context.getResources().getString(R.string.today);
+            }else if(daysLeft == 1){
+                title = context.getResources().getString(R.string.tomorrow);
+            } else {
+                title = context.getResources().getString(R.string.header_item_in) + " " + daysLeft + " " + context.getResources().getString(R.string.header_item_day) + " " + context.getResources().getString(R.string.header_item_later);
+            }
+
+            headerHolder.title.setText(title);
+
+            headerHolder.deadline.setText(deadline);
         }
         return convertView;
     }

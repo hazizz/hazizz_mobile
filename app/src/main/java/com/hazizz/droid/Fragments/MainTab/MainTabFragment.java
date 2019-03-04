@@ -46,7 +46,7 @@ public class MainTabFragment extends Fragment{
 
 
         getActivity().setTitle(R.string.app_name);
-        startingTab = getArguments().getInt("startingTab");
+        startingTab = getArguments().getInt(Transactor.KEY_STARTINGTAB);
 
         //   ((MainActivity)getActivity()).onFragmentCreated();
 

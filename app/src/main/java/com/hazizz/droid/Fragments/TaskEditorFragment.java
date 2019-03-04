@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -236,27 +237,27 @@ public class TaskEditorFragment extends ParentFragment {//implements AdapterView
         groupId = Manager.GroupManager.getGroupId();//getArguments().getInt(Strings.Path.GROUPID.toString());
 
         if(getArguments() != null) {
-            groupName = getArguments().getString("groupName");
-            taskId = getArguments().getInt("taskId");
+            groupName = getArguments().getString(Transactor.KEY_GROUPNAME);
+            taskId = getArguments().getInt(Transactor.KEY_TASKID);
 
-            where = getArguments().getShort("where");
-            type = getArguments().getShort("type");
-            groupId = getArguments().getInt(Strings.Path.GROUPID.toString());
-            groupName = getArguments().getString("groupName");
+            where = getArguments().getShort(Transactor.KEY_WHERE);
+            type = getArguments().getShort(Transactor.KEY_TYPE);
+            groupId = getArguments().getInt(Transactor.KEY_GROUPID);
+            groupName = getArguments().getString(Transactor.KEY_GROUPNAME);
             textView_group.setText(groupName);
 
-            dest = getArguments().getInt("dest");
+            dest = getArguments().getInt(Transactor.KEY_DEST);
 
         }
         if( type == EDITMODE ){//taskId != 0 || typeName != null) {
-            subject = getArguments().getInt("subjectId");
-            date = getArguments().getString("date");
+            subject = getArguments().getInt(Transactor.KEY_SUBJECTID);
+            date = getArguments().getString(Transactor.KEY_DATE);
             textView_deadline.setText(D8.textToDate(date).getMainFormat());
-            editText_taskTitle.setText(getArguments().getString("title"));
-            editText_description.setText(getArguments().getString("description"));
-            typeId = getArguments().getLong("typeId");
-            textView_subject.setText(getArguments().getString("subjectName"));
-            textView_group.setText(getArguments().getString("groupName"));
+            editText_taskTitle.setText(getArguments().getString(Transactor.KEY_TITLE));
+            editText_description.setText(getArguments().getString(Transactor.KEY_DESCRIPTION));
+            typeId = getArguments().getLong(Transactor.KEY_TYPEID);
+            textView_subject.setText(getArguments().getString(Transactor.KEY_SUBJECTNAME));
+            textView_group.setText(getArguments().getString(Transactor.KEY_GROUPNAME));
 
             spinner_group.setVisibility(View.INVISIBLE);
             spinner_subject.setVisibility(View.INVISIBLE);
@@ -379,7 +380,22 @@ public class TaskEditorFragment extends ParentFragment {//implements AdapterView
             }
         }, Integer.parseInt(D8.getYear()), Integer.parseInt(D8.getMonth()) -2, Integer.parseInt(D8.getDay()));
         //dpd.getDatePicker().setMaxDate(Calendar.getInstance().getTimeInMillis() - 1000);
-        dpd.getDatePicker().setMinDate(Calendar.getInstance().getTimeInMillis() - 1000);
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(Calendar.getInstance().getTime().getTime());
+
+        long now = cal.getTimeInMillis() - 1000;
+
+        dpd.getDatePicker().setMinDate(now);
+
+       // Calendar.getInstance().getTime() + Calendar.getInstance().yea
+        cal.add(Calendar.YEAR, 1);
+        long oneYearLater = cal.getTimeInMillis();
+
+        dpd.getDatePicker().setMaxDate(oneYearLater);
+        //1551719814281
+
+        Log.e("hey", "now in millisec" + (Calendar.getInstance().getTimeInMillis() - 1000));
 
 
 
