@@ -399,7 +399,7 @@ public class MainActivity extends AppCompatActivity
                 Transactor.fragmentMyTasks(getSupportFragmentManager().beginTransaction());
                 break;
             case R.id.nav_thera:
-                Transactor.fragmentThSchool(getSupportFragmentManager().beginTransaction());
+                Transactor.fragmentThUsers(getSupportFragmentManager().beginTransaction());
                 break;
             case R.id.nav_settings:
                 Transactor.fragmentOptions(getSupportFragmentManager().beginTransaction());

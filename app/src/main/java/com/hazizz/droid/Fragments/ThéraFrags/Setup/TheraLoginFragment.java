@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
+import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.Requests.RequestType.Thera.ThCreateSession.PojoSession;
 import com.hazizz.droid.Communication.Requests.RequestType.Thera.ThCreateSession.ThCreateSession;
 import com.hazizz.droid.Communication.Requests.RequestType.Thera.ThSchools;
@@ -20,6 +21,7 @@ import com.hazizz.droid.CustomSearchableSpinner;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
 import com.hazizz.droid.R;
+import com.hazizz.droid.Transactor;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -65,12 +67,23 @@ public class TheraLoginFragment extends ParentFragment {
             PojoSession session = (PojoSession)response;
 
             if(session.getStatus() == "ACTIVE"){
-
+                Transactor.fragmentThUsers(getFragmentManager().beginTransaction());
             }
+            Transactor.fragmentThUsers(getFragmentManager().beginTransaction());
+        }
 
+        @Override
+        public void onSuccessfulResponse() {
+            Transactor.fragmentThUsers(getFragmentManager().beginTransaction());
+        }
+
+        @Override
+        public void onErrorResponse(POJOerror error) {
+            if(error.getErrorCode() == 113){
+                // wong user or pass
+            }
         }
     };
-
 
     @Nullable
     @Override

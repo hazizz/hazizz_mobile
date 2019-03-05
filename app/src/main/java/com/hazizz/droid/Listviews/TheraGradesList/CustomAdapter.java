@@ -1,4 +1,4 @@
-package com.hazizz.droid.Listviews.TheraUserList;
+package com.hazizz.droid.Listviews.TheraGradesList;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,14 +14,14 @@ import com.hazizz.droid.R;
 
 import java.util.List;
 
-public class CustomAdapter extends ArrayAdapter<TheraUserItem> {
+public class CustomAdapter extends ArrayAdapter<TheraGradesItem> {
 
     int picID;
     Context context;
-    List<TheraUserItem> data = null;
+    List<TheraGradesItem> data = null;
 
 
-    public CustomAdapter(@NonNull Context context, int resource, @NonNull List<TheraUserItem> objects) {
+    public CustomAdapter(@NonNull Context context, int resource, @NonNull List<TheraGradesItem> objects) {
         super(context, resource, objects);
 
         this.picID = resource;
@@ -30,9 +30,10 @@ public class CustomAdapter extends ArrayAdapter<TheraUserItem> {
     }
 
     static class DataHolder{
-        TextView textView_id;
-        TextView textView_status;
-        TextView textView_url;
+        TextView textView_grade_number;
+        TextView textView_date;
+        TextView textView_theme;
+        TextView textView_weight;
     }
     @NonNull
     @Override
@@ -45,20 +46,22 @@ public class CustomAdapter extends ArrayAdapter<TheraUserItem> {
             convertView = inflater.inflate(picID, parent, false);
 
             holder = new DataHolder();
-            holder.textView_id = convertView.findViewById(R.id.textView_grade_number);
-            holder.textView_status = convertView.findViewById(R.id.textView_status);
-            holder.textView_url = convertView.findViewById(R.id.textView_theme);
+            holder.textView_grade_number = convertView.findViewById(R.id.textView_grade_number);
+            holder.textView_date = convertView.findViewById(R.id.textView_date);
+            holder.textView_theme = convertView.findViewById(R.id.textView_theme);
+            holder.textView_weight = convertView.findViewById(R.id.textView_weight);
 
             convertView.setTag(holder);
         }else{
             holder = (DataHolder)convertView.getTag();
         }
 
-        TheraUserItem th_userItem = data.get(position);
+        TheraGradesItem th_gradeItem = data.get(position);
 
-        holder.textView_id.setText("" + th_userItem.getId());
-        holder.textView_url.setText(th_userItem.getUrl());
-        holder.textView_status.setText(th_userItem.getStatus());
+        holder.textView_grade_number.setText(Integer.toString(th_gradeItem.getNumberValue()));
+        holder.textView_date.setText("" + th_gradeItem.getDate());
+        holder.textView_theme.setText(th_gradeItem.getTheme());
+        holder.textView_weight.setText(th_gradeItem.getWeight());
 
 
 

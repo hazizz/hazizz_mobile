@@ -464,6 +464,14 @@ public interface RequestTypes{
     );
 
 
+    @GET("kreta/sessions/{sessionId}/grades")
+    Call<ResponseBody> th_returnGrades(
+            @Path("sessionId") String sessionId,
+            @HeaderMap Map<String, String> headers
+    );
+
+
+
 
 
 }
