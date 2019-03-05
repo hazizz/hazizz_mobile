@@ -174,8 +174,15 @@ public class SharedPrefs {
 
     }
 
-    public static class DestManager{
+    public static class ThSessionManager{
+        private static final String fileName = "th_session";
+        public static int getSessionId(Context context){
+            return SharedPrefs.getInt(context, fileName, "sessionId");
+        }
 
+        public static void setSessionId(Context context, int sessionId){
+            SharedPrefs.save(context, fileName, "sessionId", sessionId);
+        }
     }
 
 

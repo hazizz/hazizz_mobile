@@ -15,14 +15,13 @@ import android.widget.TextView;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
-import com.hazizz.droid.Communication.Requests.RequestType.Thera.ThCreateSession.PojoSession;
-import com.hazizz.droid.Communication.Requests.RequestType.Thera.ThReturnSessions.ThReturnSessions;
+import com.hazizz.droid.Communication.Requests.RequestType.Thera.ThReturnGrades.PojoGrade;
+import com.hazizz.droid.Communication.Requests.RequestType.Thera.ThReturnGrades.ThReturnGrades;
 import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
-import com.hazizz.droid.Listviews.TheraUserList.CustomAdapter;
-import com.hazizz.droid.Listviews.TheraUserList.TheraUserItem;
+import com.hazizz.droid.Listviews.TheraGradesList.TheraGradesItem;
+import com.hazizz.droid.Listviews.TheraGradesList.CustomAdapter;
 import com.hazizz.droid.R;
 import com.hazizz.droid.SharedPrefs;
-import com.hazizz.droid.Transactor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,13 +29,12 @@ import java.util.List;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
-public class TheraUsersFragment  extends ParentFragment {
+public class TheraGradesFragment  extends ParentFragment {
 
     private CustomAdapter adapter;
-    private List<TheraUserItem> listUsers;
+    private List<TheraGradesItem> listGrades;
 
     private Button button_add;
-
 
 
     private TextView textView_noContent;
@@ -45,23 +43,23 @@ public class TheraUsersFragment  extends ParentFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.fragment_th_users, container, false);
-        Log.e("hey", "TheraUsersFragment fragment created");
+        v = inflater.inflate(R.layout.fragment_th_grades, container, false);
+        Log.e("hey", "TheraGradesFragment fragment created");
 
         fragmentSetup(R.string.title_thera_users);
 
 
         textView_noContent = v.findViewById(R.id.textView_noContent);
-             //  ((MainActivity)getActivity()).setGroupName(groupName);
+        //  ((MainActivity)getActivity()).setGroupName(groupName);
         createViewList();
-        getUsers();
+        getGrades();
 
         return v;
     }
     void createViewList(){
-        listUsers = new ArrayList<>();
+        listGrades = new ArrayList<>();
         ListView listView = (ListView)v.findViewById(R.id.listView_grades);
-        adapter = new CustomAdapter(getActivity(), R.layout.th_users_item, listUsers);
+        adapter = new CustomAdapter(getActivity(), R.layout.th_grades_item, listGrades);
         listView.setAdapter(adapter);
 
 
@@ -71,12 +69,12 @@ public class TheraUsersFragment  extends ParentFragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 // groupName = ((AnnouncementItem)listView.getItemAtPosition(i)).getGroup().getName();
-                SharedPrefs.ThSessionManager.setSessionId(getContext(), (int)adapter.getItem(i).getId());
-                Transactor.fragmentThMain(getFragmentManager().beginTransaction());
+              //  Transactor.fragmentThMain(getFragmentManager().beginTransaction());
 
             }
         });
 
+        /*
         button_add = v.findViewById(R.id.button_add);
         button_add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,20 +82,21 @@ public class TheraUsersFragment  extends ParentFragment {
                 Transactor.fragmentThSchool(getFragmentManager().beginTransaction());
             }
         });
+        */
 
     }
-    private void getUsers(){
+    private void getGrades(){
         CustomResponseHandler responseHandler = new CustomResponseHandler() {
             @Override
             public void onPOJOResponse(Object response) {
                 adapter.clear();
-                ArrayList<PojoSession> pojoList = (ArrayList<PojoSession>) response;
+                ArrayList<PojoGrade> pojoList = (ArrayList<PojoGrade>) response;
                 if(pojoList.isEmpty()){
                     textView_noContent.setVisibility(v.VISIBLE);
                 }else {
                     textView_noContent.setVisibility(v.INVISIBLE);
-                    for (PojoSession t : pojoList) {
-                        listUsers.add(new TheraUserItem(t.getId(), t.getStatus(), t.getUrl()));
+                    for (PojoGrade t : pojoList) {
+                        listGrades.add(new TheraGradesItem(t.getDate(), t.getWeight(), t.getTheme(), t.getNumberValue()));
                         adapter.notifyDataSetChanged();
                     }
                 }
@@ -117,9 +116,9 @@ public class TheraUsersFragment  extends ParentFragment {
             public void onNoConnection() {
                 textView_noContent.setText(R.string.info_noInternetAccess);
                 textView_noContent.setVisibility(View.VISIBLE);
-             //   sRefreshLayout.setRefreshing(false);
+                //   sRefreshLayout.setRefreshing(false);
             }
         };
-        MiddleMan.newRequest(new ThReturnSessions(getActivity(),responseHandler));
+        MiddleMan.newRequest(new ThReturnGrades(getActivity(),responseHandler, SharedPrefs.ThSessionManager.getSessionId(getContext())));
     }
 }

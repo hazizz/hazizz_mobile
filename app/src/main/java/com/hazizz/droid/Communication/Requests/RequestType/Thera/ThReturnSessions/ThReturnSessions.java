@@ -5,11 +5,13 @@ import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
+import com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
 import com.hazizz.droid.Communication.Requests.Request;
 import com.hazizz.droid.Communication.Requests.RequestType.Thera.ThCreateSession.PojoSession;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -27,8 +29,8 @@ public class ThReturnSessions extends Request {
 
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
-        Type listType = new TypeToken<PojoSession>(){}.getType();
-        ArrayList<PojoSession> castedList = gson.fromJson(response.body().charStream(), listType);
+        Type listType = new TypeToken<ArrayList<PojoSession>>(){}.getType();
+        List<PojoSession> castedList = gson.fromJson(response.body().charStream(), listType);
 
         cOnResponse.onPOJOResponse(castedList);
     }

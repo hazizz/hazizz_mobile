@@ -38,7 +38,9 @@ import com.hazizz.droid.Fragments.Options.MainOptionsFragment;
 import com.hazizz.droid.Fragments.Options.NotificationSettingsFragment;
 import com.hazizz.droid.Fragments.Options.PasswordFragment;
 import com.hazizz.droid.Fragments.TaskEditorFragment;
+import com.hazizz.droid.Fragments.ThéraFrags.Setup.TheraGradesFragment;
 import com.hazizz.droid.Fragments.ThéraFrags.Setup.TheraLoginFragment;
+import com.hazizz.droid.Fragments.ThéraFrags.Setup.TheraUsersFragment;
 import com.hazizz.droid.Fragments.ViewAnnouncementFragment;
 import com.hazizz.droid.Fragments.ViewTaskFragment;
 
@@ -474,6 +476,40 @@ public class Transactor extends FragmentActivity {
 
     public static void fragmentThSchool(@Nonnull FragmentTransaction fTransaction){
         TheraLoginFragment frag = new TheraLoginFragment();
+        fTransaction.replace(R.id.fragment_container, frag);
+        if(backStack){fTransaction.addToBackStack(null);}
+        fTransaction.commit();
+    }
+
+    public static void fragmentThUsers(@Nonnull FragmentTransaction fTransaction){
+        TheraUsersFragment frag = new TheraUsersFragment();
+        fTransaction.replace(R.id.fragment_container, frag);
+        if(backStack){fTransaction.addToBackStack(null);}
+        fTransaction.commit();
+    }
+
+    public static void fragmentThMain(@Nonnull FragmentTransaction fTransaction){
+      /*  TheraLoginFragment frag = new TheraLoginFragment();
+        fTransaction.replace(R.id.fragment_container, frag);
+        if(backStack){fTransaction.addToBackStack(null);}
+        fTransaction.commit();
+
+        */
+        fragmentThGrades(fTransaction);
+
+    }
+
+    /*
+    public static void fragmentThSchedules(@Nonnull FragmentTransaction fTransaction){
+        TheraSchedulesFragment frag = new TheraSchedulesFragment();
+        fTransaction.replace(R.id.fragment_container, frag);
+        if(backStack){fTransaction.addToBackStack(null);}
+        fTransaction.commit();
+    }
+    */
+
+    public static void fragmentThGrades(@Nonnull FragmentTransaction fTransaction){
+        TheraGradesFragment frag = new TheraGradesFragment();
         fTransaction.replace(R.id.fragment_container, frag);
         if(backStack){fTransaction.addToBackStack(null);}
         fTransaction.commit();

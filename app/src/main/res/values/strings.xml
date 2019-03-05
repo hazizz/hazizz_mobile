@@ -267,4 +267,6 @@
        <string name="title_thera_users">Théra felhasználók</string>
        <string name="title_thera_login">Théra bejelentkezés</string>
 
+       <string name="thera_grades">Théra jegyek</string>
+
 </resources>
