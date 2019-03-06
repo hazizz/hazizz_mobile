@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
 import com.hazizz.droid.Communication.Requests.Request;
 import com.hazizz.droid.Communication.Requests.RequestType.Thera.ThCreateSession.PojoSession;
 

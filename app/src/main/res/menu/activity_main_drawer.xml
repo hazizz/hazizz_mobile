@@ -18,9 +18,9 @@
             android:icon="@drawable/ic_person_black"
             android:title="@string/my_tasks" />
         <item
-            android:visible="false"
+            android:visible="true"
             android:id="@+id/nav_thera"
-            android:icon="@drawable/ic_create_black"
+            android:icon="@drawable/ic_thera_black"
             android:title="@string/thera" />
         <item
             android:id="@+id/nav_settings"

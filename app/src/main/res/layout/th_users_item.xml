@@ -10,7 +10,7 @@
     >
 
     <TextView
-        android:id="@+id/textView_grade_number"
+        android:id="@+id/textView_subjectName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
@@ -24,7 +24,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView_theme"
+        android:id="@+id/textView_start"
         android:layout_width="196dp"
         android:layout_height="29dp"
         android:layout_margin="5dp"
@@ -39,7 +39,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.046"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_grade_number" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_subjectName" />
 
     <TextView
         android:id="@+id/textView_status"

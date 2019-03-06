@@ -35,8 +35,6 @@
       <item>Wednesday</item>
       <item>Thursday</item>
       <item>Friday</item>
-      <item>Saturday</item>
-      <item>Sunday</item>
     </string-array>
 
     <string-array name="taskTypes">
@@ -118,6 +116,7 @@
     <string name="password">Password</string>
     <string name="email">Email</string>
     <string name="autologin">Automatic login</string>
+    <string name="login_remember">Remember user</string>
     <string name="comments">Comments</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
@@ -134,6 +133,9 @@
     <string name="yes">Yes</string>
     <string name="choose_group">Choose group</string>
     <string name="write_comment">Write a comment!</string>
+    <string name="schedules">Schedules</string>
+    <string name="grades">Grades</string>
+
 
     <string name="add_user">Add user</string>
 
@@ -275,11 +277,12 @@
     <string name="crop_image_menu_flip_vertically">Flip vertically</string>
 
 
-
+    <string name="title_thera">Thera</string>
     <string name="title_thera_users">Thera users</string>
     <string name="title_thera_login">Thera login</string>
 
     <string name="thera_grades">Thera grades</string>
+    <string name="thera_schedules">Thera schedules</string>
 
 
   </resources>

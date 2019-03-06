@@ -68,10 +68,6 @@ public class ChooseGroupFragment extends Fragment{
                 adapter.notifyDataSetChanged();
             }
 
-            @Override
-            public void onEmptyResponse() {
-                textView_noContent.setVisibility(v.VISIBLE);
-            }
         };
         MiddleMan.newRequest(new GetGroupsFromMe(getActivity(), responseHandler));
     }

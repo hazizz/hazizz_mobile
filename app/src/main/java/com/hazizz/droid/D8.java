@@ -92,6 +92,14 @@ public class D8 {
         return Integer.toString(LocalDate.now().getYear());
     }
 
+    public static String getWeek(){
+        return Integer.toString(LocalDate.now().getWeekOfWeekyear());
+    }
+
+    public static int getDayOfWeek(){
+        return LocalDate.now().getDayOfWeek();
+    }
+
     public static String getTimeInMillis (){
         return Integer.toString(LocalDate.now().getYear());
     }

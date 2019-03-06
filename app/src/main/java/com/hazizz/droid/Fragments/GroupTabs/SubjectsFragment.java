@@ -112,10 +112,6 @@ public class SubjectsFragment extends GroupFragment {
                 sRefreshLayout.setRefreshing(false);
             }
             @Override
-            public void onEmptyResponse() {
-                sRefreshLayout.setRefreshing(false);
-            }
-            @Override
             public void onNoConnection() {
                 textView_noContent.setText(R.string.info_noInternetAccess);
                 textView_noContent.setVisibility(View.VISIBLE);
@@ -149,10 +145,6 @@ public class SubjectsFragment extends GroupFragment {
             }
             @Override
             public void onErrorResponse(POJOerror error) {
-                sRefreshLayout.setRefreshing(false);
-            }
-            @Override
-            public void onEmptyResponse() {
                 sRefreshLayout.setRefreshing(false);
             }
             @Override

@@ -121,10 +121,6 @@ public class GroupAnnouncementFragment extends GroupFragment {
                 sRefreshLayout.setRefreshing(false);
             }
             @Override
-            public void onEmptyResponse() {
-                sRefreshLayout.setRefreshing(false);
-            }
-            @Override
             public void onNoConnection() {
                 textView_noContent.setText(R.string.info_noInternetAccess);
                 textView_noContent.setVisibility(View.VISIBLE);

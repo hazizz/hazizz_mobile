@@ -109,10 +109,7 @@ public class MainAnnouncementFragment extends Fragment{
             public void onErrorResponse(POJOerror error) {
                 sRefreshLayout.setRefreshing(false);
             }
-            @Override
-            public void onEmptyResponse() {
-                sRefreshLayout.setRefreshing(false);
-            }
+
             @Override
             public void onNoConnection() {
                 textView_noContent.setText(R.string.info_noInternetAccess);
