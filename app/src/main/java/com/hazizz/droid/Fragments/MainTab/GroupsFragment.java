@@ -118,11 +118,6 @@ public class GroupsFragment extends ParentFragment {
                 sRefreshLayout.setRefreshing(false);
             }
             @Override
-            public void onEmptyResponse() {
-                textView_noContent.setVisibility(View.VISIBLE);
-                sRefreshLayout.setRefreshing(false);
-            }
-            @Override
             public void onNoConnection() {
                 textView_noContent.setText(R.string.info_noInternetAccess);
                 textView_noContent.setVisibility(View.VISIBLE);

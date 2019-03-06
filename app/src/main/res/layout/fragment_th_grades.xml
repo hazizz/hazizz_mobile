@@ -13,7 +13,7 @@
 
 
     <ListView
-        android:id="@+id/listView_grades"
+        android:id="@+id/listView_classes"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_alignParentBottom="true"

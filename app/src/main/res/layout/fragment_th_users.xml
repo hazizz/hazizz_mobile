@@ -13,7 +13,7 @@
 
 
     <ListView
-        android:id="@+id/listView_grades"
+        android:id="@+id/listView_classes"
         android:layout_width="match_parent"
         android:layout_height="356dp"
         android:layout_alignParentBottom="true"
@@ -47,7 +47,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/listView_grades" />
+        app:layout_constraintTop_toBottomOf="@+id/listView_classes" />
 
     <TextView
         android:id="@+id/textView_noContent"

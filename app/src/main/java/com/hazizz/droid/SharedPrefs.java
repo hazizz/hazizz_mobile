@@ -185,5 +185,30 @@ public class SharedPrefs {
         }
     }
 
+    public static class ThLoginData{
+        private static final String fileName = "th_login";
+        public static void setData(Context context, String username, String password, String school){
+            SharedPrefs.save(context, fileName, "username", username);
+            SharedPrefs.save(context, fileName, "password", password);
+            SharedPrefs.save(context, fileName, "school", school);
+        }
+
+        public static void resetData(Context context){
+            SharedPrefs.save(context, fileName, "username", "");
+            SharedPrefs.save(context, fileName, "password", "");
+            SharedPrefs.save(context, fileName, "school", "");
+        }
+
+        public static String getUsername(Context context){
+            return SharedPrefs.getString(context, fileName, "username");
+        }
+        public static String getPassword(Context context){
+            return SharedPrefs.getString(context, fileName, "password");
+        }
+        public static String getSchool(Context context){
+            return SharedPrefs.getString(context, fileName, "school");
+        }
+    }
+
 
 }

@@ -59,10 +59,6 @@ public class AddToGroupFragment extends Fragment {
         }
 
 
-        @Override
-        public void onEmptyResponse() {
-
-        }
 
         @Override
         public void onSuccessfulResponse() {

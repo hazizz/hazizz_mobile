@@ -471,6 +471,15 @@ public interface RequestTypes{
     );
 
 
+    @GET("kreta/sessions/{sessionId}/schedule")
+    Call<ResponseBody> th_returnSchedules(
+            @Path("sessionId") String sessionId,
+            @Query("weekNumber") String weekNumber,
+            @Query("year") String year,
+            @HeaderMap Map<String, String> headers
+    );
+
+
 
 
 

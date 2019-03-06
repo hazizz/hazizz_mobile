@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -34,11 +33,7 @@ public class TheraGradesFragment  extends ParentFragment {
     private CustomAdapter adapter;
     private List<TheraGradesItem> listGrades;
 
-    private Button button_add;
-
-
     private TextView textView_noContent;
-
 
     @Nullable
     @Override
@@ -46,11 +41,10 @@ public class TheraGradesFragment  extends ParentFragment {
         v = inflater.inflate(R.layout.fragment_th_grades, container, false);
         Log.e("hey", "TheraGradesFragment fragment created");
 
-        fragmentSetup(R.string.title_thera_users);
+        fragmentSetup(R.string.thera_grades);
 
 
         textView_noContent = v.findViewById(R.id.textView_noContent);
-        //  ((MainActivity)getActivity()).setGroupName(groupName);
         createViewList();
         getGrades();
 
@@ -58,7 +52,7 @@ public class TheraGradesFragment  extends ParentFragment {
     }
     void createViewList(){
         listGrades = new ArrayList<>();
-        ListView listView = (ListView)v.findViewById(R.id.listView_grades);
+        ListView listView = (ListView)v.findViewById(R.id.listView_classes);
         adapter = new CustomAdapter(getActivity(), R.layout.th_grades_item, listGrades);
         listView.setAdapter(adapter);
 
@@ -70,19 +64,8 @@ public class TheraGradesFragment  extends ParentFragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 // groupName = ((AnnouncementItem)listView.getItemAtPosition(i)).getGroup().getName();
               //  Transactor.fragmentThMain(getFragmentManager().beginTransaction());
-
             }
         });
-
-        /*
-        button_add = v.findViewById(R.id.button_add);
-        button_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Transactor.fragmentThSchool(getFragmentManager().beginTransaction());
-            }
-        });
-        */
 
     }
     private void getGrades(){
@@ -108,9 +91,6 @@ public class TheraGradesFragment  extends ParentFragment {
             @Override
             public void onErrorResponse(POJOerror error) {
 
-            }
-            @Override
-            public void onEmptyResponse() {
             }
             @Override
             public void onNoConnection() {

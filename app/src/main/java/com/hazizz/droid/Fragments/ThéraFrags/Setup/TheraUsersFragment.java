@@ -60,7 +60,7 @@ public class TheraUsersFragment  extends ParentFragment {
     }
     void createViewList(){
         listUsers = new ArrayList<>();
-        ListView listView = (ListView)v.findViewById(R.id.listView_grades);
+        ListView listView = (ListView)v.findViewById(R.id.listView_classes);
         adapter = new CustomAdapter(getActivity(), R.layout.th_users_item, listUsers);
         listView.setAdapter(adapter);
 
@@ -97,8 +97,10 @@ public class TheraUsersFragment  extends ParentFragment {
                 }else {
                     textView_noContent.setVisibility(v.INVISIBLE);
                     for (PojoSession t : pojoList) {
-                        listUsers.add(new TheraUserItem(t.getId(), t.getStatus(), t.getUrl()));
-                        adapter.notifyDataSetChanged();
+                        if(t.getStatus().equals("ACTIVE")) {
+                            listUsers.add(new TheraUserItem(t.getId(), t.getStatus(), t.getUrl()));
+                            adapter.notifyDataSetChanged();
+                        }
                     }
                 }
             }
@@ -107,12 +109,7 @@ public class TheraUsersFragment  extends ParentFragment {
 
             }
             @Override
-            public void onErrorResponse(POJOerror error) {
-
-            }
-            @Override
-            public void onEmptyResponse() {
-            }
+            public void onErrorResponse(POJOerror error) { }
             @Override
             public void onNoConnection() {
                 textView_noContent.setText(R.string.info_noInternetAccess);

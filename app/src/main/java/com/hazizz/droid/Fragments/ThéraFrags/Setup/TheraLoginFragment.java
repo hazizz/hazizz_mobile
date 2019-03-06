@@ -1,5 +1,6 @@
 package com.hazizz.droid.Fragments.ThéraFrags.Setup;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -21,6 +23,7 @@ import com.hazizz.droid.CustomSearchableSpinner;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
 import com.hazizz.droid.R;
+import com.hazizz.droid.SharedPrefs;
 import com.hazizz.droid.Transactor;
 
 import java.util.Arrays;
@@ -44,6 +47,13 @@ public class TheraLoginFragment extends ParentFragment {
     private EditText editText_username, editText_password;
 
     private Button button_login;
+    private CheckBox checkBox_autoLogin;
+
+
+    String username;
+    String password;
+    String school;
+    private int index = -1;
 
 
     private CustomResponseHandler rh_getSchools = new CustomResponseHandler() {
@@ -58,6 +68,21 @@ public class TheraLoginFragment extends ParentFragment {
             value = Arrays.copyOf(a, a.length, String[].class);
             ArrayAdapter adapter=new ArrayAdapter(getContext(), R.layout.support_simple_spinner_dropdown_item, key);
             spinner_schools.setAdapter(adapter);
+
+            if(username != null && password != null && school != null){
+                editText_username.setText(username);
+                editText_password.setText(password);
+             //   chosenSchool = school;
+
+                for (int i=0;i<value.length;i++) {
+                    if (value[i].equals(school)) {
+                        index = i;
+                        spinner_schools.setSelection(index);
+                        break;
+                    }
+                }
+            }
+
         }
     };
 
@@ -65,7 +90,9 @@ public class TheraLoginFragment extends ParentFragment {
         @Override
         public void onPOJOResponse(Object response) {
             PojoSession session = (PojoSession)response;
-
+            if(checkBox_autoLogin.isChecked()){
+                SharedPrefs.ThLoginData.setData(getContext(), editText_username.getText().toString(), editText_password.getText().toString(), chosenSchool);
+            }
             if(session.getStatus() == "ACTIVE"){
                 Transactor.fragmentThUsers(getFragmentManager().beginTransaction());
             }
@@ -88,11 +115,12 @@ public class TheraLoginFragment extends ParentFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.fragment_th_chose_school, container, false);
+        v = inflater.inflate(R.layout.fragment_th_login, container, false);
         fragmentSetup(R.string.title_thera_login);
 
         editText_username = v.findViewById(R.id.editText_username);
         editText_password = v.findViewById(R.id.editText_password);
+        checkBox_autoLogin = v.findViewById(R.id.checkBox_autoLogin);
 
         spinner_schools = v.findViewById(R.id.SearchableSpinner_schools);
         spinner_schools.setTitle(getString(R.string.select_school));
@@ -106,11 +134,11 @@ public class TheraLoginFragment extends ParentFragment {
             @Override
             public void onClick(View v) {
                 spinner_schools.setVisibility(View.VISIBLE);
-                String username = editText_username.getText().toString();
-                String password = editText_password.getText().toString();
+                String username2 = editText_username.getText().toString();
+                String password2 = editText_password.getText().toString();
 
-                if(!username.isEmpty() || !password.isEmpty()){
-                    MiddleMan.newRequest(new ThCreateSession(getActivity(), rh_createSession, username, password, chosenSchool));
+                if(!username2.isEmpty() || !password2.isEmpty()){
+                    MiddleMan.newRequest(new ThCreateSession(getActivity(), rh_createSession, username2, password2, chosenSchool));
                 }
 
             }
@@ -123,12 +151,18 @@ public class TheraLoginFragment extends ParentFragment {
                 chosenSchool = value[position];
 
                 textView_school.setText(key[position]);
+
+
+
             }
             @Override public void onNothingSelected(AdapterView<?> parent) {
             }
         });
 
-
+        Context c = getContext();
+         username = SharedPrefs.ThLoginData.getUsername(c);
+         password = SharedPrefs.ThLoginData.getPassword(c);
+        school = SharedPrefs.ThLoginData.getSchool(c);
 
         return v;
     }

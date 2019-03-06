@@ -45,9 +45,9 @@ public class CustomAdapter extends ArrayAdapter<TheraUserItem> {
             convertView = inflater.inflate(picID, parent, false);
 
             holder = new DataHolder();
-            holder.textView_id = convertView.findViewById(R.id.textView_grade_number);
+            holder.textView_id = convertView.findViewById(R.id.textView_subjectName);
             holder.textView_status = convertView.findViewById(R.id.textView_status);
-            holder.textView_url = convertView.findViewById(R.id.textView_theme);
+            holder.textView_url = convertView.findViewById(R.id.textView_start);
 
             convertView.setTag(holder);
         }else{

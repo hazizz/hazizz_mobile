@@ -166,10 +166,6 @@ public class ViewAnnouncementFragment extends CommentableFragment implements Ada
             sRefreshLayout.setRefreshing(false);
         }
         @Override
-        public void onEmptyResponse() {
-            sRefreshLayout.setRefreshing(false);
-        }
-        @Override
         public void onNoConnection() {
             textView_noContent.setText(R.string.info_noInternetAccess);
             textView_noContent.setVisibility(View.VISIBLE);

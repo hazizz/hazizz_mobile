@@ -13,7 +13,7 @@
     <string name="header_item_day">nap</string>
     <string name="header_later">múlva</string>
 
-    <string name="days">napok</string>
+    <string name="days">nap</string>
     <string name="tomorrow">Holnap</string>S
     <string name="days2">2 nap múlva</string>
     <string name="today">Ma</string>
@@ -34,8 +34,6 @@
       <item>Szerda</item>
       <item>Csütörtök</item>
       <item>Péntek</item>
-      <item>Szombar</item>
-      <item>Vasárnap</item>
     </string-array>
 
     <string-array name="taskTypes">
@@ -50,223 +48,228 @@
 
          <item>Jelszó Beállítás</item>
        <!--   <item>Théra Beállítások</item> -->
-      </string-array>
-
-
-
-
-
-      <string name="badge_owner">TULAJDONOS</string>
+    </string-array>
+
+
+
+
+
+    <string name="badge_owner">TULAJDONOS</string>
+
+
+    <string name="group_type_open">Nyitott</string>
+    <string name="group_type_invite_only">Meghívás alapú</string>
+    <string name="group_type_password">Jelszó alapú</string>
+
+
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="configure">Configure</string>
+    <string name="add_widget">Add widget</string>
 
+    <string name="button_save">Mentés</string>
+    <string name="button_send">Küldés</string>
+    <string name="button_add">Hozzáad</string>
+    <string name="button_create">Létrehozás</string>
+    <string name="button_join">Csatlakozás</string>
 
-      <string name="group_type_open">Nyitott</string>
-      <string name="group_type_invite_only">Meghívás alapú</string>
-      <string name="group_type_password">Jelszó alapú</string>
 
+    <string name="mainpage_menu">Főoldal</string>
 
-      <string name="appwidget_text">EXAMPLE</string>
-      <string name="configure">Configure</string>
-      <string name="add_widget">Add widget</string>
+    <string name="createGroup_menu">Új csoport létrehozás</string>
+    <string name="joinGroup_menu">Csatlakozás csoportba</string>
+    <string name="leaveGroup_menu">Csoportból kilépés</string>
+    <string name="uploadProfilePic_menu">Profilkép feltöltése</string>
 
-      <string name="button_save">Mentés</string>
-      <string name="button_send">Küldés</string>
-      <string name="button_add">Hozzáad</string>
-      <string name="button_create">Létrehozás</string>
-      <string name="button_join">Csatlakozás</string>
 
+    <string name="fragment_title_new_mytask">Új feladatom</string>
+    <string name="fragment_title_new_task">Új feladat</string>
+    <string name="fragment_title_edit_task">Feladat szerkesztés</string>
 
-      <string name="mainpage_menu">Főoldal</string>
+    <string name="empty_field">Üres mező</string>
+    <string name="empty_field_password">Üres jelszó</string>
 
-      <string name="createGroup_menu">Új csoport létrehozás</string>
-      <string name="joinGroup_menu">Csatlakozás csoportba</string>
-      <string name="leaveGroup_menu">Csoportból kilépés</string>
-      <string name="uploadProfilePic_menu">Profilkép feltöltése</string>
+    <string name="ok">OK</string>
+    <string name="close">Bezár</string>
+    <string name="thera">Théra</string>
+    <string name="settings">Beállítások</string>
+    <string name="feedback">Visszajelzés</string>
+    <string name="groups">Csoportok</string>
+    <string name="task">Feladat</string>
+    <string name="tasks">Feladatok</string>
+    <string name="announcement">Bejegyzés</string>
+    <string name="announcements">Bejegyzések</string>
+    <string name="subject">Téma</string>
+    <string name="subjects">Témák</string>
+    <string name="title">Cím</string>
+    <string name="description">Leírás</string>
+    <string name="login">Bejelentkezés</string>
+    <string name="register">Regisztráció</string>
+    <string name="displayName">Becenév</string>
+    <string name="registrationDate">Regisztráció időpontja</string>
+    <string name="username">Felhasználónév</string>
+    <string name="password">Jelszó</string>
+    <string name="email">Email</string>
+    <string name="autologin">Automatikus bejelentkezés</string>
+    <string name="login_remember">Felhasználó megyjegyzése</string>
+    <string name="comments">Megjegyzések</string>
+    <string name="edit">Szerkesztés</string>
+    <string name="delete">Törlés</string>
+    <string name="my_tasks">Feladataim</string>
+    <string name="view_mytask">Én feladatom megtekintése</string>
+    <string name="notification_settings">Értesítés beállítások</string>
+    <string name="notification">Értesítés</string>
+    <string name="notifications">Értesítések</string>
+    <string name="go_back">Vissza</string>
+    <string name="reply">Válasz</string>
+    <string name="viewProfile">Profil megtekintése</string>
+    <string name="later">múlva</string>
+    <string name="no">Nem</string>
+    <string name="yes">Igen</string>
+    <string name="choose_group">Válasz csoportot</string>
+    <string name="write_comment">Írj egy kommentet!</string>
+    <string name="schedules">Schedules</string>
+    <string name="grades">Grades</string>
 
+    <string name="add_user">Új felhasználó</string>
 
-      <string name="fragment_title_new_mytask">Új feladatom</string>
-      <string name="fragment_title_new_task">Új feladat</string>
-      <string name="fragment_title_edit_task">Feladat szerkesztés</string>
+    <string name="no_task">Nincs feladat</string>
+    <string name="no_announcement">Nincs bejegyzés</string>
+    <string name="no_subject">Nincs téma</string>
+    <string name="subject_none">&lt;Nincs&gt;</string>
+    <string name="no_comment">Nincs hozzászólás</string>
 
-      <string name="empty_field">Üres mező</string>
-      <string name="empty_field_password">Üres jelszó</string>
+    <string name="groupMembers">Tagok</string>
 
-      <string name="ok">OK</string>
-      <string name="close">Bezár</string>
-      <string name="thera">Théra</string>
-      <string name="settings">Beállítások</string>
-      <string name="feedback">Visszajelzés</string>
-      <string name="groups">Csoportok</string>
-      <string name="task">Feladat</string>
-      <string name="tasks">Feladatok</string>
-      <string name="announcement">Bejegyzés</string>
-      <string name="announcements">Bejegyzések</string>
-      <string name="subject">Téma</string>
-      <string name="subjects">Témák</string>
-      <string name="title">Cím</string>
-      <string name="description">Leírás</string>
-      <string name="login">Bejelentkezés</string>
-      <string name="register">Regisztráció</string>
-      <string name="displayName">Becenév</string>
-      <string name="registrationDate">Regisztráció időpontja</string>
-      <string name="username">Felhasználónév</string>
-      <string name="password">Jelszó</string>
-      <string name="email">Email</string>
-      <string name="autologin">Automatikus bejelentkezés</string>
-      <string name="comments">Megjegyzések</string>
-      <string name="edit">Szerkesztés</string>
-      <string name="delete">Törlés</string>
-      <string name="my_tasks">Feladataim</string>
-      <string name="view_mytask">Én feladatom megtekintése</string>
-      <string name="notification_settings">Értesítés beállítások</string>
-      <string name="notification">Értesítés</string>
-      <string name="notifications">Értesítések</string>
-      <string name="go_back">Vissza</string>
-      <string name="reply">Válasz</string>
-      <string name="viewProfile">Profil megtekintése</string>
-      <string name="later">múlva</string>
-      <string name="no">Nem</string>
-      <string name="yes">Igen</string>
-      <string name="choose_group">Válasz csoportot</string>
-      <string name="write_comment">Írj egy kommentet!</string>
 
-      <string name="add_user">Új felhasználó</string>
+    <string name="title_">Cím: </string>
+    <string name="deadline_">Határidő:</string>
+    <string name="group_">Csoport:</string>
+    <string name="creator_">Létrehozó:</string>
+    <string name="description_">Leírás:</string>
+    <string name="subject_">Téma:</string>
+    <string name="tasktype_">Feladat típusa:</string>
 
-      <string name="no_task">Nincs feladat</string>
-      <string name="no_announcement">Nincs bejegyzés</string>
-      <string name="no_subject">Nincs téma</string>
-      <string name="subject_none">&lt;Nincs&gt;</string>
-      <string name="no_comment">Nincs hozzászólás</string>
 
-      <string name="groupMembers">Tagok</string>
+    <string name="daysLeft">nap múlva</string>
+    <string name="displayName_">Becenév:</string>
+    <string name="registrationDate_">Regisztráció időpontja:</string>
+    <string name="username_">Felhasználónév:</string>
 
+    <string name="press_again_to_exit">Nyomd meg mégegyszer a VISSZA gombot hogy kilépj</string>
 
-      <string name="title_">Cím: </string>
-      <string name="deadline_">Határidő:</string>
-      <string name="group_">Csoport:</string>
-      <string name="creator_">Létrehozó:</string>
-      <string name="description_">Leírás:</string>
-      <string name="subject_">Téma:</string>
-      <string name="tasktype_">Feladat típusa:</string>
 
+    <string name="termsAndConditions">Elfogadom az<a href="https://hazizz.github.io/privacy-hu.txt"> adatvédelmi nyilatkozatot</a></string>
+    <string name="passwordagain_fragment_register">Jelszó mégegyszer</string>
 
-      <string name="daysLeft">nap múlva</string>
-      <string name="displayName_">Becenév:</string>
-      <string name="registrationDate_">Regisztráció időpontja:</string>
-      <string name="username_">Felhasználónév:</string>
+    <string name="error_passwordRequiredForGroup">Jelszó szükséges a csoporthoz belépéshez</string>
 
-      <string name="press_again_to_exit">Nyomd meg mégegyszer a VISSZA gombot hogy kilépj</string>
 
 
-      <string name="termsAndConditions">Elfogadom az<a href="https://hazizz.github.io/privacy-hu.txt"> adatvédelmi nyilatkozatot</a></string>
-      <string name="passwordagain_fragment_register">Jelszó mégegyszer</string>
+    <string name="toast_feedback_thanks">Köszönjük a visszajelzésedet</string>
 
-      <string name="error_passwordRequiredForGroup">Jelszó szükséges a csoporthoz belépéshez</string>
 
+    <string name="hint_description_feedback">Visszajelzés</string>
+    <string name="hint_fragment_joingroup">Csoport név</string>
+    <string name="hint_add_subject">Új téma</string>
+    <string name="hint_newgroup">Új csoport</string>
+    <string name="title_fragment_tabgroup">Csoport:</string>
 
+    <string name="title_activity_feedback">Visszajelzés</string>
+    <string name="title_fragment_groups">Csoportjaid</string>
+    <string name="title_fragment_joingroup">Belépés egy csoportba</string>
+    <string name="title_fragment_taskeditor">Új feladat</string>
+    <string name="title_newannouncement">Új bejegyzés</string>
+    <string name="title_editannouncement">Bejegyzés szerkesztés</string>
+    <string name="title_fragment_comments">Megjegyzések</string>
+    <string name="title_fragment_creategroup">Új csoport létrehozása</string>
+    <string name="title_fragment_view_announcement">Bejegyzés Megtekintés</string>
+    <string name="title_fragment_view_task">Feladat Megtekintés</string>
 
-      <string name="toast_feedback_thanks">Köszönjük a visszajelzésedet</string>
+    <string name="tasktype_fragment_taskeditor">Feladat típusa:</string>
+    <string name="choose_deadline_fragment_taskeditor">Válasz határidőt!</string>
+    <string name="subject_fragment_taskeditor">Téma:</string>
 
 
-      <string name="hint_description_feedback">Visszajelzés</string>
-      <string name="hint_fragment_joingroup">Csoport név</string>
-      <string name="hint_add_subject">Új téma</string>
-      <string name="hint_newgroup">Új csoport</string>
-      <string name="title_fragment_tabgroup">Csoport:</string>
+    <string name="textview_logout_drawer">Kijelentkezés</string>
 
-      <string name="title_activity_feedback">Visszajelzés</string>
-      <string name="title_fragment_groups">Csoportjaid</string>
-      <string name="title_fragment_joingroup">Belépés egy csoportba</string>
-      <string name="title_fragment_taskeditor">Új feladat</string>
-      <string name="title_newannouncement">Új bejegyzés</string>
-      <string name="title_editannouncement">Bejegyzés szerkesztés</string>
-      <string name="title_fragment_comments">Megjegyzések</string>
-      <string name="title_fragment_creategroup">Új csoport létrehozása</string>
-      <string name="title_fragment_view_announcement">Bejegyzés Megtekintés</string>
-      <string name="title_fragment_view_task">Feladat Megtekintés</string>
+    <string name="add_subject">Téma hozzáadás</string>
 
-      <string name="tasktype_fragment_taskeditor">Feladat típusa:</string>
-      <string name="choose_deadline_fragment_taskeditor">Válasz határidőt!</string>
-      <string name="subject_fragment_taskeditor">Téma:</string>
+    <string name="report_bug">Hiba jelentése</string>
+    <string name="info_serverUnexpectedResponse">Nem megszokott válasz a szervertől</string>
+    <string name="info_serverNotResponding">Szerver nem válaszol</string>
+    <string name="info_noInternetAccess">Nincs internet kapcsolat</string>
 
+    <string name="select_school">Iskola kiválasztás</string>
 
-      <string name="textview_logout_drawer">Kijelentkezés</string>
+    <string name="error">Hiba</string>
+    <string name="error_termsAndConditionsNotAccepted">Nem fogadtad el az adatvédelmi nyilatkozatot</string>
 
-      <string name="add_subject">Téma hozzáadás</string>
+    <string name="error_accountLocked">A fiók zárolva van</string>
+    <string name="error_accountExpired">A fiók lejárt</string>
+    <string name="error_accountBanned">A fiók le van tiltva</string>
+    <string name="error_accountNotFound">Felhasználó nem található</string>
 
-      <string name="report_bug">Hiba jelentése</string>
-      <string name="info_serverUnexpectedResponse">Nem megszokott válasz a szervertől</string>
-      <string name="info_serverNotResponding">Szerver nem válaszol</string>
-      <string name="info_noInternetAccess">Nincs internet kapcsolat</string>
 
-      <string name="select_school">Iskola kiválasztás</string>
+    <string name="error_usernameNotFound">Csak számokat, betűket, alsóvonalat és kötőjelet tartalmazhat a felhasználónév</string>
+    <string name="error_usernameFormat">Csak számokat, betűket, alsóvonalat és kötőjelet tartalmazhat a felhasználónév</string>
+    <string name="error_usernameTaken">A felhasználónév már foglalt</string>
+    <string name="error_username">A felhasználónévnek legalább 4 karakteresnek kell lennie</string>
+    <string name="error_usernameLength">Felhasználónév 4\-8 karakteres kell hogy legyen</string>
 
-      <string name="error">Hiba</string>
-      <string name="error_termsAndConditionsNotAccepted">Nem fogadtad el az adatvédelmi nyilatkozatot</string>
+    <string name="error_emailWrong">Az email helytelen</string>
+    <string name="error_emailTaken">Az emailel már regisztráltak</string>
 
-      <string name="error_accountLocked">A fiók zárolva van</string>
-      <string name="error_accountExpired">A fiók lejárt</string>
-      <string name="error_accountBanned">A fiók le van tiltva</string>
-      <string name="error_accountNotFound">Felhasználó nem található</string>
+    <string name="error_registrationLocked">A regisztráció zárolva van</string>
 
+    <string name="error_displayNameLength">A becenévnek 4\-20 karakternek kell lennie!</string>
 
-      <string name="error_usernameNotFound">Csak számokat, betűket, alsóvonalat és kötőjelet tartalmazhat a felhasználónév</string>
-      <string name="error_usernameFormat">Csak számokat, betűket, alsóvonalat és kötőjelet tartalmazhat a felhasználónév</string>
-      <string name="error_usernameTaken">A felhasználónév már foglalt</string>
-      <string name="error_username">A felhasználónévnek legalább 4 karakteresnek kell lennie</string>
-      <string name="error_usernameLength">Felhasználónév 4\-8 karakteres kell hogy legyen</string>
+    <string name="error_titleLentgh">A cím 2\-20 karakter között lehet</string>
+    <string name="error_titleNotAcceptable">A cím nem megfelelő</string>
 
-      <string name="error_emailWrong">Az email helytelen</string>
-      <string name="error_emailTaken">Az emailel már regisztráltak</string>
+    <string name="error_alreadyMemberOfGroup">Már tagja vagy a csoportnak</string>
+    <string name="error_noPermissionToJoinGroup">Nincs jogod belépni</string>
+    <string name="error_groupNameNotAcceptable">Helytelen csoport név</string>
+    <string name="error_groupAlreadyExists">A csoport már létezik</string>
+    <string name="error_noSuchGroup">Nem létezik ilyen csoport</string>
+    <string name="error_notMemberOfGroup">Nem vagy még tagja egy csoportnak sem</string>
 
-      <string name="error_registrationLocked">A regisztráció zárolva van</string>
+    <string name="error_subjectNotSelected">Nincs kiválasztott témád</string>
 
-      <string name="error_displayNameLength">A becenévnek 4\-20 karakternek kell lennie!</string>
+    <string name="error_deadlineNotSet">Nem állítottál be határidőt</string>
 
-      <string name="error_titleLentgh">A cím 2\-20 karakter között lehet</string>
-      <string name="error_titleNotAcceptable">A cím nem megfelelő</string>
+    <string name="error_subjectLength">A téma 2\-20 karakter hosszú lehet</string>
 
-      <string name="error_alreadyMemberOfGroup">Már tagja vagy a csoportnak</string>
-      <string name="error_noPermissionToJoinGroup">Nincs jogod belépni</string>
-      <string name="error_groupNameNotAcceptable">Helytelen csoport név</string>
-      <string name="error_groupAlreadyExists">A csoport már létezik</string>
-      <string name="error_noSuchGroup">Nem létezik ilyen csoport</string>
-      <string name="error_notMemberOfGroup">Nem vagy még tagja egy csoportnak sem</string>
+    <string name="changePassword">Jelszó módosítás</string>
 
-      <string name="error_subjectNotSelected">Nincs kiválasztott témád</string>
+    <string name="currentPassword">Mostani jelszó</string>
+    <string name="newPassword">Új jelszó</string>
+    <string name="newPasswordAgain">Új jelszó mégegyszer</string>
+    <string name="password_notMatch">Jelszó nem egyezik</string>
 
-      <string name="error_deadlineNotSet">Nem állítottál be határidőt</string>
 
-      <string name="error_subjectLength">A téma 2\-20 karakter hosszú lehet</string>
+    <string name="error_wrongPassword">Helytelen jelszó</string>
+    <string name="error_passwordDoesntMatch">Jelszó nem egyezik</string>
+    <string name="error_passwordNotLongEnough">Jelszó legalább 8 karakteres kell hogy legyen</string>
+    <string name="error_givenDataWrong">Helytelen adatok</string>
 
-      <string name="changePassword">Jelszó módosítás</string>
 
-      <string name="currentPassword">Mostani jelszó</string>
-      <string name="newPassword">Új jelszó</string>
-      <string name="newPasswordAgain">Új jelszó mégegyszer</string>
-      <string name="password_notMatch">Jelszó nem egyezik</string>
 
+    <string name="success_changed_password">A jelszó sikeresen megváltoztatva</string>
 
-      <string name="error_wrongPassword">Helytelen jelszó</string>
-      <string name="error_passwordDoesntMatch">Jelszó nem egyezik</string>
-      <string name="error_passwordNotLongEnough">Jelszó legalább 8 karakteres kell hogy legyen</string>
-      <string name="error_givenDataWrong">Helytelen adatok</string>
 
 
+    <string name="crop_image_activity_title"> </string>
+    <string name="crop_image_menu_rotate_right">Forgatás</string>
+    <string name="crop_image_menu_crop">Kivág</string>
+    <string name="crop_image_menu_flip_horizontlaly">Forgatás vízszintesen</string>
+    <string name="crop_image_menu_flip_vertically">Forgatás függőlegesen</string>
 
-      <string name="success_changed_password">A jelszó sikeresen megváltoztatva</string>
 
+    <string name="title_thera">Théra</string>
+     <string name="title_thera_users">Théra felhasználók</string>
+     <string name="title_thera_login">Théra bejelentkezés</string>
 
-
-      <string name="crop_image_activity_title"> </string>
-      <string name="crop_image_menu_rotate_right">Forgatás</string>
-      <string name="crop_image_menu_crop">Kivág</string>
-      <string name="crop_image_menu_flip_horizontlaly">Forgatás vízszintesen</string>
-      <string name="crop_image_menu_flip_vertically">Forgatás függőlegesen</string>
-
-
-       <string name="title_thera_users">Théra felhasználók</string>
-       <string name="title_thera_login">Théra bejelentkezés</string>
-
-       <string name="thera_grades">Théra jegyek</string>
+     <string name="thera_grades">Théra jegyek</string>
+     <string name="thera_schedules">Théra órák</string>
 
 </resources>
