@@ -58,7 +58,7 @@ public class CustomAdapter extends BaseAdapter{
                 holder.taskDescription = (TextView) convertView.findViewById(R.id.task_description);
                // holder.taskDueDate = (TextView) convertView.findViewById(R.id.textView_dueDate);
                 holder.taskGroup = (TextView) convertView.findViewById(R.id.textView_group);
-                holder.taskGroup_ = (TextView) convertView.findViewById(R.id.textView_creator);
+           //     holder.taskGroup_ = (TextView) convertView.findViewById(R.id.textView_creator);
                 holder.taskSubject = (TextView) convertView.findViewById(R.id.textView_subject);
                 convertView.setTag(holder);
             }
@@ -89,7 +89,7 @@ public class CustomAdapter extends BaseAdapter{
             if(taskItem.getGroup() != null) {
                 holder.taskGroup.setText(taskItem.getGroup().getName());
             }else{
-                holder.taskGroup_.setVisibility(View.GONE);
+             //   holder.taskGroup_.setVisibility(View.GONE);
                 holder.taskGroup.setVisibility(View.GONE);
             }
             if(taskItem.getSubject() != null) {

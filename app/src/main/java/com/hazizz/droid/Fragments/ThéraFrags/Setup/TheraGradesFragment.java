@@ -21,6 +21,7 @@ import com.hazizz.droid.Listviews.TheraGradesList.TheraGradesItem;
 import com.hazizz.droid.Listviews.TheraGradesList.CustomAdapter;
 import com.hazizz.droid.R;
 import com.hazizz.droid.SharedPrefs;
+import com.hazizz.droid.Transactor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,8 +63,7 @@ public class TheraGradesFragment  extends ParentFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                // groupName = ((AnnouncementItem)listView.getItemAtPosition(i)).getGroup().getName();
-              //  Transactor.fragmentThMain(getFragmentManager().beginTransaction());
+                Transactor.fragmentThDialogGrade(getFragmentManager().beginTransaction(), adapter.getItem(i));
             }
         });
 
@@ -85,10 +85,6 @@ public class TheraGradesFragment  extends ParentFragment {
                 }
             }
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-            }
-            @Override
             public void onErrorResponse(POJOerror error) {
 
             }
@@ -99,6 +95,6 @@ public class TheraGradesFragment  extends ParentFragment {
                 //   sRefreshLayout.setRefreshing(false);
             }
         };
-        MiddleMan.newRequest(new ThReturnGrades(getActivity(),responseHandler, SharedPrefs.ThSessionManager.getSessionId(getContext())));
+        MiddleMan.newThRequest(new ThReturnGrades(getActivity(),responseHandler, SharedPrefs.ThSessionManager.getSessionId(getContext())));
     }
 }

@@ -127,7 +127,7 @@ public class TheraLoginFragment extends ParentFragment {
         spinner_schools.setPositiveButton(getString(R.string.close));
 
 
-        MiddleMan.newRequest(new ThSchools(getActivity(), rh_getSchools));
+        MiddleMan.newThRequest(new ThSchools(getActivity(), rh_getSchools));
 
         button_login = v.findViewById(R.id.button_login);
         button_login.setOnClickListener(new View.OnClickListener() {
@@ -138,7 +138,7 @@ public class TheraLoginFragment extends ParentFragment {
                 String password2 = editText_password.getText().toString();
 
                 if(!username2.isEmpty() || !password2.isEmpty()){
-                    MiddleMan.newRequest(new ThCreateSession(getActivity(), rh_createSession, username2, password2, chosenSchool));
+                    MiddleMan.newThRequest(new ThCreateSession(getActivity(), rh_createSession, username2, password2, chosenSchool));
                 }
 
             }

@@ -5,7 +5,7 @@ import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.Requests.Request;
+import com.hazizz.droid.Communication.Requests.Parent.ThRequest;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import java.util.List;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 
-public class ThReturnGrades extends Request {
+public class ThReturnGrades extends ThRequest {
     String p_sessionId;
 
     public ThReturnGrades(Activity act, CustomResponseHandler rh, int p_sessionId) {
@@ -27,7 +27,7 @@ public class ThReturnGrades extends Request {
         headerMap.put(HEADER_AUTH, getHeaderAuthToken());
         headerMap.put("Accept", HEADER_VALUE_CONTENTTYPE);
 
-        call = tRequest.th_returnGrades(p_sessionId ,headerMap);
+        call = aRequest.th_returnGrades(p_sessionId ,headerMap);
     }
 
     @Override

@@ -8,7 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOMembersProfilePic;
-import com.hazizz.droid.SharedPrefs;
+import com.hazizz.droid.Communication.Requests.Parent.Request;
 
 import java.io.IOException;
 import java.lang.reflect.Type;

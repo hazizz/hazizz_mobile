@@ -1,4 +1,4 @@
-package com.hazizz.droid;
+package com.hazizz.droid.widget.tasks;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,14 +12,18 @@ import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
 import com.hazizz.droid.Communication.Requests.GetTasksFromMeSync;
-import com.hazizz.droid.Communication.Requests.Request;
+import com.hazizz.droid.Communication.Requests.Parent.Request;
+import com.hazizz.droid.D8;
+import com.hazizz.droid.Network;
+import com.hazizz.droid.R;
+import com.hazizz.droid.SharedPrefs;
 
 import java.util.ArrayList;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
-import static com.hazizz.droid.CollectionWidgetProvider.EXTRA_ITEM_POSITION;
+import static com.hazizz.droid.widget.tasks.CollectionWidgetProvider.EXTRA_ITEM_POSITION;
 
 public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteViewsFactory {
 

@@ -1,17 +1,15 @@
 package com.hazizz.droid.Communication.Requests;
 
 import android.app.Activity;
-import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOgroup;
-import com.hazizz.droid.SharedPrefs;
+import com.hazizz.droid.Communication.Requests.Parent.Request;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import okhttp3.ResponseBody;

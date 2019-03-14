@@ -1,4 +1,4 @@
-package com.hazizz.droid.Fragments.CommentableFragments;
+package com.hazizz.droid.Fragments.ParentFragment;
 
 import android.support.v4.app.Fragment;
 

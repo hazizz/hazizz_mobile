@@ -1,17 +1,15 @@
 package com.hazizz.droid.Communication.Requests;
 
 import android.app.Activity;
-import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOsubject;
-import com.hazizz.droid.SharedPrefs;
+import com.hazizz.droid.Communication.Requests.Parent.Request;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;

@@ -4,8 +4,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,23 +13,16 @@ import android.widget.TextView;
 
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
-import com.hazizz.droid.Activities.MainActivity;
 import com.hazizz.droid.AndroidThings;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.Requests.CreateSubject;
-import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.Fragments.GroupTabs.GroupTabFragment;
 import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
 import com.hazizz.droid.Listener.OnBackPressedListener;
-import com.hazizz.droid.Listviews.GroupList.CustomAdapter;
-import com.hazizz.droid.Manager;
 import com.hazizz.droid.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
-
-import java.util.EnumMap;
-import java.util.HashMap;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -121,7 +112,7 @@ public class CreateSubjectFragment extends ParentFragment {
     }
 
     public void goBack(){
-         Transactor.fragmentSubjects(getFragmentManager().beginTransaction(), GroupTabFragment.groupId, GroupTabFragment.groupName);
+         Transactor.fragmentSubjects(getFragmentManager().beginTransaction(), groupId, groupName);
 
     }
 }

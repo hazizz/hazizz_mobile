@@ -29,19 +29,8 @@ public class ErrorHandler {
                     })
                     .setNegativeButton(R.string.go_back, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-
-                            /*
-                            HashMap<String, String> data = new HashMap<>();
-                            data.put("lastCall", Manager.CrashManager.getLastCall().toString());
-                            data.put("time", Manager.CrashManager.getError().getTime());
-                            data.put("errorCode", Integer.toString(Manager.CrashManager.getError().getErrorCode()));
-                            data.put("title", Manager.CrashManager.getError().getTitle());
-                            data.put("message", Manager.CrashManager.getError().getMessage());
-                            */
-
                             MiddleMan.newRequest(new Feedback(act, null, "android", AndroidThings.getAppVersion(),
                                     "no message"));
-
                             Manager.CrashManager.reset();
                             dialog.cancel();
                         }

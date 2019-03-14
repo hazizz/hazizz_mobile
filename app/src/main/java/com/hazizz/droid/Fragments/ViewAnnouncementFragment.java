@@ -48,7 +48,7 @@ import com.hazizz.droid.Communication.Requests.GetGroupMemberPermisions;
 import com.hazizz.droid.Communication.Requests.GetGroupMembersProfilePic;
 import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.Enum.EnumAT;
-import com.hazizz.droid.Fragments.CommentableFragments.CommentableFragment;
+import com.hazizz.droid.Fragments.ParentFragment.CommentableFragment;
 import com.hazizz.droid.Listviews.CommentList.CommentItem;
 import com.hazizz.droid.Listviews.CommentList.CustomAdapter;
 import com.hazizz.droid.Listviews.NonScrollListView;

@@ -48,7 +48,7 @@ public class CustomAdapter extends ArrayAdapter<TheraGradesItem> {
             holder = new DataHolder();
             holder.textView_grade_number = convertView.findViewById(R.id.textView_subjectName);
             holder.textView_date = convertView.findViewById(R.id.textView_teacher);
-            holder.textView_theme = convertView.findViewById(R.id.textView_start);
+            holder.textView_theme = convertView.findViewById(R.id.textView_weight);
             holder.textView_weight = convertView.findViewById(R.id.textView_weight);
 
             convertView.setTag(holder);

@@ -270,7 +270,7 @@
     <string name="taskType_oraltest">oral test</string>
 
 
-    <string name="crop_image_activity_title"> </string>
+    <string name="crop_image_activity_header_item_intitle"> </string>
     <string name="crop_image_menu_rotate_right">Rotate</string>
     <string name="crop_image_menu_crop">Crop</string>
     <string name="crop_image_menu_flip_horizontally">Flip horizontally</string>
@@ -283,6 +283,20 @@
 
     <string name="thera_grades">Thera grades</string>
     <string name="thera_schedules">Thera schedules</string>
+    <string name="thera_standin">replacement:</string>
+    <string name="thera_canceled">canceled</string>
+
+    <string name="thera_classStart">start:</string>
+    <string name="thera_classEnd">end:</string>
+    <string name="thera_teacher">teacher:</string>
+    <string name="thera_classRoom">classroom:</string>
+    <string name="thera_classGroup">group:</string>
+    <string name="thera_date">date:</string>
+
+    <string name="thera_grade_">grade:</string>
+    <string name="thera_weight_">weight:</string>
+    <string name="thera_theme_">theme:</string>
+
 
 
   </resources>

@@ -11,7 +11,7 @@
 
     <string name="header_item_in"></string>
     <string name="header_item_day">nap</string>
-    <string name="header_later">múlva</string>
+    <string name="header_item_later">múlva</string>
 
     <string name="days">nap</string>
     <string name="tomorrow">Holnap</string>S
@@ -271,5 +271,18 @@
 
      <string name="thera_grades">Théra jegyek</string>
      <string name="thera_schedules">Théra órák</string>
+    <string name="thera_standin">helyetesíttés:</string>
+    <string name="thera_canceled">elmarad</string>
+
+    <string name="thera_classStart">kezdet:</string>
+    <string name="thera_classEnd">vége:</string>
+    <string name="thera_teacher">tanár:</string>
+    <string name="thera_classRoom">terem:</string>
+    <string name="thera_classGroup">csoport:</string>
+    <string name="thera_date">dátum:</string>
+
+    <string name="thera_grade_">jegy:</string>
+    <string name="thera_weight_">súly:</string>
+    <string name="thera_theme_">téma:</string>
 
 </resources>

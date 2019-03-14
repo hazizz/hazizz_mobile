@@ -1,4 +1,4 @@
-package com.hazizz.droid.Communication.Requests;
+package com.hazizz.droid.Communication.Requests.Parent;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.RequestInterface;
+import com.hazizz.droid.Communication.Requests.RequestTypes;
 import com.hazizz.droid.SharedPrefs;
 
 import java.util.HashMap;
@@ -39,7 +40,6 @@ public class Request implements RequestInterface {
     protected HashMap<String, String> headerMap;
     protected HashMap<String, Object> body;
     private Retrofit retrofit;
-    private Retrofit thera_retrofit;
 
     protected Call<ResponseBody> call;
     protected RequestTypes aRequest;
@@ -81,14 +81,8 @@ public class Request implements RequestInterface {
             //  .setEndpoint(endPoint)F
             .build();
 
-        thera_retrofit = new Retrofit.Builder()
-            .baseUrl(THERA_URL)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .client(okHttpClient)
-            .build();
 
         aRequest = retrofit.create(RequestTypes.class);
-        tRequest = thera_retrofit.create(RequestTypes.class);
 
         body = new HashMap<>();
         headerMap = new HashMap<>();
