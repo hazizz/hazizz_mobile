@@ -17,14 +17,10 @@
 
         <!--
         <activity android:name=".Activities.MainActivity">
-
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         -->
         <!--
@@ -70,27 +66,25 @@
                     <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                     <action android:name="android.intent.action.SCREEN_ON"/>
                     <action android:name="android.intent.action.SCREEN_OFF"/>
-
                 </intent-filter>
-
                 <meta-data
                     android:name="android.appwidget.provider"
                     android:resource="@xml/hazizz_widget_info" />
             </receiver>
             <service android:name=".WidgetService"
                 android:permission="android.permission.BIND_REMOTEVIEWS"/>
-
             <service android:name=".UpdateService" />
         -->
 
         <service
-            android:name="com.hazizz.droid.CollectionWidgetService"
+            android:name="com.hazizz.droid.widget.tasks.CollectionWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
-        <receiver android:name="com.hazizz.droid.CollectionWidgetProvider">
+        <receiver android:name="com.hazizz.droid.widget.tasks.CollectionWidgetProvider"
+            android:label="@string/tasks">
             <intent-filter>
-                <action android:name="com.hazizz.droid.WIDGET_OPENAPPBUTTON" />
-                <action android:name="com.hazizz.droid.WIDGET_REFRESHBUTTON" />
+                <action android:name="com.hazizz.droid.widget.tasks.WIDGET_OPENAPPBUTTON" />
+                <action android:name="com.hazizz.droid.widget.tasks.WIDGET_REFRESHBUTTON" />
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
                 <action android:name="android.intent.action.SCREEN_ON" />
@@ -102,10 +96,30 @@
                 android:resource="@xml/hazizz_widget_info" />
         </receiver>
 
-      <!--  <service
-            android:name="com.hazizz.droid.Notification.NotificationIntentService"
-            android:exported="false" >
-        </service> -->
+
+        <service
+            android:name="com.hazizz.droid.widget.schedules.CollectionWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <receiver android:name="com.hazizz.droid.widget.schedules.CollectionWidgetProvider"
+            android:label="@string/schedules">
+            <intent-filter>
+                <action android:name="com.hazizz.droid.schedules.WIDGET_RIGHTBUTTON" />
+                <action android:name="com.hazizz.droid.schedules.WIDGET_LEFTBUTTON" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
+                <action android:name="android.intent.action.SCREEN_ON" />
+                <action android:name="android.intent.action.SCREEN_OFF" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/info_widget_thera_schedules" />
+        </receiver>
+        <!--  <service
+              android:name="com.hazizz.droid.Notification.NotificationIntentService"
+              android:exported="false" >
+          </service> -->
 
         <receiver android:name="com.hazizz.droid.Notification.NotificationReciever" />
 

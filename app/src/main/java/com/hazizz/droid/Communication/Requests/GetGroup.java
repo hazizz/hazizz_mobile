@@ -1,14 +1,11 @@
 package com.hazizz.droid.Communication.Requests;
 
 import android.app.Activity;
-import android.content.Context;
 import android.util.Log;
 
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOgroup;
-import com.hazizz.droid.SharedPrefs;
-
-import java.util.HashMap;
+import com.hazizz.droid.Communication.Requests.Parent.Request;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;

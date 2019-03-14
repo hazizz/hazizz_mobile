@@ -13,7 +13,7 @@ import com.hazizz.droid.Communication.Requests.DeleteATComment;
 import com.hazizz.droid.Communication.Requests.GetCommentSection;
 import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.Enum.EnumAT;
-import com.hazizz.droid.Fragments.CommentableFragments.CommentableFragment;
+import com.hazizz.droid.Fragments.ParentFragment.CommentableFragment;
 import com.hazizz.droid.R;
 import com.hazizz.droid.Transactor;
 
@@ -42,8 +42,6 @@ public class CommentItem {
     }
 
     public void showMenu(Activity act, CustomResponseHandler rh, EnumAT whereName, int typeId, View v, FragmentTransaction ft, CommentableFragment commentableFragment){
-
-
 
         PopupMenu popup = new PopupMenu(act, v);
 

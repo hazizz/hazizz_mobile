@@ -4,13 +4,14 @@ import android.app.Activity;
 import android.util.Log;
 
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.Requests.Request;
+import com.hazizz.droid.Communication.Requests.Parent.Request;
+import com.hazizz.droid.Communication.Requests.Parent.ThRequest;
 
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 
-public class ThCreateSession extends Request {
+public class ThCreateSession extends ThRequest {
     public ThCreateSession(Activity act, CustomResponseHandler rh, String b_username, String b_password, String b_url) {
         super(act, rh);
         Log.e("hey", "created ThCreateSession object");
@@ -24,7 +25,7 @@ public class ThCreateSession extends Request {
         headerMap.put(HEADER_AUTH, getHeaderAuthToken());
         headerMap.put(HEADER_CONTENTTYPE, HEADER_VALUE_CONTENTTYPE);
 
-        call = tRequest.th_createSession(headerMap, body);
+        call = aRequest.th_createSession(headerMap, body);
     }
 
     @Override

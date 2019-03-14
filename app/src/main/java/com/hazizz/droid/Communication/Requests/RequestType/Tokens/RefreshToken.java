@@ -7,7 +7,7 @@ import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJORefreshToken;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
-import com.hazizz.droid.Communication.Requests.Request;
+import com.hazizz.droid.Communication.Requests.Parent.Request;
 import com.hazizz.droid.Manager;
 import com.hazizz.droid.SharedPrefs;
 import com.hazizz.droid.Transactor;

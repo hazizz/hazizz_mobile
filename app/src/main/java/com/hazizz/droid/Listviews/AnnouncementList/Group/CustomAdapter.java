@@ -49,7 +49,7 @@ public class CustomAdapter extends ArrayAdapter<AnnouncementItem> {
 
             holder = new DataHolder();
             holder.taskTitle = (TextView) convertView.findViewById(R.id.textView_subjectName);
-            holder.taskDescription = (TextView) convertView.findViewById(R.id.textView_start);
+            holder.taskDescription = (TextView) convertView.findViewById(R.id.textView_weight);
             holder.taskCreator = (TextView) convertView.findViewById(R.id.textView_creator_);
             holder.subject_ = (TextView) convertView.findViewById(R.id.textView_creator);
             holder.subject = (TextView) convertView.findViewById(R.id.textView_subject);

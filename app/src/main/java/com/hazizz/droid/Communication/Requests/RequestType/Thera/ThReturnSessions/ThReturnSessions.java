@@ -5,7 +5,7 @@ import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.Requests.Request;
+import com.hazizz.droid.Communication.Requests.Parent.ThRequest;
 import com.hazizz.droid.Communication.Requests.RequestType.Thera.ThCreateSession.PojoSession;
 
 import java.lang.reflect.Type;
@@ -15,7 +15,7 @@ import java.util.List;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 
-public class ThReturnSessions extends Request {
+public class ThReturnSessions extends ThRequest {
     public ThReturnSessions(Activity act, CustomResponseHandler rh) {
         super(act, rh);
         Log.e("hey", "created ThReturnSessions object");
@@ -23,7 +23,7 @@ public class ThReturnSessions extends Request {
     public void setupCall() {
 
         headerMap.put(HEADER_AUTH, getHeaderAuthToken());
-        call = tRequest.th_returnSessions(headerMap);
+        call = aRequest.th_returnSessions(headerMap);
     }
 
     @Override

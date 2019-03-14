@@ -11,16 +11,12 @@ import com.google.gson.Gson;
 import com.hazizz.droid.Activities.AuthActivity;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
-import com.hazizz.droid.Communication.Requests.LoginWithRefresh;
-import com.hazizz.droid.Communication.Requests.Request;
-import com.hazizz.droid.Communication.Requests.RequestType.Login;
+import com.hazizz.droid.Communication.Requests.Parent.Request;
 import com.hazizz.droid.Communication.Requests.RequestType.Tokens.RefreshToken;
 import com.hazizz.droid.ErrorHandler;
 import com.hazizz.droid.Manager;
 import com.hazizz.droid.R;
 import com.hazizz.droid.SharedPrefs;
-
-import java.util.HashMap;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -31,16 +27,16 @@ public interface RequestInterface {
 
      void setupCall();
 
-     default void call(Activity act, Request request, Call<ResponseBody> call, CustomResponseHandler cOnResponse, Gson gson){
+     default void call(Activity act, RequestInterface request, Call<ResponseBody> call, CustomResponseHandler cOnResponse, Gson gson){
           call.enqueue(buildCallback(act, request, call, cOnResponse, gson));
      }
 
-     default void callAgain(Activity act, Request request, Call<ResponseBody> call, CustomResponseHandler cOnResponse, Gson gson){
+     default void callAgain(Activity act, RequestInterface request, Call<ResponseBody> call, CustomResponseHandler cOnResponse, Gson gson){
           call.clone().enqueue(buildCallback(act, request, call, cOnResponse, gson));
           Log.e("hey", "CALL AGAIN");
      }
 
-     default Callback<ResponseBody> buildCallback(Activity act, Request request, Call<ResponseBody> call, CustomResponseHandler cOnResponse, Gson gson){
+     default Callback<ResponseBody> buildCallback(Activity act, RequestInterface request, Call<ResponseBody> call, CustomResponseHandler cOnResponse, Gson gson){
           Callback<ResponseBody> callback = new Callback<ResponseBody>() {
                @Override
                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -124,16 +120,16 @@ public interface RequestInterface {
      }
 
 
-     default void callSpec(Activity act, Request request, Call<ResponseBody> call, CustomResponseHandler cOnResponse, Gson gson){
+     default void callSpec(Activity act, RequestInterface request, Call<ResponseBody> call, CustomResponseHandler cOnResponse, Gson gson){
           call.enqueue(buildCallbackSpec(act, request, call, cOnResponse, gson));
      }
 
-     default void callAgainSpec(Activity act, Request request, Call<ResponseBody> call, CustomResponseHandler cOnResponse, Gson gson){
+     default void callAgainSpec(Activity act, RequestInterface request, Call<ResponseBody> call, CustomResponseHandler cOnResponse, Gson gson){
           call.clone().enqueue(buildCallbackSpec(act, request, call, cOnResponse, gson));
           Log.e("hey", "CALL AGAIN");
      }
 
-     default Callback<ResponseBody> buildCallbackSpec(Activity act, Request request, Call<ResponseBody> call, CustomResponseHandler cOnResponse, Gson gson){
+     default Callback<ResponseBody> buildCallbackSpec(Activity act, RequestInterface request, Call<ResponseBody> call, CustomResponseHandler cOnResponse, Gson gson){
           Callback<ResponseBody> callback = new Callback<ResponseBody>() {
                @Override
                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -202,5 +198,8 @@ public interface RequestInterface {
      void makeCallAgain();
 
      void callIsSuccessful(Response<ResponseBody> response);
+
+
+     void cancelRequest();
 }
 

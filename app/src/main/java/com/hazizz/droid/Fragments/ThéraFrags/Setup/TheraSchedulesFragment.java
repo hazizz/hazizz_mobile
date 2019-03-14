@@ -23,6 +23,7 @@ import com.hazizz.droid.Listviews.TheraReturnSchedules.ClassItem;
 import com.hazizz.droid.Listviews.TheraReturnSchedules.CustomAdapter;
 import com.hazizz.droid.R;
 import com.hazizz.droid.SharedPrefs;
+import com.hazizz.droid.Transactor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +46,8 @@ public class TheraSchedulesFragment extends ParentFragment {
     private String weekNumber;
     private String year;
 
-   // private TextView textView_noContent;
+    private final static int weekEndStart = 5;
+
 
     @Nullable
     @Override
@@ -55,7 +57,10 @@ public class TheraSchedulesFragment extends ParentFragment {
 
         fragmentSetup(R.string.thera_schedules);
 
-        currentDay = D8.getDayOfWeek();
+        currentDay = D8.getDayOfWeek()-1;
+        if(currentDay >= weekEndStart){
+            currentDay = 0;
+        }
         spinner_day_chooser = v.findViewById(R.id.spinner_day_chooser);
         spinner_day_chooser.setSelection(currentDay);
         spinner_day_chooser.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -93,8 +98,7 @@ public class TheraSchedulesFragment extends ParentFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                // groupName = ((AnnouncementItem)listView.getItemAtPosition(i)).getGroup().getName();
-                //  Transactor.fragmentThMain(getFragmentManager().beginTransaction());
+                  Transactor.fragmentThDialogClass(getFragmentManager().beginTransaction(), adapter.getItem(i));
             }
         });
 
@@ -135,7 +139,7 @@ public class TheraSchedulesFragment extends ParentFragment {
                 //   sRefreshLayout.setRefreshing(false);
             }
         };
-        MiddleMan.newRequest(new ThReturnSchedules(getActivity(),rh, SharedPrefs.ThSessionManager.getSessionId(getContext()), weekNumber, year));
+        MiddleMan.newThRequest(new ThReturnSchedules(getActivity(),rh, SharedPrefs.ThSessionManager.getSessionId(getContext()), weekNumber, year));
     }
 
     private void getCurrentDaySchedules(int dayOfWeek){

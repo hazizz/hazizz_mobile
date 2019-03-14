@@ -1,10 +1,10 @@
 package com.hazizz.droid.Communication.Requests;
 
 import android.app.Activity;
-import android.content.Context;
 import android.util.Log;
 
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
+import com.hazizz.droid.Communication.Requests.Parent.Request;
 
 import java.io.IOException;
 

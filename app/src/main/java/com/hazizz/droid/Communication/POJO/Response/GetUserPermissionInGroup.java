@@ -3,11 +3,9 @@ package com.hazizz.droid.Communication.POJO.Response;
 
 import android.app.Activity;
 import android.util.Log;
-import com.hazizz.droid.Communication.Requests.Request;
-import com.hazizz.droid.SharedPrefs;
+import com.hazizz.droid.Communication.Requests.Parent.Request;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;

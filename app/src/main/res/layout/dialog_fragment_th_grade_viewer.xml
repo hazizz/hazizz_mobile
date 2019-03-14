@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:padding="10dp">
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="8dp"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_value">
+
+            <TextView
+                android:id="@+id/textView_weight_"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/thera_weight_"
+                android:textColor="@color/colorDarkText"
+                android:textSize="18dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/textView_theme_"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/thera_theme_"
+                android:textColor="@color/colorDarkText"
+                android:textSize="18dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_weight" />
+
+
+            <TextView
+                android:id="@+id/textView_date_"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/thera_date"
+                android:textColor="@color/colorDarkText"
+                android:textSize="18dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_theme" />
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:text="5"
+            android:textColor="@color/colorDarkText"
+            android:textSize="40sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_value">
+
+            <TextView
+                android:id="@+id/textView_weight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="weight "
+                android:textColor="@color/colorDarkText"
+                android:textSize="18dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/textView_theme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:maxLength="14"
+                android:text="12345678912345"
+                android:textColor="@color/colorDarkText"
+                android:textSize="18dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_weight"
+                android:singleLine="true" />
+
+
+            <TextView
+                android:id="@+id/textView_teacher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:maxLength="12"
+                android:singleLine="true"
+                android:text="date "
+                android:textColor="@color/colorDarkText"
+                android:textSize="18dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_theme" />
+
+
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/button_close"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="2dp"
+            android:text="@string/close"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+
+
+
+    </android.support.constraint.ConstraintLayout>
+
+
+
+</RelativeLayout>

@@ -47,7 +47,7 @@ public class CustomAdapter extends ArrayAdapter<TheraUserItem> {
             holder = new DataHolder();
             holder.textView_id = convertView.findViewById(R.id.textView_subjectName);
             holder.textView_status = convertView.findViewById(R.id.textView_status);
-            holder.textView_url = convertView.findViewById(R.id.textView_start);
+            holder.textView_url = convertView.findViewById(R.id.textView_weight);
 
             convertView.setTag(holder);
         }else{

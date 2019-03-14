@@ -3,7 +3,6 @@ package com.hazizz.droid.Fragments.GroupTabs;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -14,36 +13,31 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.hazizz.droid.Activities.MainActivity;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
 import com.hazizz.droid.Communication.Requests.GetTasksFromGroup;
-import com.hazizz.droid.Communication.Requests.LeaveGroup;
 import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.D8;
-import com.hazizz.droid.Fragments.ParentFragment.GroupFragment;
 import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
 import com.hazizz.droid.Fragments.ViewTaskFragment;
-import com.hazizz.droid.Listener.OnBackPressedListener;
 import com.hazizz.droid.Listviews.HeaderItem;
 import com.hazizz.droid.Listviews.TaskList.Group.CustomAdapter;
 import com.hazizz.droid.Listviews.TaskList.TaskItem;
-import com.hazizz.droid.Manager;
 import com.hazizz.droid.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
 
 import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.List;
-
-import okhttp3.Headers;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
-public class GroupMainFragment extends GroupFragment {
+public class GroupMainFragment extends ParentFragment {
+
+    private View v;
+    private static int groupId;
+    private static String groupName;
 
     private CustomAdapter adapter;
     private List<Object> itemList;
@@ -51,9 +45,7 @@ public class GroupMainFragment extends GroupFragment {
     private TextView textView_noContent;
     private SwipeRefreshLayout sRefreshLayout;
 
-
     FragmentManager fg;
-
 
     @Nullable
     @Override
@@ -64,8 +56,7 @@ public class GroupMainFragment extends GroupFragment {
 
         Log.e("hey", "mainGroup fragment created");
         groupId = GroupTabFragment.groupId;
-      //  groupId = Manager.GroupManager.getGroupId();
-        groupName = GroupTabFragment.groupName;//Manager.GroupManager.getGroupName();
+        groupName = GroupTabFragment.groupName;
 
         textView_noContent = v.findViewById(R.id.textView_noContent);
         sRefreshLayout = v.findViewById(R.id.swipe_refresh_layout); sRefreshLayout.bringToFront();
@@ -75,8 +66,6 @@ public class GroupMainFragment extends GroupFragment {
                 getTask();
             }});
         sRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimaryDarkBlue), getResources().getColor(R.color.colorPrimaryLightBlue), getResources().getColor(R.color.colorPrimaryDarkBlue));
-       // ((MainActivity)getActivity()).setGroupName(groupName);
-
         fg = getFragmentManager();
 
         createViewList();
@@ -116,7 +105,7 @@ public class GroupMainFragment extends GroupFragment {
                     textView_noContent.setVisibility(v.VISIBLE);
                 }else {
                     textView_noContent.setVisibility(v.INVISIBLE);
-                    int lastDaysLeft = -1;//D8.textToDate(sorted.get(0).getDueDate()).daysLeft();
+                    int lastDaysLeft = -1;
                     for (POJOgetTask t : sorted) {
                         String date = t.getDueDate();
                         int daysLeft = D8.textToDate(date).daysLeft();
@@ -140,7 +129,6 @@ public class GroupMainFragment extends GroupFragment {
             }
             @Override
             public void onErrorResponse(POJOerror error) {
-                Log.e("hey", "onErrorResponse");
                 sRefreshLayout.setRefreshing(false);
             }
             @Override
@@ -150,26 +138,13 @@ public class GroupMainFragment extends GroupFragment {
                 sRefreshLayout.setRefreshing(false);
             }
         };
-      //  MiddleMan.request.getTasksFromGroup(this.getActivity(), null, responseHandler, vars);
         MiddleMan.newRequest(new GetTasksFromGroup(getActivity(), responseHandler, groupId));
 
     }
 
     public void toTaskEditor(FragmentManager fm){
-        Log.e("hey", "GROUPID: " + groupId);
         Transactor.fragmentCreateTask(fm.beginTransaction(), groupId, groupName, Strings.Dest.TOGROUP);
 
-    }
-
-    public void leaveGroup(){
-        EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
-        vars.put(Strings.Path.GROUPID, Integer.toString(groupId));
-        MiddleMan.newRequest(new LeaveGroup( getActivity(), new CustomResponseHandler() {
-            @Override
-            public void onSuccessfulResponse() {
-                Transactor.fragmentGroups(getFragmentManager().beginTransaction());
-            }
-        }, groupId));
     }
 }
 

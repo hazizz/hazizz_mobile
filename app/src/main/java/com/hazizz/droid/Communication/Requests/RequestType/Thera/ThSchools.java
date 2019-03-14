@@ -5,8 +5,8 @@ import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.Requests.Request;
-import com.hazizz.droid.SharedPrefs;
+import com.hazizz.droid.Communication.Requests.Parent.Request;
+import com.hazizz.droid.Communication.Requests.Parent.ThRequest;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -14,7 +14,7 @@ import java.util.HashMap;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 
-public class ThSchools extends Request {
+public class ThSchools extends ThRequest {
     public ThSchools(Activity act, CustomResponseHandler rh) {
         super(act, rh);
         Log.e("hey", "created ThSchools object");
@@ -23,7 +23,7 @@ public class ThSchools extends Request {
 
         headerMap.put(HEADER_AUTH, getHeaderAuthToken());
 
-        call = tRequest.th_getSchools(headerMap);
+        call = aRequest.th_getSchools(headerMap);
     }
 
 

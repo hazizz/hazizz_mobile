@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.503"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_subject">
+
+            <TextView
+                android:visibility="invisible"
+                android:id="@+id/textView_standin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/thera_standin"
+                android:textColor="@color/colorAccent"
+                android:textSize="16sp"
+                android:paddingRight="4sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_subject" />
+
+            <TextView
+                android:visibility="invisible"
+                android:id="@+id/textView_standin_teacher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textColor="@color/colorAccent"
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@+id/textView_standin"
+                app:layout_constraintTop_toBottomOf="@+id/textView_subject" />
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/textView_canceled"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="2dp"
+            android:text="@string/thera_canceled"
+            android:textColor="@color/colorAccent"
+            android:textSize="20sp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.501"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_subject" />
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_canceled">
+
+            <TextView
+                android:id="@+id/textView55"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/thera_classStart"
+                android:textColor="@color/colorDarkText"
+                android:textSize="18dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/textView44"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/thera_classEnd"
+                android:textColor="@color/colorDarkText"
+                android:textSize="18dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_weight" />
+
+
+            <TextView
+                android:id="@+id/textView_teacher_"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/thera_teacher"
+                android:textColor="@color/colorDarkText"
+                android:textSize="18dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_theme" />
+
+            <TextView
+                android:id="@+id/textView17"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/thera_classRoom"
+                android:textColor="@color/colorDarkText"
+                android:textSize="18dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_teacher" />
+
+            <TextView
+                android:id="@+id/textView19"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/thera_classGroup"
+                android:textColor="@color/colorDarkText"
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/textView22"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/thera_date"
+                android:textColor="@color/colorDarkText"
+                android:textSize="18dp" />
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView_subject"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Tantárgy"
+            android:textColor="@color/colorDarkText"
+            android:textSize="26sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="2dp"
+            android:layout_marginRight="2dp"
+            android:text="1."
+            android:textColor="@color/colorDarkText"
+            android:textSize="26sp"
+            app:layout_constraintEnd_toStartOf="@+id/textView_subject"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_canceled">
+
+            <TextView
+                android:id="@+id/textView_weight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="kezdet: "
+                android:textColor="@color/colorDarkText"
+                android:textSize="18dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/textView_theme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="vége"
+                android:textColor="@color/colorDarkText"
+                android:textSize="18dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_weight" />
+
+
+            <TextView
+                android:id="@+id/textView_teacher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:maxLength="12"
+                android:singleLine="true"
+                android:text="tanársadasdsadsadasd"
+                android:textColor="@color/colorDarkText"
+                android:textSize="18dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_theme" />
+
+            <TextView
+                android:id="@+id/textView_classroom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="class room"
+                android:textColor="@color/colorDarkText"
+                android:textSize="18dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_teacher" />
+
+            <TextView
+                android:id="@+id/textView_classgroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:maxLength="12"
+                android:singleLine="true"
+                android:text="class group "
+                android:textColor="@color/colorDarkText"
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/textView_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="dátum"
+                android:textColor="@color/colorDarkText"
+                android:textSize="18dp" />
+
+
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/button_close"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="2dp"
+            android:text="@string/close"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+
+
+
+    </android.support.constraint.ConstraintLayout>
+
+
+
+</RelativeLayout>

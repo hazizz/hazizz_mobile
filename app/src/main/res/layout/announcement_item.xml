@@ -24,7 +24,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView_start"
+        android:id="@+id/textView_weight"
         android:layout_width="196dp"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
@@ -49,7 +49,7 @@
         android:layout_marginLeft="2dp"
         android:layout_marginStart="2dp"
         android:layout_marginTop="16dp"
-        app:layout_constraintStart_toEndOf="@+id/textView_start"
+        app:layout_constraintStart_toEndOf="@+id/textView_weight"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView

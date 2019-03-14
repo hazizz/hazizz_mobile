@@ -1,11 +1,9 @@
 package com.hazizz.droid.Fragments.GroupTabs;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -23,7 +21,6 @@ import com.hazizz.droid.Communication.Requests.GetSubjects;
 import com.hazizz.droid.Fragments.ParentFragment.GroupFragment;
 import com.hazizz.droid.Listviews.SubjectList.CustomAdapter;
 import com.hazizz.droid.Listviews.SubjectList.SubjectItem;
-import com.hazizz.droid.Manager;
 import com.hazizz.droid.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
@@ -66,6 +63,7 @@ public class SubjectsFragment extends GroupFragment {
 
         return v;
     }
+
     void createViewList(){
         listSubject = new ArrayList<>();
         ListView listView = (ListView)v.findViewById(R.id.listView_subjects);
@@ -85,6 +83,7 @@ public class SubjectsFragment extends GroupFragment {
             }
         });
     }
+
     public void getSubjects(){
         CustomResponseHandler responseHandler = new CustomResponseHandler() {
             @Override
@@ -158,7 +157,7 @@ public class SubjectsFragment extends GroupFragment {
     }
 
     public void toCreateSubject(FragmentManager fm){
-        Transactor.fragmentCreateSubject(fm.beginTransaction(), groupId, groupName);//GroupTabFragment.groupName);
+        Transactor.fragmentCreateSubject(fm.beginTransaction(), GroupTabFragment.groupId, GroupTabFragment.groupName);
     }
 
     @Override

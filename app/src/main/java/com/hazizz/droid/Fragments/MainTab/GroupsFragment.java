@@ -138,37 +138,15 @@ public class GroupsFragment extends ParentFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-               /* switch (Manager.DestManager.getDest()) {
-                    case Manager.DestManager.TOCREATETASK:
-                        Manager.GroupManager.setGroupId(((GroupItem) listView.getItemAtPosition(i)).getGroupId());
-                        Manager.GroupManager.setGroupName(((GroupItem) listView.getItemAtPosition(i)).getGroupName());
-                        Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(), ((GroupItem) listView.getItemAtPosition(i)).getGroupId(), ((GroupItem) listView.getItemAtPosition(i)).getGroupName(), Manager.DestManager.TOMAIN);
-                        break;
-                    case Manager.DestManager.TOCREATEANNOUNCEMENT:
-                        Manager.GroupManager.setGroupId(((GroupItem) listView.getItemAtPosition(i)).getGroupId());
-                        Manager.GroupManager.setGroupName(((GroupItem) listView.getItemAtPosition(i)).getGroupName());
-                        Transactor.fragmentCreateAnnouncement(getFragmentManager().beginTransaction(), ((GroupItem) listView.getItemAtPosition(i)).getGroupId(), ((GroupItem) listView.getItemAtPosition(i)).getGroupName(), Manager.DestManager.TOMAIN);
-                        break;
-                    case Manager.DestManager.TOMAIN:
-                        Transactor.fragmentMainGroup(getFragmentManager().beginTransaction(), ((GroupItem) listView.getItemAtPosition(i)).getGroupId(), ((GroupItem) listView.getItemAtPosition(i)).getGroupName());
-                        break;
-                    default:
-                        Transactor.fragmentMainGroup(getFragmentManager().beginTransaction(), ((GroupItem) listView.getItemAtPosition(i)).getGroupId(), ((GroupItem) listView.getItemAtPosition(i)).getGroupName());
-                        break;
+                int groupId = ((GroupItem) listView.getItemAtPosition(i)).getGroupId();
+                String groupName = ((GroupItem) listView.getItemAtPosition(i)).getGroupName();
+                if(Dest.TOCREATETASK.getValue() == dest) {
+                    Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(), groupId, groupName, Strings.Dest.TOMAIN);
+                }else if(Dest.TOCREATEANNOUNCEMET.getValue() == dest){
+                    Transactor.fragmentCreateAnnouncement(getFragmentManager().beginTransaction(), groupId, groupName, Strings.Dest.TOMAIN);
+                }else{
+                    Transactor.fragmentMainGroup(getFragmentManager().beginTransaction(), groupId, groupName);
                 }
-                */
-                    int groupId = ((GroupItem) listView.getItemAtPosition(i)).getGroupId();
-                    String groupName = ((GroupItem) listView.getItemAtPosition(i)).getGroupName();
-                    if(Dest.TOCREATETASK.getValue() == dest) {
-                      //  Manager.GroupManager.setGroupName(((GroupItem) listView.getItemAtPosition(i)).getGroupName());
-                        Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(), groupId, groupName, Strings.Dest.TOMAIN);
-                    }else if(Dest.TOCREATEANNOUNCEMET.getValue() == dest){
-                     //   Manager.GroupManager.setGroupId(((GroupItem) listView.getItemAtPosition(i)).getGroupId());
-                      //  Manager.GroupManager.setGroupName(((GroupItem) listView.getItemAtPosition(i)).getGroupName());
-                        Transactor.fragmentCreateAnnouncement(getFragmentManager().beginTransaction(), groupId, groupName, Strings.Dest.TOMAIN);
-                    }else{
-                        Transactor.fragmentMainGroup(getFragmentManager().beginTransaction(), groupId, groupName);
-                    }
             }
         });
     }

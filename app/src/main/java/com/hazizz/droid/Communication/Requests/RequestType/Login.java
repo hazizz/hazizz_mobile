@@ -1,13 +1,11 @@
 package com.hazizz.droid.Communication.Requests.RequestType;
 
 import android.app.Activity;
-import android.content.Context;
 import android.util.Log;
 
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOauth;
-import com.hazizz.droid.Communication.RequestInterface;
-import com.hazizz.droid.Communication.Requests.Request;
+import com.hazizz.droid.Communication.Requests.Parent.Request;
 
 import java.util.HashMap;
 

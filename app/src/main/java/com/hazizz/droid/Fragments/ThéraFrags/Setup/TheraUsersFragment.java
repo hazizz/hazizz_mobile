@@ -117,6 +117,6 @@ public class TheraUsersFragment  extends ParentFragment {
              //   sRefreshLayout.setRefreshing(false);
             }
         };
-        MiddleMan.newRequest(new ThReturnSessions(getActivity(),responseHandler));
+        MiddleMan.newThRequest(new ThReturnSessions(getActivity(),responseHandler));
     }
 }

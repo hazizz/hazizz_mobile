@@ -1,7 +1,6 @@
 package com.hazizz.droid;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,12 +20,13 @@ import com.hazizz.droid.Fragments.AnnouncementEditorFragment;
 import com.hazizz.droid.Fragments.AuthFrags.FirstFragment;
 import com.hazizz.droid.Fragments.AuthFrags.LoginFragment;
 import com.hazizz.droid.Fragments.AuthFrags.RegisterFragment;
-import com.hazizz.droid.Fragments.ChatFragment;
 import com.hazizz.droid.Fragments.CommentSectionFragment;
 import com.hazizz.droid.Fragments.CreateGroupFragment;
 import com.hazizz.droid.Fragments.CreateSubjectFragment;
 import com.hazizz.droid.Fragments.Dialog.DateViewerDialogFragment;
 import com.hazizz.droid.Fragments.Dialog.ManageSubjectDialog;
+import com.hazizz.droid.Fragments.Dialog.ThClassViewerDialogFragment;
+import com.hazizz.droid.Fragments.Dialog.ThGreadeViewerDialogFragment;
 import com.hazizz.droid.Fragments.Dialog.UserDetailDialogFragment;
 import com.hazizz.droid.Fragments.GroupTabs.GroupTabFragment;
 import com.hazizz.droid.Fragments.JoinGroupFragment;
@@ -45,6 +45,8 @@ import com.hazizz.droid.Fragments.ThéraFrags.Setup.TheraSchedulesFragment;
 import com.hazizz.droid.Fragments.ThéraFrags.Setup.TheraUsersFragment;
 import com.hazizz.droid.Fragments.ViewAnnouncementFragment;
 import com.hazizz.droid.Fragments.ViewTaskFragment;
+import com.hazizz.droid.Listviews.TheraGradesList.TheraGradesItem;
+import com.hazizz.droid.Listviews.TheraReturnSchedules.ClassItem;
 
 import javax.annotation.Nonnull;
 
@@ -72,9 +74,6 @@ public class Transactor extends FragmentActivity {
     public static final String KEY_STARTINGTAB = "startingTab";
     public static final String KEY_GOBACKTOMAIN = "goBackToMain";
     public static final String KEY_CURRENTSUBJECTNAME = "currentSubjectName";
-    
-
-
 
 
     public static Fragment getCurrentFragment(FragmentManager fManager, boolean absolute){
@@ -95,6 +94,23 @@ public class Transactor extends FragmentActivity {
     }
 
 
+    public static void fragmentThDialogClass(@Nonnull FragmentTransaction fTransaction, ClassItem classItem){
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("class", classItem);
+
+        DialogFragment dialogFragment = new ThClassViewerDialogFragment();
+        dialogFragment.setArguments(bundle);
+        dialogFragment.show(fTransaction, "dialog");
+    }
+
+    public static void fragmentThDialogGrade(@Nonnull FragmentTransaction fTransaction, TheraGradesItem gradeItem){
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("grade", gradeItem);
+
+        DialogFragment dialogFragment = new ThGreadeViewerDialogFragment();
+        dialogFragment.setArguments(bundle);
+        dialogFragment.show(fTransaction, "dialog");
+    }
 
     public static void fragmentDialogManageSubject(@Nonnull FragmentTransaction fTransaction, long groupId, long subjectId, String currentSubjectName){
         Bundle bundle = new Bundle();
@@ -218,13 +234,12 @@ public class Transactor extends FragmentActivity {
     public static void fragmentViewTask(@Nonnull FragmentTransaction fTransaction,
                                         int taskId, boolean goBackToMain, Strings.Dest dest, boolean mode){
 
-
         Bundle bundle = new Bundle();
         bundle.putInt(KEY_DEST, dest.getValue());
         bundle.putInt(Strings.Path.TASKID.toString(), taskId);
         bundle.putBoolean(KEY_GOBACKTOMAIN, goBackToMain);
         bundle.putBoolean(KEY_MODE, mode);
-        ViewTaskFragment frag = new ViewTaskFragment();
+        Fragment frag = new ViewTaskFragment();
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }
@@ -357,7 +372,6 @@ public class Transactor extends FragmentActivity {
 
     public static void fragmentViewAnnouncement(@Nonnull FragmentTransaction fTransaction,int announcementId,
                                                  boolean goBackToMain, Strings.Dest dest){
-
         Bundle bundle = new Bundle();
         bundle.putInt(KEY_DEST, dest.getValue());
         bundle.putInt(Strings.Path.ANNOUNCEMENTID.toString(), announcementId);
@@ -369,17 +383,11 @@ public class Transactor extends FragmentActivity {
         fTransaction.commit();
     }
 
-    public static void fragmentChat(@Nonnull FragmentTransaction fTransaction){
-        ChatFragment frag = new ChatFragment();
-        fTransaction.replace(R.id.fragment_container, frag);
-        if(backStack){ fTransaction.addToBackStack(null); }
-        fTransaction.commit();
-    }
 
     public static void fragmentCreateSubject(@Nonnull FragmentTransaction fTransaction, int groupId, String groupName){
         Bundle bundle = new Bundle();
         CreateSubjectFragment frag = new CreateSubjectFragment();
-        bundle.putInt(Strings.Path.GROUPID.toString(), groupId);
+        bundle.putInt(KEY_GROUPID, groupId);
         bundle.putString(KEY_GROUPNAME, groupName);
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);

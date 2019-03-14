@@ -56,9 +56,7 @@ public class D8 {
             String[] days = c.getResources().getStringArray(R.array.days);
             return days[i];
         }
-
     }
-
 
     private D8(){}
 
@@ -68,10 +66,6 @@ public class D8 {
     public static DateTimeFormatter dtf_date = DateTimeFormat.forPattern("yyyy-MM-dd");
 
     public static DateTimeFormatter dtf_time = DateTimeFormat.forPattern("yyyy-MM-dd'T'hh:mm:ss'S'");
-
-
-
-
 
     public static Date textToDate(String text){
         LocalDate l = LocalDate.parse(text);
@@ -105,7 +99,6 @@ public class D8 {
     }
 
     public static ArrayList<POJOgetTask> sortTasksByDate(ArrayList<POJOgetTask> data) {
-
 
         ArrayList<DateTime> dates = new ArrayList<>();
         for (int i = 0; i <= data.size() - 1; i++) {

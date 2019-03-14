@@ -1,4 +1,4 @@
-package com.hazizz.droid;
+package com.hazizz.droid.widget.tasks;
 
 import android.content.Intent;
 import android.widget.RemoteViewsService;

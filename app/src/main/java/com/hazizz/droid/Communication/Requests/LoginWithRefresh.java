@@ -5,13 +5,14 @@ import android.util.Log;
 
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOauth;
+import com.hazizz.droid.Communication.Requests.Parent.Request;
 
 import java.util.HashMap;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 
-public class LoginWithRefresh extends Request  {
+public class LoginWithRefresh extends Request {
     String b_username, refreshToken;
     public LoginWithRefresh(Activity act, CustomResponseHandler rh, String b_username, String refreshToken) {
         super(act, rh);
