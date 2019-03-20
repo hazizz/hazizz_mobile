@@ -42,7 +42,7 @@ public class LoginFragment extends Fragment {
     private CheckBox checkBox_autoLogin;
     private Button button_login;
     private TextView textView_error;
-    private TextView textView_register;
+    private TextView button_register;
 
 
     private View v;
@@ -104,8 +104,8 @@ public class LoginFragment extends Fragment {
         editText_username = v.findViewById(R.id.editText_username);
         editText_password = v.findViewById(R.id.editText_password);
         checkBox_autoLogin = v.findViewById(R.id.checkBox_autoLogin);
-        textView_register = v.findViewById(R.id.textView_register);
-        textView_register.setOnClickListener(new View.OnClickListener(){
+        button_register = v.findViewById(R.id.button_register);
+        button_register.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 Transactor.fragmentRegister(getFragmentManager().beginTransaction());

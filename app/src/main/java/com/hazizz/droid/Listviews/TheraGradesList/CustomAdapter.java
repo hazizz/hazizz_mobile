@@ -4,24 +4,29 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hazizz.droid.R;
 
 import java.util.List;
 
-public class CustomAdapter extends ArrayAdapter<TheraGradesItem> {
+public class CustomAdapter extends ArrayAdapter<TheraSubjectGradesItem> {
 
     int picID;
     Context context;
-    List<TheraGradesItem> data = null;
+    List<TheraSubjectGradesItem> data = null;
 
+   // DataHolder holder;
 
-    public CustomAdapter(@NonNull Context context, int resource, @NonNull List<TheraGradesItem> objects) {
+    public CustomAdapter(@NonNull Context context, int resource, @NonNull List<TheraSubjectGradesItem> objects) {
         super(context, resource, objects);
 
         this.picID = resource;
@@ -30,10 +35,9 @@ public class CustomAdapter extends ArrayAdapter<TheraGradesItem> {
     }
 
     static class DataHolder{
-        TextView textView_grade_number;
-        TextView textView_date;
-        TextView textView_theme;
-        TextView textView_weight;
+       // TextView textView_grade_example;
+        TextView textView_subjectName;
+        LinearLayout homeMadeList_grades;
     }
     @NonNull
     @Override
@@ -46,26 +50,55 @@ public class CustomAdapter extends ArrayAdapter<TheraGradesItem> {
             convertView = inflater.inflate(picID, parent, false);
 
             holder = new DataHolder();
-            holder.textView_grade_number = convertView.findViewById(R.id.textView_subjectName);
-            holder.textView_date = convertView.findViewById(R.id.textView_teacher);
-            holder.textView_theme = convertView.findViewById(R.id.textView_weight);
-            holder.textView_weight = convertView.findViewById(R.id.textView_weight);
+            //holder.textView_grade_example = convertView.findViewById(R.id.textView_grade_example);
+            holder.textView_subjectName = convertView.findViewById(R.id.textView_subjectName);
+            holder.homeMadeList_grades = (LinearLayout) convertView.findViewById(R.id.linearLayout_grades);
 
             convertView.setTag(holder);
         }else{
             holder = (DataHolder)convertView.getTag();
         }
 
-        TheraGradesItem th_gradeItem = data.get(position);
+        TheraSubjectGradesItem th_subjectItem = data.get(position);
 
-        holder.textView_grade_number.setText(Integer.toString(th_gradeItem.getNumberValue()));
-        holder.textView_date.setText("" + th_gradeItem.getDate());
-        holder.textView_theme.setText(th_gradeItem.getTheme());
-        holder.textView_weight.setText(th_gradeItem.getWeight());
+        holder.textView_subjectName.setText(th_subjectItem.getSubjectName());
+        addGrade(th_subjectItem.getGrades(), holder);
 
-
-
+        Log.e("hey", "finished 123");
 
         return convertView;
     }
+
+
+    private void addGrade(List<TheraGradesItem> grades, DataHolder holder){
+        for(int i = 0; i < grades.size(); i++){
+
+            TheraGradesItem grade = grades.get(i);
+
+            grade.getWeight();
+
+            TextView textView_grade = new TextView(context);
+
+            if(i+1 != grades.size() ) {
+                textView_grade.setText(grade.getGrade() + ",");
+            }else{
+                textView_grade.setText(grade.getGrade());
+            }
+
+            textView_grade.setVisibility(View.VISIBLE);
+            textView_grade.setTextColor(context.getResources().getColor(R.color.colorDarkText));
+
+
+
+            textView_grade.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 40);
+            textView_grade.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+
+            }});
+
+            holder.homeMadeList_grades.addView(textView_grade);
+            Log.e("hey", "grade added");
+        }
+    }
+
 }

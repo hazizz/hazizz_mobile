@@ -19,8 +19,8 @@ import com.hazizz.droid.R;
 
 public class CollectionWidgetProvider extends AppWidgetProvider {
 
-    public static final String WIDGET_RIGHTBUTTON = "right";
-    public static final String WIDGET_LEFTBUTTON = "left";
+    public static final String WIDGET_RIGHTBUTTON = "com.hazizz.droid.schedules.WIDGET_RIGHTBUTTON";
+    public static final String WIDGET_LEFTBUTTON = "com.hazizz.droid.schedules.WIDGET_LEFTBUTTON";
 
     public static final String EXTRA_STRING = "extraString2";
     public static final String ACTION_TOAST = "actionToast2";

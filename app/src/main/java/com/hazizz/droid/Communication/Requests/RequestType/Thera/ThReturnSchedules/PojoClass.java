@@ -5,30 +5,29 @@ import lombok.Data;
 @Data
 public class PojoClass {
 
+    String date;
     String startOfClass;
     String endOfClass;
+    int periodNumber;
     boolean cancelled;
     boolean standIn;
-    String SubjectCategoryName;
-    String Date;
-    String Count;
-    String ClassGroup;
-    String Teacher;
-    String ClassRoom;
+    String subject;
+    String className;
+    String teacher;
+    String room;
+    String topic;
 
-    public PojoClass(String startOfClass, String endOfClass, boolean cancelled, boolean standIn, String subjectCategoryName, String date, String count, String classGroup, String teacher, String classRoom) {
+    public PojoClass(String date, String startOfClass, String endOfClass, int periodNumber, boolean cancelled, boolean standIn,String subject, String className, String teacher, String room, String topic) {
+        this.date = date;
         this.startOfClass = startOfClass;
         this.endOfClass = endOfClass;
+        this.periodNumber = periodNumber;
         this.cancelled = cancelled;
         this.standIn = standIn;
-        SubjectCategoryName = subjectCategoryName;
-        Date = date;
-        Count = count;
-        ClassGroup = classGroup;
-        Teacher = teacher;
-        ClassRoom = classRoom;
+        this.subject = subject;
+        this.className = className;
+        this.teacher = teacher;
+        this.room = room;
+        this.topic = topic;
     }
-
-
-
 }

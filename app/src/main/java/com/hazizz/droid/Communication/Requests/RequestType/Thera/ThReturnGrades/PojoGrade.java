@@ -5,15 +5,21 @@ import lombok.Data;
 @Data
 public class PojoGrade {
 
-    String Date;
-    String Weight;
-    String Theme;
-    int NumberValue;
+    private String date;
+    private String creationDate;
+    private String subject;
+    private String topic;
+    private String gradeType;
+    private String grade;
+    private String weight;
 
-    public PojoGrade( String Date,  String Weight,  String Theme,  int NumberValue){
-        this.Date = Date;
-        this.Weight = Weight;
-        this.Theme = Theme;
-        this.NumberValue = NumberValue;
+    public PojoGrade(String date, String creationDate, String subject, String topic, String gradeType, String grade, String weight) {
+        this.date = date;
+        this.creationDate = creationDate;
+        this.subject = subject;
+        this.topic = topic;
+        this.gradeType = gradeType;
+        this.grade = grade;
+        this.weight = weight;
     }
 }

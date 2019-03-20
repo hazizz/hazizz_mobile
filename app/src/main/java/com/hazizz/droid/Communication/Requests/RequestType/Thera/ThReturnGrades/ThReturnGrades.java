@@ -6,9 +6,10 @@ import android.util.Log;
 import com.google.gson.reflect.TypeToken;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.Requests.Parent.ThRequest;
+import com.hazizz.droid.Listviews.TheraGradesList.TheraGradesItem;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -32,9 +33,9 @@ public class ThReturnGrades extends ThRequest {
 
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
-        Type listType = new TypeToken<ArrayList<PojoGrade>>(){}.getType();
-        List<PojoGrade> castedList = gson.fromJson(response.body().charStream(), listType);
-
-        cOnResponse.onPOJOResponse(castedList);
+        Type listType = new TypeToken<HashMap<String, List<TheraGradesItem>>>(){}.getType();
+        HashMap<String, List<TheraGradesItem>> castedMap = gson.fromJson(response.body().charStream(), listType);
+        Log.e("hey", "grade: " + castedMap.get("angol nyelv").get(0).getWeight());
+        cOnResponse.onPOJOResponse(castedMap);
     }
 }

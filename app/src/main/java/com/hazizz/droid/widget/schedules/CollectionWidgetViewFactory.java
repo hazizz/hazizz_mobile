@@ -104,8 +104,8 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
 
         RemoteViews itemView = new RemoteViews(mContext.getPackageName(), R.layout.item_widget_thera_schedule);
 
-        itemView.setTextViewText(R.id.task_title, task.getCount());
-        itemView.setTextViewText(R.id.task_description, task.getSubjectCategoryName());
+        itemView.setTextViewText(R.id.task_title, task.getPeriodNumber() + ".");
+        itemView.setTextViewText(R.id.task_description, task.getClassName());
      //   itemView.setTextViewText(R.id.textView_creator_, task.getCreator().getDisplayName());
 
         /*

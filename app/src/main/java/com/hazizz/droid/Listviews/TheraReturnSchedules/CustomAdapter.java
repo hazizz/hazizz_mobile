@@ -61,10 +61,10 @@ public class CustomAdapter extends ArrayAdapter<ClassItem> {
 
         ClassItem classItem = data.get(position);
 
-        holder.textView_subjectName.setText(classItem.getSubjectCategoryName());
+        holder.textView_subjectName.setText(classItem.getSubject());
         holder.textView_teacher.setText(classItem.getTeacher());
-        holder.textView_classroom.setText(classItem.getClassRoom());
-        holder.textView_count.setText(classItem.getCount() + ".");
+        holder.textView_classroom.setText(classItem.getRoom());
+        holder.textView_count.setText(classItem.getPeriodNumber() + ".");
         holder.textView_start.setText(classItem.getStartOfClass());
         holder.textView_end.setText(classItem.getEndOfClass());
 

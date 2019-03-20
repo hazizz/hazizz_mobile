@@ -120,7 +120,7 @@ public class TheraSchedulesFragment extends ParentFragment {
                             //Új nap
 
                         }
-                        listClassesAll.add(new ClassItem(t.getStartOfClass(), t.getEndOfClass(), t.isCancelled(), t.isStandIn(), t.getSubjectCategoryName(), t.getDate(), t.getCount(), t.getClassGroup(), t.getTeacher(), t.getClassRoom()));
+                        listClassesAll.add(new ClassItem(t.getDate(), t.getStartOfClass(), t.getEndOfClass(), t.getPeriodNumber(), t.isCancelled(), t.isStandIn(), t.getSubject(), t.getClassName(), t.getTeacher(), t.getRoom(), t.getTopic()));
 
                     }
                     getCurrentDaySchedules(currentDay);

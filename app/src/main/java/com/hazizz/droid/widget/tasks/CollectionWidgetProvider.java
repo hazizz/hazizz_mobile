@@ -151,7 +151,9 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
                 // Maybe consider using an Activity PendingIntent instead of a Broadcast?
             }
         }*/
-        Log.e("hey", "RECIEVED");
+
+
+        Log.e("hey", "RECIEVED INTENT");
 
         if (WIDGET_REFRESHBUTTON.equals(intent.getAction())) {
            // String str = intent.getAction();
@@ -191,6 +193,12 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
             String item = intent.getExtras().getString(EXTRA_STRING);
             Toast.makeText(context, item, Toast.LENGTH_LONG).show();
         }
+
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+        ComponentName thisAppWidget = new ComponentName(context.getPackageName(), CollectionWidgetProvider.class.getName());
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(thisAppWidget);
+
+        onUpdate(context, appWidgetManager, appWidgetIds);
 
         super.onReceive(context, intent);
     }

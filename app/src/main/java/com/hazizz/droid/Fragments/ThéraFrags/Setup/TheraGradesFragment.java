@@ -14,25 +14,23 @@ import android.widget.TextView;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
-import com.hazizz.droid.Communication.Requests.RequestType.Thera.ThReturnGrades.PojoGrade;
 import com.hazizz.droid.Communication.Requests.RequestType.Thera.ThReturnGrades.ThReturnGrades;
 import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
 import com.hazizz.droid.Listviews.TheraGradesList.TheraGradesItem;
 import com.hazizz.droid.Listviews.TheraGradesList.CustomAdapter;
+import com.hazizz.droid.Listviews.TheraGradesList.TheraSubjectGradesItem;
 import com.hazizz.droid.R;
 import com.hazizz.droid.SharedPrefs;
-import com.hazizz.droid.Transactor;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-import okhttp3.ResponseBody;
-import retrofit2.Call;
+import java.util.Map;
 
 public class TheraGradesFragment  extends ParentFragment {
 
     private CustomAdapter adapter;
-    private List<TheraGradesItem> listGrades;
+    private List<TheraSubjectGradesItem> listGrades;
 
     private TextView textView_noContent;
 
@@ -54,16 +52,14 @@ public class TheraGradesFragment  extends ParentFragment {
     void createViewList(){
         listGrades = new ArrayList<>();
         ListView listView = (ListView)v.findViewById(R.id.listView_classes);
-        adapter = new CustomAdapter(getActivity(), R.layout.th_grades_item, listGrades);
+        adapter = new CustomAdapter(getActivity(), R.layout.th_grade_subject_item, listGrades);
         listView.setAdapter(adapter);
-
-
 
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Transactor.fragmentThDialogGrade(getFragmentManager().beginTransaction(), adapter.getItem(i));
+              //  Transactor.fragmentThDialogGrade(getFragmentManager().beginTransaction(), adapter.getItem(i));
             }
         });
 
@@ -73,14 +69,20 @@ public class TheraGradesFragment  extends ParentFragment {
             @Override
             public void onPOJOResponse(Object response) {
                 adapter.clear();
-                ArrayList<PojoGrade> pojoList = (ArrayList<PojoGrade>) response;
-                if(pojoList.isEmpty()){
+                HashMap<String, List<TheraGradesItem>> pojoMap = (HashMap<String, List<TheraGradesItem>>)response;
+
+
+
+                if(pojoMap.isEmpty()){
                     textView_noContent.setVisibility(v.VISIBLE);
+                    Log.e("hey", "is Empty");
                 }else {
                     textView_noContent.setVisibility(v.INVISIBLE);
-                    for (PojoGrade t : pojoList) {
-                        listGrades.add(new TheraGradesItem(t.getDate(), t.getWeight(), t.getTheme(), t.getNumberValue()));
+
+                    for (Map.Entry<String,List<TheraGradesItem>> entry : pojoMap.entrySet()) {
+                        listGrades.add(new TheraSubjectGradesItem(entry.getKey(), entry.getValue()));
                         adapter.notifyDataSetChanged();
+                        Log.e("hey", "iterate2");
                     }
                 }
             }

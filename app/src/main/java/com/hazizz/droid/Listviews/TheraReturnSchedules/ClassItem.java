@@ -8,41 +8,44 @@ import lombok.Data;
 @Data
 public class ClassItem implements Parcelable {
 
-    String startOfClass;
-    String endOfClass;
-    boolean cancelled;
-    boolean standIn;
-    String SubjectCategoryName;
-    String Date;
-    String Count;
-    String ClassGroup;
-    String Teacher;
-    String ClassRoom;
+    private String date;
+    private String startOfClass;
+    private String endOfClass;
+    private int periodNumber;
+    private boolean cancelled;
+    private boolean standIn;
+    private String subject;
+    private String className;
+    private String teacher;
+    private String room;
+    private String topic;
 
-    public ClassItem(String startOfClass, String endOfClass, boolean cancelled, boolean standIn, String subjectCategoryName, String date, String count, String classGroup, String teacher, String classRoom) {
+    public ClassItem(String date, String startOfClass, String endOfClass, int periodNumber, boolean cancelled, boolean standIn, String subject, String className, String teacher, String room, String topic) {
+        this.date = date;
         this.startOfClass = startOfClass;
         this.endOfClass = endOfClass;
+        this.periodNumber = periodNumber;
         this.cancelled = cancelled;
         this.standIn = standIn;
-        SubjectCategoryName = subjectCategoryName;
-        Date = date;
-        Count = count;
-        ClassGroup = classGroup;
-        Teacher = teacher;
-        ClassRoom = classRoom;
+        this.subject = subject;
+        this.className = className;
+        this.teacher = teacher;
+        this.room = room;
+        this.topic = topic;
     }
 
     protected ClassItem(Parcel in) {
+        date = in.readString();
         startOfClass = in.readString();
         endOfClass = in.readString();
+        periodNumber = in.readInt();
         cancelled = in.readByte() != 0x00;
         standIn = in.readByte() != 0x00;
-        SubjectCategoryName = in.readString();
-        Date = in.readString();
-        Count = in.readString();
-        ClassGroup = in.readString();
-        Teacher = in.readString();
-        ClassRoom = in.readString();
+        subject = in.readString();
+        className = in.readString();
+        teacher = in.readString();
+        room = in.readString();
+        topic = in.readString();
     }
 
     @Override
@@ -52,16 +55,17 @@ public class ClassItem implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(date);
         dest.writeString(startOfClass);
         dest.writeString(endOfClass);
+        dest.writeInt(periodNumber);
         dest.writeByte((byte) (cancelled ? 0x01 : 0x00));
         dest.writeByte((byte) (standIn ? 0x01 : 0x00));
-        dest.writeString(SubjectCategoryName);
-        dest.writeString(Date);
-        dest.writeString(Count);
-        dest.writeString(ClassGroup);
-        dest.writeString(Teacher);
-        dest.writeString(ClassRoom);
+        dest.writeString(subject);
+        dest.writeString(className);
+        dest.writeString(teacher);
+        dest.writeString(room);
+        dest.writeString(topic);
     }
 
     @SuppressWarnings("unused")
