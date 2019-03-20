@@ -75,11 +75,11 @@ public class ThClassViewerDialogFragment extends DialogFragment {
         }else{
             textView_teacher.setText(classItem.getTeacher());
         }
-        textView_subject.setText(classItem.getSubjectCategoryName());
+        textView_subject.setText(classItem.getSubject());
         textView_date.setText(classItem.getDate());
-        textView_count.setText(classItem.getCount() + ".");
-        getTextView_classgroup.setText(classItem.getClassGroup());
-        textView_classroom.setText(classItem.getClassRoom());
+        textView_count.setText(classItem.getPeriodNumber() + ".");
+        getTextView_classgroup.setText(classItem.getClassName());
+        textView_classroom.setText(classItem.getRoom());
         button_close = v.findViewById(R.id.button_close);
         button_close.setOnClickListener(new View.OnClickListener() {
             @Override

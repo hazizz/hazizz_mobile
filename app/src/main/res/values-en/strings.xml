@@ -1,4 +1,8 @@
 <resources>
+
+    <string name="hazizz">Hazizz</string>
+    <string name="hazizz_motto">The generation Z\'s homework forum.</string>
+
     <string name="app_name">Hazizz Droid</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>

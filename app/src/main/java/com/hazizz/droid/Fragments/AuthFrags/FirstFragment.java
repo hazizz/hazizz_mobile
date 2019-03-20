@@ -26,14 +26,14 @@ public class FirstFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_first, container, false);
 
-        textView_login = v.findViewById(R.id.textView_login);
+        textView_login = v.findViewById(R.id.button_login);
         textView_login.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 Transactor.fragmentLogin(getFragmentManager().beginTransaction());
             }
         });
-        textView_register = v.findViewById(R.id.textView_register);
+        textView_register = v.findViewById(R.id.button_register);
         textView_register.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {

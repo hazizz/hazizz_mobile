@@ -40,8 +40,8 @@ public class ThGreadeViewerDialogFragment extends DialogFragment {
 
         textView_date.setText(gradeItem.getDate());
         textView_weight.setText(gradeItem.getWeight());
-        textView_theme.setText(gradeItem.getTheme());
-        textView_value.setText(Integer.toString(gradeItem.getNumberValue()));
+        textView_theme.setText(gradeItem.getTopic());
+        textView_value.setText(gradeItem.getGrade());
 
         button_close = v.findViewById(R.id.button_close);
         button_close.setOnClickListener(new View.OnClickListener() {

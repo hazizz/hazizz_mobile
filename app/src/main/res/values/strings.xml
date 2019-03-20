@@ -1,4 +1,7 @@
 <resources>
+    <string name="hazizz">Házizz</string>
+    <string name="hazizz_motto">A Z generáció házi feladat fóruma.</string>
+
     <string name="app_name">Hazizz Droid</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>

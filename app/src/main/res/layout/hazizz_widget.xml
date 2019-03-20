@@ -27,9 +27,8 @@
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryLightBlue"
-            >
+            android:layout_height="49dp"
+            android:background="@color/colorPrimaryLightBlue">
 
             <TextView
                 android:id="@+id/appwidget_text"
@@ -44,13 +43,12 @@
 
             <ImageButton
                 android:id="@+id/button_refresh"
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentTop="true"
-                app:srcCompat="@drawable/ic_refresh_grey"
-                style="?android:attr/borderlessButtonStyle"
-                />
+                app:srcCompat="@drawable/ic_refresh_grey" />
 
 
             <ImageButton

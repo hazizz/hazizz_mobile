@@ -6,25 +6,34 @@ import android.os.Parcelable;
 import lombok.Data;
 
 @Data
-public class TheraGradesItem implements Parcelable {
+public class TheraGradesItem implements Parcelable{
 
-    String Date;
-    String Weight;
-    String Theme;
-    int NumberValue;
+    private String date;
+    private String creationDate;
+    private String subject;
+    private String topic;
+    private String gradeType;
+    private String grade;
+    private String weight;
 
-    public TheraGradesItem( String Date,  String Weight,  String Theme,  int NumberValue){
-        this.Date = Date;
-        this.Weight = Weight;
-        this.Theme = Theme;
-        this.NumberValue = NumberValue;
+    public TheraGradesItem(String date, String creationDate, String subject, String topic, String gradeType, String grade, String weight) {
+        this.date = date;
+        this.creationDate = creationDate;
+        this.subject = subject;
+        this.topic = topic;
+        this.gradeType = gradeType;
+        this.grade = grade;
+        this.weight = weight;
     }
 
     protected TheraGradesItem(Parcel in) {
-        Date = in.readString();
-        Weight = in.readString();
-        Theme = in.readString();
-        NumberValue = in.readInt();
+        date = in.readString();
+        creationDate = in.readString();
+        subject = in.readString();
+        topic = in.readString();
+        gradeType = in.readString();
+        grade = in.readString();
+        weight = in.readString();
     }
 
     @Override
@@ -34,10 +43,13 @@ public class TheraGradesItem implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(Date);
-        dest.writeString(Weight);
-        dest.writeString(Theme);
-        dest.writeInt(NumberValue);
+        dest.writeString(date);
+        dest.writeString(creationDate);
+        dest.writeString(subject);
+        dest.writeString(topic);
+        dest.writeString(gradeType);
+        dest.writeString(grade);
+        dest.writeString(weight);
     }
 
     @SuppressWarnings("unused")
@@ -53,4 +65,3 @@ public class TheraGradesItem implements Parcelable {
         }
     };
 }
-
