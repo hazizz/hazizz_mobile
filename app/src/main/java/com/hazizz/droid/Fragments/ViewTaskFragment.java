@@ -61,8 +61,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 
 public class ViewTaskFragment extends CommentableFragment implements AdapterView.OnItemSelectedListener{
-
-   // private Button button_comments;
     private Button button_delete;
     private Button button_edit;
 
@@ -211,20 +209,6 @@ public class ViewTaskFragment extends CommentableFragment implements AdapterView
         button_delete = v.findViewById(R.id.button_delete);
         button_edit = v.findViewById(R.id.button_edit);
 
-      /*  ConstraintLayout.
-        LinearLayout.LayoutParams listLayoutParams = new LinearLayout.LayoutParams(
-                LayoutHeight, LinearLayout.LayoutParams.WRAP_CONTENT);
-        view.setLayoutParams(listLayoutParams);
-        */
-        /*
-        int h = getActivity().getWindowManager().getDefaultDisplay().getHeight();
-        ConstraintLayout mainLayout = (ConstraintLayout) v.findViewById(R.id.constraintLayout);
-        h = mainLayout.getHeight();
-        ViewGroup.LayoutParams params = mainLayout.getLayoutParams();
-        params.height = h;
-        mainLayout.setLayoutParams(new LinearLayout.LayoutParams(params));
-        */
-
         // Comment part
 
         scrollView = v.findViewById(R.id.scrollView);
@@ -334,20 +318,16 @@ public class ViewTaskFragment extends CommentableFragment implements AdapterView
 
         button_edit.setOnClickListener(view -> {
             if(gotResponse) {
-                Transactor.fragmentEditTask(getFragmentManager().beginTransaction(), groupId,
-                        Manager.GroupManager.getGroupName(), taskId, type, subjectId, subjectName, title, descripiton, date,
-                        Strings.Dest.CONVERT.convert(dest));
+                if(!isMyMode) {
+                    Transactor.fragmentEditTask(getFragmentManager().beginTransaction(), groupId, Manager.GroupManager.getGroupName(),
+                            taskId, type, subjectId, subjectName, title, descripiton, date,
+                            Strings.Dest.CONVERT.convert(dest));
+                }else{
+                    Transactor.fragmentEditMyTask(getFragmentManager().beginTransaction(),
+                            taskId, type, title, descripiton, date, Strings.Dest.CONVERT.convert(dest));
+                }
             }
         });
-        /*
-        button_comments = v.findViewById(R.id.button_comments);
-        button_comments.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Transactor.fragmentCommentSection(getFragmentManager().beginTransaction(), Strings.Path.TASKS.toString(), taskId);
-            }
-        });
-        */
 
         createViewList();
 
@@ -433,7 +413,7 @@ public class ViewTaskFragment extends CommentableFragment implements AdapterView
                             }
                         };
                         MiddleMan.newRequest(new GetGroupMembersProfilePic(getActivity(), responseHandler, groupId));
-                    } else {
+                    }else{
                         enable_button_comment++;
                         visibleIfEnabled_comment_send();
                     }
@@ -443,6 +423,8 @@ public class ViewTaskFragment extends CommentableFragment implements AdapterView
                     textView_group_.setVisibility(View.GONE);
                     textView_group.setVisibility(View.GONE);
                     textView_commentTitle.setVisibility(View.INVISIBLE);
+                    button_delete.setVisibility(View.VISIBLE);
+                    button_edit.setVisibility(View.VISIBLE);
                 }
 
                 taskId = (int)pojoResponse.getId();

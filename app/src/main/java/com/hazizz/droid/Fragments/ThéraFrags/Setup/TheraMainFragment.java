@@ -14,8 +14,8 @@ import com.hazizz.droid.Transactor;
 
 public class TheraMainFragment extends ParentFragment {
 
-    private TextView textView_grades;
-    private TextView textView_schedules;
+    private TextView button_grades;
+    private TextView button_schedules;
 
     @Nullable
     @Override
@@ -23,15 +23,15 @@ public class TheraMainFragment extends ParentFragment {
         v = inflater.inflate(R.layout.fragment_th_main, container, false);
         fragmentSetup(R.string.title_thera);
 
-        textView_grades = v.findViewById(R.id.textView_grades);
-        textView_grades.setOnClickListener(new View.OnClickListener() {
+        button_grades = v.findViewById(R.id.button_grades);
+        button_grades.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Transactor.fragmentThGrades(getFragmentManager().beginTransaction());
             }
         });
-        textView_schedules = v.findViewById(R.id.textView_schedules);
-        textView_schedules.setOnClickListener(new View.OnClickListener() {
+        button_schedules = v.findViewById(R.id.button_schedules);
+        button_schedules.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Transactor.fragmentThSchedules(getFragmentManager().beginTransaction());

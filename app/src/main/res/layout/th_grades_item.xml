@@ -42,7 +42,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView_subjectName" />
 
     <TextView
-        android:id="@+id/textView_teacher"
+        android:id="@+id/textView_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -61,7 +61,7 @@
         android:layout_marginTop="16dp"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_teacher" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_date" />
 
 
 </android.support.constraint.ConstraintLayout>

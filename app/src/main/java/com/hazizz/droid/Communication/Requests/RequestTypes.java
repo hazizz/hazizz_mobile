@@ -255,6 +255,12 @@ public interface RequestTypes{
             @Body HashMap<String, Object> body
     );
 
+    @GET("groups/{groupId}/invitelink")
+    Call<ResponseBody> returnInviteLink(
+            @Path("groupId") String groupId,
+            @HeaderMap Map<String, String> headers
+    );
+
     @GET("me/joingroup/{groupId}")
     Call<ResponseBody> joinGroup(
             @Path("groupId") String groupId,

@@ -6,10 +6,15 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
 
-import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.Transactor;
 
 public class PagerAdapter extends FragmentStatePagerAdapter {
+
+    public static final int TASKS_TAB = 0;
+    public static final int ANNOUNCEMENTS_TAB = 1;
+    public static final int SUBJECTS_TAB = 2;
+    public static final int GROUPMEMBERS_TAB = 3;
+
     int mNumOfTabs;
 
     private int groupId;
@@ -28,9 +33,10 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
         Fragment frag;
 
         switch (position) {
-            case 0:
+            case TASKS_TAB:
                 bundle = new Bundle();
                 Log.e("hey", "pagerAdapter groupId: " + groupId);
+                Log.e("hey", "changed tab");
                 bundle.putInt(Transactor.KEY_GROUPID, groupId);
                 bundle.putString(Transactor.KEY_GROUPNAME, groupName);
                 frag = new GroupMainFragment();
@@ -38,7 +44,8 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
                 currentFrag = frag;
                 return frag;
 
-            case 1:
+            case ANNOUNCEMENTS_TAB:
+                Log.e("hey", "changed tab");
                 bundle = new Bundle();
                 bundle.putInt(Transactor.KEY_GROUPID, groupId);
                 bundle.putString(Transactor.KEY_GROUPNAME, groupName);
@@ -46,7 +53,8 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
                 frag.setArguments(bundle);
                 currentFrag = frag;
                 return frag;
-            case 2:
+            case SUBJECTS_TAB:
+                Log.e("hey", "changed tab");
                 bundle = new Bundle();
                 bundle.putInt(Transactor.KEY_GROUPID, groupId);
                 frag = new SubjectsFragment();
@@ -54,8 +62,9 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
 
                 currentFrag = frag;
                 return frag;
-            case 3:
+            case GROUPMEMBERS_TAB:
             default:
+                Log.e("hey", "changed tab");
                 bundle = new Bundle();
                 bundle.putInt(Transactor.KEY_GROUPID, groupId);
                 bundle.putString(Transactor.KEY_GROUPNAME, groupName);

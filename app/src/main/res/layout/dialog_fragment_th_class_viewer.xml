@@ -25,25 +25,25 @@
             app:layout_constraintTop_toBottomOf="@+id/textView_subject">
 
             <TextView
-                android:visibility="invisible"
                 android:id="@+id/textView_standin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingRight="4sp"
                 android:text="@string/thera_standin"
                 android:textColor="@color/colorAccent"
                 android:textSize="16sp"
-                android:paddingRight="4sp"
+                android:visibility="invisible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView_subject" />
 
             <TextView
-                android:visibility="invisible"
                 android:id="@+id/textView_standin_teacher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="TextView"
                 android:textColor="@color/colorAccent"
                 android:textSize="16sp"
+                android:visibility="invisible"
                 app:layout_constraintStart_toEndOf="@+id/textView_standin"
                 app:layout_constraintTop_toBottomOf="@+id/textView_subject" />
         </LinearLayout>
@@ -73,7 +73,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dp"
             android:layout_marginStart="4dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="2dp"
             android:orientation="vertical"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView_canceled">
@@ -108,7 +108,7 @@
                 android:textColor="@color/colorDarkText"
                 android:textSize="18dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView_theme" />
+                app:layout_constraintTop_toBottomOf="@+id/textView_topic" />
 
             <TextView
                 android:id="@+id/textView17"
@@ -118,7 +118,7 @@
                 android:textColor="@color/colorDarkText"
                 android:textSize="18dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView_teacher" />
+                app:layout_constraintTop_toBottomOf="@+id/textView_date" />
 
             <TextView
                 android:id="@+id/textView19"
@@ -129,7 +129,7 @@
                 android:textSize="18dp" />
 
             <TextView
-                android:id="@+id/textView22"
+                android:id="@+id/textView_date_"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/thera_date"
@@ -152,7 +152,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView_value"
+            android:id="@+id/textView_grade"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="2dp"
@@ -167,7 +167,7 @@
             android:id="@+id/linearLayout3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="2dp"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView_canceled">
@@ -176,6 +176,7 @@
                 android:id="@+id/textView_weight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="right"
                 android:text="kezdet: "
                 android:textColor="@color/colorDarkText"
                 android:textSize="18dp"
@@ -184,9 +185,10 @@
 
 
             <TextView
-                android:id="@+id/textView_theme"
+                android:id="@+id/textView_topic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="right"
                 android:text="vége"
                 android:textColor="@color/colorDarkText"
                 android:textSize="18dp"
@@ -198,29 +200,32 @@
                 android:id="@+id/textView_teacher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="right"
                 android:ellipsize="marquee"
-                android:maxLength="12"
+                android:maxLength="20"
                 android:singleLine="true"
                 android:text="tanársadasdsadsadasd"
                 android:textColor="@color/colorDarkText"
                 android:textSize="18dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView_theme" />
+                app:layout_constraintTop_toBottomOf="@+id/textView_topic" />
 
             <TextView
                 android:id="@+id/textView_classroom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="right"
                 android:text="class room"
                 android:textColor="@color/colorDarkText"
                 android:textSize="18dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView_teacher" />
+                app:layout_constraintTop_toBottomOf="@+id/textView_date" />
 
             <TextView
                 android:id="@+id/textView_classgroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="right"
                 android:ellipsize="marquee"
                 android:maxLength="12"
                 android:singleLine="true"
@@ -232,7 +237,8 @@
                 android:id="@+id/textView_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="dátum"
+                android:layout_gravity="right"
+                android:text="  "
                 android:textColor="@color/colorDarkText"
                 android:textSize="18dp" />
 
@@ -247,12 +253,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="2dp"
             android:text="@string/close"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
-
 
 
     </android.support.constraint.ConstraintLayout>

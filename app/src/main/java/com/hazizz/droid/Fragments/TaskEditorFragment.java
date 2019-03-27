@@ -164,7 +164,7 @@ public class TaskEditorFragment extends ParentFragment {//implements AdapterView
         });
 
         textView_group = (TextView)v.findViewById(R.id.textView_group);
-        textView_group_ = (TextView)v.findViewById(R.id.textView_creator);
+        textView_group_ = (TextView)v.findViewById(R.id.textView_group_);
         spinner_group = (Spinner)v.findViewById(R.id.group_spinner);
         spinner_subject = (Spinner)v.findViewById(R.id.subject_spinner);
         textView_subject = v.findViewById(R.id.textView_subject);
@@ -229,7 +229,7 @@ public class TaskEditorFragment extends ParentFragment {//implements AdapterView
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_taskType.setAdapter(adapter);
 
-        groupId = Manager.GroupManager.getGroupId();//getArguments().getInt(Strings.Path.GROUPID.toString());
+        groupId = Manager.GroupManager.getGroupId();
 
         if(getArguments() != null) {
             groupName = getArguments().getString(Transactor.KEY_GROUPNAME);
@@ -244,22 +244,32 @@ public class TaskEditorFragment extends ParentFragment {//implements AdapterView
             dest = getArguments().getInt(Transactor.KEY_DEST);
 
         }
-        if( type == EDITMODE ){//taskId != 0 || typeName != null) {
-            subject = getArguments().getInt(Transactor.KEY_SUBJECTID);
+        if( type == EDITMODE ){
+
+            if(where == MYMODE){
+                spinner_subject.setVisibility(View.GONE);
+                textView_subject_.setVisibility(View.GONE);
+                textView_subject.setVisibility(View.GONE);
+                spinner_group.setVisibility(View.GONE);
+                textView_group_.setVisibility(View.GONE);
+                textView_group.setVisibility(View.GONE);
+            }else{
+                subject = getArguments().getInt(Transactor.KEY_SUBJECTID);
+                textView_subject.setText(getArguments().getString(Transactor.KEY_SUBJECTNAME));
+                textView_group.setText(getArguments().getString(Transactor.KEY_GROUPNAME));
+
+            }
+
             date = getArguments().getString(Transactor.KEY_DATE);
             textView_deadline.setText(D8.textToDate(date).getMainFormat());
             editText_taskTitle.setText(getArguments().getString(Transactor.KEY_TITLE));
             editText_description.setText(getArguments().getString(Transactor.KEY_DESCRIPTION));
             typeId = getArguments().getLong(Transactor.KEY_TYPEID);
-            textView_subject.setText(getArguments().getString(Transactor.KEY_SUBJECTNAME));
-            textView_group.setText(getArguments().getString(Transactor.KEY_GROUPNAME));
 
             spinner_group.setVisibility(View.INVISIBLE);
             spinner_subject.setVisibility(View.INVISIBLE);
 
             spinner_taskType.setSelection((int)typeId-1);
-
-
 
             setTitle(R.string.fragment_title_edit_task);
 

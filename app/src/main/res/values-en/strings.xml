@@ -139,6 +139,12 @@
     <string name="write_comment">Write a comment!</string>
     <string name="schedules">Schedules</string>
     <string name="grades">Grades</string>
+    <string name="copy">Copy</string>
+    <string name="share">Share</string>
+    <string name="loading">Loading...</string>
+
+
+    <string name="school_">School:</string>
 
 
     <string name="add_user">Add user</string>
@@ -157,6 +163,18 @@
     <string name="displayName_">Display name:</string>
     <string name="registrationDate_">Registration date:</string>
     <string name="username_">Username:</string>
+
+
+
+    <string name="invite_link_info">Send this link to your classmates to join</string>
+    <string name="invite_link_info_part2"></string>
+
+    <string name="already_in_group">You are already a member of this group</string>
+    <string name="added_to_group">You were successfully added to this group</string>
+
+    <string name="invite_to_group_text_title">Hazizz Droid: </string>
+    <string name="invite_to_group_text_part1">Join to </string>
+    <string name="invite_to_group_text_part2"> group to receive your homeworks:</string>
 
 
     <string name="press_again_to_exit">Please click BACK again to exit</string>
@@ -300,6 +318,8 @@
     <string name="thera_grade_">grade:</string>
     <string name="thera_weight_">weight:</string>
     <string name="thera_theme_">theme:</string>
+    <string name="thera_subject_">subject:</string>
+    <string name="thera_grade_type_">grade type:</string>
 
 
 

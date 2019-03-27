@@ -31,8 +31,6 @@ public class Request implements RequestInterface {
     protected static final String HEADER_VALUE_CONTENTTYPE = "application/json";
 
 
-
-
     protected String getHeaderAuthToken(){return "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext());}
     protected String getHeaderAuthToken(Context context){return "Bearer " + SharedPrefs.TokenManager.getToken(context);}
 
@@ -80,7 +78,6 @@ public class Request implements RequestInterface {
             .client(okHttpClient)
             //  .setEndpoint(endPoint)F
             .build();
-
 
         aRequest = retrofit.create(RequestTypes.class);
 

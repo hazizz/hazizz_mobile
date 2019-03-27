@@ -47,11 +47,11 @@ public class CustomAdapter extends ArrayAdapter<ClassItem> {
             convertView = inflater.inflate(picID, parent, false);
 
             holder = new DataHolder();
-            holder.textView_count= convertView.findViewById(R.id.textView_value);
+            holder.textView_count= convertView.findViewById(R.id.textView_grade);
             holder.textView_start= convertView.findViewById(R.id.textView_weight);
-            holder.textView_end= convertView.findViewById(R.id.textView_theme);
+            holder.textView_end= convertView.findViewById(R.id.textView_topic);
             holder.textView_subjectName = convertView.findViewById(R.id.textView_subjectName);
-            holder.textView_teacher = convertView.findViewById(R.id.textView_teacher);
+            holder.textView_teacher = convertView.findViewById(R.id.textView_date);
             holder.textView_classroom = convertView.findViewById(R.id.textView_classroom);
 
             convertView.setTag(holder);

@@ -94,7 +94,7 @@ public class MyTasksFragment extends Fragment{
                     textView_noContent.setVisibility(v.VISIBLE);
                 }else {
                     textView_noContent.setVisibility(v.INVISIBLE);
-                    int lastDaysLeft = -1;//D8.textToDate(sorted.get(0).getDueDate()).daysLeft();
+                    int lastDaysLeft = -1;
                     for (POJOgetTask t : sorted) {
                         String date = t.getDueDate();
                         int daysLeft = D8.textToDate(date).daysLeft();
