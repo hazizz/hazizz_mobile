@@ -3,7 +3,7 @@ package com.hazizz.droid.Fragments.GroupTabs;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.hazizz.droid.Activities.MainActivity;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOMembersProfilePic;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
@@ -21,7 +20,7 @@ import com.hazizz.droid.Communication.POJO.Response.POJOuser;
 import com.hazizz.droid.Communication.POJO.Response.PojoPermisionUsers;
 import com.hazizz.droid.Communication.Requests.GetGroupMemberPermisions;
 import com.hazizz.droid.Communication.Strings;
-import com.hazizz.droid.Fragments.ParentFragment.GroupFragment;
+import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
 import com.hazizz.droid.Listviews.UserList.CustomAdapter;
 import com.hazizz.droid.Listviews.UserList.UserItem;
 import com.hazizz.droid.Manager;
@@ -30,11 +29,10 @@ import com.hazizz.droid.R;
 import com.hazizz.droid.Transactor;
 
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 
-public class GetGroupMembersFragment extends GroupFragment {
+public class GetGroupMembersFragment extends ParentFragment {
 
     private List<UserItem> listUser;
     private View v;
@@ -158,4 +156,9 @@ public class GetGroupMembersFragment extends GroupFragment {
             }
         });
     }
+
+    public void openInviteLinkDialog(FragmentManager fm){
+        Transactor.fragmentDialogInviteLink(fm.beginTransaction(), GroupTabFragment.groupId, GroupTabFragment.groupName);
+    }
+
 }

@@ -12,7 +12,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemClock;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -31,14 +31,21 @@ import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
+import com.hazizz.droid.AndroidThings;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
+import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.POJO.Response.POJOme;
 import com.hazizz.droid.Communication.POJO.Response.PojoPicSmall;
 import com.hazizz.droid.Communication.Requests.GetMyProfilePic;
+import com.hazizz.droid.Communication.Requests.JoinGroup;
 import com.hazizz.droid.Communication.Requests.Me;
 import com.hazizz.droid.Communication.Requests.MessageOfTheDay;
 import com.hazizz.droid.Converter.Converter;
-import com.hazizz.droid.Fragments.CreateSubjectFragment;
+import com.hazizz.droid.Fragments.GroupTabs.GetGroupMembersFragment;
 import com.hazizz.droid.Fragments.GroupTabs.GroupAnnouncementFragment;
 import com.hazizz.droid.Fragments.GroupTabs.GroupMainFragment;
 import com.hazizz.droid.Fragments.GroupTabs.GroupTabFragment;
@@ -47,7 +54,6 @@ import com.hazizz.droid.Fragments.MainTab.GroupsFragment;
 import com.hazizz.droid.Fragments.MainTab.MainAnnouncementFragment;
 import com.hazizz.droid.Fragments.MainTab.MainFragment;
 import com.hazizz.droid.Fragments.MyTasksFragment;
-import com.hazizz.droid.Fragments.ViewTaskFragment;
 import com.hazizz.droid.Listener.OnBackPressedListener;
 import com.hazizz.droid.Manager;
 import com.hazizz.droid.Notification.NotificationReciever;
@@ -61,6 +67,8 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 import io.fabric.sdk.android.Fabric;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -161,6 +169,59 @@ public class MainActivity extends AppCompatActivity
        // }
         Fabric.with(this, new Answers());
 
+        FirebaseDynamicLinks.getInstance()
+                .getDynamicLink(getIntent())
+                .addOnSuccessListener(this, new OnSuccessListener<PendingDynamicLinkData>() {
+                    @Override
+                    public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
+                        // Get deep link from result (may be null if no link is found)
+                        Uri deepLink = null;
+                        if (pendingDynamicLinkData != null) {
+                            deepLink = pendingDynamicLinkData.getLink();
+                        }
+
+                        if(deepLink!=null){
+                            int groupId = Integer.parseInt(deepLink.getQueryParameter("group"));
+
+                                CustomResponseHandler rh_joinGroup = new CustomResponseHandler() {
+
+                                    @Override
+                                    public void onErrorResponse(POJOerror error) {
+                                        if(error.getErrorCode() == 55){ // user already in group
+                                            Transactor.fragmentMainGroup(getSupportFragmentManager().beginTransaction(), groupId);
+                                            Toast.makeText(thisActivity, getString(R.string.already_in_group),
+                                                    Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                    @Override
+                                    public void onSuccessfulResponse() {
+                                        Transactor.fragmentMainGroup(getSupportFragmentManager().beginTransaction(), groupId);
+                                        Toast.makeText(thisActivity, getString(R.string.added_to_group),
+                                                Toast.LENGTH_LONG).show();
+                                    }
+                                };
+
+                                MiddleMan.newRequest(new JoinGroup(thisActivity, rh_joinGroup, groupId));
+                        }else{
+                            Log.e("hey", "deep link uri is null");
+                        }
+
+                        Log.e("hey", "dynamic link lol: " + deepLink);
+                        // Handle the deep link. For example, open the linked
+                        // content, or apply promotional credit to the user's
+                        // account.
+                        // ...
+
+                        // ...
+                    }
+                })
+                .addOnFailureListener(this, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("hey", "getDynamicLink:onFailure", e);
+                    }
+                });
+
         setContentView(R.layout.activity_main);
 
         Manager.ThreadManager.startThreadIfNotRunning(this);
@@ -199,6 +260,8 @@ public class MainActivity extends AppCompatActivity
                     ((GroupsFragment)currentFrag).toCreateGroup(getSupportFragmentManager());
                 }else if (currentFrag instanceof MyTasksFragment) {
                     ((MyTasksFragment)currentFrag).toCreateTask();
+                }else if (currentFrag instanceof GetGroupMembersFragment) {
+                    ((GetGroupMembersFragment)currentFrag).openInviteLinkDialog(getSupportFragmentManager());
                 }
             }
         });
@@ -250,6 +313,8 @@ public class MainActivity extends AppCompatActivity
 
 
         TaskReporterNotification.setNotification(getApplicationContext(), 8, 5);
+
+
 
     }
 
@@ -333,6 +398,60 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
         invalidateOptionsMenu();
         Log.e("hey", "onResume is trigered");
+
+        /*
+        Uri uri = this.getIntent().getData();
+        if(uri!=null){
+            Uri inside_uri = Uri.parse(uri.getQuery());
+            if(inside_uri!=null) {
+                int groupId = Integer.parseInt(inside_uri.getQueryParameter("group"));
+                Log.e("hey", "deep link: " + inside_uri);
+                Log.e("hey", "deep link groupId: " + groupId);
+
+                CustomResponseHandler rh_joinGroup = new CustomResponseHandler() {
+
+                    @Override
+                    public void onErrorResponse(POJOerror error) {
+                        if(error.getErrorCode() == 55){ // user already in group
+                            Transactor.fragmentMainGroup(getSupportFragmentManager().beginTransaction(), groupId);
+                            Toast.makeText(thisActivity, getString(R.string.already_in_group),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                    @Override
+                    public void onSuccessfulResponse() {
+                        Transactor.fragmentMainGroup(getSupportFragmentManager().beginTransaction(), groupId);
+                        Toast.makeText(thisActivity, getString(R.string.added_to_group),
+                                Toast.LENGTH_LONG).show();
+                    }
+                };
+
+                MiddleMan.newRequest(new JoinGroup(this, rh_joinGroup, groupId));
+
+            }
+        }else{
+            Log.e("hey", "deep link uri is null");
+        }
+        */
+
+        //  android:launchMode="singleTop"
+
+        /*
+        <intent-filter android:label="@string/app_name">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "http://www.example.com/gizmos” -->
+                <data android:scheme="https"
+        android:host="hazizz.duckdns.org:9000"
+        android:path="/shortener"
+                />
+                <!-- note that the leading "/" is required for pathPrefix-->
+            </intent-filter>
+
+        */
+
+
     }
 
     @Override
@@ -503,7 +622,7 @@ public class MainActivity extends AppCompatActivity
 
         if (currentFrag instanceof GroupAnnouncementFragment || currentFrag instanceof GroupMainFragment
             || currentFrag instanceof MainAnnouncementFragment || currentFrag instanceof MainFragment
-            || currentFrag instanceof MyTasksFragment) {
+            || currentFrag instanceof MyTasksFragment ) {
             fab_action.setVisibility(View.VISIBLE);
            // if(menuItem_feedback != null && menuItem_leaveGroup != null
           //         && menuItem_profilePic != null) {
@@ -530,7 +649,8 @@ public class MainActivity extends AppCompatActivity
      //           && menuItem_profilePic != null) {
             if (currentFrag instanceof GroupAnnouncementFragment || currentFrag instanceof GroupMainFragment
                     || currentFrag instanceof MainAnnouncementFragment || currentFrag instanceof SubjectsFragment
-                    || currentFrag instanceof MainFragment || currentFrag instanceof GroupsFragment) {
+                    || currentFrag instanceof MainFragment || currentFrag instanceof GroupsFragment
+                    || currentFrag instanceof GetGroupMembersFragment) {
                 fab_action.setVisibility(View.VISIBLE);
                 if (currentFrag instanceof GroupsFragment) {
                     fab_joinGroup.setVisibility(View.VISIBLE);

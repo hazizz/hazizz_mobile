@@ -33,7 +33,7 @@ public class DateViewerDialogFragment extends DialogFragment {
         D8.Date dateText = D8.textToDate(getArguments().getString(Transactor.KEY_DATE));
 
         // Do all the stuff to initialize your custom view
-        textView_mainFormat = v.findViewById(R.id.textView_mainFormat);
+        textView_mainFormat = v.findViewById(R.id.textView_link);
         textView_daysLeft = v.findViewById(R.id.textView_daysLeft);
         textView_dayOfTheWeek = v.findViewById(R.id.textView_dayOfTheWeek);
 

@@ -54,7 +54,6 @@ public class MainTabFragment extends Fragment{
 
         tabLayout.addTab(tabLayout.newTab().setText(R.string.tasks));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.announcements));
-       // tabLayout.addTab(tabLayout.newTab().setText("Csoportok"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         //  tabLayout.setcur
         // tabLayout.setCu
@@ -64,19 +63,11 @@ public class MainTabFragment extends Fragment{
                 (getActivity().getSupportFragmentManager(), tabLayout.getTabCount());
         //adapter.giveArgs(groupId, groupName);
 
-        //    viewPager.setCurrent
-        // bottomBar.setDefaultTab(R.id.tab_default);
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-             /*   if(adapter.getItem(viewPager.getCurrentItem()).getClass() == GroupsFragment.class) {
-                    adapter.setDest(dest);
-                }else{
-                    adapter.setDest("");
-                } */
-               // Manager.DestManager.setDest(Manager.DestManager.TOMAIN);
                 viewPager.setCurrentItem(tab.getPosition());
                 ((MainActivity)getActivity()).onTabSelected(adapter.getItem(viewPager.getCurrentItem()));
                 currentTab = adapter.getItem(viewPager.getCurrentItem());
@@ -109,7 +100,6 @@ public class MainTabFragment extends Fragment{
             Log.e("hey", "returned this");
             return this;
         }
-        // return adapter.getCurrentFrag();
     }
     public void setTab(int i){
         viewPager.setCurrentItem(i, true);

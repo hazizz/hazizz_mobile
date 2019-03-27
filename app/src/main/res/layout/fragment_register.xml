@@ -14,27 +14,45 @@
 
 
         <TextView
-            android:id="@+id/editText"
-            android:layout_width="305dp"
+            android:id="@+id/editText4"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="12dp"
+            android:layout_marginBottom="-20dp"
+            android:layout_marginTop="10dp"
             android:layout_weight="1"
-            android:ems="10"
-            android:gravity="center_horizontal"
-            android:text="@string/register"
-            android:textSize="30sp"
+            android:fontFamily="@font/architects_daughter_font"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:text="@string/hazizz"
+            android:textColor="@color/colorPrimaryDarkBlue"
+            android:textSize="60sp"
             android:textStyle="bold" />
 
+
+        <TextView
+            android:id="@+id/editText5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="0dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/architects_daughter_font"
+            android:gravity="center"
+            android:text="@string/register"
+            android:textColor="@color/colorPrimaryDarkBlue"
+            android:textSize="26sp"
+            android:textStyle="bold" />
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/textInputLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="6dp"
 
             >
+
             <EditText
                 android:id="@+id/editText_username"
                 android:layout_width="300dp"
@@ -49,9 +67,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="6dp"
 
             >
+
             <EditText
                 android:id="@+id/editText_email"
                 android:layout_width="300dp"
@@ -66,9 +85,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="6dp"
 
             >
+
             <EditText
                 android:id="@+id/editText_password"
                 android:layout_width="300dp"
@@ -83,10 +103,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="0dp"
+            android:layout_marginTop="6dp"
 
             >
+
             <EditText
                 android:id="@+id/editText_passwordCheck"
                 android:layout_width="300dp"
@@ -97,7 +118,7 @@
         </android.support.design.widget.TextInputLayout>
 
         <android.support.constraint.ConstraintLayout
-            android:layout_width="wrap_content"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center">
 
@@ -131,7 +152,7 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="0dp"
             android:layout_marginTop="5dp"
             android:layout_weight="1"
             android:text=" " />
@@ -143,35 +164,32 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="4dp"
             android:background="@drawable/rounded_lightblue_border"
-            android:textColor="@color/white"
-
-            android:text="@string/register" />
+            android:text="@string/register"
+            android:textSize="18dp"
+            android:textColor="@color/white" />
 
 
     </LinearLayout>
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text=" " />
-
-        <TextView
-            android:id="@+id/textView_toLogin"
+        <Button
+            android:id="@+id/button_toLogin"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="17dp"
-            android:clickable="true"
-            android:onClick="onClick"
-            android:paddingBottom="12dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/border_button_gray_nosolid"
             android:text="@string/login"
-            android:textSize="20sp" />
-    </RelativeLayout>
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+    </android.support.constraint.ConstraintLayout>
 </LinearLayout>

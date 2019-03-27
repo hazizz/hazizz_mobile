@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.hazizz.droid.D8;
 import com.hazizz.droid.Listviews.TheraReturnSchedules.ClassItem;
 import com.hazizz.droid.R;
 
@@ -48,13 +49,13 @@ public class ThClassViewerDialogFragment extends DialogFragment {
        // D8.Date dateText = D8.textToDate(getArguments().getString(Transactor.KEY_DATE));
 
         textView_start = v.findViewById(R.id.textView_weight);
-        textView_end = v.findViewById(R.id.textView_theme);
+        textView_end = v.findViewById(R.id.textView_topic);
         textView_canceled = v.findViewById(R.id.textView_canceled);
          textView_standin = v.findViewById(R.id.textView_standin);
         textView_standin_teacher = v.findViewById(R.id.textView_standin_teacher);
          textView_subject = v.findViewById(R.id.textView_subject);
          textView_date = v.findViewById(R.id.textView_date);
-         textView_count = v.findViewById(R.id.textView_value);
+         textView_count = v.findViewById(R.id.textView_grade);
          getTextView_classgroup = v.findViewById(R.id.textView_classgroup);
          textView_teacher = v.findViewById(R.id.textView_teacher);
          textView_classroom = v.findViewById(R.id.textView_classroom);
@@ -76,7 +77,7 @@ public class ThClassViewerDialogFragment extends DialogFragment {
             textView_teacher.setText(classItem.getTeacher());
         }
         textView_subject.setText(classItem.getSubject());
-        textView_date.setText(classItem.getDate());
+        textView_date.setText(D8.textToDate(classItem.getDate()).getMainFormat());
         textView_count.setText(classItem.getPeriodNumber() + ".");
         getTextView_classgroup.setText(classItem.getClassName());
         textView_classroom.setText(classItem.getRoom());

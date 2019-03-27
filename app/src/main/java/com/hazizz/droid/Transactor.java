@@ -1,6 +1,7 @@
 package com.hazizz.droid;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,6 +25,7 @@ import com.hazizz.droid.Fragments.CommentSectionFragment;
 import com.hazizz.droid.Fragments.CreateGroupFragment;
 import com.hazizz.droid.Fragments.CreateSubjectFragment;
 import com.hazizz.droid.Fragments.Dialog.DateViewerDialogFragment;
+import com.hazizz.droid.Fragments.Dialog.InviteLinkDialogFragment;
 import com.hazizz.droid.Fragments.Dialog.ManageSubjectDialog;
 import com.hazizz.droid.Fragments.Dialog.ThClassViewerDialogFragment;
 import com.hazizz.droid.Fragments.Dialog.ThGreadeViewerDialogFragment;
@@ -93,6 +95,15 @@ public class Transactor extends FragmentActivity {
         }
     }
 
+    public static void fragmentDialogInviteLink(@Nonnull FragmentTransaction fTransaction, long groupId, String groupName){
+        Bundle bundle = new Bundle();
+        bundle.putLong(KEY_GROUPID, groupId);
+        bundle.putString(KEY_GROUPNAME, groupName);
+
+        DialogFragment dialogFragment = new InviteLinkDialogFragment();
+        dialogFragment.setArguments(bundle);
+        dialogFragment.show(fTransaction, "dialog");
+    }
 
     public static void fragmentThDialogClass(@Nonnull FragmentTransaction fTransaction, ClassItem classItem){
         Bundle bundle = new Bundle();
@@ -110,6 +121,15 @@ public class Transactor extends FragmentActivity {
         DialogFragment dialogFragment = new ThGreadeViewerDialogFragment();
         dialogFragment.setArguments(bundle);
         dialogFragment.show(fTransaction, "dialog");
+    }
+
+    public static void fragmentThDialogGrade(@Nonnull FragmentManager fragmentManager, TheraGradesItem gradeItem){
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("grade", gradeItem);
+
+        DialogFragment dialogFragment = new ThGreadeViewerDialogFragment();
+        dialogFragment.setArguments(bundle);
+        dialogFragment.show(fragmentManager.beginTransaction(), "dialog");
     }
 
     public static void fragmentDialogManageSubject(@Nonnull FragmentTransaction fTransaction, long groupId, long subjectId, String currentSubjectName){
@@ -209,6 +229,10 @@ public class Transactor extends FragmentActivity {
         fragmentGroupTab(fTransaction, groupId, groupName, 0);
     }
 
+    public static void fragmentMainGroup(@Nonnull FragmentTransaction fTransaction, int groupId){
+        fragmentGroupTab(fTransaction, groupId, "", 0);
+    }
+
 
     public static void fragmentToATChooser(@Nonnull FragmentTransaction fTransaction, int where){
        //  Manager.DestManager.setDest(where);
@@ -297,6 +321,25 @@ public class Transactor extends FragmentActivity {
         fTransaction.commit();
     }
 
+    public static void fragmentEditMyTask(@Nonnull FragmentTransaction fTransaction, int taskId, PojoType type,
+                                          String taskTitle, String taskDescription, String date, Strings.Dest dest){
+        Bundle bundle = new Bundle();
+        bundle.putInt(KEY_DEST, dest.getValue());
+        bundle.putShort(KEY_WHERE, TaskEditorFragment.GROUPMODE);
+        bundle.putShort(KEY_TYPE, TaskEditorFragment.EDITMODE);
+        bundle.putInt(KEY_TASKID, taskId);
+        bundle.putLong(KEY_TYPEID, type.getId());
+        bundle.putString(KEY_TYPENAME, type.getName());
+        bundle.putString(KEY_TITLE, taskTitle);
+        bundle.putString(KEY_DESCRIPTION, taskDescription);
+        bundle.putString(KEY_DATE, date);
+        TaskEditorFragment frag = new TaskEditorFragment();
+        frag.setArguments(bundle);
+        fTransaction.replace(R.id.fragment_container, frag);
+        if(backStack){ fTransaction.addToBackStack(null); }
+        fTransaction.commit();
+    }
+
     public static void fragmentEditTask(@Nonnull FragmentTransaction fTransaction, int groupId, String groupName,
                                         int taskId, PojoType type, int taskSubjectId, String subjectName, String taskTitle,
                                         String taskDescription, String date, Strings.Dest dest){
@@ -307,7 +350,7 @@ public class Transactor extends FragmentActivity {
         bundle.putInt(KEY_TASKID, taskId);
         bundle.putInt(Strings.Path.GROUPID.toString(), groupId);
         bundle.putString(KEY_GROUPNAME, groupName);
-      //  bundle.putString(KEY_TYPENAME, type.getName());
+        //  bundle.putString(KEY_TYPENAME, type.getName());
         bundle.putLong(KEY_TYPEID, type.getId());
         bundle.putString(KEY_TYPENAME, type.getName());
         bundle.putInt(KEY_SUBJECTID, taskSubjectId);
@@ -484,7 +527,7 @@ public class Transactor extends FragmentActivity {
     }
 
 
-    public static void fragmentThSchool(@Nonnull FragmentTransaction fTransaction){
+    public static void fragmentThLogin(@Nonnull FragmentTransaction fTransaction){
         TheraLoginFragment frag = new TheraLoginFragment();
         fTransaction.replace(R.id.fragment_container, frag);
         if(backStack){fTransaction.addToBackStack(null);}

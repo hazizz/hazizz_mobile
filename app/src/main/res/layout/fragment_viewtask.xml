@@ -60,6 +60,7 @@
                         android:scrollbars="vertical"
                         android:singleLine="false"
                         android:text="      "
+                        android:textColor="@color/colorDarkText"
                         android:textSize="20sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.512"
@@ -75,6 +76,7 @@
                         android:layout_marginTop="8dp"
                         android:maxWidth="80dp"
                         android:text="             "
+                        android:textColor="@color/colorDarkText"
                         android:textSize="20sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView_group" />
@@ -97,6 +99,7 @@
                         android:layout_marginRight="32dp"
                         android:layout_marginTop="8dp"
                         android:text="     "
+                        android:textColor="@color/colorDarkText"
                         android:textSize="20sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView_tasktype" />
@@ -144,6 +147,7 @@
                         android:maxLines="1"
                         android:singleLine="true"
                         android:text="           "
+                        android:textColor="@color/colorDarkText"
                         android:textSize="20sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -159,6 +163,7 @@
                         android:maxLines="1"
                         android:singleLine="true"
                         android:text="          "
+                        android:textColor="@color/colorDarkText"
                         android:textSize="20sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView_creator_" />
@@ -220,6 +225,7 @@
                         android:layout_marginRight="32dp"
                         android:layout_marginTop="8dp"
                         android:text="           "
+                        android:textColor="@color/colorDarkText"
                         android:textSize="20sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView_subject" />

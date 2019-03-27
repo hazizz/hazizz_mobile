@@ -160,7 +160,7 @@ android:layout_height="match_parent"
             android:id="@+id/textView_daysLeft"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/textView_mainFormat"
+            android:layout_alignStart="@+id/textView_link"
             android:layout_alignTop="@+id/textView_displayName"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
@@ -172,7 +172,7 @@ android:layout_height="match_parent"
 
 
         <TextView
-            android:id="@+id/textView_mainFormat"
+            android:id="@+id/textView_link"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"

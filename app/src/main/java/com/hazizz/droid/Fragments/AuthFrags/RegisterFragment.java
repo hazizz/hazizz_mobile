@@ -46,7 +46,7 @@ public class RegisterFragment extends Fragment {
 
     private TextView textView_error;
 
-    private TextView textView_toLogin;
+    private TextView button_toLogin;
 
     private View v;
 
@@ -159,8 +159,8 @@ public class RegisterFragment extends Fragment {
                 }
             }
         });
-        textView_toLogin = v.findViewById(R.id.textView_toLogin);
-        textView_toLogin.setOnClickListener(new View.OnClickListener(){
+        button_toLogin = v.findViewById(R.id.button_toLogin);
+        button_toLogin.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 Transactor.fragmentLogin(getFragmentManager().beginTransaction());

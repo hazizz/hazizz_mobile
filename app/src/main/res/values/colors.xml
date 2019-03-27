@@ -29,6 +29,12 @@
     <color name="color_light_darker_gray">#bababa</color>
 
 
+    <color name="colorTheraGradeWeight50">#7b7b7b</color>
+    <color name="colorTheraGradeWeight100">#000000</color>
+    <color name="colorTheraGradeWeight200">#ff0000</color>
+    <color name="colorTheraGradeWeight150">#13a300</color>
+
+
 
 
 </resources>

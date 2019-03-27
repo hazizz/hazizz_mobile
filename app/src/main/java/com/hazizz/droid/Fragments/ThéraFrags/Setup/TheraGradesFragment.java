@@ -52,7 +52,8 @@ public class TheraGradesFragment  extends ParentFragment {
     void createViewList(){
         listGrades = new ArrayList<>();
         ListView listView = (ListView)v.findViewById(R.id.listView_classes);
-        adapter = new CustomAdapter(getActivity(), R.layout.th_grade_subject_item, listGrades);
+        adapter = new CustomAdapter(getActivity(), R.layout.th_grade_subject_item, listGrades, getFragmentManager());
+        //        adapter = new CustomAdapter(getActivity(), R.layout.th_grade_subject_item, listGrades, getFragmentManager().beginTransaction());
         listView.setAdapter(adapter);
 
 

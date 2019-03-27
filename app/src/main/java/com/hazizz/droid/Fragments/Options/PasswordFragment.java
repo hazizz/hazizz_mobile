@@ -15,7 +15,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hazizz.droid.Activities.MainActivity;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOauth;
@@ -26,6 +25,7 @@ import com.hazizz.droid.Communication.Requests.ChangePassword;
 import com.hazizz.droid.Communication.Requests.ElevationToken;
 import com.hazizz.droid.Communication.Requests.RequestType.Login;
 import com.hazizz.droid.Converter.Converter;
+import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
 import com.hazizz.droid.Manager;
 import com.hazizz.droid.R;
 import com.hazizz.droid.SharedPrefs;
@@ -33,7 +33,7 @@ import com.hazizz.droid.Transactor;
 
 import java.util.List;
 
-public class PasswordFragment extends Fragment {
+public class PasswordFragment extends ParentFragment {
 
     public List<POJOgroup> groups;
     private View v;
@@ -99,7 +99,9 @@ public class PasswordFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_password, container, false);
-        ((MainActivity)getActivity()).onFragmentCreated();
+
+
+        fragmentSetup(R.string.changePassword);
 
         textView_errorCurrentPassword = v.findViewById(R.id.textView_error_currentPassword);
         textView_errorNewPassword = v.findViewById(R.id.textView_error_newPassword);

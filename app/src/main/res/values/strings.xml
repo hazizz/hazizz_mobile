@@ -132,6 +132,13 @@
     <string name="write_comment">Írj egy kommentet!</string>
     <string name="schedules">Schedules</string>
     <string name="grades">Grades</string>
+    <string name="copy">Másolás</string>
+    <string name="share">Megosztás</string>
+    <string name="loading">Betöltés...</string>
+
+
+
+    <string name="school_">Iskola:</string>
 
     <string name="add_user">Új felhasználó</string>
 
@@ -159,6 +166,18 @@
     <string name="username_">Felhasználónév:</string>
 
     <string name="press_again_to_exit">Nyomd meg mégegyszer a VISSZA gombot hogy kilépj</string>
+
+
+    <string name="invite_link_info">Küld el diáktársaidnak ezt a linket hogy csatlakozon a</string>
+    <string name="invite_link_info_part2">csoportba</string>
+
+
+    <string name="already_in_group">Már tagja voltál a csoportnak</string>
+    <string name="added_to_group">Sikeresen hozzá lettél adva a csoporthoz</string>
+
+    <string name="invite_to_group_text_title">Házizz Droid: </string>
+    <string name="invite_to_group_text_part1">Csatlakoz a </string>
+    <string name="invite_to_group_text_part2"> csoportba hogy megkapd a házi feladataidat</string>
 
 
     <string name="termsAndConditions">Elfogadom az<a href="https://hazizz.github.io/privacy-hu.txt"> adatvédelmi nyilatkozatot</a></string>
@@ -287,5 +306,7 @@
     <string name="thera_grade_">jegy:</string>
     <string name="thera_weight_">súly:</string>
     <string name="thera_theme_">téma:</string>
+    <string name="thera_subject_">tantárgy:</string>
+    <string name="thera_grade_type_">jegy tipus:</string>
 
 </resources>

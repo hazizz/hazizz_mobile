@@ -12,8 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.hazizz.droid.Activities.MainActivity;
+import com.hazizz.droid.Communication.POJO.Response.CommentSectionPOJOs.POJOGroup;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOMembersProfilePic;
+import com.hazizz.droid.Communication.Requests.GetGroup;
 import com.hazizz.droid.Communication.Requests.GetGroupMembersProfilePic;
 import com.hazizz.droid.Communication.Requests.LeaveGroup;
 import com.hazizz.droid.Communication.Strings;
@@ -52,8 +54,10 @@ public class GroupTabFragment extends ParentFragment {
 
         groupId = getArguments().getInt(Transactor.KEY_GROUPID);
         getGroupMemberProfilePics();
+
         groupName = getArguments().getString(Transactor.KEY_GROUPNAME);
-        fragmentSetup(getResources().getString(R.string.group_)+ " " + groupName);
+        getGroupDetails(groupId);
+        fragmentSetup();
         setOnBackPressedListener(new OnBackPressedListener() {
             @Override
             public void onBackPressed() {
@@ -83,6 +87,7 @@ public class GroupTabFragment extends ParentFragment {
         adapter.giveArgs(groupId, groupName);
 
         viewPager.setOffscreenPageLimit(5);
+
     //    viewPager.setCurrent
        // bottomBar.setDefaultTab(R.id.tab_default);
         viewPager.setAdapter(adapter);
@@ -144,5 +149,17 @@ public class GroupTabFragment extends ParentFragment {
         EnumMap<Strings.Path, Object> vars = new EnumMap<>(Strings.Path.class);
         vars.put(Strings.Path.GROUPID, Integer.toString(groupId));
         MiddleMan.newRequest(new GetGroupMembersProfilePic(getActivity(),responseHandler, groupId));
+    }
+
+    public void getGroupDetails(int groupId) {
+        CustomResponseHandler responseHandler = new CustomResponseHandler() {
+            @Override
+            public void onPOJOResponse(Object response) {
+                POJOGroup groupInfo = (POJOGroup)response;
+                groupName = groupInfo.getName();
+                setTitle(getResources().getString(R.string.group_)+ " " + groupName);
+            }
+        };
+        MiddleMan.newRequest(new GetGroup(getActivity(),responseHandler, groupId));
     }
 }

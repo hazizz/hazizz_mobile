@@ -21,10 +21,20 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dp"
             android:layout_marginStart="4dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="2dp"
             android:orientation="vertical"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_value">
+            app:layout_constraintTop_toBottomOf="@+id/textView_grade">
+
+            <TextView
+                android:id="@+id/textView_subject_"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/thera_subject_"
+                android:textColor="@color/colorDarkText"
+                android:textSize="18dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textView_weight_"
@@ -56,13 +66,13 @@
                 android:textColor="@color/colorDarkText"
                 android:textSize="18dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView_theme" />
+                app:layout_constraintTop_toBottomOf="@+id/textView_topic" />
 
 
         </LinearLayout>
 
         <TextView
-            android:id="@+id/textView_value"
+            android:id="@+id/textView_grade"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
@@ -71,7 +81,7 @@
             android:layout_marginStart="8dp"
             android:text="5"
             android:textColor="@color/colorDarkText"
-            android:textSize="40sp"
+            android:textSize="55sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -80,15 +90,30 @@
             android:id="@+id/linearLayout3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="2dp"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_value">
+            app:layout_constraintTop_toBottomOf="@+id/textView_grade">
+
+            <TextView
+                android:id="@+id/textView_subject"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:text="matek"
+                android:ellipsize="marquee"
+                android:maxLength="22"
+                android:singleLine="true"
+                android:textColor="@color/colorDarkText"
+                android:textSize="18dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textView_weight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="right"
                 android:text="weight "
                 android:textColor="@color/colorDarkText"
                 android:textSize="18dp"
@@ -97,23 +122,25 @@
 
 
             <TextView
-                android:id="@+id/textView_theme"
+                android:id="@+id/textView_topic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="marquee"
-                android:maxLength="14"
+                android:maxLength="22"
+                android:singleLine="true"
                 android:text="12345678912345"
                 android:textColor="@color/colorDarkText"
                 android:textSize="18dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView_weight"
-                android:singleLine="true" />
+                android:layout_gravity="right" />
 
 
             <TextView
-                android:id="@+id/textView_teacher"
+                android:id="@+id/textView_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="right"
                 android:ellipsize="marquee"
                 android:maxLength="12"
                 android:singleLine="true"
@@ -121,7 +148,7 @@
                 android:textColor="@color/colorDarkText"
                 android:textSize="18dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView_theme" />
+                app:layout_constraintTop_toBottomOf="@+id/textView_topic" />
 
 
         </LinearLayout>
@@ -134,7 +161,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="2dp"
             android:text="@string/close"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"

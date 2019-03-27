@@ -37,7 +37,27 @@
             android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="adjustResize"
             android:autoRemoveFromRecents="true"
-            />
+
+            android:launchMode="singleTop"
+
+            >
+
+          <!--  https://hazizz.page.link/?link=http://hazizz.github.io/hazizz-webclient/index.html?group=2&apn=com.hazizz.droid&afl=hazizz.github.io -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data android:scheme="https" android:host="hazizz.page.link"/>
+                <data android:scheme="https" android:host="hazizz.github.io"/>
+                <data android:scheme="https" android:host="hazizz.duckdns.org:9000" />
+            </intent-filter>
+
+
+        </activity>
+
+
+
         <activity
             android:name=".Activities.AuthActivity"
             android:noHistory="false"

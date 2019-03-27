@@ -81,7 +81,7 @@ public class TheraUsersFragment  extends ParentFragment {
         button_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Transactor.fragmentThSchool(getFragmentManager().beginTransaction());
+                Transactor.fragmentThLogin(getFragmentManager().beginTransaction());
             }
         });
 
@@ -93,14 +93,19 @@ public class TheraUsersFragment  extends ParentFragment {
                 adapter.clear();
                 ArrayList<PojoSession> pojoList = (ArrayList<PojoSession>) response;
                 if(pojoList.isEmpty()){
-                    textView_noContent.setVisibility(v.VISIBLE);
+                    Transactor.fragmentThLogin(getFragmentManager().beginTransaction());
                 }else {
                     textView_noContent.setVisibility(v.INVISIBLE);
+                    boolean foundActive = false;
                     for (PojoSession t : pojoList) {
                         if(t.getStatus().equals("ACTIVE")) {
+                            foundActive = true;
                             listUsers.add(new TheraUserItem(t.getId(), t.getStatus(), t.getUrl()));
                             adapter.notifyDataSetChanged();
                         }
+                    }
+                    if(!foundActive){
+                        Transactor.fragmentThLogin(getFragmentManager().beginTransaction());
                     }
                 }
             }
