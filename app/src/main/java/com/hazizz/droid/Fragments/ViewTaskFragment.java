@@ -194,7 +194,7 @@ public class ViewTaskFragment extends CommentableFragment implements AdapterView
         textView_type = v.findViewById(R.id.textView_tasktype);
         textView_title = v.findViewById(R.id.textView_title);
         textView_description = v.findViewById(R.id.editText_description);
-        textView_creatorName = v.findViewById(R.id.textView_creator_);
+        textView_creatorName = v.findViewById(R.id.textView_creator);
         textView_subject = v.findViewById(R.id.textView_subject);
         textView_group = v.findViewById(R.id.textView_group);
         textView_group_ = v.findViewById(R.id.textView_group_);

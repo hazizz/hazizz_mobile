@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity
     CustomResponseHandler rh_profilePic = new CustomResponseHandler() {
         @Override
         public void onPOJOResponse(Object response) {
-            Bitmap bitmap = Converter.imageFromText(
+            Bitmap bitmap = Converter.imageFromText(getBaseContext(),
                     ((PojoPicSmall)response).getData().split(",")[1]);
             bitmap = Converter.scaleBitmapToRegular(bitmap);
             bitmap = Converter.getCroppedBitmap(bitmap);

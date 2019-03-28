@@ -76,7 +76,7 @@ public class MainOptionsFragment extends Fragment {
         MiddleMan.newRequest(new GetMyProfilePic(getActivity(), new CustomResponseHandler() {
             @Override
             public void onPOJOResponse(Object response) {
-                Bitmap bitmap = Converter.imageFromText(
+                Bitmap bitmap = Converter.imageFromText(getContext(),
                         ((PojoPicSmall)response).getData().split(",")[1]);
               //  bitmap = Converter.scaleBitmapToRegular(bitmap);
                 bitmap = Converter.getCroppedBitmap(bitmap);
@@ -180,7 +180,7 @@ public class MainOptionsFragment extends Fragment {
                 }
             }
         });
-        imageView_profilePic.setImageBitmap(Converter.getCroppedBitmap(Converter.imageFromText(Manager.MeInfo.getProfilePic())));
+        imageView_profilePic.setImageBitmap(Converter.getCroppedBitmap(Converter.imageFromText(getContext(),Manager.MeInfo.getProfilePic())));
         editText_displayName.setText(Manager.MeInfo.getDisplayName());
         imageButton_displayNameCheck.setImageResource(R.drawable.ic_create_black);
 

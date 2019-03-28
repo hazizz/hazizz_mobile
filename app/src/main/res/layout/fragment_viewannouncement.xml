@@ -36,6 +36,7 @@
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:singleLine="true"
+                    android:textColor="@color/colorDarkText"
                     android:textSize="30sp" />
 
                 <android.support.constraint.ConstraintLayout
@@ -67,7 +68,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
                     <TextView
-                        android:id="@+id/textView_creator_"
+                        android:id="@+id/textView_creator"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="32dp"
@@ -135,10 +136,10 @@
                         android:layout_marginRight="32dp"
                         android:layout_marginTop="40dp"
                         android:text="           "
+                        android:textColor="@color/colorDarkText"
                         android:textSize="20sp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:textColor="@color/colorDarkText" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <Button
                         android:id="@+id/button_edit"

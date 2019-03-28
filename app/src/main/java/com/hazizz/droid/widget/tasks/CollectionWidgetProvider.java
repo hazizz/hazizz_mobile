@@ -70,6 +70,17 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
     }
 
+    /*
+    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
+                                int appWidgetId) {
+        views = new RemoteViews(context.getPackageName(), R.layout.test_widget);
+        views.setOnClickPendingIntent(R.id.wid_btn_tst, setButton(context));
+
+        appWidgetManager.updateAppWidget(appWidgetId, views);
+    }
+    */
+
+
 
 
     @Override
@@ -92,7 +103,8 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
             widgetView.setInt(R.id.button_refresh, "setImageResource", R.drawable.ic_refresh_grey);
             widgetView.setInt(R.id.button_openapp, "setImageResource", R.drawable.ic_add_black_24dp);
 
-            Intent buttonIntent = new Intent(WIDGET_REFRESHBUTTON);
+            Intent buttonIntent = new Intent(context, CollectionWidgetProvider.class);
+            buttonIntent.setAction(WIDGET_REFRESHBUTTON);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, buttonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             widgetView.setOnClickPendingIntent(R.id.button_refresh, pendingIntent);
 
@@ -100,12 +112,14 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
             pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
             widgetView.setOnClickPendingIntent(R.id.button_openapp, pendingIntent); */
 
-            buttonIntent = new Intent(WIDGET_OPENAPPBUTTON);
+            buttonIntent = new Intent(context, CollectionWidgetProvider.class);
+            buttonIntent.setAction(WIDGET_OPENAPPBUTTON);
             pendingIntent = PendingIntent.getBroadcast(context, 0, buttonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             widgetView.setOnClickPendingIntent(R.id.button_openapp, pendingIntent);
            // widgetView.setOnClickPendingIntent(R.id.button_refresh, getPendingSelfIntent(context, MyOnClick));
 
-            Intent detailIntent = new Intent(ACTION_VIEW_DETAILS);
+            Intent detailIntent = new Intent(context, CollectionWidgetProvider.class);
+            detailIntent.setAction(ACTION_VIEW_DETAILS);
             PendingIntent pIntent = PendingIntent.getBroadcast(context, 0, detailIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             widgetView.setPendingIntentTemplate(R.id.widget_stack, pIntent);
 
@@ -151,11 +165,10 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
                 // Maybe consider using an Activity PendingIntent instead of a Broadcast?
             }
         }*/
-
-
         Log.e("hey", "RECIEVED INTENT");
+        String intentAction = intent.getAction();
 
-        if (WIDGET_REFRESHBUTTON.equals(intent.getAction())) {
+        if (WIDGET_REFRESHBUTTON.equals(intentAction)) {
            // String str = intent.getAction();
             final AppWidgetManager mgr = AppWidgetManager.getInstance(context);
             final ComponentName cn = new ComponentName(context, CollectionWidgetProvider.class);
@@ -174,7 +187,7 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
             Log.e("hey", "CLICK REFRESH BUTTON");
         }
 
-        else if (WIDGET_OPENAPPBUTTON.equals(intent.getAction())) {
+        else if (WIDGET_OPENAPPBUTTON.equals(intentAction)) {
             Manager.WidgetManager.setDest(Manager.WidgetManager.TOATCHOOSER);
             Intent i = new Intent(context, AuthActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -182,23 +195,25 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
             Log.e("hey", "CLICK WIDGET_OPENAPPBUTTON");
         }
 
-        if (ACTION_TOAST.equals(intent.getAction())) {
+        if (ACTION_TOAST.equals(intentAction)) {
          //   int clickedPosition = intent.getIntExtra(EXTRA_ITEM_POSITION, 0);
             int clickedPosition = intent.getIntExtra(EXTRA_STRING, 0);
             Toast.makeText(context, "Clicked position: " + clickedPosition, Toast.LENGTH_SHORT).show();
             Log.e("hey", "click wdiget");
         }
 
-        if  (intent.getAction().equals(ACTION_TOAST)) {
+        if  (intentAction.equals(ACTION_TOAST)) {
             String item = intent.getExtras().getString(EXTRA_STRING);
             Toast.makeText(context, item, Toast.LENGTH_LONG).show();
         }
 
+        /*
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
         ComponentName thisAppWidget = new ComponentName(context.getPackageName(), CollectionWidgetProvider.class.getName());
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(thisAppWidget);
 
         onUpdate(context, appWidgetManager, appWidgetIds);
+        */
 
         super.onReceive(context, intent);
     }

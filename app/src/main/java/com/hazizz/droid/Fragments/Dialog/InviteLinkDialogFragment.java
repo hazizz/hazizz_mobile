@@ -12,6 +12,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.hazizz.droid.Communication.MiddleMan;
+import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
+import com.hazizz.droid.Communication.Requests.ReturnInvitationLink;
 import com.hazizz.droid.R;
 import com.hazizz.droid.Transactor;
 
@@ -94,7 +97,7 @@ public class InviteLinkDialogFragment extends DialogFragment {
         });
 
 
-        /*
+
         MiddleMan.newRequest(new ReturnInvitationLink(getActivity(), new CustomResponseHandler() {
             @Override
             public void onPOJOResponse(Object response) {
@@ -102,10 +105,7 @@ public class InviteLinkDialogFragment extends DialogFragment {
                 textView_link.setText(inviteLink);
             }
         }, groupId));
-        */
 
-        inviteLink = "https://hazizz.duckdns.org:9000/shortener?groupinvite=" + groupId;
-        textView_link.setText(inviteLink);
 
         return v;
     }

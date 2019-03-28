@@ -60,7 +60,7 @@ public class CustomAdapter extends ArrayAdapter<UserItem> {
 
         UserItem userItem = data.get(position);
         if(userItem.getUserProfilePic() != null && !userItem.getUserProfilePic().equals("")) {
-            holder.userProfilePic.setImageBitmap(Converter.getCroppedBitmap(Converter.scaleBitmapToRegular(Converter.imageFromText(userItem.userProfilePic))));
+            holder.userProfilePic.setImageBitmap(Converter.getCroppedBitmap(Converter.scaleBitmapToRegular(Converter.imageFromText(getContext(),userItem.userProfilePic))));
         }else{
             holder.userProfilePic.setImageResource(R.mipmap.ic_launcher_round);
         }
