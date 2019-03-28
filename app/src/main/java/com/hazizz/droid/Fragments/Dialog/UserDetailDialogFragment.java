@@ -56,7 +56,7 @@ public class UserDetailDialogFragment extends DialogFragment {
         View v = inflater.inflate(R.layout.dialog_fragment_user_detail, container, false);
 
         long userId = getArguments().getLong(Transactor.KEY_USERID);
-        Bitmap profilePic = Converter.getCroppedBitmap(Converter.imageFromText(getArguments().getString(Strings.Other.PROFILEPIC.toString())));
+        Bitmap profilePic = Converter.getCroppedBitmap(Converter.imageFromText(getContext(), getArguments().getString(Strings.Other.PROFILEPIC.toString())));
         rank = getArguments().getInt(Transactor.KEY_RANK);
         if(rank == Strings.Rank.OWNER.getValue()){
             FrameLayout badge = v.findViewById(R.id.badge_owner);
@@ -80,7 +80,7 @@ public class UserDetailDialogFragment extends DialogFragment {
         MiddleMan.newRequest(new GetUserProfilePic(getActivity(), new CustomResponseHandler() {
             @Override
             public void onPOJOResponse(Object response) {
-                Bitmap bitmap = Converter.imageFromText(
+                Bitmap bitmap = Converter.imageFromText(getContext(),
                         ((PojoPicSmall)response).getData().split(",")[1]);
                 //  bitmap = Converter.scaleBitmapToRegular(bitmap);
                 bitmap = Converter.getCroppedBitmap(bitmap);

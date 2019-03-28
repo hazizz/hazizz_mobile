@@ -1,7 +1,5 @@
 package com.hazizz.droid.Communication.POJO.Response;
 
-import java.util.List;
-
 import lombok.Data;
 
 @Data

@@ -71,7 +71,7 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
 
         itemView.setTextViewText(R.id.task_title, task.getTitle());
         itemView.setTextViewText(R.id.task_description, task.getDescription());
-        itemView.setTextViewText(R.id.textView_creator_, task.getCreator().getDisplayName());
+        itemView.setTextViewText(R.id.textView_creator, task.getCreator().getDisplayName());
 
         if(task.getSubject() != null) {
             itemView.setTextViewText(R.id.textView_subject, task.getSubject().getName());
@@ -79,7 +79,7 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
             itemView.setViewVisibility(R.id.textView_subject, View.INVISIBLE);
             itemView.setViewVisibility(R.id.textView_subject_info, View.INVISIBLE);
         }
-        itemView.setTextViewText(R.id.textView_deadline, task.getDueDate());
+        itemView.setTextViewText(R.id.textView_deadline, D8.textToDate(task.getDueDate()).getMainFormat());
 
         Intent intent = new Intent();
       //  intent.putExtra(CollectionWidgetProvider.EXTRA_ITEM, task);

@@ -110,7 +110,7 @@ public class CustomAdapter extends ArrayAdapter<CommentItem>  {
             holder = (DataHolder)convertView.getTag();
         }
 
-        holder.commentProfilePic.setImageBitmap(Converter.getCroppedBitmap(Converter.scaleBitmapToRegular(Converter.imageFromText(commentItem.getCommentProfilePic()))));
+        holder.commentProfilePic.setImageBitmap(Converter.getCroppedBitmap(Converter.scaleBitmapToRegular(Converter.imageFromText(getContext(),commentItem.getCommentProfilePic()))));
         holder.commentName.setText(commentItem.getCreator().getDisplayName());
         holder.commentContent.setText(commentItem.getCommentContent());
 

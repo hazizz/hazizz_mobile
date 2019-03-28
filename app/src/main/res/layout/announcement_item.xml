@@ -43,44 +43,13 @@
 
 
     <RelativeLayout
-        android:id="@+id/relativeLayout4"
-        android:layout_width="wrap_content"
-        android:layout_height="47dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toEndOf="@+id/textView_weight"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/textView_info_from"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/creator_"
-            tools:layout_editor_absoluteX="244dp"
-            tools:layout_editor_absoluteY="38dp" />
-
-
-        <TextView
-            android:id="@+id/textView_group_"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerVertical="true"
-            android:layout_marginBottom="0dp"
-            android:text="@string/subject_"
-            tools:layout_editor_absoluteX="244dp"
-            tools:layout_editor_absoluteY="104dp" />
-    </RelativeLayout>
-
-    <RelativeLayout
         android:id="@+id/relativeLayout3"
         android:layout_width="wrap_content"
         android:layout_height="47dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toEndOf="@+id/relativeLayout4"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
@@ -93,7 +62,7 @@
 
 
         <TextView
-            android:id="@+id/textView_creator_"
+            android:id="@+id/textView_creator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="creator"

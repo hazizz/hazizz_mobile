@@ -85,7 +85,7 @@ public class CustomAdapter extends BaseAdapter {
                 holder.taskTitle = (TextView) convertView.findViewById(R.id.task_title);
                 holder.taskDescription = (TextView) convertView.findViewById(R.id.task_description);
                // holder.taskDueDate = (TextView) convertView.findViewById(R.id.textView_dueDate);
-                holder.taskCreator = (TextView) convertView.findViewById(R.id.textView_creator_);
+                holder.taskCreator = (TextView) convertView.findViewById(R.id.textView_creator);
                 holder.taskSubject = (TextView) convertView.findViewById(R.id.textView_subject);
                 convertView.setTag(holder);
 
@@ -114,7 +114,7 @@ public class CustomAdapter extends BaseAdapter {
             holder.taskTitle.setText(taskItem.getTaskTitle());
             holder.taskDescription.setText(taskItem.getTaskDescription());
 
-            holder.taskCreator.setText(taskItem.getCreator().getUsername());
+            holder.taskCreator.setText(taskItem.getCreator().getDisplayName());
             if (taskItem.getSubject() != null) {
                 holder.taskSubject.setText(taskItem.getSubject().getName() + ":");
             } else {

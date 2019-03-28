@@ -1,5 +1,6 @@
 package com.hazizz.droid.Converter;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -10,6 +11,7 @@ import android.graphics.Rect;
 import android.util.Base64;
 
 import com.google.common.hash.Hashing;
+import com.hazizz.droid.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -19,14 +21,16 @@ public class Converter {
 
     private Converter(){}
 
-    public static Bitmap imageFromText(String encodedImage){
+    public static Bitmap imageFromText(Context context, String encodedImage){
         if(encodedImage != null && !encodedImage.equals("")) {
             if (encodedImage.startsWith("data")) {
                 encodedImage = encodedImage.split(",")[1];
             }
             byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
             return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        }else{return null;}
+        }else{
+            return BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher_round);
+        }
     }
 
     public static Bitmap imageFromText(InputStream inputStream){

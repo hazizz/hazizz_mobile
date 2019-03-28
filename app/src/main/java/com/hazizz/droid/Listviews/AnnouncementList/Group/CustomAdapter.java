@@ -34,7 +34,6 @@ public class CustomAdapter extends ArrayAdapter<AnnouncementItem> {
         TextView taskTitle;
         TextView taskDescription;
         TextView taskCreator;
-        TextView subject_;
         TextView subject;
     }
     @NonNull
@@ -50,8 +49,7 @@ public class CustomAdapter extends ArrayAdapter<AnnouncementItem> {
             holder = new DataHolder();
             holder.taskTitle = (TextView) convertView.findViewById(R.id.textView_subjectName);
             holder.taskDescription = (TextView) convertView.findViewById(R.id.textView_weight);
-            holder.taskCreator = (TextView) convertView.findViewById(R.id.textView_creator_);
-            holder.subject_ = (TextView) convertView.findViewById(R.id.textView_group_);
+            holder.taskCreator = (TextView) convertView.findViewById(R.id.textView_creator);
             holder.subject = (TextView) convertView.findViewById(R.id.textView_subject);
             convertView.setTag(holder);
         }else{
@@ -61,14 +59,13 @@ public class CustomAdapter extends ArrayAdapter<AnnouncementItem> {
         AnnouncementItem announcementItem = data.get(position);
         holder.taskTitle.setText(announcementItem.getAnnouncementTitle());
         holder.taskDescription.setText(announcementItem.getAnnouncementDescription());
-        holder.taskCreator.setText(announcementItem.getCreator().getUsername());
+        holder.taskCreator.setText(announcementItem.getCreator().getDisplayName());
 
 
         if(announcementItem.getSubject() != null){
             holder.subject.setText(announcementItem.getSubject().getName());
         }else{
             holder.subject.setVisibility(View.GONE);
-            holder.subject_.setVisibility(View.GONE);
         }
         return convertView;
     }

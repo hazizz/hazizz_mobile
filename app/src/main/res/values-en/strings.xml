@@ -1,7 +1,7 @@
 <resources>
 
     <string name="hazizz">Hazizz</string>
-    <string name="hazizz_motto">The generation Z\'s homework forum.</string>
+    <string name="hazizz_motto">From pupils to pupils</string>
 
     <string name="app_name">Hazizz Droid</string>
     <string name="title_activity_main">MainActivity</string>
@@ -198,7 +198,7 @@
     <string name="hint_newgroup">New group</string>
     <string name="title_fragment_tabgroup">Group:</string>
 
-
+    <string name="title_choose_at">Task/announcement chooser</string>
     <string name="title_activity_feedback">Feedback</string>
     <string name="title_fragment_groups">Your groups</string>
     <string name="title_fragment_joingroup">Join group</string>
@@ -298,6 +298,8 @@
     <string name="crop_image_menu_flip_horizontally">Flip horizontally</string>
     <string name="crop_image_menu_flip_vertically">Flip vertically</string>
 
+
+    <string name="kreta">Kréta</string>
 
     <string name="title_thera">Thera</string>
     <string name="title_thera_users">Thera users</string>
