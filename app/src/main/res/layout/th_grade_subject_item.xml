@@ -8,6 +8,21 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/textView_average"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:text="4.3"
+        android:textColor="@color/colorDarkText"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/textView_"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
         android:id="@+id/textView_subjectName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -19,6 +34,20 @@
         android:textColor="@color/colorDarkText"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView_"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginStart="2dp"
+        android:ellipsize="end"
+        android:text=":"
+        android:textColor="@color/colorDarkText"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/textView_subjectName"
         app:layout_constraintTop_toTopOf="parent" />
 
 

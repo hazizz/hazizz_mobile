@@ -18,7 +18,7 @@
     <color name="colorError">#f23c50</color>
     <color name="colorTitleText">#8c8c8c</color>
 
-    <color name="colorDarkText">#DE000000</color>
+    <color name="colorDarkText">#de000000</color>
     <color name="colorDefaultBackColor">#FAFAFA</color>
 
     <color name="color_badge_owner">#d9a849</color>

@@ -464,6 +464,20 @@ public interface RequestTypes{
             @Body Map<String, Object> body
     );
 
+
+    @DELETE("sessions/{sessionId}")
+    Call<ResponseBody> th_removeSession(
+            @Path("sessionId") String sessionId,
+            @HeaderMap Map<String, String> headers
+    );
+
+    @POST("sessions/{sessionId}/auth")
+    Call<ResponseBody> th_authenticateSession(
+            @Path("sessionId") String sessionId,
+            @HeaderMap Map<String, String> headers,
+            @Body Map<String, Object> body
+    );
+
     @GET("sessions")
     Call<ResponseBody> th_returnSessions(
             @HeaderMap Map<String, String> headers

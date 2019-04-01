@@ -31,6 +31,13 @@ public class SharedPrefs {
         return context.getSharedPreferences(fileName, Context.MODE_PRIVATE);
     }
 
+    private static void clearAll(Context context, String fileName1) {
+        fileName = fileName1;
+        SharedPreferences.Editor editor = context.getSharedPreferences(fileName, Context.MODE_PRIVATE).edit();
+        editor.clear();
+        editor.apply();
+    }
+
     //Save Booleans
     public static void savePref(Context context, String fileName, String key, boolean value) {
         getPrefs(context, fileName).edit().putBoolean(key, value).commit();
@@ -92,7 +99,9 @@ public class SharedPrefs {
     }
 
     public static long getLong(Context context,String fileName, String key) {
+      //  return context.getSharedPreferences(fileName, Context.MODE_PRIVATE).getLong(key, 0l);
         return getPrefs(context, fileName).getLong(key, 0);
+      //  return Long.parseLong(getPrefs(context, fileName).getString(key, "0"));
     }
 
     public static long getLong(Context context,String fileName, String key, long defaultValue) {
@@ -175,39 +184,51 @@ public class SharedPrefs {
     }
 
     public static class ThSessionManager{
-        private static final String fileName = "th_session";
-        public static int getSessionId(Context context){
-            return SharedPrefs.getInt(context, fileName, "sessionId");
+        private static final String fileName = "th_session2";
+        public static long getSessionId(Context context){
+            return SharedPrefs.getLong(context, fileName, "sessionId");
         }
 
-        public static void setSessionId(Context context, int sessionId){
+        public static void setSessionId(Context context, long sessionId){
             SharedPrefs.save(context, fileName, "sessionId", sessionId);
+        }
+
+        public static void clearSession(Context context){
+            long nulla = 0;
+            SharedPrefs.save(context, fileName, "sessionId", nulla);
         }
     }
 
     public static class ThLoginData{
-        private static final String fileName = "th_login";
-        public static void setData(Context context, String username, String password, String school){
-            SharedPrefs.save(context, fileName, "username", username);
-            SharedPrefs.save(context, fileName, "password", password);
-            SharedPrefs.save(context, fileName, "school", school);
+        private static final String fileName = "th_loginData";
+        public static void setData(Context context, long sessionId, String username, String school){
+            String key1 = Long.toString(sessionId);
+            SharedPrefs.save(context, fileName, key1 + "_" + "username", username);
+            SharedPrefs.save(context, fileName, key1 + "_" + "school", school);
         }
 
-        public static void resetData(Context context){
-            SharedPrefs.save(context, fileName, "username", "");
-            SharedPrefs.save(context, fileName, "password", "");
-            SharedPrefs.save(context, fileName, "school", "");
+        public static void clearData(Context context, long sessionId){
+            String key1 = Long.toString(sessionId);
+            SharedPrefs.save(context, Long.toString(sessionId), key1 + "_" + "username", "");
+            SharedPrefs.save(context, Long.toString(sessionId), key1 + "_" + "school", "");
         }
 
-        public static String getUsername(Context context){
-            return SharedPrefs.getString(context, fileName, "username");
+        public static void clearAllData(Context context){
+
+            SharedPrefs.clearAll(context, fileName);
         }
-        public static String getPassword(Context context){
-            return SharedPrefs.getString(context, fileName, "password");
+
+        public static String getUsername(Context context, long sessionId){
+            String key1 = Long.toString(sessionId);
+            return SharedPrefs.getString(context, fileName, key1 + "_" + "username");
         }
-        public static String getSchool(Context context){
-            return SharedPrefs.getString(context, fileName, "school");
+        public static String getSchool(Context context, long sessionId){
+            String key1 = Long.toString(sessionId);
+            return SharedPrefs.getString(context, fileName, key1 + "_" + "school");
         }
+
+
+
     }
 
 

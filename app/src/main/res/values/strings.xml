@@ -37,6 +37,8 @@
       <item>Szerda</item>
       <item>Csütörtök</item>
       <item>Péntek</item>
+      <item>Szombat</item>
+      <item>Vasárnap</item>
     </string-array>
 
     <string-array name="taskTypes">
@@ -106,10 +108,12 @@
     <string name="title">Cím</string>
     <string name="description">Leírás</string>
     <string name="login">Bejelentkezés</string>
+    <string name="enter">Belépés</string>
     <string name="register">Regisztráció</string>
     <string name="displayName">Becenév</string>
-    <string name="registrationDate">Regisztráció időpontja</string>
+    <string name="registrationDate">Regisztráció</string>
     <string name="username">Felhasználónév</string>
+    <string name="users">Felhasználók</string>
     <string name="password">Jelszó</string>
     <string name="email">Email</string>
     <string name="autologin">Automatikus bejelentkezés</string>
@@ -135,7 +139,7 @@
     <string name="copy">Másolás</string>
     <string name="share">Megosztás</string>
     <string name="loading">Betöltés...</string>
-
+    <string name="switch_account">Fiók váltás</string>
 
 
     <string name="school_">Iskola:</string>
@@ -162,13 +166,13 @@
 
     <string name="daysLeft">nap múlva</string>
     <string name="displayName_">Becenév:</string>
-    <string name="registrationDate_">Regisztráció időpontja:</string>
+    <string name="registrationDate_">Regisztráció:</string>
     <string name="username_">Felhasználónév:</string>
 
     <string name="press_again_to_exit">Nyomd meg mégegyszer a VISSZA gombot hogy kilépj</string>
 
 
-    <string name="invite_link_info">Küld el diáktársaidnak ezt a linket hogy csatlakozon a</string>
+    <string name="invite_link_info">Küld el diáktársaidnak ezt a linket hogy csatlakozanak a</string>
     <string name="invite_link_info_part2">csoportba</string>
 
 
@@ -290,8 +294,8 @@
 
 
     <string name="title_thera">Théra</string>
-     <string name="title_thera_users">Théra felhasználók</string>
-     <string name="title_thera_login">Théra bejelentkezés</string>
+     <string name="title_kreta_users">Kréta felhasználók</string>
+     <string name="title_kreta_login">Kréta bejelentkezés</string>
 
     <string name="kreta">Kréta</string>
 

@@ -1,5 +1,6 @@
 package com.hazizz.droid.Listviews.TheraGradesList;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -39,44 +40,54 @@ public class CustomAdapter extends ArrayAdapter<TheraSubjectGradesItem> {
 
     static class DataHolder{
         TextView textView_subjectName;
+        TextView textView_average;
         LinearLayout homeMadeList_grades;
     }
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         DataHolder holder = null;
+        View listItem = LayoutInflater.from(context).inflate(R.layout.th_grade_subject_item, parent, false);
 
-        View listItem = convertView;
+
+        if(convertView == null) {
+            LayoutInflater inflater = ((Activity) context).getLayoutInflater();
+
+            convertView = inflater.inflate(picID, parent, false);
+
+            holder = new DataHolder();
+
+
+            holder.textView_average = convertView.findViewById(R.id.textView_average);
+            holder.textView_subjectName = convertView.findViewById(R.id.textView_subjectName);
+            holder.homeMadeList_grades = (LinearLayout) convertView.findViewById(R.id.linearLayout_grades);
+
+            convertView.setTag(holder);
+        }else{
+            holder = (DataHolder)convertView.getTag();
+        }
 
         TheraSubjectGradesItem th_subjectItem = data.get(position);
 
-        if(listItem == null) {
+        holder.textView_subjectName.setText(th_subjectItem.getSubjectName());
+        addGrade(th_subjectItem.getGrades(), convertView, holder);
 
-            listItem = LayoutInflater.from(context).inflate(R.layout.th_grade_subject_item, parent, false);
-
-        }
-
-        TextView textView_subjectName = listItem.findViewById(R.id.textView_subjectName);
-        LinearLayout homeMadeList_grades = (LinearLayout) listItem.findViewById(R.id.linearLayout_grades);
-
-        textView_subjectName.setText(th_subjectItem.getSubjectName());
-        addGrade(th_subjectItem.getGrades(), listItem);
-
-        Log.e("hey", "finished 123");
-
-        return listItem;
-
-
-
+        return convertView;
     }
 
-
-    private void addGrade(List<TheraGradesItem> grades, View listItem){
+    private void addGrade(List<TheraGradesItem> grades, View listItem, DataHolder holder){
         LinearLayout homeMadeList_grades = listItem.findViewById(R.id.linearLayout_grades);
         homeMadeList_grades.removeAllViews();
+        int a_count = 0;
+        int a_sum = 0;
         for(int i = 0; i < grades.size(); i++){
 
             TheraGradesItem grade = grades.get(i);
+
+            try {
+                a_count++;
+                a_sum += Integer.parseInt(grade.getGrade());
+            }catch (Exception ignore){}
 
             TextView textView_grade = new TextView(context);
 
@@ -106,6 +117,12 @@ public class CustomAdapter extends ArrayAdapter<TheraSubjectGradesItem> {
                 homeMadeList_grades.addView(textView_comma);
 
             }
+        }
+        if(a_count != 0) {
+            float average = (float)a_sum / a_count;
+            holder.textView_average.setText(String.valueOf(average));
+        }else{
+            holder.textView_average.setText("0.0");
         }
     }
 

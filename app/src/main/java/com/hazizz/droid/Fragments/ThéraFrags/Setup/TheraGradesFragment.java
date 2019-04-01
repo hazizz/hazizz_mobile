@@ -21,6 +21,7 @@ import com.hazizz.droid.Listviews.TheraGradesList.CustomAdapter;
 import com.hazizz.droid.Listviews.TheraGradesList.TheraSubjectGradesItem;
 import com.hazizz.droid.R;
 import com.hazizz.droid.SharedPrefs;
+import com.hazizz.droid.Transactor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,7 +54,6 @@ public class TheraGradesFragment  extends ParentFragment {
         listGrades = new ArrayList<>();
         ListView listView = (ListView)v.findViewById(R.id.listView_classes);
         adapter = new CustomAdapter(getActivity(), R.layout.th_grade_subject_item, listGrades, getFragmentManager());
-        //        adapter = new CustomAdapter(getActivity(), R.layout.th_grade_subject_item, listGrades, getFragmentManager().beginTransaction());
         listView.setAdapter(adapter);
 
 
@@ -66,13 +66,12 @@ public class TheraGradesFragment  extends ParentFragment {
 
     }
     private void getGrades(){
+        long sessionId = SharedPrefs.ThSessionManager.getSessionId(getContext());
         CustomResponseHandler responseHandler = new CustomResponseHandler() {
             @Override
             public void onPOJOResponse(Object response) {
                 adapter.clear();
                 HashMap<String, List<TheraGradesItem>> pojoMap = (HashMap<String, List<TheraGradesItem>>)response;
-
-
 
                 if(pojoMap.isEmpty()){
                     textView_noContent.setVisibility(v.VISIBLE);
@@ -89,7 +88,12 @@ public class TheraGradesFragment  extends ParentFragment {
             }
             @Override
             public void onErrorResponse(POJOerror error) {
-
+                //        session not found,                session not active
+                if(error.getErrorCode() == 132 || error.getErrorCode() == 136) {
+                    Transactor.fragmentThLoginAuthSession(getFragmentManager().beginTransaction(), sessionId,
+                            SharedPrefs.ThLoginData.getSchool(getContext(), sessionId),
+                            SharedPrefs.ThLoginData.getUsername(getContext(), sessionId));
+                }
             }
             @Override
             public void onNoConnection() {
@@ -98,6 +102,6 @@ public class TheraGradesFragment  extends ParentFragment {
                 //   sRefreshLayout.setRefreshing(false);
             }
         };
-        MiddleMan.newThRequest(new ThReturnGrades(getActivity(),responseHandler, SharedPrefs.ThSessionManager.getSessionId(getContext())));
+        MiddleMan.newThRequest(new ThReturnGrades(getActivity(),responseHandler, sessionId));
     }
 }

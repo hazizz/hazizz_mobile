@@ -33,6 +33,7 @@ public class CustomAdapter extends ArrayAdapter<TheraUserItem> {
         TextView textView_id;
         TextView textView_status;
         TextView textView_url;
+        TextView textView_username;
     }
     @NonNull
     @Override
@@ -48,6 +49,8 @@ public class CustomAdapter extends ArrayAdapter<TheraUserItem> {
             holder.textView_id = convertView.findViewById(R.id.textView_subjectName);
             holder.textView_status = convertView.findViewById(R.id.textView_status);
             holder.textView_url = convertView.findViewById(R.id.textView_weight);
+            holder.textView_username = convertView.findViewById(R.id.textView_username);
+
 
             convertView.setTag(holder);
         }else{
@@ -59,9 +62,7 @@ public class CustomAdapter extends ArrayAdapter<TheraUserItem> {
         holder.textView_id.setText("" + th_userItem.getId());
         holder.textView_url.setText(th_userItem.getUrl());
         holder.textView_status.setText(th_userItem.getStatus());
-
-
-
+        holder.textView_username.setText(th_userItem.getUsername());
 
         return convertView;
     }

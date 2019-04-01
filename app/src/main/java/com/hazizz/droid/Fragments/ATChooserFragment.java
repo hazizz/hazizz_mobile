@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.hazizz.droid.Communication.Strings;
+import com.hazizz.droid.Fragments.MainTab.GroupsFragment;
 import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
 import com.hazizz.droid.Transactor;
 import com.hazizz.droid.R;
@@ -31,16 +31,19 @@ public class ATChooserFragment extends ParentFragment {
         button_task.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-            //    Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(), Manager.GroupManager.getGroupId(), Manager.GroupManager.getGroupName(), Manager.DestManager.TOMAIN);
-                Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(), Strings.Dest.TOMAIN);
+                Transactor.fragmentCreatorAT(getFragmentManager().beginTransaction(), GroupsFragment.Dest.TOCREATETASK);
+
+                //    Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(), Manager.GroupManager.getGroupId(), Manager.GroupManager.getGroupName(), Manager.DestManager.TOMAIN);
+               // Transactor.fragmentCreateTask(getFragmentManager().beginTransaction(), Strings.Dest.TOMAIN);
             }
         });
         button_announcement = v.findViewById(R.id.button_announcement);
         button_announcement.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-              //  Transactor.fragmentCreateAnnouncement(getFragmentManager().beginTransaction(), Manager.GroupManager.getGroupId(), Manager.GroupManager.getGroupName(), Manager.DestManager.TOMAIN);
-                Transactor.fragmentCreateAnnouncement(getFragmentManager().beginTransaction(), Strings.Dest.TOMAIN);
+                Transactor.fragmentCreatorAT(getFragmentManager().beginTransaction(), GroupsFragment.Dest.TOCREATEANNOUNCEMET);
+                //  Transactor.fragmentCreateAnnouncement(getFragmentManager().beginTransaction(), Manager.GroupManager.getGroupId(), Manager.GroupManager.getGroupName(), Manager.DestManager.TOMAIN);
+             //   Transactor.fragmentCreateAnnouncement(getFragmentManager().beginTransaction(), Strings.Dest.TOMAIN);
             }
         });
         return v;

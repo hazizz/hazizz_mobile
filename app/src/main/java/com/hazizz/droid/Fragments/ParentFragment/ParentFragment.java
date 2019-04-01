@@ -1,14 +1,11 @@
 package com.hazizz.droid.Fragments.ParentFragment;
 
-
 import android.support.v4.app.Fragment;
 import android.view.View;
 
 import com.hazizz.droid.Activities.MainActivity;
 import com.hazizz.droid.AndroidThings;
 import com.hazizz.droid.Listener.OnBackPressedListener;
-
-
 
 public class ParentFragment extends Fragment {
 
@@ -22,6 +19,7 @@ public class ParentFragment extends Fragment {
     protected void setTitle(int titleId){
         getActivity().setTitle(titleId);
     }
+
     protected void setTitle(CharSequence title){
         getActivity().setTitle(title);
     }
@@ -54,6 +52,12 @@ public class ParentFragment extends Fragment {
 
     protected void clearFragment(){
         ((MainActivity)getActivity()).removeOnBackPressedListener();
+        AndroidThings.closeKeyboard(getContext(), v);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
         AndroidThings.closeKeyboard(getContext(), v);
     }
 }

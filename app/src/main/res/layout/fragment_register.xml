@@ -18,8 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="-20dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginBottom="-25dp"
+            android:layout_marginTop="0dp"
             android:layout_weight="1"
             android:fontFamily="@font/architects_daughter_font"
             android:gravity="center"
@@ -49,7 +49,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="10dp"
 
             >
 
@@ -67,7 +67,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="2dp"
 
             >
 
@@ -85,9 +85,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="0dp"
 
-            >
+            android:paddingTop="2dp">
 
             <EditText
                 android:id="@+id/editText_password"
@@ -104,9 +104,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="0dp"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="0dp"
 
-            >
+            android:paddingTop="2dp">
 
             <EditText
                 android:id="@+id/editText_passwordCheck"
@@ -162,11 +162,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="2dp"
             android:background="@drawable/rounded_lightblue_border"
             android:text="@string/register"
-            android:textSize="18dp"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:textSize="20dp" />
 
 
     </LinearLayout>
@@ -186,6 +186,8 @@
             android:background="@drawable/border_button_gray_nosolid"
             android:text="@string/login"
             android:textSize="20sp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

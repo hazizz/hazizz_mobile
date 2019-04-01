@@ -100,22 +100,14 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
             widgetView.setRemoteAdapter(R.id.widget_stack, intent);
             widgetView.setEmptyView(R.id.widget_stack, R.id.widget_info);
 
-            widgetView.setInt(R.id.button_refresh, "setImageResource", R.drawable.ic_refresh_grey);
-            widgetView.setInt(R.id.button_openapp, "setImageResource", R.drawable.ic_add_black_24dp);
+            setRefreshButton(context, widgetView);
+            setOpenAppButton(context, widgetView);
 
-            Intent buttonIntent = new Intent(context, CollectionWidgetProvider.class);
-            buttonIntent.setAction(WIDGET_REFRESHBUTTON);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, buttonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            widgetView.setOnClickPendingIntent(R.id.button_refresh, pendingIntent);
 
        /*     intent = new Intent(context, AuthActivity.class);
             pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
             widgetView.setOnClickPendingIntent(R.id.button_openapp, pendingIntent); */
 
-            buttonIntent = new Intent(context, CollectionWidgetProvider.class);
-            buttonIntent.setAction(WIDGET_OPENAPPBUTTON);
-            pendingIntent = PendingIntent.getBroadcast(context, 0, buttonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            widgetView.setOnClickPendingIntent(R.id.button_openapp, pendingIntent);
            // widgetView.setOnClickPendingIntent(R.id.button_refresh, getPendingSelfIntent(context, MyOnClick));
 
             Intent detailIntent = new Intent(context, CollectionWidgetProvider.class);
@@ -155,6 +147,22 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
 
+    private void setRefreshButton(Context context, RemoteViews remoteViews){
+        remoteViews.setInt(R.id.button_refresh, "setImageResource", R.drawable.ic_refresh_grey);
+        Intent buttonIntent = new Intent(context, CollectionWidgetProvider.class);
+        buttonIntent.setAction(WIDGET_REFRESHBUTTON);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, buttonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        remoteViews.setOnClickPendingIntent(R.id.button_refresh, pendingIntent);
+    }
+
+    private void setOpenAppButton(Context context, RemoteViews remoteViews){
+        remoteViews.setInt(R.id.button_openapp, "setImageResource", R.drawable.ic_add_black_24dp);
+        Intent buttonIntent = new Intent(context, CollectionWidgetProvider.class);
+        buttonIntent.setAction(WIDGET_OPENAPPBUTTON);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, buttonIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        remoteViews.setOnClickPendingIntent(R.id.button_openapp, pendingIntent);
+    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
       /*  if(intent.getAction().equals(ACTION_VIEW_DETAILS)) {
@@ -169,7 +177,9 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
         String intentAction = intent.getAction();
 
         if (WIDGET_REFRESHBUTTON.equals(intentAction)) {
-           // String str = intent.getAction();
+
+
+
             final AppWidgetManager mgr = AppWidgetManager.getInstance(context);
             final ComponentName cn = new ComponentName(context, CollectionWidgetProvider.class);
             mgr.notifyAppWidgetViewDataChanged(mgr.getAppWidgetIds(cn), R.id.widget_stack);
@@ -183,11 +193,20 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
                 widgetView.setViewVisibility(R.id.widget_textView_content, View.VISIBLE);
                 widgetView.setTextViewText(R.id.widget_textView_content, contentInfo);
             }
+
+            setRefreshButton(context, widgetView);
+            setOpenAppButton(context, widgetView);
+
             mgr.updateAppWidget(mgr.getAppWidgetIds(cn),widgetView);
             Log.e("hey", "CLICK REFRESH BUTTON");
         }
 
         else if (WIDGET_OPENAPPBUTTON.equals(intentAction)) {
+
+            RemoteViews widgetView = new RemoteViews(context.getPackageName(), R.layout.hazizz_widget);
+            setRefreshButton(context, widgetView);
+            setOpenAppButton(context, widgetView);
+
             Manager.WidgetManager.setDest(Manager.WidgetManager.TOATCHOOSER);
             Intent i = new Intent(context, AuthActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

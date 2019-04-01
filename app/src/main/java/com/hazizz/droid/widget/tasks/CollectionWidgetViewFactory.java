@@ -38,7 +38,6 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
         mContext = context;
         data = new ArrayList<POJOgetTask>();
     }
-
     @Override
     public void onCreate() {
        /* String[] titles = { "New Phones Released!", "Random App Makes $300 Million",
@@ -86,8 +85,6 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
         intent.putExtra(EXTRA_ITEM_POSITION, position);
         itemView.setOnClickFillInIntent(R.layout.widget_task_item, intent);
 
-
-
         final Intent fillInIntent = new Intent();
         fillInIntent.setAction(CollectionWidgetProvider.ACTION_TOAST);
         final Bundle bundle = new Bundle();
@@ -98,9 +95,6 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
         itemView.setOnClickFillInIntent(R.layout.widget_task_item, fillInIntent);
         itemView.setOnClickFillInIntent(R.id.widget_stack, fillInIntent);
         itemView.setOnClickFillInIntent(R.id.widget_item_linearLayout, fillInIntent);
-
-
-
 
         return itemView;
     }

@@ -3,7 +3,6 @@ package com.hazizz.droid.Fragments.GroupTabs;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -14,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.hazizz.droid.Activities.MainActivity;
 import com.hazizz.droid.Communication.POJO.Response.AnnouncementPOJOs.POJOAnnouncement;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
@@ -23,14 +21,11 @@ import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.Fragments.ParentFragment.GroupFragment;
 import com.hazizz.droid.Listviews.AnnouncementList.AnnouncementItem;
 import com.hazizz.droid.Listviews.AnnouncementList.Group.CustomAdapter;
-import com.hazizz.droid.Manager;
 import com.hazizz.droid.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
 
 import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -89,12 +84,6 @@ public class GroupAnnouncementFragment extends GroupFragment {
     private void getAnnouncements(){
         CustomResponseHandler responseHandler = new CustomResponseHandler() {
             @Override
-            public int hashCode() {
-                return super.hashCode();
-            }
-
-
-            @Override
             public void onPOJOResponse(Object response) {
                 adapter.clear();
                 ArrayList<POJOAnnouncement> pojoList = (ArrayList<POJOAnnouncement>) response;
@@ -116,23 +105,19 @@ public class GroupAnnouncementFragment extends GroupFragment {
                 textView_noContent.setVisibility(v.VISIBLE);
                 sRefreshLayout.setRefreshing(false);
             }
-            @Override
-            public void onErrorResponse(POJOerror error) {
-                sRefreshLayout.setRefreshing(false);
-            }
+            @Override public void onErrorResponse(POJOerror error) { sRefreshLayout.setRefreshing(false); }
             @Override
             public void onNoConnection() {
                 textView_noContent.setText(R.string.info_noInternetAccess);
                 textView_noContent.setVisibility(View.VISIBLE);
                 sRefreshLayout.setRefreshing(false);
-                //    textView_noContent.
             }
         };
         MiddleMan.newRequest(new GetAnnouncementsFromGroup(getActivity(),responseHandler, groupId));
     }
 
     public void toAnnouncementEditor(FragmentManager fm){
-        Transactor.fragmentCreateAnnouncement(fm.beginTransaction(),groupId, groupName, Strings.Dest.TOGROUP);
+        Transactor.fragmentCreateAnnouncement(fm.beginTransaction(),GroupTabFragment.groupId, GroupTabFragment.groupName, Strings.Dest.TOGROUP);
 
     }
 }

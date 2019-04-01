@@ -68,6 +68,9 @@ public interface RequestInterface {
                               }
                          }
 
+
+
+
                          else if(pojoError.getErrorCode() == 18 || pojoError.getErrorCode() == 17) {
                               MiddleMan.addToCallAgain(request);
                               if(!Manager.ThreadManager.isFreezed()) {
@@ -199,6 +202,7 @@ public interface RequestInterface {
 
      void callIsSuccessful(Response<ResponseBody> response);
 
+    // void callIsError(POJOerror pojoError);
 
      void cancelRequest();
 }
