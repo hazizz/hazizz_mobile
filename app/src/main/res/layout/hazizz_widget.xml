@@ -37,7 +37,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:layout_gravity="center"
-                android:text="@string/task"
+                android:text="@string/my_tasks"
                 android:textColor="#363636"
                 android:textSize="24sp" />
 

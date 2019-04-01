@@ -4,13 +4,14 @@
 
     <stroke
         android:width="3dp"
-        android:color="@color/colorPrimaryLightViolet" />
+        android:color="@color/colorAccent" />
 
     <solid
-        android:color="@color/colorPrimaryLightBlue"
+        android:color="@color/colorAccent"
         />
 
-    <corners android:radius="10dp" />
+    <corners android:radius="360dp" />
+
 
     <padding
         android:left="4dp"

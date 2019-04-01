@@ -1,31 +1,30 @@
-package com.hazizz.droid.Communication.Requests.RequestType.Thera.ThCreateSession;
+package com.hazizz.droid.Communication.Requests.RequestType.Thera;
 
 import android.app.Activity;
 import android.util.Log;
 
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.Requests.Parent.ThRequest;
-import com.hazizz.droid.Communication.Requests.RequestType.Thera.PojoSession;
-
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 
-public class ThCreateSession extends ThRequest {
-    public ThCreateSession(Activity act, CustomResponseHandler rh, String b_username, String b_password, String b_url) {
+public class ThAuthenticateSession extends ThRequest {
+    String p_session;
+    public ThAuthenticateSession(Activity act, CustomResponseHandler rh, long p_session, String b_password) {
         super(act, rh);
-        Log.e("hey", "created ThCreateSession object");
+        Log.e("hey", "created ThAuthenticateSession object");
 
-        body.put("username", b_username);
+        this.p_session = Long.toString(p_session);
+
         body.put("password", b_password);
-        body.put("url", b_url);
 
     }
     public void setupCall() {
         headerMap.put(HEADER_AUTH, getHeaderAuthToken());
         headerMap.put(HEADER_CONTENTTYPE, HEADER_VALUE_CONTENTTYPE);
 
-        call = aRequest.th_createSession(headerMap, body);
+        call = aRequest.th_authenticateSession(p_session ,headerMap, body);
     }
 
     @Override

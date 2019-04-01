@@ -298,6 +298,8 @@ public class MainActivity extends AppCompatActivity
              public void onClick(View view) {
                  SharedPrefs.savePref(getBaseContext(), "autoLogin", "autoLogin", false);
                  SharedPrefs.TokenManager.invalidateTokens(getBaseContext());
+                 SharedPrefs.ThSessionManager.clearSession(getBaseContext());
+                 SharedPrefs.ThLoginData.clearAllData(getBaseContext());
                  Intent i = new Intent(thisActivity, AuthActivity.class);
                  finish();
                  startActivity(i);
@@ -518,7 +520,7 @@ public class MainActivity extends AppCompatActivity
                 Transactor.fragmentMyTasks(getSupportFragmentManager().beginTransaction());
                 break;
             case R.id.nav_thera:
-                Transactor.fragmentThUsers(getSupportFragmentManager().beginTransaction());
+                Transactor.fragmentThMain(getSupportFragmentManager().beginTransaction());
                 break;
             case R.id.nav_settings:
                 Transactor.fragmentOptions(getSupportFragmentManager().beginTransaction());

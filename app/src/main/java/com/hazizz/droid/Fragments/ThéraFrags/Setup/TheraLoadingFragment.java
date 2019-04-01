@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
 import com.hazizz.droid.R;
+import com.hazizz.droid.SharedPrefs;
 
 public class TheraLoadingFragment extends ParentFragment {
     @Nullable
@@ -20,7 +21,9 @@ public class TheraLoadingFragment extends ParentFragment {
         fragmentSetup(R.string.loading);
 
 
-        //  ((MainActivity)getActivity()).setGroupName(groupName);
+        // check for session state
+        SharedPrefs.ThSessionManager.getSessionId(getContext());
+
 
 
         return v;

@@ -26,19 +26,21 @@
 
 
     <string-array name="filterTypes">
-      <item>New</item>
-      <item>Subject</item>
-      <item>Group</item>
-      <item>Done</item>
-      <item>Undone</item>
+        <item>New</item>
+        <item>Subject</item>
+        <item>Group</item>
+        <item>Done</item>
+        <item>Undone</item>
     </string-array>
 
     <string-array name="days">
-      <item>Monday</item>
-      <item>Tuesday</item>
-      <item>Wednesday</item>
-      <item>Thursday</item>
-      <item>Friday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
     </string-array>
 
     <string-array name="taskTypes">
@@ -113,10 +115,12 @@
     <string name="title">Title</string>
     <string name="description">Description</string>
     <string name="login">Login</string>
+    <string name="enter">Enter</string>
     <string name="register">Register</string>
     <string name="displayName">Display Name</string>
     <string name="registrationDate">Registration date</string>
     <string name="username">Username</string>
+    <string name="users">Users</string>
     <string name="password">Password</string>
     <string name="email">Email</string>
     <string name="autologin">Automatic login</string>
@@ -142,6 +146,8 @@
     <string name="copy">Copy</string>
     <string name="share">Share</string>
     <string name="loading">Loading...</string>
+    <string name="switch_account">Switch account</string>
+
 
 
     <string name="school_">School:</string>
@@ -167,7 +173,7 @@
 
 
     <string name="invite_link_info">Send this link to your classmates to join</string>
-    <string name="invite_link_info_part2"></string>
+    <string name="invite_link_info_part2">group</string>
 
     <string name="already_in_group">You are already a member of this group</string>
     <string name="added_to_group">You were successfully added to this group</string>
@@ -302,8 +308,8 @@
     <string name="kreta">Kréta</string>
 
     <string name="title_thera">Thera</string>
-    <string name="title_thera_users">Thera users</string>
-    <string name="title_thera_login">Thera login</string>
+    <string name="title_kreta_users">Kreta users</string>
+    <string name="title_kreta_login">Kreta login</string>
 
     <string name="thera_grades">Thera grades</string>
     <string name="thera_schedules">Thera schedules</string>

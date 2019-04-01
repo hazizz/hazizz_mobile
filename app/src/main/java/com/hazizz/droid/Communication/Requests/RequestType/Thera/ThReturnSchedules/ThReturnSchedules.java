@@ -7,8 +7,6 @@ import android.util.Log;
 import com.google.gson.reflect.TypeToken;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
-import com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
-import com.hazizz.droid.Communication.Requests.Parent.Request;
 import com.hazizz.droid.Communication.Requests.Parent.ThRequest;
 import com.hazizz.droid.Listviews.TheraReturnSchedules.ClassItem;
 
@@ -23,27 +21,27 @@ import retrofit2.Response;
 public class ThReturnSchedules extends ThRequest {
     String p_sessionId, q_weekNumber, q_year;
 
-    public ThReturnSchedules(Context context, CustomResponseHandler rh, int p_sessionId, int q_weekNumber, int q_year) {
+    public ThReturnSchedules(Context context, CustomResponseHandler rh, long p_sessionId, int q_weekNumber, int q_year) {
         super(context, rh);
         Log.e("hey", "created ThReturnGrades object");
-        this.p_sessionId = Integer.toString(p_sessionId);
+        this.p_sessionId = Long.toString(p_sessionId);
         this.q_weekNumber = Integer.toString(q_weekNumber);
         this.q_year = Integer.toString(q_year);
 
     }
 
-    public ThReturnSchedules(Activity act, CustomResponseHandler rh, int p_sessionId, int q_weekNumber, int q_year) {
+    public ThReturnSchedules(Activity act, CustomResponseHandler rh, long p_sessionId, int q_weekNumber, int q_year) {
         super(act, rh);
         Log.e("hey", "created ThReturnGrades object");
-        this.p_sessionId = Integer.toString(p_sessionId);
+        this.p_sessionId = Long.toString(p_sessionId);
         this.q_weekNumber = Integer.toString(q_weekNumber);
         this.q_year = Integer.toString(q_year);
 
     }
-    public ThReturnSchedules(Activity act, CustomResponseHandler rh, int p_sessionId, String q_weekNumber, String q_year) {
+    public ThReturnSchedules(Activity act, CustomResponseHandler rh, long p_sessionId, String q_weekNumber, String q_year) {
         super(act, rh);
         Log.e("hey", "created ThReturnGrades object");
-        this.p_sessionId = Integer.toString(p_sessionId);
+        this.p_sessionId = Long.toString(p_sessionId);
         this.q_weekNumber = q_weekNumber;
         this.q_year = q_year;
 

@@ -41,6 +41,7 @@ import com.hazizz.droid.Fragments.Options.NotificationSettingsFragment;
 import com.hazizz.droid.Fragments.Options.PasswordFragment;
 import com.hazizz.droid.Fragments.TaskEditorFragment;
 import com.hazizz.droid.Fragments.ThéraFrags.Setup.TheraGradesFragment;
+import com.hazizz.droid.Fragments.ThéraFrags.Setup.TheraLoadingFragment;
 import com.hazizz.droid.Fragments.ThéraFrags.Setup.TheraLoginFragment;
 import com.hazizz.droid.Fragments.ThéraFrags.Setup.TheraMainFragment;
 import com.hazizz.droid.Fragments.ThéraFrags.Setup.TheraSchedulesFragment;
@@ -526,6 +527,26 @@ public class Transactor extends FragmentActivity {
         fragmentMainTab(fTransaction,0);
     }
 
+
+    public static void fragmentThLoading(@Nonnull FragmentTransaction fTransaction){
+        TheraLoadingFragment frag = new TheraLoadingFragment();
+        fTransaction.replace(R.id.fragment_container, frag);
+        if(backStack){fTransaction.addToBackStack(null);}
+        fTransaction.commit();
+    }
+
+    public static void fragmentThLoginAuthSession(@Nonnull FragmentTransaction fTransaction, long session, String school, String username){
+        Bundle bundle = new Bundle();
+        bundle.putLong("sessionId", session);
+        bundle.putString("school", school);
+        bundle.putString("username", username);
+        TheraLoginFragment frag = new TheraLoginFragment();
+        frag.setArguments(bundle);
+
+        fTransaction.replace(R.id.fragment_container, frag);
+        if(backStack){fTransaction.addToBackStack(null);}
+        fTransaction.commit();
+    }
 
     public static void fragmentThLogin(@Nonnull FragmentTransaction fTransaction){
         TheraLoginFragment frag = new TheraLoginFragment();

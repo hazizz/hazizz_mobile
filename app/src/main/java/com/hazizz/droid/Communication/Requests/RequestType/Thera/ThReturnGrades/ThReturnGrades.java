@@ -18,10 +18,10 @@ import retrofit2.Response;
 public class ThReturnGrades extends ThRequest {
     String p_sessionId;
 
-    public ThReturnGrades(Activity act, CustomResponseHandler rh, int p_sessionId) {
+    public ThReturnGrades(Activity act, CustomResponseHandler rh, long p_sessionId) {
         super(act, rh);
         Log.e("hey", "created ThReturnGrades object");
-        this.p_sessionId = Integer.toString(p_sessionId);
+        this.p_sessionId = Long.toString(p_sessionId);
 
     }
     public void setupCall() {

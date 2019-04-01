@@ -10,12 +10,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.POJOerror;
-import com.hazizz.droid.Communication.Requests.RequestType.Thera.ThCreateSession.PojoSession;
+import com.hazizz.droid.Communication.Requests.RequestType.Thera.PojoSession;
+import com.hazizz.droid.Communication.Requests.RequestType.Thera.ThRemoveSession;
 import com.hazizz.droid.Communication.Requests.RequestType.Thera.ThReturnSessions.ThReturnSessions;
 import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
 import com.hazizz.droid.Listviews.TheraUserList.CustomAdapter;
@@ -27,19 +26,19 @@ import com.hazizz.droid.Transactor;
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-
 public class TheraUsersFragment  extends ParentFragment {
 
     private CustomAdapter adapter;
     private List<TheraUserItem> listUsers;
+    private TheraUserItem selectedItem = null;
 
     private Button button_add;
+    private Button button_login;
+    private Button button_delete;
 
+    private View view_lastItem = null;
 
-
-    private TextView textView_noContent;
+    ListView listView;
 
 
     @Nullable
@@ -48,34 +47,9 @@ public class TheraUsersFragment  extends ParentFragment {
         v = inflater.inflate(R.layout.fragment_th_users, container, false);
         Log.e("hey", "TheraUsersFragment fragment created");
 
-        fragmentSetup(R.string.title_thera_users);
+        fragmentSetup(R.string.title_kreta_users);
 
 
-        textView_noContent = v.findViewById(R.id.textView_noContent);
-             //  ((MainActivity)getActivity()).setGroupName(groupName);
-        createViewList();
-        getUsers();
-
-        return v;
-    }
-    void createViewList(){
-        listUsers = new ArrayList<>();
-        ListView listView = (ListView)v.findViewById(R.id.listView_classes);
-        adapter = new CustomAdapter(getActivity(), R.layout.th_users_item, listUsers);
-        listView.setAdapter(adapter);
-
-
-
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                // groupName = ((AnnouncementItem)listView.getItemAtPosition(i)).getGroup().getName();
-                SharedPrefs.ThSessionManager.setSessionId(getContext(), (int)adapter.getItem(i).getId());
-                Transactor.fragmentThMain(getFragmentManager().beginTransaction());
-
-            }
-        });
 
         button_add = v.findViewById(R.id.button_add);
         button_add.setOnClickListener(new View.OnClickListener() {
@@ -84,8 +58,77 @@ public class TheraUsersFragment  extends ParentFragment {
                 Transactor.fragmentThLogin(getFragmentManager().beginTransaction());
             }
         });
+        button_login = v.findViewById(R.id.button_login);
+        button_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(selectedItem != null){
+                    long sessionId = selectedItem.getId();
+                    if(selectedItem.getStatus().equals("ACTIVE")) {
+                        SharedPrefs.ThSessionManager.setSessionId(getContext(), sessionId);
+                        Transactor.fragmentThMain(getFragmentManager().beginTransaction());
+                    }
+                    else{
+                        Transactor.fragmentThLoginAuthSession(getFragmentManager().beginTransaction(), sessionId,
+                                selectedItem.getUrl(),
+                                selectedItem.getUsername());
+                    }
+                }
+            }
+        });
+        button_delete = v.findViewById(R.id.button_delete);
+        button_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(selectedItem != null){
+                    MiddleMan.newThRequest(new ThRemoveSession(getActivity(), new CustomResponseHandler() {
+                        @Override public void onSuccessfulResponse() {
+                            adapter.remove(selectedItem);
+                        }
+                    },(int)selectedItem.getId()));
+                }
+            }
+        });
+
+        button_login.setVisibility(View.INVISIBLE);
+        button_delete.setVisibility(View.INVISIBLE);
+
+
+             //  ((MainActivity)getActivity()).setGroupName(groupName);
+        createViewList();
+        getUsers();
+
+        return v;
+    }
+    void createViewList(){
+        listUsers = new ArrayList<>();
+        listView = (ListView)v.findViewById(R.id.listView_classes);
+        adapter = new CustomAdapter(getActivity(), R.layout.th_users_item, listUsers);
+        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if(view_lastItem != null) {
+                    view_lastItem.setBackgroundColor(getResources().getColor(R.color.white));
+                }
+                view.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLightestBlue));
+                view_lastItem = view;
+
+                selectedItem = adapter.getItem(i);
+
+                button_login.setVisibility(View.VISIBLE);
+                button_delete.setVisibility(View.VISIBLE);
+            }
+        });
+
 
     }
+
+    private void saveSession(TheraUserItem userItem){
+        SharedPrefs.ThSessionManager.setSessionId(getContext(), (int) userItem.getId());
+    }
+
     private void getUsers(){
         CustomResponseHandler responseHandler = new CustomResponseHandler() {
             @Override
@@ -95,31 +138,14 @@ public class TheraUsersFragment  extends ParentFragment {
                 if(pojoList.isEmpty()){
                     Transactor.fragmentThLogin(getFragmentManager().beginTransaction());
                 }else {
-                    textView_noContent.setVisibility(v.INVISIBLE);
-                    boolean foundActive = false;
                     for (PojoSession t : pojoList) {
-                        if(t.getStatus().equals("ACTIVE")) {
-                            foundActive = true;
-                            listUsers.add(new TheraUserItem(t.getId(), t.getStatus(), t.getUrl()));
-                            adapter.notifyDataSetChanged();
-                        }
-                    }
-                    if(!foundActive){
-                        Transactor.fragmentThLogin(getFragmentManager().beginTransaction());
+                        listUsers.add(new TheraUserItem(t.getId(), t.getStatus(), t.getUsername(), t.getUrl()));
+                        adapter.notifyDataSetChanged();
                     }
                 }
             }
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-            }
-            @Override
-            public void onErrorResponse(POJOerror error) { }
-            @Override
             public void onNoConnection() {
-                textView_noContent.setText(R.string.info_noInternetAccess);
-                textView_noContent.setVisibility(View.VISIBLE);
-             //   sRefreshLayout.setRefreshing(false);
             }
         };
         MiddleMan.newThRequest(new ThReturnSessions(getActivity(),responseHandler));

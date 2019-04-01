@@ -48,7 +48,9 @@ public class InviteLinkDialogFragment extends DialogFragment {
         groupName = getArguments().getString(Transactor.KEY_GROUPNAME);
 
         textView_info = v.findViewById(R.id.textView_info);
-        textView_info.setText(getResources().getText(R.string.invite_link_info) + " " + groupName + getResources().getText(R.string.invite_link_info_part2) + ":");
+        textView_info.setText(getResources().getText(R.string.invite_link_info)
+                                + " " + groupName
+                                + " " + getResources().getText(R.string.invite_link_info_part2) + ":");
         textView_link = v.findViewById(R.id.textView_link);
         button_copyLink = v.findViewById(R.id.button_copyLink);
         button_copyLink.setOnClickListener(new View.OnClickListener() {

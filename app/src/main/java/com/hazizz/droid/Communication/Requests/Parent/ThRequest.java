@@ -6,9 +6,11 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
+import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.RequestInterface;
 import com.hazizz.droid.Communication.Requests.RequestTypes;
 import com.hazizz.droid.SharedPrefs;
+import com.hazizz.droid.Transactor;
 
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
@@ -136,5 +138,8 @@ public class ThRequest implements RequestInterface {
     public void setupCall() { }
 
     public void callIsSuccessful(Response<ResponseBody> response) { }
+
+    public void callIsError(POJOerror pojoError) { }
+
 }
 

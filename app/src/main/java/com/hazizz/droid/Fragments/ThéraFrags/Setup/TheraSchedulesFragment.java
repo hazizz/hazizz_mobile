@@ -46,7 +46,7 @@ public class TheraSchedulesFragment extends ParentFragment {
     private String weekNumber;
     private String year;
 
-    private final static int weekEndStart = 5;
+    private static final int weekEndStart = 5;
 
 
     @Nullable
@@ -106,6 +106,7 @@ public class TheraSchedulesFragment extends ParentFragment {
 
     }
     private void getSchedules(){
+        long sessionId = SharedPrefs.ThSessionManager.getSessionId(getContext());
         CustomResponseHandler rh = new CustomResponseHandler() {
             @Override
             public void onPOJOResponse(Object response) {
@@ -127,19 +128,16 @@ public class TheraSchedulesFragment extends ParentFragment {
                 }
             }
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-            }
-            @Override
             public void onErrorResponse(POJOerror error) {
-
-            }
-            @Override
-            public void onNoConnection() {
-                //   sRefreshLayout.setRefreshing(false);
+                //                            session not found,                session not active
+                if(error.getErrorCode() == 132 || error.getErrorCode() == 136) {
+                    Transactor.fragmentThLoginAuthSession(getFragmentManager().beginTransaction(), sessionId,
+                            SharedPrefs.ThLoginData.getSchool(getContext(), sessionId),
+                            SharedPrefs.ThLoginData.getUsername(getContext(), sessionId));;
+                }
             }
         };
-        MiddleMan.newThRequest(new ThReturnSchedules(getActivity(),rh, SharedPrefs.ThSessionManager.getSessionId(getContext()), weekNumber, year));
+        MiddleMan.newThRequest(new ThReturnSchedules(getActivity(),rh, sessionId, weekNumber, year));
     }
 
     private void getCurrentDaySchedules(int dayOfWeek){
