@@ -28,7 +28,6 @@ public class GetAT extends Request {
         call = aRequest.getAT(p_whereName, p_whereId, headerMap);
     }
 
-
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
         if(p_whereName.equals(Strings.Path.TASKS.toString())) {

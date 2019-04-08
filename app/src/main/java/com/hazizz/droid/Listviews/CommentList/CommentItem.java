@@ -1,21 +1,9 @@
 package com.hazizz.droid.Listviews.CommentList;
 
-import android.app.Activity;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.PopupMenu;
-import android.view.MenuItem;
-import android.view.View;
+import android.util.Log;
 
-import com.hazizz.droid.Communication.MiddleMan;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs.POJOcreator;
-import com.hazizz.droid.Communication.Requests.DeleteATComment;
-import com.hazizz.droid.Communication.Requests.GetCommentSection;
 import com.hazizz.droid.Communication.Strings;
-import com.hazizz.droid.Enum.EnumAT;
-import com.hazizz.droid.Fragments.ParentFragment.CommentableFragment;
-import com.hazizz.droid.R;
-import com.hazizz.droid.Transactor;
 
 import lombok.Data;
 
@@ -34,6 +22,9 @@ public class CommentItem {
     }
 
     public CommentItem(long commentId, String commentProfilePic, Strings.Rank groupRank, POJOcreator creator, String commentContent){
+        Log.e("hey", "creatorId" + creator.getId() + "\nprofile  pic: " + commentProfilePic);
+
+
         this.commentId = commentId;
         this.commentProfilePic = commentProfilePic;
         this.groupRank = groupRank;
@@ -41,7 +32,7 @@ public class CommentItem {
         this.commentContent = commentContent;
     }
 
-    public void showMenu(Activity act, CustomResponseHandler rh, EnumAT whereName, int typeId, View v, FragmentTransaction ft, CommentableFragment commentableFragment){
+  /*  private void showMenu(Activity act, CustomResponseHandler updateComments_rh, EnumAT whereName, int typeId, View v, FragmentTransaction ft, CommentableFragment commentableFragment){
 
         PopupMenu popup = new PopupMenu(act, v);
 
@@ -69,7 +60,7 @@ public class CommentItem {
                         MiddleMan.newRequest(new DeleteATComment(act, new CustomResponseHandler(){
                             @Override
                             public void onSuccessfulResponse() {
-                                MiddleMan.newRequest(new GetCommentSection(act, rh, whereName.toString(), (int)typeId));
+                                MiddleMan.newRequest(new GetCommentSection(act, updateComments_rh, whereName.toString(), (int)typeId));
                             }
                         }, whereName, (int)typeId, commentId));
                         break;
@@ -82,6 +73,7 @@ public class CommentItem {
         });
         popup.show();
     }
+    */
 
 
 }

@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.hazizz.droid.Cache.MeInfo.MeInfo;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOMembersProfilePic;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
@@ -76,6 +77,8 @@ public class GetGroupMembersFragment extends ParentFragment {
                 textView_noContent.setVisibility(v.INVISIBLE);
                 PojoPermisionUsers pojoPermisionUser = (PojoPermisionUsers)response;
                 HashMap<Integer, POJOMembersProfilePic> profilePicMap = Manager.ProfilePicManager.getCurrentGroupMembersProfilePic();
+
+                MeInfo meInfo = MeInfo.getInstance();
                 if(pojoPermisionUser != null) {
                     if(pojoPermisionUser.getOWNER() != null) {
                         for (POJOuser u : pojoPermisionUser.getOWNER()) {
@@ -84,8 +87,8 @@ public class GetGroupMembersFragment extends ParentFragment {
                             } catch (NullPointerException e) {
                                 listUser.add(new UserItem(u.getId(),u.getDisplayName(), u.getUsername(), null, Strings.Rank.OWNER.getValue()));
                             }
-                            if(u.getId() == Manager.MeInfo.getId()){
-                                Manager.MeInfo.setRankInCurrentGroup(Strings.Rank.OWNER);
+                            if(u.getId() == meInfo.getUserId()){
+                                meInfo.setRankInCurrentGroup(Strings.Rank.OWNER);
                             }
                             Log.e("hey", "555: OWNER");
                             Manager.GroupRankManager.setRank(u.getId(), Strings.Rank.OWNER);
@@ -98,8 +101,8 @@ public class GetGroupMembersFragment extends ParentFragment {
                             } catch (NullPointerException e) {
                                 listUser.add(new UserItem(u.getId(),u.getDisplayName(),u.getUsername(), null, Strings.Rank.MODERATOR.getValue()));
                             }
-                            if(u.getId() == Manager.MeInfo.getId()){
-                                Manager.MeInfo.setRankInCurrentGroup(Strings.Rank.MODERATOR);
+                            if(u.getId() == meInfo.getUserId()){
+                                meInfo.setRankInCurrentGroup(Strings.Rank.MODERATOR);
                             }
                             Log.e("hey", "555: MODI");
                             Manager.GroupRankManager.setRank(u.getId(), Strings.Rank.MODERATOR);
@@ -112,8 +115,8 @@ public class GetGroupMembersFragment extends ParentFragment {
                             } catch (NullPointerException e) {
                                 listUser.add(new UserItem(u.getId(),u.getDisplayName(),u.getUsername(), null, Strings.Rank.USER.getValue()));
                             }
-                            if(u.getId() == Manager.MeInfo.getId()){
-                                Manager.MeInfo.setRankInCurrentGroup(Strings.Rank.USER);
+                            if(u.getId() == meInfo.getUserId()){
+                                meInfo.setRankInCurrentGroup(Strings.Rank.USER);
                             }
                             Log.e("hey", "555: USER");
                             Manager.GroupRankManager.setRank(u.getId(), Strings.Rank.USER);

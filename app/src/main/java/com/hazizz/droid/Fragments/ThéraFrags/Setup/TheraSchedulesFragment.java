@@ -19,6 +19,7 @@ import com.hazizz.droid.Communication.Requests.RequestType.Thera.ThReturnSchedul
 import com.hazizz.droid.Communication.Requests.RequestType.Thera.ThReturnSchedules.ThReturnSchedules;
 import com.hazizz.droid.D8;
 import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
+import com.hazizz.droid.Listener.OnBackPressedListener;
 import com.hazizz.droid.Listviews.TheraReturnSchedules.ClassItem;
 import com.hazizz.droid.Listviews.TheraReturnSchedules.CustomAdapter;
 import com.hazizz.droid.R;
@@ -56,6 +57,12 @@ public class TheraSchedulesFragment extends ParentFragment {
         Log.e("hey", "TheraSchedulesFragment fragment created");
 
         fragmentSetup(R.string.thera_schedules);
+        setOnBackPressedListener(new OnBackPressedListener() {
+            @Override
+            public void onBackPressed() {
+                Transactor.fragmentThMain(getFragmentManager().beginTransaction());
+            }
+        });
 
         currentDay = D8.getDayOfWeek()-1;
         if(currentDay >= weekEndStart){

@@ -16,10 +16,10 @@ import retrofit2.Response;
 
 public class GetGroupMembersProfilePic extends Request {
     String groupId;
-    public GetGroupMembersProfilePic(Activity act, CustomResponseHandler rh, int groupId) {
+    public GetGroupMembersProfilePic(Activity act, CustomResponseHandler rh, long groupId) {
         super(act, rh);
         Log.e("hey", "created GetAnnouncements object");
-        this.groupId = Integer.toString(groupId);
+        this.groupId = Long.toString(groupId);
     }
     public void setupCall() {
         headerMap.put(HEADER_AUTH, getHeaderAuthToken());
@@ -29,8 +29,8 @@ public class GetGroupMembersProfilePic extends Request {
 
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
-        Type listType = new TypeToken<HashMap<Integer, POJOMembersProfilePic>>(){}.getType();
-        HashMap<Integer, POJOMembersProfilePic> castedMap = gson.fromJson(response.body().charStream(), listType);
+        Type listType = new TypeToken<HashMap<Long, POJOMembersProfilePic>>(){}.getType();
+        HashMap<Long, POJOMembersProfilePic> castedMap = gson.fromJson(response.body().charStream(), listType);
         cOnResponse.onPOJOResponse(castedMap);
     }
 }

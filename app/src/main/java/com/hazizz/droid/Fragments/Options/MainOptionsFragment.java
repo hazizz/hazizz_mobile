@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.hazizz.droid.Activities.MainActivity;
 import com.hazizz.droid.AndroidThings;
+import com.hazizz.droid.Cache.MeInfo.MeInfo;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.POJO.Response.POJOgroup;
@@ -33,7 +34,7 @@ import com.hazizz.droid.Communication.Requests.SetDisplayName;
 import com.hazizz.droid.Communication.Requests.SetMyProfilePic;
 import com.hazizz.droid.Converter.Converter;
 import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
-import com.hazizz.droid.Manager;
+import com.hazizz.droid.Listener.OnBackPressedListener;
 import com.hazizz.droid.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
@@ -64,12 +65,24 @@ public class MainOptionsFragment extends ParentFragment {
     private boolean changedPic = false;
     private boolean changedDisplayName = false;
 
+
+    private MeInfo meInfo;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_options, container, false);
 
         fragmentSetup(R.string.settings);
+
+        setOnBackPressedListener(new OnBackPressedListener() {
+            @Override
+            public void onBackPressed() {
+                Transactor.fragmentMain(getFragmentManager().beginTransaction());
+            }
+        });
+
+        meInfo = MeInfo.getInstance();
 
         imageView_profilePic = v.findViewById(R.id.imageView_profilePic);
         MiddleMan.newRequest(new GetMyProfilePic(getActivity(), new CustomResponseHandler() {
@@ -136,7 +149,7 @@ public class MainOptionsFragment extends ParentFragment {
             public void onClick(View v) {
                 if(changedPic) {
                     HashMap<String, Object> body = new HashMap<>();
-                    body.put("data", "data:image/jpeg;base64," + Manager.MeInfo.getProfilePic());
+                    body.put("data", "data:image/jpeg;base64," + meInfo.getProfilePic());
                     body.put("type", "ppfull");
 
                     MiddleMan.newRequest(new SetMyProfilePic(getActivity(), new CustomResponseHandler() {
@@ -145,7 +158,7 @@ public class MainOptionsFragment extends ParentFragment {
                             fab_profilePicCheck.setImageResource(R.drawable.ic_camera_black);
                             changedPic = false;
                         }
-                    }, "data:image/jpeg;base64," + Manager.MeInfo.getProfilePic(), "ppfull"));
+                    }, "data:image/jpeg;base64," + meInfo.getProfilePic(), "ppfull"));
                 }else{
                     pickImage();
                 }
@@ -179,8 +192,8 @@ public class MainOptionsFragment extends ParentFragment {
                 }
             }
         });
-        imageView_profilePic.setImageBitmap(Converter.getCroppedBitmap(Converter.imageFromText(getContext(),Manager.MeInfo.getProfilePic())));
-        editText_displayName.setText(Manager.MeInfo.getDisplayName());
+        imageView_profilePic.setImageBitmap(Converter.getCroppedBitmap(Converter.imageFromText(getContext(), meInfo.getProfilePic())));
+        editText_displayName.setText(meInfo.getDisplayName());
         imageButton_displayNameCheck.setImageResource(R.drawable.ic_create_black);
 
         fab_profilePicCheck.setImageResource(R.drawable.ic_camera_black);
@@ -207,6 +220,10 @@ public class MainOptionsFragment extends ParentFragment {
                         //Jelszó Beállítás
                         Transactor.fragmentPassword(getFragmentManager().beginTransaction());
                         break;
+                    case 1:
+                        //szerver
+                        Transactor.fragmentServerSettings(getFragmentManager().beginTransaction());
+                        break;
                     case 2:
                     default:
                         //Théra Beállítások
@@ -224,7 +241,7 @@ public class MainOptionsFragment extends ParentFragment {
         Log.e("hey", "setProfilePic called");
         imageView_profilePic.setImageBitmap(b);
         String base64_profilePic = Converter.imageToText(b);
-        Manager.MeInfo.setProfilePic(base64_profilePic);
+        meInfo.setProfilePic(base64_profilePic);
         fab_profilePicCheck.setImageResource(R.drawable.ic_check_black);
     }
 

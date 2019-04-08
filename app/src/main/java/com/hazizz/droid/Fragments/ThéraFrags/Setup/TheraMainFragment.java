@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
+import com.hazizz.droid.Listener.OnBackPressedListener;
 import com.hazizz.droid.R;
 import com.hazizz.droid.SharedPrefs;
 import com.hazizz.droid.Transactor;
@@ -27,7 +28,14 @@ public class TheraMainFragment extends ParentFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_th_main, container, false);
+
         fragmentSetup(R.string.title_thera);
+        setOnBackPressedListener(new OnBackPressedListener() {
+            @Override
+            public void onBackPressed() {
+                Transactor.fragmentMain(getFragmentManager().beginTransaction());
+            }
+        });
 
         textView_username = v.findViewById(R.id.textView_username);
         textView_username_ = v.findViewById(R.id.textView_username_);

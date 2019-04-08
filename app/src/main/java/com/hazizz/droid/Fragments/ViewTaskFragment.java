@@ -1,6 +1,7 @@
 package com.hazizz.droid.Fragments;
 
 import android.app.AlertDialog;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -26,29 +27,28 @@ import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
 import com.hazizz.droid.Activities.MainActivity;
 import com.hazizz.droid.AndroidThings;
+import com.hazizz.droid.Cache.CurrentGroup;
+import com.hazizz.droid.Cache.CurrentMembersManager;
+import com.hazizz.droid.Cache.MeInfo.MeInfo;
+import com.hazizz.droid.Cache.Member;
 import com.hazizz.droid.Communication.POJO.Response.CommentSectionPOJOs.POJOComment;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.POJOMembersProfilePic;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.POJO.Response.POJOsubject;
-import com.hazizz.droid.Communication.POJO.Response.POJOuser;
-import com.hazizz.droid.Communication.POJO.Response.PojoPermisionUsers;
 import com.hazizz.droid.Communication.POJO.Response.PojoType;
 import com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs.POJOgetTaskDetailed;
 import com.hazizz.droid.Communication.Requests.AddComment;
 import com.hazizz.droid.Communication.Requests.DeleteAT;
 import com.hazizz.droid.Communication.Requests.GetAT;
 import com.hazizz.droid.Communication.Requests.GetCommentSection;
-import com.hazizz.droid.Communication.Requests.GetGroupMemberPermisions;
-import com.hazizz.droid.Communication.Requests.GetGroupMembersProfilePic;
 import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.D8;
 import com.hazizz.droid.Enum.EnumAT;
 import com.hazizz.droid.Fragments.ParentFragment.CommentableFragment;
+import com.hazizz.droid.Listener.GenericListener;
 import com.hazizz.droid.Listviews.CommentList.CommentItem;
 import com.hazizz.droid.Listviews.CommentList.CustomAdapter;
 import com.hazizz.droid.Listviews.NonScrollListView;
-import com.hazizz.droid.Manager;
 import com.hazizz.droid.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
@@ -101,6 +101,11 @@ public class ViewTaskFragment extends CommentableFragment implements AdapterView
     CommentableFragment self;
 
 
+    CurrentGroup currentGroup;
+
+
+
+    /*
     CustomResponseHandler permissionRh = new CustomResponseHandler() {
         @Override
         public void onPOJOResponse(Object response) {
@@ -124,6 +129,8 @@ public class ViewTaskFragment extends CommentableFragment implements AdapterView
             }
         }
     };
+    */
+
 
 
     // Comment part
@@ -140,44 +147,7 @@ public class ViewTaskFragment extends CommentableFragment implements AdapterView
     private TextView textView_noContent;
     private SwipeRefreshLayout sRefreshLayout;
 
-    private CustomResponseHandler getComments_rh = new CustomResponseHandler() {
-        @Override
-        public void onPOJOResponse(Object response) {
-            adapter.clear();
-            listComment.clear();
-            adapter.notifyDataSetChanged();
 
-            ArrayList<POJOComment> comments = (ArrayList<POJOComment>) response;
-            HashMap<Integer, POJOMembersProfilePic> profilePicMap = Manager.ProfilePicManager.getCurrentGroupMembersProfilePic();
-            if(comments.isEmpty()) {
-                textView_noContent.setVisibility(v.VISIBLE);
-            }else {
-                for (POJOComment t : comments) {
-                    Strings.Rank rank = Manager.GroupRankManager.getRank((int)t.getCreator().getId());
-
-                    // TODO ez itt lent igencsak buggos---------------------ˇ
-                    listComment.add(new CommentItem(t.getId(),profilePicMap.get((int)t.getCreator().getId()).getData(), rank,t.getCreator(), t.getContent()));
-                }
-                adapter.notifyDataSetChanged();
-                textView_noContent.setVisibility(v.INVISIBLE);
-            }
-            sRefreshLayout.setRefreshing(false);
-        }
-        @Override
-        public void onFailure(Call<ResponseBody> call, Throwable t) {
-            sRefreshLayout.setRefreshing(false);
-        }
-        @Override
-        public void onErrorResponse(POJOerror error) {
-            sRefreshLayout.setRefreshing(false);
-        }
-        @Override
-        public void onNoConnection() {
-            textView_noContent.setText(R.string.info_noInternetAccess);
-            textView_noContent.setVisibility(View.VISIBLE);
-            sRefreshLayout.setRefreshing(false);
-        }
-    };
 
     private POJOsubject subject;
 
@@ -229,7 +199,9 @@ public class ViewTaskFragment extends CommentableFragment implements AdapterView
         textView_noContent = v.findViewById(R.id.textView_noContent);
         sRefreshLayout = v.findViewById(R.id.swipe_refresh_layout); sRefreshLayout.bringToFront();
         sRefreshLayout.setOnRefreshListener(() -> getData());
-        sRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimaryDarkBlue), getResources().getColor(R.color.colorPrimaryLightBlue), getResources().getColor(R.color.colorPrimaryDarkBlue));
+        sRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimaryDarkBlue),
+                                            getResources().getColor(R.color.colorPrimaryLightBlue),
+                                            getResources().getColor(R.color.colorPrimaryDarkBlue));
         button_send = v.findViewById(R.id.button_send_comment);
         button_send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -319,7 +291,7 @@ public class ViewTaskFragment extends CommentableFragment implements AdapterView
         button_edit.setOnClickListener(view -> {
             if(gotResponse) {
                 if(!isMyMode) {
-                    Transactor.fragmentEditTask(getFragmentManager().beginTransaction(), groupId, Manager.GroupManager.getGroupName(),
+                    Transactor.fragmentEditTask(getFragmentManager().beginTransaction(), groupId, currentGroup.getGroupName(),
                             taskId, type, subjectId, subjectName, title, descripiton, date,
                             Strings.Dest.CONVERT.convert(dest));
                 }else{
@@ -347,76 +319,41 @@ public class ViewTaskFragment extends CommentableFragment implements AdapterView
 
                 POJOgetTaskDetailed pojoResponse = (POJOgetTaskDetailed) response;
 
+                currentGroup = CurrentGroup.getInstance();
+
+                creatorId = (int) pojoResponse.getCreator().getId();
+
                 if(!isMyMode){
                     if (pojoResponse.getGroup() != null) {
                         groupName = pojoResponse.getGroup().getName();
                         groupId = pojoResponse.getGroup().getId();
-                        Manager.GroupManager.setGroupId(groupId);
-                        Manager.GroupManager.setGroupName(groupName);
                     }
 
-                    CustomResponseHandler r1 = new CustomResponseHandler() {
-                        @Override
-                        public void onPOJOResponse(Object response) {
-                            PojoPermisionUsers pojoPermisionUser = (PojoPermisionUsers) response;
-                            Manager.GroupRankManager.clear();
-                            if (pojoPermisionUser != null) {
-                                if (pojoPermisionUser.getOWNER() != null) {
-                                    for (POJOuser u : pojoPermisionUser.getOWNER()) {
-                                        Manager.GroupRankManager.setRank(u.getId(), Strings.Rank.OWNER);
-                                        if(Manager.MeInfo.getId() == u.getId()){
-                                            Manager.MeInfo.setRankInCurrentGroup(Strings.Rank.OWNER);
-                                        }
-                                    }
-                                }
-                                if (pojoPermisionUser.getMODERATOR() != null) {
-                                    for (POJOuser u : pojoPermisionUser.getMODERATOR()) {
-                                        Manager.GroupRankManager.setRank(u.getId(), Strings.Rank.MODERATOR);
-                                        if(Manager.MeInfo.getId() == u.getId()){
-                                            Manager.MeInfo.setRankInCurrentGroup(Strings.Rank.MODERATOR);
-                                        }
-                                    }
-                                }
-                                if (pojoPermisionUser.getUSER() != null) {
-                                    for (POJOuser u : pojoPermisionUser.getUSER()) {
-                                        Manager.GroupRankManager.setRank(u.getId(), Strings.Rank.USER);
-                                        if(Manager.MeInfo.getId() == u.getId()){
-                                            Manager.MeInfo.setRankInCurrentGroup(Strings.Rank.USER);
-                                        }
-                                    }
-                                }
-                            }
+                    if(!currentGroup.groupIdIsSame(groupId)) {
 
-                            if(Manager.MeInfo.getId() == creatorId || Manager.MeInfo.getRankInCurrentGroup().getValue() >= Strings.Rank.MODERATOR.getValue() ){
-                                button_delete.setVisibility(View.VISIBLE);
-                                button_edit.setVisibility(View.VISIBLE);
-                            }
-
-                            enable_button_comment++;
-                            visibleIfEnabled_comment_send();
-                        }
-                    };
-                    MiddleMan.newRequest(new GetGroupMemberPermisions(getActivity(), r1, groupId));
-
-                    creatorId = (int) pojoResponse.getCreator().getId();
-
-                  //  MiddleMan.newRequest(new GetUserPermissionInGroup(getActivity(), permissionRh, groupId, (int) Manager.MeInfo.getId()));
-
-                    if (Manager.ProfilePicManager.getCurrentGroupId() != groupId || dest == Strings.Dest.TOMAIN.getValue()) {
-                        CustomResponseHandler responseHandler = new CustomResponseHandler() {
-                            @Override
-                            public void onPOJOResponse(Object response) {
-                                Manager.ProfilePicManager.setCurrentGroupMembersProfilePic((HashMap<Integer, POJOMembersProfilePic>) response, groupId);
+                        GenericListener gotAllGroupDataListener = new GenericListener() {
+                            @Override public void execute() {
                                 getComments();
-                                enable_button_comment++;
-                                visibleIfEnabled_comment_send();
+                                MeInfo meInfo = MeInfo.getInstance();
+                                Log.e("hey", "er3: " + meInfo.getRankInCurrentGroup().toString() + ", " + meInfo.getRankInCurrentGroup().getValue());
+                                if(meInfo.getUserId() == creatorId || meInfo.getRankInCurrentGroup().getValue() >= Strings.Rank.MODERATOR.getValue() ){
+                                    button_delete.setVisibility(View.VISIBLE);
+                                    button_edit.setVisibility(View.VISIBLE);
+                                }
                             }
                         };
-                        MiddleMan.newRequest(new GetGroupMembersProfilePic(getActivity(), responseHandler, groupId));
+
+                        currentGroup.setGroup(getActivity(), groupId, groupName, gotAllGroupDataListener);
                     }else{
-                        enable_button_comment++;
-                        visibleIfEnabled_comment_send();
+                        getComments();
                     }
+
+                    button_send.setVisibility(View.VISIBLE);
+                    textView_commentTitle.setVisibility(View.VISIBLE);
+                    box_comment.setVisibility(View.VISIBLE);
+
+
+
                 }else{// is my task
                     sRefreshLayout.setRefreshing(false);
                     getActivity().setTitle(R.string.view_mytask);
@@ -464,8 +401,8 @@ public class ViewTaskFragment extends CommentableFragment implements AdapterView
 
             }
         };
-
         getData();
+
         self = this;
         return v;
     }
@@ -492,7 +429,7 @@ public class ViewTaskFragment extends CommentableFragment implements AdapterView
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Manager.GroupManager.leftGroup();
+      //  Manager.GroupManager.leftGroup();
     }
 
     @Override
@@ -509,7 +446,7 @@ public class ViewTaskFragment extends CommentableFragment implements AdapterView
 
 
     public void visibleIfEnabled_comment_send(){
-        if(enable_button_comment > 1){
+        if(currentGroup.isReady()){
             button_send.setVisibility(View.VISIBLE);
          //   editText_commentBody.setVisibility(View.VISIBLE);
             textView_commentTitle.setVisibility(View.VISIBLE);
@@ -539,9 +476,10 @@ public class ViewTaskFragment extends CommentableFragment implements AdapterView
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                // A view where the popup will be positioned
                 ImageView imageView_popup = view.findViewById(R.id.imageView_popup);
 
-                adapter.getItem(i).showMenu(getActivity(), getComments_rh, EnumAT.TASKS, taskId, imageView_popup, getFragmentManager().beginTransaction(), self);
+                adapter.showMenu(getActivity(), EnumAT.TASKS, taskId, adapter.getItem(i), imageView_popup, getFragmentManager().beginTransaction(), self);
             }
         });
     }
@@ -554,6 +492,47 @@ public class ViewTaskFragment extends CommentableFragment implements AdapterView
 
     private void getComments(){
         if(!isMyMode) {
+            CustomResponseHandler getComments_rh = new CustomResponseHandler() {
+                @Override
+                public void onPOJOResponse(Object response) {
+                    adapter.clear();
+                    listComment.clear();
+                    adapter.notifyDataSetChanged();
+
+                    ArrayList<POJOComment> comments = (ArrayList<POJOComment>) response;
+                    // HashMap<Long, POJOMembersProfilePic> profilePicMap = currentGroup.getMembers().;
+                    CurrentMembersManager members = currentGroup.getMembers();
+                    if(comments.isEmpty()) {
+                        textView_noContent.setVisibility(v.VISIBLE);
+                    }else {
+                        for (POJOComment t : comments) {
+                            Member member = members.getMember(t.getCreator().getId());
+
+                            Strings.Rank rank = member.getRank();
+                            String profilePic = member.getProfilePic();
+
+                            //Manager.GroupRankManager.getRank((int) t.getCreator().getId());
+
+                            listComment.add(new CommentItem(t.getId(), profilePic, rank, t.getCreator(), t.getContent()));
+
+                        }
+                        adapter.notifyDataSetChanged();
+                        textView_noContent.setVisibility(v.INVISIBLE);
+                    }
+                    sRefreshLayout.setRefreshing(false);
+                }
+                @Override public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    sRefreshLayout.setRefreshing(false);
+                }
+                @Override public void onErrorResponse(POJOerror error) {
+                    sRefreshLayout.setRefreshing(false);
+                }
+                @Override public void onNoConnection() {
+                    textView_noContent.setText(R.string.info_noInternetAccess);
+                    textView_noContent.setVisibility(View.VISIBLE);
+                    sRefreshLayout.setRefreshing(false);
+                }
+            };
             MiddleMan.newRequest(new GetCommentSection(getActivity(), getComments_rh, Strings.Path.TASKS.toString(), taskId));
         }
     }

@@ -2,9 +2,9 @@ package com.hazizz.droid.Listviews.CommentList;
 
 import android.app.Activity;
 import android.content.Context;
-import android.media.Image;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,14 +17,19 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.hazizz.droid.Cache.MeInfo.MeInfo;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.Requests.DeleteATComment;
 import com.hazizz.droid.Communication.Requests.GetCommentSection;
 import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.Converter.Converter;
-import com.hazizz.droid.Manager;
+import com.hazizz.droid.Enum.EnumAT;
+import com.hazizz.droid.Fragments.ParentFragment.CommentableFragment;
 import com.hazizz.droid.R;
+import com.hazizz.droid.Transactor;
+
+import org.w3c.dom.Comment;
 
 import java.util.List;
 
@@ -65,40 +70,7 @@ public class CustomAdapter extends ArrayAdapter<CommentItem>  {
             convertView = inflater.inflate(picID, parent, false);
 
             holder = new DataHolder();
-            /*
-            holder.imageView_popup = convertView.findViewById(R.id.imageView_popup);
-            ImageView v = holder.imageView_popup;
-            holder.imageView_popup.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    PopupMenu popup = new PopupMenu(getContext(), v);
 
-                    popup.getMenuInflater().inflate(R.menu.menu_comment_item_popup, popup.getMenu());
-                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            switch (item.getItemId()){
-                                case R.id.popupitem_edit:
-                                    break;
-                                case R.id.popupitem_delete:
-                                    MiddleMan.newRequest(new DeleteATComment(, new CustomResponseHandler(){
-                                        @Override
-                                        public void onSuccessfulResponse() {
-                                            getComments();
-                                        }
-                                    }, Strings.Path.TASKS, taskId, commentId));
-                                    break;
-                            }
-                            popup.dismiss();
-
-                            return false;
-                        }
-                    });
-                    popup.show();
-                }
-            });
-
-            */
             holder.imageView_popup = convertView.findViewById(R.id.imageView_popup);
             holder.commentProfilePic = (ImageView) convertView.findViewById(R.id.imageView_memberProfilePic);
             holder.commentName = (TextView) convertView.findViewById(R.id.textView_name);
@@ -120,8 +92,6 @@ public class CustomAdapter extends ArrayAdapter<CommentItem>  {
         if(rank.getValue() == Strings.Rank.OWNER.getValue()){
             holder.badge_owner.setVisibility(View.VISIBLE);
             commentItem.setCanModify(true);
-          //  holder.commentName.setText(commentItem.getCreator().getId() + "");
-          //  holder.commentContent.setText(rank.toString() + "");
 
 
         } else if(rank.getValue() == Strings.Rank.MODERATOR.getValue()){
@@ -129,7 +99,7 @@ public class CustomAdapter extends ArrayAdapter<CommentItem>  {
         }else if(rank.getValue() == Strings.Rank.USER.getValue()){
 
         }
-        if(commentItem.creator.getId() == Manager.MeInfo.getId()){
+        if(commentItem.creator.getId() == MeInfo.getInstance().getUserId()){
             commentItem.setCanModify(true);
         }
 
@@ -140,5 +110,47 @@ public class CustomAdapter extends ArrayAdapter<CommentItem>  {
     public void clear() {
         super.clear();
         data.clear();
+    }
+
+
+
+
+    public void showMenu(Activity act, EnumAT whereName, int typeId, CommentItem commentItem, View v, FragmentTransaction ft, CommentableFragment commentableFragment){
+        PopupMenu popup = new PopupMenu(act, v);
+
+        popup.getMenuInflater().inflate(R.menu.menu_comment_item_popup, popup.getMenu());
+
+        if(MeInfo.getInstance().getUserId() == commentItem.getCreator().getId()) {
+            popup.getMenu().getItem(3).setVisible(true);
+        }
+
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.popupitem_reply:
+                        break;
+                    case R.id.popupitem_viewProfile:
+                        Transactor.fragmentDialogShowUserDetailDialog(ft, commentItem.getCreator().getId(), commentItem.groupRank.getValue(), commentItem.getCommentProfilePic());
+                        break;
+                    case R.id.popupitem_edit:
+                        commentableFragment.editComment(commentItem.getCommentId(), commentItem.getCommentContent());
+                        break;
+                    case R.id.popupitem_delete:
+                        MiddleMan.newRequest(new DeleteATComment(act, new CustomResponseHandler(){
+                            @Override
+                            public void onSuccessfulResponse() {
+                                remove(commentItem);
+                            }
+                        }, whereName, typeId, commentItem.getCommentId()));
+                        break;
+                }
+                popup.dismiss();
+
+
+                return false;
+            }
+        });
+        popup.show();
     }
 }

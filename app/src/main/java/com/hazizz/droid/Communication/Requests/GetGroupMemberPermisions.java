@@ -12,10 +12,10 @@ import retrofit2.Response;
 
 public class GetGroupMemberPermisions extends Request {
     private String p_groupId;
-    public GetGroupMemberPermisions(Activity act, CustomResponseHandler rh, int p_groupId) {
+    public GetGroupMemberPermisions(Activity act, CustomResponseHandler rh, long p_groupId) {
         super(act, rh);
         Log.e("hey", "created GetGroupMemberPermisions object");
-        this.p_groupId = Integer.toString(p_groupId);
+        this.p_groupId = Long.toString(p_groupId);
     }
     @Override public void makeCall() {
         call(act,  thisRequest, call, cOnResponse, gson);

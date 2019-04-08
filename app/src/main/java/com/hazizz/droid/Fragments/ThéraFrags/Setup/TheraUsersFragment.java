@@ -17,6 +17,7 @@ import com.hazizz.droid.Communication.Requests.RequestType.Thera.PojoSession;
 import com.hazizz.droid.Communication.Requests.RequestType.Thera.ThRemoveSession;
 import com.hazizz.droid.Communication.Requests.RequestType.Thera.ThReturnSessions.ThReturnSessions;
 import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
+import com.hazizz.droid.Listener.OnBackPressedListener;
 import com.hazizz.droid.Listviews.TheraUserList.CustomAdapter;
 import com.hazizz.droid.Listviews.TheraUserList.TheraUserItem;
 import com.hazizz.droid.R;
@@ -48,7 +49,12 @@ public class TheraUsersFragment  extends ParentFragment {
         Log.e("hey", "TheraUsersFragment fragment created");
 
         fragmentSetup(R.string.title_kreta_users);
-
+        setOnBackPressedListener(new OnBackPressedListener() {
+            @Override
+            public void onBackPressed() {
+                Transactor.fragmentThMain(getFragmentManager().beginTransaction());
+            }
+        });
 
 
         button_add = v.findViewById(R.id.button_add);
@@ -66,6 +72,7 @@ public class TheraUsersFragment  extends ParentFragment {
                     long sessionId = selectedItem.getId();
                     if(selectedItem.getStatus().equals("ACTIVE")) {
                         SharedPrefs.ThSessionManager.setSessionId(getContext(), sessionId);
+                        SharedPrefs.ThLoginData.setData(getContext(), sessionId, selectedItem.getUsername(), selectedItem.getUrl());
                         Transactor.fragmentThMain(getFragmentManager().beginTransaction());
                     }
                     else{

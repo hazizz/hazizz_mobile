@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.hazizz.droid.Transactor;
@@ -16,8 +17,9 @@ public class FirstFragment extends Fragment {
 
     private View v;
 
-    private TextView textView_login;
-    private TextView textView_register;
+    private Button button_login;
+    private Button button_register;
+    private Button button_setAddress;
 
 
 
@@ -26,18 +28,26 @@ public class FirstFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_first, container, false);
 
-        textView_login = v.findViewById(R.id.button_login);
-        textView_login.setOnClickListener(new View.OnClickListener(){
+        button_login = v.findViewById(R.id.button_login);
+        button_login.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 Transactor.fragmentLogin(getFragmentManager().beginTransaction());
             }
         });
-        textView_register = v.findViewById(R.id.button_register);
-        textView_register.setOnClickListener(new View.OnClickListener(){
+        button_register = v.findViewById(R.id.button_register);
+        button_register.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 Transactor.fragmentRegister(getFragmentManager().beginTransaction());
+            }
+        });
+
+        button_setAddress = v.findViewById(R.id.button_setAddress);
+        button_setAddress.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Transactor.fragmentServerSettings(getFragmentManager().beginTransaction());
             }
         });
 

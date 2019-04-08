@@ -27,7 +27,7 @@ public class ThRequest implements RequestInterface {
     protected Activity act;
     protected Context context;
  //   private static final String BASE_URL = "https://hazizz.duckdns.org:8081/";
-    private static final String THERA_URL = "https://hazizz.duckdns.org:9000/thera-server/kreta/";
+    private static String THERA_URL = "https://hazizz.duckdns.org:9000/thera-server/kreta/";
 
     protected static final String HEADER_AUTH = "Authorization";
     protected static final String HEADER_CONTENTTYPE = "Content-Type";
@@ -79,6 +79,14 @@ public class ThRequest implements RequestInterface {
     public ThRequest(Activity act, CustomResponseHandler cOnResponse) {
         this.act = act;
         this.cOnResponse = cOnResponse;
+
+        // "https://hazizz.duckdns.org:9000/thera-server/kreta/"
+
+       // SharedPrefs.Server.setMainAddress(getActivity(), "https://hazizz.duckdns.org:9000/");
+
+      //  THERA_URL = SharedPrefs.Server.getTheraAddress(getActivity());
+
+
         Gson gson = new GsonBuilder().serializeNulls().excludeFieldsWithoutExposeAnnotation().create();
         okHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(5, TimeUnit.SECONDS)
