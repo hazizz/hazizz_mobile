@@ -55,7 +55,8 @@
       <!--   <item>Notification settings</item> -->
          <item>Change Password</item>
       <!--   <item>Théra Settings</item> -->
-    </string-array>
+        <!--    <item>Server settings</item> -->
+        </string-array>
 
 
     <string name="badge_owner">OWNER</string>
@@ -147,8 +148,9 @@
     <string name="share">Share</string>
     <string name="loading">Loading...</string>
     <string name="switch_account">Switch account</string>
-
-
+    <string name="server_address">Server address</string>
+    <string name="set">Set</string>
+    <string name="dangerous">Dangerous!!!</string>
 
     <string name="school_">School:</string>
 
@@ -229,7 +231,11 @@
     <string name="report_bug">Report bug</string>
     <string name="info_serverUnexpectedResponse">Unexpected response from server</string>
     <string name="info_serverNotResponding">Server not responding</string>
+    <string name="info_something_went_wrong">Something went wrong</string>
     <string name="info_noInternetAccess">No internet connection</string>
+
+    <string name="info_serverAddressChange">If the address is not correct, you will have to reinstall the app</string>
+
 
     <string name="select_school">Choose school</string>
 

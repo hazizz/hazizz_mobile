@@ -116,7 +116,7 @@ public interface RequestInterface {
                     if(cOnResponse != null) {
                          cOnResponse.onFailure(call, t);
                     }
-                    Toast.makeText(act, R.string.info_serverNotResponding, Toast.LENGTH_LONG).show();
+                    Toast.makeText(act, R.string.info_something_went_wrong, Toast.LENGTH_LONG).show();
                }
           };
           return callback;

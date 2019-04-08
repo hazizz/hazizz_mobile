@@ -35,13 +35,14 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:background="@null"
         android:inputType="text"
         android:lines="1"
         android:maxLength="20"
         android:maxLines="1"
         android:text="DisplayName"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView_profilePic" />
@@ -52,11 +53,12 @@
         android:layout_height="50dp"
         android:layout_marginLeft="76dp"
         android:layout_marginStart="76dp"
+        android:layout_marginTop="76dp"
         android:scaleType="center"
         android:src="@drawable/ic_camera_black"
         app:backgroundTint="@color/colorAccent"
-        app:layout_constraintBottom_toTopOf="@+id/editText_displayName"
-        app:layout_constraintStart_toStartOf="@+id/imageView_profilePic" />
+        app:layout_constraintStart_toStartOf="@+id/imageView_profilePic"
+        app:layout_constraintTop_toTopOf="@+id/imageView_profilePic" />
 
 
     <ImageButton
@@ -66,7 +68,7 @@
         android:layout_height="34dp"
         android:layout_marginLeft="4dp"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="16dp"
         android:src="@drawable/ic_create_black"
         app:backgroundTint="@color/colorAccent"
         app:layout_constraintStart_toEndOf="@+id/editText_displayName"
@@ -82,7 +84,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="8dp"
         android:layout_weight="1"
         android:entries="@array/options_array"
         android:focusable="false"

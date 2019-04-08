@@ -35,7 +35,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
-import com.hazizz.droid.AndroidThings;
+import com.hazizz.droid.Cache.MeInfo.MeInfo;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.POJO.Response.POJOme;
@@ -44,6 +44,7 @@ import com.hazizz.droid.Communication.Requests.GetMyProfilePic;
 import com.hazizz.droid.Communication.Requests.JoinGroup;
 import com.hazizz.droid.Communication.Requests.Me;
 import com.hazizz.droid.Communication.Requests.MessageOfTheDay;
+import com.hazizz.droid.Communication.Requests.Parent.Request;
 import com.hazizz.droid.Converter.Converter;
 import com.hazizz.droid.Fragments.GroupTabs.GetGroupMembersFragment;
 import com.hazizz.droid.Fragments.GroupTabs.GroupAnnouncementFragment;
@@ -106,6 +107,9 @@ public class MainActivity extends AppCompatActivity
 
     private Activity thisActivity = this;
 
+
+    private MeInfo meInfo;
+
     private OnBackPressedListener currentBackPressedListener;
 
 
@@ -118,7 +122,7 @@ public class MainActivity extends AppCompatActivity
             bitmap = Converter.scaleBitmapToRegular(bitmap);
             bitmap = Converter.getCroppedBitmap(bitmap);
 
-            Manager.MeInfo.setProfilePic(Converter.imageToText(bitmap));
+            meInfo.setProfilePic(Converter.imageToText(bitmap));
             setProfileImageInNav(bitmap);
         }
     };
@@ -131,10 +135,10 @@ public class MainActivity extends AppCompatActivity
             strNavEmail = (pojo.getEmailAddress());
             strNavUsername = (pojo.getUsername());
             strNavDisplayName = (pojo.getDisplayName());
-            Manager.MeInfo.setId(pojo.getId());
-            Manager.MeInfo.setProfileName(strNavUsername);
-            Manager.MeInfo.setDisplayName(strNavDisplayName);
-            Manager.MeInfo.setProfileEmail(strNavEmail);
+            meInfo.setUserId(pojo.getId());
+            meInfo.setProfileName(strNavUsername);
+            meInfo.setDisplayName(strNavDisplayName);
+            meInfo.setProfileEmail(strNavEmail);
             setDisplayNameInNav(strNavDisplayName);
             navEmail.setText(strNavEmail);
         }
@@ -168,6 +172,13 @@ public class MainActivity extends AppCompatActivity
         Fabric.with(this, new Crashlytics());
        // }
         Fabric.with(this, new Answers());
+
+        if(!SharedPrefs.Server.hasChangedAddress(this)) {
+            SharedPrefs.Server.setMainAddress(this, Request.BASE_URL);
+        }
+
+        meInfo = MeInfo.getInstance();
+
 
         FirebaseDynamicLinks.getInstance()
                 .getDynamicLink(getIntent())

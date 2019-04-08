@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hazizz.droid.AndroidThings;
+import com.hazizz.droid.Cache.MeInfo.MeInfo;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.Requests.Subject.DeleteSubject;
@@ -56,7 +57,7 @@ public class ManageSubjectDialog extends DialogFragment {
         button_close = v.findViewById(R.id.button_close);
         button_check_edit = v.findViewById(R.id.imageButton_check_edit);
 
-        if(Strings.Rank.MODERATOR.getValue() > Manager.MeInfo.getRankInCurrentGroup().getValue()){
+        if(Strings.Rank.MODERATOR.getValue() > MeInfo.getInstance().getRankInCurrentGroup().getValue()){
             button_edit.setVisibility(View.INVISIBLE);
             button_delete.setVisibility(View.INVISIBLE);
 

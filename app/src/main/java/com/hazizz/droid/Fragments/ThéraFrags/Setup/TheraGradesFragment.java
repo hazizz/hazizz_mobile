@@ -16,6 +16,7 @@ import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.Requests.RequestType.Thera.ThReturnGrades.ThReturnGrades;
 import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
+import com.hazizz.droid.Listener.OnBackPressedListener;
 import com.hazizz.droid.Listviews.TheraGradesList.TheraGradesItem;
 import com.hazizz.droid.Listviews.TheraGradesList.CustomAdapter;
 import com.hazizz.droid.Listviews.TheraGradesList.TheraSubjectGradesItem;
@@ -42,7 +43,12 @@ public class TheraGradesFragment  extends ParentFragment {
         Log.e("hey", "TheraGradesFragment fragment created");
 
         fragmentSetup(R.string.thera_grades);
-
+        setOnBackPressedListener(new OnBackPressedListener() {
+            @Override
+            public void onBackPressed() {
+                Transactor.fragmentThMain(getFragmentManager().beginTransaction());
+            }
+        });
 
         textView_noContent = v.findViewById(R.id.textView_noContent);
         createViewList();

@@ -30,12 +30,7 @@ public class ParentFragment extends Fragment {
             setTitle(titleId);
         }
     }
-    protected void fragmentSetup(CharSequence title){
-        ((MainActivity)getActivity()).onFragmentCreated();
-        if(title != null){
-            setTitle(title);
-        }
-    }
+
 
     protected void setOnBackPressedListener(OnBackPressedListener onBackPressedListener){
         ((MainActivity)getActivity()).setOnBackPressedListener(onBackPressedListener);

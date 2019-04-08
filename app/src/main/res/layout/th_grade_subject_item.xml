@@ -19,6 +19,7 @@
         android:text="4.3"
         android:textColor="@color/colorDarkText"
         android:textSize="18sp"
+        android:visibility="invisible"
         app:layout_constraintStart_toEndOf="@+id/textView_"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -47,6 +48,7 @@
         android:text=":"
         android:textColor="@color/colorDarkText"
         android:textSize="18sp"
+        android:visibility="invisible"
         app:layout_constraintStart_toEndOf="@+id/textView_subjectName"
         app:layout_constraintTop_toTopOf="parent" />
 

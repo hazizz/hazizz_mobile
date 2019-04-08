@@ -16,9 +16,8 @@ public class POJODetailedAnnouncement {
     private POJOcreator creator;
     private POJOgroup group;
     private POJOsubject subject;
-  //  private List<POJOcommentSection> sections;
 
-    public POJODetailedAnnouncement(int id, String title, String description, String creationDate, String lastUpdated, POJOsubject subject, POJOcreator creator, POJOgroup group ){//, List<POJOcommentSection> sections){
+    public POJODetailedAnnouncement(int id, String title, String description, String creationDate, String lastUpdated, POJOsubject subject, POJOcreator creator, POJOgroup group ){
         this.id = id;
         this.title = title;
         this.description = description;
@@ -27,7 +26,6 @@ public class POJODetailedAnnouncement {
         this.creator = creator;
         this.group = group;
         this.subject = subject;
-     //   this.sections = sections;
     }
 
 }

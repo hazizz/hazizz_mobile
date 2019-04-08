@@ -12,11 +12,11 @@ import retrofit2.Response;
 
 public class GetUserPermissionInGroup extends Request {
     private String p_groupId, p_userId;
-    public GetUserPermissionInGroup(Activity act, CustomResponseHandler rh, int p_groupId, int p_userId) {
+    public GetUserPermissionInGroup(Activity act, CustomResponseHandler rh, int p_groupId, long p_userId) {
         super(act, rh);
         Log.e("hey", "created GetUserPermissionInGroup object");
         this.p_groupId = Integer.toString(p_groupId);
-        this.p_userId =  Integer.toString(p_userId);
+        this.p_userId =  Long.toString(p_userId);
     }
     public void setupCall() {
 

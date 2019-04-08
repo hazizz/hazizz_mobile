@@ -53,6 +53,8 @@
 
          <item>Jelszó Beállítás</item>
        <!--   <item>Théra Beállítások</item> -->
+
+     <!--   <item>Szerver beállítások</item> -->
     </string-array>
 
 
@@ -140,6 +142,9 @@
     <string name="share">Megosztás</string>
     <string name="loading">Betöltés...</string>
     <string name="switch_account">Fiók váltás</string>
+    <string name="server_address">Szerver cím</string>
+    <string name="set">Beállítás</string>
+    <string name="dangerous">Veszélyes!!!</string>
 
 
     <string name="school_">Iskola:</string>
@@ -186,6 +191,9 @@
 
     <string name="termsAndConditions">Elfogadom az<a href="https://hazizz.github.io/privacy-hu.txt"> adatvédelmi nyilatkozatot</a></string>
     <string name="passwordagain_fragment_register">Jelszó mégegyszer</string>
+    <string name="areyousure_delete_task">Biztos hogy törlöd a feladatot?</string>
+    <string name="areyousure_delete_announcement">Biztos hogy törlöd a bejegyzést?</string>
+
 
     <string name="error_passwordRequiredForGroup">Jelszó szükséges a csoporthoz belépéshez</string>
 
@@ -200,6 +208,8 @@
     <string name="hint_newgroup">Új csoport</string>
     <string name="title_fragment_tabgroup">Csoport:</string>
 
+
+    <string name="title_set_server_address">Szerver cím beállítás</string>
 
     <string name="title_choose_at">Feladat/bejegyzés választó</string>
     <string name="title_activity_feedback">Visszajelzés</string>
@@ -225,7 +235,11 @@
     <string name="report_bug">Hiba jelentése</string>
     <string name="info_serverUnexpectedResponse">Nem megszokott válasz a szervertől</string>
     <string name="info_serverNotResponding">Szerver nem válaszol</string>
+    <string name="info_something_went_wrong">Valami hiba történt</string>
     <string name="info_noInternetAccess">Nincs internet kapcsolat</string>
+
+
+    <string name="info_serverAddressChange">Ha a cím nem helyes az alkalmazást újra kell telepíteni</string>
 
     <string name="select_school">Iskola kiválasztás</string>
 
@@ -269,7 +283,7 @@
 
     <string name="changePassword">Jelszó módosítás</string>
 
-    <string name="currentPassword">Mostani jelszó</string>
+    <string name="currentPassword">Jelenlegi jelszó</string>
     <string name="newPassword">Új jelszó</string>
     <string name="newPasswordAgain">Új jelszó mégegyszer</string>
     <string name="password_notMatch">Jelszó nem egyezik</string>

@@ -171,8 +171,8 @@ public class Manager {
 
         private static SparseArray<Strings.Rank> groupRanks = new SparseArray<>();
 
-        public static Strings.Rank getRank(int userId){
-            Strings.Rank rank = groupRanks.get(userId);
+        public static Strings.Rank getRank(long userId){
+            Strings.Rank rank = groupRanks.get((int)userId);
 
             for(int i = 0; i < groupRanks.size(); i++) {
                 int key = groupRanks.keyAt(i);
@@ -186,13 +186,13 @@ public class Manager {
             return Strings.Rank.NULL;
         }
 
-        public static void setRank(int userId, Strings.Rank rank){
-            groupRanks.put(userId, rank);
+        public static void setRank(long userId, Strings.Rank rank){
+            groupRanks.put((int)userId, rank);
             for(int i = 0; i < groupRanks.size(); i++) {
                 int key = groupRanks.keyAt(i);
                 // get the object by the key.
             }
-            Log.e("hey", "rank3: " + groupRanks.get(userId).toString());
+            Log.e("hey", "rank3: " + groupRanks.get((int)userId).toString());
         }
 
         public static void clear(){
@@ -200,6 +200,7 @@ public class Manager {
         }
     }
 
+    /*
     @Data
     public static class GroupManager{
 
@@ -229,6 +230,8 @@ public class Manager {
         }
 
     }
+    */
+
 
     public static class MeInfo {
 
@@ -296,6 +299,7 @@ public class Manager {
             return profilePic;
         }
     }
+
 
 
 }

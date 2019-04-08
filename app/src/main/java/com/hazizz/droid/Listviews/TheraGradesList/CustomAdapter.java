@@ -78,15 +78,16 @@ public class CustomAdapter extends ArrayAdapter<TheraSubjectGradesItem> {
     private void addGrade(List<TheraGradesItem> grades, View listItem, DataHolder holder){
         LinearLayout homeMadeList_grades = listItem.findViewById(R.id.linearLayout_grades);
         homeMadeList_grades.removeAllViews();
-        int a_count = 0;
-        int a_sum = 0;
+        double total = 0;
+        double amount = 0;
         for(int i = 0; i < grades.size(); i++){
 
             TheraGradesItem grade = grades.get(i);
+            int weight = Integer.parseInt(grade.getWeight());
 
             try {
-                a_count++;
-                a_sum += Integer.parseInt(grade.getGrade());
+                amount += (weight/100);
+                total += Integer.parseInt(grade.getGrade()) * (weight/100);
             }catch (Exception ignore){}
 
             TextView textView_grade = new TextView(context);
@@ -118,9 +119,9 @@ public class CustomAdapter extends ArrayAdapter<TheraSubjectGradesItem> {
 
             }
         }
-        if(a_count != 0) {
-            float average = (float)a_sum / a_count;
-            holder.textView_average.setText(String.valueOf(average));
+        if(amount != 0) {
+            double average = total / amount;
+            holder.textView_average.setText(String.format("%.2f", average));
         }else{
             holder.textView_average.setText("0.0");
         }

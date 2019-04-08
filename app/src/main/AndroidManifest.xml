@@ -117,7 +117,7 @@
         </receiver>
 
 
-        <service
+  <!--      <service
             android:name="com.hazizz.droid.widget.schedules.CollectionWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
@@ -136,6 +136,7 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/info_widget_thera_schedules" />
         </receiver>
+        -->
         <!--  <service
               android:name="com.hazizz.droid.Notification.NotificationIntentService"
               android:exported="false" >

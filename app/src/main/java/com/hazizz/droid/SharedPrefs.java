@@ -231,5 +231,35 @@ public class SharedPrefs {
 
     }
 
+    public static class Server {
+        private static final String fileName = "server";
+        private static final String key = "address";
+
+        private static final String fileName_th = "server_th";
+
+        public static String getHazizzAddress(Context context) {
+            return SharedPrefs.getString(context, fileName, key) + ":8081/";
+        }
+
+        public static void setMainAddress(Context context, String address) {
+            SharedPrefs.save(context, fileName, key, address);
+
+        }
+
+        public static boolean hasChangedAddress(Context context) {
+            return SharedPrefs.getBoolean(context, fileName_th, "hasChanged");
+        }
+
+        public static void setHasChangedAddress(Context context) {
+            SharedPrefs.savePref(context, fileName_th, "hasChanged", true);
+        }
+
+
+        public static String getTheraAddress(Context context) {
+            return SharedPrefs.getString(context, fileName, key) + ":9000/thera-server/kreta/";
+        }
+
+
+    }
 
 }

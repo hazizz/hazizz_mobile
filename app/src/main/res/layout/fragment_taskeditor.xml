@@ -86,7 +86,7 @@
                         android:gravity="left|center_vertical"
                         android:paddingLeft="20dp"
 
-                        android:text="ASD   "
+                        android:text="Csoport"
                         android:textColor="@color/colorDarkText"
                         android:textSize="15sp"
                         app:layout_constraintStart_toStartOf="@+id/textView_subject"

@@ -1,7 +1,6 @@
 package com.hazizz.droid;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -39,6 +38,7 @@ import com.hazizz.droid.Fragments.MyTasksFragment;
 import com.hazizz.droid.Fragments.Options.MainOptionsFragment;
 import com.hazizz.droid.Fragments.Options.NotificationSettingsFragment;
 import com.hazizz.droid.Fragments.Options.PasswordFragment;
+import com.hazizz.droid.Fragments.Options.ServerSettingsFragment;
 import com.hazizz.droid.Fragments.TaskEditorFragment;
 import com.hazizz.droid.Fragments.ThéraFrags.Setup.TheraGradesFragment;
 import com.hazizz.droid.Fragments.ThéraFrags.Setup.TheraLoadingFragment;
@@ -170,41 +170,47 @@ public class Transactor extends FragmentActivity {
         LogFragment frag = new LogFragment();
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }
-        fTransaction.commit();
+        fTransaction.commitAllowingStateLoss();
     }
 
     public static void fragmentFirst(@Nonnull FragmentTransaction fTransaction){
         FirstFragment frag = new FirstFragment();
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }
-        fTransaction.commit();
+        fTransaction.commitAllowingStateLoss();
     }
 
     public static void fragmentRegister(@Nonnull FragmentTransaction fTransaction){
         RegisterFragment frag = new RegisterFragment();
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }
-        fTransaction.commit();
+        fTransaction.commitAllowingStateLoss();
     }
     public static void fragmentLogin(@Nonnull FragmentTransaction fTransaction){
         LoginFragment frag = new LoginFragment();
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }
-        fTransaction.commit();
+        fTransaction.commitAllowingStateLoss();
     }
 
     public static void fragmentPassword(@Nonnull FragmentTransaction fTransaction){
         PasswordFragment frag = new PasswordFragment();
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }
-        fTransaction.commit();
+        fTransaction.commitAllowingStateLoss();
     }
 
     public static void fragmentNotificationSettings(@Nonnull FragmentTransaction fTransaction){
         NotificationSettingsFragment frag = new NotificationSettingsFragment();
         fTransaction.replace(R.id.fragment_container, frag);
-        fTransaction.commit();
+        fTransaction.commitAllowingStateLoss();
+    }
 
+
+    public static void fragmentServerSettings(@Nonnull FragmentTransaction fTransaction){
+        ServerSettingsFragment frag = new ServerSettingsFragment();
+        fTransaction.replace(R.id.fragment_container, frag);
+        fTransaction.commitAllowingStateLoss();
     }
 
     public static void fragmentOptions(@Nonnull FragmentTransaction fTransaction){
@@ -213,7 +219,7 @@ public class Transactor extends FragmentActivity {
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }
-        fTransaction.commit();
+        fTransaction.commitAllowingStateLoss();
     }
 
 
@@ -223,7 +229,7 @@ public class Transactor extends FragmentActivity {
     public static void fragmentGroups(@NonNull FragmentTransaction fTransaction){
         Fragment frag = new GroupsFragment();
         fTransaction.replace(R.id.fragment_container, frag);
-        fTransaction.commit();
+        fTransaction.commitAllowingStateLoss();
       // fragmentMainTab(fTransaction, 2);
     }
     public static void fragmentMainGroup(@Nonnull FragmentTransaction fTransaction, int groupId, String groupName){
@@ -245,14 +251,14 @@ public class Transactor extends FragmentActivity {
        // Manager.GroupManager.setGroupId(groupId);Manager.GroupManager.setGroupName(groupName);
         Fragment frag = new ATChooserFragment();
         fTransaction.replace(R.id.fragment_container, frag);
-        fTransaction.commit();
+        fTransaction.commitAllowingStateLoss();
     }
 
     public static void fragmentMyTasks(@Nonnull FragmentTransaction fTransaction){
 
         MyTasksFragment frag = new MyTasksFragment();
         fTransaction.replace(R.id.fragment_container, frag);
-        fTransaction.commit();
+        fTransaction.commitAllowingStateLoss();
     }
 
 
@@ -268,7 +274,7 @@ public class Transactor extends FragmentActivity {
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }
-        fTransaction.commit();
+        fTransaction.commitAllowingStateLoss();
     }
 
 
@@ -280,7 +286,7 @@ public class Transactor extends FragmentActivity {
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }
-        fTransaction.commit();
+        fTransaction.commitAllowingStateLoss();
     }
 
     public static void fragmentEditMyTask(@Nonnull FragmentTransaction fTransaction){
@@ -291,7 +297,7 @@ public class Transactor extends FragmentActivity {
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }
-        fTransaction.commit();
+        fTransaction.commitAllowingStateLoss();
     }
 
     public static void fragmentCreateTask(@Nonnull FragmentTransaction fTransaction, int groupId, String groupName, Strings.Dest dest){
@@ -307,7 +313,7 @@ public class Transactor extends FragmentActivity {
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }
-        fTransaction.commit();
+        fTransaction.commitAllowingStateLoss();
     }
 
     public static void fragmentCreateTask(@Nonnull FragmentTransaction fTransaction, Strings.Dest dest){
@@ -319,7 +325,7 @@ public class Transactor extends FragmentActivity {
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }
-        fTransaction.commit();
+        fTransaction.commitAllowingStateLoss();
     }
 
     public static void fragmentEditMyTask(@Nonnull FragmentTransaction fTransaction, int taskId, PojoType type,
@@ -338,7 +344,7 @@ public class Transactor extends FragmentActivity {
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);
         if(backStack){ fTransaction.addToBackStack(null); }
-        fTransaction.commit();
+        fTransaction.commitAllowingStateLoss();
     }
 
     public static void fragmentEditTask(@Nonnull FragmentTransaction fTransaction, int groupId, String groupName,
@@ -363,7 +369,7 @@ public class Transactor extends FragmentActivity {
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);
         if(backStack){ fTransaction.addToBackStack(null); }
-        fTransaction.commit();
+        fTransaction.commitAllowingStateLoss();
     }
 
 
@@ -373,7 +379,7 @@ public class Transactor extends FragmentActivity {
         bundle.putInt(KEY_DEST, dest.getValue());
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);
-        fTransaction.commit();
+        fTransaction.commitAllowingStateLoss();
     }
 
     public static void fragmentCreateAnnouncement(@Nonnull FragmentTransaction fTransaction, int groupId, String groupName, Strings.Dest dest){
@@ -385,7 +391,7 @@ public class Transactor extends FragmentActivity {
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);
         if(backStack){ fTransaction.addToBackStack(null); }
-        fTransaction.commit();
+        fTransaction.commitAllowingStateLoss();
     }
     public static void fragmentCreateAnnouncement(@Nonnull FragmentTransaction fTransaction, Strings.Dest dest){
         AnnouncementEditorFragment frag = new AnnouncementEditorFragment();
@@ -393,7 +399,7 @@ public class Transactor extends FragmentActivity {
         bundle.putInt(KEY_DEST, dest.getValue());
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
-        fTransaction.commit();
+        fTransaction.commitAllowingStateLoss();
     }
 
     public static void fragmentEditAnnouncement(@Nonnull FragmentTransaction fTransaction, int groupId, int announcementId, String groupName, String title, String description, Strings.Dest dest){
@@ -409,7 +415,7 @@ public class Transactor extends FragmentActivity {
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }
-        fTransaction.commit();
+        fTransaction.commitAllowingStateLoss();
     }
 
 
@@ -424,7 +430,7 @@ public class Transactor extends FragmentActivity {
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);
         if(backStack){ fTransaction.addToBackStack(null); }
-        fTransaction.commit();
+        fTransaction.commitAllowingStateLoss();
     }
 
 
@@ -436,7 +442,7 @@ public class Transactor extends FragmentActivity {
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);
         if(backStack){ fTransaction.addToBackStack(null); }
-        fTransaction.commit();
+        fTransaction.commitAllowingStateLoss();
     }
 
 
@@ -446,7 +452,7 @@ public class Transactor extends FragmentActivity {
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);
         if(backStack){ fTransaction.addToBackStack(null); }
-        fTransaction.commit(); */
+        fTransaction.commitAllowingStateLoss(); */
         fragmentGroupTab(fTransaction, groupId, groupName, 2);
     }
 
@@ -454,14 +460,14 @@ public class Transactor extends FragmentActivity {
         CreateGroupFragment frag = new CreateGroupFragment();
         fTransaction.replace(R.id.fragment_container, frag);
         if(backStack){ fTransaction.addToBackStack(null); }
-        fTransaction.commit();
+        fTransaction.commitAllowingStateLoss();
     }
 
     public static void fragmentJoinGroup(@Nonnull FragmentTransaction fTransaction){
         JoinGroupFragment frag = new JoinGroupFragment();
         fTransaction.replace(R.id.fragment_container, frag);
         if(backStack){ fTransaction.addToBackStack(null); }
-        fTransaction.commit();
+        fTransaction.commitAllowingStateLoss();
     }
 
     public static void fragmentGetGroupMembers(@Nonnull FragmentTransaction fTransaction, int groupId, String groupName){
@@ -477,7 +483,7 @@ public class Transactor extends FragmentActivity {
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
         if(backStack){ fTransaction.addToBackStack(null); }
-        fTransaction.commit();
+        fTransaction.commitAllowingStateLoss();
     }
 
     public static void fragmentMainTab(@Nonnull FragmentTransaction fTransaction,int startingTab){
@@ -485,9 +491,9 @@ public class Transactor extends FragmentActivity {
         bundle.putInt(KEY_STARTINGTAB, startingTab);
         MainTabFragment frag = new MainTabFragment();
         frag.setArguments(bundle);
-        fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
+        fTransaction.replace(R.id.fragment_container, frag);
         if(backStack){ fTransaction.addToBackStack(null); }
-        fTransaction.commit();
+        fTransaction.commitAllowingStateLoss();
     }
 
     public static void fragmentCommentSection(@Nonnull FragmentTransaction fTransaction, String whereName, int whereId){
@@ -499,7 +505,7 @@ public class Transactor extends FragmentActivity {
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);
         if(backStack){ fTransaction.addToBackStack(null); }
-        fTransaction.commit();
+        fTransaction.commitAllowingStateLoss();
     }
 
     public static void fragmentComments(@Nonnull FragmentTransaction fTransaction, String whereName,int whereId){
@@ -510,7 +516,7 @@ public class Transactor extends FragmentActivity {
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);
         if(backStack){fTransaction.addToBackStack(null);}
-        fTransaction.commit();
+        fTransaction.commitAllowingStateLoss();
     }
 
 
@@ -532,7 +538,7 @@ public class Transactor extends FragmentActivity {
         TheraLoadingFragment frag = new TheraLoadingFragment();
         fTransaction.replace(R.id.fragment_container, frag);
         if(backStack){fTransaction.addToBackStack(null);}
-        fTransaction.commit();
+        fTransaction.commitAllowingStateLoss();
     }
 
     public static void fragmentThLoginAuthSession(@Nonnull FragmentTransaction fTransaction, long session, String school, String username){
@@ -545,29 +551,34 @@ public class Transactor extends FragmentActivity {
 
         fTransaction.replace(R.id.fragment_container, frag);
         if(backStack){fTransaction.addToBackStack(null);}
-        fTransaction.commit();
+        fTransaction.commitAllowingStateLoss();
     }
 
     public static void fragmentThLogin(@Nonnull FragmentTransaction fTransaction){
         TheraLoginFragment frag = new TheraLoginFragment();
         fTransaction.replace(R.id.fragment_container, frag);
         if(backStack){fTransaction.addToBackStack(null);}
-        fTransaction.commit();
+        fTransaction.commitAllowingStateLoss();
     }
 
     public static void fragmentThUsers(@Nonnull FragmentTransaction fTransaction){
         TheraUsersFragment frag = new TheraUsersFragment();
         fTransaction.replace(R.id.fragment_container, frag);
         if(backStack){fTransaction.addToBackStack(null);}
-        fTransaction.commit();
+        fTransaction.commitAllowingStateLoss();
     }
 
     public static void fragmentThMain(@Nonnull FragmentTransaction fTransaction){
         TheraMainFragment frag = new TheraMainFragment();
         fTransaction.replace(R.id.fragment_container, frag);
         if(backStack){fTransaction.addToBackStack(null);}
-        fTransaction.commit();
-
+        fTransaction.commitAllowingStateLoss();
+    }
+    public static void fragmentThMain(@Nonnull FragmentTransaction fTransaction, String username){
+        TheraMainFragment frag = new TheraMainFragment();
+        fTransaction.replace(R.id.fragment_container, frag);
+        if(backStack){fTransaction.addToBackStack(null);}
+        fTransaction.commitAllowingStateLoss();
     }
 
 
@@ -575,7 +586,7 @@ public class Transactor extends FragmentActivity {
         TheraSchedulesFragment frag = new TheraSchedulesFragment();
         fTransaction.replace(R.id.fragment_container, frag);
         if(backStack){fTransaction.addToBackStack(null);}
-        fTransaction.commit();
+        fTransaction.commitAllowingStateLoss();
     }
 
 
@@ -583,7 +594,7 @@ public class Transactor extends FragmentActivity {
         TheraGradesFragment frag = new TheraGradesFragment();
         fTransaction.replace(R.id.fragment_container, frag);
         if(backStack){fTransaction.addToBackStack(null);}
-        fTransaction.commit();
+        fTransaction.commitAllowingStateLoss();
     }
 
 

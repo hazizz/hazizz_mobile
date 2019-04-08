@@ -23,8 +23,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Request implements RequestInterface {
     protected Gson gson = new Gson();
     protected Activity act;
-    private static final String BASE_URL = "https://hazizz.duckdns.org:8081/";
-    private static final String THERA_URL = "https://hazizz.duckdns.org:9000/thera-server/";
+
+    public final static String BASE_URL = "https://hazizz.duckdns.org:9000/";
+    public final static String BASE_URL_OLD = "https://hazizz.duckdns.org:8081/";
+
+    public final static String BASE_URL2 = "https://hazizz.duckdns.org";
+    public final static String BASE_URL_OLD2 = "https://hazizz.duckdns.org";
+
+    private static String HAZIZZ_URL = "https://hazizz.duckdns.org:9000/hazizz-server/";
+   // private static final String THERA_URL = "https://hazizz.duckdns.org:9000/thera-server/";
 
     protected static final String HEADER_AUTH = "Authorization";
     protected static final String HEADER_CONTENTTYPE = "Content-Type";
@@ -65,6 +72,15 @@ public class Request implements RequestInterface {
     public Request(Activity act, CustomResponseHandler cOnResponse) {
         this.act = act;
         this.cOnResponse = cOnResponse;
+
+
+
+     //   HAZIZZ_URL = SharedPrefs.Server.getHazizzAddress(getActivity());
+         //BASE_URL + "hazizz-server/";//SharedPrefs.Server.getHazizzAddress(getActivity());
+
+        //"https://hazizz.duckdns.org:9000/hazizz-server/"
+
+
         Gson gson = new GsonBuilder().serializeNulls().excludeFieldsWithoutExposeAnnotation().create();
         okHttpClient = new OkHttpClient.Builder()
             .connectTimeout(5, TimeUnit.SECONDS)
@@ -73,7 +89,7 @@ public class Request implements RequestInterface {
             .build();
 
         retrofit = new Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(HAZIZZ_URL)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(okHttpClient)
             //  .setEndpoint(endPoint)F

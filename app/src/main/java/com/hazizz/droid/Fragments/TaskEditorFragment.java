@@ -23,6 +23,7 @@ import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
 import com.hazizz.droid.Activities.MainActivity;
 import com.hazizz.droid.AndroidThings;
+import com.hazizz.droid.Cache.CurrentGroup;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.POJO.Response.POJOgroup;
@@ -48,24 +49,11 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
-
-public class TaskEditorFragment extends ParentFragment {//implements AdapterView.OnItemSelectedListener{
-    public static final short GROUPMODE = 0;
-    public static final short MYMODE = 1;
-
-    public static final short EDITMODE = 1;
-    public static final short CREATEMODE = 0;
-
-    private short where = 0;
-    private short type = 0;
-
-    private String[] taskTypeArray;
-
-
+public class TaskEditorFragment extends ParentFragment {
     private Integer year, month, day;
     private String str_year, str_month, str_day;
 
-    private int groupId;
+    private long groupId;
     private String groupName;
     private int subject;
     private int taskId;
@@ -97,6 +85,15 @@ public class TaskEditorFragment extends ParentFragment {//implements AdapterView
 
     ArrayAdapter<POJOgroup> g_adapter;
     ArrayAdapter<POJOsubject> s_adapter;
+
+    public static final short GROUPMODE = 0;
+    public static final short MYMODE = 1;
+
+    public static final short EDITMODE = 1;
+    public static final short CREATEMODE = 0;
+
+    private short where = 0;
+    private short type = 0;
 
     CustomResponseHandler rh_task = new CustomResponseHandler() {
         @Override
@@ -218,7 +215,7 @@ public class TaskEditorFragment extends ParentFragment {//implements AdapterView
             }
         });
 
-        taskTypeArray = getResources().getStringArray(R.array.taskTypes);
+        String[] taskTypeArray = getResources().getStringArray(R.array.taskTypes);
         List<String> taskTypeList = Arrays.asList(taskTypeArray);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
@@ -229,7 +226,8 @@ public class TaskEditorFragment extends ParentFragment {//implements AdapterView
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_taskType.setAdapter(adapter);
 
-        groupId = Manager.GroupManager.getGroupId();
+        groupId = CurrentGroup.getInstance().getGroupId();
+        groupName = CurrentGroup.getInstance().getGroupName();
 
         if(getArguments() != null) {
             groupName = getArguments().getString(Transactor.KEY_GROUPNAME);
@@ -237,8 +235,8 @@ public class TaskEditorFragment extends ParentFragment {//implements AdapterView
 
             where = getArguments().getShort(Transactor.KEY_WHERE);
             type = getArguments().getShort(Transactor.KEY_TYPE);
-            groupId = getArguments().getInt(Transactor.KEY_GROUPID);
-            groupName = getArguments().getString(Transactor.KEY_GROUPNAME);
+          //  groupId = getArguments().getInt(Transactor.KEY_GROUPID);
+         //   groupName = getArguments().getString(Transactor.KEY_GROUPNAME);
             textView_group.setText(groupName);
 
             dest = getArguments().getInt(Transactor.KEY_DEST);
@@ -281,7 +279,7 @@ public class TaskEditorFragment extends ParentFragment {//implements AdapterView
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     groupId = ((POJOgroup)spinner_group.getItemAtPosition(position)).getId();
-                    MiddleMan.newRequest(new GetSubjects(getActivity(),rh_subjects, groupId));
+                    MiddleMan.newRequest(new GetSubjects(getActivity(),rh_subjects, (int)groupId));
                     textView_group.setText(((POJOgroup)spinner_group.getItemAtPosition(position)).getName());
                 }
                 @Override public void onNothingSelected(AdapterView<?> parent) { }
@@ -382,6 +380,17 @@ public class TaskEditorFragment extends ParentFragment {//implements AdapterView
                 if(day < 10){str_day = "0" + day;}else{str_day = day + "";}
                 date = year + "-" + month + "-" + day;
                 textView_deadline.setText(str_year + "." + str_month + "."+ str_day);
+
+
+                /*
+                if(day < 10) {
+                    int f_day = day+1;
+                    str_day = "0" + f_day;
+                }else {
+                    int f_day = day+1;
+                    str_day = f_day + "";
+                }
+                */
             }
         }, Integer.parseInt(D8.getYear()), Integer.parseInt(D8.getMonth()) -2, Integer.parseInt(D8.getDay()));
         //dpd.getDatePicker().setMaxDate(Calendar.getInstance().getTimeInMillis() - 1000);
@@ -467,7 +476,7 @@ public class TaskEditorFragment extends ParentFragment {//implements AdapterView
             int byId;
             if (subjectId == 0) {
                 byName = Strings.Path.GROUPS.toString();
-                byId = groupId;
+                byId = (int)groupId;
             } else {
                 byName = Strings.Path.SUBJECTS.toString();
                 byId = subjectId;
@@ -481,7 +490,7 @@ public class TaskEditorFragment extends ParentFragment {//implements AdapterView
         MiddleMan.newRequest(r);
     }
     public int getGroupId(){
-        return groupId;
+        return (int)groupId;
     }
     public String getGroupName(){
         return groupName;
@@ -489,7 +498,7 @@ public class TaskEditorFragment extends ParentFragment {//implements AdapterView
 
     private void goBack(){
         if(dest == Strings.Dest.TOGROUP.getValue()){
-            Transactor.fragmentGroupTask(getFragmentManager().beginTransaction(),groupId, groupName);
+            Transactor.fragmentGroupTask(getFragmentManager().beginTransaction(),(int)groupId, groupName);
         }else if(dest == Strings.Dest.TOMAIN.getValue()){
             Transactor.fragmentMainTask(getFragmentManager().beginTransaction());
         }

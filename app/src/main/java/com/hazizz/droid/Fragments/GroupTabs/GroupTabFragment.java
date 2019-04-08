@@ -26,6 +26,9 @@ import com.hazizz.droid.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.CacheRequest;
 import java.util.EnumMap;
 import java.util.HashMap;
 
@@ -116,7 +119,7 @@ public class GroupTabFragment extends ParentFragment {
     public void onDestroyView() {
         Log.e("hey", "left group");
         super.onDestroyView();
-        Manager.GroupManager.leftGroup();
+     //   Manager.GroupManager.leftGroup();
     }
 
     public Fragment getCurrentFrag(){
@@ -161,5 +164,6 @@ public class GroupTabFragment extends ParentFragment {
             }
         };
         MiddleMan.newRequest(new GetGroup(getActivity(),responseHandler, groupId));
+
     }
 }

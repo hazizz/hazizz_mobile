@@ -1,6 +1,5 @@
 package com.hazizz.droid.Fragments;
 
-
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,6 +25,10 @@ import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
 import com.hazizz.droid.Activities.MainActivity;
 import com.hazizz.droid.AndroidThings;
+import com.hazizz.droid.Cache.CurrentGroup;
+import com.hazizz.droid.Cache.CurrentMembersManager;
+import com.hazizz.droid.Cache.MeInfo.MeInfo;
+import com.hazizz.droid.Cache.Member;
 import com.hazizz.droid.Communication.POJO.Response.AnnouncementPOJOs.POJODetailedAnnouncement;
 import com.hazizz.droid.Communication.POJO.Response.CommentSectionPOJOs.POJOComment;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
@@ -43,6 +46,7 @@ import com.hazizz.droid.Communication.Requests.GetGroupMembersProfilePic;
 import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.Enum.EnumAT;
 import com.hazizz.droid.Fragments.ParentFragment.CommentableFragment;
+import com.hazizz.droid.Listener.GenericListener;
 import com.hazizz.droid.Listviews.CommentList.CommentItem;
 import com.hazizz.droid.Listviews.CommentList.CustomAdapter;
 import com.hazizz.droid.Listviews.NonScrollListView;
@@ -87,6 +91,9 @@ public class ViewAnnouncementFragment extends CommentableFragment implements Ada
         }
     };
 
+    private MeInfo meInfo;
+    private CurrentGroup currentGroup;
+
     CustomResponseHandler permissionRh = new CustomResponseHandler() {
         @Override
         public void onPOJOResponse(Object response) {
@@ -100,11 +107,11 @@ public class ViewAnnouncementFragment extends CommentableFragment implements Ada
             }else if(Strings.Rank.OWNER.toString().equals(rank)) {
                 r = Strings.Rank.OWNER;
             }
-            Manager.MeInfo.setRankInCurrentGroup(r);
+            meInfo.setRankInCurrentGroup(r);
 
-            Log.e("hey", "talicska 2: " + Manager.MeInfo.getRankInCurrentGroup().getValue() + " " + Manager.MeInfo.getRankInCurrentGroup().toString());
+            Log.e("hey", "talicska 2: " + meInfo.getRankInCurrentGroup().getValue() + " " + meInfo.getRankInCurrentGroup().toString());
 
-            if(Manager.MeInfo.getId() == creatorId || Manager.MeInfo.getRankInCurrentGroup().getValue() >= Strings.Rank.MODERATOR.getValue() ){
+            if(meInfo.getUserId() == creatorId || meInfo.getRankInCurrentGroup().getValue() >= Strings.Rank.MODERATOR.getValue() ){
                 button_delete.setVisibility(View.VISIBLE);
                 button_edit.setVisibility(View.VISIBLE);
             }
@@ -131,41 +138,7 @@ public class ViewAnnouncementFragment extends CommentableFragment implements Ada
     private TextView textView_noContent;
     private SwipeRefreshLayout sRefreshLayout;
 
-    private CustomResponseHandler getComments_rh = new CustomResponseHandler() {
-        @Override
-        public void onPOJOResponse(Object response) {
-            adapter.clear();
-            ArrayList<POJOComment> comments = (ArrayList<POJOComment>) response;
-            HashMap<Integer, POJOMembersProfilePic> profilePicMap = Manager.ProfilePicManager.getCurrentGroupMembersProfilePic();
-            if(comments.isEmpty()) {
-                textView_noContent.setVisibility(v.VISIBLE);
-            }else {
-                adapter.clear();
-                for (POJOComment t : comments) {
-                    Strings.Rank rank = Manager.GroupRankManager.getRank((int)t.getCreator().getId());
-                    listComment.add(new CommentItem(t.getId(), profilePicMap.get((int)t.getCreator().getId()).getData(),rank, t.getCreator(), t.getContent()));
-                }
-                adapter.notifyDataSetChanged();
-                textView_noContent.setVisibility(v.INVISIBLE);
-            }
-            sRefreshLayout.setRefreshing(false);
-        }
-        @Override
-        public void onFailure(Call<ResponseBody> call, Throwable t) {
-            sRefreshLayout.setRefreshing(false);
-        }
-        @Override
-        public void onErrorResponse(POJOerror error) {
-            Log.e("hey", "onErrorResponse");
-            sRefreshLayout.setRefreshing(false);
-        }
-        @Override
-        public void onNoConnection() {
-            textView_noContent.setText(R.string.info_noInternetAccess);
-            textView_noContent.setVisibility(View.VISIBLE);
-            sRefreshLayout.setRefreshing(false);
-        }
-    };
+
 
 
 
@@ -175,6 +148,10 @@ public class ViewAnnouncementFragment extends CommentableFragment implements Ada
         ((MainActivity)getActivity()).onFragmentCreated();
 
         getActivity().setTitle(R.string.title_fragment_view_announcement);
+
+        currentGroup = CurrentGroup.getInstance();
+
+        meInfo = MeInfo.getInstance();
 
         type = v.findViewById(R.id.textView_tasktype);
         textView_title = v.findViewById(R.id.textView_subject);
@@ -188,7 +165,7 @@ public class ViewAnnouncementFragment extends CommentableFragment implements Ada
             @Override
             public void onClick(View view) {
                 if(gotResponse){
-                    Transactor.fragmentEditAnnouncement(getFragmentManager().beginTransaction(), Manager.GroupManager.getGroupId(), announcementId, Manager.GroupManager.getGroupName(), title, descripiton, Strings.Dest.TOGROUP);//commentId);
+                    Transactor.fragmentEditAnnouncement(getFragmentManager().beginTransaction(), (int)currentGroup.getGroupId(), announcementId, currentGroup.getGroupName(), title, descripiton, Strings.Dest.TOGROUP);//commentId);
                 }
             }});
 
@@ -208,7 +185,7 @@ public class ViewAnnouncementFragment extends CommentableFragment implements Ada
                                     @Override
                                     public void onSuccessfulResponse() {
                                         if(dest == Strings.Dest.TOGROUP.getValue()) {
-                                            Transactor.fragmentGroupAnnouncement(getFragmentManager().beginTransaction(), Manager.GroupManager.getGroupId(), Manager.GroupManager.getGroupName());
+                                            Transactor.fragmentGroupAnnouncement(getFragmentManager().beginTransaction(), (int)currentGroup.getGroupId(), currentGroup.getGroupName());
                                         } else{
                                             Transactor.fragmentMainAnnouncement(getFragmentManager().beginTransaction());
                                         }
@@ -330,11 +307,32 @@ public class ViewAnnouncementFragment extends CommentableFragment implements Ada
             public void onPOJOResponse(Object response) {
                 POJODetailedAnnouncement pojoResponse = (POJODetailedAnnouncement)response;
 
-                Manager.GroupManager.setGroupId(pojoResponse.getGroup().getId());
-                Manager.GroupManager.setGroupName(pojoResponse.getGroup().getName());
 
                 groupId = pojoResponse.getGroup().getId();
+                groupName = pojoResponse.getGroup().getName();
 
+                if(!currentGroup.groupIdIsSame(groupId)) {
+
+                    GenericListener gotAllGroupDataListener = new GenericListener() {
+                        @Override public void execute() {
+                            getComments();
+                            MeInfo meInfo = MeInfo.getInstance();
+                            if(meInfo.getUserId() == creatorId || meInfo.getRankInCurrentGroup().getValue() >= Strings.Rank.MODERATOR.getValue() ){
+                                button_delete.setVisibility(View.VISIBLE);
+                                button_edit.setVisibility(View.VISIBLE);
+                            }                            }
+                    };
+
+                    currentGroup.setGroup(getActivity(), groupId, groupName, gotAllGroupDataListener);
+                }else{
+                    getComments();
+                }
+
+                button_send.setVisibility(View.VISIBLE);
+                textView_commentTitle.setVisibility(View.VISIBLE);
+                box_comment.setVisibility(View.VISIBLE);
+
+                /*
                 CustomResponseHandler r2 = new CustomResponseHandler() {
                     @Override
                     public void onPOJOResponse(Object response) {
@@ -364,7 +362,7 @@ public class ViewAnnouncementFragment extends CommentableFragment implements Ada
 
                 creatorId = (int)pojoResponse.getCreator().getId();
 
-                MiddleMan.newRequest(new GetUserPermissionInGroup(getActivity(), permissionRh, groupId, (int)Manager.MeInfo.getId()));
+                MiddleMan.newRequest(new GetUserPermissionInGroup(getActivity(), permissionRh, groupId, meInfo.getUserId()));
 
 
                 if(Manager.ProfilePicManager.getCurrentGroupId() != groupId || dest == Strings.Dest.TOMAIN.getValue()){
@@ -382,6 +380,7 @@ public class ViewAnnouncementFragment extends CommentableFragment implements Ada
                     enable_button_comment++;
                     visibleIfEnabled_button_comment();
                 }
+                */
 
                 announcementId = pojoResponse.getId();
 
@@ -397,6 +396,7 @@ public class ViewAnnouncementFragment extends CommentableFragment implements Ada
         };
         createViewList();
         getData();
+
 
         self = this;
 
@@ -424,7 +424,7 @@ public class ViewAnnouncementFragment extends CommentableFragment implements Ada
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Manager.GroupManager.leftGroup();
+       // Manager.GroupManager.leftGroup();
     }
 
     @Override
@@ -475,40 +475,9 @@ public class ViewAnnouncementFragment extends CommentableFragment implements Ada
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-             //   Transactor.fragmentDialogShowUserDetailDialog(getFragmentManager().beginTransaction(), (long)adapter.getItem(i).getCreator().getId(), adapter.getItem(i).getCommentProfilePic());
-
-                //     Transactor.fragmentDialogShowUserDetailDialog(getFragmentManager().beginTransaction(), (long)adapter.getItem(i).getCreator().getId(), adapter.getItem(i).getCommentProfilePic());
                 ImageView imageView_popup = view.findViewById(R.id.imageView_popup);
 
-                // Context wrapper = new ContextThemeWrapper(null, R.style.popupMenuStyle);
-                adapter.getItem(i).showMenu(getActivity(), getComments_rh, EnumAT.ANNOUNCEMENTS, announcementId, imageView_popup, getFragmentManager().beginTransaction(), self);
-                /*
-                PopupMenu popup = new PopupMenu(getActivity(), view_position_popup);
-
-                popup.getMenuInflater().inflate(R.menu.menu_comment_item_popup, popup.getMenu());
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()){
-                            case R.id.popupitem_edit:
-                                break;
-                            case R.id.popupitem_delete:
-                                MiddleMan.newRequest(new DeleteATComment(getActivity(), new CustomResponseHandler(){
-                                    @Override
-                                    public void onSuccessfulResponse() {
-                                        getComments();
-                                    }
-                                }, Strings.Path.ANNOUNCEMENTS, announcementId, commentId));
-                                break;
-                        }
-                        popup.dismiss();
-
-                        return false;
-                    }
-                });
-                popup.show();
-                */
-
+                adapter.showMenu(getActivity(), EnumAT.ANNOUNCEMENTS, announcementId, adapter.getItem(i), imageView_popup, getFragmentManager().beginTransaction(), self);
             }
         });
     }
@@ -520,6 +489,49 @@ public class ViewAnnouncementFragment extends CommentableFragment implements Ada
     }
 
     private void getComments(){
+        CustomResponseHandler getComments_rh = new CustomResponseHandler() {
+            @Override
+            public void onPOJOResponse(Object response) {
+                adapter.clear();
+                listComment.clear();
+                adapter.notifyDataSetChanged();
+
+                ArrayList<POJOComment> comments = (ArrayList<POJOComment>) response;
+
+                CurrentMembersManager members = currentGroup.getMembers();
+                if(comments.isEmpty()) {
+                    textView_noContent.setVisibility(v.VISIBLE);
+                }else {
+                    for (POJOComment t : comments) {
+                        Member member = members.getMember(t.getCreator().getId());
+
+                        Strings.Rank rank = member.getRank();
+                        String profilePic = member.getProfilePic();
+
+                        listComment.add(new CommentItem(t.getId(), profilePic, rank, t.getCreator(), t.getContent()));
+                    }
+                    adapter.notifyDataSetChanged();
+                    textView_noContent.setVisibility(v.INVISIBLE);
+                }
+                sRefreshLayout.setRefreshing(false);
+            }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                sRefreshLayout.setRefreshing(false);
+            }
+            @Override
+            public void onErrorResponse(POJOerror error) {
+                Log.e("hey", "onErrorResponse");
+                sRefreshLayout.setRefreshing(false);
+            }
+            @Override
+            public void onNoConnection() {
+                textView_noContent.setText(R.string.info_noInternetAccess);
+                textView_noContent.setVisibility(View.VISIBLE);
+                sRefreshLayout.setRefreshing(false);
+            }
+        };
+
         MiddleMan.newRequest(new GetCommentSection(getActivity(), getComments_rh, Strings.Path.ANNOUNCEMENTS.toString(), announcementId));
     }
 
