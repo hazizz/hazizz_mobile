@@ -1,10 +1,8 @@
 package com.hazizz.droid.Cache;
 
 import android.app.Activity;
-import android.content.Context;
 import android.util.Log;
 import android.util.SparseArray;
-import android.view.View;
 
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
@@ -15,7 +13,6 @@ import com.hazizz.droid.Communication.Requests.GetGroupMemberPermisions;
 import com.hazizz.droid.Communication.Requests.GetGroupMembersProfilePic;
 import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.Listener.GenericListener;
-import com.hazizz.droid.Manager;
 
 import java.util.HashMap;
 import java.util.List;
@@ -41,11 +38,16 @@ public class CurrentGroup {
     private long groupId;
 
                   // id
-    private CurrentMembersManager members = new CurrentMembersManager();
+    private CurrentMembersManager membersManager = new CurrentMembersManager();
 
-    public CurrentMembersManager getMembers(){
-        return members;
+    public CurrentMembersManager getMembersManager(){
+        return membersManager;
     }
+
+    public List<Member> getMembers(){
+        return membersManager.getMembers();
+    }
+
 
     private GenericListener listener = new GenericListener() {@Override public void execute() { }};
     
@@ -112,7 +114,7 @@ public class CurrentGroup {
     }
 
     public boolean isReady(){
-        return members.isReady();
+        return membersManager.isReady();
     }
 
 
@@ -153,7 +155,7 @@ public class CurrentGroup {
         this.groupName = groupName;
 
         requestCount = 0;
-        members.clear();
+        membersManager.clear();
         profilePicsWereSet = false;
         dataWereSet = false;
 
@@ -162,7 +164,7 @@ public class CurrentGroup {
             @Override public void onPOJOResponse(Object response) {
                 PojoPermisionUsers pojoPermisionUser = (PojoPermisionUsers) response;
 
-                members.addMembersByRanks(pojoPermisionUser);
+                membersManager.addMembersByRanks(pojoPermisionUser);
 
                 requestCount++;
                 /*
@@ -181,7 +183,7 @@ public class CurrentGroup {
             public void onPOJOResponse(Object response) {
               //  Manager.ProfilePicManager.setCurrentGroupMembersProfilePic((HashMap<Integer, POJOMembersProfilePic>) response, groupId);
 
-                members.addMembersByProfilePics((HashMap<Long, POJOMembersProfilePic>) response);
+                membersManager.addMembersByProfilePics((HashMap<Long, POJOMembersProfilePic>) response);
 
                 requestCount++;
                 ifCollectedAllDataDo();

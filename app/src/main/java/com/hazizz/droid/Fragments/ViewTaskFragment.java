@@ -501,7 +501,7 @@ public class ViewTaskFragment extends CommentableFragment implements AdapterView
 
                     ArrayList<POJOComment> comments = (ArrayList<POJOComment>) response;
                     // HashMap<Long, POJOMembersProfilePic> profilePicMap = currentGroup.getMembers().;
-                    CurrentMembersManager members = currentGroup.getMembers();
+                    CurrentMembersManager members = currentGroup.getMembersManager();
                     if(comments.isEmpty()) {
                         textView_noContent.setVisibility(v.VISIBLE);
                     }else {

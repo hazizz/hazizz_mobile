@@ -30,6 +30,10 @@ public class CurrentMembersManager {
         return setupPhase >= 2;
     }
 
+    public List<Member> getMembers(){
+        return members;
+    }
+
     public void addMember(Long userId, String profilePic){
         Member unRegisteredMember = findMember(userId);
 

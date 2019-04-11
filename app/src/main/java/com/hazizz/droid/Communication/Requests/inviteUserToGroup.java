@@ -11,7 +11,7 @@ import retrofit2.Response;
 
 public class inviteUserToGroup extends Request {
     String groupId;
-    inviteUserToGroup(Activity act, CustomResponseHandler rh, int groupId) {
+    public inviteUserToGroup(Activity act, CustomResponseHandler rh, int groupId) {
         super(act, rh);
         this.groupId = Integer.toString(groupId);
         Log.e("hey", "created inviteUserToGroup object");

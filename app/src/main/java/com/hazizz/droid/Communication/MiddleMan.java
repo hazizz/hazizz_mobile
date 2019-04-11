@@ -14,6 +14,7 @@ import java.util.concurrent.LinkedBlockingDeque;
 public class MiddleMan{
     public static BlockingQueue<RequestInterface> requestQueue = new LinkedBlockingDeque<>(10);
     public static BlockingQueue<RequestInterface> waitingForResponseQueue = new LinkedBlockingDeque<>(10);
+    public static BlockingQueue<RequestInterface> rateLimitRequestQueue = new LinkedBlockingDeque<>(10);
 
     public static void cancelAllRequest(){
         for (RequestInterface r : requestQueue) {
@@ -38,6 +39,14 @@ public class MiddleMan{
     public static void addToCallAgain(RequestInterface r) {
         try {
             requestQueue.put(r);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void addToRateLimitQueue(RequestInterface r) {
+        try {
+            rateLimitRequestQueue.put(r);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -84,6 +93,17 @@ public class MiddleMan{
             Log.e("hey", "call again: " + r);
             r.setupCall();
             r.makeCallAgain();
+
+        }
+
+    }
+
+    public static void callAgainRateLimit(){
+        for(RequestInterface r : rateLimitRequestQueue) {
+            Log.e("hey", "call again2: " + r);
+            r.setupCall();
+            r.makeCallAgain();
+            rateLimitRequestQueue.remove(r);
         }
     }
 

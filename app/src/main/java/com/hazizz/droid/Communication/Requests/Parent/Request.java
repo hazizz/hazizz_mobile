@@ -66,7 +66,9 @@ public class Request implements RequestInterface {
 
     public void cancelRequest() {
         okHttpClient.dispatcher().cancelAll();
-        this.call.cancel();
+        if(this.call != null) {
+            this.call.cancel();
+        }
     }
 
     public Request(Activity act, CustomResponseHandler cOnResponse) {

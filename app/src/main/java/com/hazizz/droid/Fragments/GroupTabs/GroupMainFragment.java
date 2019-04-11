@@ -13,13 +13,14 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.hazizz.droid.Cache.CurrentGroup;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
 import com.hazizz.droid.Communication.Requests.GetTasksFromGroup;
 import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.D8;
-import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
+import com.hazizz.droid.Fragments.ParentFragment.TabFragment;
 import com.hazizz.droid.Fragments.ViewTaskFragment;
 import com.hazizz.droid.Listviews.HeaderItem;
 import com.hazizz.droid.Listviews.TaskList.Group.CustomAdapter;
@@ -33,7 +34,7 @@ import java.util.List;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
-public class GroupMainFragment extends ParentFragment {
+public class GroupMainFragment extends TabFragment {
 
     private View v;
     private static int groupId;
@@ -45,12 +46,17 @@ public class GroupMainFragment extends ParentFragment {
     private TextView textView_noContent;
     private SwipeRefreshLayout sRefreshLayout;
 
+    private CurrentGroup currentGroup;
+
+
     FragmentManager fg;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_main, container, false);
+
+
 
         fragmentSetup();
 
@@ -63,13 +69,19 @@ public class GroupMainFragment extends ParentFragment {
         sRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getTask();
+                getTasks();
             }});
         sRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimaryDarkBlue), getResources().getColor(R.color.colorPrimaryLightBlue), getResources().getColor(R.color.colorPrimaryDarkBlue));
         fg = getFragmentManager();
 
+    //    getTasks();
+
+        currentGroup = CurrentGroup.getInstance();
         createViewList();
-        getTask();
+        if(!isViewShown) {
+            getTasks();
+            isViewShown = true;
+        }
 
         return v;
     }
@@ -95,7 +107,7 @@ public class GroupMainFragment extends ParentFragment {
         });
     }
 
-    private void getTask(){
+    private void getTasks(){
         CustomResponseHandler responseHandler = new CustomResponseHandler() {
             @Override
             public void onPOJOResponse(Object response) {
@@ -146,6 +158,27 @@ public class GroupMainFragment extends ParentFragment {
         Transactor.fragmentCreateTask(fm.beginTransaction(), groupId, groupName, Strings.Dest.TOGROUP);
 
     }
+
+
+
+
+
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (getView() != null && !isViewShown) {
+            isViewShown = true;
+            // fetchdata() contains logic to show data when page is selected mostly asynctask to fill the data
+            getTasks();
+        } else {
+            isViewShown = false;
+        }
+    }
+
+
+
+
 }
 
 

@@ -498,7 +498,7 @@ public class ViewAnnouncementFragment extends CommentableFragment implements Ada
 
                 ArrayList<POJOComment> comments = (ArrayList<POJOComment>) response;
 
-                CurrentMembersManager members = currentGroup.getMembers();
+                CurrentMembersManager members = currentGroup.getMembersManager();
                 if(comments.isEmpty()) {
                     textView_noContent.setVisibility(v.VISIBLE);
                 }else {
