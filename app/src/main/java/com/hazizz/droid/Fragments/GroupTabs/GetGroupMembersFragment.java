@@ -13,7 +13,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.hazizz.droid.Cache.CurrentGroup;
 import com.hazizz.droid.Cache.MeInfo.MeInfo;
+import com.hazizz.droid.Cache.Member;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOMembersProfilePic;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
@@ -21,7 +23,7 @@ import com.hazizz.droid.Communication.POJO.Response.POJOuser;
 import com.hazizz.droid.Communication.POJO.Response.PojoPermisionUsers;
 import com.hazizz.droid.Communication.Requests.GetGroupMemberPermisions;
 import com.hazizz.droid.Communication.Strings;
-import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
+import com.hazizz.droid.Fragments.ParentFragment.TabFragment;
 import com.hazizz.droid.Listviews.UserList.CustomAdapter;
 import com.hazizz.droid.Listviews.UserList.UserItem;
 import com.hazizz.droid.Manager;
@@ -33,7 +35,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class GetGroupMembersFragment extends ParentFragment {
+public class GetGroupMembersFragment extends TabFragment {
 
     private List<UserItem> listUser;
     private View v;
@@ -44,11 +46,16 @@ public class GetGroupMembersFragment extends ParentFragment {
     private TextView textView_noContent;
     private SwipeRefreshLayout sRefreshLayout;
 
+    private CurrentGroup currentGroup;
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_getgroupmembers, container, false);
+
+
+
 
         fragmentSetup();
 
@@ -60,16 +67,33 @@ public class GetGroupMembersFragment extends ParentFragment {
         sRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getUser();
+                getUsers();
             }});
         sRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimaryDarkBlue), getResources().getColor(R.color.colorPrimaryLightBlue), getResources().getColor(R.color.colorPrimaryDarkBlue));
+
+      //  getUser();
+
+
+        currentGroup = CurrentGroup.getInstance();
         createViewList();
-        getUser();
+        if(!isViewShown) {
+            getUsers();
+            isViewShown = true;
+        }
+
 
         return v;
     }
 
-    public void getUser() {
+    public void getUsers() {
+        List<Member> members =  currentGroup.getMembers();
+        for(Member member : members) {
+            listUser.add(new UserItem(member.getUserId(), member.getDisplayName(), member.getUsername(), member.getProfilePic(), member.getRank().getValue()));
+        }
+        adapter.notifyDataSetChanged();
+        sRefreshLayout.setRefreshing(false);
+
+
         CustomResponseHandler responseHandler = new CustomResponseHandler() {
             @Override
             public void onPOJOResponse(Object response) {
@@ -140,7 +164,7 @@ public class GetGroupMembersFragment extends ParentFragment {
                 sRefreshLayout.setRefreshing(false);
             }
         };
-        MiddleMan.newRequest(new GetGroupMemberPermisions(getActivity(), responseHandler, groupId));
+     //   MiddleMan.newRequest(new GetGroupMemberPermisions(getActivity(), responseHandler, groupId));
     }
 
     void createViewList(){
@@ -165,4 +189,24 @@ public class GetGroupMembersFragment extends ParentFragment {
         Transactor.fragmentDialogInviteLink(fm.beginTransaction(), GroupTabFragment.groupId, GroupTabFragment.groupName);
     }
 
+    /*
+    @Override
+    public void onTabSelected() {
+        super.onTabSelected();
+        getUser();
+    }
+    */
+
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (getView() != null && !isViewShown) {
+            isViewShown = true;
+            // fetchdata() contains logic to show data when page is selected mostly asynctask to fill the data
+            getUsers();
+        } else {
+            isViewShown = false;
+        }
+    }
 }

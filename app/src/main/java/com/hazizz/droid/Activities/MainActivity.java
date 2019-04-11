@@ -40,11 +40,14 @@ import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.POJO.Response.POJOme;
 import com.hazizz.droid.Communication.POJO.Response.PojoPicSmall;
+import com.hazizz.droid.Communication.Requests.GetGroupsFromMe;
 import com.hazizz.droid.Communication.Requests.GetMyProfilePic;
 import com.hazizz.droid.Communication.Requests.JoinGroup;
 import com.hazizz.droid.Communication.Requests.Me;
 import com.hazizz.droid.Communication.Requests.MessageOfTheDay;
 import com.hazizz.droid.Communication.Requests.Parent.Request;
+import com.hazizz.droid.Communication.Requests.ReturnInvitationLink;
+import com.hazizz.droid.Communication.Requests.inviteUserToGroup;
 import com.hazizz.droid.Converter.Converter;
 import com.hazizz.droid.Fragments.GroupTabs.GetGroupMembersFragment;
 import com.hazizz.droid.Fragments.GroupTabs.GroupAnnouncementFragment;
@@ -318,6 +321,16 @@ public class MainActivity extends AppCompatActivity
              });
 
         MiddleMan.newRequest(new MessageOfTheDay(this, rh_motd));
+
+        /*
+        CustomResponseHandler r = new CustomResponseHandler() {
+            @Override
+            public void onPOJOResponse(Object response) {
+            }
+        };
+        MiddleMan.newRequest(new ReturnInvitationLink(this, r, 2));
+        MiddleMan.newRequest(new GetGroupsFromMe(this, r));
+        */
 
         MiddleMan.newRequest(new GetMyProfilePic(this, rh_profilePic));
 

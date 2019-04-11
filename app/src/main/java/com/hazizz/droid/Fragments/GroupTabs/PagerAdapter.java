@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
 
+import com.hazizz.droid.Fragments.ParentFragment.TabFragment;
 import com.hazizz.droid.Transactor;
 
 public class PagerAdapter extends FragmentStatePagerAdapter {
@@ -20,7 +21,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     private int groupId;
     private String groupName;
 
-    private Fragment currentFrag;
+    private TabFragment currentFrag;
 
     public PagerAdapter(FragmentManager fm, int NumOfTabs) {
         super(fm);
@@ -30,7 +31,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
 
         Bundle bundle;
-        Fragment frag;
+        TabFragment frag;
 
         switch (position) {
             case TASKS_TAB:

@@ -89,13 +89,27 @@ public interface RequestInterface {
                          }else if(pojoError.getErrorCode() == 19){
                               if(!Manager.ThreadManager.isDelayed()) {
                                    Manager.ThreadManager.startDelay();
+
                                    MiddleMan.cancelAndSaveAllRequests();
+                                  // MiddleMan.gotRequestResponse(request);
+                                   MiddleMan.addToCallAgain(request);
                               }else {
                                    MiddleMan.addToCallAgain(request);
                               }
                               Answers.getInstance().logCustom(new CustomEvent("Request")
                                       .putCustomAttribute("request", "to many requests")
                               );
+
+                         /*
+                         else if(pojoError.getErrorCode() == 19){
+                              if(!Manager.ThreadManager.isDelayed()) {
+                                   Manager.ThreadManager.startDelay();
+                                   MiddleMan.addToRateLimitQueue(request);
+                                   //    MiddleMan.cancelAndSaveAllRequests();
+                              }else {
+                                   MiddleMan.addToRateLimitQueue(request);
+                          }
+                              */
 
                          }else {
                               if(cOnResponse != null){
@@ -166,10 +180,12 @@ public interface RequestInterface {
                          }else if(pojoError.getErrorCode() == 19){
                               if(!Manager.ThreadManager.isDelayed()) {
                                    Manager.ThreadManager.startDelay();
-                                   MiddleMan.cancelAndSaveAllRequests();
+                                   MiddleMan.addToRateLimitQueue(request);
+                               //    MiddleMan.cancelAndSaveAllRequests();
                               }else {
-                                   MiddleMan.addToCallAgain(request);
+                                   MiddleMan.addToRateLimitQueue(request);
                               }
+
                               Answers.getInstance().logCustom(new CustomEvent("Request")
                                       .putCustomAttribute("request", "to many requests")
                               );

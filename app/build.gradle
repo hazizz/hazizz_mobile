@@ -20,8 +20,8 @@ android {
         applicationId "com.hazizz.droid"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 34
-        versionName "0.8.9"
+        versionCode 35
+        versionName "0.8.9.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
 

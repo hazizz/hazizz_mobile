@@ -1,5 +1,6 @@
 package com.hazizz.droid.Fragments.GroupTabs;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,7 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.hazizz.droid.Activities.MainActivity;
+import com.hazizz.droid.Cache.CurrentGroup;
 import com.hazizz.droid.Communication.POJO.Response.CommentSectionPOJOs.POJOGroup;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOMembersProfilePic;
@@ -20,15 +21,14 @@ import com.hazizz.droid.Communication.Requests.GetGroupMembersProfilePic;
 import com.hazizz.droid.Communication.Requests.LeaveGroup;
 import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
+import com.hazizz.droid.Fragments.ParentFragment.TabFragment;
+import com.hazizz.droid.Listener.GenericListener;
 import com.hazizz.droid.Listener.OnBackPressedListener;
 import com.hazizz.droid.Manager;
 import com.hazizz.droid.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.CacheRequest;
 import java.util.EnumMap;
 import java.util.HashMap;
 
@@ -41,6 +41,11 @@ public class GroupTabFragment extends ParentFragment {
     private int startingTab;
 
     private ViewPager viewPager;
+
+
+    public static Activity activity;
+
+    public static CurrentGroup currentGroup;
 
     CustomResponseHandler rh = new CustomResponseHandler() {
         @Override
@@ -55,11 +60,65 @@ public class GroupTabFragment extends ParentFragment {
         v = inflater.inflate(R.layout.fragment_tabgroup, container, false);
         Log.e("hey", "GroupTab fragment created");
 
-        groupId = getArguments().getInt(Transactor.KEY_GROUPID);
-        getGroupMemberProfilePics();
+        activity = getActivity();
 
+        groupId = getArguments().getInt(Transactor.KEY_GROUPID);
         groupName = getArguments().getString(Transactor.KEY_GROUPNAME);
-        getGroupDetails(groupId);
+
+        currentGroup = CurrentGroup.getInstance();
+        currentGroup.setGroup(getActivity(), groupId, groupName, new GenericListener() {
+            @Override
+            public void execute(){
+
+                startingTab = getArguments().getInt(Transactor.KEY_STARTINGTAB);
+
+
+                TabLayout tabLayout = (TabLayout) v.findViewById(R.id.tab_layout);
+                tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+
+                tabLayout.addTab(tabLayout.newTab().setText(R.string.tasks));
+                tabLayout.addTab(tabLayout.newTab().setText(R.string.announcements));
+                tabLayout.addTab(tabLayout.newTab().setText(R.string.subjects));
+                tabLayout.addTab(tabLayout.newTab().setText(R.string.groupMembers));
+                tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+                //  tabLayout.setcurff
+                // tabLayout.setCu
+
+                viewPager = (ViewPager) v.findViewById(R.id.pager);
+                adapter = new PagerAdapter
+                        (getActivity().getSupportFragmentManager(), tabLayout.getTabCount());
+                adapter.giveArgs(groupId, groupName);
+
+                viewPager.setOffscreenPageLimit(5);
+
+                //    viewPager.setCurrent
+                // bottomBar.setDefaultTab(R.id.tab_default);
+                viewPager.setAdapter(adapter);
+                viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+                tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                    @Override
+                    public void onTabSelected(TabLayout.Tab tab) {
+                        viewPager.setCurrentItem(tab.getPosition());
+
+                        TabFragment tabFragment = (TabFragment) adapter.getItem(viewPager.getCurrentItem());
+                        tabFragment.onTabSelected();
+
+                    }
+                    @Override
+                    public void onTabUnselected(TabLayout.Tab tab) {
+
+                    }
+                    @Override
+                    public void onTabReselected(TabLayout.Tab tab) {
+
+                    }
+                });
+                viewPager.setCurrentItem(startingTab, true);
+            }
+        });
+
+
+
         fragmentSetup();
         setOnBackPressedListener(new OnBackPressedListener() {
             @Override
@@ -68,49 +127,11 @@ public class GroupTabFragment extends ParentFragment {
             }
         });
 
-        Manager.GroupRankManager.clear();
+        setTitle(getResources().getString(R.string.group_)+ " " + groupName);
 
-        startingTab = getArguments().getInt(Transactor.KEY_STARTINGTAB);
+      //  Manager.GroupRankManager.clear();
 
 
-        TabLayout tabLayout = (TabLayout) v.findViewById(R.id.tab_layout);
-        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.tasks));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.announcements));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.subjects));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.groupMembers));
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-      //  tabLayout.setcurff
-       // tabLayout.setCu
-
-        viewPager = (ViewPager) v.findViewById(R.id.pager);
-        adapter = new PagerAdapter
-                (getActivity().getSupportFragmentManager(), tabLayout.getTabCount());
-        adapter.giveArgs(groupId, groupName);
-
-        viewPager.setOffscreenPageLimit(5);
-
-    //    viewPager.setCurrent
-       // bottomBar.setDefaultTab(R.id.tab_default);
-        viewPager.setAdapter(adapter);
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-                ((MainActivity)getActivity()).onTabSelected(adapter.getItem(viewPager.getCurrentItem()));
-            }
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-        viewPager.setCurrentItem(startingTab, true);
 
         return v;
     }
@@ -160,6 +181,9 @@ public class GroupTabFragment extends ParentFragment {
             public void onPOJOResponse(Object response) {
                 POJOGroup groupInfo = (POJOGroup)response;
                 groupName = groupInfo.getName();
+
+
+
                 setTitle(getResources().getString(R.string.group_)+ " " + groupName);
             }
         };
