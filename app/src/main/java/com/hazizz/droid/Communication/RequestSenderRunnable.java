@@ -16,6 +16,7 @@ public class RequestSenderRunnable implements Runnable{
     @Override public void run() {
         boolean loopBool = true;
         while(loopBool) {
+          //  Log.e("hey", "ifFreezed: " + Manager.ThreadManager.isFreezed());
             if(Manager.ThreadManager.isDelayed()) {
                 synchronized (this) {
                     try {
@@ -35,7 +36,10 @@ public class RequestSenderRunnable implements Runnable{
                             MiddleMan.sendRequestsFromQ();
                         }
                     }
+                }else{
+
                 }
+
             }
         }
     }

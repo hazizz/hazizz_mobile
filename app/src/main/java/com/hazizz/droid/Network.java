@@ -18,4 +18,21 @@ public class Network {
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
+    public static boolean isConnectedToWifi(Context c){
+        ConnectivityManager cm = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+        return wifi.isConnected();
+    }
+
+    public static boolean isConnectedToMobileNet(Context c){
+        ConnectivityManager cm = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo mobileNet = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+        return mobileNet.isConnected();
+    }
+
+
+
+
 }

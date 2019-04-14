@@ -26,6 +26,10 @@ public class GetTasksFromMeSync extends Request {
         this.context = context;
         Log.e("hey", "created GetTasksFromMeSync object");
     }
+    public GetTasksFromMeSync(Context context) {
+        this.context = context;
+        Log.e("hey", "created GetTasksFromMeSync object");
+    }
     public void setupCall() {
 
         headerMap.put(HEADER_AUTH, getHeaderAuthToken(context));
@@ -36,8 +40,7 @@ public class GetTasksFromMeSync extends Request {
         try {
             Response<ResponseBody> response = call.execute();
             try {
-                Type listType = new TypeToken<ArrayList<POJOgetTask>>() {
-                }.getType();
+                Type listType = new TypeToken<ArrayList<POJOgetTask>>() {}.getType();
                 List<POJOgetTask> castedList = gson.fromJson(response.body().charStream(), listType);
                 cOnResponse.onPOJOResponse(castedList);
             }catch (Exception e){
@@ -53,8 +56,7 @@ public class GetTasksFromMeSync extends Request {
     public void call(Context act, Request r, Call<ResponseBody> call, CustomResponseHandler cOnResponse, Gson gson){
         try {
             Response<ResponseBody> response = call.execute();
-            Type listType = new TypeToken<ArrayList<POJOgetTask>>() {
-            }.getType();
+            Type listType = new TypeToken<ArrayList<POJOgetTask>>() {}.getType();
             List<POJOgetTask> castedList = gson.fromJson(response.body().charStream(), listType);
             cOnResponse.onPOJOResponse(castedList);
         } catch (IOException e) {
@@ -62,6 +64,26 @@ public class GetTasksFromMeSync extends Request {
             Log.e("hey", "exception");
         }
     }
+
+    public List<POJOgetTask> syncCall(){
+        try {
+            Response<ResponseBody> response = call.execute();
+            Type listType = new TypeToken<ArrayList<POJOgetTask>>(){}.getType();
+            List<POJOgetTask> castedList = gson.fromJson(response.body().charStream(), listType);
+            return castedList;
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e("hey", "exception");
+            return null;
+        }
+    }
+
+
+
+
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) { }
+
+
+
 }

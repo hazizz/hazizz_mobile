@@ -1,6 +1,7 @@
 package com.hazizz.droid;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -609,6 +610,11 @@ public class Transactor extends FragmentActivity {
     public static void AuthActivity(Activity thisActivity){
         Intent i = new Intent(thisActivity, AuthActivity.class);
         thisActivity.startActivity(i);
+    }
+
+    public static void authActivity(Context context){
+        Intent i = new Intent(context, AuthActivity.class);
+        context.startActivity(i);
     }
 
     public static void activityMain(Activity thisActivity){
