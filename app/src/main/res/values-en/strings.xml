@@ -52,7 +52,7 @@
 
 
     <string-array name="options_array">
-      <!--   <item>Notification settings</item> -->
+         <item>Notification settings</item>
          <item>Change Password</item>
       <!--   <item>Théra Settings</item> -->
         <!--    <item>Server settings</item> -->
@@ -292,8 +292,13 @@
     <string name="error_passwordNotLongEnough">Password must be at least 8 characters long</string>
     <string name="error_givenDataWrong">Incorrect date</string>
 
-
     <string name="success_changed_password">The password was successfully changed</string>
+
+
+    <string name="notif_unfinished_tasks1">You have</string>
+    <string name="notif_unfinished_tasks2">task for tomorrow</string>
+
+    <string name="notif_settings_notify_everyday">Notify every day</string>
 
 
 

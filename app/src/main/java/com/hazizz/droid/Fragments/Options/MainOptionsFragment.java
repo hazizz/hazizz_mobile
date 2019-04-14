@@ -211,20 +211,18 @@ public class MainOptionsFragment extends ParentFragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i){
-                   /* case 0:
-                        Transactor.fragmentNotificationSettings(getFragmentManager().beginTransaction());
-
-                        break;
-                        */
                     case 0:
+                        Transactor.fragmentNotificationSettings(getFragmentManager().beginTransaction());
+                        break;
+                    case 1:
                         //Jelszó Beállítás
                         Transactor.fragmentPassword(getFragmentManager().beginTransaction());
                         break;
-                    case 1:
+                    case 2:
                         //szerver
                         Transactor.fragmentServerSettings(getFragmentManager().beginTransaction());
                         break;
-                    case 2:
+                    case 3:
                     default:
                         //Théra Beállítások
                         break;

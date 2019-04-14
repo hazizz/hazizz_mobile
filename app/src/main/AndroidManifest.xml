@@ -5,6 +5,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 
     <application
         android:allowBackup="true"
@@ -15,21 +16,6 @@
         android:theme="@style/AppTheme"
         android:windowSoftInputMode="adjustPan">
 
-        <!--
-        <activity android:name=".Activities.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        -->
-        <!--
-            <activity
-            android:name=".Activities.MainActivity"
-            android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar"
-            tools:ignore="DuplicateActivity"></activity>
-        -->
         <activity
             android:name=".Activities.MainActivity"
             android:noHistory="false"
@@ -42,7 +28,6 @@
 
             >
 
-          <!--  https://hazizz.page.link/?link=http://hazizz.github.io/hazizz-webclient/index.html?group=2&apn=com.hazizz.droid&afl=hazizz.github.io -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -52,11 +37,7 @@
                 <data android:scheme="https" android:host="hazizz.github.io"/>
                 <data android:scheme="https" android:host="hazizz.duckdns.org:9000" />
             </intent-filter>
-
-
         </activity>
-
-
 
         <activity
             android:name=".Activities.AuthActivity"
@@ -78,24 +59,6 @@
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/ImageCropTheme"/>
 
-
-
-        <!--
-               <receiver android:name=".HazizzWidget">
-                <intent-filter>
-                    <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                    <action android:name="android.intent.action.SCREEN_ON"/>
-                    <action android:name="android.intent.action.SCREEN_OFF"/>
-                </intent-filter>
-                <meta-data
-                    android:name="android.appwidget.provider"
-                    android:resource="@xml/hazizz_widget_info" />
-            </receiver>
-            <service android:name=".WidgetService"
-                android:permission="android.permission.BIND_REMOTEVIEWS"/>
-            <service android:name=".UpdateService" />
-        -->
-
         <service
             android:name="com.hazizz.droid.widget.tasks.CollectionWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
@@ -114,6 +77,13 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/hazizz_widget_info" />
+        </receiver>
+
+        <receiver android:name="com.hazizz.droid.receiver.NetworkChangeReceiver" >
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+            </intent-filter>
         </receiver>
 
 
@@ -142,7 +112,8 @@
               android:exported="false" >
           </service> -->
 
-        <receiver android:name="com.hazizz.droid.Notification.NotificationReciever" />
+        <receiver android:name="com.hazizz.droid.Notification.NotificationReceiver" />
+
 
         <meta-data
             android:name="io.fabric.ApiKey"

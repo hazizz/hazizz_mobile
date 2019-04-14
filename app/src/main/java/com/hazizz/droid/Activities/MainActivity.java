@@ -1,14 +1,9 @@
 package com.hazizz.droid.Activities;
 
 import android.app.Activity;
-import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.Notification;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,19 +30,18 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
+import com.hazizz.droid.AppInfo;
 import com.hazizz.droid.Cache.MeInfo.MeInfo;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.POJO.Response.POJOme;
 import com.hazizz.droid.Communication.POJO.Response.PojoPicSmall;
-import com.hazizz.droid.Communication.Requests.GetGroupsFromMe;
 import com.hazizz.droid.Communication.Requests.GetMyProfilePic;
 import com.hazizz.droid.Communication.Requests.JoinGroup;
 import com.hazizz.droid.Communication.Requests.Me;
 import com.hazizz.droid.Communication.Requests.MessageOfTheDay;
 import com.hazizz.droid.Communication.Requests.Parent.Request;
-import com.hazizz.droid.Communication.Requests.ReturnInvitationLink;
-import com.hazizz.droid.Communication.Requests.inviteUserToGroup;
+import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.Converter.Converter;
 import com.hazizz.droid.Fragments.GroupTabs.GetGroupMembersFragment;
 import com.hazizz.droid.Fragments.GroupTabs.GroupAnnouncementFragment;
@@ -58,21 +52,16 @@ import com.hazizz.droid.Fragments.MainTab.GroupsFragment;
 import com.hazizz.droid.Fragments.MainTab.MainAnnouncementFragment;
 import com.hazizz.droid.Fragments.MainTab.MainFragment;
 import com.hazizz.droid.Fragments.MyTasksFragment;
+import com.hazizz.droid.Fragments.ViewTaskFragment;
 import com.hazizz.droid.Listener.OnBackPressedListener;
 import com.hazizz.droid.Manager;
-import com.hazizz.droid.Notification.NotificationReciever;
 import com.hazizz.droid.Notification.TaskReporterNotification;
 import com.hazizz.droid.SharedPrefs;
 import com.hazizz.droid.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
 
-import java.util.Calendar;
-import java.util.TimeZone;
-
 import io.fabric.sdk.android.Fabric;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -116,6 +105,15 @@ public class MainActivity extends AppCompatActivity
     private OnBackPressedListener currentBackPressedListener;
 
 
+    public static final String value_INTENT_MODE_VIEWTASK = "viewTask";
+    public static final String key_INTENT_MODE = "mode";
+    public static final String key_INTENT_GROUPID = "groupId";
+    public static final String key_INTENT_TASKID = "taskId";
+
+
+    private boolean gotMyProfilePicRespond = false;
+
+
     private boolean toMainFrag = false;
     CustomResponseHandler rh_profilePic = new CustomResponseHandler() {
         @Override
@@ -133,6 +131,7 @@ public class MainActivity extends AppCompatActivity
     CustomResponseHandler responseHandler = new CustomResponseHandler() {
         @Override
         public void onPOJOResponse(Object response) {
+
             POJOme pojo = (POJOme) response;
             SharedPrefs.save(getApplicationContext(),"userInfo", "username",pojo.getUsername());
             strNavEmail = (pojo.getEmailAddress());
@@ -199,34 +198,23 @@ public class MainActivity extends AppCompatActivity
 
                                 CustomResponseHandler rh_joinGroup = new CustomResponseHandler() {
 
-                                    @Override
-                                    public void onErrorResponse(POJOerror error) {
+                                    @Override public void onErrorResponse(POJOerror error) {
                                         if(error.getErrorCode() == 55){ // user already in group
                                             Transactor.fragmentMainGroup(getSupportFragmentManager().beginTransaction(), groupId);
                                             Toast.makeText(thisActivity, getString(R.string.already_in_group),
                                                     Toast.LENGTH_LONG).show();
                                         }
                                     }
-                                    @Override
-                                    public void onSuccessfulResponse() {
+                                    @Override public void onSuccessfulResponse() {
                                         Transactor.fragmentMainGroup(getSupportFragmentManager().beginTransaction(), groupId);
                                         Toast.makeText(thisActivity, getString(R.string.added_to_group),
                                                 Toast.LENGTH_LONG).show();
                                     }
                                 };
-
                                 MiddleMan.newRequest(new JoinGroup(thisActivity, rh_joinGroup, groupId));
-                        }else{
-                            Log.e("hey", "deep link uri is null");
                         }
 
                         Log.e("hey", "dynamic link lol: " + deepLink);
-                        // Handle the deep link. For example, open the linked
-                        // content, or apply promotional credit to the user's
-                        // account.
-                        // ...
-
-                        // ...
                     }
                 })
                 .addOnFailureListener(this, new OnFailureListener() {
@@ -280,6 +268,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
         navView = (NavigationView) findViewById(R.id.nav_view);
+
         navView.setNavigationItemSelectedListener(this);
         navView.bringToFront();
 
@@ -299,6 +288,30 @@ public class MainActivity extends AppCompatActivity
 
 
         drawerLayout = findViewById(R.id.drawer_layout);
+        drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+                if(!gotMyProfilePicRespond){
+                    MiddleMan.newRequest(new Me(thisActivity, responseHandler));
+                    MiddleMan.newRequest(new GetMyProfilePic(thisActivity, rh_profilePic));
+                }
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
         toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
@@ -318,179 +331,42 @@ public class MainActivity extends AppCompatActivity
                  finish();
                  startActivity(i);
              }
-             });
+        });
 
         MiddleMan.newRequest(new MessageOfTheDay(this, rh_motd));
 
-        /*
-        CustomResponseHandler r = new CustomResponseHandler() {
-            @Override
-            public void onPOJOResponse(Object response) {
-            }
-        };
-        MiddleMan.newRequest(new ReturnInvitationLink(this, r, 2));
-        MiddleMan.newRequest(new GetGroupsFromMe(this, r));
-        */
-
-        MiddleMan.newRequest(new GetMyProfilePic(this, rh_profilePic));
-
-        MiddleMan.newRequest(new Me(this, responseHandler));
-
-
-
-        TaskReporterNotification.setNotification(getApplicationContext(), 8, 5);
-
-
-
-    }
-
-    private void scheduleNotification(Context context, Notification notification, int delay) {
-
-     //   Intent notificationIntent = new Intent(MainActivity.this, NotificationReciever.class);
-      //  notificationIntent.putExtra(NotificationReciever.NOTIFICATION_ID, 1);
-    //    notificationIntent.putExtra(NotificationReciever.NOTIFICATION, notification);
-      //  PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-    //    long futureInMillis = SystemClock.elapsedRealtime() + delay;
-     //   AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-
-      //  alarmManager.set(AlarmManager.ELAPSED_REALTIME, futureInMillis, pendingIntent);
-
-        Calendar updateTime = Calendar.getInstance();
-        updateTime.setTimeZone(TimeZone.getTimeZone("GMT"));
-        updateTime.set(Calendar.HOUR_OF_DAY, 20);
-        updateTime.set(Calendar.MINUTE, 2);
-
-        Intent notificationIntent = new Intent(context, NotificationReciever.class);
-        notificationIntent.putExtra(NotificationReciever.NOTIFICATION_ID, 1);
-        notificationIntent.putExtra(NotificationReciever.NOTIFICATION, notification);
-
-
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-        AlarmManager alarms = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-                updateTime.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, pendingIntent);
-
-       // alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, futureInMillis,
-        //        AlarmManager.INTERVAL_DAY, pendingIntent);
-
-    }
-
-    private Notification getNotification(Context context, String content) {
-      //  Notification.Builder builder = new Notification.Builder(MainActivity.this);
-       // builder.setContentTitle("Scheduled Notification");
-       // builder.setContentText(content);
-       // Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-       // builder.setSound(soundUri);
-       // builder.setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND);
-
-        /*
-        Notification notification = new Notification.BigTextStyle(builder)
-                .setContentTitle("Scheduled Notification")
-                .setContentText(content)
-                .bigText(myText).build()
-                */
-        if(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) == null){
-            Log.e("hey", "88 sound is null");
-        }else{
-            Log.e("hey", "88 sound is NOT null");
+        if(AppInfo.isFirstTimeLaunched(getBaseContext())){
+            TaskReporterNotification.enable(getBaseContext());
+            TaskReporterNotification.setScheduleForNotification(getBaseContext(), 17, 0);
         }
 
-        Notification noti = new Notification.Builder(context)
-                .setStyle(new Notification.BigTextStyle().bigText("big text big text big text big text big text big text big text big text " +
-                        "big text big text big text big text big text big text big text big text big text " +
-                        "big text big text big text big text big text big text big text big text big text " +
-                        "big text big text big text big text big text big text "))
-                .setContentTitle("Feladataid:")
-                .setContentText("3 befejezetlen feladat holnapra")
-                .setSmallIcon(R.mipmap.ic_launcher2)
 
-               // .setDefaults(Notification.DEFAULT_ALL)
 
-                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-
-              //  .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
-
-                .build();
-        if(noti == null){
-            Log.e("hey", "88 Notif is null");
-        }else{Log.e("hey", "88 Notif is NOT null");}
-        return noti;
+        Intent intent = getIntent();
+        String mode = intent.getStringExtra("mode");
+        if(mode != null && mode.equals(value_INTENT_MODE_VIEWTASK)){
+            long groupId = intent.getLongExtra(key_INTENT_GROUPID, 0);
+            long taskId = intent.getLongExtra(key_INTENT_TASKID, 0);
+            if(groupId != 0){
+                Transactor.fragmentViewTask(getSupportFragmentManager().beginTransaction(), (int)taskId,
+                        true, Strings.Dest.TOMAIN, ViewTaskFragment.publicMode);
+            }else{
+                Transactor.fragmentViewTask(getSupportFragmentManager().beginTransaction(), (int)taskId,
+                        true, Strings.Dest.TOMAIN, ViewTaskFragment.myMode);
+            }
+        }
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         invalidateOptionsMenu();
         Log.e("hey", "onResume is trigered");
-
-        /*
-        Uri uri = this.getIntent().getData();
-        if(uri!=null){
-            Uri inside_uri = Uri.parse(uri.getQuery());
-            if(inside_uri!=null) {
-                int groupId = Integer.parseInt(inside_uri.getQueryParameter("group"));
-                Log.e("hey", "deep link: " + inside_uri);
-                Log.e("hey", "deep link groupId: " + groupId);
-
-                CustomResponseHandler rh_joinGroup = new CustomResponseHandler() {
-
-                    @Override
-                    public void onErrorResponse(POJOerror error) {
-                        if(error.getErrorCode() == 55){ // user already in group
-                            Transactor.fragmentMainGroup(getSupportFragmentManager().beginTransaction(), groupId);
-                            Toast.makeText(thisActivity, getString(R.string.already_in_group),
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    }
-                    @Override
-                    public void onSuccessfulResponse() {
-                        Transactor.fragmentMainGroup(getSupportFragmentManager().beginTransaction(), groupId);
-                        Toast.makeText(thisActivity, getString(R.string.added_to_group),
-                                Toast.LENGTH_LONG).show();
-                    }
-                };
-
-                MiddleMan.newRequest(new JoinGroup(this, rh_joinGroup, groupId));
-
-            }
-        }else{
-            Log.e("hey", "deep link uri is null");
-        }
-        */
-
-        //  android:launchMode="singleTop"
-
-        /*
-        <intent-filter android:label="@string/app_name">
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <!-- Accepts URIs that begin with "http://www.example.com/gizmos” -->
-                <data android:scheme="https"
-        android:host="hazizz.duckdns.org:9000"
-        android:path="/shortener"
-                />
-                <!-- note that the leading "/" is required for pathPrefix-->
-            </intent-filter>
-
-        */
-
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         Log.e("hey", "onCreateOptionsMenu asdasd");
-
-      //  menu_options = menu;
-      //  getMenuInflater().inflate(R.menu.main, menu_options);
-
-      //  menuItem_leaveGroup = menu_options.findItem(R.id.action_leaveGroup);
-      //  menuItem_profilePic = menu_options.findItem(R.id.action_profilePic);
-      //  menuItem_feedback = menu_options.findItem(R.id.action_feedback);
-      //  menuItem_settings = menu_options.findItem(R.id.action_settings);
 
         if(Manager.WidgetManager.getDest() == Manager.WidgetManager.TOATCHOOSER){
             Transactor.fragmentATChooser(getSupportFragmentManager().beginTransaction());
@@ -505,9 +381,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         Fragment cFrag = Transactor.getCurrentFragment(getSupportFragmentManager(), false);
         if(toggle.onOptionsItemSelected(item)){
             return true;
@@ -569,15 +442,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     void toCreateTaskFrag(){
-      //  Transactor.fragmentCreateTask(getSupportFragmentManager().beginTransaction(), Manager.DestManager.TOMAIN);
-       // Manager.DestManager.setDest(Manager.DestManager.TOCREATETASK);
-       // Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction());
         Transactor.fragmentCreatorAT(getSupportFragmentManager().beginTransaction(), GroupsFragment.Dest.TOCREATETASK);
 
     }
     void toAnnouncementEditorFrag(){
-      //  Manager.DestManager.setDest(Manager.DestManager.TOCREATEANNOUNCEMENT);
-      //  Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction());
         Transactor.fragmentCreatorAT(getSupportFragmentManager().beginTransaction(), GroupsFragment.Dest.TOCREATEANNOUNCEMET);
 
     }
@@ -618,24 +486,6 @@ public class MainActivity extends AppCompatActivity
         }else{
             Transactor.fragmentMain(getSupportFragmentManager().beginTransaction());
         }
-      /*  currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager(), true);
-
-        if (currentFrag instanceof GroupTabFragment) {//GroupMainFragment
-            Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction());
-        }
-        else if (currentFrag instanceof ViewTaskFragment) {
-            if(!((ViewTaskFragment)currentFrag).getGoBackToMain()) {
-                Transactor.fragmentMainGroup(getSupportFragmentManager().beginTransaction(), ((ViewTaskFragment) currentFrag).getGroupId(), ((ViewTaskFragment) currentFrag).getGroupName());
-            }else{
-                Transactor.fragmentMain(getSupportFragmentManager().beginTransaction());
-            }
-        } else if (currentFrag instanceof CreateSubjectFragment) {
-            ((CreateSubjectFragment) currentFrag).goBack();
-        } else {
-            Log.e("hey", "back button pressed and Else block is being called");
-            Transactor.fragmentMain(getSupportFragmentManager().beginTransaction());
-        }
-        */
     }
 
     public void hideFabs(){
@@ -650,8 +500,6 @@ public class MainActivity extends AppCompatActivity
             || currentFrag instanceof MainAnnouncementFragment || currentFrag instanceof MainFragment
             || currentFrag instanceof MyTasksFragment ) {
             fab_action.setVisibility(View.VISIBLE);
-           // if(menuItem_feedback != null && menuItem_leaveGroup != null
-          //         && menuItem_profilePic != null) {
                 if (currentFrag instanceof MainFragment) {
                     navView.getMenu().getItem(0).setChecked(true);
                 } else {
@@ -671,8 +519,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void onTabSelected(Fragment currentFrag){
-     //   if(menuItem_feedback != null && menuItem_leaveGroup != null
-     //           && menuItem_profilePic != null) {
             if (currentFrag instanceof GroupAnnouncementFragment || currentFrag instanceof GroupMainFragment
                     || currentFrag instanceof MainAnnouncementFragment || currentFrag instanceof SubjectsFragment
                     || currentFrag instanceof MainFragment || currentFrag instanceof GroupsFragment
@@ -693,7 +539,6 @@ public class MainActivity extends AppCompatActivity
             } else {
                 fab_action.setVisibility(View.INVISIBLE);
             }
-      //  }
     }
     public void pickImage() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -713,5 +558,4 @@ public class MainActivity extends AppCompatActivity
         menuItem_thera.setVisible(true);
         menuItem_logs.setVisible(true);
     }
-
 }

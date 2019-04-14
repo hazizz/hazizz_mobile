@@ -44,7 +44,7 @@ public class Request implements RequestInterface {
 
     protected HashMap<String, String> headerMap;
     protected HashMap<String, Object> body;
-    private Retrofit retrofit;
+    protected Retrofit retrofit;
 
     protected Call<ResponseBody> call;
     protected RequestTypes aRequest;
@@ -54,7 +54,9 @@ public class Request implements RequestInterface {
 
     protected Request thisRequest = this;
 
-    private OkHttpClient okHttpClient;
+    protected OkHttpClient okHttpClient;
+
+    protected Context context;
 
     public Activity getActivity(){
         return act;
@@ -71,17 +73,36 @@ public class Request implements RequestInterface {
         }
     }
 
+    public Request() {
+        Gson gson = new GsonBuilder().serializeNulls().excludeFieldsWithoutExposeAnnotation().create();
+        okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(5, TimeUnit.SECONDS)
+                .writeTimeout(5, TimeUnit.SECONDS)
+                .readTimeout(5, TimeUnit.SECONDS)
+                .build();
+
+        retrofit = new Retrofit.Builder()
+                .baseUrl(HAZIZZ_URL)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(okHttpClient)
+                //  .setEndpoint(endPoint)F
+                .build();
+
+        aRequest = retrofit.create(RequestTypes.class);
+
+        body = new HashMap<>();
+        headerMap = new HashMap<>();
+    }
+
     public Request(Activity act, CustomResponseHandler cOnResponse) {
         this.act = act;
+        this.context = act;
         this.cOnResponse = cOnResponse;
-
-
 
      //   HAZIZZ_URL = SharedPrefs.Server.getHazizzAddress(getActivity());
          //BASE_URL + "hazizz-server/";//SharedPrefs.Server.getHazizzAddress(getActivity());
 
         //"https://hazizz.duckdns.org:9000/hazizz-server/"
-
 
         Gson gson = new GsonBuilder().serializeNulls().excludeFieldsWithoutExposeAnnotation().create();
         okHttpClient = new OkHttpClient.Builder()
@@ -116,5 +137,7 @@ public class Request implements RequestInterface {
     public void setupCall() { }
 
     public void callIsSuccessful(Response<ResponseBody> response) { }
+
+    public void makeSyncCall(){ }
 }
 

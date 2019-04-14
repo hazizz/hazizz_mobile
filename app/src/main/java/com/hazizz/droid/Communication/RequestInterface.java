@@ -1,6 +1,7 @@
 package com.hazizz.droid.Communication;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
@@ -29,6 +30,72 @@ public interface RequestInterface {
 
      default void call(Activity act, RequestInterface request, Call<ResponseBody> call, CustomResponseHandler cOnResponse, Gson gson){
           call.enqueue(buildCallback(act, request, call, cOnResponse, gson));
+     }
+
+     default void independentCall(Context context, RequestInterface request, Call<ResponseBody> call, CustomResponseHandler cOnResponse, Gson gson){
+          call.enqueue(new Callback<ResponseBody>() {
+               @Override
+               public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if(response.body() == null){
+                         Log.e("hey", "response is null ");
+                    }
+                    if(response.isSuccessful()){ // response != null
+                         Log.e("hey", "response.isSuccessful()");
+                         callIsSuccessful(response);
+                    }
+
+                    else if(!response.isSuccessful()){ // response != null
+                         POJOerror pojoError = gson.fromJson(response.errorBody().charStream(),POJOerror.class);
+                         Log.e("hey", "errorCOde is: " + pojoError.getErrorCode());
+                         Log.e("hey", "errorMessage is: " + pojoError.getMessage());
+
+                         if(pojoError.getErrorCode() == 18 || pojoError.getErrorCode() == 17) {
+                              MiddleMan.addToCallAgain(request);
+                              if(!Manager.ThreadManager.isFreezed()) {
+                                   Manager.ThreadManager.freezeThread();
+
+                                   Request r = new RefreshToken(context);
+                                   r.setupCall();
+                                   r.makeCall();
+
+                                   Answers.getInstance().logCustom(new CustomEvent("Token")
+                                           .putCustomAttribute("token", "refresh the token")
+                                   );
+                              }
+                              // too many requests
+                         }else if(pojoError.getErrorCode() == 19){
+                              if(!Manager.ThreadManager.isDelayed()) {
+                                   Manager.ThreadManager.startDelay();
+
+                                   MiddleMan.cancelAndSaveAllRequests();
+                                   MiddleMan.addToCallAgain(request);
+                              }else {
+                                   MiddleMan.addToCallAgain(request);
+                              }
+                              Answers.getInstance().logCustom(new CustomEvent("Request")
+                                      .putCustomAttribute("request", "to many requests")
+                              );
+                         }else {
+                              if(cOnResponse != null){
+                                   cOnResponse.onErrorResponse(pojoError);
+                              }
+                         }
+                         String errorMessage =  pojoError.getMessage().substring(0, Math.min(pojoError.getMessage().length(), 100));;
+                         Answers.getInstance().logCustom(new CustomEvent("Request error")
+                                 .putCustomAttribute("error code: ", pojoError.getErrorCode())
+                                 .putCustomAttribute("error message: ", errorMessage)
+                                 .putCustomAttribute("time: ", pojoError.getTime())
+                         );
+                    }
+                    MiddleMan.gotRequestResponse(request);
+               }
+               @Override
+               public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    if(cOnResponse != null) {
+                         cOnResponse.onFailure(call, t);
+                    }
+               }
+          });
      }
 
      default void callAgain(Activity act, RequestInterface request, Call<ResponseBody> call, CustomResponseHandler cOnResponse, Gson gson){
@@ -67,9 +134,6 @@ public interface RequestInterface {
                                    act.startActivity(i);
                               }
                          }
-
-
-
 
                          else if(pojoError.getErrorCode() == 18 || pojoError.getErrorCode() == 17) {
                               MiddleMan.addToCallAgain(request);

@@ -2,26 +2,54 @@ package com.hazizz.droid.Notification;
 
 import android.app.AlarmManager;
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.media.RingtoneManager;
+import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.StyleSpan;
+import android.util.Log;
 
+import com.hazizz.droid.Activities.MainActivity;
+import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
+import com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
+import com.hazizz.droid.Communication.Requests.GetTasksFromMe;
+import com.hazizz.droid.D8;
+import com.hazizz.droid.Listener.GenericListener;
+import com.hazizz.droid.Network;
 import com.hazizz.droid.R;
 import com.hazizz.droid.SharedPrefs;
+import com.hazizz.droid.receiver.BroadcastReceiverHandler;
+import com.hazizz.droid.receiver.NetworkChangeReceiver;
 
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.TimeZone;
+import java.util.List;
 
 public class TaskReporterNotification {
     private static final String fileName = "ReportTaskSchedule";
+    private static final String enabled_key = "enabled";
 
-    public static void setEnabled(Context context, boolean state){
-        SharedPrefs.savePref(context, fileName, "enabled", state);
+
+    public static void enable(Context context){
+        SharedPrefs.savePref(context, fileName, enabled_key, true);
+    }
+
+    public static void disable(Context context){
+
+        SharedPrefs.savePref(context, fileName, enabled_key, false);
     }
 
     public static boolean isEnabled(Context context){
-        return SharedPrefs.getBoolean(context, fileName, "enabled");
+        return SharedPrefs.getBoolean(context, fileName, enabled_key);
     }
 
     public static void setSchedule(Context context, int hour, int minute){
@@ -40,61 +68,171 @@ public class TaskReporterNotification {
         return SharedPrefs.getInt(context, fileName, "minute");
     }
 
-    public static void setNotification(Context context, int hour, int minute){
-       // setEnabled(context, true);
-        if(isEnabled(context)) {
-            setSchedule(context, hour, minute);
-            scheduleNotification(context, getNotification(context));
-        }
+    public static void setScheduleForNotification(Context context, int hour, int minute) {
+        Log.e("hey", "alarm manager set");
+        setSchedule(context, hour, minute);
+        Intent _intent = new Intent(context, NotificationReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, _intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.SECOND, 0);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
+    private static void ifConnectionCreateNotification(Context context){
+        BroadcastReceiverHandler networkChangeReceiver = new BroadcastReceiverHandler(new NetworkChangeReceiver());
+        networkChangeReceiver.setOnReceive(new GenericListener() {
+            @Override
+            public void execute() {
+                if(Network.isConnectedToWifi(context) || Network.isConnectedToMobileNet(context)) {
+                    GetTasksFromMe getTasksRequest = new GetTasksFromMe(context, new CustomResponseHandler() {
+                        @Override
+                        public void onPOJOResponse(Object response) {
+                            Log.e("hey", "got response for notif2");
+                            List<POJOgetTask> tasks = (List<POJOgetTask>) response;
+                            List<POJOgetTask> tasksToReport = new ArrayList<>();
 
-    public static Notification getNotification(Context context) {
-        Notification noti = null;
-        if(isEnabled(context)) {
-            noti = new Notification.Builder(context)
-                    .setStyle(new Notification.BigTextStyle().bigText("big text big text big text big text big text big text big text big text " +
-                            "big text big text big text big text big text big text big text big text big text " +
-                            "big text big text big text big text big text big text big text big text big text " +
-                            "big text big text big text big text big text big text "))
-                    .setContentTitle("Feladataid holnapra:")
-                    .setContentText("3 befejezetlen feladat holnapra")
-                    .setSmallIcon(R.mipmap.ic_launcher2)
-                    .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
-
-                    .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                    .build();
-        }
-        return noti;
-    }
-
-    public static void scheduleNotification(Context context, Notification notification) {
-        if(isEnabled(context)) {
-            int hour, minute;
-            if (SharedPrefs.getBoolean(context, fileName, "setOnce")) {
-                hour = getScheduleHour(context);
-                minute = getScheduleMinute(context);
-            } else {
-                hour = 18;
-                minute = 0;
+                            for (POJOgetTask task : tasks) {
+                                if (D8.textToDate(task.getDueDate()).daysLeft() == 1) {
+                                    tasksToReport.add(task);
+                                }
+                            }
+                            if (!tasksToReport.isEmpty()) {
+                                showNotification(context, tasksToReport);
+                            }
+                            networkChangeReceiver.unregister(context);
+                        }
+                    });
+                    getTasksRequest.setupCall();
+                    getTasksRequest.makeIndependentCall();
+                }
             }
-            Calendar updateTime = Calendar.getInstance();
-            updateTime.setTimeZone(TimeZone.getTimeZone("GMT"));
-            updateTime.set(Calendar.HOUR_OF_DAY, hour);
-            updateTime.set(Calendar.MINUTE, minute);
+        });
+        networkChangeReceiver.register(context);
+    }
 
-            Intent notificationIntent = new Intent(context, NotificationReciever.class);
-            notificationIntent.putExtra(NotificationReciever.NOTIFICATION_ID, 1);
-            notificationIntent.putExtra(NotificationReciever.NOTIFICATION, notification);
+    public static void createNotification(Context context){
+        if(Network.isConnectedToWifi(context) || Network.isConnectedToMobileNet(context)) {
+            GetTasksFromMe getTasksRequest = new GetTasksFromMe(context, new CustomResponseHandler() {
+                @Override
+                public void onPOJOResponse(Object response) {
+                    Log.e("hey", "got response for notif");
+                    List<POJOgetTask> tasks = (List<POJOgetTask>) response;
+                    List<POJOgetTask> tasksToReport = new ArrayList<>();
 
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-            AlarmManager alarms = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            alarms.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-                    updateTime.getTimeInMillis(),
-                    AlarmManager.INTERVAL_DAY, pendingIntent);
-
-            // alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, futureInMillis,
-            //        AlarmManager.INTERVAL_DAY, pendingIntent);
+                    for (POJOgetTask task : tasks) {
+                        if (D8.textToDate(task.getDueDate()).daysLeft() == 1) {
+                            tasksToReport.add(task);
+                        }
+                    }
+                    if (!tasksToReport.isEmpty()) {
+                        showNotification(context, tasksToReport);
+                    }
+                }
+                @Override
+                public void onNoConnection() {
+                    ifConnectionCreateNotification(context);
+                }
+            });
+            getTasksRequest.setupCall();
+            getTasksRequest.makeIndependentCall();
+        }else{
+            ifConnectionCreateNotification(context);
         }
+    }
+
+
+    public static void showNotification(Context context, List<POJOgetTask> tasks) {
+        String CHANNEL_ID = "your_name";// The id of the channel.
+        CharSequence name = context.getResources().getString(R.string.app_name);// The user-visible name of the channel.
+        NotificationCompat.Builder mBuilder;
+        Intent notificationIntent = new Intent(context, MainActivity.class);
+        Bundle bundle = new Bundle();
+        notificationIntent.putExtras(bundle);
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+
+        for(POJOgetTask task : tasks) {
+            Spannable sb;
+            if(task.getSubject()!= null){
+                String subject = task.getSubject().getName();
+                String title = task.getTitle();
+                String description = task.getDescription();
+
+                String divider = " : ";
+
+                int i_start_subject = 0;
+                int i_end_subject = i_start_subject + subject.length();
+                int i_start_title = subject.length() + divider.length();
+                int i_end_title = i_start_title + title.length() + 1;
+
+
+                sb = new SpannableString(subject + divider + title + divider + description);
+
+                sb.setSpan(new StyleSpan(Typeface.BOLD), i_start_subject, i_end_subject, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                sb.setSpan(new StyleSpan(Typeface.BOLD), i_start_title, i_end_title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }else{
+                String title = task.getTitle();
+                String description = task.getDescription();
+
+                String divider = " : ";
+
+                int i_start_title = 0;
+                int i_end_title = title.length();
+
+
+                sb = new SpannableString(title + divider + description);
+
+                sb.setSpan(new StyleSpan(Typeface.BOLD), i_start_title, i_end_title, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            }
+            inboxStyle.addLine(sb);
+        }
+
+        if (android.os.Build.VERSION.SDK_INT >= 26) {
+            NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_HIGH);
+            mNotificationManager.createNotificationChannel(mChannel);
+            mBuilder = new NotificationCompat.Builder(context)
+                    .setLights(Color.RED, 300, 300)
+                    .setChannelId(CHANNEL_ID)
+                    ;
+
+        } else {
+            mBuilder = new NotificationCompat.Builder(context)
+                    .setPriority(Notification.PRIORITY_HIGH)
+                    ;
+        }
+        int taskAmount = tasks.size();
+
+        if(taskAmount == 1){
+            POJOgetTask task = tasks.get(0);
+            if(task != null) {
+                notificationIntent.putExtra(MainActivity.key_INTENT_MODE, MainActivity.value_INTENT_MODE_VIEWTASK);
+                if (task.getGroup() != null) {
+                    notificationIntent.putExtra(MainActivity.key_INTENT_GROUPID,task.getGroup().getId());
+                }
+                notificationIntent.putExtra(MainActivity.key_INTENT_TASKID, task.getId());
+            }
+        }
+
+        mBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+        mBuilder.setStyle(inboxStyle);
+        mBuilder.setVibrate(new long[]{1000, 1000});
+        mBuilder.setSmallIcon(R.mipmap.ic_launcher2);
+        mBuilder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher2));
+        mBuilder.setContentTitle(context.getResources().getString(R.string.notif_unfinished_tasks1) + " "
+                + taskAmount + " "
+                + context.getResources().getString(R.string.notif_unfinished_tasks2));
+
+        PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(contentIntent);
+        mBuilder.setAutoCancel(true);
+        mNotificationManager.notify(1, mBuilder.build());
     }
 }

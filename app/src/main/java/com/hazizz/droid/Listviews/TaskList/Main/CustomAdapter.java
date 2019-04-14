@@ -51,14 +51,11 @@ public class CustomAdapter extends BaseAdapter{
         if(convertView == null) {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             if(getItemViewType(position) == NORMAL_ITEM){
-               // convertView = inflater.inflate(picID, parent, false);
                 convertView = inflater.inflate(R.layout.task_main_item, null);
                 holder = new DataHolder();
                 holder.taskTitle = (TextView) convertView.findViewById(R.id.task_title);
                 holder.taskDescription = (TextView) convertView.findViewById(R.id.task_description);
-               // holder.taskDueDate = (TextView) convertView.findViewById(R.id.textView_dueDate);
                 holder.taskGroup = (TextView) convertView.findViewById(R.id.textView_group);
-           //     holder.taskGroup_ = (TextView) convertView.findViewById(R.id.textView_creator);
                 holder.taskSubject = (TextView) convertView.findViewById(R.id.textView_subject);
                 convertView.setTag(holder);
             }

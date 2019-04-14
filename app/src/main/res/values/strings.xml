@@ -49,7 +49,7 @@
     </string-array>
 
     <string-array name="options_array">
-      <!--   <item>Értesítés beállítások</item> -->
+         <item>Értesítés beállítások</item>
 
          <item>Jelszó Beállítás</item>
        <!--   <item>Théra Beállítások</item> -->
@@ -297,6 +297,12 @@
 
 
     <string name="success_changed_password">A jelszó sikeresen megváltoztatva</string>
+
+
+    <string name="notif_unfinished_tasks1">Van</string>
+    <string name="notif_unfinished_tasks2">feladatod holnapra</string>
+
+    <string name="notif_settings_notify_everyday">Értesítés minden nap</string>
 
 
 
