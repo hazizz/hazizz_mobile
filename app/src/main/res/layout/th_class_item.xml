@@ -14,13 +14,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:text="TitleTitleTitleTitleTle"
         android:textColor="@color/colorDarkText"
-        android:textSize="20sp"
-        app:layout_constraintStart_toEndOf="@+id/textView_grade"
+        android:textSize="22sp"
+        app:layout_constraintStart_toEndOf="@+id/textView_count"
         app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -28,11 +28,13 @@
         android:id="@+id/textView_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="4dp"
         android:layout_marginRight="4dp"
-        android:layout_marginTop="4dp"
         android:text="TextView"
-        android:visibility="invisible"
+        android:textColor="@color/colorDarkText"
+        android:textStyle="bold"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -43,13 +45,14 @@
         android:layout_marginBottom="2dp"
         android:layout_marginEnd="4dp"
         android:layout_marginRight="4dp"
-        android:text="TextView"
+        android:text="125"
+        android:textColor="@color/colorDarkText"
         android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
-        android:id="@+id/textView_grade"
+        android:id="@+id/textView_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -67,37 +70,60 @@
         android:id="@+id/textView14"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginLeft="2dp"
         android:layout_marginBottom="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginStart="4dp"
         android:text="-"
         android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView_weight" />
+        app:layout_constraintStart_toEndOf="@+id/textView_start" />
 
     <TextView
-        android:id="@+id/textView_topic"
+        android:id="@+id/textView_end"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginLeft="2dp"
         android:layout_marginBottom="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginStart="4dp"
         android:text="TextView"
         android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView14" />
 
     <TextView
-        android:id="@+id/textView_weight"
+        android:id="@+id/textView_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:layout_marginLeft="6dp"
         android:layout_marginBottom="4dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
         android:text="description"
         android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView_grade" />
+        app:layout_constraintStart_toEndOf="@+id/textView_count" />
+
+    <TextView
+        android:id="@+id/textView_canceled"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/border_warning"
+        android:gravity="center"
+        android:text="@string/thera_canceled"
+        android:textAllCaps="true"
+        android:textColor="@color/colorAccent_opacity"
+        android:textSize="26dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.793"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </android.support.constraint.ConstraintLayout>

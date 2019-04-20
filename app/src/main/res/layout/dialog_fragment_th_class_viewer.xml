@@ -22,7 +22,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.503"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_subject">
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
             <TextView
                 android:id="@+id/textView_standin"
@@ -34,7 +34,7 @@
                 android:textSize="16sp"
                 android:visibility="invisible"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView_subject" />
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
             <TextView
                 android:id="@+id/textView_standin_teacher"
@@ -45,7 +45,7 @@
                 android:textSize="16sp"
                 android:visibility="invisible"
                 app:layout_constraintStart_toEndOf="@+id/textView_standin"
-                app:layout_constraintTop_toBottomOf="@+id/textView_subject" />
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
         </LinearLayout>
 
 
@@ -65,7 +65,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.501"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_subject" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
 
         <LinearLayout
@@ -97,7 +97,7 @@
                 android:textColor="@color/colorDarkText"
                 android:textSize="18dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView_weight" />
+                app:layout_constraintTop_toBottomOf="@+id/textView_start" />
 
 
             <TextView
@@ -108,7 +108,7 @@
                 android:textColor="@color/colorDarkText"
                 android:textSize="18dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView_topic" />
+                app:layout_constraintTop_toBottomOf="@+id/textView_end" />
 
             <TextView
                 android:id="@+id/textView17"
@@ -139,29 +139,43 @@
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/textView_subject"
+        <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Tantárgy"
-            android:textColor="@color/colorDarkText"
-            android:textSize="26sp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/textView_grade"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="2dp"
-            android:layout_marginRight="2dp"
-            android:text="1."
-            android:textColor="@color/colorDarkText"
-            android:textSize="26sp"
-            app:layout_constraintEnd_toStartOf="@+id/textView_subject"
-            app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/textView_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1."
+                android:textColor="@color/colorDarkText"
+                android:textSize="26sp"
+                app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView_subject"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Tantárgy"
+                android:textColor="@color/colorDarkText"
+                android:textSize="26sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </LinearLayout>
+
+
 
         <LinearLayout
             android:id="@+id/linearLayout3"
@@ -173,7 +187,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView_canceled">
 
             <TextView
-                android:id="@+id/textView_weight"
+                android:id="@+id/textView_start"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -185,7 +199,7 @@
 
 
             <TextView
-                android:id="@+id/textView_topic"
+                android:id="@+id/textView_end"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -193,7 +207,7 @@
                 android:textColor="@color/colorDarkText"
                 android:textSize="18dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView_weight" />
+                app:layout_constraintTop_toBottomOf="@+id/textView_start" />
 
 
             <TextView
@@ -208,7 +222,7 @@
                 android:textColor="@color/colorDarkText"
                 android:textSize="18dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView_topic" />
+                app:layout_constraintTop_toBottomOf="@+id/textView_end" />
 
             <TextView
                 android:id="@+id/textView_classroom"

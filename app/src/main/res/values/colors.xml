@@ -14,9 +14,10 @@
     <color name="colorBackground">#ffffff</color>
     <color name="colorBackground1">#E9F1DF</color>
     <color name="colorYellow">#FFCB05</color>
-    <color name="colorAccent">#f23c50</color>
+    <color name="colorAccent">#F23C50</color>
     <color name="colorError">#f23c50</color>
     <color name="colorTitleText">#8c8c8c</color>
+    <color name="colorAccent_opacity">#E4F23C50</color>
 
     <color name="colorDarkText">#de000000</color>
     <color name="colorDefaultBackColor">#FAFAFA</color>

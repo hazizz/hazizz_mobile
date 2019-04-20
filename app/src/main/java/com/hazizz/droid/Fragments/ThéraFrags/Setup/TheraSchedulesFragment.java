@@ -101,16 +101,12 @@ public class TheraSchedulesFragment extends ParentFragment {
         ListView listView = (ListView)v.findViewById(R.id.listView_classes);
         listView.setAdapter(adapter);
 
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                   Transactor.fragmentThDialogClass(getFragmentManager().beginTransaction(), adapter.getItem(i));
             }
         });
-
-
-
     }
     private void getSchedules(){
         long sessionId = SharedPrefs.ThSessionManager.getSessionId(getContext());

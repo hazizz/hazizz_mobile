@@ -497,7 +497,6 @@ public class ViewTaskFragment extends CommentableFragment implements AdapterView
                 public void onPOJOResponse(Object response) {
                     adapter.clear();
                     listComment.clear();
-                    adapter.notifyDataSetChanged();
 
                     ArrayList<POJOComment> comments = (ArrayList<POJOComment>) response;
                     // HashMap<Long, POJOMembersProfilePic> profilePicMap = currentGroup.getMembers().;
@@ -511,14 +510,12 @@ public class ViewTaskFragment extends CommentableFragment implements AdapterView
                             Strings.Rank rank = member.getRank();
                             String profilePic = member.getProfilePic();
 
-                            //Manager.GroupRankManager.getRank((int) t.getCreator().getId());
-
                             listComment.add(new CommentItem(t.getId(), profilePic, rank, t.getCreator(), t.getContent()));
-
                         }
-                        adapter.notifyDataSetChanged();
+
                         textView_noContent.setVisibility(v.INVISIBLE);
                     }
+                    adapter.notifyDataSetChanged();
                     sRefreshLayout.setRefreshing(false);
                 }
                 @Override public void onFailure(Call<ResponseBody> call, Throwable t) {

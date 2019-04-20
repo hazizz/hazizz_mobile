@@ -24,7 +24,7 @@
             android:layout_marginTop="2dp"
             android:orientation="vertical"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_grade">
+            app:layout_constraintTop_toBottomOf="@+id/textView_count">
 
             <TextView
                 android:id="@+id/textView_subject_"
@@ -55,7 +55,7 @@
                 android:textColor="@color/colorDarkText"
                 android:textSize="18dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView_weight" />
+                app:layout_constraintTop_toBottomOf="@+id/textView_start" />
 
 
             <TextView
@@ -66,13 +66,13 @@
                 android:textColor="@color/colorDarkText"
                 android:textSize="18dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView_topic" />
+                app:layout_constraintTop_toBottomOf="@+id/textView_end" />
 
 
         </LinearLayout>
 
         <TextView
-            android:id="@+id/textView_grade"
+            android:id="@+id/textView_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
@@ -93,7 +93,7 @@
             android:layout_marginTop="2dp"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_grade">
+            app:layout_constraintTop_toBottomOf="@+id/textView_count">
 
             <TextView
                 android:id="@+id/textView_subject"
@@ -110,7 +110,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView_weight"
+                android:id="@+id/textView_start"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -122,7 +122,7 @@
 
 
             <TextView
-                android:id="@+id/textView_topic"
+                android:id="@+id/textView_end"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="marquee"
@@ -132,7 +132,7 @@
                 android:textColor="@color/colorDarkText"
                 android:textSize="18dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView_weight"
+                app:layout_constraintTop_toBottomOf="@+id/textView_start"
                 android:layout_gravity="right" />
 
 
@@ -148,7 +148,7 @@
                 android:textColor="@color/colorDarkText"
                 android:textSize="18dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView_topic" />
+                app:layout_constraintTop_toBottomOf="@+id/textView_end" />
 
 
         </LinearLayout>

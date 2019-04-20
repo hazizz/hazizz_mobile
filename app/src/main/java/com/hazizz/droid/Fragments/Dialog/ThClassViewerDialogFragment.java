@@ -48,14 +48,14 @@ public class ThClassViewerDialogFragment extends DialogFragment {
 
        // D8.Date dateText = D8.textToDate(getArguments().getString(Transactor.KEY_DATE));
 
-        textView_start = v.findViewById(R.id.textView_weight);
-        textView_end = v.findViewById(R.id.textView_topic);
+        textView_start = v.findViewById(R.id.textView_start);
+        textView_end = v.findViewById(R.id.textView_end);
         textView_canceled = v.findViewById(R.id.textView_canceled);
          textView_standin = v.findViewById(R.id.textView_standin);
         textView_standin_teacher = v.findViewById(R.id.textView_standin_teacher);
          textView_subject = v.findViewById(R.id.textView_subject);
          textView_date = v.findViewById(R.id.textView_date);
-         textView_count = v.findViewById(R.id.textView_grade);
+         textView_count = v.findViewById(R.id.textView_count);
          getTextView_classgroup = v.findViewById(R.id.textView_classgroup);
          textView_teacher = v.findViewById(R.id.textView_teacher);
          textView_classroom = v.findViewById(R.id.textView_classroom);

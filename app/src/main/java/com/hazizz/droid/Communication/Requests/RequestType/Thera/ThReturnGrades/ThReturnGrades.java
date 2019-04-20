@@ -9,8 +9,8 @@ import com.hazizz.droid.Communication.Requests.Parent.ThRequest;
 import com.hazizz.droid.Listviews.TheraGradesList.TheraGradesItem;
 
 import java.lang.reflect.Type;
-import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -33,8 +33,8 @@ public class ThReturnGrades extends ThRequest {
 
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
-        Type listType = new TypeToken<HashMap<String, List<TheraGradesItem>>>(){}.getType();
-        HashMap<String, List<TheraGradesItem>> castedMap = gson.fromJson(response.body().charStream(), listType);
+        Type listType = new TypeToken<TreeMap<String, List<TheraGradesItem>>>(){}.getType();
+        TreeMap<String, List<TheraGradesItem>> castedMap = gson.fromJson(response.body().charStream(), listType);
         Log.e("hey", "grade: " + castedMap.get("angol nyelv").get(0).getWeight());
         cOnResponse.onPOJOResponse(castedMap);
     }
