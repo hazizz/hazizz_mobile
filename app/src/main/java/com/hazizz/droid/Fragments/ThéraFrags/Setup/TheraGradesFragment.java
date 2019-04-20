@@ -25,9 +25,9 @@ import com.hazizz.droid.SharedPrefs;
 import com.hazizz.droid.Transactor;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class TheraGradesFragment  extends ParentFragment {
 
@@ -77,7 +77,7 @@ public class TheraGradesFragment  extends ParentFragment {
             @Override
             public void onPOJOResponse(Object response) {
                 adapter.clear();
-                HashMap<String, List<TheraGradesItem>> pojoMap = (HashMap<String, List<TheraGradesItem>>)response;
+                TreeMap<String, List<TheraGradesItem>> pojoMap = (TreeMap<String, List<TheraGradesItem>>)response;
 
                 if(pojoMap.isEmpty()){
                     textView_noContent.setVisibility(v.VISIBLE);

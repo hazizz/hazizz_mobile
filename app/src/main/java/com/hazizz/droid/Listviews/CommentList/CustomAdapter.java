@@ -21,7 +21,6 @@ import com.hazizz.droid.Cache.MeInfo.MeInfo;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.Requests.DeleteATComment;
-import com.hazizz.droid.Communication.Requests.GetCommentSection;
 import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.Converter.Converter;
 import com.hazizz.droid.Enum.EnumAT;
@@ -29,7 +28,6 @@ import com.hazizz.droid.Fragments.ParentFragment.CommentableFragment;
 import com.hazizz.droid.R;
 import com.hazizz.droid.Transactor;
 
-import org.w3c.dom.Comment;
 
 import java.util.List;
 
@@ -86,20 +84,19 @@ public class CustomAdapter extends ArrayAdapter<CommentItem>  {
         holder.commentName.setText(commentItem.getCreator().getDisplayName());
         holder.commentContent.setText(commentItem.getCommentContent());
 
-        Strings.Rank rank = commentItem.getGroupRank(); // Manager.GroupRankManager.getRank((int)commentItem.getCreator().getId());
+        Strings.Rank rank = commentItem.getGroupRank();
 
         Log.e("hey", "hehjó: " + rank.toString() + ", " + rank.getValue() + ", " + commentItem.getCreator().getId());
         if(rank.getValue() == Strings.Rank.OWNER.getValue()){
             holder.badge_owner.setVisibility(View.VISIBLE);
             commentItem.setCanModify(true);
-
-
-        } else if(rank.getValue() == Strings.Rank.MODERATOR.getValue()){
-
-        }else if(rank.getValue() == Strings.Rank.USER.getValue()){
-
+            Log.e("hey",  commentItem.getCreator().getUsername() + " is owner: " + commentItem.getCreator().getId());
+       // }else if(rank.getValue() == Strings.Rank.MODERATOR.getValue()){
+       // }else if(rank.getValue() == Strings.Rank.USER.getValue()){
+        }else{
+            holder.badge_owner.setVisibility(View.INVISIBLE);
         }
-        if(commentItem.creator.getId() == MeInfo.getInstance().getUserId()){
+        if(commentItem.getCreator().getId() == MeInfo.getInstance().getUserId()){
             commentItem.setCanModify(true);
         }
 

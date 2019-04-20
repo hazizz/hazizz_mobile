@@ -40,9 +40,9 @@ public class ThGreadeViewerDialogFragment extends DialogFragment {
 
         textView_subject = v.findViewById(R.id.textView_subject);
         textView_date = v.findViewById(R.id.textView_date);
-        textView_weight = v.findViewById(R.id.textView_weight);
-        textView_topic = v.findViewById(R.id.textView_topic);
-        textView_grade = v.findViewById(R.id.textView_grade);
+        textView_weight = v.findViewById(R.id.textView_start);
+        textView_topic = v.findViewById(R.id.textView_end);
+        textView_grade = v.findViewById(R.id.textView_count);
 
         textView_grade.setTextColor(TheraGradeColorer.getColor(getContext(), gradeItem.getWeight()));
         textView_weight.setTextColor(TheraGradeColorer.getColor(getContext(), gradeItem.getWeight()));

@@ -35,6 +35,9 @@ public class CustomAdapter extends ArrayAdapter<ClassItem> {
         TextView textView_subjectName;
         TextView textView_teacher;
         TextView textView_classroom;
+
+        TextView textView_canceled;
+
     }
     @NonNull
     @Override
@@ -47,12 +50,16 @@ public class CustomAdapter extends ArrayAdapter<ClassItem> {
             convertView = inflater.inflate(picID, parent, false);
 
             holder = new DataHolder();
-            holder.textView_count= convertView.findViewById(R.id.textView_grade);
-            holder.textView_start= convertView.findViewById(R.id.textView_weight);
-            holder.textView_end= convertView.findViewById(R.id.textView_topic);
+            holder.textView_count= convertView.findViewById(R.id.textView_count);
+            holder.textView_start= convertView.findViewById(R.id.textView_start);
+            holder.textView_end= convertView.findViewById(R.id.textView_end);
             holder.textView_subjectName = convertView.findViewById(R.id.textView_subjectName);
             holder.textView_teacher = convertView.findViewById(R.id.textView_date);
             holder.textView_classroom = convertView.findViewById(R.id.textView_classroom);
+
+            holder.textView_canceled = convertView.findViewById(R.id.textView_canceled);
+
+
 
             convertView.setTag(holder);
         }else{
@@ -61,12 +68,23 @@ public class CustomAdapter extends ArrayAdapter<ClassItem> {
 
         ClassItem classItem = data.get(position);
 
+
+
         holder.textView_subjectName.setText(classItem.getSubject());
         holder.textView_teacher.setText(classItem.getTeacher());
         holder.textView_classroom.setText(classItem.getRoom());
         holder.textView_count.setText(classItem.getPeriodNumber() + ".");
         holder.textView_start.setText(classItem.getStartOfClass());
         holder.textView_end.setText(classItem.getEndOfClass());
+
+        if(classItem.isCancelled()){
+            holder.textView_canceled.setVisibility(View.VISIBLE);
+        }else{
+            holder.textView_canceled.setVisibility(View.INVISIBLE);
+        }
+        if(classItem.isStandIn()){
+            holder.textView_teacher.setTextColor(context.getResources().getColor(R.color.colorAccent));
+        }
 
         return convertView;
     }

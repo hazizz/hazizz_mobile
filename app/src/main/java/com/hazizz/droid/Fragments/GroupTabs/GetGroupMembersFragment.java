@@ -48,14 +48,10 @@ public class GetGroupMembersFragment extends TabFragment {
 
     private CurrentGroup currentGroup;
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_getgroupmembers, container, false);
-
-
-
 
         fragmentSetup();
 
@@ -71,22 +67,18 @@ public class GetGroupMembersFragment extends TabFragment {
             }});
         sRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimaryDarkBlue), getResources().getColor(R.color.colorPrimaryLightBlue), getResources().getColor(R.color.colorPrimaryDarkBlue));
 
-      //  getUser();
-
-
         currentGroup = CurrentGroup.getInstance();
         createViewList();
         if(!isViewShown) {
             getUsers();
             isViewShown = true;
         }
-
-
         return v;
     }
 
     public void getUsers() {
         List<Member> members =  currentGroup.getMembers();
+        listUser.clear();
         for(Member member : members) {
             listUser.add(new UserItem(member.getUserId(), member.getDisplayName(), member.getUsername(), member.getProfilePic(), member.getRank().getValue()));
         }
@@ -189,21 +181,11 @@ public class GetGroupMembersFragment extends TabFragment {
         Transactor.fragmentDialogInviteLink(fm.beginTransaction(), GroupTabFragment.groupId, GroupTabFragment.groupName);
     }
 
-    /*
-    @Override
-    public void onTabSelected() {
-        super.onTabSelected();
-        getUser();
-    }
-    */
-
-
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (getView() != null && !isViewShown) {
             isViewShown = true;
-            // fetchdata() contains logic to show data when page is selected mostly asynctask to fill the data
             getUsers();
         } else {
             isViewShown = false;
