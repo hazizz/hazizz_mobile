@@ -35,14 +35,13 @@
                 android:layout_alignStart="@+id/textView_link"
                 android:layout_alignTop="@+id/textView_displayName"
                 android:text="               "
-                android:textColor="@color/colorDarkText"
                 android:textSize="24sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=", "
-                android:textColor="@color/colorDarkText"
+
                 android:textSize="24dp" />
 
             <TextView
@@ -51,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@+id/textView_daysLeft"
                 android:text="             "
-                android:textColor="@color/colorDarkText"
+
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -72,7 +71,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="                   "
-            android:textColor="@color/colorDarkText"
+
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

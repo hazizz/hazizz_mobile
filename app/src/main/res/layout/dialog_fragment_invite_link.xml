@@ -75,7 +75,7 @@
             android:clickable="true"
             android:gravity="center_horizontal"
             android:text="@string/loading"
-            android:textColor="@color/colorDarkText"
+
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -104,7 +104,7 @@
             android:layout_marginStart="8dp"
             android:gravity="center_horizontal"
             android:text="@string/invite_link_info"
-            android:textColor="@color/colorDarkText"
+
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.505"

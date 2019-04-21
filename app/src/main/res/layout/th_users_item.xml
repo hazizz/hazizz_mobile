@@ -20,7 +20,7 @@
         android:layout_marginTop="16dp"
         android:ellipsize="end"
         android:text=":"
-        android:textColor="@color/colorDarkText"
+
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/textView_subjectName"
         app:layout_constraintTop_toTopOf="parent" />
@@ -35,7 +35,7 @@
         android:layout_marginTop="4dp"
         android:ellipsize="end"
         android:text="username"
-        android:textColor="@color/colorDarkText"
+
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/textView_"
         app:layout_constraintTop_toTopOf="parent" />
@@ -50,7 +50,7 @@
         android:layout_marginTop="8dp"
         android:ellipsize="end"
         android:text="Title"
-        android:textColor="@color/colorDarkText"
+
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

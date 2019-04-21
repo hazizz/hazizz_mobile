@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -78,6 +79,8 @@ public class MainActivity extends AppCompatActivity
     private TextView navUsername;
     private TextView navEmail;
     private TextView navLogout;
+
+    private ImageButton imageButton_darkMode;
 
     public static String strNavUsername;
     public static String strNavEmail;
@@ -168,6 +171,13 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        if(AppInfo.isDarkMode(getBaseContext())){
+            setTheme(R.style.AppTheme_Dark);
+        }else{
+            setTheme(R.style.AppTheme_Light);
+        }
+
         super.onCreate(savedInstanceState);
 
         //if (!BuildConfig.DEBUG) { // only enable bug tracking in release version
@@ -278,6 +288,22 @@ public class MainActivity extends AppCompatActivity
         navEmail = (TextView) headerView.findViewById(R.id.textView_email);
         navLogout = findViewById(R.id.textView_logout);
 
+        imageButton_darkMode = findViewById(R.id.imageButton_darkMode);
+        imageButton_darkMode.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+
+                if(AppInfo.isDarkMode(getBaseContext())){
+                    AppInfo.setDarkMode(getBaseContext(), false);
+                    setTheme(R.style.AppTheme_Light);
+                }else{
+                    AppInfo.setDarkMode(getBaseContext(), true);
+                    setTheme(R.style.AppTheme_Dark);
+                }
+                recreate();
+
+            }
+        });
+
         menu_nav = navView.getMenu();
         menuItem_home     = menu_nav.getItem(0);
         menuItem_groups   = menu_nav.getItem(1);
@@ -299,6 +325,7 @@ public class MainActivity extends AppCompatActivity
                 if(!gotMyProfilePicRespond){
                     MiddleMan.newRequest(new Me(thisActivity, responseHandler));
                     MiddleMan.newRequest(new GetMyProfilePic(thisActivity, rh_profilePic));
+                    gotMyProfilePicRespond = true;
                 }
             }
 

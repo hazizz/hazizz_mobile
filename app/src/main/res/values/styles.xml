@@ -1,6 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
+
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimaryDarkBlue</item>
@@ -13,6 +14,41 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
+    <style name="AppTheme.Light" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimaryDarkBlue</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkBlue</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+
+        <item name="android:textColorPrimary">@color/colorTextColorPrimary_light</item>
+        <item name="android:textColorSecondary">@color/colorTextColorSecondary_light</item>
+
+
+        <item name="android:windowBackground">@color/white</item>
+    </style>
+
+    <style name="AppTheme.Dark" parent="Theme.AppCompat.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimaryDarkBlue</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkBlue</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+
+        <item name="android:textColorPrimary">@color/colorTextColorPrimary_dark</item>
+        <item name="android:textColorSecondary">@color/colorTextColorPrimary_dark</item>
+
+
+        <item name="android:windowBackground">@color/colorBackground_dark</item>
+    </style>
+
+   <!-- <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    -->
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 

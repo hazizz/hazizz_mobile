@@ -125,7 +125,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
             android:text="@string/username_"
-            android:textColor="@color/colorDarkText"
+
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             tools:layout_editor_absoluteY="98dp" />
@@ -138,7 +138,7 @@
             android:layout_alignTop="@+id/textView_displayName"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
-            android:textColor="@color/colorDarkText"
+
             android:textSize="16sp"
             android:text="@string/displayName_"
             app:layout_constraintStart_toStartOf="parent"
@@ -153,7 +153,7 @@
             android:layout_below="@+id/textView_dayOfTheWeek"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
-            android:textColor="@color/colorDarkText"
+
             android:textSize="16sp"
             android:text="@string/registrationDate_"
             app:layout_constraintStart_toStartOf="parent"
@@ -175,7 +175,7 @@
                 android:layout_alignStart="@+id/textView_displayName"
                 android:layout_centerVertical="true"
                 android:text="           "
-                android:textColor="@color/colorDarkText"
+
                 android:textSize="16sp" />
 
             <TextView
@@ -185,7 +185,7 @@
                 android:layout_above="@+id/textView_dayOfTheWeek"
                 android:layout_alignParentEnd="true"
                 android:text="           "
-                android:textColor="@color/colorDarkText"
+
                 android:textSize="16sp" />
 
             <TextView
@@ -195,7 +195,7 @@
                 android:layout_alignStart="@+id/textView_displayName"
                 android:layout_below="@+id/textView_dayOfTheWeek"
                 android:text="           "
-                android:textColor="@color/colorDarkText"
+
                 android:textSize="16sp"
                 app:layout_constraintTop_toBottomOf="@+id/textView_username" />
         </LinearLayout>

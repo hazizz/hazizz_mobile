@@ -14,4 +14,14 @@ public class AppInfo {
         }
         return firstTime;
     }
+
+    public static boolean isDarkMode(Context context){
+        boolean darkMode = SharedPrefs.getBoolean(context, fileName, "darkMode");
+
+        return darkMode;
+    }
+
+    public static void setDarkMode(Context context, boolean isDark){
+        SharedPrefs.savePref(context, fileName, "darkMode", isDark);
+    }
 }

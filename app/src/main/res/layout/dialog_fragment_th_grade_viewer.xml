@@ -31,7 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/thera_subject_"
-                android:textColor="@color/colorDarkText"
+
                 android:textSize="18dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -41,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/thera_weight_"
-                android:textColor="@color/colorDarkText"
+
                 android:textSize="18dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -52,7 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/thera_theme_"
-                android:textColor="@color/colorDarkText"
+
                 android:textSize="18dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView_start" />
@@ -63,7 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/thera_date"
-                android:textColor="@color/colorDarkText"
+
                 android:textSize="18dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView_end" />
@@ -80,7 +80,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
             android:text="5"
-            android:textColor="@color/colorDarkText"
+
             android:textSize="55sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -104,7 +104,7 @@
                 android:ellipsize="marquee"
                 android:maxLength="22"
                 android:singleLine="true"
-                android:textColor="@color/colorDarkText"
+
                 android:textSize="18dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -115,7 +115,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:text="weight "
-                android:textColor="@color/colorDarkText"
+
                 android:textSize="18dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -129,7 +129,7 @@
                 android:maxLength="22"
                 android:singleLine="true"
                 android:text="12345678912345"
-                android:textColor="@color/colorDarkText"
+
                 android:textSize="18dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView_start"
@@ -145,7 +145,7 @@
                 android:maxLength="12"
                 android:singleLine="true"
                 android:text="date "
-                android:textColor="@color/colorDarkText"
+
                 android:textSize="18dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView_end" />

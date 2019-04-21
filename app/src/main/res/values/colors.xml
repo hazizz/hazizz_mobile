@@ -11,6 +11,9 @@
 
     <color name="white">#ffffff</color>
 
+    <color name="colorBackground_dark">#292929</color>
+
+    <color name="colorBackground_light">#ffffff</color>
     <color name="colorBackground">#ffffff</color>
     <color name="colorBackground1">#E9F1DF</color>
     <color name="colorYellow">#FFCB05</color>
@@ -36,6 +39,11 @@
     <color name="colorTheraGradeWeight150">#13a300</color>
 
 
+    <color name="colorTextColorPrimary_light">#CD1B1C1F</color>
+    <color name="colorTextColorSecondary_light">#8033343B</color>
+
+    <color name="colorTextColorPrimary_dark">#F4F4F6</color>
+    <color name="colorTextColorSecondary_dark">#96F4F4F6</color>
 
 
 </resources>

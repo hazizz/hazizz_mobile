@@ -10,7 +10,7 @@
 
     android:clickable="true"
     android:focusable="true"
-    android:background="@color/colorBackground"
+    android:background="@color/colorBackground_light"
     android:id="@+id/widget_item_linearLayout"
 
     >

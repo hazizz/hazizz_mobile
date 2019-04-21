@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/colorBackground"
     >
 
     <TextView
@@ -18,7 +17,7 @@
         android:layout_marginTop="2dp"
         android:ellipsize="end"
         android:text="Title"
-        android:textColor="@color/colorDarkText"
+
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/textView_subject"
         app:layout_constraintTop_toTopOf="parent" />
@@ -33,7 +32,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="2dp"
         android:text="subject"
-        android:textColor="@color/colorDarkText"
+
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

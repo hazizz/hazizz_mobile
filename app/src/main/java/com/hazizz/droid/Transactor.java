@@ -21,7 +21,6 @@ import com.hazizz.droid.Fragments.AnnouncementEditorFragment;
 import com.hazizz.droid.Fragments.AuthFrags.FirstFragment;
 import com.hazizz.droid.Fragments.AuthFrags.LoginFragment;
 import com.hazizz.droid.Fragments.AuthFrags.RegisterFragment;
-import com.hazizz.droid.Fragments.CommentSectionFragment;
 import com.hazizz.droid.Fragments.CreateGroupFragment;
 import com.hazizz.droid.Fragments.CreateSubjectFragment;
 import com.hazizz.droid.Fragments.Dialog.DateViewerDialogFragment;
@@ -482,7 +481,7 @@ public class Transactor extends FragmentActivity {
         bundle.putInt(KEY_STARTINGTAB, startingTab);
         GroupTabFragment frag = new GroupTabFragment();
         frag.setArguments(bundle);
-        fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
+        fTransaction.replace(R.id.fragment_container, frag);
         if(backStack){ fTransaction.addToBackStack(null); }
         fTransaction.commitAllowingStateLoss();
     }
@@ -497,30 +496,6 @@ public class Transactor extends FragmentActivity {
         fTransaction.commitAllowingStateLoss();
     }
 
-    public static void fragmentCommentSection(@Nonnull FragmentTransaction fTransaction, String whereName, int whereId){
-        Bundle bundle = new Bundle();
-        bundle.putString(Strings.Path.WHERENAME.toString(), whereName);
-        bundle.putInt(Strings.Path.WHEREID.toString(), whereId);
-
-        CommentSectionFragment frag = new CommentSectionFragment();
-        frag.setArguments(bundle);
-        fTransaction.replace(R.id.fragment_container, frag);
-        if(backStack){ fTransaction.addToBackStack(null); }
-        fTransaction.commitAllowingStateLoss();
-    }
-
-    public static void fragmentComments(@Nonnull FragmentTransaction fTransaction, String whereName,int whereId){
-        Bundle bundle = new Bundle();
-        bundle.putString(Strings.Path.WHERENAME.toString(), whereName);
-        bundle.putInt(Strings.Path.WHEREID.toString(), whereId);
-        CommentSectionFragment frag = new CommentSectionFragment();
-        frag.setArguments(bundle);
-        fTransaction.replace(R.id.fragment_container, frag);
-        if(backStack){fTransaction.addToBackStack(null);}
-        fTransaction.commitAllowingStateLoss();
-    }
-
-
     public static void fragmentGroupAnnouncement(@Nonnull FragmentTransaction fTransaction, int groupId, String groupName){
         fragmentGroupTab(fTransaction, groupId, groupName, 1);
     }
@@ -533,7 +508,6 @@ public class Transactor extends FragmentActivity {
     public static void fragmentMainTask(@Nonnull FragmentTransaction fTransaction){
         fragmentMainTab(fTransaction,0);
     }
-
 
     public static void fragmentThLoading(@Nonnull FragmentTransaction fTransaction){
         TheraLoadingFragment frag = new TheraLoadingFragment();
