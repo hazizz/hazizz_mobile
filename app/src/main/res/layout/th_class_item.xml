@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@color/colorBackground"
     >
 
     <TextView
@@ -18,7 +17,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:text="TitleTitleTitleTitleTle"
-        android:textColor="@color/colorDarkText"
+
         android:textSize="22sp"
         app:layout_constraintStart_toEndOf="@+id/textView_count"
         app:layout_constraintTop_toTopOf="parent" />
@@ -32,7 +31,7 @@
         android:layout_marginEnd="4dp"
         android:layout_marginRight="4dp"
         android:text="TextView"
-        android:textColor="@color/colorDarkText"
+
         android:textStyle="bold"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
@@ -46,7 +45,7 @@
         android:layout_marginEnd="4dp"
         android:layout_marginRight="4dp"
         android:text="125"
-        android:textColor="@color/colorDarkText"
+
         android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -60,7 +59,7 @@
         android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
         android:text="1."
-        android:textColor="@color/colorDarkText"
+
         android:textSize="34sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

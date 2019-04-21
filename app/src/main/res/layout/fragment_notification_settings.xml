@@ -19,7 +19,7 @@
         android:background="@drawable/rounded_lightblue_border"
         android:text="17:00"
 
-        android:textColor="@color/colorDarkText"
+
         android:textSize="80sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.504"

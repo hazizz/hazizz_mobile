@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/colorBackground"
     >
 
 
@@ -87,7 +86,7 @@
                         android:paddingLeft="20dp"
 
                         android:text="Csoport"
-                        android:textColor="@color/colorDarkText"
+
                         android:textSize="15sp"
                         app:layout_constraintStart_toStartOf="@+id/textView_subject"
                         app:layout_constraintTop_toTopOf="@+id/constraintLayout3" />
@@ -101,7 +100,7 @@
                         android:gravity="left|center_vertical"
                         android:paddingLeft="20dp"
                         android:text="          "
-                        android:textColor="@color/colorDarkText"
+
                         android:textSize="15sp"
                         android:visibility="visible"
                         app:layout_constraintBottom_toBottomOf="@+id/subject_spinner"
@@ -209,7 +208,7 @@
                     android:clickable="true"
                     android:onClick="onClick"
                     android:text="@string/choose_deadline_fragment_taskeditor"
-                    android:textColor="@color/colorDarkText"
+
                     android:textSize="15sp"
                     app:layout_constraintStart_toStartOf="@+id/constraintLayout3"
                     app:layout_constraintTop_toBottomOf="@+id/constraintLayout3" />

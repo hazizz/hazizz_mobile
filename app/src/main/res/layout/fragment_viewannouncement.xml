@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
     android:orientation="vertical">
 
 
@@ -36,7 +35,7 @@
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:textColor="@color/colorDarkText"
+
                     android:textSize="30sp" />
 
                 <android.support.constraint.ConstraintLayout
@@ -61,7 +60,7 @@
                         android:scrollbars="vertical"
                         android:singleLine="false"
                         android:text="      "
-                        android:textColor="@color/colorDarkText"
+
                         android:textSize="17sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.509"
@@ -76,7 +75,7 @@
                         android:layout_marginRight="32dp"
                         android:layout_marginTop="8dp"
                         android:text="             "
-                        android:textColor="@color/colorDarkText"
+
                         android:textSize="20sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView_group" />
@@ -136,7 +135,6 @@
                         android:layout_marginRight="32dp"
                         android:layout_marginTop="40dp"
                         android:text="           "
-                        android:textColor="@color/colorDarkText"
                         android:textSize="20sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -193,7 +191,6 @@
                         android:layout_marginStart="8dp"
                         android:text="@string/comments"
                         android:textAlignment="center"
-                        android:textColor="@color/colorDarkText"
                         android:textSize="24dp"
                         android:visibility="invisible"
                         app:layout_constraintBottom_toBottomOf="parent"

@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@color/colorBackground"
     tools:openDrawer="start"
     >
 
@@ -111,17 +110,41 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:clickable="true"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/textView_logout"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
+                android:layout_gravity="bottom"
                 android:layout_marginLeft="10dp"
                 android:clickable="true"
                 android:gravity="center"
                 android:onClick="logoutPressed"
                 android:text="@string/textview_logout_drawer" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+
+            <ImageButton
+                android:id="@+id/imageButton_darkMode"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_moon_gray"
+                />
+
+            <!--
+            <Button
+                android:id="@+id/imageButton_darkMode"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                />
+            -->
         </LinearLayout>
     </android.support.design.widget.NavigationView>
 

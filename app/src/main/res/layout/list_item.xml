@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:text="group name"
         android:textSize="24sp"
-        android:textColor="@color/colorDarkText"
+
         />
 
 

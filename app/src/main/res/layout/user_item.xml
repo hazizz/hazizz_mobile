@@ -40,7 +40,7 @@
         android:layout_marginTop="2dp"
         android:text="user Name"
         android:textSize="17sp"
-        android:textColor="@color/colorDarkText"
+
         app:layout_constraintStart_toEndOf="@+id/imageView_memberProfilePic"
         app:layout_constraintTop_toTopOf="parent" />
 

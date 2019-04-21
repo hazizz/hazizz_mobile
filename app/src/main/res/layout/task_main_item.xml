@@ -7,7 +7,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@color/colorYellow"
 
     android:paddingBottom="0dp"
     >
@@ -19,7 +18,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/colorBackground"
 
         >
 
@@ -31,7 +29,7 @@
             android:layout_marginTop="4dp"
             android:ellipsize="end"
             android:text="Title"
-            android:textColor="@color/colorDarkText"
+
             android:textSize="18sp"
             app:layout_constraintStart_toEndOf="@+id/textView_subject"
             app:layout_constraintTop_toTopOf="parent" />
@@ -45,7 +43,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
             android:text="subject"
-            android:textColor="@color/colorDarkText"
+
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

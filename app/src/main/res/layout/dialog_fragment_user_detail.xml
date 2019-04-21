@@ -151,7 +151,7 @@ android:layout_height="match_parent"
             android:layout_marginStart="10dp"
             android:layout_marginTop="8dp"
             android:text="@string/username_"
-            android:textColor="@color/colorDarkText"
+
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/badge_owner" />
@@ -165,7 +165,7 @@ android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
             android:text="@string/displayName_"
-            android:textColor="@color/colorDarkText"
+
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView_dayOfTheWeek" />
@@ -180,7 +180,7 @@ android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
             android:text="@string/registrationDate_"
-            android:textColor="@color/colorDarkText"
+
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView_daysLeft" />
@@ -204,7 +204,7 @@ android:layout_height="match_parent"
                 android:layout_centerVertical="true"
                 android:layout_gravity="right"
                 android:text="           "
-                android:textColor="@color/colorDarkText"
+
                 android:textSize="16sp" />
 
             <TextView
@@ -215,7 +215,7 @@ android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
                 android:layout_gravity="right"
                 android:text="           "
-                android:textColor="@color/colorDarkText"
+
                 android:textSize="16sp" />
 
             <TextView
@@ -226,7 +226,7 @@ android:layout_height="match_parent"
                 android:layout_below="@+id/textView_dayOfTheWeek"
                 android:layout_gravity="right"
                 android:text="           "
-                android:textColor="@color/colorDarkText"
+
                 android:textSize="16sp"
                 app:layout_constraintTop_toBottomOf="@+id/textView_username" />
         </LinearLayout>

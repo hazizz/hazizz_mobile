@@ -83,7 +83,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/thera_classStart"
-                android:textColor="@color/colorDarkText"
+
                 android:textSize="18dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -94,7 +94,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/thera_classEnd"
-                android:textColor="@color/colorDarkText"
+
                 android:textSize="18dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView_start" />
@@ -105,7 +105,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/thera_teacher"
-                android:textColor="@color/colorDarkText"
+
                 android:textSize="18dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView_end" />
@@ -115,7 +115,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/thera_classRoom"
-                android:textColor="@color/colorDarkText"
+
                 android:textSize="18dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView_date" />
@@ -125,7 +125,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/thera_classGroup"
-                android:textColor="@color/colorDarkText"
+
                 android:textSize="18dp" />
 
             <TextView
@@ -133,7 +133,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/thera_date"
-                android:textColor="@color/colorDarkText"
+
                 android:textSize="18dp" />
 
 
@@ -157,7 +157,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="1."
-                android:textColor="@color/colorDarkText"
+
                 android:textSize="26sp"
                 app:layout_constraintEnd_toStartOf="@+id/linearLayout"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -168,7 +168,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="Tantárgy"
-                android:textColor="@color/colorDarkText"
+
                 android:textSize="26sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -192,7 +192,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:text="kezdet: "
-                android:textColor="@color/colorDarkText"
+
                 android:textSize="18dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -204,7 +204,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:text="vége"
-                android:textColor="@color/colorDarkText"
+
                 android:textSize="18dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView_start" />
@@ -219,7 +219,7 @@
                 android:maxLength="20"
                 android:singleLine="true"
                 android:text="tanársadasdsadsadasd"
-                android:textColor="@color/colorDarkText"
+
                 android:textSize="18dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView_end" />
@@ -230,7 +230,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:text="class room"
-                android:textColor="@color/colorDarkText"
+
                 android:textSize="18dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView_date" />
@@ -244,7 +244,7 @@
                 android:maxLength="12"
                 android:singleLine="true"
                 android:text="class group "
-                android:textColor="@color/colorDarkText"
+
                 android:textSize="18dp" />
 
             <TextView
@@ -253,7 +253,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:text="  "
-                android:textColor="@color/colorDarkText"
+
                 android:textSize="18dp" />
 
 

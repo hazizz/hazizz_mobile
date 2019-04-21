@@ -310,6 +310,8 @@
 
 
     <string name="crop_image_activity_header_item_intitle"> </string>
+    <string name="crop_image_activity_title"> </string>
+
     <string name="crop_image_menu_rotate_right">Rotate</string>
     <string name="crop_image_menu_crop">Crop</string>
     <string name="crop_image_menu_flip_horizontally">Flip horizontally</string>

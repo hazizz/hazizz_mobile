@@ -304,12 +304,17 @@
 
     <string name="notif_settings_notify_everyday">Értesítés minden nap</string>
 
+    <string name="taskType_homework">homework</string>
+    <string name="taskType_assigment">assigment</string>
+    <string name="taskType_test">test</string>
+    <string name="taskType_oraltest">oral test</string>
 
 
+    <string name="crop_image_activity_header_item_intitle"> </string>
     <string name="crop_image_activity_title"> </string>
     <string name="crop_image_menu_rotate_right">Forgatás</string>
     <string name="crop_image_menu_crop">Kivág</string>
-    <string name="crop_image_menu_flip_horizontlaly">Forgatás vízszintesen</string>
+    <string name="crop_image_menu_flip_horizontally">Forgatás vízszintesen</string>
     <string name="crop_image_menu_flip_vertically">Forgatás függőlegesen</string>
 
 
