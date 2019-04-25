@@ -3,8 +3,9 @@ package com.hazizz.droid.Communication;
 import android.content.Context;
 import android.util.Log;
 
-import com.hazizz.droid.Manager;
+import com.hazizz.droid.manager.Manager;
 import com.hazizz.droid.Network;
+import com.hazizz.droid.manager.ThreadManager;
 
 public class RequestSenderRunnable implements Runnable{
 
@@ -15,9 +16,12 @@ public class RequestSenderRunnable implements Runnable{
     }
     @Override public void run() {
         boolean loopBool = true;
+
+        ThreadManager threadManager = ThreadManager.getInstance();
+
         while(loopBool) {
           //  Log.e("hey", "ifFreezed: " + Manager.ThreadManager.isFreezed());
-            if(Manager.ThreadManager.isDelayed()) {
+            if(threadManager.isDelayed()) {
                 synchronized (this) {
                     try {
                         Log.e("hey", "waiting123: start");
@@ -27,10 +31,10 @@ public class RequestSenderRunnable implements Runnable{
                         e.printStackTrace();
                     }
                 }
-                Manager.ThreadManager.endDelay();
+                threadManager.endDelay();
                 MiddleMan.callAgainRateLimit();
             }else {
-                if (!Manager.ThreadManager.isFreezed()) {
+                if (!threadManager.isFreezed()) {
                     if (Network.getActiveNetwork(context) != null && Network.isConnectedOrConnecting(context)) {
                         if (!MiddleMan.requestQueue.isEmpty()) {
                             MiddleMan.sendRequestsFromQ();

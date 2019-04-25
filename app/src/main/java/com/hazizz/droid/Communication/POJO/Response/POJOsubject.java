@@ -3,7 +3,7 @@ package com.hazizz.droid.Communication.POJO.Response;
 import lombok.Data;
 
 @Data
-public class POJOsubject {
+public class POJOsubject implements Pojo {
 
     private int id;
 

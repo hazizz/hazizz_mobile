@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
@@ -58,8 +59,9 @@ public class InviteLinkDialogFragment extends DialogFragment {
             public void onClick(View v) {
                 if(inviteLink != null && !inviteLink.equals("")) {
                     ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("this is a label123", textView_link.getText().toString());
+                    ClipData clip = ClipData.newPlainText("invite link", textView_link.getText().toString());
                     clipboard.setPrimaryClip(clip);
+                    Toast.makeText(getContext(), R.string.copied_to_clipboard, Toast.LENGTH_LONG);
                 }
             }
         });

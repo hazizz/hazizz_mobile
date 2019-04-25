@@ -101,6 +101,8 @@ public class TheraUsersFragment  extends ParentFragment {
         button_delete.setVisibility(View.INVISIBLE);
 
 
+
+
              //  ((MainActivity)getActivity()).setGroupName(groupName);
         createViewList();
         getUsers();
@@ -113,11 +115,14 @@ public class TheraUsersFragment  extends ParentFragment {
         adapter = new CustomAdapter(getActivity(), R.layout.th_users_item, listUsers);
         listView.setAdapter(adapter);
 
+
+
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if(view_lastItem != null) {
-                    view_lastItem.setBackgroundColor(getResources().getColor(R.color.white));
+                    view_lastItem.setBackground(listView.getBackground());
                 }
                 view.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLightestBlue));
                 view_lastItem = view;

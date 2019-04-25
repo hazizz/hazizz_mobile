@@ -21,7 +21,6 @@ import com.hazizz.droid.D8;
 import com.hazizz.droid.Listviews.HeaderItem;
 import com.hazizz.droid.Listviews.TaskList.Main.CustomAdapter;
 import com.hazizz.droid.Listviews.TaskList.TaskItem;
-import com.hazizz.droid.Manager;
 import com.hazizz.droid.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;

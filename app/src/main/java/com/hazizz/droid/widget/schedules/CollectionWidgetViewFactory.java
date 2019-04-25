@@ -143,7 +143,7 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
     }
 
     @Override public int getViewTypeCount() {
-        return 2;
+        return 1;
     }
 
     @Override public boolean hasStableIds() {

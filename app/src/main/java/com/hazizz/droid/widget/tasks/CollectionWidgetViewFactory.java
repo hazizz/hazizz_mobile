@@ -75,8 +75,8 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
         if(task.getSubject() != null) {
             itemView.setTextViewText(R.id.textView_subject, task.getSubject().getName());
         }else{
-            itemView.setViewVisibility(R.id.textView_subject, View.INVISIBLE);
-            itemView.setViewVisibility(R.id.textView_subject_info, View.INVISIBLE);
+            itemView.setViewVisibility(R.id.textView_subject, View.GONE);
+            itemView.setViewVisibility(R.id.textView_, View.GONE);
         }
         itemView.setTextViewText(R.id.textView_deadline, D8.textToDate(task.getDueDate()).getMainFormat());
 
@@ -100,7 +100,7 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
     }
 
     @Override public int getViewTypeCount() {
-        return 2;
+        return 1;
     }
 
     @Override public boolean hasStableIds() {

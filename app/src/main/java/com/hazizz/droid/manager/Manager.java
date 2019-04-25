@@ -1,4 +1,4 @@
-package com.hazizz.droid;
+package com.hazizz.droid.manager;
 
 import android.content.Context;
 import android.util.Log;
@@ -18,7 +18,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 
 public class Manager {
-
+    /*
     public static class ThreadManager {
         private static final String threadName = "unique_name";
         private static Thread thisThread = null;
@@ -72,6 +72,7 @@ public class Manager {
             return freeze;
         }
     }
+    */
 
 
     public static class ProfilePicManager {

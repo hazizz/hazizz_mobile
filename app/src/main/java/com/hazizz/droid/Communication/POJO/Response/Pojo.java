@@ -1,5 +1,3 @@
 package com.hazizz.droid.Communication.POJO.Response;
 
-public class POJOpost {
-
-}
+public interface Pojo { }

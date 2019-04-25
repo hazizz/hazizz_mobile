@@ -24,7 +24,7 @@ import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
 import com.hazizz.droid.Fragments.ParentFragment.TabFragment;
 import com.hazizz.droid.Listener.GenericListener;
 import com.hazizz.droid.Listener.OnBackPressedListener;
-import com.hazizz.droid.Manager;
+import com.hazizz.droid.manager.Manager;
 import com.hazizz.droid.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;

@@ -14,10 +14,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.hazizz.droid.Activities.MainActivity;
+import com.hazizz.droid.Cache.HCache;
 import com.hazizz.droid.Communication.POJO.Response.AnnouncementPOJOs.POJOAnnouncement;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
-import com.hazizz.droid.Communication.Requests.GetMyAnnouncements;
+import com.hazizz.droid.Communication.Requests.GetAnnouncementsFromMe;
 import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.Listviews.AnnouncementList.AnnouncementItem;
 import com.hazizz.droid.Listviews.AnnouncementList.Main.CustomAdapter;
@@ -40,7 +41,6 @@ public class MainAnnouncementFragment extends Fragment{
     private TextView textView_noContent;
     private SwipeRefreshLayout sRefreshLayout;
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -58,6 +58,9 @@ public class MainAnnouncementFragment extends Fragment{
         //  ((MainActivity)getActivity()).setGroupName(groupName);
         createViewList();
         getAnnouncements();
+
+        processData(HCache.getInstance()
+                .getAnnouncementsFromMe(getContext()));
 
         return v;
     }
@@ -78,28 +81,36 @@ public class MainAnnouncementFragment extends Fragment{
             }
         });
     }
-    private void getAnnouncements(){
 
+    private void processData(List<POJOAnnouncement> data){
+        if(data != null){
+            adapter.clear();
+            if(data.isEmpty()){
+                textView_noContent.setVisibility(v.VISIBLE);
+            }else {
+                textView_noContent.setVisibility(v.INVISIBLE);
+                for (POJOAnnouncement t : data) {
+                    listTask.add(new AnnouncementItem(t.getTitle(),
+                            t.getDescription(), t.getGroup(), t.getCreator(),
+                            t.getSubject(), t.getId()));
+                    adapter.notifyDataSetChanged();
+                }
+            }
+            sRefreshLayout.setRefreshing(false);
+        }
+    }
+
+    private void getAnnouncements(){
         CustomResponseHandler responseHandler = new CustomResponseHandler() {
+            @Override public void getRawResponseBody(String rawResponseBody) {
+                HCache.getInstance().setAnnouncementsFromMe(getContext(), rawResponseBody);
+            }
 
             @Override
             public void onPOJOResponse(Object response) {
-                adapter.clear();
-                ArrayList<POJOAnnouncement> pojoList = (ArrayList<POJOAnnouncement>) response;
-                if(pojoList.size() == 0){
-                    textView_noContent.setVisibility(v.VISIBLE);
-                }else {
-                    textView_noContent.setVisibility(v.INVISIBLE);
-                    for (POJOAnnouncement t : pojoList) {
-                        listTask.add(new AnnouncementItem(t.getTitle(),
-                                t.getDescription(), t.getGroup(), t.getCreator(),
-                                t.getSubject(), t.getId()));
-                        adapter.notifyDataSetChanged();
-                        Log.e("hey", t.getId() + " " + t.getGroup().getId());
-                    }
-                    Log.e("hey", "got response");
-                }
-                sRefreshLayout.setRefreshing(false);
+                ArrayList<POJOAnnouncement> data = (ArrayList<POJOAnnouncement>) response;
+                processData(data);
+
             }
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
@@ -117,7 +128,6 @@ public class MainAnnouncementFragment extends Fragment{
                 sRefreshLayout.setRefreshing(false);
             }
         };
-        //  MiddleMan.request.getTasksFromGroup(this.getActivity(), null, responseHandler, vars);
-        MiddleMan.newRequest(new GetMyAnnouncements(getActivity(),responseHandler));
+        MiddleMan.newRequest(new GetAnnouncementsFromMe(getActivity(),responseHandler));
     }
 }

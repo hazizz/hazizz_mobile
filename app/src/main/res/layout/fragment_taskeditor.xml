@@ -56,8 +56,8 @@
                         android:layout_height="43dp"
                         android:layout_alignParentBottom="true"
                         android:layout_gravity="left"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:layout_editor_absoluteX="0dp" />
+                        app:layout_constraintStart_toStartOf="@+id/textView_group"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <Spinner
                         android:id="@+id/taskType_spinner"
@@ -81,7 +81,7 @@
                         android:id="@+id/textView_group"
                         android:layout_width="145dp"
                         android:layout_height="42dp"
-                        android:background="@color/colorBackground"
+                        android:background="?android:attr/windowBackground"
                         android:gravity="left|center_vertical"
                         android:paddingLeft="20dp"
 
@@ -202,13 +202,14 @@
                     android:id="@+id/textView_deadline"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="18dp"
-                    android:layout_marginStart="18dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
                     android:layout_marginTop="12dp"
+                    android:background="@drawable/rounded_lightblue_border"
                     android:clickable="true"
                     android:onClick="onClick"
                     android:text="@string/choose_deadline_fragment_taskeditor"
-
+                    android:textColor="@color/white"
                     android:textSize="15sp"
                     app:layout_constraintStart_toStartOf="@+id/constraintLayout3"
                     app:layout_constraintTop_toBottomOf="@+id/constraintLayout3" />

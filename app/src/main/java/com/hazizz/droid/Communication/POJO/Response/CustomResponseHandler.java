@@ -11,4 +11,6 @@ public interface CustomResponseHandler {
     default void onSuccessfulResponse(){}
     default void onNoConnection(){}
     default void getHeaders(Headers headers){}
+    default void getRawResponseBody(String rawResponseBody){}
+
 }

@@ -106,7 +106,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="4dp"
                     android:layout_marginStart="12dp"
-                    android:background="@color/colorBackground"
+                    android:background="?android:attr/windowBackground"
                     android:gravity="left|center_vertical"
                     android:minHeight="60dp"
                     android:text="@string/select_school"

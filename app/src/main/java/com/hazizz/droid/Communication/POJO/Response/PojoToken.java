@@ -3,7 +3,7 @@ package com.hazizz.droid.Communication.POJO.Response;
 import lombok.Data;
 
 @Data
-public class PojoToken {
+public class PojoToken implements Pojo {
 
     String token;
 

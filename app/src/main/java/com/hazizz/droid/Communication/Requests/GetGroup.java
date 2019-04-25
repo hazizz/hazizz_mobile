@@ -27,6 +27,7 @@ public class GetGroup extends Request {
     }
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
+
         POJOGroup pojoGroup = gson.fromJson(response.body().charStream(), POJOGroup.class);
         cOnResponse.onPOJOResponse(pojoGroup);
     }

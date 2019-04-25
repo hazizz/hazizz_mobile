@@ -18,6 +18,7 @@ import android.text.SpannableString;
 import android.text.style.StyleSpan;
 import android.util.Log;
 
+import com.hazizz.droid.Activities.AuthActivity;
 import com.hazizz.droid.Activities.MainActivity;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
@@ -150,13 +151,17 @@ public class TaskReporterNotification {
         String CHANNEL_ID = "your_name";// The id of the channel.
         CharSequence name = context.getResources().getString(R.string.app_name);// The user-visible name of the channel.
         NotificationCompat.Builder mBuilder;
-        Intent notificationIntent = new Intent(context, MainActivity.class);
-        Bundle bundle = new Bundle();
-        notificationIntent.putExtras(bundle);
+        Intent notificationIntent = new Intent(context, AuthActivity.class);
+
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
         NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+
+
+        Bundle bundle = new Bundle();
+
+
 
         for(POJOgetTask task : tasks) {
             Spannable sb;
@@ -229,6 +234,9 @@ public class TaskReporterNotification {
         mBuilder.setContentTitle(context.getResources().getString(R.string.notif_unfinished_tasks1) + " "
                 + taskAmount + " "
                 + context.getResources().getString(R.string.notif_unfinished_tasks2));
+
+
+        notificationIntent.putExtras(bundle);
 
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         mBuilder.setContentIntent(contentIntent);

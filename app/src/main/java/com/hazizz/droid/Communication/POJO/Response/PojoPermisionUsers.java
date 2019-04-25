@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import lombok.Data;
 
 @Data
-public class PojoPermisionUsers {
+public class PojoPermisionUsers implements Pojo {
 
     private ArrayList<POJOuser> OWNER;
 

@@ -75,20 +75,17 @@ public class D8 {
     public static String getDateTomorrow(){
         return tomorrow.toString();
     }
-    public static String getDay(){
-        return Integer.toString(LocalDate.now().getDayOfMonth());
+    public static int getDay(){
+        return LocalDate.now().getDayOfMonth();
     }
-    public static String getMonth(){
-        return Integer.toString(LocalDate.now().getMonthOfYear() + 1);
+    public static int getMonth(){
+        return LocalDate.now().getMonthOfYear() + 1;
 
     }
-    public static String getYear(){
-        return Integer.toString(LocalDate.now().getYear());
+    public static int getYear(){ return LocalDate.now().getYear();
     }
 
-    public static String getWeek(){
-        return Integer.toString(LocalDate.now().getWeekOfWeekyear());
-    }
+    public static int getWeek(){ return LocalDate.now().getWeekOfWeekyear(); }
 
     public static int getDayOfWeek(){
         return LocalDate.now().getDayOfWeek();

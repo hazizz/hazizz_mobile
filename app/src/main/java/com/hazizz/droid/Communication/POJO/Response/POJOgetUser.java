@@ -4,7 +4,7 @@ package com.hazizz.droid.Communication.POJO.Response;
 import lombok.Data;
 
 @Data
-public class POJOgetUser {
+public class POJOgetUser implements Pojo {
 
     private int id;
     private String username;

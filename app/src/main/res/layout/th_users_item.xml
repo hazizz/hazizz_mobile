@@ -7,7 +7,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white"
+    android:background="?android:attr/windowBackground"
+
     >
 
     <TextView
@@ -20,7 +21,6 @@
         android:layout_marginTop="16dp"
         android:ellipsize="end"
         android:text=":"
-
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/textView_subjectName"
         app:layout_constraintTop_toTopOf="parent" />

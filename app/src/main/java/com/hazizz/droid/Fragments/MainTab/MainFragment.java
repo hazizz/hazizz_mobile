@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.hazizz.droid.Activities.MainActivity;
+import com.hazizz.droid.Cache.HCache;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
@@ -24,7 +25,6 @@ import com.hazizz.droid.Fragments.ViewTaskFragment;
 import com.hazizz.droid.Listviews.HeaderItem;
 import com.hazizz.droid.Listviews.TaskList.Main.CustomAdapter;
 import com.hazizz.droid.Listviews.TaskList.TaskItem;
-import com.hazizz.droid.Manager;
 import com.hazizz.droid.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
@@ -62,6 +62,9 @@ public class MainFragment extends Fragment {
         createViewList();
         getTasks();
 
+        processData(HCache.getInstance()
+                .getTasksFromMe(getContext()));
+
         return v;
     }
 
@@ -92,47 +95,39 @@ public class MainFragment extends Fragment {
         });
     }
 
+    private void processData(List<POJOgetTask> data){
+        if(data != null) {
+            adapter.clear();
+            if (data.isEmpty()) {
+                textView_noContent.setVisibility(v.VISIBLE);
+            } else {
+                textView_noContent.setVisibility(v.INVISIBLE);
+                int lastDaysLeft = -1;
+                for (POJOgetTask t : data) {
+                    String date = t.getDueDate();
+                    int daysLeft = D8.textToDate(date).daysLeft();
+                    if (daysLeft > lastDaysLeft) {
+                        itemList.add(new HeaderItem(date));
+                        lastDaysLeft = daysLeft;
+                    }
+                    itemList.add(new TaskItem(R.drawable.ic_launcher_background, t.getTitle(),
+                            t.getDescription(), t.getGroup(), t.getCreator(), t.getSubject(), t.getId()));
+                }
+                adapter.notifyDataSetChanged();
+            }
+            sRefreshLayout.setRefreshing(false);
+        }
+    }
+
     private void getTasks(){
         CustomResponseHandler responseHandler = new CustomResponseHandler() {
+            @Override public void getRawResponseBody(String rawResponseBody) {
+                HCache.getInstance().setTasksFromMe(getContext(), rawResponseBody);
+            }
             @Override
             public void onPOJOResponse(Object response) {
-                adapter.clear();
-
-                ArrayList<POJOgetTask> sorted = D8.sortTasksByDate((ArrayList<POJOgetTask>) response);
-
-                if(sorted.isEmpty()) {
-                    textView_noContent.setVisibility(v.VISIBLE);
-                }else {
-                    textView_noContent.setVisibility(v.INVISIBLE);
-                    int lastDaysLeft = -1;//D8.textToDate(sorted.get(0).getDueDate()).daysLeft();
-                    for (POJOgetTask t : sorted) {
-                        String date = t.getDueDate();
-                        int daysLeft = D8.textToDate(date).daysLeft();
-                       // String deadline = D8.textToDate(t.getDueDate()).getMainFormat();
-
-
-                        if(daysLeft > lastDaysLeft) {
-                            itemList.add(new HeaderItem(date));
-                           // String deadline = D8.textToDate(t.getDueDate()).getMainFormat();
-                          /*  if(daysLeft == 0){
-                                title = getResources().getString(R.string.today);
-                            }else if(daysLeft == 1){
-                                title = getResources().getString(R.string.tomorrow);
-                            }
-                            else {
-                                title = daysLeft + " " + getResources().getString(R.string.days) + " " + getResources().getString(R.string.later);
-                            }
-                            */
-                          //  itemList.add(new HeaderItem(title, deadline));
-                            lastDaysLeft = daysLeft;
-                        }
-                        Log.e("hey",  "id task: " + t.getDueDate());
-                        itemList.add(new TaskItem(R.drawable.ic_launcher_background, t.getTitle(),
-                                t.getDescription(), t.getGroup(), t.getCreator(), t.getSubject(), t.getId()));
-                    }
-                    adapter.notifyDataSetChanged();
-                }
-                sRefreshLayout.setRefreshing(false);
+                ArrayList<POJOgetTask> sortedData = D8.sortTasksByDate((ArrayList<POJOgetTask>) response);
+                processData(sortedData);
             }
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {

@@ -55,12 +55,13 @@ import com.hazizz.droid.Fragments.MainTab.MainFragment;
 import com.hazizz.droid.Fragments.MyTasksFragment;
 import com.hazizz.droid.Fragments.ViewTaskFragment;
 import com.hazizz.droid.Listener.OnBackPressedListener;
-import com.hazizz.droid.Manager;
+import com.hazizz.droid.manager.Manager;
 import com.hazizz.droid.Notification.TaskReporterNotification;
 import com.hazizz.droid.SharedPrefs;
 import com.hazizz.droid.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
+import com.hazizz.droid.manager.ThreadManager;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -107,7 +108,7 @@ public class MainActivity extends AppCompatActivity
 
     private OnBackPressedListener currentBackPressedListener;
 
-
+    public static final String value_INTENT_MODE_CHOOSER = "chooser";
     public static final String value_INTENT_MODE_VIEWTASK = "viewTask";
     public static final String key_INTENT_MODE = "mode";
     public static final String key_INTENT_GROUPID = "groupId";
@@ -134,7 +135,6 @@ public class MainActivity extends AppCompatActivity
     CustomResponseHandler responseHandler = new CustomResponseHandler() {
         @Override
         public void onPOJOResponse(Object response) {
-
             POJOme pojo = (POJOme) response;
             SharedPrefs.save(getApplicationContext(),"userInfo", "username",pojo.getUsername());
             strNavEmail = (pojo.getEmailAddress());
@@ -172,6 +172,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+
         if(AppInfo.isDarkMode(getBaseContext())){
             setTheme(R.style.AppTheme_Dark);
         }else{
@@ -182,7 +183,6 @@ public class MainActivity extends AppCompatActivity
 
         //if (!BuildConfig.DEBUG) { // only enable bug tracking in release version
         Fabric.with(this, new Crashlytics());
-       // }
         Fabric.with(this, new Answers());
 
         if(!SharedPrefs.Server.hasChangedAddress(this)) {
@@ -190,7 +190,6 @@ public class MainActivity extends AppCompatActivity
         }
 
         meInfo = MeInfo.getInstance();
-
 
         FirebaseDynamicLinks.getInstance()
                 .getDynamicLink(getIntent())
@@ -202,7 +201,6 @@ public class MainActivity extends AppCompatActivity
                         if (pendingDynamicLinkData != null) {
                             deepLink = pendingDynamicLinkData.getLink();
                         }
-
                         if(deepLink!=null){
                             int groupId = Integer.parseInt(deepLink.getQueryParameter("group"));
 
@@ -223,7 +221,6 @@ public class MainActivity extends AppCompatActivity
                                 };
                                 MiddleMan.newRequest(new JoinGroup(thisActivity, rh_joinGroup, groupId));
                         }
-
                         Log.e("hey", "dynamic link lol: " + deepLink);
                     }
                 })
@@ -236,7 +233,7 @@ public class MainActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_main);
 
-        Manager.ThreadManager.startThreadIfNotRunning(this);
+        ThreadManager.getInstance().startThreadIfNotRunning(this);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -299,7 +296,14 @@ public class MainActivity extends AppCompatActivity
                     AppInfo.setDarkMode(getBaseContext(), true);
                     setTheme(R.style.AppTheme_Dark);
                 }
-                recreate();
+
+                Intent intent = new Intent(thisActivity, MainActivity.class);
+
+                finish();
+
+                startActivity(intent);
+                // removes the slide animation
+                overridePendingTransition(0, 0);
 
             }
         });
@@ -312,14 +316,9 @@ public class MainActivity extends AppCompatActivity
         menuItem_settings = menu_nav.getItem(4);
         menuItem_logs     = menu_nav.getItem(5);
 
-
         drawerLayout = findViewById(R.id.drawer_layout);
         drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
-            @Override
-            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
-
-            }
-
+            @Override public void onDrawerSlide(@NonNull View drawerView, float slideOffset) { }
             @Override
             public void onDrawerOpened(@NonNull View drawerView) {
                 if(!gotMyProfilePicRespond){
@@ -328,16 +327,8 @@ public class MainActivity extends AppCompatActivity
                     gotMyProfilePicRespond = true;
                 }
             }
-
-            @Override
-            public void onDrawerClosed(@NonNull View drawerView) {
-
-            }
-
-            @Override
-            public void onDrawerStateChanged(int newState) {
-
-            }
+            @Override public void onDrawerClosed(@NonNull View drawerView) { }
+            @Override public void onDrawerStateChanged(int newState) { }
         });
         toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(toggle);
@@ -363,29 +354,42 @@ public class MainActivity extends AppCompatActivity
         MiddleMan.newRequest(new MessageOfTheDay(this, rh_motd));
 
         if(AppInfo.isFirstTimeLaunched(getBaseContext())){
+            Transactor.authActivity(getBaseContext());
             TaskReporterNotification.enable(getBaseContext());
             TaskReporterNotification.setScheduleForNotification(getBaseContext(), 17, 0);
         }
 
-
-
-        Intent intent = getIntent();
-        String mode = intent.getStringExtra("mode");
-        if(mode != null && mode.equals(value_INTENT_MODE_VIEWTASK)){
-            long groupId = intent.getLongExtra(key_INTENT_GROUPID, 0);
-            long taskId = intent.getLongExtra(key_INTENT_TASKID, 0);
-            if(groupId != 0){
-                Transactor.fragmentViewTask(getSupportFragmentManager().beginTransaction(), (int)taskId,
-                        true, Strings.Dest.TOMAIN, ViewTaskFragment.publicMode);
-            }else{
-                Transactor.fragmentViewTask(getSupportFragmentManager().beginTransaction(), (int)taskId,
-                        true, Strings.Dest.TOMAIN, ViewTaskFragment.myMode);
-            }
+        if(AppInfo.isDarkMode(getBaseContext())){
+            imageButton_darkMode.setImageDrawable(getResources().getDrawable(R.drawable.ic_sun));
+          //  imageButton_darkMode.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_sun ));
+        }else{
+           // imageButton_darkMode.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_moon_gray));
+            imageButton_darkMode.setImageDrawable(getResources().getDrawable(R.drawable.ic_moon_gray));
         }
     }
 
     @Override
     public void onResume() {
+
+        Intent intent = getIntent();
+        String mode = intent.getStringExtra(key_INTENT_MODE);
+        if(mode != null){
+            if(mode.equals(value_INTENT_MODE_VIEWTASK)) {
+                int groupId = intent.getIntExtra(key_INTENT_GROUPID, 0);
+                int taskId = intent.getIntExtra(key_INTENT_TASKID, 0);
+                Log.e("hey", "group and task id: " + groupId + ", " + taskId);
+                if (groupId != 0) {
+                    Transactor.fragmentViewTask(getSupportFragmentManager().beginTransaction(), (int) taskId,
+                            true, Strings.Dest.TOMAIN, ViewTaskFragment.publicMode);
+                } else {
+                    Transactor.fragmentViewTask(getSupportFragmentManager().beginTransaction(), (int) taskId,
+                            true, Strings.Dest.TOMAIN, ViewTaskFragment.myMode);
+                }
+            }else if(mode.equals(value_INTENT_MODE_CHOOSER)){
+                Transactor.fragmentATChooser(getSupportFragmentManager().beginTransaction());
+            }
+        }
+
         super.onResume();
         invalidateOptionsMenu();
         Log.e("hey", "onResume is trigered");
@@ -393,11 +397,25 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Log.e("hey", "onCreateOptionsMenu asdasd");
+        Log.e("hey", "onCreateOptionsMenu called");
 
-        if(Manager.WidgetManager.getDest() == Manager.WidgetManager.TOATCHOOSER){
-            Transactor.fragmentATChooser(getSupportFragmentManager().beginTransaction());
-            Log.e("hey", "TOATCHOOSER hah");
+        Intent intent = getIntent();
+        String mode = intent.getStringExtra(key_INTENT_MODE);
+        if(mode != null){
+            if(mode.equals(value_INTENT_MODE_VIEWTASK)) {
+                int groupId = intent.getIntExtra(key_INTENT_GROUPID, 0);
+                int taskId = intent.getIntExtra(key_INTENT_TASKID, 0);
+                Log.e("hey", "group and task id: " + groupId + ", " + taskId);
+                if (groupId != 0) {
+                    Transactor.fragmentViewTask(getSupportFragmentManager().beginTransaction(), (int) taskId,
+                            true, Strings.Dest.TOMAIN, ViewTaskFragment.publicMode);
+                } else {
+                    Transactor.fragmentViewTask(getSupportFragmentManager().beginTransaction(), (int) taskId,
+                            true, Strings.Dest.TOMAIN, ViewTaskFragment.myMode);
+                }
+            }else if(mode.equals(value_INTENT_MODE_CHOOSER)){
+                Transactor.fragmentATChooser(getSupportFragmentManager().beginTransaction());
+            }
         }
         else if(toMainFrag) {
             toMainFrag();

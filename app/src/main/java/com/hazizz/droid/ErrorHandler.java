@@ -4,14 +4,9 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 
-import com.hazizz.droid.AndroidThings;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.Communication.Requests.Feedback;
-import com.hazizz.droid.Manager;
-import com.hazizz.droid.R;
-import com.hazizz.droid.Transactor;
-
-import java.util.HashMap;
+import com.hazizz.droid.manager.Manager;
 
 public class ErrorHandler {
 

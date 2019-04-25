@@ -18,8 +18,6 @@ import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.Requests.Subject.DeleteSubject;
 import com.hazizz.droid.Communication.Requests.Subject.EditSubject;
 import com.hazizz.droid.Communication.Strings;
-import com.hazizz.droid.Fragments.GroupTabs.SubjectsFragment;
-import com.hazizz.droid.Manager;
 import com.hazizz.droid.R;
 import com.hazizz.droid.Transactor;
 

@@ -4,7 +4,7 @@ import android.util.Log;
 
 import lombok.Data;
 
-public class POJOerror{
+public class POJOerror implements Pojo{
 
     private String time = "null";
     private int errorCode = 0;

@@ -29,8 +29,6 @@ import com.hazizz.droid.Transactor;
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.ResponseBody;
-import retrofit2.Call;
 
 public class TheraSchedulesFragment extends ParentFragment {
 
@@ -44,14 +42,12 @@ public class TheraSchedulesFragment extends ParentFragment {
 
     private int currentDay;
 
-    private String weekNumber;
-    private String year;
+    private int weekNumber;
+    private int year;
 
     private static final int weekEndStart = 5;
 
-
-    @Nullable
-    @Override
+    @Nullable @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_th_timetable, container, false);
         Log.e("hey", "TheraSchedulesFragment fragment created");
@@ -67,13 +63,14 @@ public class TheraSchedulesFragment extends ParentFragment {
         currentDay = D8.getDayOfWeek()-1;
         if(currentDay >= weekEndStart){
             currentDay = 0;
+            weekNumber++;
         }
         spinner_day_chooser = v.findViewById(R.id.spinner_day_chooser);
         spinner_day_chooser.setSelection(currentDay);
         spinner_day_chooser.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                currentDay = position+1;
+                currentDay = position;
                 getCurrentDaySchedules(currentDay);
                 textView_spinner_display.setText(spinner_day_chooser.getSelectedItem().toString());
             }
@@ -86,14 +83,12 @@ public class TheraSchedulesFragment extends ParentFragment {
 
         textView_spinner_display = v.findViewById(R.id.textView_spinner_display);
 
-
         weekNumber = D8.getWeek();
         year = D8.getYear();
 
         createViewList();
         getSchedules();
         return v;
-
     }
     void createViewList(){
         listClassesCurrentDay = new ArrayList<>();

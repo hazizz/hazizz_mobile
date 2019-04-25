@@ -117,7 +117,7 @@ public class CustomAdapter extends ArrayAdapter<CommentItem>  {
 
         popup.getMenuInflater().inflate(R.menu.menu_comment_item_popup, popup.getMenu());
 
-        if(MeInfo.getInstance().getUserId() == commentItem.getCreator().getId()) {
+        if(MeInfo.getInstance().getUserId() == commentItem.getCreator().getId() || MeInfo.getInstance().getRankInCurrentGroup().getValue() >= Strings.Rank.MODERATOR.getValue()) {
             popup.getMenu().getItem(3).setVisible(true);
         }
 

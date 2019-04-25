@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.hazizz.droid.Cache.CurrentGroup;
+import com.hazizz.droid.Cache.HCache;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
@@ -48,15 +49,12 @@ public class GroupMainFragment extends TabFragment {
 
     private CurrentGroup currentGroup;
 
-
     FragmentManager fg;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_main, container, false);
-
-
 
         fragmentSetup();
 
@@ -74,15 +72,15 @@ public class GroupMainFragment extends TabFragment {
         sRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimaryDarkBlue), getResources().getColor(R.color.colorPrimaryLightBlue), getResources().getColor(R.color.colorPrimaryDarkBlue));
         fg = getFragmentManager();
 
-    //    getTasks();
-
         currentGroup = CurrentGroup.getInstance();
         createViewList();
         if(!isViewShown) {
             getTasks();
+            processData(HCache.getInstance()
+                        .getGroup(getContext(), groupId)
+                        .getTasks(getContext()));
             isViewShown = true;
         }
-
         return v;
     }
 
@@ -107,32 +105,43 @@ public class GroupMainFragment extends TabFragment {
         });
     }
 
+    private void processData(List<POJOgetTask> data){
+        if(data != null) {
+            adapter.clear();
+            if (data.isEmpty()) {
+                textView_noContent.setVisibility(v.VISIBLE);
+            } else {
+                textView_noContent.setVisibility(v.INVISIBLE);
+                int lastDaysLeft = -1;
+                for (POJOgetTask t : data) {
+                    String date = t.getDueDate();
+                    int daysLeft = D8.textToDate(date).daysLeft();
+
+                    if (daysLeft > lastDaysLeft) {
+                        itemList.add(new HeaderItem(date));
+                        lastDaysLeft = daysLeft;
+                    }
+                    itemList.add(new TaskItem(R.drawable.ic_launcher_background, t.getTitle(),
+                            t.getDescription(), t.getGroup(), t.getCreator(), t.getSubject(), t.getId()));
+                }
+                adapter.notifyDataSetChanged();
+            }
+            sRefreshLayout.setRefreshing(false);
+        }
+    }
+
     private void getTasks(){
         CustomResponseHandler responseHandler = new CustomResponseHandler() {
             @Override
-            public void onPOJOResponse(Object response) {
-                adapter.clear();
-                ArrayList<POJOgetTask> sorted = D8.sortTasksByDate((ArrayList<POJOgetTask>) response);
-                if(sorted.isEmpty()){
-                    textView_noContent.setVisibility(v.VISIBLE);
-                }else {
-                    textView_noContent.setVisibility(v.INVISIBLE);
-                    int lastDaysLeft = -1;
-                    for (POJOgetTask t : sorted) {
-                        String date = t.getDueDate();
-                        int daysLeft = D8.textToDate(date).daysLeft();
+            public void getRawResponseBody(String rawResponseBody) {
+                HCache.getInstance().getGroup(getContext(), groupId).setTasks(getContext(), rawResponseBody);
+            }
 
-                        if(daysLeft > lastDaysLeft) {
-                            itemList.add(new HeaderItem(date));
-                            lastDaysLeft = daysLeft;
-                        }
-                        Log.e("hey",  "id task: " + t.getDueDate());
-                        itemList.add(new TaskItem(R.drawable.ic_launcher_background, t.getTitle(),
-                                t.getDescription(), t.getGroup(), t.getCreator(), t.getSubject(), t.getId()));
-                    }
-                    adapter.notifyDataSetChanged();
-                }
-                sRefreshLayout.setRefreshing(false);
+            @Override
+            public void onPOJOResponse(Object response) {
+
+                ArrayList<POJOgetTask> sortedData = D8.sortTasksByDate((ArrayList<POJOgetTask>) response);
+                processData(sortedData);
             }
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
@@ -158,10 +167,6 @@ public class GroupMainFragment extends TabFragment {
         Transactor.fragmentCreateTask(fm.beginTransaction(), groupId, groupName, Strings.Dest.TOGROUP);
 
     }
-
-
-
-
 
 
     @Override
