@@ -5,13 +5,14 @@ import android.os.Parcelable;
 
 import com.hazizz.droid.Communication.POJO.Response.POJOgroup;
 import com.hazizz.droid.Communication.POJO.Response.POJOsubject;
+import com.hazizz.droid.Communication.POJO.Response.Pojo;
 import com.hazizz.droid.Communication.POJO.Response.PojoAssignation;
 import com.hazizz.droid.Communication.POJO.Response.PojoType;
 
 import lombok.Data;
 
 @Data
-public class POJOgetTask implements Parcelable {
+public class POJOgetTask implements Parcelable, Pojo {
 
     private int id;
     private PojoAssignation assignation;

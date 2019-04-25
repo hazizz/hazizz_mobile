@@ -14,7 +14,7 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.hazizz.droid.Activities.AuthActivity;
-import com.hazizz.droid.Manager;
+import com.hazizz.droid.manager.Manager;
 import com.hazizz.droid.R;
 
 public class CollectionWidgetProvider extends AppWidgetProvider {

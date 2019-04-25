@@ -2,8 +2,6 @@ package com.hazizz.droid.Activities;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -13,15 +11,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hazizz.droid.AndroidThings;
+import com.hazizz.droid.AppInfo;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.Requests.Feedback;
-import com.hazizz.droid.Manager;
 import com.hazizz.droid.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
-
-import java.util.HashMap;
 
 public class FeedbackActivity extends AppCompatActivity {
 
@@ -50,6 +46,13 @@ public class FeedbackActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        if(AppInfo.isDarkMode(getBaseContext())){
+            setTheme(R.style.AppTheme_Dark);
+        }else{
+            setTheme(R.style.AppTheme_Light);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback);
         setTitle(R.string.title_activity_feedback);

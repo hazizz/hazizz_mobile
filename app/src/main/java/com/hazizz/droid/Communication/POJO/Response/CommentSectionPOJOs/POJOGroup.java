@@ -1,10 +1,12 @@
 package com.hazizz.droid.Communication.POJO.Response.CommentSectionPOJOs;
 
 
+import com.hazizz.droid.Communication.POJO.Response.Pojo;
+
 import lombok.Data;
 
 @Data
-public class POJOGroup {
+public class POJOGroup implements Pojo {
     private int id;
     private String name;
     private String groupType;

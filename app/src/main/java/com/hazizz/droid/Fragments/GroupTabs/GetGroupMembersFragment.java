@@ -21,13 +21,11 @@ import com.hazizz.droid.Communication.POJO.Response.POJOMembersProfilePic;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.POJO.Response.POJOuser;
 import com.hazizz.droid.Communication.POJO.Response.PojoPermisionUsers;
-import com.hazizz.droid.Communication.Requests.GetGroupMemberPermisions;
 import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.Fragments.ParentFragment.TabFragment;
 import com.hazizz.droid.Listviews.UserList.CustomAdapter;
 import com.hazizz.droid.Listviews.UserList.UserItem;
-import com.hazizz.droid.Manager;
-import com.hazizz.droid.Communication.MiddleMan;
+import com.hazizz.droid.manager.Manager;
 import com.hazizz.droid.R;
 import com.hazizz.droid.Transactor;
 

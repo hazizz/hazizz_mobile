@@ -151,6 +151,8 @@
     <string name="server_address">Server address</string>
     <string name="set">Set</string>
     <string name="dangerous">Dangerous!!!</string>
+    <string name="copied">Copied</string>
+    <string name="copied_to_clipboard">Copied to clipboard</string>
 
     <string name="school_">School:</string>
 

@@ -574,6 +574,11 @@ public class Transactor extends FragmentActivity {
 
 
 
+    public static void openApp(Context context, Bundle bundle){
+        Intent intent = new Intent(context, AuthActivity.class);
+        intent.putExtras(bundle);
+        context.startActivity(intent);
+    }
 
 
     public static void feedbackActivity(Activity thisActivity){

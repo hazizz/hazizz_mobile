@@ -15,9 +15,11 @@ import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.Requests.Parent.Request;
 import com.hazizz.droid.Communication.Requests.RequestType.Tokens.RefreshToken;
 import com.hazizz.droid.ErrorHandler;
-import com.hazizz.droid.Manager;
+import com.hazizz.droid.manager.Manager;
 import com.hazizz.droid.R;
 import com.hazizz.droid.SharedPrefs;
+import com.hazizz.droid.Transactor;
+import com.hazizz.droid.manager.ThreadManager;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -49,10 +51,13 @@ public interface RequestInterface {
                          Log.e("hey", "errorCOde is: " + pojoError.getErrorCode());
                          Log.e("hey", "errorMessage is: " + pojoError.getMessage());
 
+                         ThreadManager threadManager = ThreadManager.getInstance();
+
+
                          if(pojoError.getErrorCode() == 18 || pojoError.getErrorCode() == 17) {
                               MiddleMan.addToCallAgain(request);
-                              if(!Manager.ThreadManager.isFreezed()) {
-                                   Manager.ThreadManager.freezeThread();
+                              if(!threadManager.isFreezed()) {
+                                   threadManager.freezeThread();
 
                                    Request r = new RefreshToken(context);
                                    r.setupCall();
@@ -64,8 +69,8 @@ public interface RequestInterface {
                               }
                               // too many requests
                          }else if(pojoError.getErrorCode() == 19){
-                              if(!Manager.ThreadManager.isDelayed()) {
-                                   Manager.ThreadManager.startDelay();
+                              if(!threadManager.isDelayed()) {
+                                   threadManager.startDelay();
 
                                    MiddleMan.cancelAndSaveAllRequests();
                                    MiddleMan.addToCallAgain(request);
@@ -110,6 +115,8 @@ public interface RequestInterface {
                     Log.e("hey", "gotResponse");
                     Log.e("hey", response.raw().toString());
 
+
+
                     if(response.body() == null){
                          Log.e("hey", "response is null ");
                     }
@@ -118,7 +125,12 @@ public interface RequestInterface {
                          callIsSuccessful(response);
                     }
 
+
                     else if(!response.isSuccessful()){ // response != null
+
+                         ThreadManager threadManager = ThreadManager.getInstance();
+
+
                          POJOerror pojoError = gson.fromJson(response.errorBody().charStream(),POJOerror.class);
                          Log.e("hey", "errorCOde is: " + pojoError.getErrorCode());
                          Log.e("hey", "errorMessage is: " + pojoError.getMessage());
@@ -129,16 +141,14 @@ public interface RequestInterface {
 
                          if(pojoError.getErrorCode() == 0) {
                               if(SharedPrefs.TokenManager.tokenInvalidated(act)){
-                                   Intent i = new Intent(act, AuthActivity.class);
-
-                                   act.startActivity(i);
+                                   Transactor.authActivity(act);
                               }
                          }
 
                          else if(pojoError.getErrorCode() == 18 || pojoError.getErrorCode() == 17) {
                               MiddleMan.addToCallAgain(request);
-                              if(!Manager.ThreadManager.isFreezed()) {
-                                   Manager.ThreadManager.freezeThread();
+                              if(!threadManager.isFreezed()) {
+                                   threadManager.freezeThread();
 
 
                                    Request r = new RefreshToken(act);
@@ -151,8 +161,8 @@ public interface RequestInterface {
                               }
                               // too many requests
                          }else if(pojoError.getErrorCode() == 19){
-                              if(!Manager.ThreadManager.isDelayed()) {
-                                   Manager.ThreadManager.startDelay();
+                              if(!threadManager.isDelayed()) {
+                                   threadManager.startDelay();
 
                                    MiddleMan.cancelAndSaveAllRequests();
                                   // MiddleMan.gotRequestResponse(request);
@@ -225,7 +235,11 @@ public interface RequestInterface {
                          callIsSuccessful(response);
                     }
 
+
                     else if(!response.isSuccessful()){ // response != null
+                         ThreadManager threadManager = ThreadManager.getInstance();
+
+
                          POJOerror pojoError = gson.fromJson(response.errorBody().charStream(),POJOerror.class);
                          Log.e("hey", "errorCOde is: " + pojoError.getErrorCode());
                          Log.e("hey", "errorMessage is: " + pojoError.getMessage());
@@ -242,8 +256,8 @@ public interface RequestInterface {
                               }
 
                          }else if(pojoError.getErrorCode() == 19){
-                              if(!Manager.ThreadManager.isDelayed()) {
-                                   Manager.ThreadManager.startDelay();
+                              if(!threadManager.isDelayed()) {
+                                   threadManager.startDelay();
                                    MiddleMan.addToRateLimitQueue(request);
                                //    MiddleMan.cancelAndSaveAllRequests();
                               }else {

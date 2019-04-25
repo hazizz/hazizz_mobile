@@ -5,12 +5,18 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
+import com.hazizz.droid.Communication.POJO.Response.Pojo;
 import com.hazizz.droid.Communication.RequestInterface;
 import com.hazizz.droid.Communication.Requests.RequestTypes;
+import com.hazizz.droid.Listviews.TheraGradesList.TheraGradesItem;
 import com.hazizz.droid.SharedPrefs;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
+import java.util.List;
+import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -139,5 +145,12 @@ public class Request implements RequestInterface {
     public void callIsSuccessful(Response<ResponseBody> response) { }
 
     public void makeSyncCall(){ }
+
+
+    public void cache(String key, String serializedObject){
+
+    }
+
+
 }
 

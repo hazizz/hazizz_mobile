@@ -2,13 +2,14 @@ package com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs;
 
 import com.hazizz.droid.Communication.POJO.Response.POJOgroup;
 import com.hazizz.droid.Communication.POJO.Response.POJOsubject;
+import com.hazizz.droid.Communication.POJO.Response.Pojo;
 import com.hazizz.droid.Communication.POJO.Response.PojoAssignation;
 import com.hazizz.droid.Communication.POJO.Response.PojoType;
 
 import lombok.Data;
 
 @Data
-public class POJOgetTaskDetailed {
+public class POJOgetTaskDetailed  implements Pojo {
     private int id;
     private PojoAssignation assignation;
     private PojoType type;

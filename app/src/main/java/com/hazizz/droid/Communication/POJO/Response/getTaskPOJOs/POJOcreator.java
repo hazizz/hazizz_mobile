@@ -1,9 +1,11 @@
 package com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs;
 
+import com.hazizz.droid.Communication.POJO.Response.Pojo;
+
 import lombok.Data;
 
 @Data
-public class POJOcreator {
+public class POJOcreator implements Pojo {
 
     private long id;
     private String username;

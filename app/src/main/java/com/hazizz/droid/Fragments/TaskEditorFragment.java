@@ -39,7 +39,6 @@ import com.hazizz.droid.Communication.Strings;
 import com.hazizz.droid.D8;
 import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
 import com.hazizz.droid.Listener.OnBackPressedListener;
-import com.hazizz.droid.Manager;
 import com.hazizz.droid.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
@@ -94,6 +93,8 @@ public class TaskEditorFragment extends ParentFragment {
 
     private short where = 0;
     private short type = 0;
+
+    private boolean firstSelection = true;
 
     CustomResponseHandler rh_task = new CustomResponseHandler() {
         @Override
@@ -195,7 +196,6 @@ public class TaskEditorFragment extends ParentFragment {
             }
         });
 
-
         textView_deadline = v.findViewById(R.id.textView_deadline);
 
         textView_deadline.setOnClickListener(new View.OnClickListener(){
@@ -243,7 +243,6 @@ public class TaskEditorFragment extends ParentFragment {
 
         }
         if( type == EDITMODE ){
-
             if(where == MYMODE){
                 spinner_subject.setVisibility(View.GONE);
                 textView_subject_.setVisibility(View.GONE);
@@ -255,7 +254,6 @@ public class TaskEditorFragment extends ParentFragment {
                 subject = getArguments().getInt(Transactor.KEY_SUBJECTID);
                 textView_subject.setText(getArguments().getString(Transactor.KEY_SUBJECTNAME));
                 textView_group.setText(getArguments().getString(Transactor.KEY_GROUPNAME));
-
             }
 
             date = getArguments().getString(Transactor.KEY_DATE);
@@ -278,9 +276,13 @@ public class TaskEditorFragment extends ParentFragment {
             spinner_group.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    groupId = ((POJOgroup)spinner_group.getItemAtPosition(position)).getId();
-                    MiddleMan.newRequest(new GetSubjects(getActivity(),rh_subjects, (int)groupId));
-                    textView_group.setText(((POJOgroup)spinner_group.getItemAtPosition(position)).getName());
+                    MiddleMan.newRequest(new GetSubjects(getActivity(), rh_subjects, (int) groupId));
+                    if(!firstSelection) {
+                        groupId = ((POJOgroup) spinner_group.getItemAtPosition(position)).getId();
+                        textView_group.setText(((POJOgroup) spinner_group.getItemAtPosition(position)).getName());
+                    }else{
+                        firstSelection = false;
+                    }
                 }
                 @Override public void onNothingSelected(AdapterView<?> parent) { }
             });
@@ -288,8 +290,6 @@ public class TaskEditorFragment extends ParentFragment {
                 @Override public void onPOJOResponse(Object response) {
                     groups = (ArrayList<POJOgroup>) response;
                     g_adapter.clear();
-                    //  g_adapter.add(new POJOsubject(0, getString(R.string.subject_none)));
-                    int choosenId;
                     if (!groups.isEmpty()) {
                         int emGroupId = 0;
                         int index = 0;
@@ -306,10 +306,6 @@ public class TaskEditorFragment extends ParentFragment {
                         if (type == EDITMODE) {
                             spinner_group.setSelection(emGroupId);
                         }
-                      //  }else if(groupId!=0){
-
-                      //  }
-
                     }
                     s_adapter.notifyDataSetChanged();
                 }
@@ -380,19 +376,8 @@ public class TaskEditorFragment extends ParentFragment {
                 if(day < 10){str_day = "0" + day;}else{str_day = day + "";}
                 date = year + "-" + month + "-" + day;
                 textView_deadline.setText(str_year + "." + str_month + "."+ str_day);
-
-
-                /*
-                if(day < 10) {
-                    int f_day = day+1;
-                    str_day = "0" + f_day;
-                }else {
-                    int f_day = day+1;
-                    str_day = f_day + "";
-                }
-                */
             }
-        }, Integer.parseInt(D8.getYear()), Integer.parseInt(D8.getMonth()) -2, Integer.parseInt(D8.getDay()));
+        }, D8.getYear(), D8.getMonth() -2, D8.getDay()+1);
         //dpd.getDatePicker().setMaxDate(Calendar.getInstance().getTimeInMillis() - 1000);
 
         Calendar cal = Calendar.getInstance();
@@ -409,35 +394,9 @@ public class TaskEditorFragment extends ParentFragment {
         dpd.getDatePicker().setMaxDate(oneYearLater);
         //1551719814281
 
-        Log.e("hey", "now in millisec" + (Calendar.getInstance().getTimeInMillis() - 1000));
-
-
-
-
 
         return v;
     }
-    /*
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        ConstraintLayout mainLayout = (ConstraintLayout) v.findViewById(R.id.constraintLayout);
-        mainLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                int h = mainLayout.getMeasuredHeight();
-                if(h > 0) {
-                    mainLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                    ConstraintLayout mainLayout = (ConstraintLayout) v.findViewById(R.id.constraintLayout);
-                    ViewGroup.LayoutParams params = mainLayout.getLayoutParams();
-                    params.height = h;
-                    mainLayout.setLayoutParams(new LinearLayout.LayoutParams(params));
-                }
-            }
-        });
-    }
-    */
 
     private void editTask() {
         int tTypeId = spinner_taskType.getSelectedItemPosition() + 1;

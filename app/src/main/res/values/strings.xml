@@ -145,6 +145,8 @@
     <string name="server_address">Szerver cím</string>
     <string name="set">Beállítás</string>
     <string name="dangerous">Veszélyes!!!</string>
+    <string name="copied">Másolva</string>
+    <string name="copied_to_clipboard">Vágólapra másolva</string>
 
 
     <string name="school_">Iskola:</string>

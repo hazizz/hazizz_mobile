@@ -1,11 +1,12 @@
 package com.hazizz.droid.Communication.POJO.Response.CommentSectionPOJOs;
 
+import com.hazizz.droid.Communication.POJO.Response.Pojo;
 import com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs.POJOcreator;
 
 import lombok.Data;
 
 @Data
-public class POJOComment {
+public class POJOComment implements Pojo {
     private int id;
 
     private String content;

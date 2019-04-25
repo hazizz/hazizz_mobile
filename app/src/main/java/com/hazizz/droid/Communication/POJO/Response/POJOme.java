@@ -5,7 +5,7 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class POJOme {
+public class POJOme implements Pojo {
 
     private final int id;
     private final String username;

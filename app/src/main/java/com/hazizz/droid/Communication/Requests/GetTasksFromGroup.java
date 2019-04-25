@@ -8,6 +8,7 @@ import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
 import com.hazizz.droid.Communication.Requests.Parent.Request;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,11 +32,18 @@ public class GetTasksFromGroup extends Request {
 
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
-        Log.e("hey", "response.isSuccessful()");
-
         Type listType = new TypeToken<ArrayList<POJOgetTask>>(){}.getType();
-        List<POJOgetTask> castedList = gson.fromJson(response.body().charStream(), listType);
+
+        List<POJOgetTask> castedList = null;
+        try {
+            String rawResponseBody = response.body().string();
+            castedList = gson.fromJson(rawResponseBody, listType);
+            cOnResponse.getRawResponseBody(rawResponseBody);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e("hey", "ioexception lololol");
+        }
+
         cOnResponse.onPOJOResponse(castedList);
-        Log.e("hey", "size of response list: " + castedList.size());
     }
 }

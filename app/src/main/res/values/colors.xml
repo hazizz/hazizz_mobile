@@ -4,14 +4,21 @@
     <color name="colorPrimaryDarkerBlue">#2b909b</color>
     <color name="colorPrimaryDarkBlue">#36B1BF</color>
     <color name="colorPrimaryLightBlue">#46D9D9</color>
-    <color name="colorPrimaryLightestBlue">#8946d9d9</color>
+    <color name="colorPrimaryLightestBlue">#63D8D8</color>
 
-    <color name="color_hazizz_background_blue">#d4f7f7</color>
+    <color name="colorPrimary_dark">#0F6A8B</color>
+    <color name="colorPrimaryDark_dark">#46698D</color>
+
+
+
+    <color name="color_hazizz_background_blue">#8881E7E7</color>
     <color name="color_hazizz_list_item_blue">#edffff</color>
 
     <color name="white">#ffffff</color>
 
     <color name="colorBackground_dark">#292929</color>
+
+    <color name="color_white_layer">#45FFFFFF</color>
 
     <color name="colorBackground_light">#ffffff</color>
     <color name="colorBackground">#ffffff</color>
@@ -39,11 +46,11 @@
     <color name="colorTheraGradeWeight150">#13a300</color>
 
 
-    <color name="colorTextColorPrimary_light">#CD1B1C1F</color>
-    <color name="colorTextColorSecondary_light">#8033343B</color>
+    <color name="colorTextColorPrimary_light">#2E2E2E</color>
+    <color name="colorTextColorSecondary_light">#2E2E2E</color>
 
     <color name="colorTextColorPrimary_dark">#F4F4F6</color>
-    <color name="colorTextColorSecondary_dark">#96F4F4F6</color>
+    <color name="colorTextColorSecondary_dark">#C4C4C4</color>
 
 
 </resources>

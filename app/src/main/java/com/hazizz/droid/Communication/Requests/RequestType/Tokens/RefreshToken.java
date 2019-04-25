@@ -4,26 +4,20 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJORefreshToken;
 import com.hazizz.droid.Communication.POJO.Response.POJOerror;
 import com.hazizz.droid.Communication.Requests.Parent.Request;
-import com.hazizz.droid.Communication.Requests.RequestTypes;
-import com.hazizz.droid.Manager;
+import com.hazizz.droid.manager.Manager;
 import com.hazizz.droid.SharedPrefs;
 import com.hazizz.droid.Transactor;
+import com.hazizz.droid.manager.ThreadManager;
 
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
 
-import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RefreshToken extends Request {
 
@@ -35,7 +29,7 @@ public class RefreshToken extends Request {
             POJORefreshToken pojoRefreshToken = (POJORefreshToken)response;
             SharedPrefs.TokenManager.setRefreshToken(context, pojoRefreshToken.getRefresh());
             SharedPrefs.TokenManager.setToken(context, pojoRefreshToken.getToken());
-            Manager.ThreadManager.unfreezeThread();
+            ThreadManager.getInstance().unfreezeThread();
             MiddleMan.callAgain();
             Log.e("hey", "got refresh token response");
         }

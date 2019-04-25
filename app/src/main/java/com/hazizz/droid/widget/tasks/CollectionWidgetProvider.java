@@ -14,7 +14,7 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.hazizz.droid.Activities.AuthActivity;
-import com.hazizz.droid.Manager;
+import com.hazizz.droid.Activities.MainActivity;
 import com.hazizz.droid.R;
 
 public class CollectionWidgetProvider extends AppWidgetProvider {
@@ -207,8 +207,8 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
             setRefreshButton(context, widgetView);
             setOpenAppButton(context, widgetView);
 
-            Manager.WidgetManager.setDest(Manager.WidgetManager.TOATCHOOSER);
             Intent i = new Intent(context, AuthActivity.class);
+            i.putExtra(MainActivity.key_INTENT_MODE, MainActivity.value_INTENT_MODE_CHOOSER);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(i);
             Log.e("hey", "CLICK WIDGET_OPENAPPBUTTON");

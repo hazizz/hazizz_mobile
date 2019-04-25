@@ -15,6 +15,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.hazizz.droid.Activities.AuthActivity;
 import com.hazizz.droid.Activities.MainActivity;
 import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
 import com.hazizz.droid.Communication.POJO.Response.POJOauth;
@@ -46,9 +47,6 @@ public class LoginFragment extends Fragment {
 
 
     private View v;
-    //   private TextView textView;
-
-    //  private MyCallback<ResponseBodies.Error> errorCallback;
 
     CustomResponseHandler responseHandler = new CustomResponseHandler() {
         @Override
@@ -58,8 +56,8 @@ public class LoginFragment extends Fragment {
             }
             SharedPrefs.TokenManager.setToken(getContext() ,((POJOauth)response).getToken());
             SharedPrefs.TokenManager.setRefreshToken(getContext() ,((POJOauth)response).getRefresh());
-            switchToMain();
             button_login.setEnabled(true);
+            ((AuthActivity)getActivity()).openMainActivity();
             Transactor.fragmentFirst(getFragmentManager().beginTransaction());
         }
         @Override
@@ -75,7 +73,6 @@ public class LoginFragment extends Fragment {
         }
         @Override
         public void onErrorResponse(POJOerror error) {
-            //  textView.append("\n errorCode: " + error.getErrorCode());
             if(error.getErrorCode() == 12){ // wrong password
                 textView_error.setText(R.string.error_wrongPassword);
             }
@@ -95,7 +92,6 @@ public class LoginFragment extends Fragment {
             button_login.setEnabled(true);
         }
     };
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -136,11 +132,6 @@ public class LoginFragment extends Fragment {
             }
         });
         return v;
-    }
-
-    private void switchToMain(){
-        Intent i = new Intent(this.getActivity(), MainActivity.class);
-        startActivity(i);
     }
 
 }
