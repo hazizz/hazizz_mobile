@@ -1,4 +1,4 @@
-package com.hazizz.droid.Fragments.MainTab;
+package com.hazizz.droid.fragments.MainTab;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,16 +12,17 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.hazizz.droid.Activities.MainActivity;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.POJOerror;
-import com.hazizz.droid.Communication.POJO.Response.POJOgroup;
-import com.hazizz.droid.Communication.Requests.GetGroupsFromMe;
+import com.hazizz.droid.activities.MainActivity;
+
+import com.hazizz.droid.Communication.requests.GetGroupsFromMe;
 import com.hazizz.droid.Communication.Strings;
-import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
-import com.hazizz.droid.Listviews.GroupList.CustomAdapter;
-import com.hazizz.droid.Listviews.GroupList.GroupItem;
-import com.hazizz.droid.Transactor;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.Communication.responsePojos.PojoError;
+import com.hazizz.droid.Communication.responsePojos.PojoGroup;
+import com.hazizz.droid.fragments.ParentFragment.ParentFragment;
+import com.hazizz.droid.listviews.GroupList.CustomAdapter;
+import com.hazizz.droid.listviews.GroupList.GroupItem;
+import com.hazizz.droid.navigation.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
 
@@ -95,10 +96,10 @@ public class GroupsFragment extends ParentFragment {
             public void onPOJOResponse(Object response) {
                 adapter.clear();
                 textView_noContent.setVisibility(View.INVISIBLE);
-                ArrayList<POJOgroup> castedListFullOfPojos = (ArrayList<POJOgroup>)response;
+                ArrayList<PojoGroup> castedListFullOfPojos = (ArrayList<PojoGroup>)response;
                 listGroup.clear();
                 if(!castedListFullOfPojos.isEmpty()) {
-                    for (POJOgroup g : castedListFullOfPojos) {
+                    for (PojoGroup g : castedListFullOfPojos) {
                         listGroup.add(new GroupItem(R.drawable.ic_launcher_background, g.getName(), g.getId()));
                     }
                     adapter.notifyDataSetChanged();
@@ -112,7 +113,7 @@ public class GroupsFragment extends ParentFragment {
                 sRefreshLayout.setRefreshing(false);
             }
             @Override
-            public void onErrorResponse(POJOerror error) {
+            public void onErrorResponse(PojoError error) {
                 sRefreshLayout.setRefreshing(false);
             }
             @Override

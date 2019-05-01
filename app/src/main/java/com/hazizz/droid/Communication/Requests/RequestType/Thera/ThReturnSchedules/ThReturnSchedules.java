@@ -1,14 +1,16 @@
-package com.hazizz.droid.Communication.Requests.RequestType.Thera.ThReturnSchedules;
+package com.hazizz.droid.Communication.requests.RequestType.Thera.ThReturnSchedules;
 
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.POJOerror;
-import com.hazizz.droid.Communication.Requests.Parent.ThRequest;
-import com.hazizz.droid.Listviews.TheraReturnSchedules.ClassItem;
+
+
+import com.hazizz.droid.Communication.requests.parent.ThRequest;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.Communication.responsePojos.PojoError;
+import com.hazizz.droid.listviews.TheraReturnSchedules.ClassItem;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -61,7 +63,7 @@ public class ThReturnSchedules extends ThRequest {
                 ArrayList<ClassItem> castedList = gson.fromJson(response.body().charStream(), listType);
                 cOnResponse.onPOJOResponse(castedList);
             }catch (Exception e){
-                POJOerror error = gson.fromJson(response.errorBody().charStream(), POJOerror.class);
+                PojoError error = gson.fromJson(response.errorBody().charStream(), PojoError.class);
                 cOnResponse.onErrorResponse(error);
             }
         } catch (IOException e) {

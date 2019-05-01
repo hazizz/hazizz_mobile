@@ -1,4 +1,4 @@
-package com.hazizz.droid.Fragments;
+package com.hazizz.droid.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,17 +11,18 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import com.hazizz.droid.Activities.MainActivity;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.POJOerror;
-import com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
-import com.hazizz.droid.Communication.Requests.GetMyTasks;
+import com.hazizz.droid.activities.MainActivity;
+
+import com.hazizz.droid.Communication.requests.GetMyTasks;
 import com.hazizz.droid.Communication.Strings;
-import com.hazizz.droid.D8;
-import com.hazizz.droid.Listviews.HeaderItem;
-import com.hazizz.droid.Listviews.TaskList.Main.CustomAdapter;
-import com.hazizz.droid.Listviews.TaskList.TaskItem;
-import com.hazizz.droid.Transactor;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.Communication.responsePojos.PojoError;
+import com.hazizz.droid.Communication.responsePojos.taskPojos.PojoTask;
+import com.hazizz.droid.other.D8;
+import com.hazizz.droid.listviews.HeaderItem;
+import com.hazizz.droid.listviews.TaskList.Main.CustomAdapter;
+import com.hazizz.droid.listviews.TaskList.TaskItem;
+import com.hazizz.droid.navigation.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
 
@@ -87,14 +88,14 @@ public class MyTasksFragment extends Fragment{
             @Override
             public void onPOJOResponse(Object response) {
                 adapter.clear();
-                ArrayList<POJOgetTask> sorted = D8.sortTasksByDate((ArrayList<POJOgetTask>) response);
+                ArrayList<PojoTask> sorted = D8.sortTasksByDate((ArrayList< PojoTask>) response);
 
                 if(sorted.isEmpty()) {
                     textView_noContent.setVisibility(v.VISIBLE);
                 }else {
                     textView_noContent.setVisibility(v.INVISIBLE);
                     int lastDaysLeft = -1;
-                    for (POJOgetTask t : sorted) {
+                    for ( PojoTask t : sorted) {
                         String date = t.getDueDate();
                         int daysLeft = D8.textToDate(date).daysLeft();
 
@@ -114,7 +115,7 @@ public class MyTasksFragment extends Fragment{
                 sRefreshLayout.setRefreshing(false);
             }
             @Override
-            public void onErrorResponse(POJOerror error) {
+            public void onErrorResponse(PojoError error) {
                 sRefreshLayout.setRefreshing(false);
             }
             @Override

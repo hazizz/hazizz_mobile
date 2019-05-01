@@ -1,11 +1,12 @@
-package com.hazizz.droid.Communication.Requests;
+package com.hazizz.droid.Communication.requests;
 
 import android.app.Activity;
 import android.util.Log;
 
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.POJOme;
-import com.hazizz.droid.Communication.Requests.Parent.Request;
+
+import com.hazizz.droid.Communication.requests.parent.Request;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.Communication.responsePojos.PojoMe;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -24,7 +25,7 @@ public class Me extends Request {
 
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
-        POJOme pojoMe = gson.fromJson(response.body().charStream(), POJOme.class);
-        cOnResponse.onPOJOResponse(pojoMe);
+        PojoMe PojoMe = gson.fromJson(response.body().charStream(), PojoMe.class);
+        cOnResponse.onPOJOResponse(PojoMe);
     }
 }

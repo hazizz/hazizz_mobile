@@ -1,18 +1,19 @@
-package com.hazizz.droid.Cache;
+package com.hazizz.droid.cache;
 
 import android.app.Activity;
 import android.util.Log;
 import android.util.SparseArray;
 
 import com.hazizz.droid.Communication.MiddleMan;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.POJOMembersProfilePic;
-import com.hazizz.droid.Communication.POJO.Response.POJOuser;
-import com.hazizz.droid.Communication.POJO.Response.PojoPermisionUsers;
-import com.hazizz.droid.Communication.Requests.GetGroupMemberPermisions;
-import com.hazizz.droid.Communication.Requests.GetGroupMembersProfilePic;
+
+import com.hazizz.droid.Communication.requests.GetGroupMemberPermisions;
+import com.hazizz.droid.Communication.requests.GetGroupMembersProfilePic;
 import com.hazizz.droid.Communication.Strings;
-import com.hazizz.droid.Listener.GenericListener;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.Communication.responsePojos.PojoMembersProfilePic;
+import com.hazizz.droid.Communication.responsePojos.PojoPermisionUsers;
+import com.hazizz.droid.Communication.responsePojos.PojoUser;
+import com.hazizz.droid.listeners.GenericListener;
 
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +38,6 @@ public class CurrentGroup {
     private String groupName;
     private long groupId;
 
-                  // id
     private CurrentMembersManager membersManager = new CurrentMembersManager();
 
     public CurrentMembersManager getMembersManager(){
@@ -48,42 +48,36 @@ public class CurrentGroup {
         return membersManager.getMembers();
     }
 
-
     private GenericListener listener = new GenericListener() {@Override public void execute() { }};
     
     private boolean dataWereSet = false;
     private boolean profilePicsWereSet = false;
 
-
     private short requestCount = 0;
 
+    private HashMap<Integer, PojoMembersProfilePic> membersProfilePic = new HashMap<>();
 
-    private HashMap<Integer, POJOMembersProfilePic> membersProfilePic = new HashMap<>();
-
-    public void setGroupMembersProfilePic(HashMap<Integer, POJOMembersProfilePic> pics1, int groupId){
+    public void setGroupMembersProfilePic(HashMap<Integer, PojoMembersProfilePic> pics1, int groupId){
         membersProfilePic = pics1;
-        for(Map.Entry<Integer, POJOMembersProfilePic> entry : membersProfilePic.entrySet()) {
+        for(Map.Entry<Integer, PojoMembersProfilePic> entry : membersProfilePic.entrySet()) {
             Log.e("hey",  entry.getKey() + ": " + entry.getValue().getData());
         }
     }
 
-
     private SparseArray<Strings.Rank> ranks = new SparseArray<>();
 
-    private List<POJOuser> owners;
-    private List<POJOuser> moderators;
-    private List<POJOuser> users;
+    private List<PojoUser> owners;
+    private List<PojoUser> moderators;
+    private List<PojoUser> users;
 
-    public void setRankOwners(List<POJOuser> owners){}
-    public void setRankModerators(List<POJOuser> moderators){}
-    public void setRankUsers(List<POJOuser> users){}
-
-
-    public List<POJOuser> getRankOwners(){return owners;}
-    public List<POJOuser> getRankModerators(){return moderators;}
-    public List<POJOuser> getRankUsers(){return users; }
+    public void setRankOwners(List<PojoUser> owners){}
+    public void setRankModerators(List<PojoUser> moderators){}
+    public void setRankUsers(List<PojoUser> users){}
 
 
+    public List<PojoUser> getRankOwners(){return owners;}
+    public List<PojoUser> getRankModerators(){return moderators;}
+    public List<PojoUser> getRankUsers(){return users; }
 
     public Strings.Rank getRank(int userId){
         Strings.Rank rank = ranks.get(userId);
@@ -134,7 +128,7 @@ public class CurrentGroup {
 
 
 
-    public HashMap<Integer, POJOMembersProfilePic> getGroupMembersProfilePic(){
+    public HashMap<Integer, PojoMembersProfilePic> getGroupMembersProfilePic(){
         return membersProfilePic;
     }
 
@@ -167,12 +161,7 @@ public class CurrentGroup {
                 membersManager.addMembersByRanks(pojoPermisionUser);
 
                 requestCount++;
-                /*
-                if (Manager.MeInfo.getId() == creatorId || Manager.MeInfo.getRankInCurrentGroup().getValue() >= Strings.Rank.MODERATOR.getValue()) {
-                    button_delete.setVisibility(View.VISIBLE);
-                    button_edit.setVisibility(View.VISIBLE);
-                }
-                */
+
                 ifCollectedAllDataDo();
             }
         };
@@ -181,9 +170,9 @@ public class CurrentGroup {
         CustomResponseHandler responseHandler = new CustomResponseHandler() {
             @Override
             public void onPOJOResponse(Object response) {
-              //  Manager.ProfilePicManager.setCurrentGroupMembersProfilePic((HashMap<Integer, POJOMembersProfilePic>) response, groupId);
+              //  Manager.ProfilePicManager.setCurrentGroupMembersProfilePic((HashMap<Integer, PojoMembersProfilePic>) response, groupId);
 
-                membersManager.addMembersByProfilePics((HashMap<Long, POJOMembersProfilePic>) response);
+                membersManager.addMembersByProfilePics((HashMap<Long, PojoMembersProfilePic>) response);
 
                 requestCount++;
                 ifCollectedAllDataDo();

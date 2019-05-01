@@ -1,4 +1,4 @@
-package com.hazizz.droid.Fragments.GroupTabs;
+package com.hazizz.droid.fragments.GroupTabs;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -6,8 +6,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
 
-import com.hazizz.droid.Fragments.ParentFragment.TabFragment;
-import com.hazizz.droid.Transactor;
+import com.hazizz.droid.fragments.ParentFragment.TabFragment;
+import com.hazizz.droid.navigation.Transactor;
 
 public class PagerAdapter extends FragmentStatePagerAdapter {
 

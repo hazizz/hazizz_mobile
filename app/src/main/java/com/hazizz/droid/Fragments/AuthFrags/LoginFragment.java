@@ -1,6 +1,5 @@
-package com.hazizz.droid.Fragments.AuthFrags;
+package com.hazizz.droid.fragments.AuthFrags;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,19 +14,17 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.hazizz.droid.Activities.AuthActivity;
-import com.hazizz.droid.Activities.MainActivity;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.POJOauth;
-import com.hazizz.droid.Communication.POJO.Response.POJOerror;
-import com.hazizz.droid.Communication.Requests.RequestType.Login;
-import com.hazizz.droid.Converter.Converter;
-import com.hazizz.droid.SharedPrefs;
-import com.hazizz.droid.Transactor;
+import com.hazizz.droid.activities.AuthActivity;
+
+import com.hazizz.droid.Communication.requests.RequestType.Login;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.Communication.responsePojos.PojoAuth;
+import com.hazizz.droid.Communication.responsePojos.PojoError;
+import com.hazizz.droid.converter.Converter;
+import com.hazizz.droid.other.SharedPrefs;
+import com.hazizz.droid.navigation.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
-
-import java.util.HashMap;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -54,8 +51,8 @@ public class LoginFragment extends Fragment {
            if(checkBox_autoLogin.isChecked()){
                 SharedPrefs.savePref(getContext(), "autoLogin", "autoLogin", true);
             }
-            SharedPrefs.TokenManager.setToken(getContext() ,((POJOauth)response).getToken());
-            SharedPrefs.TokenManager.setRefreshToken(getContext() ,((POJOauth)response).getRefresh());
+            SharedPrefs.TokenManager.setToken(getContext() ,((PojoAuth)response).getToken());
+            SharedPrefs.TokenManager.setRefreshToken(getContext() ,((PojoAuth)response).getRefresh());
             button_login.setEnabled(true);
             ((AuthActivity)getActivity()).openMainActivity();
             Transactor.fragmentFirst(getFragmentManager().beginTransaction());
@@ -72,7 +69,7 @@ public class LoginFragment extends Fragment {
             button_login.setEnabled(true);
         }
         @Override
-        public void onErrorResponse(POJOerror error) {
+        public void onErrorResponse(PojoError error) {
             if(error.getErrorCode() == 12){ // wrong password
                 textView_error.setText(R.string.error_wrongPassword);
             }

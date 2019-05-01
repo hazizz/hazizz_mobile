@@ -1,4 +1,4 @@
-package com.hazizz.droid.Fragments.AuthFrags;
+package com.hazizz.droid.fragments.AuthFrags;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,9 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
-import com.hazizz.droid.Transactor;
+import com.hazizz.droid.navigation.Transactor;
 import com.hazizz.droid.R;
 
 public class FirstFragment extends Fragment {

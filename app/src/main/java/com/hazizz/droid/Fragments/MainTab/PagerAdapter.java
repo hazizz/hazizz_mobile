@@ -1,4 +1,4 @@
-package com.hazizz.droid.Fragments.MainTab;
+package com.hazizz.droid.fragments.MainTab;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

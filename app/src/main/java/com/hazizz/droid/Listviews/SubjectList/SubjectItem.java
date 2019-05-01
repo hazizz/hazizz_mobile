@@ -1,4 +1,6 @@
-package com.hazizz.droid.Listviews.SubjectList;
+package com.hazizz.droid.listviews.SubjectList;
+
+import com.hazizz.droid.Communication.responsePojos.PojoAuth;
 
 import lombok.Data;
 
@@ -6,16 +8,10 @@ import lombok.Data;
 public class SubjectItem {
 
     String subjectName;
-   /* POJOgroup group;
-    POJOsubject subject;*/
     int subjectId;
 
-    public SubjectItem(String subjectName,/* String taskDescription, POJOgroup group, POJOcreator creator, POJOsubject subject,*/ int subjectId){
+    public SubjectItem(String subjectName, int subjectId){
         this.subjectName = subjectName;
-       /* this.announcementDescription = taskDescription;
-        this.group = group;
-        this.creator = creator;
-        this.subject = subject; */
         this.subjectId = subjectId;
     }
 }

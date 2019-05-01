@@ -1,10 +1,11 @@
-package com.hazizz.droid.Communication.Requests;
+package com.hazizz.droid.Communication.requests;
 
 import android.app.Activity;
 import android.util.Log;
 
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.Requests.Parent.Request;
+
+import com.hazizz.droid.Communication.requests.parent.Request;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -18,9 +19,9 @@ public class LeaveGroup extends Request {
     }
     public void setupCall() {
 
-        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
-        headerMap.put("Content-Type", "application/json");
-        call = aRequest.getGroupMembers(p_groupId, headerMap);
+        putHeaderAuthToken();
+        putHeaderContentType();
+        call = aRequest.leaveGroup(p_groupId, headerMap);
     }
 
 

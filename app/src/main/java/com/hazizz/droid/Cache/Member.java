@@ -1,4 +1,4 @@
-package com.hazizz.droid.Cache;
+package com.hazizz.droid.cache;
 
 import android.util.Log;
 

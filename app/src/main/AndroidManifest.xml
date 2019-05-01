@@ -17,7 +17,7 @@
         android:windowSoftInputMode="adjustPan">
 
         <activity
-            android:name=".Activities.MainActivity"
+            android:name=".activities.MainActivity"
             android:noHistory="false"
 
             android:configChanges="orientation|screenSize"
@@ -40,7 +40,7 @@
         </activity>
 
         <activity
-            android:name=".Activities.AuthActivity"
+            android:name=".activities.AuthActivity"
             android:noHistory="false"
             android:windowSoftInputMode="adjustPan"
             android:configChanges="orientation|screenSize">
@@ -52,7 +52,7 @@
         </activity>
 
         <activity
-            android:name=".Activities.FeedbackActivity"
+            android:name=".activities.FeedbackActivity"
             android:noHistory="true"
             android:windowSoftInputMode="adjustPan" />
 
@@ -112,7 +112,7 @@
               android:exported="false" >
           </service> -->
 
-        <receiver android:name="com.hazizz.droid.Notification.NotificationReceiver" />
+        <receiver android:name="com.hazizz.droid.notification.NotificationReceiver" />
 
 
         <meta-data

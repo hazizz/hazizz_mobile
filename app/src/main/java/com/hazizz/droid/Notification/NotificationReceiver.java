@@ -1,4 +1,4 @@
-package com.hazizz.droid.Notification;
+package com.hazizz.droid.notification;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

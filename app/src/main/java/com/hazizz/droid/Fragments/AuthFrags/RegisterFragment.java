@@ -1,4 +1,4 @@
-package com.hazizz.droid.Fragments.AuthFrags;
+package com.hazizz.droid.fragments.AuthFrags;
 
 
 import android.graphics.Color;
@@ -17,15 +17,16 @@ import android.widget.TextView;
 
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.SignUpEvent;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.POJOerror;
-import com.hazizz.droid.Communication.Requests.RequestType.Register;
-import com.hazizz.droid.Converter.Converter;
-import com.hazizz.droid.Transactor;
+
+
+import com.hazizz.droid.Communication.requests.RequestType.Register;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.Communication.responsePojos.PojoError;
+import com.hazizz.droid.converter.Converter;
+import com.hazizz.droid.navigation.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
 
-import java.util.HashMap;
 import java.util.regex.Pattern;
 
 import okhttp3.ResponseBody;
@@ -57,7 +58,7 @@ public class RegisterFragment extends Fragment {
             textView_error.setText(R.string.info_serverNotResponding);
         }
         @Override
-        public void onErrorResponse(POJOerror error) {
+        public void onErrorResponse(PojoError error) {
             int errorCode = error.getErrorCode();
             if(errorCode == 2){
                 Answers.getInstance().logSignUp(new SignUpEvent()

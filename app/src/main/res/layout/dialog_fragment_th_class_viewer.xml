@@ -50,6 +50,7 @@
 
 
         <TextView
+            android:background="@drawable/border_warning"
             android:id="@+id/textView_canceled"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -59,6 +60,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="2dp"
             android:text="@string/thera_canceled"
+            android:textAllCaps="true"
             android:textColor="@color/colorAccent"
             android:textSize="20sp"
             android:visibility="invisible"

@@ -1,4 +1,4 @@
-package com.hazizz.droid.Communication.Requests;
+package com.hazizz.droid.Communication.requests;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,9 +6,9 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.POJOMembersProfilePic;
-import com.hazizz.droid.Communication.Requests.Parent.Request;
+import com.hazizz.droid.Communication.requests.parent.Request;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.Communication.responsePojos.PojoMembersProfilePic;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -33,8 +33,8 @@ public class GetGroupMembersProfilePicSync extends Request {
     public void makeCall() {
         try {
             Response<ResponseBody> response = call.execute();
-            Type listType = new TypeToken<HashMap<Integer, POJOMembersProfilePic>>(){}.getType();
-            HashMap<Integer, POJOMembersProfilePic> castedMap = gson.fromJson(response.body().charStream(), listType);
+            Type listType = new TypeToken<HashMap<Integer, PojoMembersProfilePic>>(){}.getType();
+            HashMap<Integer, PojoMembersProfilePic> castedMap = gson.fromJson(response.body().charStream(), listType);
 
             cOnResponse.onPOJOResponse(castedMap);
         } catch (IOException e) {
@@ -43,15 +43,15 @@ public class GetGroupMembersProfilePicSync extends Request {
         }
     }
 
-    public HashMap<Integer, POJOMembersProfilePic> getGroupMembersProfilePic(){
+    public HashMap<Integer, PojoMembersProfilePic> getGroupMembersProfilePic(){
         Response<ResponseBody> response = null;
         try {
             response = call.execute();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Type listType = new TypeToken<HashMap<Integer, POJOMembersProfilePic>>(){}.getType();
-        HashMap<Integer, POJOMembersProfilePic> castedMap = gson.fromJson(response.body().charStream(), listType);
+        Type listType = new TypeToken<HashMap<Integer, PojoMembersProfilePic>>(){}.getType();
+        HashMap<Integer, PojoMembersProfilePic> castedMap = gson.fromJson(response.body().charStream(), listType);
         return castedMap;
     }
 

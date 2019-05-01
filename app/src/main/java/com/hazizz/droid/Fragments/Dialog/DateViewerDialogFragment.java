@@ -1,4 +1,4 @@
-package com.hazizz.droid.Fragments.Dialog;
+package com.hazizz.droid.fragments.Dialog;
 
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.hazizz.droid.D8;
+import com.hazizz.droid.other.D8;
 import com.hazizz.droid.R;
-import com.hazizz.droid.Transactor;
+import com.hazizz.droid.navigation.Transactor;
 
 public class DateViewerDialogFragment extends DialogFragment {
 

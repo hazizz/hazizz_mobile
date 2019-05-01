@@ -1,4 +1,4 @@
-package com.hazizz.droid.Notification;
+package com.hazizz.droid.notification;
 
 import android.app.AlarmManager;
 import android.app.Notification;
@@ -18,16 +18,17 @@ import android.text.SpannableString;
 import android.text.style.StyleSpan;
 import android.util.Log;
 
-import com.hazizz.droid.Activities.AuthActivity;
-import com.hazizz.droid.Activities.MainActivity;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
-import com.hazizz.droid.Communication.Requests.GetTasksFromMe;
-import com.hazizz.droid.D8;
-import com.hazizz.droid.Listener.GenericListener;
-import com.hazizz.droid.Network;
+import com.hazizz.droid.activities.AuthActivity;
+import com.hazizz.droid.activities.MainActivity;
+
+import com.hazizz.droid.Communication.requests.GetTasksFromMe;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.Communication.responsePojos.taskPojos.PojoTask;
+import com.hazizz.droid.other.D8;
+import com.hazizz.droid.listeners.GenericListener;
+import com.hazizz.droid.other.Network;
 import com.hazizz.droid.R;
-import com.hazizz.droid.SharedPrefs;
+import com.hazizz.droid.other.SharedPrefs;
 import com.hazizz.droid.receiver.BroadcastReceiverHandler;
 import com.hazizz.droid.receiver.NetworkChangeReceiver;
 
@@ -94,10 +95,10 @@ public class TaskReporterNotification {
                         @Override
                         public void onPOJOResponse(Object response) {
                             Log.e("hey", "got response for notif2");
-                            List<POJOgetTask> tasks = (List<POJOgetTask>) response;
-                            List<POJOgetTask> tasksToReport = new ArrayList<>();
+                            List<PojoTask> tasks = (List< PojoTask>) response;
+                            List< PojoTask> tasksToReport = new ArrayList<>();
 
-                            for (POJOgetTask task : tasks) {
+                            for ( PojoTask task : tasks) {
                                 if (D8.textToDate(task.getDueDate()).daysLeft() == 1) {
                                     tasksToReport.add(task);
                                 }
@@ -122,10 +123,10 @@ public class TaskReporterNotification {
                 @Override
                 public void onPOJOResponse(Object response) {
                     Log.e("hey", "got response for notif");
-                    List<POJOgetTask> tasks = (List<POJOgetTask>) response;
-                    List<POJOgetTask> tasksToReport = new ArrayList<>();
+                    List< PojoTask> tasks = (List< PojoTask>) response;
+                    List< PojoTask> tasksToReport = new ArrayList<>();
 
-                    for (POJOgetTask task : tasks) {
+                    for ( PojoTask task : tasks) {
                         if (D8.textToDate(task.getDueDate()).daysLeft() == 1) {
                             tasksToReport.add(task);
                         }
@@ -147,7 +148,7 @@ public class TaskReporterNotification {
     }
 
 
-    public static void showNotification(Context context, List<POJOgetTask> tasks) {
+    public static void showNotification(Context context, List< PojoTask> tasks) {
         String CHANNEL_ID = "your_name";// The id of the channel.
         CharSequence name = context.getResources().getString(R.string.app_name);// The user-visible name of the channel.
         NotificationCompat.Builder mBuilder;
@@ -163,7 +164,7 @@ public class TaskReporterNotification {
 
 
 
-        for(POJOgetTask task : tasks) {
+        for( PojoTask task : tasks) {
             Spannable sb;
             if(task.getSubject()!= null){
                 String subject = task.getSubject().getName();
@@ -216,7 +217,7 @@ public class TaskReporterNotification {
         int taskAmount = tasks.size();
 
         if(taskAmount == 1){
-            POJOgetTask task = tasks.get(0);
+             PojoTask task = tasks.get(0);
             if(task != null) {
                 notificationIntent.putExtra(MainActivity.key_INTENT_MODE, MainActivity.value_INTENT_MODE_VIEWTASK);
                 if (task.getGroup() != null) {

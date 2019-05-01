@@ -3,7 +3,7 @@ package com.hazizz.droid.receiver;
 import android.content.Context;
 import android.content.IntentFilter;
 
-import com.hazizz.droid.Listener.GenericListener;
+import com.hazizz.droid.listeners.GenericListener;
 
 public class BroadcastReceiverHandler {
 

@@ -208,7 +208,7 @@
                     android:textAlignment="center"/>
 
 
-                <com.hazizz.droid.Listviews.NonScrollListView
+                <com.hazizz.droid.listviews.NonScrollListView
                     android:id="@+id/listView_comments"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

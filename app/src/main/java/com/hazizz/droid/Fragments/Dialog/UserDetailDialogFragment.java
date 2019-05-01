@@ -1,4 +1,4 @@
-package com.hazizz.droid.Fragments.Dialog;
+package com.hazizz.droid.fragments.Dialog;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -12,16 +12,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hazizz.droid.Communication.MiddleMan;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.PojoPicSmall;
-import com.hazizz.droid.Communication.POJO.Response.PojoPublicUserData;
-import com.hazizz.droid.Communication.Requests.GetPublicUserDetail;
-import com.hazizz.droid.Communication.Requests.GetUserProfilePic;
+
+import com.hazizz.droid.Communication.requests.GetPublicUserDetail;
+import com.hazizz.droid.Communication.requests.GetUserProfilePic;
 import com.hazizz.droid.Communication.Strings;
-import com.hazizz.droid.Converter.Converter;
-import com.hazizz.droid.D8;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.Communication.responsePojos.PojoPicSmall;
+import com.hazizz.droid.Communication.responsePojos.PojoPublicUserData;
+import com.hazizz.droid.converter.Converter;
+import com.hazizz.droid.other.D8;
 import com.hazizz.droid.R;
-import com.hazizz.droid.Transactor;
+import com.hazizz.droid.navigation.Transactor;
 
 public class UserDetailDialogFragment extends DialogFragment {
 

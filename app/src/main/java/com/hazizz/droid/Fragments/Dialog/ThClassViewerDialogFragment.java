@@ -1,4 +1,4 @@
-package com.hazizz.droid.Fragments.Dialog;
+package com.hazizz.droid.fragments.Dialog;
 
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.hazizz.droid.D8;
-import com.hazizz.droid.Listviews.TheraReturnSchedules.ClassItem;
+import com.hazizz.droid.other.D8;
+import com.hazizz.droid.listviews.TheraReturnSchedules.ClassItem;
 import com.hazizz.droid.R;
 
 public class ThClassViewerDialogFragment extends DialogFragment {

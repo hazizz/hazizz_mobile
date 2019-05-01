@@ -1,4 +1,4 @@
-package com.hazizz.droid.Listviews.UserList;
+package com.hazizz.droid.listviews.UserList;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hazizz.droid.Communication.Strings;
-import com.hazizz.droid.Converter.Converter;
+import com.hazizz.droid.converter.Converter;
 import com.hazizz.droid.R;
 
 import java.util.List;

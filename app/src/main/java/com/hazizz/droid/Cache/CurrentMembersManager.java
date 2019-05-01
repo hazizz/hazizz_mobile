@@ -1,12 +1,12 @@
-package com.hazizz.droid.Cache;
+package com.hazizz.droid.cache;
 
 import android.util.Log;
 
-import com.hazizz.droid.Cache.MeInfo.MeInfo;
-import com.hazizz.droid.Communication.POJO.Response.POJOMembersProfilePic;
-import com.hazizz.droid.Communication.POJO.Response.POJOuser;
-import com.hazizz.droid.Communication.POJO.Response.PojoPermisionUsers;
+import com.hazizz.droid.cache.MeInfo.MeInfo;
 import com.hazizz.droid.Communication.Strings;
+import com.hazizz.droid.Communication.responsePojos.PojoMembersProfilePic;
+import com.hazizz.droid.Communication.responsePojos.PojoPermisionUsers;
+import com.hazizz.droid.Communication.responsePojos.PojoUser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +20,7 @@ public class CurrentMembersManager {
     List<Member> members = new ArrayList<>();
 
     PojoPermisionUsers usersData;
-    HashMap<Long, POJOMembersProfilePic> profilePics;
+    HashMap<Long, PojoMembersProfilePic> profilePics;
 
 
     short setupPhase = 0;
@@ -71,7 +71,7 @@ public class CurrentMembersManager {
             long myId = meInfo.getUserId();
 
             if (members.getOWNER() != null) {
-                for (POJOuser u : members.getOWNER()) {
+                for (PojoUser u : members.getOWNER()) {
                     addMember(u.getId(), u.getUsername(), u.getDisplayName(), Strings.Rank.OWNER);
                     if(u.getId() == myId){
                         Log.e("hey", "im34 owner");
@@ -80,7 +80,7 @@ public class CurrentMembersManager {
                 }
             }
             if (members.getMODERATOR() != null) {
-                for (POJOuser u : members.getMODERATOR()) {
+                for (PojoUser u : members.getMODERATOR()) {
                     addMember(u.getId(), u.getUsername(), u.getDisplayName(), Strings.Rank.MODERATOR);
                     if(u.getId() == myId){
                         Log.e("hey", "im34 moderator");
@@ -88,7 +88,7 @@ public class CurrentMembersManager {
                     }
                 }
             }if (members.getUSER() != null) {
-                for (POJOuser u : members.getUSER()) {
+                for (PojoUser u : members.getUSER()) {
                     addMember(u.getId(), u.getUsername(), u.getDisplayName(), Strings.Rank.USER);
                     if(u.getId() == myId){
                         Log.e("hey", "im34 user");
@@ -96,7 +96,7 @@ public class CurrentMembersManager {
                     }
                 }
             }if (members.getNULL() != null) {
-                for (POJOuser u : members.getNULL()) {
+                for (PojoUser u : members.getNULL()) {
                     addMember(u.getId(), u.getUsername(), u.getDisplayName(), Strings.Rank.NULL);
                     if(u.getId() == myId){
                         Log.e("hey", "im34 null");
@@ -108,8 +108,8 @@ public class CurrentMembersManager {
         setupPhase++;
     }
 
-    public void addMembersByProfilePics(Map<Long, POJOMembersProfilePic> profilePics){
-        for(Map.Entry<Long, POJOMembersProfilePic> entry : profilePics.entrySet()) {
+    public void addMembersByProfilePics(Map<Long, PojoMembersProfilePic> profilePics){
+        for(Map.Entry<Long, PojoMembersProfilePic> entry : profilePics.entrySet()) {
             Log.e("hey",  entry.getKey() + ": " + entry.getValue().getData());
             Long userId = entry.getKey();
             addMember(userId, entry.getValue().getData());

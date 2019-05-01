@@ -1,22 +1,16 @@
-package com.hazizz.droid.Communication.Requests.Parent;
+package com.hazizz.droid.Communication.requests.parent;
 
 import android.app.Activity;
 import android.content.Context;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.Pojo;
 import com.hazizz.droid.Communication.RequestInterface;
-import com.hazizz.droid.Communication.Requests.RequestTypes;
-import com.hazizz.droid.Listviews.TheraGradesList.TheraGradesItem;
-import com.hazizz.droid.SharedPrefs;
+import com.hazizz.droid.Communication.requests.RequestTypes;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.other.SharedPrefs;
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
-import java.util.List;
-import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -128,6 +122,14 @@ public class Request implements RequestInterface {
 
         body = new HashMap<>();
         headerMap = new HashMap<>();
+    }
+
+    protected void putHeaderContentType(){
+        headerMap.put("Content-Type", "application/json");
+    }
+
+    protected void putHeaderAuthToken(){
+        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
     }
 
     @Override

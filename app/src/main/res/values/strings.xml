@@ -123,6 +123,7 @@
     <string name="comments">Megjegyzések</string>
     <string name="edit">Szerkesztés</string>
     <string name="delete">Törlés</string>
+    <string name="leave_group">Csoportból kilépés</string>
     <string name="my_tasks">Feladataim</string>
     <string name="view_mytask">Én feladatom megtekintése</string>
     <string name="notification_settings">Értesítés beállítások</string>
@@ -176,6 +177,10 @@
     <string name="registrationDate_">Regisztráció:</string>
     <string name="username_">Felhasználónév:</string>
 
+
+    <string name="leaveGroup_successful">Csoport elhagyva</string>
+
+
     <string name="press_again_to_exit">Nyomd meg mégegyszer a VISSZA gombot hogy kilépj</string>
 
 
@@ -195,6 +200,7 @@
     <string name="passwordagain_fragment_register">Jelszó mégegyszer</string>
     <string name="areyousure_delete_task">Biztos hogy törlöd a feladatot?</string>
     <string name="areyousure_delete_announcement">Biztos hogy törlöd a bejegyzést?</string>
+    <string name="areyousure_leave_group">Biztos hogy kilépsz ebből a csoportból?</string>
 
 
     <string name="error_passwordRequiredForGroup">Jelszó szükséges a csoporthoz belépéshez</string>

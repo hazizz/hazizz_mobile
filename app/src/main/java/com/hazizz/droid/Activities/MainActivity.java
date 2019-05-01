@@ -1,4 +1,4 @@
-package com.hazizz.droid.Activities;
+package com.hazizz.droid.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -31,34 +31,33 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
-import com.hazizz.droid.AppInfo;
-import com.hazizz.droid.Cache.MeInfo.MeInfo;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.POJOerror;
-import com.hazizz.droid.Communication.POJO.Response.POJOme;
-import com.hazizz.droid.Communication.POJO.Response.PojoPicSmall;
-import com.hazizz.droid.Communication.Requests.GetMyProfilePic;
-import com.hazizz.droid.Communication.Requests.JoinGroup;
-import com.hazizz.droid.Communication.Requests.Me;
-import com.hazizz.droid.Communication.Requests.MessageOfTheDay;
-import com.hazizz.droid.Communication.Requests.Parent.Request;
+import com.hazizz.droid.other.AppInfo;
+import com.hazizz.droid.cache.MeInfo.MeInfo;
+
+import com.hazizz.droid.Communication.requests.GetMyProfilePic;
+import com.hazizz.droid.Communication.requests.JoinGroup;
+import com.hazizz.droid.Communication.requests.Me;
+import com.hazizz.droid.Communication.requests.MessageOfTheDay;
+import com.hazizz.droid.Communication.requests.parent.Request;
 import com.hazizz.droid.Communication.Strings;
-import com.hazizz.droid.Converter.Converter;
-import com.hazizz.droid.Fragments.GroupTabs.GetGroupMembersFragment;
-import com.hazizz.droid.Fragments.GroupTabs.GroupAnnouncementFragment;
-import com.hazizz.droid.Fragments.GroupTabs.GroupMainFragment;
-import com.hazizz.droid.Fragments.GroupTabs.GroupTabFragment;
-import com.hazizz.droid.Fragments.GroupTabs.SubjectsFragment;
-import com.hazizz.droid.Fragments.MainTab.GroupsFragment;
-import com.hazizz.droid.Fragments.MainTab.MainAnnouncementFragment;
-import com.hazizz.droid.Fragments.MainTab.MainFragment;
-import com.hazizz.droid.Fragments.MyTasksFragment;
-import com.hazizz.droid.Fragments.ViewTaskFragment;
-import com.hazizz.droid.Listener.OnBackPressedListener;
-import com.hazizz.droid.manager.Manager;
-import com.hazizz.droid.Notification.TaskReporterNotification;
-import com.hazizz.droid.SharedPrefs;
-import com.hazizz.droid.Transactor;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.Communication.responsePojos.PojoError;
+import com.hazizz.droid.Communication.responsePojos.PojoMe;
+import com.hazizz.droid.Communication.responsePojos.PojoPicSmall;
+import com.hazizz.droid.converter.Converter;
+import com.hazizz.droid.fragments.GroupTabs.GetGroupMembersFragment;
+import com.hazizz.droid.fragments.GroupTabs.GroupAnnouncementFragment;
+import com.hazizz.droid.fragments.GroupTabs.GroupMainFragment;
+import com.hazizz.droid.fragments.GroupTabs.SubjectsFragment;
+import com.hazizz.droid.fragments.MainTab.GroupsFragment;
+import com.hazizz.droid.fragments.MainTab.MainAnnouncementFragment;
+import com.hazizz.droid.fragments.MainTab.MainFragment;
+import com.hazizz.droid.fragments.MyTasksFragment;
+import com.hazizz.droid.fragments.ViewTaskFragment;
+import com.hazizz.droid.listeners.OnBackPressedListener;
+import com.hazizz.droid.notification.TaskReporterNotification;
+import com.hazizz.droid.other.SharedPrefs;
+import com.hazizz.droid.navigation.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
 import com.hazizz.droid.manager.ThreadManager;
@@ -90,6 +89,8 @@ public class MainActivity extends AppCompatActivity
     FloatingActionButton fab_joinGroup;
     FloatingActionButton fab_action;
 
+    private Menu optionsMenu;
+
     private Menu menu_nav;
     private MenuItem menuItem_home;
     private MenuItem menuItem_groups;
@@ -103,7 +104,6 @@ public class MainActivity extends AppCompatActivity
 
     private Activity thisActivity = this;
 
-
     private MeInfo meInfo;
 
     private OnBackPressedListener currentBackPressedListener;
@@ -116,7 +116,6 @@ public class MainActivity extends AppCompatActivity
 
 
     private boolean gotMyProfilePicRespond = false;
-
 
     private boolean toMainFrag = false;
     CustomResponseHandler rh_profilePic = new CustomResponseHandler() {
@@ -135,7 +134,7 @@ public class MainActivity extends AppCompatActivity
     CustomResponseHandler responseHandler = new CustomResponseHandler() {
         @Override
         public void onPOJOResponse(Object response) {
-            POJOme pojo = (POJOme) response;
+            PojoMe pojo = (PojoMe) response;
             SharedPrefs.save(getApplicationContext(),"userInfo", "username",pojo.getUsername());
             strNavEmail = (pojo.getEmailAddress());
             strNavUsername = (pojo.getUsername());
@@ -172,7 +171,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
         if(AppInfo.isDarkMode(getBaseContext())){
             setTheme(R.style.AppTheme_Dark);
         }else{
@@ -206,7 +204,7 @@ public class MainActivity extends AppCompatActivity
 
                                 CustomResponseHandler rh_joinGroup = new CustomResponseHandler() {
 
-                                    @Override public void onErrorResponse(POJOerror error) {
+                                    @Override public void onErrorResponse(PojoError error) {
                                         if(error.getErrorCode() == 55){ // user already in group
                                             Transactor.fragmentMainGroup(getSupportFragmentManager().beginTransaction(), groupId);
                                             Toast.makeText(thisActivity, getString(R.string.already_in_group),
@@ -304,7 +302,6 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
                 // removes the slide animation
                 overridePendingTransition(0, 0);
-
             }
         });
 
@@ -339,8 +336,7 @@ public class MainActivity extends AppCompatActivity
         Activity thisActivity = this;
 
         navLogout.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View view) {
+             @Override public void onClick(View view) {
                  SharedPrefs.savePref(getBaseContext(), "autoLogin", "autoLogin", false);
                  SharedPrefs.TokenManager.invalidateTokens(getBaseContext());
                  SharedPrefs.ThSessionManager.clearSession(getBaseContext());
@@ -361,16 +357,25 @@ public class MainActivity extends AppCompatActivity
 
         if(AppInfo.isDarkMode(getBaseContext())){
             imageButton_darkMode.setImageDrawable(getResources().getDrawable(R.drawable.ic_sun));
-          //  imageButton_darkMode.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_sun ));
         }else{
-           // imageButton_darkMode.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_moon_gray));
             imageButton_darkMode.setImageDrawable(getResources().getDrawable(R.drawable.ic_moon_gray));
+        }
+
+        boolean receivedIntentTask = receiveIntentTask();
+        if(!receivedIntentTask && toMainFrag) {
+            toMainFrag();
+            toMainFrag = false;
         }
     }
 
     @Override
     public void onResume() {
+        receiveIntentTask();
+        super.onResume();
+        Log.e("hey", "onResume is trigered");
+    }
 
+    private boolean receiveIntentTask(){
         Intent intent = getIntent();
         String mode = intent.getStringExtra(key_INTENT_MODE);
         if(mode != null){
@@ -388,63 +393,24 @@ public class MainActivity extends AppCompatActivity
             }else if(mode.equals(value_INTENT_MODE_CHOOSER)){
                 Transactor.fragmentATChooser(getSupportFragmentManager().beginTransaction());
             }
+            return true;
         }
-
-        super.onResume();
-        invalidateOptionsMenu();
-        Log.e("hey", "onResume is trigered");
+        return false;
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         Log.e("hey", "onCreateOptionsMenu called");
-
-        Intent intent = getIntent();
-        String mode = intent.getStringExtra(key_INTENT_MODE);
-        if(mode != null){
-            if(mode.equals(value_INTENT_MODE_VIEWTASK)) {
-                int groupId = intent.getIntExtra(key_INTENT_GROUPID, 0);
-                int taskId = intent.getIntExtra(key_INTENT_TASKID, 0);
-                Log.e("hey", "group and task id: " + groupId + ", " + taskId);
-                if (groupId != 0) {
-                    Transactor.fragmentViewTask(getSupportFragmentManager().beginTransaction(), (int) taskId,
-                            true, Strings.Dest.TOMAIN, ViewTaskFragment.publicMode);
-                } else {
-                    Transactor.fragmentViewTask(getSupportFragmentManager().beginTransaction(), (int) taskId,
-                            true, Strings.Dest.TOMAIN, ViewTaskFragment.myMode);
-                }
-            }else if(mode.equals(value_INTENT_MODE_CHOOSER)){
-                Transactor.fragmentATChooser(getSupportFragmentManager().beginTransaction());
-            }
-        }
-        else if(toMainFrag) {
-            toMainFrag();
-            toMainFrag = false;
-        }
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Fragment cFrag = Transactor.getCurrentFragment(getSupportFragmentManager(), false);
         if(toggle.onOptionsItemSelected(item)){
             return true;
         }
-        switch (item.getItemId()){
-            case R.id.action_leaveGroup:
-                ((GroupTabFragment)cFrag).leaveGroup();
-                return true;
-            case R.id.action_profilePic:
-                pickImage();
-                return true;
-            case R.id.action_feedback:
-                Transactor.feedbackActivity(this);
-                return true;
-            case R.id.action_settings:
-                Transactor.fragmentOptions(getSupportFragmentManager().beginTransaction());
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return false;
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

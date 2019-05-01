@@ -1,12 +1,12 @@
-package com.hazizz.droid.Communication.Requests;
+package com.hazizz.droid.Communication.requests;
 
 import android.app.Activity;
 import android.util.Log;
 
-import com.hazizz.droid.Communication.POJO.Response.CommentSectionPOJOs.POJOGroup;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.POJOgroup;
-import com.hazizz.droid.Communication.Requests.Parent.Request;
+
+import com.hazizz.droid.Communication.requests.parent.Request;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.Communication.responsePojos.PojoGroup;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -28,7 +28,7 @@ public class GetGroup extends Request {
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
 
-        POJOGroup pojoGroup = gson.fromJson(response.body().charStream(), POJOGroup.class);
-        cOnResponse.onPOJOResponse(pojoGroup);
+        PojoGroup PojoGroup = gson.fromJson(response.body().charStream(), PojoGroup.class);
+        cOnResponse.onPOJOResponse(PojoGroup);
     }
 }

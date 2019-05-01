@@ -1,4 +1,4 @@
-package com.hazizz.droid.Listviews.TheraReturnSchedules;
+package com.hazizz.droid.listviews.TheraReturnSchedules;
 
 import android.app.Activity;
 import android.content.Context;

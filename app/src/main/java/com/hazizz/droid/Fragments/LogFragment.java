@@ -1,6 +1,4 @@
-package com.hazizz.droid.Fragments;
-
-import android.graphics.Bitmap;
+package com.hazizz.droid.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,23 +8,20 @@ import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.hazizz.droid.Activities.MainActivity;
+import com.hazizz.droid.activities.MainActivity;
 import com.hazizz.droid.Communication.MiddleMan;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.POJOgroup;
-import com.hazizz.droid.Communication.Requests.GetLog;
+
+import com.hazizz.droid.Communication.requests.GetLog;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.Communication.responsePojos.PojoGroup;
 import com.hazizz.droid.R;
 import java.util.List;
 
 public class LogFragment  extends Fragment {
 
-    public List<POJOgroup> groups;
+    public List<PojoGroup> groups;
     private View v;
 
     private TextView textView_log;

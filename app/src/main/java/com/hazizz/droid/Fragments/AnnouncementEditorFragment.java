@@ -1,4 +1,4 @@
-package com.hazizz.droid.Fragments;
+package com.hazizz.droid.fragments;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -15,15 +15,17 @@ import android.widget.TextView;
 
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
-import com.hazizz.droid.AndroidThings;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.POJOerror;
-import com.hazizz.droid.Communication.Requests.CreateAT;
-import com.hazizz.droid.Communication.Requests.EditAT;
+import com.hazizz.droid.other.AndroidThings;
+
+
+import com.hazizz.droid.Communication.requests.CreateAT;
+import com.hazizz.droid.Communication.requests.EditAT;
 import com.hazizz.droid.Communication.Strings;
-import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
-import com.hazizz.droid.Listener.OnBackPressedListener;
-import com.hazizz.droid.Transactor;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.Communication.responsePojos.PojoError;
+import com.hazizz.droid.fragments.ParentFragment.ParentFragment;
+import com.hazizz.droid.listeners.OnBackPressedListener;
+import com.hazizz.droid.navigation.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
 
@@ -64,7 +66,7 @@ public class AnnouncementEditorFragment extends ParentFragment {
 
     CustomResponseHandler rh = new CustomResponseHandler() {
         @Override
-        public void onErrorResponse(POJOerror error) {
+        public void onErrorResponse(PojoError error) {
             int errorCode = error.getErrorCode();
             if(errorCode == 2){ // cím túl hosszú (2-20 karatket)
                 textView_error.setText(R.string.error_titleNotAcceptable);

@@ -13,8 +13,7 @@ import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
-import com.hazizz.droid.Activities.AuthActivity;
-import com.hazizz.droid.manager.Manager;
+import com.hazizz.droid.activities.AuthActivity;
 import com.hazizz.droid.R;
 
 public class CollectionWidgetProvider extends AppWidgetProvider {
@@ -149,7 +148,7 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
       /*  if(intent.getAction().equals(ACTION_VIEW_DETAILS)) {
-            POJOgetTask article = (POJOgetTask)intent.getSerializableExtra(EXTRA_ITEM);
+             PojoTask article = ( PojoTask)intent.getSerializableExtra(EXTRA_ITEM);
             if(article != null) {
                 // Handle the click here.
                 // Maybe start a details activity?
@@ -178,7 +177,6 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
         }
 
         else if (WIDGET_LEFTBUTTON.equals(intent.getAction())) {
-            Manager.WidgetManager.setDest(Manager.WidgetManager.TOATCHOOSER);
             Intent i = new Intent(context, AuthActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(i);

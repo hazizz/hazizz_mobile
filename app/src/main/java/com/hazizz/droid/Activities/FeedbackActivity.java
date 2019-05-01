@@ -1,4 +1,4 @@
-package com.hazizz.droid.Activities;
+package com.hazizz.droid.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -10,12 +10,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hazizz.droid.AndroidThings;
-import com.hazizz.droid.AppInfo;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.POJOerror;
-import com.hazizz.droid.Communication.Requests.Feedback;
-import com.hazizz.droid.Transactor;
+import com.hazizz.droid.other.AndroidThings;
+import com.hazizz.droid.other.AppInfo;
+
+import com.hazizz.droid.Communication.requests.Feedback;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.Communication.responsePojos.PojoError;
+import com.hazizz.droid.navigation.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
 
@@ -27,7 +28,7 @@ public class FeedbackActivity extends AppCompatActivity {
 
     CustomResponseHandler rh = new CustomResponseHandler() {
         @Override
-        public void onErrorResponse(POJOerror error) {
+        public void onErrorResponse(PojoError error) {
             textView_error.setText(R.string.error);
             button_feedback.setEnabled(true);
         }

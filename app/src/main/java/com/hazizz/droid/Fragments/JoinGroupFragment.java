@@ -1,4 +1,4 @@
-package com.hazizz.droid.Fragments;
+package com.hazizz.droid.fragments;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -14,17 +14,18 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.hazizz.droid.AndroidThings;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.POJOerror;
-import com.hazizz.droid.Communication.POJO.Response.POJOgroup;
-import com.hazizz.droid.Communication.Requests.GetGroups;
-import com.hazizz.droid.Communication.Requests.JoinGroup;
-import com.hazizz.droid.Communication.Requests.JoinGroupByPassword;
+import com.hazizz.droid.other.AndroidThings;
+
+import com.hazizz.droid.Communication.requests.GetGroups;
+import com.hazizz.droid.Communication.requests.JoinGroup;
+import com.hazizz.droid.Communication.requests.JoinGroupByPassword;
 import com.hazizz.droid.Communication.Strings;
-import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
-import com.hazizz.droid.Listener.OnBackPressedListener;
-import com.hazizz.droid.Transactor;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.Communication.responsePojos.PojoError;
+import com.hazizz.droid.Communication.responsePojos.PojoGroup;
+import com.hazizz.droid.fragments.ParentFragment.ParentFragment;
+import com.hazizz.droid.listeners.OnBackPressedListener;
+import com.hazizz.droid.navigation.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
 
@@ -59,7 +60,7 @@ public class JoinGroupFragment extends ParentFragment {
             radioGroup_groupTypes.setEnabled(true);
         }
         @Override
-        public void onErrorResponse(POJOerror error) {
+        public void onErrorResponse(PojoError error) {
             if(error.getErrorCode() == 55){ // user already in group
                 textView_error.setText(R.string.error_alreadyMemberOfGroup);
             }else if(error.getErrorCode() == 56){
@@ -89,8 +90,8 @@ public class JoinGroupFragment extends ParentFragment {
         @Override
         public void onPOJOResponse(Object response) {
             boolean found = false;
-            ArrayList<POJOgroup> castedList = (ArrayList<POJOgroup>) response;
-            for(POJOgroup g : castedList){
+            ArrayList<PojoGroup> castedList = (ArrayList<PojoGroup>) response;
+            for(PojoGroup g : castedList){
                 if(g.getName().equals(groupName)) {
                     found = true;
                     if (g.getGroupType().equals(Strings.Path.GROUPTYPE_OPEN.toString())) {
@@ -140,7 +141,7 @@ public class JoinGroupFragment extends ParentFragment {
         }
 
         @Override
-        public void onErrorResponse(POJOerror error) {
+        public void onErrorResponse(PojoError error) {
             button_joinGroup.setEnabled(true);
             editText_groupName.setEnabled(true);
             editText_password.setEnabled(true);

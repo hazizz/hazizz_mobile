@@ -1,12 +1,13 @@
-package com.hazizz.droid.Communication.Requests;
+package com.hazizz.droid.Communication.requests;
 
 import android.app.Activity;
 import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
-import com.hazizz.droid.Communication.POJO.Response.CommentSectionPOJOs.POJOComment;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.Requests.Parent.Request;
+
+import com.hazizz.droid.Communication.requests.parent.Request;
+import com.hazizz.droid.Communication.responsePojos.commentSectionPojos.PojoComment;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -48,8 +49,8 @@ public class GetCommentSection extends Request {
 
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
-        Type listType = new TypeToken<ArrayList<POJOComment>>(){}.getType();
-        List<POJOComment> castedList = gson.fromJson(response.body().charStream(), listType);
+        Type listType = new TypeToken<ArrayList<PojoComment>>(){}.getType();
+        List<PojoComment> castedList = gson.fromJson(response.body().charStream(), listType);
 
         cOnResponse.onPOJOResponse(castedList);
     }

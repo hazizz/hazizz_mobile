@@ -1,4 +1,4 @@
-package com.hazizz.droid.Fragments.GroupTabs;
+package com.hazizz.droid.fragments.GroupTabs;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,15 +13,16 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.hazizz.droid.Cache.CurrentGroup;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.POJOerror;
-import com.hazizz.droid.Communication.POJO.Response.POJOsubject;
-import com.hazizz.droid.Communication.Requests.GetSubjects;
-import com.hazizz.droid.Fragments.ParentFragment.TabFragment;
-import com.hazizz.droid.Listviews.SubjectList.CustomAdapter;
-import com.hazizz.droid.Listviews.SubjectList.SubjectItem;
-import com.hazizz.droid.Transactor;
+import com.hazizz.droid.cache.CurrentGroup;
+
+import com.hazizz.droid.Communication.requests.GetSubjects;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.Communication.responsePojos.PojoError;
+import com.hazizz.droid.Communication.responsePojos.PojoSubject;
+import com.hazizz.droid.fragments.ParentFragment.TabFragment;
+import com.hazizz.droid.listviews.SubjectList.CustomAdapter;
+import com.hazizz.droid.listviews.SubjectList.SubjectItem;
+import com.hazizz.droid.navigation.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
 
@@ -96,12 +97,12 @@ public class SubjectsFragment extends TabFragment {
             @Override
             public void onPOJOResponse(Object response) {
                 adapter.clear();
-                ArrayList<POJOsubject> pojoList = (ArrayList<POJOsubject>) response;
+                ArrayList<PojoSubject> pojoList = (ArrayList< PojoSubject>) response;
                 if(pojoList.isEmpty()){
                     textView_noContent.setVisibility(v.VISIBLE);
                 }else {
                     textView_noContent.setVisibility(v.INVISIBLE);
-                    for (POJOsubject t : pojoList) {
+                    for ( PojoSubject t : pojoList) {
                         listSubject.add(new SubjectItem(t.getName(), t.getId()));
                         adapter.notifyDataSetChanged();
                     }
@@ -114,7 +115,7 @@ public class SubjectsFragment extends TabFragment {
                 sRefreshLayout.setRefreshing(false);
             }
             @Override
-            public void onErrorResponse(POJOerror error) {
+            public void onErrorResponse(PojoError error) {
                 sRefreshLayout.setRefreshing(false);
             }
             @Override

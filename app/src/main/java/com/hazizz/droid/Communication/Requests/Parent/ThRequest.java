@@ -1,16 +1,16 @@
-package com.hazizz.droid.Communication.Requests.Parent;
+package com.hazizz.droid.Communication.requests.parent;
 
 import android.app.Activity;
 import android.content.Context;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.POJOerror;
+
 import com.hazizz.droid.Communication.RequestInterface;
-import com.hazizz.droid.Communication.Requests.RequestTypes;
-import com.hazizz.droid.SharedPrefs;
-import com.hazizz.droid.Transactor;
+import com.hazizz.droid.Communication.requests.RequestTypes;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.Communication.responsePojos.PojoError;
+import com.hazizz.droid.other.SharedPrefs;
 
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
@@ -33,9 +33,6 @@ public class ThRequest implements RequestInterface {
     protected static final String HEADER_CONTENTTYPE = "Content-Type";
     protected static final String HEADER_VALUE_CONTENTTYPE = "application/json";
 
-
-
-
     protected String getHeaderAuthToken(){
         if(context == null) {
             return "Bearer " + SharedPrefs.TokenManager.getToken(act.getBaseContext());
@@ -47,7 +44,6 @@ public class ThRequest implements RequestInterface {
     protected String getHeaderAuthToken(Context context){
         return "Bearer " + SharedPrefs.TokenManager.getToken(context);
     }
-
 
     protected HashMap<String, String> headerMap;
     protected HashMap<String, Object> body;
@@ -86,7 +82,6 @@ public class ThRequest implements RequestInterface {
 
       //  THERA_URL = SharedPrefs.Server.getTheraAddress(getActivity());
 
-
         Gson gson = new GsonBuilder().serializeNulls().excludeFieldsWithoutExposeAnnotation().create();
         okHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(5, TimeUnit.SECONDS)
@@ -102,6 +97,7 @@ public class ThRequest implements RequestInterface {
                 .build();
 
         aRequest = retrofit.create(RequestTypes.class);
+
 
         body = new HashMap<>();
         headerMap = new HashMap<>();
@@ -147,7 +143,7 @@ public class ThRequest implements RequestInterface {
 
     public void callIsSuccessful(Response<ResponseBody> response) { }
 
-    public void callIsError(POJOerror pojoError) { }
+    public void callIsError(PojoError PojoError) { }
 
 }
 

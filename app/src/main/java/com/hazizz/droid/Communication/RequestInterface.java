@@ -1,5 +1,8 @@
 package com.hazizz.droid.Communication;
 
+
+import retrofit2.Callback;
+import retrofit2.Response;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -9,22 +12,19 @@ import android.widget.Toast;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
 import com.google.gson.Gson;
-import com.hazizz.droid.Activities.AuthActivity;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.POJOerror;
-import com.hazizz.droid.Communication.Requests.Parent.Request;
-import com.hazizz.droid.Communication.Requests.RequestType.Tokens.RefreshToken;
-import com.hazizz.droid.ErrorHandler;
-import com.hazizz.droid.manager.Manager;
+import com.hazizz.droid.activities.AuthActivity;
+import com.hazizz.droid.Communication.requests.parent.Request;
+import com.hazizz.droid.Communication.requests.RequestType.Tokens.RefreshToken;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.Communication.responsePojos.PojoError;
+import com.hazizz.droid.other.ErrorHandler;
 import com.hazizz.droid.R;
-import com.hazizz.droid.SharedPrefs;
-import com.hazizz.droid.Transactor;
+import com.hazizz.droid.other.SharedPrefs;
+import com.hazizz.droid.navigation.Transactor;
 import com.hazizz.droid.manager.ThreadManager;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public interface RequestInterface {
 
@@ -47,14 +47,14 @@ public interface RequestInterface {
                     }
 
                     else if(!response.isSuccessful()){ // response != null
-                         POJOerror pojoError = gson.fromJson(response.errorBody().charStream(),POJOerror.class);
-                         Log.e("hey", "errorCOde is: " + pojoError.getErrorCode());
-                         Log.e("hey", "errorMessage is: " + pojoError.getMessage());
+                         PojoError PojoError = gson.fromJson(response.errorBody().charStream(),PojoError.class);
+                         Log.e("hey", "errorCOde is: " + PojoError.getErrorCode());
+                         Log.e("hey", "errorMessage is: " + PojoError.getMessage());
 
                          ThreadManager threadManager = ThreadManager.getInstance();
 
 
-                         if(pojoError.getErrorCode() == 18 || pojoError.getErrorCode() == 17) {
+                         if(PojoError.getErrorCode() == 18 || PojoError.getErrorCode() == 17) {
                               MiddleMan.addToCallAgain(request);
                               if(!threadManager.isFreezed()) {
                                    threadManager.freezeThread();
@@ -68,7 +68,7 @@ public interface RequestInterface {
                                    );
                               }
                               // too many requests
-                         }else if(pojoError.getErrorCode() == 19){
+                         }else if(PojoError.getErrorCode() == 19){
                               if(!threadManager.isDelayed()) {
                                    threadManager.startDelay();
 
@@ -82,14 +82,14 @@ public interface RequestInterface {
                               );
                          }else {
                               if(cOnResponse != null){
-                                   cOnResponse.onErrorResponse(pojoError);
+                                   cOnResponse.onErrorResponse(PojoError);
                               }
                          }
-                         String errorMessage =  pojoError.getMessage().substring(0, Math.min(pojoError.getMessage().length(), 100));;
+                         String errorMessage =  PojoError.getMessage().substring(0, Math.min(PojoError.getMessage().length(), 100));;
                          Answers.getInstance().logCustom(new CustomEvent("Request error")
-                                 .putCustomAttribute("error code: ", pojoError.getErrorCode())
+                                 .putCustomAttribute("error code: ", PojoError.getErrorCode())
                                  .putCustomAttribute("error message: ", errorMessage)
-                                 .putCustomAttribute("time: ", pojoError.getTime())
+                                 .putCustomAttribute("time: ", PojoError.getTime())
                          );
                     }
                     MiddleMan.gotRequestResponse(request);
@@ -115,8 +115,6 @@ public interface RequestInterface {
                     Log.e("hey", "gotResponse");
                     Log.e("hey", response.raw().toString());
 
-
-
                     if(response.body() == null){
                          Log.e("hey", "response is null ");
                     }
@@ -125,27 +123,26 @@ public interface RequestInterface {
                          callIsSuccessful(response);
                     }
 
-
                     else if(!response.isSuccessful()){ // response != null
 
                          ThreadManager threadManager = ThreadManager.getInstance();
 
 
-                         POJOerror pojoError = gson.fromJson(response.errorBody().charStream(),POJOerror.class);
-                         Log.e("hey", "errorCOde is: " + pojoError.getErrorCode());
-                         Log.e("hey", "errorMessage is: " + pojoError.getMessage());
-                         if(pojoError.getErrorCode() == 1){
-                              Manager.CrashManager.setCrashData(pojoError, call);
+                         PojoError PojoError = gson.fromJson(response.errorBody().charStream(),PojoError.class);
+                         Log.e("hey", "errorCOde is: " + PojoError.getErrorCode());
+                         Log.e("hey", "errorMessage is: " + PojoError.getMessage());
+                         if(PojoError.getErrorCode() == 1){
+
                               ErrorHandler.unExpectedResponseDialog(act);
                          }
 
-                         if(pojoError.getErrorCode() == 0) {
+                         if(PojoError.getErrorCode() == 0) {
                               if(SharedPrefs.TokenManager.tokenInvalidated(act)){
                                    Transactor.authActivity(act);
                               }
                          }
 
-                         else if(pojoError.getErrorCode() == 18 || pojoError.getErrorCode() == 17) {
+                         else if(PojoError.getErrorCode() == 18 || PojoError.getErrorCode() == 17) {
                               MiddleMan.addToCallAgain(request);
                               if(!threadManager.isFreezed()) {
                                    threadManager.freezeThread();
@@ -160,12 +157,11 @@ public interface RequestInterface {
                                    );
                               }
                               // too many requests
-                         }else if(pojoError.getErrorCode() == 19){
+                         }else if(PojoError.getErrorCode() == 19){
                               if(!threadManager.isDelayed()) {
                                    threadManager.startDelay();
 
                                    MiddleMan.cancelAndSaveAllRequests();
-                                  // MiddleMan.gotRequestResponse(request);
                                    MiddleMan.addToCallAgain(request);
                               }else {
                                    MiddleMan.addToCallAgain(request);
@@ -175,7 +171,7 @@ public interface RequestInterface {
                               );
 
                          /*
-                         else if(pojoError.getErrorCode() == 19){
+                         else if(PojoError.getErrorCode() == 19){
                               if(!Manager.ThreadManager.isDelayed()) {
                                    Manager.ThreadManager.startDelay();
                                    MiddleMan.addToRateLimitQueue(request);
@@ -187,14 +183,14 @@ public interface RequestInterface {
 
                          }else {
                               if(cOnResponse != null){
-                                   cOnResponse.onErrorResponse(pojoError);
+                                   cOnResponse.onErrorResponse(PojoError);
                               }
                          }
-                         String errorMessage =  pojoError.getMessage().substring(0, Math.min(pojoError.getMessage().length(), 100));;
+                         String errorMessage =  PojoError.getMessage().substring(0, Math.min(PojoError.getMessage().length(), 100));;
                          Answers.getInstance().logCustom(new CustomEvent("Request error")
-                                 .putCustomAttribute("error code: ", pojoError.getErrorCode())
+                                 .putCustomAttribute("error code: ", PojoError.getErrorCode())
                                  .putCustomAttribute("error message: ", errorMessage)
-                                 .putCustomAttribute("time: ", pojoError.getTime())
+                                 .putCustomAttribute("time: ", PojoError.getTime())
                          );
                     }
                     MiddleMan.gotRequestResponse(request);
@@ -240,22 +236,21 @@ public interface RequestInterface {
                          ThreadManager threadManager = ThreadManager.getInstance();
 
 
-                         POJOerror pojoError = gson.fromJson(response.errorBody().charStream(),POJOerror.class);
-                         Log.e("hey", "errorCOde is: " + pojoError.getErrorCode());
-                         Log.e("hey", "errorMessage is: " + pojoError.getMessage());
-                         if(pojoError.getErrorCode() == 1){
-                              Manager.CrashManager.setCrashData(pojoError, call);
+                         PojoError PojoError = gson.fromJson(response.errorBody().charStream(),PojoError.class);
+                         Log.e("hey", "errorCOde is: " + PojoError.getErrorCode());
+                         Log.e("hey", "errorMessage is: " + PojoError.getMessage());
+                         if(PojoError.getErrorCode() == 1){
                               ErrorHandler.unExpectedResponseDialog(act);
                          }
 
-                         if(pojoError.getErrorCode() == 0) {
+                         if(PojoError.getErrorCode() == 0) {
                               if(SharedPrefs.TokenManager.tokenInvalidated(act)){
                                    Intent i = new Intent(act, AuthActivity.class);
 
                                    act.startActivity(i);
                               }
 
-                         }else if(pojoError.getErrorCode() == 19){
+                         }else if(PojoError.getErrorCode() == 19){
                               if(!threadManager.isDelayed()) {
                                    threadManager.startDelay();
                                    MiddleMan.addToRateLimitQueue(request);
@@ -269,14 +264,14 @@ public interface RequestInterface {
                               );
 
                          }else {
-                              cOnResponse.onErrorResponse(pojoError);
+                              cOnResponse.onErrorResponse(PojoError);
 
                          }
-                         String errorMessage =  pojoError.getMessage().substring(0, Math.min(pojoError.getMessage().length(), 100));;
+                         String errorMessage =  PojoError.getMessage().substring(0, Math.min(PojoError.getMessage().length(), 100));;
                          Answers.getInstance().logCustom(new CustomEvent("Request error")
-                                 .putCustomAttribute("error code: ", pojoError.getErrorCode())
+                                 .putCustomAttribute("error code: ", PojoError.getErrorCode())
                                  .putCustomAttribute("error message: ", errorMessage)
-                                 .putCustomAttribute("time: ", pojoError.getTime())
+                                 .putCustomAttribute("time: ", PojoError.getTime())
                          );
                     }
                     MiddleMan.gotRequestResponse(request);
@@ -295,8 +290,6 @@ public interface RequestInterface {
      void makeCallAgain();
 
      void callIsSuccessful(Response<ResponseBody> response);
-
-    // void callIsError(POJOerror pojoError);
 
      void cancelRequest();
 }

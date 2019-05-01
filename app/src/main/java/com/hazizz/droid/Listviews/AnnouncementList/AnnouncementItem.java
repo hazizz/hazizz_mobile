@@ -1,8 +1,8 @@
-package com.hazizz.droid.Listviews.AnnouncementList;
+package com.hazizz.droid.listviews.AnnouncementList;
 
-import com.hazizz.droid.Communication.POJO.Response.POJOgroup;
-import com.hazizz.droid.Communication.POJO.Response.POJOsubject;
-import com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs.POJOcreator;
+import com.hazizz.droid.Communication.responsePojos.PojoGroup;
+import com.hazizz.droid.Communication.responsePojos.PojoSubject;
+import com.hazizz.droid.Communication.responsePojos.taskPojos.PojoCreator;
 
 import lombok.Data;
 
@@ -11,12 +11,12 @@ public class AnnouncementItem {
 
     String announcementTitle;
     String announcementDescription;
-    POJOgroup group;
-    POJOcreator creator;
-    POJOsubject subject;
+    PojoGroup group;
+    PojoCreator creator;
+     PojoSubject subject;
     int announcementId;
 
-    public AnnouncementItem(String taskTitle, String taskDescription, POJOgroup group, POJOcreator creator, POJOsubject subject, int announcementId){
+    public AnnouncementItem(String taskTitle, String taskDescription, PojoGroup group, PojoCreator creator,  PojoSubject subject, int announcementId){
         this.announcementTitle = taskTitle;
         this.announcementDescription = taskDescription;
         this.group = group;

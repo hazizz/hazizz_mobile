@@ -1,10 +1,11 @@
-package com.hazizz.droid.Communication.Requests.MyTask;
+package com.hazizz.droid.Communication.requests.myTask;
 
 import android.app.Activity;
 import android.util.Log;
 
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.Requests.Parent.Request;
+
+import com.hazizz.droid.Communication.requests.parent.Request;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
 
 import java.util.HashMap;
 
@@ -14,7 +15,7 @@ import retrofit2.Response;
 public class EditMyTask extends Request {
     String p_taskId;
     public EditMyTask(Activity act, CustomResponseHandler rh, int p_taskId,
-                  int b_taskType, String b_taskTitle, String b_description, String b_dueDate) {
+                      int b_taskType, String b_taskTitle, String b_description, String b_dueDate) {
         super(act, rh);
         Log.e("hey", "created EditMyTask object");
         this.p_taskId = Integer.toString(p_taskId);

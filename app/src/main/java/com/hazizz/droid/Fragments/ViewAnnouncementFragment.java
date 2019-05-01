@@ -1,4 +1,4 @@
-package com.hazizz.droid.Fragments;
+package com.hazizz.droid.fragments;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
@@ -23,28 +23,28 @@ import android.widget.TextView;
 
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
-import com.hazizz.droid.Activities.MainActivity;
-import com.hazizz.droid.AndroidThings;
-import com.hazizz.droid.Cache.CurrentGroup;
-import com.hazizz.droid.Cache.CurrentMembersManager;
-import com.hazizz.droid.Cache.MeInfo.MeInfo;
-import com.hazizz.droid.Cache.Member;
-import com.hazizz.droid.Communication.POJO.Response.AnnouncementPOJOs.POJODetailedAnnouncement;
-import com.hazizz.droid.Communication.POJO.Response.CommentSectionPOJOs.POJOComment;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.POJOerror;
-import com.hazizz.droid.Communication.Requests.AddComment;
-import com.hazizz.droid.Communication.Requests.DeleteAT;
-import com.hazizz.droid.Communication.Requests.GetAT;
-import com.hazizz.droid.Communication.Requests.GetCommentSection;
+import com.hazizz.droid.activities.MainActivity;
+import com.hazizz.droid.other.AndroidThings;
+import com.hazizz.droid.cache.CurrentGroup;
+import com.hazizz.droid.cache.CurrentMembersManager;
+import com.hazizz.droid.cache.MeInfo.MeInfo;
+import com.hazizz.droid.cache.Member;
+import com.hazizz.droid.Communication.requests.AddComment;
+import com.hazizz.droid.Communication.requests.DeleteAT;
+import com.hazizz.droid.Communication.requests.GetAT;
+import com.hazizz.droid.Communication.requests.GetCommentSection;
 import com.hazizz.droid.Communication.Strings;
-import com.hazizz.droid.Enum.EnumAT;
-import com.hazizz.droid.Fragments.ParentFragment.CommentableFragment;
-import com.hazizz.droid.Listener.GenericListener;
-import com.hazizz.droid.Listviews.CommentList.CommentItem;
-import com.hazizz.droid.Listviews.CommentList.CustomAdapter;
-import com.hazizz.droid.Listviews.NonScrollListView;
-import com.hazizz.droid.Transactor;
+import com.hazizz.droid.Communication.responsePojos.announcementPojos.PojoAnnouncementDetailed;
+import com.hazizz.droid.Communication.responsePojos.commentSectionPojos.PojoComment;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.Communication.responsePojos.PojoError;
+import com.hazizz.droid.enums.EnumAT;
+import com.hazizz.droid.fragments.ParentFragment.CommentableFragment;
+import com.hazizz.droid.listeners.GenericListener;
+import com.hazizz.droid.listviews.CommentList.CommentItem;
+import com.hazizz.droid.listviews.CommentList.CustomAdapter;
+import com.hazizz.droid.listviews.NonScrollListView;
+import com.hazizz.droid.navigation.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
 
@@ -187,7 +187,7 @@ public class ViewAnnouncementFragment extends CommentableFragment implements Ada
                                         );
                                     }
                                     @Override
-                                    public void onErrorResponse(POJOerror error) {
+                                    public void onErrorResponse(PojoError error) {
                                         button_delete.setEnabled(true);
                                         Answers.getInstance().logCustom(new CustomEvent("delete announcement")
                                                 .putCustomAttribute("status", error.getErrorCode())
@@ -244,7 +244,7 @@ public class ViewAnnouncementFragment extends CommentableFragment implements Ada
                             button_send.setEnabled(true);
                         }
                         @Override
-                        public void onErrorResponse(POJOerror error) {
+                        public void onErrorResponse(PojoError error) {
                             button_send.setEnabled(true);
                             Answers.getInstance().logCustom(new CustomEvent("add comment")
                                     .putCustomAttribute("status", error.getErrorCode())
@@ -297,7 +297,7 @@ public class ViewAnnouncementFragment extends CommentableFragment implements Ada
         rh = new CustomResponseHandler() {
             @Override
             public void onPOJOResponse(Object response) {
-                POJODetailedAnnouncement pojoResponse = (POJODetailedAnnouncement)response;
+                PojoAnnouncementDetailed pojoResponse = (PojoAnnouncementDetailed)response;
 
                 groupId = pojoResponse.getGroup().getId();
                 groupName = pojoResponse.getGroup().getName();
@@ -426,13 +426,13 @@ public class ViewAnnouncementFragment extends CommentableFragment implements Ada
                 adapter.clear();
                 listComment.clear();
 
-                ArrayList<POJOComment> comments = (ArrayList<POJOComment>) response;
+                ArrayList<PojoComment> comments = (ArrayList<PojoComment>) response;
 
                 CurrentMembersManager members = currentGroup.getMembersManager();
                 if(comments.isEmpty()) {
                     textView_noContent.setVisibility(v.VISIBLE);
                 }else {
-                    for (POJOComment t : comments) {
+                    for (PojoComment t : comments) {
                         Member member = members.getMember(t.getCreator().getId());
 
                         Strings.Rank rank = member.getRank();
@@ -451,7 +451,7 @@ public class ViewAnnouncementFragment extends CommentableFragment implements Ada
                 sRefreshLayout.setRefreshing(false);
             }
             @Override
-            public void onErrorResponse(POJOerror error) {
+            public void onErrorResponse(PojoError error) {
                 Log.e("hey", "onErrorResponse");
                 sRefreshLayout.setRefreshing(false);
             }

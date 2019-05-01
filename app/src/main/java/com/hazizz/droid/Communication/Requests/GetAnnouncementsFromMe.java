@@ -1,13 +1,13 @@
-package com.hazizz.droid.Communication.Requests;
+package com.hazizz.droid.Communication.requests;
 
 import android.app.Activity;
 import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
-import com.hazizz.droid.Communication.POJO.Response.AnnouncementPOJOs.POJOAnnouncement;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
-import com.hazizz.droid.Communication.Requests.Parent.Request;
+
+import com.hazizz.droid.Communication.requests.parent.Request;
+import com.hazizz.droid.Communication.responsePojos.announcementPojos.PojoAnnouncement;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -31,9 +31,9 @@ public class GetAnnouncementsFromMe extends Request {
     public void callIsSuccessful(Response<ResponseBody> response) {
 
 
-        Type listType = new TypeToken<ArrayList<POJOAnnouncement>>(){}.getType();
+        Type listType = new TypeToken<ArrayList<PojoAnnouncement>>(){}.getType();
 
-        List<POJOAnnouncement> castedList = null;
+        List<PojoAnnouncement> castedList = null;
         try {
             String rawResponseBody = response.body().string();
             castedList = gson.fromJson(rawResponseBody, listType);

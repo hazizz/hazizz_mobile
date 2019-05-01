@@ -86,7 +86,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editText7">
 
-                <com.hazizz.droid.CustomSearchableSpinner
+                <com.hazizz.droid.other.CustomSearchableSpinner
                     android:id="@+id/SearchableSpinner_schools"
                     android:layout_width="0dp"
                     android:layout_height="77dp"

@@ -1,4 +1,4 @@
-package com.hazizz.droid.Fragments.GroupTabs;
+package com.hazizz.droid.fragments.GroupTabs;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,16 +13,16 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.hazizz.droid.Cache.CurrentGroup;
-import com.hazizz.droid.Communication.POJO.Response.AnnouncementPOJOs.POJOAnnouncement;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.POJOerror;
-import com.hazizz.droid.Communication.Requests.GetAnnouncementsFromGroup;
+import com.hazizz.droid.cache.CurrentGroup;
+import com.hazizz.droid.Communication.requests.GetAnnouncementsFromGroup;
 import com.hazizz.droid.Communication.Strings;
-import com.hazizz.droid.Fragments.ParentFragment.TabFragment;
-import com.hazizz.droid.Listviews.AnnouncementList.AnnouncementItem;
-import com.hazizz.droid.Listviews.AnnouncementList.Group.CustomAdapter;
-import com.hazizz.droid.Transactor;
+import com.hazizz.droid.Communication.responsePojos.announcementPojos.PojoAnnouncement;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.Communication.responsePojos.PojoError;
+import com.hazizz.droid.fragments.ParentFragment.TabFragment;
+import com.hazizz.droid.listviews.AnnouncementList.AnnouncementItem;
+import com.hazizz.droid.listviews.AnnouncementList.Group.CustomAdapter;
+import com.hazizz.droid.navigation.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
 
@@ -69,8 +69,6 @@ public class GroupAnnouncementFragment extends TabFragment {
                 getAnnouncements();
             }});
         sRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimaryDarkBlue), getResources().getColor(R.color.colorPrimaryLightBlue), getResources().getColor(R.color.colorPrimaryDarkBlue));
-       // getAnnouncements();
-
 
         currentGroup = CurrentGroup.getInstance();
         createViewList();
@@ -102,12 +100,12 @@ public class GroupAnnouncementFragment extends TabFragment {
             @Override
             public void onPOJOResponse(Object response) {
                 adapter.clear();
-                ArrayList<POJOAnnouncement> pojoList = (ArrayList<POJOAnnouncement>) response;
+                ArrayList<PojoAnnouncement> pojoList = (ArrayList<PojoAnnouncement>) response;
                 if(pojoList.isEmpty()){
                     textView_noContent.setVisibility(v.VISIBLE);
                 }else {
                     textView_noContent.setVisibility(v.INVISIBLE);
-                    for (POJOAnnouncement t : pojoList) {
+                    for (PojoAnnouncement t : pojoList) {
                         listAnnouncement.add(new AnnouncementItem(t.getTitle(),
                                 t.getDescription(), t.getGroup(), t.getCreator(), t.getSubject(), t.getId()));
                         adapter.notifyDataSetChanged();
@@ -121,7 +119,7 @@ public class GroupAnnouncementFragment extends TabFragment {
                 textView_noContent.setVisibility(v.VISIBLE);
                 sRefreshLayout.setRefreshing(false);
             }
-            @Override public void onErrorResponse(POJOerror error) { sRefreshLayout.setRefreshing(false); }
+            @Override public void onErrorResponse(PojoError error) { sRefreshLayout.setRefreshing(false); }
             @Override
             public void onNoConnection() {
                 textView_noContent.setText(R.string.info_noInternetAccess);
@@ -129,23 +127,18 @@ public class GroupAnnouncementFragment extends TabFragment {
                 sRefreshLayout.setRefreshing(false);
             }
         };
-        MiddleMan.newRequest(new GetAnnouncementsFromGroup(GroupTabFragment.activity,responseHandler, (int)currentGroup.getGroupId()));
+        MiddleMan.newRequest(new GetAnnouncementsFromGroup(getActivity(),responseHandler, (int)currentGroup.getGroupId()));
     }
 
     public void toAnnouncementEditor(FragmentManager fm){
         Transactor.fragmentCreateAnnouncement(fm.beginTransaction(),(int)currentGroup.getGroupId(), GroupTabFragment.groupName, Strings.Dest.TOGROUP);
     }
 
-
-
-
-
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (getView() != null && !isViewShown) {
             isViewShown = true;
-            // fetchdata() contains logic to show data when page is selected mostly asynctask to fill the data
             getAnnouncements();
         } else {
             isViewShown = false;

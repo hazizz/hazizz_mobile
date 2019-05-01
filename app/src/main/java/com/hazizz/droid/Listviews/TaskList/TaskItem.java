@@ -1,8 +1,8 @@
-package com.hazizz.droid.Listviews.TaskList;
+package com.hazizz.droid.listviews.TaskList;
 
-import com.hazizz.droid.Communication.POJO.Response.POJOgroup;
-import com.hazizz.droid.Communication.POJO.Response.POJOsubject;
-import com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs.POJOcreator;
+import com.hazizz.droid.Communication.responsePojos.PojoGroup;
+import com.hazizz.droid.Communication.responsePojos.PojoSubject;
+import com.hazizz.droid.Communication.responsePojos.taskPojos.PojoCreator;
 
 import lombok.Data;
 
@@ -13,12 +13,12 @@ public class TaskItem {
     String taskTitle;
     String taskDescription;
   //  String taskDueDate;
-    POJOgroup group;
-    POJOcreator creator;
-    POJOsubject subject;
+    PojoGroup group;
+    PojoCreator creator;
+     PojoSubject subject;
     int taskId;
 
-    public TaskItem(int taskPic, String taskTitle, String taskDescription,POJOgroup group, POJOcreator creator, POJOsubject subject, int taskId){
+    public TaskItem(int taskPic, String taskTitle, String taskDescription,PojoGroup group, PojoCreator creator,  PojoSubject subject, int taskId){
         this.taskPic = taskPic;
         this.taskTitle = taskTitle;
         this.taskDescription = taskDescription;
