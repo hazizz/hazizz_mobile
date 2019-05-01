@@ -1,13 +1,13 @@
-package com.hazizz.droid.Communication.Requests;
+package com.hazizz.droid.Communication.requests;
 
 import android.app.Activity;
 import android.util.Log;
 
-import com.hazizz.droid.Communication.POJO.Response.AnnouncementPOJOs.POJODetailedAnnouncement;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs.POJOgetTaskDetailed;
-import com.hazizz.droid.Communication.Requests.Parent.Request;
+import com.hazizz.droid.Communication.requests.parent.Request;
 import com.hazizz.droid.Communication.Strings;
+import com.hazizz.droid.Communication.responsePojos.announcementPojos.PojoAnnouncementDetailed;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.Communication.responsePojos.taskPojos.PojoTaskDetailed;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -34,10 +34,10 @@ public class GetATBy extends Request {
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
         if(p_whereName.equals(Strings.Path.TASKS.toString())) {
-            POJOgetTaskDetailed pojo = gson.fromJson(response.body().charStream(), POJOgetTaskDetailed.class);
+             PojoTaskDetailed pojo = gson.fromJson(response.body().charStream(),  PojoTaskDetailed.class);
             cOnResponse.onPOJOResponse(pojo);
         }else{
-            POJODetailedAnnouncement pojo = gson.fromJson(response.body().charStream(), POJODetailedAnnouncement.class);
+            PojoAnnouncementDetailed pojo = gson.fromJson(response.body().charStream(), PojoAnnouncementDetailed.class);
             cOnResponse.onPOJOResponse(pojo);
         }
 

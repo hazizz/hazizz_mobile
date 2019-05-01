@@ -1,17 +1,16 @@
-package com.hazizz.droid.Communication.Requests.RequestType.Tokens;
+package com.hazizz.droid.Communication.requests.RequestType.Tokens;
 
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
 import com.hazizz.droid.Communication.MiddleMan;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.POJORefreshToken;
-import com.hazizz.droid.Communication.POJO.Response.POJOerror;
-import com.hazizz.droid.Communication.Requests.Parent.Request;
-import com.hazizz.droid.manager.Manager;
-import com.hazizz.droid.SharedPrefs;
-import com.hazizz.droid.Transactor;
+import com.hazizz.droid.Communication.requests.parent.Request;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.Communication.responsePojos.PojoError;
+import com.hazizz.droid.Communication.responsePojos.PojoRefreshToken;
+import com.hazizz.droid.other.SharedPrefs;
+import com.hazizz.droid.navigation.Transactor;
 import com.hazizz.droid.manager.ThreadManager;
 
 import java.util.HashMap;
@@ -26,15 +25,15 @@ public class RefreshToken extends Request {
     CustomResponseHandler customResponseHandler = new CustomResponseHandler() {
         @Override
         public void onPOJOResponse(Object response) {
-            POJORefreshToken pojoRefreshToken = (POJORefreshToken)response;
-            SharedPrefs.TokenManager.setRefreshToken(context, pojoRefreshToken.getRefresh());
-            SharedPrefs.TokenManager.setToken(context, pojoRefreshToken.getToken());
+            PojoRefreshToken PojoRefreshToken = (com.hazizz.droid.Communication.responsePojos.PojoRefreshToken)response;
+            SharedPrefs.TokenManager.setRefreshToken(context, PojoRefreshToken.getRefresh());
+            SharedPrefs.TokenManager.setToken(context, PojoRefreshToken.getToken());
             ThreadManager.getInstance().unfreezeThread();
             MiddleMan.callAgain();
             Log.e("hey", "got refresh token response");
         }
         @Override
-        public void onErrorResponse(POJOerror error) {
+        public void onErrorResponse(PojoError error) {
             if(error.getErrorCode() == 21){
                 MiddleMan.cancelAllRequest();
                 Transactor.authActivity(context);
@@ -66,7 +65,7 @@ public class RefreshToken extends Request {
     public void makeCallAgain() { callAgain(act,  thisRequest, call, customResponseHandler, gson); }
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
-        POJORefreshToken pojo = gson.fromJson(response.body().charStream(), POJORefreshToken.class);
+        PojoRefreshToken pojo = gson.fromJson(response.body().charStream(), PojoRefreshToken.class);
         customResponseHandler.onPOJOResponse(pojo);
     }
 }

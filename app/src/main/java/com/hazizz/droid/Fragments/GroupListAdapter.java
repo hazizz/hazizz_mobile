@@ -1,4 +1,4 @@
-package com.hazizz.droid.Fragments;
+package com.hazizz.droid.fragments;
 
 public class GroupListAdapter{ /*extends ArrayAdapter<Group> {
 

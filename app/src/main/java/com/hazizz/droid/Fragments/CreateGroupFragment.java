@@ -1,10 +1,9 @@
-package com.hazizz.droid.Fragments;
+package com.hazizz.droid.fragments;
 
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,21 +16,21 @@ import android.widget.TextView;
 
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
-import com.hazizz.droid.Activities.MainActivity;
-import com.hazizz.droid.AndroidThings;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.POJOerror;
-import com.hazizz.droid.Communication.POJO.Response.POJOgroup;
-import com.hazizz.droid.Communication.Requests.CreateGroup;
+import com.hazizz.droid.other.AndroidThings;
+
+
+import com.hazizz.droid.Communication.requests.CreateGroup;
 import com.hazizz.droid.Communication.Strings;
-import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
-import com.hazizz.droid.Listener.OnBackPressedListener;
-import com.hazizz.droid.Transactor;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.Communication.responsePojos.PojoError;
+import com.hazizz.droid.Communication.responsePojos.PojoGroup;
+import com.hazizz.droid.fragments.ParentFragment.ParentFragment;
+import com.hazizz.droid.listeners.OnBackPressedListener;
+import com.hazizz.droid.navigation.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import okhttp3.Headers;
 import okhttp3.ResponseBody;
@@ -52,8 +51,8 @@ public class CreateGroupFragment extends ParentFragment {
     CustomResponseHandler rh_getGroups = new CustomResponseHandler() {
         @Override
         public void onPOJOResponse(Object response) {
-            ArrayList<POJOgroup> castedList = (ArrayList<POJOgroup>) response;
-            for(POJOgroup g : castedList){
+            ArrayList<PojoGroup> castedList = (ArrayList<PojoGroup>) response;
+            for(PojoGroup g : castedList){
                 if(newGroupName.equals(g.getName())){
                     Transactor.fragmentMainGroup(getFragmentManager().beginTransaction(), g.getId(), newGroupName);
                     AndroidThings.closeKeyboard(getContext(), v);
@@ -66,7 +65,7 @@ public class CreateGroupFragment extends ParentFragment {
             textView_error.setText(R.string.info_noInternetAccess);
         }
         @Override
-        public void onErrorResponse(POJOerror error) {
+        public void onErrorResponse(PojoError error) {
             if(error.getErrorCode() == 2){ // validation failed
                 textView_error.setText(R.string.error_groupNameNotAcceptable);
             }
@@ -102,7 +101,7 @@ public class CreateGroupFragment extends ParentFragment {
         }
 
         @Override
-        public void onErrorResponse(POJOerror error) {
+        public void onErrorResponse(PojoError error) {
             if(error.getErrorCode() == 2){ // validation failed
                   textView_error.setText(R.string.error_groupNameNotAcceptable);
             }

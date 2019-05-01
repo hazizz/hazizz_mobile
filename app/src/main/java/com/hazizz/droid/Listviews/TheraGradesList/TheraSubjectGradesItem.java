@@ -1,4 +1,4 @@
-package com.hazizz.droid.Listviews.TheraGradesList;
+package com.hazizz.droid.listviews.TheraGradesList;
 
 import java.util.List;
 

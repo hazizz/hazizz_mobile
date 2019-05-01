@@ -1,4 +1,4 @@
-package com.hazizz.droid.Fragments.MainTab;
+package com.hazizz.droid.fragments.MainTab;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,16 +13,16 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.hazizz.droid.Activities.MainActivity;
-import com.hazizz.droid.Cache.HCache;
-import com.hazizz.droid.Communication.POJO.Response.AnnouncementPOJOs.POJOAnnouncement;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.POJOerror;
-import com.hazizz.droid.Communication.Requests.GetAnnouncementsFromMe;
+import com.hazizz.droid.activities.MainActivity;
+import com.hazizz.droid.cache.HCache;
+import com.hazizz.droid.Communication.requests.GetAnnouncementsFromMe;
 import com.hazizz.droid.Communication.Strings;
-import com.hazizz.droid.Listviews.AnnouncementList.AnnouncementItem;
-import com.hazizz.droid.Listviews.AnnouncementList.Main.CustomAdapter;
-import com.hazizz.droid.Transactor;
+import com.hazizz.droid.Communication.responsePojos.announcementPojos.PojoAnnouncement;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.Communication.responsePojos.PojoError;
+import com.hazizz.droid.listviews.AnnouncementList.AnnouncementItem;
+import com.hazizz.droid.listviews.AnnouncementList.Main.CustomAdapter;
+import com.hazizz.droid.navigation.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
 
@@ -82,14 +82,14 @@ public class MainAnnouncementFragment extends Fragment{
         });
     }
 
-    private void processData(List<POJOAnnouncement> data){
+    private void processData(List<PojoAnnouncement> data){
         if(data != null){
             adapter.clear();
             if(data.isEmpty()){
                 textView_noContent.setVisibility(v.VISIBLE);
             }else {
                 textView_noContent.setVisibility(v.INVISIBLE);
-                for (POJOAnnouncement t : data) {
+                for (PojoAnnouncement t : data) {
                     listTask.add(new AnnouncementItem(t.getTitle(),
                             t.getDescription(), t.getGroup(), t.getCreator(),
                             t.getSubject(), t.getId()));
@@ -108,7 +108,7 @@ public class MainAnnouncementFragment extends Fragment{
 
             @Override
             public void onPOJOResponse(Object response) {
-                ArrayList<POJOAnnouncement> data = (ArrayList<POJOAnnouncement>) response;
+                ArrayList<PojoAnnouncement> data = (ArrayList<PojoAnnouncement>) response;
                 processData(data);
 
             }
@@ -117,7 +117,7 @@ public class MainAnnouncementFragment extends Fragment{
                 sRefreshLayout.setRefreshing(false);
             }
             @Override
-            public void onErrorResponse(POJOerror error) {
+            public void onErrorResponse(PojoError error) {
                 sRefreshLayout.setRefreshing(false);
             }
 

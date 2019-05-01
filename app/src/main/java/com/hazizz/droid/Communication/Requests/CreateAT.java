@@ -1,11 +1,12 @@
-package com.hazizz.droid.Communication.Requests;
+package com.hazizz.droid.Communication.requests;
 
 import android.app.Activity;
 import android.util.Log;
 
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.Requests.Parent.Request;
+
+import com.hazizz.droid.Communication.requests.parent.Request;
 import com.hazizz.droid.Communication.Strings;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -14,7 +15,7 @@ public class CreateAT extends Request {
     private String p_whereName, p_byName;
     private int p_byId;
     public CreateAT(Activity act, CustomResponseHandler rh, Strings.Path p_whereName, String p_byName, int p_byId,
-             int b_taskType, String b_taskTitle, String b_description, String b_dueDate) {
+                    int b_taskType, String b_taskTitle, String b_description, String b_dueDate) {
         super(act, rh);
         Log.e("hey", "created CreateAT object");
 

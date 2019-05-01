@@ -1,4 +1,4 @@
-package com.hazizz.droid.Listviews.SubjectList;
+package com.hazizz.droid.listviews.SubjectList;
 
 import android.app.Activity;
 import android.content.Context;

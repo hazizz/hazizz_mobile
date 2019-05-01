@@ -1,13 +1,14 @@
-package com.hazizz.droid.Communication.Requests;
+package com.hazizz.droid.Communication.requests;
 
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
-import com.hazizz.droid.Communication.Requests.Parent.Request;
+
+import com.hazizz.droid.Communication.requests.parent.Request;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.Communication.responsePojos.taskPojos.PojoTask;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -40,8 +41,8 @@ public class GetTasksFromMe extends Request {
 
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
-        Type listType = new TypeToken<ArrayList<POJOgetTask>>(){}.getType();
-        List<POJOgetTask> castedList = null;
+        Type listType = new TypeToken<ArrayList<PojoTask>>(){}.getType();
+        List< PojoTask> castedList = null;
         try {
             String rawResponseBody = response.body().string();
             castedList = gson.fromJson(rawResponseBody, listType);

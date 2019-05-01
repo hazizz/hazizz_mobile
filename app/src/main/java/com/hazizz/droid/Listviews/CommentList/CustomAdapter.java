@@ -1,4 +1,4 @@
-package com.hazizz.droid.Listviews.CommentList;
+package com.hazizz.droid.listviews.CommentList;
 
 import android.app.Activity;
 import android.content.Context;
@@ -17,16 +17,17 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.hazizz.droid.Cache.MeInfo.MeInfo;
+import com.hazizz.droid.cache.MeInfo.MeInfo;
 import com.hazizz.droid.Communication.MiddleMan;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.Requests.DeleteATComment;
+
+import com.hazizz.droid.Communication.requests.DeleteATComment;
 import com.hazizz.droid.Communication.Strings;
-import com.hazizz.droid.Converter.Converter;
-import com.hazizz.droid.Enum.EnumAT;
-import com.hazizz.droid.Fragments.ParentFragment.CommentableFragment;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.converter.Converter;
+import com.hazizz.droid.enums.EnumAT;
+import com.hazizz.droid.fragments.ParentFragment.CommentableFragment;
 import com.hazizz.droid.R;
-import com.hazizz.droid.Transactor;
+import com.hazizz.droid.navigation.Transactor;
 
 
 import java.util.List;

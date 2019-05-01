@@ -1,4 +1,4 @@
-package com.hazizz.droid.Fragments;
+package com.hazizz.droid.fragments;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -13,14 +13,15 @@ import android.widget.TextView;
 
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
-import com.hazizz.droid.AndroidThings;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.POJOerror;
-import com.hazizz.droid.Communication.Requests.CreateSubject;
-import com.hazizz.droid.Fragments.GroupTabs.GroupTabFragment;
-import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
-import com.hazizz.droid.Listener.OnBackPressedListener;
-import com.hazizz.droid.Transactor;
+import com.hazizz.droid.other.AndroidThings;
+
+
+import com.hazizz.droid.Communication.requests.CreateSubject;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.Communication.responsePojos.PojoError;
+import com.hazizz.droid.fragments.ParentFragment.ParentFragment;
+import com.hazizz.droid.listeners.OnBackPressedListener;
+import com.hazizz.droid.navigation.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
 
@@ -58,7 +59,7 @@ public class CreateSubjectFragment extends ParentFragment {
             button_addSubject.setEnabled(true);
         }
         @Override
-        public void onErrorResponse(POJOerror error) {
+        public void onErrorResponse(PojoError error) {
             if(error.getErrorCode() == 2){ // validation failed
 
             }

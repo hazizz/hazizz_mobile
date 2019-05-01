@@ -1,4 +1,4 @@
-package com.hazizz.droid.Fragments.MainTab;
+package com.hazizz.droid.fragments.MainTab;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,19 +13,20 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.hazizz.droid.Activities.MainActivity;
-import com.hazizz.droid.Cache.HCache;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.POJOerror;
-import com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
-import com.hazizz.droid.Communication.Requests.GetTasksFromMe;
+import com.hazizz.droid.activities.MainActivity;
+import com.hazizz.droid.cache.HCache;
+
+import com.hazizz.droid.Communication.requests.GetTasksFromMe;
 import com.hazizz.droid.Communication.Strings;
-import com.hazizz.droid.D8;
-import com.hazizz.droid.Fragments.ViewTaskFragment;
-import com.hazizz.droid.Listviews.HeaderItem;
-import com.hazizz.droid.Listviews.TaskList.Main.CustomAdapter;
-import com.hazizz.droid.Listviews.TaskList.TaskItem;
-import com.hazizz.droid.Transactor;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.Communication.responsePojos.PojoError;
+import com.hazizz.droid.Communication.responsePojos.taskPojos.PojoTask;
+import com.hazizz.droid.other.D8;
+import com.hazizz.droid.fragments.ViewTaskFragment;
+import com.hazizz.droid.listviews.HeaderItem;
+import com.hazizz.droid.listviews.TaskList.Main.CustomAdapter;
+import com.hazizz.droid.listviews.TaskList.TaskItem;
+import com.hazizz.droid.navigation.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
 
@@ -95,7 +96,7 @@ public class MainFragment extends Fragment {
         });
     }
 
-    private void processData(List<POJOgetTask> data){
+    private void processData(List<PojoTask> data){
         if(data != null) {
             adapter.clear();
             if (data.isEmpty()) {
@@ -103,7 +104,7 @@ public class MainFragment extends Fragment {
             } else {
                 textView_noContent.setVisibility(v.INVISIBLE);
                 int lastDaysLeft = -1;
-                for (POJOgetTask t : data) {
+                for ( PojoTask t : data) {
                     String date = t.getDueDate();
                     int daysLeft = D8.textToDate(date).daysLeft();
                     if (daysLeft > lastDaysLeft) {
@@ -126,7 +127,7 @@ public class MainFragment extends Fragment {
             }
             @Override
             public void onPOJOResponse(Object response) {
-                ArrayList<POJOgetTask> sortedData = D8.sortTasksByDate((ArrayList<POJOgetTask>) response);
+                ArrayList< PojoTask> sortedData = D8.sortTasksByDate((ArrayList< PojoTask>) response);
                 processData(sortedData);
             }
             @Override
@@ -134,7 +135,7 @@ public class MainFragment extends Fragment {
                 sRefreshLayout.setRefreshing(false);
             }
             @Override
-            public void onErrorResponse(POJOerror error) {
+            public void onErrorResponse(PojoError error) {
                 sRefreshLayout.setRefreshing(false);
             }
             @Override

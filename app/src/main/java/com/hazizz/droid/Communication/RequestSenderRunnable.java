@@ -3,8 +3,7 @@ package com.hazizz.droid.Communication;
 import android.content.Context;
 import android.util.Log;
 
-import com.hazizz.droid.manager.Manager;
-import com.hazizz.droid.Network;
+import com.hazizz.droid.other.Network;
 import com.hazizz.droid.manager.ThreadManager;
 
 public class RequestSenderRunnable implements Runnable{
@@ -43,7 +42,6 @@ public class RequestSenderRunnable implements Runnable{
                 }else{
 
                 }
-
             }
         }
     }

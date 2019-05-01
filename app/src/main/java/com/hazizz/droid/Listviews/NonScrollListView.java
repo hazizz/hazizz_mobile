@@ -1,4 +1,4 @@
-package com.hazizz.droid.Listviews;
+package com.hazizz.droid.listviews;
 
 import android.content.Context;
 import android.util.AttributeSet;

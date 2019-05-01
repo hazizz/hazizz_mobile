@@ -1,6 +1,6 @@
-package com.hazizz.droid.Fragments.ParentFragment;
+package com.hazizz.droid.fragments.ParentFragment;
 
-import com.hazizz.droid.Listener.GenericListener;
+import com.hazizz.droid.listeners.GenericListener;
 
 public class TabFragment extends ParentFragment {
 

@@ -1,4 +1,4 @@
-package com.hazizz.droid.Listviews.GroupList;
+package com.hazizz.droid.listviews.GroupList;
 
 import lombok.Data;
 

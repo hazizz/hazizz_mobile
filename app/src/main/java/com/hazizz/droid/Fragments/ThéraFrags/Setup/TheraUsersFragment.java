@@ -1,4 +1,4 @@
-package com.hazizz.droid.Fragments.ThéraFrags.Setup;
+package com.hazizz.droid.fragments.ThéraFrags.Setup;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,17 +12,18 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.hazizz.droid.Communication.MiddleMan;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.Requests.RequestType.Thera.PojoSession;
-import com.hazizz.droid.Communication.Requests.RequestType.Thera.ThRemoveSession;
-import com.hazizz.droid.Communication.Requests.RequestType.Thera.ThReturnSessions.ThReturnSessions;
-import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
-import com.hazizz.droid.Listener.OnBackPressedListener;
-import com.hazizz.droid.Listviews.TheraUserList.CustomAdapter;
-import com.hazizz.droid.Listviews.TheraUserList.TheraUserItem;
+
+import com.hazizz.droid.Communication.requests.RequestType.Thera.PojoSession;
+import com.hazizz.droid.Communication.requests.RequestType.Thera.ThRemoveSession;
+import com.hazizz.droid.Communication.requests.RequestType.Thera.ThReturnSessions.ThReturnSessions;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.fragments.ParentFragment.ParentFragment;
+import com.hazizz.droid.listeners.OnBackPressedListener;
+import com.hazizz.droid.listviews.TheraUserList.CustomAdapter;
+import com.hazizz.droid.listviews.TheraUserList.TheraUserItem;
 import com.hazizz.droid.R;
-import com.hazizz.droid.SharedPrefs;
-import com.hazizz.droid.Transactor;
+import com.hazizz.droid.other.SharedPrefs;
+import com.hazizz.droid.navigation.Transactor;
 
 import java.util.ArrayList;
 import java.util.List;

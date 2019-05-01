@@ -1,4 +1,4 @@
-package com.hazizz.droid.Fragments.Dialog;
+package com.hazizz.droid.fragments.Dialog;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -14,10 +14,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hazizz.droid.Communication.MiddleMan;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.Requests.ReturnInvitationLink;
+
+import com.hazizz.droid.Communication.requests.ReturnInvitationLink;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
 import com.hazizz.droid.R;
-import com.hazizz.droid.Transactor;
+import com.hazizz.droid.navigation.Transactor;
 
 public class InviteLinkDialogFragment extends DialogFragment {
 

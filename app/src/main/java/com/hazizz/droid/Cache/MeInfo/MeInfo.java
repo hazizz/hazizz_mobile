@@ -1,4 +1,4 @@
-package com.hazizz.droid.Cache.MeInfo;
+package com.hazizz.droid.cache.MeInfo;
 
 import com.hazizz.droid.Communication.Strings;
 

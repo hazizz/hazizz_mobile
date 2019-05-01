@@ -1,4 +1,4 @@
-package com.hazizz.droid.Listviews;
+package com.hazizz.droid.listviews;
 
 import android.widget.TextView;
 

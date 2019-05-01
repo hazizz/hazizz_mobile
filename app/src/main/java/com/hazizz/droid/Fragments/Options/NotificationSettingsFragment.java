@@ -1,4 +1,4 @@
-package com.hazizz.droid.Fragments.Options;
+package com.hazizz.droid.fragments.Options;
 
 import android.app.TimePickerDialog;
 import android.os.Bundle;
@@ -13,8 +13,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
-import com.hazizz.droid.Notification.TaskReporterNotification;
+import com.hazizz.droid.fragments.ParentFragment.ParentFragment;
+import com.hazizz.droid.notification.TaskReporterNotification;
 import com.hazizz.droid.R;
 
 public class NotificationSettingsFragment extends ParentFragment {

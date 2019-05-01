@@ -1,4 +1,4 @@
-package com.hazizz.droid.Fragments.GroupTabs;
+package com.hazizz.droid.fragments.GroupTabs;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,20 +13,21 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.hazizz.droid.Cache.CurrentGroup;
-import com.hazizz.droid.Cache.HCache;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.POJOerror;
-import com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
-import com.hazizz.droid.Communication.Requests.GetTasksFromGroup;
+import com.hazizz.droid.cache.CurrentGroup;
+import com.hazizz.droid.cache.HCache;
+
+import com.hazizz.droid.Communication.requests.GetTasksFromGroup;
 import com.hazizz.droid.Communication.Strings;
-import com.hazizz.droid.D8;
-import com.hazizz.droid.Fragments.ParentFragment.TabFragment;
-import com.hazizz.droid.Fragments.ViewTaskFragment;
-import com.hazizz.droid.Listviews.HeaderItem;
-import com.hazizz.droid.Listviews.TaskList.Group.CustomAdapter;
-import com.hazizz.droid.Listviews.TaskList.TaskItem;
-import com.hazizz.droid.Transactor;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.Communication.responsePojos.PojoError;
+import com.hazizz.droid.Communication.responsePojos.taskPojos.PojoTask;
+import com.hazizz.droid.other.D8;
+import com.hazizz.droid.fragments.ParentFragment.TabFragment;
+import com.hazizz.droid.fragments.ViewTaskFragment;
+import com.hazizz.droid.listviews.HeaderItem;
+import com.hazizz.droid.listviews.TaskList.Group.CustomAdapter;
+import com.hazizz.droid.listviews.TaskList.TaskItem;
+import com.hazizz.droid.navigation.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
 
@@ -105,7 +106,7 @@ public class GroupMainFragment extends TabFragment {
         });
     }
 
-    private void processData(List<POJOgetTask> data){
+    private void processData(List<PojoTask> data){
         if(data != null) {
             adapter.clear();
             if (data.isEmpty()) {
@@ -113,7 +114,7 @@ public class GroupMainFragment extends TabFragment {
             } else {
                 textView_noContent.setVisibility(v.INVISIBLE);
                 int lastDaysLeft = -1;
-                for (POJOgetTask t : data) {
+                for ( PojoTask t : data) {
                     String date = t.getDueDate();
                     int daysLeft = D8.textToDate(date).daysLeft();
 
@@ -140,7 +141,7 @@ public class GroupMainFragment extends TabFragment {
             @Override
             public void onPOJOResponse(Object response) {
 
-                ArrayList<POJOgetTask> sortedData = D8.sortTasksByDate((ArrayList<POJOgetTask>) response);
+                ArrayList< PojoTask> sortedData = D8.sortTasksByDate((ArrayList< PojoTask>) response);
                 processData(sortedData);
             }
             @Override
@@ -149,7 +150,7 @@ public class GroupMainFragment extends TabFragment {
                 sRefreshLayout.setRefreshing(false);
             }
             @Override
-            public void onErrorResponse(POJOerror error) {
+            public void onErrorResponse(PojoError error) {
                 sRefreshLayout.setRefreshing(false);
             }
             @Override

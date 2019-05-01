@@ -1,11 +1,11 @@
 package com.hazizz.droid.Communication;
 
-import com.hazizz.droid.Communication.Requests.Parent.ThRequest;
-import com.hazizz.droid.Network;
+import com.hazizz.droid.Communication.requests.parent.ThRequest;
+import com.hazizz.droid.other.Network;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.hazizz.droid.Communication.Requests.Parent.Request;
+import com.hazizz.droid.Communication.requests.parent.Request;
 import com.hazizz.droid.R;
 
 import java.util.concurrent.BlockingQueue;

@@ -1,11 +1,11 @@
-package com.hazizz.droid.Fragments.ParentFragment;
+package com.hazizz.droid.fragments.ParentFragment;
 
 import android.support.v4.app.Fragment;
 import android.view.View;
 
-import com.hazizz.droid.Activities.MainActivity;
-import com.hazizz.droid.AndroidThings;
-import com.hazizz.droid.Listener.OnBackPressedListener;
+import com.hazizz.droid.activities.MainActivity;
+import com.hazizz.droid.other.AndroidThings;
+import com.hazizz.droid.listeners.OnBackPressedListener;
 
 public class ParentFragment extends Fragment {
 
@@ -24,6 +24,7 @@ public class ParentFragment extends Fragment {
         getActivity().setTitle(title);
     }
 
+
     protected void fragmentSetup(int titleId){
         ((MainActivity)getActivity()).onFragmentCreated();
         if(titleId != 0){
@@ -31,19 +32,9 @@ public class ParentFragment extends Fragment {
         }
     }
 
-
     protected void setOnBackPressedListener(OnBackPressedListener onBackPressedListener){
         ((MainActivity)getActivity()).setOnBackPressedListener(onBackPressedListener);
     }
-
-    /*
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        Log.e("hey", "22 Parent onDestroy called");
-    }
-    */
 
     protected void clearFragment(){
         ((MainActivity)getActivity()).removeOnBackPressedListener();

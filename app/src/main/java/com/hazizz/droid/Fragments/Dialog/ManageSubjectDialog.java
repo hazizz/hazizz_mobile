@@ -1,4 +1,4 @@
-package com.hazizz.droid.Fragments.Dialog;
+package com.hazizz.droid.fragments.Dialog;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -11,15 +11,16 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.hazizz.droid.AndroidThings;
-import com.hazizz.droid.Cache.MeInfo.MeInfo;
+import com.hazizz.droid.other.AndroidThings;
+import com.hazizz.droid.cache.MeInfo.MeInfo;
 import com.hazizz.droid.Communication.MiddleMan;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.Requests.Subject.DeleteSubject;
-import com.hazizz.droid.Communication.Requests.Subject.EditSubject;
+
+import com.hazizz.droid.Communication.requests.Subject.DeleteSubject;
+import com.hazizz.droid.Communication.requests.Subject.EditSubject;
 import com.hazizz.droid.Communication.Strings;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
 import com.hazizz.droid.R;
-import com.hazizz.droid.Transactor;
+import com.hazizz.droid.navigation.Transactor;
 
 public class ManageSubjectDialog extends DialogFragment {
 

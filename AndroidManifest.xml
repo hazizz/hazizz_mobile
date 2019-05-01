@@ -31,13 +31,13 @@
             tools:ignore="DuplicateActivity"></activity>
         -->
         <activity
-            android:name="com.hazizz.droid.Activities.MainActivity"
+            android:name="com.hazizz.droid.activities.MainActivity"
             android:noHistory="true"
             android:windowSoftInputMode="adjustPan"
             android:configChanges="orientation|screenSize"
             />
         <activity
-            android:name=".Activities.AuthActivity"
+            android:name=".activities.AuthActivity"
             android:noHistory="false"
             android:windowSoftInputMode="adjustPan"
             android:configChanges="orientation|screenSize">
@@ -49,7 +49,7 @@
         </activity>
 
         <activity
-            android:name=".Activities.FeedbackActivity"
+            android:name=".activities.FeedbackActivity"
             android:noHistory="true"
             android:windowSoftInputMode="adjustPan" />
 

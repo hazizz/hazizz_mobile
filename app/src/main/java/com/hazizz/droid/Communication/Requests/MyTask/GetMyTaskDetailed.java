@@ -1,11 +1,12 @@
-package com.hazizz.droid.Communication.Requests.MyTask;
+package com.hazizz.droid.Communication.requests.myTask;
 
 import android.app.Activity;
 import android.util.Log;
 
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs.POJOgetTaskDetailed;
-import com.hazizz.droid.Communication.Requests.Parent.Request;
+
+import com.hazizz.droid.Communication.requests.parent.Request;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.Communication.responsePojos.taskPojos.PojoTaskDetailed;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -25,7 +26,7 @@ public class GetMyTaskDetailed extends Request{
 
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
-        POJOgetTaskDetailed pojo = gson.fromJson(response.body().charStream(), POJOgetTaskDetailed.class);
+         PojoTaskDetailed pojo = gson.fromJson(response.body().charStream(),  PojoTaskDetailed.class);
         cOnResponse.onPOJOResponse(pojo);
     }
 }

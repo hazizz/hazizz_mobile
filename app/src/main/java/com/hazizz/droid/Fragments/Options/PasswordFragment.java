@@ -1,4 +1,4 @@
-package com.hazizz.droid.Fragments.Options;
+package com.hazizz.droid.fragments.Options;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,29 +13,30 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hazizz.droid.Activities.MainActivity;
-import com.hazizz.droid.Cache.MeInfo.MeInfo;
+import com.hazizz.droid.activities.MainActivity;
+import com.hazizz.droid.cache.MeInfo.MeInfo;
 import com.hazizz.droid.Communication.MiddleMan;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.POJOauth;
-import com.hazizz.droid.Communication.POJO.Response.POJOerror;
-import com.hazizz.droid.Communication.POJO.Response.POJOgroup;
-import com.hazizz.droid.Communication.POJO.Response.PojoToken;
-import com.hazizz.droid.Communication.Requests.ChangePassword;
-import com.hazizz.droid.Communication.Requests.ElevationToken;
-import com.hazizz.droid.Communication.Requests.RequestType.Login;
-import com.hazizz.droid.Converter.Converter;
-import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
-import com.hazizz.droid.Listener.OnBackPressedListener;
+
+import com.hazizz.droid.Communication.requests.ChangePassword;
+import com.hazizz.droid.Communication.requests.ElevationToken;
+import com.hazizz.droid.Communication.requests.RequestType.Login;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.Communication.responsePojos.PojoAuth;
+import com.hazizz.droid.Communication.responsePojos.PojoError;
+import com.hazizz.droid.Communication.responsePojos.PojoGroup;
+import com.hazizz.droid.Communication.responsePojos.PojoToken;
+import com.hazizz.droid.converter.Converter;
+import com.hazizz.droid.fragments.ParentFragment.ParentFragment;
+import com.hazizz.droid.listeners.OnBackPressedListener;
 import com.hazizz.droid.R;
-import com.hazizz.droid.SharedPrefs;
-import com.hazizz.droid.Transactor;
+import com.hazizz.droid.other.SharedPrefs;
+import com.hazizz.droid.navigation.Transactor;
 
 import java.util.List;
 
 public class PasswordFragment extends ParentFragment {
 
-    public List<POJOgroup> groups;
+    public List<PojoGroup> groups;
     private View v;
 
     private EditText editText_currentPassword;
@@ -51,8 +52,8 @@ public class PasswordFragment extends ParentFragment {
     private CustomResponseHandler authRh = new CustomResponseHandler() {
         @Override
         public void onPOJOResponse(Object response) {
-            SharedPrefs.TokenManager.setToken(getContext() ,((POJOauth)response).getToken());
-            SharedPrefs.TokenManager.setRefreshToken(getContext() ,((POJOauth)response).getRefresh());
+            SharedPrefs.TokenManager.setToken(getContext() ,((PojoAuth)response).getToken());
+            SharedPrefs.TokenManager.setRefreshToken(getContext() ,((PojoAuth)response).getRefresh());
 
             Transactor.fragmentOptions(getFragmentManager().beginTransaction());
             Toast.makeText(getActivity(), getString(R.string.success_changed_password),
@@ -69,7 +70,7 @@ public class PasswordFragment extends ParentFragment {
         }
 
         @Override
-        public void onErrorResponse(POJOerror error) {
+        public void onErrorResponse(PojoError error) {
             button_save.setEnabled(true);
         }
     };
@@ -84,7 +85,7 @@ public class PasswordFragment extends ParentFragment {
         }
 
         @Override
-        public void onErrorResponse(POJOerror error) {
+        public void onErrorResponse(PojoError error) {
             if(error.getErrorCode() == 17){ // wrong token, try again
 
             }else if(error.getErrorCode() == 12){

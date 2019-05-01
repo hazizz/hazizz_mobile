@@ -1,11 +1,10 @@
-package com.hazizz.droid.Listviews.TheraGradesList;
+package com.hazizz.droid.listviews.TheraGradesList;
 
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hazizz.droid.R;
-import com.hazizz.droid.TheraGradeColorer;
-import com.hazizz.droid.Transactor;
+import com.hazizz.droid.other.TheraGradeColorer;
+import com.hazizz.droid.navigation.Transactor;
 
 import java.util.List;
 

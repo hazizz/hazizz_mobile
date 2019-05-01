@@ -1,10 +1,11 @@
-package com.hazizz.droid.Communication.Requests.RequestType.Thera;
+package com.hazizz.droid.Communication.requests.RequestType.Thera;
 
 import android.app.Activity;
 import android.util.Log;
 
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.Requests.Parent.ThRequest;
+
+import com.hazizz.droid.Communication.requests.parent.ThRequest;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;

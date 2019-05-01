@@ -1,10 +1,11 @@
-package com.hazizz.droid.Communication.Requests;
+package com.hazizz.droid.Communication.requests;
 
 import android.app.Activity;
 import android.util.Log;
 
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.Requests.Parent.Request;
+
+import com.hazizz.droid.Communication.requests.parent.Request;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
 
 import java.io.IOException;
 
@@ -33,8 +34,8 @@ public class MessageOfTheDay extends Request {
 
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
-       /* Type listType = new TypeToken<HashMap<Integer, POJOMembersProfilePic>>(){}.getType();
-        HashMap<Integer, POJOMembersProfilePic> castedMap = gson.fromJson(response.body().charStream(), listType);
+       /* Type listType = new TypeToken<HashMap<Integer, PojoMembersProfilePic>>(){}.getType();
+        HashMap<Integer, PojoMembersProfilePic> castedMap = gson.fromJson(response.body().charStream(), listType);
         cOnResponse.onPOJOResponse(castedMap);
         Log.e("hey", "size of response map: " + castedMap.size());*/
         try {

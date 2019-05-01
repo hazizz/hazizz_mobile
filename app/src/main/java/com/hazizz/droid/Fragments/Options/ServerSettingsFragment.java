@@ -1,4 +1,4 @@
-package com.hazizz.droid.Fragments.Options;
+package com.hazizz.droid.fragments.Options;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,10 +10,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.hazizz.droid.Activities.AuthActivity;
-import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
+import com.hazizz.droid.activities.AuthActivity;
+import com.hazizz.droid.fragments.ParentFragment.ParentFragment;
 import com.hazizz.droid.R;
-import com.hazizz.droid.SharedPrefs;
+import com.hazizz.droid.other.SharedPrefs;
 
 public class ServerSettingsFragment extends ParentFragment {
 

@@ -1,4 +1,4 @@
-package com.hazizz.droid.Fragments.ThéraFrags.Setup;
+package com.hazizz.droid.fragments.ThéraFrags.Setup;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,17 +12,19 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.hazizz.droid.Communication.MiddleMan;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.POJOerror;
-import com.hazizz.droid.Communication.Requests.RequestType.Thera.ThReturnGrades.ThReturnGrades;
-import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
-import com.hazizz.droid.Listener.OnBackPressedListener;
-import com.hazizz.droid.Listviews.TheraGradesList.TheraGradesItem;
-import com.hazizz.droid.Listviews.TheraGradesList.CustomAdapter;
-import com.hazizz.droid.Listviews.TheraGradesList.TheraSubjectGradesItem;
+
+
+import com.hazizz.droid.Communication.requests.RequestType.Thera.ThReturnGrades.ThReturnGrades;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.Communication.responsePojos.PojoError;
+import com.hazizz.droid.fragments.ParentFragment.ParentFragment;
+import com.hazizz.droid.listeners.OnBackPressedListener;
+import com.hazizz.droid.listviews.TheraGradesList.TheraGradesItem;
+import com.hazizz.droid.listviews.TheraGradesList.CustomAdapter;
+import com.hazizz.droid.listviews.TheraGradesList.TheraSubjectGradesItem;
 import com.hazizz.droid.R;
-import com.hazizz.droid.SharedPrefs;
-import com.hazizz.droid.Transactor;
+import com.hazizz.droid.other.SharedPrefs;
+import com.hazizz.droid.navigation.Transactor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,7 +95,7 @@ public class TheraGradesFragment  extends ParentFragment {
                 }
             }
             @Override
-            public void onErrorResponse(POJOerror error) {
+            public void onErrorResponse(PojoError error) {
                 //        session not found,                session not active
                 if(error.getErrorCode() == 132 || error.getErrorCode() == 136) {
                     Transactor.fragmentThLoginAuthSession(getFragmentManager().beginTransaction(), sessionId,

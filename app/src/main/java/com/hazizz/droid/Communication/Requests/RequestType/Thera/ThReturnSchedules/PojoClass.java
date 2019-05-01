@@ -1,4 +1,4 @@
-package com.hazizz.droid.Communication.Requests.RequestType.Thera.ThReturnSchedules;
+package com.hazizz.droid.Communication.requests.RequestType.Thera.ThReturnSchedules;
 
 import lombok.Data;
 

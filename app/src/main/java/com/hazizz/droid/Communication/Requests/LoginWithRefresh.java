@@ -1,11 +1,12 @@
-package com.hazizz.droid.Communication.Requests;
+package com.hazizz.droid.Communication.requests;
 
 import android.app.Activity;
 import android.util.Log;
 
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.POJOauth;
-import com.hazizz.droid.Communication.Requests.Parent.Request;
+
+import com.hazizz.droid.Communication.requests.parent.Request;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.Communication.responsePojos.PojoAuth;
 
 import java.util.HashMap;
 
@@ -31,7 +32,7 @@ public class LoginWithRefresh extends Request {
 
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
-        POJOauth pojoAuth = gson.fromJson(response.body().charStream(), POJOauth.class);
-        cOnResponse.onPOJOResponse(pojoAuth);
+        PojoAuth PojoAuth = gson.fromJson(response.body().charStream(), PojoAuth.class);
+        cOnResponse.onPOJOResponse(PojoAuth);
     }
 }

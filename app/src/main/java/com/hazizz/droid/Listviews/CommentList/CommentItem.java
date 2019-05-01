@@ -1,9 +1,9 @@
-package com.hazizz.droid.Listviews.CommentList;
+package com.hazizz.droid.listviews.CommentList;
 
 import android.util.Log;
 
-import com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs.POJOcreator;
 import com.hazizz.droid.Communication.Strings;
+import com.hazizz.droid.Communication.responsePojos.taskPojos.PojoCreator;
 
 import lombok.Data;
 
@@ -13,7 +13,7 @@ public class CommentItem {
     Strings.Rank groupRank;
     long commentId;
     String commentProfilePic;
-    POJOcreator creator;
+    PojoCreator creator;
     String commentContent;
     private boolean canModify;
 
@@ -21,7 +21,7 @@ public class CommentItem {
         canModify = b;
     }
 
-    public CommentItem(long commentId, String commentProfilePic, Strings.Rank groupRank, POJOcreator creator, String commentContent){
+    public CommentItem(long commentId, String commentProfilePic, Strings.Rank groupRank, PojoCreator creator, String commentContent){
         Log.e("hey", "creatorId" + creator.getId() + "\nprofile  pic: " + commentProfilePic);
 
 

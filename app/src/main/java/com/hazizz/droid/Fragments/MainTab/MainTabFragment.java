@@ -1,4 +1,4 @@
-package com.hazizz.droid.Fragments.MainTab;
+package com.hazizz.droid.fragments.MainTab;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,9 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.hazizz.droid.Activities.MainActivity;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Transactor;
+import com.hazizz.droid.activities.MainActivity;
+
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.navigation.Transactor;
 import com.hazizz.droid.R;
 
 public class MainTabFragment extends Fragment{

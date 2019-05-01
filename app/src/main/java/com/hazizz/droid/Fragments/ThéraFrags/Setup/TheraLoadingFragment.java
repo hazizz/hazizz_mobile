@@ -1,4 +1,4 @@
-package com.hazizz.droid.Fragments.ThéraFrags.Setup;
+package com.hazizz.droid.fragments.ThéraFrags.Setup;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -7,9 +7,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
+import com.hazizz.droid.fragments.ParentFragment.ParentFragment;
 import com.hazizz.droid.R;
-import com.hazizz.droid.SharedPrefs;
+import com.hazizz.droid.other.SharedPrefs;
 
 public class TheraLoadingFragment extends ParentFragment {
     @Nullable

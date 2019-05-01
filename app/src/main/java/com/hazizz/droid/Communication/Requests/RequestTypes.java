@@ -1,6 +1,4 @@
-package com.hazizz.droid.Communication.Requests;
-
-import com.google.gson.JsonElement;
+package com.hazizz.droid.Communication.requests;
 
 import java.util.HashMap;
 import java.util.Map;

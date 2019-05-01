@@ -1,4 +1,4 @@
-package com.hazizz.droid.Listviews.TheraGradesList;
+package com.hazizz.droid.listviews.TheraGradesList;
 
 import android.os.Parcel;
 import android.os.Parcelable;

@@ -1,4 +1,4 @@
-package com.hazizz.droid.Converter;
+package com.hazizz.droid.converter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -9,22 +9,13 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.util.Base64;
-import android.util.Log;
 
 import com.google.common.hash.Hashing;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-import com.hazizz.droid.Communication.POJO.Response.Pojo;
-import com.hazizz.droid.Listviews.TheraGradesList.TheraGradesItem;
 import com.hazizz.droid.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.lang.reflect.Type;
 import java.nio.charset.Charset;
-import java.util.List;
-import java.util.TreeMap;
 
 public class Converter {
 
@@ -95,17 +86,4 @@ public class Converter {
             return null;
         }
     }
-
-    /*
-    public static <T> T toObject(String deserializedObject, Class<T> c){
-        Gson gson = new GsonBuilder().serializeNulls().excludeFieldsWithoutExposeAnnotation().create();
-
-   //   Type type = new TypeToken<>(){}.getType();
-     //  Log.e("hey", "type: " + type.toString());
-       // TreeMap<String, List<TheraGradesItem>> castedObject2 = gson.fromJson(deserializedObject, );
-       // o = gson.fromJson(deserializedObject, o.getClass());
-        T o = gson.fromJson(deserializedObject, c);
-        return o;
-    }
-    */
 }

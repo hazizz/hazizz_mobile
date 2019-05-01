@@ -1,4 +1,4 @@
-package com.hazizz.droid.Fragments;
+package com.hazizz.droid.fragments;
 
 import android.app.DatePickerDialog;
 import android.graphics.Color;
@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,25 +20,24 @@ import android.widget.TextView;
 
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
-import com.hazizz.droid.Activities.MainActivity;
-import com.hazizz.droid.AndroidThings;
-import com.hazizz.droid.Cache.CurrentGroup;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.POJOerror;
-import com.hazizz.droid.Communication.POJO.Response.POJOgroup;
-import com.hazizz.droid.Communication.POJO.Response.POJOsubject;
-import com.hazizz.droid.Communication.Requests.CreateAT;
-import com.hazizz.droid.Communication.Requests.EditAT;
-import com.hazizz.droid.Communication.Requests.GetGroupsFromMe;
-import com.hazizz.droid.Communication.Requests.GetSubjects;
-import com.hazizz.droid.Communication.Requests.MyTask.CreateMyTask;
-import com.hazizz.droid.Communication.Requests.MyTask.EditMyTask;
-import com.hazizz.droid.Communication.Requests.Parent.Request;
+import com.hazizz.droid.activities.MainActivity;
+import com.hazizz.droid.other.AndroidThings;
+import com.hazizz.droid.Communication.requests.CreateAT;
+import com.hazizz.droid.Communication.requests.EditAT;
+import com.hazizz.droid.Communication.requests.GetGroupsFromMe;
+import com.hazizz.droid.Communication.requests.GetSubjects;
+import com.hazizz.droid.Communication.requests.myTask.CreateMyTask;
+import com.hazizz.droid.Communication.requests.myTask.EditMyTask;
+import com.hazizz.droid.Communication.requests.parent.Request;
 import com.hazizz.droid.Communication.Strings;
-import com.hazizz.droid.D8;
-import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
-import com.hazizz.droid.Listener.OnBackPressedListener;
-import com.hazizz.droid.Transactor;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.Communication.responsePojos.PojoError;
+import com.hazizz.droid.Communication.responsePojos.PojoGroup;
+import com.hazizz.droid.Communication.responsePojos.PojoSubject;
+import com.hazizz.droid.other.D8;
+import com.hazizz.droid.fragments.ParentFragment.ParentFragment;
+import com.hazizz.droid.listeners.OnBackPressedListener;
+import com.hazizz.droid.navigation.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
 
@@ -78,12 +76,12 @@ public class TaskEditorFragment extends ParentFragment {
     private long typeId = 0;
     private String typeName, date;
 
-    private List<POJOsubject> subjects = new ArrayList<>();
-    private List<POJOgroup> groups = new ArrayList<>();
+    private List<PojoSubject> subjects = new ArrayList<>();
+    private List<PojoGroup> groups = new ArrayList<>();
 
 
-    ArrayAdapter<POJOgroup> g_adapter;
-    ArrayAdapter<POJOsubject> s_adapter;
+    ArrayAdapter<PojoGroup> g_adapter;
+    ArrayAdapter<PojoSubject> s_adapter;
 
     public static final short GROUPMODE = 0;
     public static final short MYMODE = 1;
@@ -98,7 +96,7 @@ public class TaskEditorFragment extends ParentFragment {
 
     CustomResponseHandler rh_task = new CustomResponseHandler() {
         @Override
-        public void onErrorResponse(POJOerror error) {
+        public void onErrorResponse(PojoError error) {
             int errorCode = error.getErrorCode();
             if(errorCode == 2){ // cím túl hosszú (2-20 karatket)
                 textView_error.setText(R.string.error_titleNotAcceptable);
@@ -124,12 +122,12 @@ public class TaskEditorFragment extends ParentFragment {
     CustomResponseHandler rh_subjects = new CustomResponseHandler() {
         @Override
         public void onPOJOResponse(Object response) {
-            subjects = (ArrayList<POJOsubject>)response;
+            subjects = (ArrayList<PojoSubject>)response;
             s_adapter.clear();
-            s_adapter.add(new POJOsubject(0, getString(R.string.subject_none)));
+            s_adapter.add(new PojoSubject(0, getString(R.string.subject_none)));
             if(!subjects.isEmpty()) {
                 int emSubjectId = 0;
-                for (POJOsubject s : subjects) {
+                for ( PojoSubject s : subjects) {
                     s_adapter.add(s);
                     if (subject == s.getId()) {
                         emSubjectId = s.getId();
@@ -171,7 +169,6 @@ public class TaskEditorFragment extends ParentFragment {
         spinner_taskType = (Spinner)v.findViewById(R.id.taskType_spinner);
         editText_taskTitle = v.findViewById(R.id.taskTitle);
         editText_description = v.findViewById(R.id.editText_description);
-     //   editText_description.setImeOptions(EditorInfo.IME_ACTION_DONE);
         editText_description.setRawInputType(InputType.TYPE_CLASS_TEXT);
         textView_error = v.findViewById(R.id.textView_error_currentPassword);
         textView_error.setTextColor(Color.rgb(255, 0, 0));
@@ -188,8 +185,7 @@ public class TaskEditorFragment extends ParentFragment {
         });
 
         editText_description.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
+            @Override public void onFocusChange(View v, boolean hasFocus) {
                 if(hasFocus){
                     scrollView.smoothScrollTo(0, editText_description.getTop());
                 }
@@ -226,21 +222,17 @@ public class TaskEditorFragment extends ParentFragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_taskType.setAdapter(adapter);
 
-        groupId = CurrentGroup.getInstance().getGroupId();
-        groupName = CurrentGroup.getInstance().getGroupName();
-
         if(getArguments() != null) {
             groupName = getArguments().getString(Transactor.KEY_GROUPNAME);
             taskId = getArguments().getInt(Transactor.KEY_TASKID);
 
             where = getArguments().getShort(Transactor.KEY_WHERE);
             type = getArguments().getShort(Transactor.KEY_TYPE);
-          //  groupId = getArguments().getInt(Transactor.KEY_GROUPID);
+            groupId = getArguments().getInt(Transactor.KEY_GROUPID);
          //   groupName = getArguments().getString(Transactor.KEY_GROUPNAME);
             textView_group.setText(groupName);
 
             dest = getArguments().getInt(Transactor.KEY_DEST);
-
         }
         if( type == EDITMODE ){
             if(where == MYMODE){
@@ -270,30 +262,31 @@ public class TaskEditorFragment extends ParentFragment {
             setTitle(R.string.fragment_title_edit_task);
 
         }else{
-            g_adapter = new ArrayAdapter<POJOgroup>(getContext(), android.R.layout.simple_spinner_item);
+            g_adapter = new ArrayAdapter<PojoGroup>(getContext(), android.R.layout.simple_spinner_item);
             g_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner_group.setAdapter(g_adapter);
             spinner_group.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    MiddleMan.newRequest(new GetSubjects(getActivity(), rh_subjects, (int) groupId));
                     if(!firstSelection) {
-                        groupId = ((POJOgroup) spinner_group.getItemAtPosition(position)).getId();
-                        textView_group.setText(((POJOgroup) spinner_group.getItemAtPosition(position)).getName());
+                        groupId = ((PojoGroup) spinner_group.getItemAtPosition(position)).getId();
+                        textView_group.setText(((PojoGroup) spinner_group.getItemAtPosition(position)).getName());
+                        MiddleMan.newRequest(new GetSubjects(getActivity(), rh_subjects, (int) groupId));
                     }else{
                         firstSelection = false;
+                        MiddleMan.newRequest(new GetSubjects(getActivity(), rh_subjects, (int) groupId));
                     }
                 }
                 @Override public void onNothingSelected(AdapterView<?> parent) { }
             });
             MiddleMan.newRequest(new GetGroupsFromMe(getActivity(), new CustomResponseHandler() {
                 @Override public void onPOJOResponse(Object response) {
-                    groups = (ArrayList<POJOgroup>) response;
+                    groups = (ArrayList<PojoGroup>) response;
                     g_adapter.clear();
                     if (!groups.isEmpty()) {
                         int emGroupId = 0;
                         int index = 0;
-                        for (POJOgroup s : groups) {
+                        for (PojoGroup s : groups) {
 
                             g_adapter.add(s);
                             if (groupId == s.getId()) {
@@ -311,7 +304,7 @@ public class TaskEditorFragment extends ParentFragment {
                 }
             }));
 
-            s_adapter = new ArrayAdapter<POJOsubject>(getContext(), android.R.layout.simple_spinner_item);
+            s_adapter = new ArrayAdapter< PojoSubject>(getContext(), android.R.layout.simple_spinner_item);
             s_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner_subject.setAdapter(s_adapter);
        //     MiddleMan.newRequest(new GetSubjects(getActivity(),rh_subjects, groupId));
@@ -430,7 +423,7 @@ public class TaskEditorFragment extends ParentFragment {
 
         Request r;
         if(where == GROUPMODE){
-            int subjectId = ((POJOsubject) spinner_subject.getSelectedItem()).getId();
+            int subjectId = (( PojoSubject) spinner_subject.getSelectedItem()).getId();
             String byName;
             int byId;
             if (subjectId == 0) {

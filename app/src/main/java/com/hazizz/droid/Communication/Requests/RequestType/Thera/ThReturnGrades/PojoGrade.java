@@ -1,4 +1,4 @@
-package com.hazizz.droid.Communication.Requests.RequestType.Thera.ThReturnGrades;
+package com.hazizz.droid.Communication.requests.RequestType.Thera.ThReturnGrades;
 
 import lombok.Data;
 

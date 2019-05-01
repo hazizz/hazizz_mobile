@@ -1,4 +1,4 @@
-package com.hazizz.droid.Listviews.TaskList.Group;
+package com.hazizz.droid.listviews.TaskList.Group;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,10 +11,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.hazizz.droid.D8;
-import com.hazizz.droid.Listviews.HeaderHolder;
-import com.hazizz.droid.Listviews.HeaderItem;
-import com.hazizz.droid.Listviews.TaskList.TaskItem;
+import com.hazizz.droid.other.D8;
+import com.hazizz.droid.listviews.HeaderHolder;
+import com.hazizz.droid.listviews.HeaderItem;
+import com.hazizz.droid.listviews.TaskList.TaskItem;
 import com.hazizz.droid.R;
 
 import java.util.List;
@@ -81,10 +81,8 @@ public class CustomAdapter extends BaseAdapter {
                 convertView = inflater.inflate(R.layout.task_item, null);
 
                 holder = new DataHolder();
-                // holder.taskPic = (ImageView) convertView.findViewById(R.id.task_pic);
                 holder.taskTitle = (TextView) convertView.findViewById(R.id.task_title);
                 holder.taskDescription = (TextView) convertView.findViewById(R.id.task_description);
-               // holder.taskDueDate = (TextView) convertView.findViewById(R.id.textView_dueDate);
                 holder.taskCreator = (TextView) convertView.findViewById(R.id.textView_creator);
                 holder.taskSubject = (TextView) convertView.findViewById(R.id.textView_subject);
                 convertView.setTag(holder);
@@ -107,9 +105,6 @@ public class CustomAdapter extends BaseAdapter {
 
         if(holder != null){
             TaskItem taskItem = (TaskItem) data.get(position);
-
-          //  D8.Date deadLineDate = D8.textToDate(taskItem.getTaskDueDate());
-          //  holder.taskDueDate.setText(deadLineDate.getMainFormat());
 
             holder.taskTitle.setText(taskItem.getTaskTitle());
             holder.taskDescription.setText(taskItem.getTaskDescription());

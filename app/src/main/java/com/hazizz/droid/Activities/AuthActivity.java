@@ -1,4 +1,4 @@
-package com.hazizz.droid.Activities;
+package com.hazizz.droid.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,11 +9,10 @@ import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
-import com.hazizz.droid.AppInfo;
-import com.hazizz.droid.Fragments.AuthFrags.FirstFragment;
-import com.hazizz.droid.manager.Manager;
-import com.hazizz.droid.SharedPrefs;
-import com.hazizz.droid.Transactor;
+import com.hazizz.droid.other.AppInfo;
+import com.hazizz.droid.fragments.AuthFrags.FirstFragment;
+import com.hazizz.droid.other.SharedPrefs;
+import com.hazizz.droid.navigation.Transactor;
 import com.hazizz.droid.R;
 import com.hazizz.droid.manager.ThreadManager;
 

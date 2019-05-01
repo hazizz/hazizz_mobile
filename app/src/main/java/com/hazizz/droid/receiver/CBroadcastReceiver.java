@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.hazizz.droid.Listener.GenericListener;
+import com.hazizz.droid.listeners.GenericListener;
 
 public class CBroadcastReceiver extends BroadcastReceiver {
 

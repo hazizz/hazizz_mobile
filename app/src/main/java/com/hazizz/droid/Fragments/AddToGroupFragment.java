@@ -1,4 +1,4 @@
-package com.hazizz.droid.Fragments;
+package com.hazizz.droid.fragments;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -13,13 +13,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.hazizz.droid.Activities.MainActivity;
-import com.hazizz.droid.AndroidThings;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.POJOerror;
+import com.hazizz.droid.activities.MainActivity;
+import com.hazizz.droid.other.AndroidThings;
+
+
 import com.hazizz.droid.Communication.Strings;
-import com.hazizz.droid.Listviews.GroupList.CustomAdapter;
-import com.hazizz.droid.Transactor;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.Communication.responsePojos.PojoError;
+import com.hazizz.droid.listviews.GroupList.CustomAdapter;
+import com.hazizz.droid.navigation.Transactor;
 import com.hazizz.droid.R;
 
 import java.util.EnumMap;
@@ -77,7 +79,7 @@ public class AddToGroupFragment extends Fragment {
         }
 
         @Override
-        public void onErrorResponse(POJOerror error) {
+        public void onErrorResponse(PojoError error) {
             //  textView.append("\n errorCode: " + error.getErrorCode());
             if(error.getErrorCode() == 2){ // validation failed
                 //  textView_error.setText("Helytelen jelszó");

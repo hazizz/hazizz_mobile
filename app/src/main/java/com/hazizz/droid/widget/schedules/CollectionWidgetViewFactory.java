@@ -7,15 +7,17 @@ import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.POJOerror;
-import com.hazizz.droid.Communication.Requests.Parent.ThRequest;
-import com.hazizz.droid.Communication.Requests.RequestType.Thera.ThReturnSchedules.ThReturnSchedules;
-import com.hazizz.droid.D8;
-import com.hazizz.droid.Listviews.TheraReturnSchedules.ClassItem;
-import com.hazizz.droid.Network;
+
+
+import com.hazizz.droid.Communication.requests.parent.ThRequest;
+import com.hazizz.droid.Communication.requests.RequestType.Thera.ThReturnSchedules.ThReturnSchedules;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.Communication.responsePojos.PojoError;
+import com.hazizz.droid.other.D8;
+import com.hazizz.droid.listviews.TheraReturnSchedules.ClassItem;
+import com.hazizz.droid.other.Network;
 import com.hazizz.droid.R;
-import com.hazizz.droid.SharedPrefs;
+import com.hazizz.droid.other.SharedPrefs;
 
 import java.util.ArrayList;
 
@@ -83,8 +85,8 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
         String[] dates = { "Everyday", "June 20, 2012", "September 10, 2014", "August 9, 2014", "November 10, 2014" };
 
         for(int i = 0; i < 5; i++) {
-            data.add(new POJOgetTask(1, "type", titles[i], "descripto", new POJOsubject(1, "asd"),
-                    dates[i], new POJOcreator(1, "usernaem", "2"), new POJOgroup(1, "name", "OPen asd", 2)));
+            data.add(new  PojoTask(1, "type", titles[i], "descripto", new  PojoAuth(1, "asd"),
+                    dates[i], new PojoCreator(1, "usernaem", "2"), new PojoGroup(1, "name", "OPen asd", 2)));
         } */
     }
 
@@ -175,7 +177,7 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
                     contentInfo = "";
                 }
                 @Override
-                public void onErrorResponse(POJOerror error) {
+                public void onErrorResponse(PojoError error) {
                     if(error.getErrorCode() == 17) {
                         data.clear();
                         contentInfo = "Nem vagy bejelentkezve";

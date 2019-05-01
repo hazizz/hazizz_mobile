@@ -1,4 +1,4 @@
-package com.hazizz.droid.Cache;
+package com.hazizz.droid.cache;
 
 import android.content.Context;
 import android.util.Log;
@@ -6,14 +6,12 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.hazizz.droid.Communication.POJO.Response.AnnouncementPOJOs.POJOAnnouncement;
-import com.hazizz.droid.Communication.POJO.Response.getTaskPOJOs.POJOgetTask;
-import com.hazizz.droid.Communication.Requests.GetAnnouncementsFromGroup;
-import com.hazizz.droid.Communication.Requests.GetAnnouncementsFromMe;
-import com.hazizz.droid.Communication.Requests.GetTasksFromGroup;
-import com.hazizz.droid.Communication.Requests.GetTasksFromMe;
-import com.hazizz.droid.Listviews.SubjectList.SubjectItem;
-import com.hazizz.droid.SharedPrefs;
+import com.hazizz.droid.Communication.requests.GetAnnouncementsFromGroup;
+import com.hazizz.droid.Communication.requests.GetTasksFromGroup;
+import com.hazizz.droid.Communication.responsePojos.announcementPojos.PojoAnnouncement;
+import com.hazizz.droid.Communication.responsePojos.taskPojos.PojoTask;
+import com.hazizz.droid.listviews.SubjectList.SubjectItem;
+import com.hazizz.droid.other.SharedPrefs;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -41,24 +39,24 @@ public class HCache {
     private static final int notFound = 0;
 
 
-    List<POJOgetTask> tasksFromMe = new ArrayList<>();
-    List<POJOAnnouncement> announcementsFromMe = new ArrayList<>();
+    List<PojoTask> tasksFromMe = new ArrayList<>();
+    List<PojoAnnouncement> announcementsFromMe = new ArrayList<>();
 
     public void setTasksFromMe(Context context, String serializedArrayListTasks){
         SharedPrefs.save(context, fileName_all, key_tasks, serializedArrayListTasks);
     }
-    public List<POJOgetTask> getTasksFromMe(Context context){
+    public List< PojoTask> getTasksFromMe(Context context){
         String serialized = SharedPrefs.getString(context, fileName_all, key_tasks, null);
-        Type listType = new TypeToken<ArrayList<POJOgetTask>>(){}.getType();
+        Type listType = new TypeToken<ArrayList< PojoTask>>(){}.getType();
         return gson.fromJson(serialized, listType);
     }
 
     public void setAnnouncementsFromMe(Context context, String serializedArrayListAnnouncements){
         SharedPrefs.save(context, fileName_all, key_announcements, serializedArrayListAnnouncements);
     }
-    public List<POJOAnnouncement> getAnnouncementsFromMe(Context context){
+    public List<PojoAnnouncement> getAnnouncementsFromMe(Context context){
         String serialized = SharedPrefs.getString(context, fileName_all, key_announcements, null);
-        Type listType = new TypeToken<ArrayList<POJOAnnouncement>>(){}.getType();
+        Type listType = new TypeToken<ArrayList<PojoAnnouncement>>(){}.getType();
         return gson.fromJson(serialized, listType);
     }
 
@@ -110,9 +108,9 @@ public class HCache {
 
         }
 
-        public List<POJOgetTask> getTasks(Context context){
+        public List< PojoTask> getTasks(Context context){
             String serialized = SharedPrefs.getString(context, fileName_group, key_tasks, null);
-            Type listType = new TypeToken<ArrayList<POJOgetTask>>(){}.getType();
+            Type listType = new TypeToken<ArrayList< PojoTask>>(){}.getType();
             return gson.fromJson(serialized, listType);
         }
 

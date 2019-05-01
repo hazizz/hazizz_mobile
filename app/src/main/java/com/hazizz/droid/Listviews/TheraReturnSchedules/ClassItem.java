@@ -1,4 +1,4 @@
-package com.hazizz.droid.Listviews.TheraReturnSchedules;
+package com.hazizz.droid.listviews.TheraReturnSchedules;
 
 import android.os.Parcel;
 import android.os.Parcelable;

@@ -1,4 +1,4 @@
-package com.hazizz.droid.Listviews.TheraUserList;
+package com.hazizz.droid.listviews.TheraUserList;
 
 import lombok.Data;
 

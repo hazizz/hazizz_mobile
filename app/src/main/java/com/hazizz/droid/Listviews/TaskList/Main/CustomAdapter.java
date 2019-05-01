@@ -1,20 +1,19 @@
-package com.hazizz.droid.Listviews.TaskList.Main;
+package com.hazizz.droid.listviews.TaskList.Main;
 
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.hazizz.droid.D8;
-import com.hazizz.droid.Listviews.HeaderHolder;
-import com.hazizz.droid.Listviews.HeaderItem;
-import com.hazizz.droid.Listviews.TaskList.TaskItem;
+import com.hazizz.droid.other.D8;
+import com.hazizz.droid.listviews.HeaderHolder;
+import com.hazizz.droid.listviews.HeaderItem;
+import com.hazizz.droid.listviews.TaskList.TaskItem;
 import com.hazizz.droid.R;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.hazizz.droid.Listviews.AnnouncementList.Main;
+package com.hazizz.droid.listviews.AnnouncementList.Main;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.hazizz.droid.Listviews.AnnouncementList.AnnouncementItem;
+import com.hazizz.droid.listviews.AnnouncementList.AnnouncementItem;
 import com.hazizz.droid.R;
 
 import java.util.List;

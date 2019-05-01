@@ -1,4 +1,4 @@
-package com.hazizz.droid.Fragments.Options;
+package com.hazizz.droid.fragments.Options;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -22,20 +22,21 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.hazizz.droid.Activities.MainActivity;
-import com.hazizz.droid.AndroidThings;
-import com.hazizz.droid.Cache.MeInfo.MeInfo;
-import com.hazizz.droid.Communication.POJO.Response.CustomResponseHandler;
-import com.hazizz.droid.Communication.POJO.Response.POJOerror;
-import com.hazizz.droid.Communication.POJO.Response.POJOgroup;
-import com.hazizz.droid.Communication.POJO.Response.PojoPicSmall;
-import com.hazizz.droid.Communication.Requests.GetMyProfilePic;
-import com.hazizz.droid.Communication.Requests.SetDisplayName;
-import com.hazizz.droid.Communication.Requests.SetMyProfilePic;
-import com.hazizz.droid.Converter.Converter;
-import com.hazizz.droid.Fragments.ParentFragment.ParentFragment;
-import com.hazizz.droid.Listener.OnBackPressedListener;
-import com.hazizz.droid.Transactor;
+import com.hazizz.droid.activities.MainActivity;
+import com.hazizz.droid.other.AndroidThings;
+import com.hazizz.droid.cache.MeInfo.MeInfo;
+
+import com.hazizz.droid.Communication.requests.GetMyProfilePic;
+import com.hazizz.droid.Communication.requests.SetDisplayName;
+import com.hazizz.droid.Communication.requests.SetMyProfilePic;
+import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.Communication.responsePojos.PojoError;
+import com.hazizz.droid.Communication.responsePojos.PojoGroup;
+import com.hazizz.droid.Communication.responsePojos.PojoPicSmall;
+import com.hazizz.droid.converter.Converter;
+import com.hazizz.droid.fragments.ParentFragment.ParentFragment;
+import com.hazizz.droid.listeners.OnBackPressedListener;
+import com.hazizz.droid.navigation.Transactor;
 import com.hazizz.droid.Communication.MiddleMan;
 import com.hazizz.droid.R;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -48,7 +49,7 @@ import java.util.List;
 
 public class MainOptionsFragment extends ParentFragment {
 
-    public List<POJOgroup> groups;
+    public List<PojoGroup> groups;
     private View v;
 
     private Button button_thera;
@@ -172,7 +173,7 @@ public class MainOptionsFragment extends ParentFragment {
                     String newDisplayName = editText_displayName.getText().toString();
                     MiddleMan.newRequest(new SetDisplayName(getActivity(), new CustomResponseHandler() {
                         @Override
-                        public void onErrorResponse(POJOerror error) {
+                        public void onErrorResponse(PojoError error) {
                             Log.e("hey", "couldnt set profile pic");
                             editText_displayName.setText(lastDisplayName);
                             AndroidThings.closeKeyboard(getContext(), v);
