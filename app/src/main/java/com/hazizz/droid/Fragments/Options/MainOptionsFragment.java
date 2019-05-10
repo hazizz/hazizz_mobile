@@ -23,22 +23,24 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.hazizz.droid.activities.MainActivity;
+import com.hazizz.droid.cache.HCache;
 import com.hazizz.droid.other.AndroidThings;
 import com.hazizz.droid.cache.MeInfo.MeInfo;
 
-import com.hazizz.droid.Communication.requests.GetMyProfilePic;
-import com.hazizz.droid.Communication.requests.SetDisplayName;
-import com.hazizz.droid.Communication.requests.SetMyProfilePic;
-import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
-import com.hazizz.droid.Communication.responsePojos.PojoError;
-import com.hazizz.droid.Communication.responsePojos.PojoGroup;
-import com.hazizz.droid.Communication.responsePojos.PojoPicSmall;
+import com.hazizz.droid.communication.requests.GetMyProfilePic;
+import com.hazizz.droid.communication.requests.SetDisplayName;
+import com.hazizz.droid.communication.requests.SetMyProfilePic;
+import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.communication.responsePojos.PojoError;
+import com.hazizz.droid.communication.responsePojos.PojoGroup;
+import com.hazizz.droid.communication.responsePojos.PojoPicSmall;
 import com.hazizz.droid.converter.Converter;
 import com.hazizz.droid.fragments.ParentFragment.ParentFragment;
 import com.hazizz.droid.listeners.OnBackPressedListener;
 import com.hazizz.droid.navigation.Transactor;
-import com.hazizz.droid.Communication.MiddleMan;
+import com.hazizz.droid.communication.MiddleMan;
 import com.hazizz.droid.R;
+import com.hazizz.droid.other.Theme;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -56,7 +58,7 @@ public class MainOptionsFragment extends ParentFragment {
     private ImageView imageView_profilePic;
     private EditText editText_displayName;
     private ImageButton fab_profilePicCheck;
-    private ImageButton imageButton_displayNameCheck;
+    private ImageButton imageButton_displayNameAction;
     private TextView textView_error;
 
     private final int PICK_PHOTO_FOR_AVATAR = 1;
@@ -118,6 +120,7 @@ public class MainOptionsFragment extends ParentFragment {
         textView_error.setTextColor(Color.rgb(255, 0, 0));
 
         editText_displayName = v.findViewById(R.id.editText_displayName);
+        editText_displayName.setText(HCache.getInstance().getDisplayUsername(getContext()));
         editText_displayName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
@@ -132,7 +135,7 @@ public class MainOptionsFragment extends ParentFragment {
             public void beforeTextChanged(CharSequence c, int start, int count, int after) { }
 
             public void afterTextChanged(Editable c) {
-                imageButton_displayNameCheck.setImageResource(R.drawable.ic_check_black);
+                imageButton_displayNameAction.setImageResource(R.drawable.ic_check_black);
                 int length = editText_displayName.length();
                 if(length >= 4 && length <= 20) {
                     textView_error.setText("");
@@ -165,8 +168,9 @@ public class MainOptionsFragment extends ParentFragment {
                 }
             }
         });
-        imageButton_displayNameCheck = v.findViewById(R.id.imageButton_checkDisplayName);
-        imageButton_displayNameCheck.setOnClickListener(new View.OnClickListener() {
+        imageButton_displayNameAction = v.findViewById(R.id.imageButton_checkDisplayName);
+        imageButton_displayNameAction.setColorFilter(Theme.getIconColor(getContext()));
+        imageButton_displayNameAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(changedDisplayName) {
@@ -181,7 +185,7 @@ public class MainOptionsFragment extends ParentFragment {
 
                         @Override
                         public void onSuccessfulResponse() {
-                            imageButton_displayNameCheck.setImageResource(R.drawable.ic_create_black);
+                            imageButton_displayNameAction.setImageResource(R.drawable.ic_create_black);
                             ((MainActivity) getActivity()).setDisplayNameInNav(newDisplayName);
                             editText_displayName.clearFocus();
                             changedDisplayName = false;
@@ -195,7 +199,7 @@ public class MainOptionsFragment extends ParentFragment {
         });
         imageView_profilePic.setImageBitmap(Converter.getCroppedBitmap(Converter.imageFromText(getContext(), meInfo.getProfilePic())));
         editText_displayName.setText(meInfo.getDisplayName());
-        imageButton_displayNameCheck.setImageResource(R.drawable.ic_create_black);
+        imageButton_displayNameAction.setImageResource(R.drawable.ic_create_black);
 
         fab_profilePicCheck.setImageResource(R.drawable.ic_camera_black);
 
@@ -277,16 +281,6 @@ public class MainOptionsFragment extends ParentFragment {
             if (data == null) {
                 return;
             }try {
-/*
-                CropImageView cropImageView = (CropImageView) v.findViewById(R.id.cropImageView);
-                cropImageView.setAspectRatio(5, 10);
-                cropImageView.setFixedAspectRatio(true);
-                cropImageView.setCropShape(CropImageView.CropShape.OVAL);
-                cropImageView.setScaleType(CropImageView.ScaleType.FIT_CENTER);
-                cropImageView.setAutoZoomEnabled(true);
-                cropImageView.setShowProgressBar(true);
-                cropImageView.setCropRect(new Rect(0, 0, 800, 500));
-*/
                 CropImage.activity(data.getData())
                     .setActivityMenuIconColor(getResources().getColor(R.color.colorDarkText))
                     .setAspectRatio(1,1)
@@ -295,8 +289,6 @@ public class MainOptionsFragment extends ParentFragment {
                     .setCropShape(CropImageView.CropShape.OVAL)
                     .setBorderLineThickness(8)
                     .start(getContext(), this);
-
-              //  bitmap = cropImageView.getCroppedImage();
 
             } catch (Exception e) {
                 e.printStackTrace();

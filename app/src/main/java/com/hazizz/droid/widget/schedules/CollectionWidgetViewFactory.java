@@ -9,10 +9,10 @@ import android.widget.RemoteViewsService;
 
 
 
-import com.hazizz.droid.Communication.requests.parent.ThRequest;
-import com.hazizz.droid.Communication.requests.RequestType.Thera.ThReturnSchedules.ThReturnSchedules;
-import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
-import com.hazizz.droid.Communication.responsePojos.PojoError;
+import com.hazizz.droid.communication.requests.parent.ThRequest;
+import com.hazizz.droid.communication.requests.RequestType.Thera.ThReturnSchedules.ThReturnSchedules;
+import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.communication.responsePojos.PojoError;
 import com.hazizz.droid.other.D8;
 import com.hazizz.droid.listviews.TheraReturnSchedules.ClassItem;
 import com.hazizz.droid.other.Network;
@@ -50,7 +50,7 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
     }
 
     private void initDate(){
-        currentDay = D8.getDayOfWeek()-1;
+        currentDay = D8.getDayOfWeek(D8.getNow())-1;
         if(currentDay >= weekEndStart){
             currentDay = 0;
         }

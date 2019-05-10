@@ -1,17 +1,17 @@
-package com.hazizz.droid.Communication.requests;
+package com.hazizz.droid.communication.requests;
 
 import android.app.Activity;
 import android.util.Log;
 
 
-import com.hazizz.droid.Communication.requests.parent.Request;
-import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
-import com.hazizz.droid.Communication.responsePojos.PojoToken;
+import com.hazizz.droid.communication.requests.parent.AuthRequest;
+import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.communication.responsePojos.PojoToken;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 
-public class ElevationToken extends Request {
+public class ElevationToken extends AuthRequest {
     public ElevationToken(Activity act, CustomResponseHandler rh, String b_hashedOldPassword) {
         super(act, rh);
         Log.e("hey", "created ElevationToken object");
@@ -24,6 +24,7 @@ public class ElevationToken extends Request {
 
         call = aRequest.elevationToken(headerMap, body);
     }
+    /*
     @Override
     public void makeCall() {
         callSpec(act,  thisRequest, call, cOnResponse, gson);
@@ -32,6 +33,7 @@ public class ElevationToken extends Request {
     public void makeCallAgain() {
         callAgainSpec(act,  thisRequest, call, cOnResponse, gson);
     }
+    */
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
         PojoToken pojoToken = gson.fromJson(response.body().charStream(), PojoToken.class);

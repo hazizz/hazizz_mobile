@@ -13,12 +13,13 @@ import android.widget.Toast;
 import com.hazizz.droid.other.AndroidThings;
 import com.hazizz.droid.other.AppInfo;
 
-import com.hazizz.droid.Communication.requests.Feedback;
-import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
-import com.hazizz.droid.Communication.responsePojos.PojoError;
+import com.hazizz.droid.communication.requests.Feedback;
+import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.communication.responsePojos.PojoError;
 import com.hazizz.droid.navigation.Transactor;
-import com.hazizz.droid.Communication.MiddleMan;
+import com.hazizz.droid.communication.MiddleMan;
 import com.hazizz.droid.R;
+import com.hazizz.droid.other.Theme;
 
 public class FeedbackActivity extends AppCompatActivity {
 
@@ -36,7 +37,7 @@ public class FeedbackActivity extends AppCompatActivity {
         public void onSuccessfulResponse() {
             Toast.makeText(getApplicationContext(), getString(R.string.toast_feedback_thanks),
                     Toast.LENGTH_LONG).show();
-            goBackToFrag();
+            goBackToMainActivity();
         }
         @Override
         public void onNoConnection() {
@@ -48,7 +49,7 @@ public class FeedbackActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        if(AppInfo.isDarkMode(getBaseContext())){
+        if(Theme.isDarkMode(getBaseContext())){
             setTheme(R.style.AppTheme_Dark);
         }else{
             setTheme(R.style.AppTheme_Light);
@@ -78,17 +79,17 @@ public class FeedbackActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // back button pressed
-                goBackToFrag();
+                goBackToMainActivity();
             }
         });
     }
     @Override
     public void onBackPressed() {
-        goBackToFrag();
+        goBackToMainActivity();
     }
 
-    private void goBackToFrag(){
-        Transactor.activityMain(this);
+    private void goBackToMainActivity(){
+       // Transactor.activityMain(this);
         finish();
     }
 }

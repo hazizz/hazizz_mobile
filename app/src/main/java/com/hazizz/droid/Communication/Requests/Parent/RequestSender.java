@@ -1,8 +1,8 @@
-package com.hazizz.droid.Communication.requests.parent;
+package com.hazizz.droid.communication.requests.parent;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.hazizz.droid.Communication.requests.RequestTypes;
+import com.hazizz.droid.communication.requests.RequestTypes;
 
 import java.util.concurrent.TimeUnit;
 

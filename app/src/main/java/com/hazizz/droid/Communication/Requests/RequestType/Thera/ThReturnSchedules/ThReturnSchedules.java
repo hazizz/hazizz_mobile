@@ -1,4 +1,4 @@
-package com.hazizz.droid.Communication.requests.RequestType.Thera.ThReturnSchedules;
+package com.hazizz.droid.communication.requests.RequestType.Thera.ThReturnSchedules;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,9 +7,9 @@ import android.util.Log;
 import com.google.gson.reflect.TypeToken;
 
 
-import com.hazizz.droid.Communication.requests.parent.ThRequest;
-import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
-import com.hazizz.droid.Communication.responsePojos.PojoError;
+import com.hazizz.droid.communication.requests.parent.ThRequest;
+import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.communication.responsePojos.PojoError;
 import com.hazizz.droid.listviews.TheraReturnSchedules.ClassItem;
 
 import java.io.IOException;

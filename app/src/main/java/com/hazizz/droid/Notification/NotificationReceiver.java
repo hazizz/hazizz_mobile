@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.hazizz.droid.other.SharedPrefs;
+
 public class NotificationReceiver extends BroadcastReceiver {
 
     @Override
@@ -14,7 +16,11 @@ public class NotificationReceiver extends BroadcastReceiver {
             TaskReporterNotification.createNotification(context);
         }
 
+        int count = SharedPrefs.getInt(context, "gotAlarm", "asd", 0);
+        count++;
 
-        Log.e("hey", "RECEIVeD alarm manager");
+        SharedPrefs.save(context, "gotAlarm", "asd", count);
+
+        Log.e("hey", "RECEIVeD alarm manager: " + count);
     }
 }

@@ -13,10 +13,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hazizz.droid.Communication.MiddleMan;
+import com.hazizz.droid.communication.MiddleMan;
 
-import com.hazizz.droid.Communication.requests.ReturnInvitationLink;
-import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.communication.requests.ReturnInvitationLink;
+import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
 import com.hazizz.droid.R;
 import com.hazizz.droid.navigation.Transactor;
 

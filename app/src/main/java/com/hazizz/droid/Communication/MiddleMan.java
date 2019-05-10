@@ -1,11 +1,10 @@
-package com.hazizz.droid.Communication;
+package com.hazizz.droid.communication;
 
-import com.hazizz.droid.Communication.requests.parent.ThRequest;
+import com.hazizz.droid.communication.requests.parent.ParentRequest;
 import com.hazizz.droid.other.Network;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.hazizz.droid.Communication.requests.parent.Request;
 import com.hazizz.droid.R;
 
 import java.util.concurrent.BlockingQueue;
@@ -52,7 +51,7 @@ public class MiddleMan{
         }
     }
 
-    public static void newRequest(Request newRequest) {
+    public static void newRequest(ParentRequest newRequest) {
         for (RequestInterface r : requestQueue)
             if (r.getClass() == newRequest.getClass()) {
                 requestQueue.remove(r);
@@ -68,6 +67,7 @@ public class MiddleMan{
         }
     }
 
+    /*
     public static void newThRequest(ThRequest newRequest) {
         for (RequestInterface r : requestQueue)
             if (r.getClass() == newRequest.getClass()) {
@@ -83,6 +83,7 @@ public class MiddleMan{
             e.printStackTrace();
         }
     }
+    */
 
     public static void gotRequestResponse(RequestInterface r){
         waitingForResponseQueue.remove(r);

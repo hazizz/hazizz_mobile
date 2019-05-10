@@ -15,16 +15,16 @@ import android.widget.Toast;
 
 import com.hazizz.droid.activities.MainActivity;
 import com.hazizz.droid.cache.MeInfo.MeInfo;
-import com.hazizz.droid.Communication.MiddleMan;
+import com.hazizz.droid.communication.MiddleMan;
 
-import com.hazizz.droid.Communication.requests.ChangePassword;
-import com.hazizz.droid.Communication.requests.ElevationToken;
-import com.hazizz.droid.Communication.requests.RequestType.Login;
-import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
-import com.hazizz.droid.Communication.responsePojos.PojoAuth;
-import com.hazizz.droid.Communication.responsePojos.PojoError;
-import com.hazizz.droid.Communication.responsePojos.PojoGroup;
-import com.hazizz.droid.Communication.responsePojos.PojoToken;
+import com.hazizz.droid.communication.requests.ChangePassword;
+import com.hazizz.droid.communication.requests.ElevationToken;
+import com.hazizz.droid.communication.requests.RequestType.Login;
+import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.communication.responsePojos.PojoAuth;
+import com.hazizz.droid.communication.responsePojos.PojoError;
+import com.hazizz.droid.communication.responsePojos.PojoGroup;
+import com.hazizz.droid.communication.responsePojos.PojoToken;
 import com.hazizz.droid.converter.Converter;
 import com.hazizz.droid.fragments.ParentFragment.ParentFragment;
 import com.hazizz.droid.listeners.OnBackPressedListener;

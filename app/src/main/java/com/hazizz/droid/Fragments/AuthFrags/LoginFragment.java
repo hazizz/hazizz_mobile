@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,14 +15,15 @@ import android.widget.TextView;
 
 import com.hazizz.droid.activities.AuthActivity;
 
-import com.hazizz.droid.Communication.requests.RequestType.Login;
-import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
-import com.hazizz.droid.Communication.responsePojos.PojoAuth;
-import com.hazizz.droid.Communication.responsePojos.PojoError;
+import com.hazizz.droid.communication.requests.RequestType.Login;
+import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.communication.responsePojos.PojoAuth;
+import com.hazizz.droid.communication.responsePojos.PojoError;
 import com.hazizz.droid.converter.Converter;
+import com.hazizz.droid.other.AppInfo;
 import com.hazizz.droid.other.SharedPrefs;
 import com.hazizz.droid.navigation.Transactor;
-import com.hazizz.droid.Communication.MiddleMan;
+import com.hazizz.droid.communication.MiddleMan;
 import com.hazizz.droid.R;
 
 import okhttp3.ResponseBody;
@@ -42,53 +42,7 @@ public class LoginFragment extends Fragment {
     private TextView textView_error;
     private TextView button_register;
 
-
     private View v;
-
-    CustomResponseHandler responseHandler = new CustomResponseHandler() {
-        @Override
-        public void onPOJOResponse(Object response) {
-           if(checkBox_autoLogin.isChecked()){
-                SharedPrefs.savePref(getContext(), "autoLogin", "autoLogin", true);
-            }
-            SharedPrefs.TokenManager.setToken(getContext() ,((PojoAuth)response).getToken());
-            SharedPrefs.TokenManager.setRefreshToken(getContext() ,((PojoAuth)response).getRefresh());
-            button_login.setEnabled(true);
-            ((AuthActivity)getActivity()).openMainActivity();
-            Transactor.fragmentFirst(getFragmentManager().beginTransaction());
-        }
-        @Override
-        public void onFailure(Call<ResponseBody> call, Throwable t) {
-            Log.e("hey", "got here onFailure");
-            button_login.setEnabled(true);
-            textView_error.setText(R.string.info_serverNotResponding);
-        }
-        @Override
-        public void onNoConnection() {
-            textView_error.setText(R.string.info_noInternetAccess);
-            button_login.setEnabled(true);
-        }
-        @Override
-        public void onErrorResponse(PojoError error) {
-            if(error.getErrorCode() == 12){ // wrong password
-                textView_error.setText(R.string.error_wrongPassword);
-            }
-            if(error.getErrorCode() == 13){ // no such user
-                textView_error.setText(R.string.error_accountLocked);
-            }
-            if(error.getErrorCode() == 14){
-                textView_error.setText(R.string.error_accountExpired);
-            }
-            if(error.getErrorCode() == 15){ // no such user
-                textView_error.setText(R.string.error_accountBanned);
-            }
-            if(error.getErrorCode() == 31){ // no such user
-                textView_error.setText(R.string.error_accountNotFound);
-            }
-
-            button_login.setEnabled(true);
-        }
-    };
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -124,11 +78,52 @@ public class LoginFragment extends Fragment {
                     password = Converter.hashString(password);
 
                     button_login.setEnabled(false);
-                    MiddleMan.newRequest(new Login(getActivity(), responseHandler, username, password));
+                    MiddleMan.newRequest(new Login(getActivity(), new CustomResponseHandler() {
+                        @Override
+                        public void onPOJOResponse(Object response) {
+                            if(checkBox_autoLogin.isChecked()){
+                                AppInfo.setAutoLogin(getContext(), true);
+                            }
+                            AppInfo.setLoggedIn(getContext(), true);
+                            SharedPrefs.TokenManager.setToken(getContext() ,((PojoAuth)response).getToken());
+                            SharedPrefs.TokenManager.setRefreshToken(getContext() ,((PojoAuth)response).getRefresh());
+                            button_login.setEnabled(true);
+                            ((AuthActivity)getActivity()).openMainActivity();
+                            Transactor.fragmentFirst(getFragmentManager().beginTransaction());
+                        }
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            button_login.setEnabled(true);
+                            textView_error.setText(R.string.info_serverNotResponding);
+                        }
+                        @Override
+                        public void onNoConnection() {
+                            textView_error.setText(R.string.info_noInternetAccess);
+                            button_login.setEnabled(true);
+                        }
+                        @Override
+                        public void onErrorResponse(PojoError error) {
+                            if(error.getErrorCode() == 12){ // wrong password
+                                textView_error.setText(R.string.error_wrongPassword);
+                            }
+                            if(error.getErrorCode() == 13){ // no such user
+                                textView_error.setText(R.string.error_accountLocked);
+                            }
+                            if(error.getErrorCode() == 14){
+                                textView_error.setText(R.string.error_accountExpired);
+                            }
+                            if(error.getErrorCode() == 15){ // no such user
+                                textView_error.setText(R.string.error_accountBanned);
+                            }
+                            if(error.getErrorCode() == 31){ // no such user
+                                textView_error.setText(R.string.error_accountNotFound);
+                            }
+                            button_login.setEnabled(true);
+                        }
+                    }, username, password));
                 }
             }
         });
         return v;
     }
-
 }

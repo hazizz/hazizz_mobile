@@ -1,4 +1,4 @@
-package com.hazizz.droid.Communication.responsePojos.taskPojos;
+package com.hazizz.droid.communication.responsePojos.taskPojos;
 
 import lombok.Data;
 

@@ -24,21 +24,21 @@
 
 
     <string-array name="filterTypes">
-      <item>Új</item>
-      <item>Téma</item>
-      <item>Csoport</item>
-      <item>Kész</item>
-      <item>Befejezetlen</item>
+        <item>Új</item>
+        <item>Téma</item>
+        <item>Csoport</item>
+        <item>Kész</item>
+        <item>Befejezetlen</item>
     </string-array>
 
     <string-array name="days">
-      <item>Hétfő</item>
-      <item>Kedd</item>
-      <item>Szerda</item>
-      <item>Csütörtök</item>
-      <item>Péntek</item>
-      <item>Szombat</item>
-      <item>Vasárnap</item>
+        <item>Hétfő</item>
+        <item>Kedd</item>
+        <item>Szerda</item>
+        <item>Csütörtök</item>
+        <item>Péntek</item>
+        <item>Szombat</item>
+        <item>Vasárnap</item>
     </string-array>
 
     <string-array name="taskTypes">
@@ -49,16 +49,13 @@
     </string-array>
 
     <string-array name="options_array">
-         <item>Értesítés beállítások</item>
+        <item>Értesítés beállítások</item>
 
-         <item>Jelszó Beállítás</item>
-       <!--   <item>Théra Beállítások</item> -->
+        <item>Jelszó Beállítás</item>
+        <!--   <item>Théra Beállítások</item> -->
 
-     <!--   <item>Szerver beállítások</item> -->
+        <!--   <item>Szerver beállítások</item> -->
     </string-array>
-
-
-
 
 
     <string name="badge_owner">TULAJDONOS</string>
@@ -141,13 +138,14 @@
     <string name="grades">Grades</string>
     <string name="copy">Másolás</string>
     <string name="share">Megosztás</string>
-    <string name="loading">Betöltés...</string>
+    <string name="loading">Betöltés…</string>
     <string name="switch_account">Fiók váltás</string>
     <string name="server_address">Szerver cím</string>
     <string name="set">Beállítás</string>
     <string name="dangerous">Veszélyes!!!</string>
     <string name="copied">Másolva</string>
     <string name="copied_to_clipboard">Vágólapra másolva</string>
+    <string name="message_from_devs">Üzenet a fejlesztőktől</string>
 
 
     <string name="school_">Iskola:</string>
@@ -204,7 +202,6 @@
 
 
     <string name="error_passwordRequiredForGroup">Jelszó szükséges a csoporthoz belépéshez</string>
-
 
 
     <string name="toast_feedback_thanks">Köszönjük a visszajelzésedet</string>
@@ -303,7 +300,6 @@
     <string name="error_givenDataWrong">Helytelen adatok</string>
 
 
-
     <string name="success_changed_password">A jelszó sikeresen megváltoztatva</string>
 
 
@@ -327,13 +323,13 @@
 
 
     <string name="title_thera">Théra</string>
-     <string name="title_kreta_users">Kréta felhasználók</string>
-     <string name="title_kreta_login">Kréta bejelentkezés</string>
+    <string name="title_kreta_users">Kréta felhasználók</string>
+    <string name="title_kreta_login">Kréta bejelentkezés</string>
 
     <string name="kreta">Kréta</string>
 
-     <string name="thera_grades">Théra jegyek</string>
-     <string name="thera_schedules">Théra órák</string>
+    <string name="thera_grades">Théra jegyek</string>
+    <string name="thera_schedules">Théra órák</string>
     <string name="thera_standin">helyetesíttés:</string>
     <string name="thera_canceled">elmarad</string>
 
@@ -349,5 +345,6 @@
     <string name="thera_theme_">téma:</string>
     <string name="thera_subject_">tantárgy:</string>
     <string name="thera_grade_type_">jegy tipus:</string>
+    <string name="title_activity_thera">TheraActivity</string>
 
 </resources>

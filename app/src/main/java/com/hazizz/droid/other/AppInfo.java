@@ -15,13 +15,47 @@ public class AppInfo {
         return firstTime;
     }
 
-    public static boolean isDarkMode(Context context){
-        boolean darkMode = SharedPrefs.getBoolean(context, fileName, "darkMode");
+    public static boolean isLoggedIn(Context context){
+        boolean loggedIn = SharedPrefs.getBoolean(context, fileName, "loggedIn");
 
-        return darkMode;
+        return  loggedIn;
     }
 
-    public static void setDarkMode(Context context, boolean isDark){
-        SharedPrefs.savePref(context, fileName, "darkMode", isDark);
+    public static void setLoggedIn(Context context, boolean loggedIn){
+        SharedPrefs.savePref(context, fileName, "loggedIn", loggedIn);
     }
+
+    public static boolean isAutoLogin(Context context){
+        boolean autoLogin = SharedPrefs.getBoolean(context, fileName, "autoLogin");
+
+        return  autoLogin;
+    }
+
+    public static void setAutoLogin(Context context, boolean autoLogin){
+        SharedPrefs.savePref(context, fileName, "autoLogin", autoLogin);
+    }
+
+    public static boolean motdADayHasPassed(Context context){
+        final int defaultValue = -2;
+        int lastReportDay = SharedPrefs.getInt(context, fileName, "motdDate", defaultValue);
+        if(lastReportDay == defaultValue){
+            SharedPrefs.save(context, fileName, "motdDate", lastReportDay);
+            return false;
+        }
+        int nowDay = D8.getDayOfYear(D8.getNow());
+        if(lastReportDay == nowDay-1){
+            SharedPrefs.save(context, fileName, "motdDate", lastReportDay);
+            return true;
+        }
+        return false;
+    }
+
+    public static String getLanguage(Context context){
+        return SharedPrefs.getString(context, fileName, "language", "en");
+    }
+
+    public static void setLanguage(Context context, String language_code){
+        SharedPrefs.save(context, fileName, "language", language_code);
+    }
+
 }

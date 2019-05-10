@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.RingtoneManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -21,9 +22,9 @@ import android.util.Log;
 import com.hazizz.droid.activities.AuthActivity;
 import com.hazizz.droid.activities.MainActivity;
 
-import com.hazizz.droid.Communication.requests.GetTasksFromMe;
-import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
-import com.hazizz.droid.Communication.responsePojos.taskPojos.PojoTask;
+import com.hazizz.droid.communication.requests.GetTasksFromMe;
+import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.communication.responsePojos.taskPojos.PojoTask;
 import com.hazizz.droid.other.D8;
 import com.hazizz.droid.listeners.GenericListener;
 import com.hazizz.droid.other.Network;
@@ -35,6 +36,7 @@ import com.hazizz.droid.receiver.NetworkChangeReceiver;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class TaskReporterNotification {
     private static final String fileName = "ReportTaskSchedule";
@@ -70,19 +72,33 @@ public class TaskReporterNotification {
         return SharedPrefs.getInt(context, fileName, "minute");
     }
 
+    public static void remindScheduleForNotification(Context context) {
+        setScheduleForNotification(context, getScheduleHour(context), getScheduleMinute(context));
+
+    }
+
     public static void setScheduleForNotification(Context context, int hour, int minute) {
         Log.e("hey", "alarm manager set");
         setSchedule(context, hour, minute);
         Intent _intent = new Intent(context, NotificationReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, _intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+
         alarmManager.cancel(pendingIntent);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, hour);
         calendar.set(Calendar.MINUTE, minute);
         calendar.set(Calendar.SECOND, 0);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+
+        if (calendar.before(Calendar.getInstance())) {
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
+
+        //alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS), pendingIntent);
+      //  alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60 * 3, pendingIntent); //TimeUnit.MILLISECONDS.convert(5, TimeUnit.SECONDS)
+
     }
 
     private static void ifConnectionCreateNotification(Context context){
@@ -110,7 +126,7 @@ public class TaskReporterNotification {
                         }
                     });
                     getTasksRequest.setupCall();
-                    getTasksRequest.makeIndependentCall();
+                    getTasksRequest.makeCall();
                 }
             }
         });
@@ -141,7 +157,7 @@ public class TaskReporterNotification {
                 }
             });
             getTasksRequest.setupCall();
-            getTasksRequest.makeIndependentCall();
+            getTasksRequest.makeCall();
         }else{
             ifConnectionCreateNotification(context);
         }
@@ -152,7 +168,7 @@ public class TaskReporterNotification {
         String CHANNEL_ID = "your_name";// The id of the channel.
         CharSequence name = context.getResources().getString(R.string.app_name);// The user-visible name of the channel.
         NotificationCompat.Builder mBuilder;
-        Intent notificationIntent = new Intent(context, AuthActivity.class);
+        Intent notificationIntent = new Intent(context, MainActivity.class);
 
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
         NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -177,7 +193,6 @@ public class TaskReporterNotification {
                 int i_end_subject = i_start_subject + subject.length();
                 int i_start_title = subject.length() + divider.length();
                 int i_end_title = i_start_title + title.length() + 1;
-
 
                 sb = new SpannableString(subject + divider + title + divider + description);
 
@@ -227,9 +242,9 @@ public class TaskReporterNotification {
             }
         }
 
-        mBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+        mBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)); //Settings.System.DEFAULT_NOTIFICATION_URI
         mBuilder.setStyle(inboxStyle);
-        mBuilder.setVibrate(new long[]{1000, 1000});
+        mBuilder.setVibrate(new long[]{1000, 1000, 1000});
         mBuilder.setSmallIcon(R.mipmap.ic_launcher2);
         mBuilder.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher2));
         mBuilder.setContentTitle(context.getResources().getString(R.string.notif_unfinished_tasks1) + " "

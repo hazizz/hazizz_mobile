@@ -1,7 +1,5 @@
 package com.hazizz.droid.listviews.SubjectList;
 
-import com.hazizz.droid.Communication.responsePojos.PojoAuth;
-
 import lombok.Data;
 
 @Data

@@ -1,3 +1,3 @@
-package com.hazizz.droid.Communication.responsePojos;
+package com.hazizz.droid.communication.responsePojos;
 
 public interface Pojo { }

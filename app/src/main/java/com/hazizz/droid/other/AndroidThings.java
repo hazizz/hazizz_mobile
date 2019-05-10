@@ -1,5 +1,6 @@
 package com.hazizz.droid.other;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -20,6 +21,10 @@ public class AndroidThings {
         if(imm != null && view != null){
             imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
         }
+    }
+
+    public static void removeSlideAnimation(Activity activity){
+        activity.overridePendingTransition(0, 0);
     }
 
     public static String getAppVersion(){ // this.getCurrentFocus()

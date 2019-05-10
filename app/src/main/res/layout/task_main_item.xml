@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -9,6 +8,8 @@
     android:orientation="vertical"
     android:background="?android:attr/windowBackground"
     android:paddingBottom="0dp"
+    android:clickable="true"
+    android:focusable="true"
     >
 
     <android.support.constraint.ConstraintLayout

@@ -10,17 +10,18 @@ import android.widget.RemoteViewsService;
 
 
 
-import com.hazizz.droid.Communication.requests.GetTasksFromMeSync;
-import com.hazizz.droid.Communication.requests.parent.Request;
-import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
-import com.hazizz.droid.Communication.responsePojos.PojoError;
-import com.hazizz.droid.Communication.responsePojos.taskPojos.PojoTask;
+import com.hazizz.droid.communication.requests.GetTasksFromMeSync;
+import com.hazizz.droid.communication.requests.parent.Request;
+import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.communication.responsePojos.PojoError;
+import com.hazizz.droid.communication.responsePojos.taskPojos.PojoTask;
 import com.hazizz.droid.other.D8;
 import com.hazizz.droid.other.Network;
 import com.hazizz.droid.R;
 import com.hazizz.droid.other.SharedPrefs;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -33,7 +34,7 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
 
     private static String contentInfo = "";
 
-    private ArrayList< PojoTask> data;
+    private List< PojoTask> data;
     private Context mContext;
 
     CollectionWidgetViewFactory(Context context) {
@@ -117,7 +118,7 @@ public class CollectionWidgetViewFactory implements RemoteViewsService.RemoteVie
             CustomResponseHandler rh = new CustomResponseHandler() {
                 @Override
                 public void onPOJOResponse(Object response) {
-                    ArrayList< PojoTask> r = (ArrayList< PojoTask>) response;
+                    List< PojoTask> r = (List< PojoTask>) response;
                     if (r == null || r.isEmpty()) {
                         data.clear();
                         contentInfo = "Nincs feladat";

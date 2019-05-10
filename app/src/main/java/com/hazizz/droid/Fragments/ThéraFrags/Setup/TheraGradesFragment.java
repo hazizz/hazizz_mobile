@@ -11,12 +11,13 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.hazizz.droid.Communication.MiddleMan;
+import com.hazizz.droid.cache.HCache;
+import com.hazizz.droid.communication.MiddleMan;
 
 
-import com.hazizz.droid.Communication.requests.RequestType.Thera.ThReturnGrades.ThReturnGrades;
-import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
-import com.hazizz.droid.Communication.responsePojos.PojoError;
+import com.hazizz.droid.communication.requests.RequestType.Thera.ThReturnGrades.ThReturnGrades;
+import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.communication.responsePojos.PojoError;
 import com.hazizz.droid.fragments.ParentFragment.ParentFragment;
 import com.hazizz.droid.listeners.OnBackPressedListener;
 import com.hazizz.droid.listviews.TheraGradesList.TheraGradesItem;
@@ -29,6 +30,7 @@ import com.hazizz.droid.navigation.Transactor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 public class TheraGradesFragment  extends ParentFragment {
@@ -56,6 +58,8 @@ public class TheraGradesFragment  extends ParentFragment {
         createViewList();
         getGrades();
 
+        processData(HCache.getInstance().getThera().getGrades(getContext()));
+
         return v;
     }
     void createViewList(){
@@ -73,26 +77,37 @@ public class TheraGradesFragment  extends ParentFragment {
         });
 
     }
+
+
+    private void processData(SortedMap<String, List<TheraGradesItem>> gradeMap){
+        if(gradeMap != null) {
+            if (gradeMap.isEmpty()) {
+                textView_noContent.setVisibility(v.VISIBLE);
+                Log.e("hey", "is Empty");
+            } else {
+                adapter.clear();
+                textView_noContent.setVisibility(v.INVISIBLE);
+                for (Map.Entry<String, List<TheraGradesItem>> entry : gradeMap.entrySet()) {
+                    listGrades.add(new TheraSubjectGradesItem(entry.getKey(), entry.getValue()));
+                    adapter.notifyDataSetChanged();
+                    Log.e("hey", "iterate2");
+                }
+            }
+        }
+    }
+
     private void getGrades(){
         long sessionId = SharedPrefs.ThSessionManager.getSessionId(getContext());
         CustomResponseHandler responseHandler = new CustomResponseHandler() {
             @Override
+            public void getRawResponseBody(String rawResponseBody) {
+                HCache.getInstance().getThera().setGrades(getContext(), rawResponseBody);
+            }
+
+            @Override
             public void onPOJOResponse(Object response) {
-                adapter.clear();
-                TreeMap<String, List<TheraGradesItem>> pojoMap = (TreeMap<String, List<TheraGradesItem>>)response;
-
-                if(pojoMap.isEmpty()){
-                    textView_noContent.setVisibility(v.VISIBLE);
-                    Log.e("hey", "is Empty");
-                }else {
-                    textView_noContent.setVisibility(v.INVISIBLE);
-
-                    for (Map.Entry<String,List<TheraGradesItem>> entry : pojoMap.entrySet()) {
-                        listGrades.add(new TheraSubjectGradesItem(entry.getKey(), entry.getValue()));
-                        adapter.notifyDataSetChanged();
-                        Log.e("hey", "iterate2");
-                    }
-                }
+                TreeMap<String, List<TheraGradesItem>> gradeMap = (TreeMap<String, List<TheraGradesItem>>)response;
+                processData(gradeMap);
             }
             @Override
             public void onErrorResponse(PojoError error) {
@@ -107,9 +122,8 @@ public class TheraGradesFragment  extends ParentFragment {
             public void onNoConnection() {
                 textView_noContent.setText(R.string.info_noInternetAccess);
                 textView_noContent.setVisibility(View.VISIBLE);
-                //   sRefreshLayout.setRefreshing(false);
             }
         };
-        MiddleMan.newThRequest(new ThReturnGrades(getActivity(),responseHandler, sessionId));
+        MiddleMan.newRequest(new ThReturnGrades(getActivity(),responseHandler, sessionId));
     }
 }

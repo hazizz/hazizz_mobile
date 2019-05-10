@@ -12,13 +12,14 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.hazizz.droid.Communication.MiddleMan;
+import com.hazizz.droid.cache.HCache;
+import com.hazizz.droid.communication.MiddleMan;
 
 
-import com.hazizz.droid.Communication.requests.RequestType.Thera.ThReturnSchedules.PojoClass;
-import com.hazizz.droid.Communication.requests.RequestType.Thera.ThReturnSchedules.ThReturnSchedules;
-import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
-import com.hazizz.droid.Communication.responsePojos.PojoError;
+import com.hazizz.droid.communication.requests.RequestType.Thera.ThReturnSchedules.PojoClass;
+import com.hazizz.droid.communication.requests.RequestType.Thera.ThReturnSchedules.ThReturnSchedules;
+import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.communication.responsePojos.PojoError;
 import com.hazizz.droid.other.D8;
 import com.hazizz.droid.fragments.ParentFragment.ParentFragment;
 import com.hazizz.droid.listeners.OnBackPressedListener;
@@ -61,7 +62,7 @@ public class TheraSchedulesFragment extends ParentFragment {
             }
         });
 
-        currentDay = D8.getDayOfWeek()-1;
+        currentDay = D8.getDayOfWeek(D8.getNow())-1;
         if(currentDay >= weekEndStart){
             currentDay = 0;
             weekNumber++;
@@ -84,11 +85,14 @@ public class TheraSchedulesFragment extends ParentFragment {
 
         textView_spinner_display = v.findViewById(R.id.textView_spinner_display);
 
-        weekNumber = D8.getWeek();
-        year = D8.getYear();
+        weekNumber = D8.getWeek(D8.getNow());
+        year = D8.getYear(D8.getNow());
 
         createViewList();
         getSchedules();
+
+        proccessData(HCache.getInstance().getThera().getSchedule(getContext()));
+
         return v;
     }
     void createViewList(){
@@ -104,27 +108,39 @@ public class TheraSchedulesFragment extends ParentFragment {
             }
         });
     }
+
+    private void proccessData(List<PojoClass> classList){
+        if(classList != null) {
+            if (classList.isEmpty()) {
+            } else {
+                String currentD = "";
+                for (PojoClass t : classList) {
+                    if (t.getDate().equals(currentD)) {
+                        //Ehhez a naphoz tartozik
+                    } else {
+                        //Új nap
+                    }
+                    listClassesAll.add(new ClassItem(t.getDate(), t.getStartOfClass(), t.getEndOfClass(), t.getPeriodNumber(), t.isCancelled(), t.isStandIn(), t.getSubject(), t.getClassName(), t.getTeacher(), t.getRoom(), t.getTopic()));
+                }
+                getCurrentDaySchedules(currentDay);
+            }
+        }
+    }
+
     private void getSchedules(){
         long sessionId = SharedPrefs.ThSessionManager.getSessionId(getContext());
         CustomResponseHandler rh = new CustomResponseHandler() {
+
+            @Override
+            public void getRawResponseBody(String rawResponseBody) {
+                HCache.getInstance().getThera().setSchedule(getContext(), rawResponseBody);
+            }
+
             @Override
             public void onPOJOResponse(Object response) {
-                ArrayList<PojoClass> pojoList = (ArrayList<PojoClass>) response;
-                if(pojoList.isEmpty()){
-                }else {
-                    String currentD = "";
-                    for (PojoClass t : pojoList) {
-                        if(t.getDate().equals(currentD)){
-                            //Ehhez a naphoz tartozik
-                        }else{
-                            //Új nap
+                ArrayList<PojoClass> classList = (ArrayList<PojoClass>) response;
+                proccessData(classList);
 
-                        }
-                        listClassesAll.add(new ClassItem(t.getDate(), t.getStartOfClass(), t.getEndOfClass(), t.getPeriodNumber(), t.isCancelled(), t.isStandIn(), t.getSubject(), t.getClassName(), t.getTeacher(), t.getRoom(), t.getTopic()));
-
-                    }
-                    getCurrentDaySchedules(currentDay);
-                }
             }
             @Override
             public void onErrorResponse(PojoError error) {
@@ -136,7 +152,7 @@ public class TheraSchedulesFragment extends ParentFragment {
                 }
             }
         };
-        MiddleMan.newThRequest(new ThReturnSchedules(getActivity(),rh, sessionId, weekNumber, year));
+        MiddleMan.newRequest(new ThReturnSchedules(getActivity(),rh, sessionId, weekNumber, year));
     }
 
     private void getCurrentDaySchedules(int dayOfWeek){

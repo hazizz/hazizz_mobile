@@ -1,12 +1,12 @@
-package com.hazizz.droid.Communication.requests.RequestType.Thera.ThReturnGrades;
+package com.hazizz.droid.communication.requests.RequestType.Thera.ThReturnGrades;
 
 import android.app.Activity;
 import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
 
-import com.hazizz.droid.Communication.requests.parent.ThRequest;
-import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.communication.requests.parent.ThRequest;
+import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
 import com.hazizz.droid.listviews.TheraGradesList.TheraGradesItem;
 
 import java.lang.reflect.Type;

@@ -1,4 +1,4 @@
-package com.hazizz.droid.Communication.requests;
+package com.hazizz.droid.communication.requests;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,19 +22,19 @@ public interface RequestTypes{
             @Body HashMap<String, Object> register
     );
 
-    @POST("auth/")
+    @POST("auth/accesstoken")
     Call<ResponseBody> refreshToken(
             @HeaderMap Map<String, String> headers,
             @Body HashMap<String, Object> register
     );
 
-    @POST("auth/")
+    @POST("auth/accesstoken")
     Call<ResponseBody> login(
             @HeaderMap Map<String, String> headers,
             @Body HashMap<String, Object> registerBody
     );
 
-    @POST("elevation/")
+    @POST("auth/elevationtoken")
     Call<ResponseBody> elevationToken(
             @HeaderMap Map<String, String> headers,
             @Body HashMap<String, Object> newPasswordBody
@@ -451,45 +451,45 @@ public interface RequestTypes{
 
 
 
-    @GET("schools")
+    @GET("kreta/schools")
     Call<ResponseBody> th_getSchools(
             @HeaderMap Map<String, String> headers
     );
 
-    @POST("sessions")
+    @POST("kreta/sessions")
     Call<ResponseBody> th_createSession(
             @HeaderMap Map<String, String> headers,
             @Body Map<String, Object> body
     );
 
 
-    @DELETE("sessions/{sessionId}")
+    @DELETE("kreta/sessions/{sessionId}")
     Call<ResponseBody> th_removeSession(
             @Path("sessionId") String sessionId,
             @HeaderMap Map<String, String> headers
     );
 
-    @POST("sessions/{sessionId}/auth")
+    @POST("kreta/sessions/{sessionId}/auth")
     Call<ResponseBody> th_authenticateSession(
             @Path("sessionId") String sessionId,
             @HeaderMap Map<String, String> headers,
             @Body Map<String, Object> body
     );
 
-    @GET("sessions")
+    @GET("kreta/sessions")
     Call<ResponseBody> th_returnSessions(
             @HeaderMap Map<String, String> headers
     );
 
 
-    @GET("sessions/{sessionId}/grades")
+    @GET("kreta/sessions/{sessionId}/grades")
     Call<ResponseBody> th_returnGrades(
             @Path("sessionId") String sessionId,
             @HeaderMap Map<String, String> headers
     );
 
 
-    @GET("sessions/{sessionId}/schedule")
+    @GET("kreta/sessions/{sessionId}/schedule")
     Call<ResponseBody> th_returnSchedules(
             @Path("sessionId") String sessionId,
             @Query("weekNumber") String weekNumber,

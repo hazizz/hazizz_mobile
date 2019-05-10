@@ -1,4 +1,4 @@
-package com.hazizz.droid.Communication.requests.RequestType.Thera;
+package com.hazizz.droid.communication.requests.RequestType.Thera;
 
 import lombok.Data;
 

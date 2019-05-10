@@ -11,12 +11,12 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.hazizz.droid.Communication.MiddleMan;
+import com.hazizz.droid.communication.MiddleMan;
 
-import com.hazizz.droid.Communication.requests.RequestType.Thera.PojoSession;
-import com.hazizz.droid.Communication.requests.RequestType.Thera.ThRemoveSession;
-import com.hazizz.droid.Communication.requests.RequestType.Thera.ThReturnSessions.ThReturnSessions;
-import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.communication.requests.RequestType.Thera.PojoSession;
+import com.hazizz.droid.communication.requests.RequestType.Thera.ThRemoveSession;
+import com.hazizz.droid.communication.requests.RequestType.Thera.ThReturnSessions.ThReturnSessions;
+import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
 import com.hazizz.droid.fragments.ParentFragment.ParentFragment;
 import com.hazizz.droid.listeners.OnBackPressedListener;
 import com.hazizz.droid.listviews.TheraUserList.CustomAdapter;
@@ -89,7 +89,7 @@ public class TheraUsersFragment  extends ParentFragment {
             @Override
             public void onClick(View v) {
                 if(selectedItem != null){
-                    MiddleMan.newThRequest(new ThRemoveSession(getActivity(), new CustomResponseHandler() {
+                    MiddleMan.newRequest(new ThRemoveSession(getActivity(), new CustomResponseHandler() {
                         @Override public void onSuccessfulResponse() {
                             adapter.remove(selectedItem);
                         }
@@ -161,6 +161,6 @@ public class TheraUsersFragment  extends ParentFragment {
             public void onNoConnection() {
             }
         };
-        MiddleMan.newThRequest(new ThReturnSessions(getActivity(),responseHandler));
+        MiddleMan.newRequest(new ThReturnSessions(getActivity(),responseHandler));
     }
 }

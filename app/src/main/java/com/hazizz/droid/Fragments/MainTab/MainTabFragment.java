@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 
 import com.hazizz.droid.activities.MainActivity;
 
-import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
 import com.hazizz.droid.navigation.Transactor;
 import com.hazizz.droid.R;
 

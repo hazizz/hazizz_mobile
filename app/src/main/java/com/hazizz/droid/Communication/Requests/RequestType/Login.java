@@ -1,19 +1,20 @@
-package com.hazizz.droid.Communication.requests.RequestType;
+package com.hazizz.droid.communication.requests.RequestType;
 
 import android.app.Activity;
 import android.util.Log;
 
 
-import com.hazizz.droid.Communication.requests.parent.Request;
-import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
-import com.hazizz.droid.Communication.responsePojos.PojoAuth;
+import com.hazizz.droid.communication.requests.parent.AuthRequest;
+import com.hazizz.droid.communication.requests.parent.Request;
+import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.communication.responsePojos.PojoAuth;
 
 import java.util.HashMap;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 
-public class Login extends Request  {
+public class Login extends AuthRequest {
     String b_username, b_password;
     public Login(Activity act, CustomResponseHandler rh, String b_username, String b_password) {
         super(act, rh);

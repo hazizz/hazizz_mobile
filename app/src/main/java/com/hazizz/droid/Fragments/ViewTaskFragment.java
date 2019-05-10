@@ -25,22 +25,23 @@ import android.widget.TextView;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
 import com.hazizz.droid.activities.MainActivity;
+import com.hazizz.droid.communication.responsePojos.taskPojos.PojoTask;
 import com.hazizz.droid.other.AndroidThings;
 import com.hazizz.droid.cache.CurrentGroup;
 import com.hazizz.droid.cache.CurrentMembersManager;
 import com.hazizz.droid.cache.MeInfo.MeInfo;
 import com.hazizz.droid.cache.Member;
-import com.hazizz.droid.Communication.requests.AddComment;
-import com.hazizz.droid.Communication.requests.DeleteAT;
-import com.hazizz.droid.Communication.requests.GetAT;
-import com.hazizz.droid.Communication.requests.GetCommentSection;
-import com.hazizz.droid.Communication.Strings;
-import com.hazizz.droid.Communication.responsePojos.commentSectionPojos.PojoComment;
-import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
-import com.hazizz.droid.Communication.responsePojos.PojoError;
-import com.hazizz.droid.Communication.responsePojos.PojoSubject;
-import com.hazizz.droid.Communication.responsePojos.PojoType;
-import com.hazizz.droid.Communication.responsePojos.taskPojos.PojoTaskDetailed;
+import com.hazizz.droid.communication.requests.AddComment;
+import com.hazizz.droid.communication.requests.DeleteAT;
+import com.hazizz.droid.communication.requests.GetAT;
+import com.hazizz.droid.communication.requests.GetCommentSection;
+import com.hazizz.droid.communication.Strings;
+import com.hazizz.droid.communication.responsePojos.commentSectionPojos.PojoComment;
+import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.communication.responsePojos.PojoError;
+import com.hazizz.droid.communication.responsePojos.PojoSubject;
+import com.hazizz.droid.communication.responsePojos.PojoType;
+import com.hazizz.droid.communication.responsePojos.taskPojos.PojoTaskDetailed;
 import com.hazizz.droid.other.D8;
 import com.hazizz.droid.enums.EnumAT;
 import com.hazizz.droid.fragments.ParentFragment.CommentableFragment;
@@ -49,7 +50,7 @@ import com.hazizz.droid.listviews.CommentList.CommentItem;
 import com.hazizz.droid.listviews.CommentList.CustomAdapter;
 import com.hazizz.droid.listviews.NonScrollListView;
 import com.hazizz.droid.navigation.Transactor;
-import com.hazizz.droid.Communication.MiddleMan;
+import com.hazizz.droid.communication.MiddleMan;
 import com.hazizz.droid.R;
 
 import java.util.ArrayList;
@@ -279,99 +280,104 @@ public class ViewTaskFragment extends CommentableFragment implements AdapterView
 
             dest = bundle.getInt(Transactor.KEY_DEST);
 
+            PojoTask pojoTask = bundle.getParcelable(Transactor.KEY_OBJECT);
+
+            if(pojoTask != null){
+                proccessData(pojoTask);
+            }
+
         }else{Log.e("hey", "bundle is null");}
         getTask_rh = new CustomResponseHandler() {
             @Override
             public void onPOJOResponse(Object response) {
-
-                 PojoTaskDetailed pojoResponse = ( PojoTaskDetailed) response;
-
-                currentGroup = CurrentGroup.getInstance();
-
-                creatorId = (int) pojoResponse.getCreator().getId();
-
-                if(!isMyMode){
-                    if (pojoResponse.getGroup() != null) {
-                        groupName = pojoResponse.getGroup().getName();
-                        groupId = pojoResponse.getGroup().getId();
-                    }
-
-                    if(!currentGroup.groupIdIsSame(groupId)) {
-
-                        GenericListener gotAllGroupDataListener = new GenericListener() {
-                            @Override public void execute() {
-                                getComments();
-                                MeInfo meInfo = MeInfo.getInstance();
-                                Log.e("hey", "er3: " + meInfo.getRankInCurrentGroup().toString() + ", " + meInfo.getRankInCurrentGroup().getValue());
-                                if(meInfo.getUserId() == creatorId || meInfo.getRankInCurrentGroup().getValue() >= Strings.Rank.MODERATOR.getValue() ){
-                                    button_delete.setVisibility(View.VISIBLE);
-                                    button_edit.setVisibility(View.VISIBLE);
-                                }
-                            }
-                        };
-
-                        currentGroup.setGroup(getActivity(), groupId, groupName, gotAllGroupDataListener);
-                    }else{
-                        getComments();
-                    }
-
-                    button_send.setVisibility(View.VISIBLE);
-                    textView_commentTitle.setVisibility(View.VISIBLE);
-                    box_comment.setVisibility(View.VISIBLE);
-
-
-
-                }else{// is my task
-                    sRefreshLayout.setRefreshing(false);
-                    getActivity().setTitle(R.string.view_mytask);
-                    textView_group_.setVisibility(View.GONE);
-                    textView_group.setVisibility(View.GONE);
-                    textView_commentTitle.setVisibility(View.INVISIBLE);
-                    button_delete.setVisibility(View.VISIBLE);
-                    button_edit.setVisibility(View.VISIBLE);
-                }
-
-                taskId = (int)pojoResponse.getId();
-                type = pojoResponse.getType();
-                subject = pojoResponse.getSubject();
-
-                if(subject != null) {
-                    subjectName = subject.getName();
-                    subjectId = subject.getId();
-                }else{
-                    subjectName = getString(R.string.subject_none);
-                }
-
-                type = pojoResponse.getType();
-                title = pojoResponse.getTitle();
-                descripiton = pojoResponse.getDescription();
-                date = pojoResponse.getDueDate();
-
-
-                gotResponse = true;
-
-                int typeId = (int)pojoResponse.getType().getId();
-
-                String[] taskTypeArray = getResources().getStringArray(R.array.taskTypes);
-                textView_type.setText(taskTypeArray[typeId-1]);
-
-
-                textView_title.setText(title);
-                textView_description.setText(descripiton);
-
-                textView_creatorName.setText(pojoResponse.getCreator().getDisplayName());
-
-                textView_subject.setText(subjectName);
-                textView_group.setText(groupName);
-
-                textView_deadLine.setText(D8.textToDate(date).getMainFormat());
-
+                 PojoTaskDetailed pojoTaskDetailed = ( PojoTaskDetailed) response;
+                 proccessData(pojoTaskDetailed);
             }
         };
         getData();
 
         self = this;
         return v;
+    }
+
+    public void proccessData(PojoTask pojoTask){
+        currentGroup = CurrentGroup.getInstance();
+
+        creatorId = (int) pojoTask.getCreator().getId();
+
+        if(!isMyMode){
+            if (pojoTask.getGroup() != null) {
+                groupName = pojoTask.getGroup().getName();
+                groupId = pojoTask.getGroup().getId();
+            }
+
+            if(!currentGroup.groupIdIsSame(groupId)) {
+
+                GenericListener gotAllGroupDataListener = new GenericListener() {
+                    @Override public void execute() {
+                        getComments();
+                        MeInfo meInfo = MeInfo.getInstance();
+                        Log.e("hey", "er3: " + meInfo.getRankInCurrentGroup().toString() + ", " + meInfo.getRankInCurrentGroup().getValue());
+                        if(meInfo.getUserId() == creatorId || meInfo.getRankInCurrentGroup().getValue() >= Strings.Rank.MODERATOR.getValue() ){
+                            button_delete.setVisibility(View.VISIBLE);
+                            button_edit.setVisibility(View.VISIBLE);
+                        }
+                    }
+                };
+
+                currentGroup.setGroup(getActivity(), groupId, groupName, gotAllGroupDataListener);
+            }else{
+                getComments();
+            }
+
+            button_send.setVisibility(View.VISIBLE);
+            textView_commentTitle.setVisibility(View.VISIBLE);
+            box_comment.setVisibility(View.VISIBLE);
+
+        }else{// is my task
+            sRefreshLayout.setRefreshing(false);
+            getActivity().setTitle(R.string.view_mytask);
+            textView_group_.setVisibility(View.GONE);
+            textView_group.setVisibility(View.GONE);
+            textView_commentTitle.setVisibility(View.INVISIBLE);
+            button_delete.setVisibility(View.VISIBLE);
+            button_edit.setVisibility(View.VISIBLE);
+        }
+
+        taskId = (int)pojoTask.getId();
+        type = pojoTask.getType();
+        subject = pojoTask.getSubject();
+
+        if(subject != null) {
+            subjectName = subject.getName();
+            subjectId = subject.getId();
+        }else{
+            subjectName = getString(R.string.subject_none);
+        }
+
+        type = pojoTask.getType();
+        title = pojoTask.getTitle();
+        descripiton = pojoTask.getDescription();
+        date = pojoTask.getDueDate();
+
+
+        gotResponse = true;
+
+        int typeId = (int)pojoTask.getType().getId();
+
+        String[] taskTypeArray = getResources().getStringArray(R.array.taskTypes);
+        textView_type.setText(taskTypeArray[typeId-1]);
+
+
+        textView_title.setText(title);
+        textView_description.setText(descripiton);
+
+        textView_creatorName.setText(pojoTask.getCreator().getDisplayName());
+
+        textView_subject.setText(subjectName);
+        textView_group.setText(groupName);
+
+        textView_deadLine.setText(D8.textToDate(date).getMainFormat());
     }
 
     @Override

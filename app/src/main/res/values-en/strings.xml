@@ -154,6 +154,9 @@
     <string name="dangerous">Dangerous!!!</string>
     <string name="copied">Copied</string>
     <string name="copied_to_clipboard">Copied to clipboard</string>
+    <string name="message_from_devs">Message from devs</string>
+
+
 
     <string name="school_">School:</string>
 

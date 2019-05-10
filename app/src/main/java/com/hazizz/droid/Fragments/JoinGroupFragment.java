@@ -16,17 +16,17 @@ import android.widget.TextView;
 
 import com.hazizz.droid.other.AndroidThings;
 
-import com.hazizz.droid.Communication.requests.GetGroups;
-import com.hazizz.droid.Communication.requests.JoinGroup;
-import com.hazizz.droid.Communication.requests.JoinGroupByPassword;
-import com.hazizz.droid.Communication.Strings;
-import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
-import com.hazizz.droid.Communication.responsePojos.PojoError;
-import com.hazizz.droid.Communication.responsePojos.PojoGroup;
+import com.hazizz.droid.communication.requests.GetGroups;
+import com.hazizz.droid.communication.requests.JoinGroup;
+import com.hazizz.droid.communication.requests.JoinGroupByPassword;
+import com.hazizz.droid.communication.Strings;
+import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.communication.responsePojos.PojoError;
+import com.hazizz.droid.communication.responsePojos.PojoGroup;
 import com.hazizz.droid.fragments.ParentFragment.ParentFragment;
 import com.hazizz.droid.listeners.OnBackPressedListener;
 import com.hazizz.droid.navigation.Transactor;
-import com.hazizz.droid.Communication.MiddleMan;
+import com.hazizz.droid.communication.MiddleMan;
 import com.hazizz.droid.R;
 
 import java.util.ArrayList;

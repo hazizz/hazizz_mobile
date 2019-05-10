@@ -11,11 +11,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.hazizz.droid.activities.MainActivity;
-import com.hazizz.droid.Communication.MiddleMan;
+import com.hazizz.droid.communication.MiddleMan;
 
-import com.hazizz.droid.Communication.requests.GetLog;
-import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
-import com.hazizz.droid.Communication.responsePojos.PojoGroup;
+import com.hazizz.droid.communication.requests.GetLog;
+import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.communication.responsePojos.PojoGroup;
 import com.hazizz.droid.R;
 import java.util.List;
 

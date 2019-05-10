@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.hazizz.droid.cache.CurrentGroup;
 import com.hazizz.droid.cache.Member;
-import com.hazizz.droid.Communication.responsePojos.PojoMembersProfilePic;
+import com.hazizz.droid.communication.responsePojos.PojoMembersProfilePic;
 import com.hazizz.droid.fragments.ParentFragment.TabFragment;
 import com.hazizz.droid.listviews.UserList.CustomAdapter;
 import com.hazizz.droid.listviews.UserList.UserItem;

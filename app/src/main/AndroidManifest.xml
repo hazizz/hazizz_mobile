@@ -5,7 +5,8 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -15,55 +16,59 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.Light"
         android:windowSoftInputMode="adjustPan">
-
+        <activity
+            android:name=".activities.TheraActivity"
+            android:label="@string/title_activity_thera"
+            android:theme="@style/AppTheme.Light"/>
         <activity
             android:name=".activities.MainActivity"
-            android:noHistory="false"
-
-            android:configChanges="orientation|screenSize"
-            android:windowSoftInputMode="adjustResize"
             android:autoRemoveFromRecents="true"
-
+            android:configChanges="orientation|screenSize"
             android:launchMode="singleTop"
-
-            >
+            android:noHistory="false"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
 
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="https" android:host="hazizz.page.link"/>
-                <data android:scheme="https" android:host="hazizz.github.io"/>
-                <data android:scheme="https" android:host="hazizz.duckdns.org:9000" />
+                <data
+                    android:host="hazizz.page.link"
+                    android:scheme="https" />
+                <data
+                    android:host="hazizz.github.io"
+                    android:scheme="https" />
+                <data
+                    android:host="hazizz.duckdns.org:9000"
+                    android:scheme="https" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activities.AuthActivity"
+            android:configChanges="orientation|screenSize"
             android:noHistory="false"
-            android:windowSoftInputMode="adjustPan"
-            android:configChanges="orientation|screenSize">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:windowSoftInputMode="adjustPan">
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
-
         <activity
             android:name=".activities.FeedbackActivity"
-            android:noHistory="true"
+            android:noHistory="false"
             android:windowSoftInputMode="adjustPan" />
-
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:theme="@style/ImageCropTheme"/>
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/ImageCropTheme" />
 
         <service
-            android:name="com.hazizz.droid.widget.tasks.CollectionWidgetService"
+            android:name=".widget.tasks.CollectionWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
-        <receiver android:name="com.hazizz.droid.widget.tasks.CollectionWidgetProvider"
+        <receiver
+            android:name=".widget.tasks.CollectionWidgetProvider"
             android:label="@string/tasks">
             <intent-filter>
                 <action android:name="com.hazizz.droid.widget.tasks.WIDGET_OPENAPPBUTTON" />
@@ -78,16 +83,14 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/hazizz_widget_info" />
         </receiver>
-
-        <receiver android:name="com.hazizz.droid.receiver.NetworkChangeReceiver" >
+        <receiver android:name=".receiver.NetworkChangeReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
                 <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
             </intent-filter>
         </receiver>
-
-
-  <!--      <service
+        <!--
+      <service
             android:name="com.hazizz.droid.widget.schedules.CollectionWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
@@ -107,22 +110,20 @@
                 android:resource="@xml/info_widget_thera_schedules" />
         </receiver>
         -->
-        <!--  <service
+        <!--
+  <service
               android:name="com.hazizz.droid.Notification.NotificationIntentService"
               android:exported="false" >
-          </service> -->
-
-        <receiver android:name="com.hazizz.droid.notification.NotificationReceiver" />
-
+          </service>
+        -->
+        <receiver android:name=".notification.NotificationReceiver" />
 
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="0f9021718173dec04323139822a86d8a00779cc8" />
-
         <meta-data
             android:name="firebase_crashlytics_collection_enabled"
             android:value="false" />
-
     </application>
 
 </manifest>

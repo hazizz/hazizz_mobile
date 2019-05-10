@@ -31,19 +31,21 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
+import com.hazizz.droid.cache.HCache;
+import com.hazizz.droid.other.AndroidThings;
 import com.hazizz.droid.other.AppInfo;
 import com.hazizz.droid.cache.MeInfo.MeInfo;
 
-import com.hazizz.droid.Communication.requests.GetMyProfilePic;
-import com.hazizz.droid.Communication.requests.JoinGroup;
-import com.hazizz.droid.Communication.requests.Me;
-import com.hazizz.droid.Communication.requests.MessageOfTheDay;
-import com.hazizz.droid.Communication.requests.parent.Request;
-import com.hazizz.droid.Communication.Strings;
-import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
-import com.hazizz.droid.Communication.responsePojos.PojoError;
-import com.hazizz.droid.Communication.responsePojos.PojoMe;
-import com.hazizz.droid.Communication.responsePojos.PojoPicSmall;
+import com.hazizz.droid.communication.requests.GetMyProfilePic;
+import com.hazizz.droid.communication.requests.JoinGroup;
+import com.hazizz.droid.communication.requests.Me;
+import com.hazizz.droid.communication.requests.MessageOfTheDay;
+import com.hazizz.droid.communication.requests.parent.Request;
+import com.hazizz.droid.communication.Strings;
+import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.communication.responsePojos.PojoError;
+import com.hazizz.droid.communication.responsePojos.PojoMe;
+import com.hazizz.droid.communication.responsePojos.PojoPicSmall;
 import com.hazizz.droid.converter.Converter;
 import com.hazizz.droid.fragments.GroupTabs.GetGroupMembersFragment;
 import com.hazizz.droid.fragments.GroupTabs.GroupAnnouncementFragment;
@@ -58,9 +60,10 @@ import com.hazizz.droid.listeners.OnBackPressedListener;
 import com.hazizz.droid.notification.TaskReporterNotification;
 import com.hazizz.droid.other.SharedPrefs;
 import com.hazizz.droid.navigation.Transactor;
-import com.hazizz.droid.Communication.MiddleMan;
+import com.hazizz.droid.communication.MiddleMan;
 import com.hazizz.droid.R;
 import com.hazizz.droid.manager.ThreadManager;
+import com.hazizz.droid.other.Theme;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -118,66 +121,42 @@ public class MainActivity extends AppCompatActivity
     private boolean gotMyProfilePicRespond = false;
 
     private boolean toMainFrag = false;
-    CustomResponseHandler rh_profilePic = new CustomResponseHandler() {
-        @Override
-        public void onPOJOResponse(Object response) {
-            Bitmap bitmap = Converter.imageFromText(getBaseContext(),
-                    ((PojoPicSmall)response).getData().split(",")[1]);
-            bitmap = Converter.scaleBitmapToRegular(bitmap);
-            bitmap = Converter.getCroppedBitmap(bitmap);
 
-            meInfo.setProfilePic(Converter.imageToText(bitmap));
-            setProfileImageInNav(bitmap);
-        }
-    };
+    private static boolean hasInstance = false;
 
-    CustomResponseHandler responseHandler = new CustomResponseHandler() {
-        @Override
-        public void onPOJOResponse(Object response) {
-            PojoMe pojo = (PojoMe) response;
-            SharedPrefs.save(getApplicationContext(),"userInfo", "username",pojo.getUsername());
-            strNavEmail = (pojo.getEmailAddress());
-            strNavUsername = (pojo.getUsername());
-            strNavDisplayName = (pojo.getDisplayName());
-            meInfo.setUserId(pojo.getId());
-            meInfo.setProfileName(strNavUsername);
-            meInfo.setDisplayName(strNavDisplayName);
-            meInfo.setProfileEmail(strNavEmail);
-            setDisplayNameInNav(strNavDisplayName);
-            navEmail.setText(strNavEmail);
-        }
-    };
+    public static boolean hasInstance(){
+        return hasInstance;
+    }
 
-    CustomResponseHandler rh_motd = new CustomResponseHandler() {
-        @Override
-        public void onPOJOResponse(Object response) {
-            String motd = (String)response;
-            if(!motd.equals("") && !SharedPrefs.getString(getBaseContext(), "motd", "message").equals(motd)) {
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
-                    alertDialogBuilder.setTitle("Napi üzenet");
-                    alertDialogBuilder
-                        .setMessage(motd)
-                        .setCancelable(true)
-                        .setPositiveButton("Oké", (dialog, id) -> {
-                            SharedPrefs.save(getBaseContext(), "motd", "message", motd);
-                            dialog.cancel();
-                        });
-                    AlertDialog alertDialog = alertDialogBuilder.create();
-                    alertDialog.show();
-            }
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        hasInstance = true;
 
-        if(AppInfo.isDarkMode(getBaseContext())){
+        if(Theme.isDarkMode(getBaseContext())){
             setTheme(R.style.AppTheme_Dark);
         }else{
             setTheme(R.style.AppTheme_Light);
         }
 
         super.onCreate(savedInstanceState);
+
+        if(AppInfo.isFirstTimeLaunched(getBaseContext())){
+            Transactor.authActivity(getBaseContext());
+            TaskReporterNotification.enable(getBaseContext());
+            TaskReporterNotification.setScheduleForNotification(getBaseContext(), 17, 0);
+        }else{
+            TaskReporterNotification.remindScheduleForNotification(getBaseContext());
+        }
+
+        if(!AppInfo.isLoggedIn(getBaseContext()) || !AppInfo.isAutoLogin(getBaseContext())
+            || SharedPrefs.TokenManager.getRefreshToken(this).equals("used")){
+            Log.e("hey", "status443 is LOggedIn: " + AppInfo.isLoggedIn(getBaseContext()));
+            Log.e("hey", "status443 is isAutoLogin: " + AppInfo.isAutoLogin(getBaseContext()));
+            Log.e("hey", "status443 is TokenManager: " + SharedPrefs.TokenManager.getRefreshToken(this).equals("used"));
+            finish();
+            Transactor.authActivity(getBaseContext());
+        }
 
         //if (!BuildConfig.DEBUG) { // only enable bug tracking in release version
         Fabric.with(this, new Crashlytics());
@@ -190,44 +169,44 @@ public class MainActivity extends AppCompatActivity
         meInfo = MeInfo.getInstance();
 
         FirebaseDynamicLinks.getInstance()
-                .getDynamicLink(getIntent())
-                .addOnSuccessListener(this, new OnSuccessListener<PendingDynamicLinkData>() {
-                    @Override
-                    public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
-                        // Get deep link from result (may be null if no link is found)
-                        Uri deepLink = null;
-                        if (pendingDynamicLinkData != null) {
-                            deepLink = pendingDynamicLinkData.getLink();
-                        }
-                        if(deepLink!=null){
-                            int groupId = Integer.parseInt(deepLink.getQueryParameter("group"));
+            .getDynamicLink(getIntent())
+            .addOnSuccessListener(this, new OnSuccessListener<PendingDynamicLinkData>() {
+                @Override
+                public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
+                    // Get deep link from result (may be null if no link is found)
+                    Uri deepLink = null;
+                    if (pendingDynamicLinkData != null) {
+                        deepLink = pendingDynamicLinkData.getLink();
+                    }
+                    if(deepLink!=null){
+                        int groupId = Integer.parseInt(deepLink.getQueryParameter("group"));
 
-                                CustomResponseHandler rh_joinGroup = new CustomResponseHandler() {
+                            CustomResponseHandler rh_joinGroup = new CustomResponseHandler() {
 
-                                    @Override public void onErrorResponse(PojoError error) {
-                                        if(error.getErrorCode() == 55){ // user already in group
-                                            Transactor.fragmentMainGroup(getSupportFragmentManager().beginTransaction(), groupId);
-                                            Toast.makeText(thisActivity, getString(R.string.already_in_group),
-                                                    Toast.LENGTH_LONG).show();
-                                        }
-                                    }
-                                    @Override public void onSuccessfulResponse() {
+                                @Override public void onErrorResponse(PojoError error) {
+                                    if(error.getErrorCode() == 55){ // user already in group
                                         Transactor.fragmentMainGroup(getSupportFragmentManager().beginTransaction(), groupId);
-                                        Toast.makeText(thisActivity, getString(R.string.added_to_group),
+                                        Toast.makeText(thisActivity, getString(R.string.already_in_group),
                                                 Toast.LENGTH_LONG).show();
                                     }
-                                };
-                                MiddleMan.newRequest(new JoinGroup(thisActivity, rh_joinGroup, groupId));
-                        }
-                        Log.e("hey", "dynamic link lol: " + deepLink);
+                                }
+                                @Override public void onSuccessfulResponse() {
+                                    Transactor.fragmentMainGroup(getSupportFragmentManager().beginTransaction(), groupId);
+                                    Toast.makeText(thisActivity, getString(R.string.added_to_group),
+                                            Toast.LENGTH_LONG).show();
+                                }
+                            };
+                            MiddleMan.newRequest(new JoinGroup(thisActivity, rh_joinGroup, groupId));
                     }
-                })
-                .addOnFailureListener(this, new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("hey", "getDynamicLink:onFailure", e);
-                    }
-                });
+                    Log.e("hey", "dynamic link lol: " + deepLink);
+                }
+            })
+            .addOnFailureListener(this, new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.w("hey", "getDynamicLink:onFailure", e);
+                }
+            });
 
         setContentView(R.layout.activity_main);
 
@@ -274,6 +253,9 @@ public class MainActivity extends AppCompatActivity
         });
         navView = (NavigationView) findViewById(R.id.nav_view);
 
+        navView.inflateMenu(R.menu.activity_main_drawer);
+
+
         navView.setNavigationItemSelectedListener(this);
         navView.bringToFront();
 
@@ -286,12 +268,11 @@ public class MainActivity extends AppCompatActivity
         imageButton_darkMode = findViewById(R.id.imageButton_darkMode);
         imageButton_darkMode.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-
-                if(AppInfo.isDarkMode(getBaseContext())){
-                    AppInfo.setDarkMode(getBaseContext(), false);
+                if(Theme.isDarkMode(getBaseContext())){
+                    Theme.setDarkMode(getBaseContext(), false);
                     setTheme(R.style.AppTheme_Light);
                 }else{
-                    AppInfo.setDarkMode(getBaseContext(), true);
+                    Theme.setDarkMode(getBaseContext(), true);
                     setTheme(R.style.AppTheme_Dark);
                 }
 
@@ -300,8 +281,7 @@ public class MainActivity extends AppCompatActivity
                 finish();
 
                 startActivity(intent);
-                // removes the slide animation
-                overridePendingTransition(0, 0);
+                AndroidThings.removeSlideAnimation(thisActivity);
             }
         });
 
@@ -319,8 +299,35 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onDrawerOpened(@NonNull View drawerView) {
                 if(!gotMyProfilePicRespond){
-                    MiddleMan.newRequest(new Me(thisActivity, responseHandler));
-                    MiddleMan.newRequest(new GetMyProfilePic(thisActivity, rh_profilePic));
+                    navUsername.setText(HCache.getInstance().getDisplayUsername(getBaseContext()));
+                    MiddleMan.newRequest(new Me(thisActivity, new CustomResponseHandler() {
+                        @Override
+                        public void onPOJOResponse(Object response) {
+                        PojoMe pojo = (PojoMe) response;
+                        HCache.getInstance().setUsername(getBaseContext(), pojo.getUsername());
+                        HCache.getInstance().setDisplayUsername(getBaseContext(), pojo.getDisplayName());
+                        strNavEmail = (pojo.getEmailAddress());
+                        strNavUsername = (pojo.getUsername());
+                        strNavDisplayName = (pojo.getDisplayName());
+                        meInfo.setUserId(pojo.getId());
+                        meInfo.setProfileName(strNavUsername);
+                        meInfo.setDisplayName(strNavDisplayName);
+                        meInfo.setProfileEmail(strNavEmail);
+                        navUsername.setText(strNavDisplayName);
+                        navEmail.setText(strNavEmail);
+                        }
+                    }));
+                    MiddleMan.newRequest(new GetMyProfilePic(thisActivity,  new CustomResponseHandler() {
+                        @Override
+                        public void onPOJOResponse(Object response) {
+                        Bitmap bitmap = Converter.imageFromText(getBaseContext(),
+                                ((PojoPicSmall)response).getData().split(",")[1]);
+                        bitmap = Converter.scaleBitmapToRegular(bitmap);
+                        bitmap = Converter.getCroppedBitmap(bitmap);
+                        meInfo.setProfilePic(Converter.imageToText(bitmap));
+                        setProfileImageInNav(bitmap);
+                        }
+                    }));
                     gotMyProfilePicRespond = true;
                 }
             }
@@ -337,31 +344,47 @@ public class MainActivity extends AppCompatActivity
 
         navLogout.setOnClickListener(new View.OnClickListener() {
              @Override public void onClick(View view) {
+                 AppInfo.setLoggedIn(getBaseContext(), false);
+
                  SharedPrefs.savePref(getBaseContext(), "autoLogin", "autoLogin", false);
                  SharedPrefs.TokenManager.invalidateTokens(getBaseContext());
                  SharedPrefs.ThSessionManager.clearSession(getBaseContext());
                  SharedPrefs.ThLoginData.clearAllData(getBaseContext());
-                 Intent i = new Intent(thisActivity, AuthActivity.class);
+                 HCache.getInstance().clearData(getBaseContext());
                  finish();
-                 startActivity(i);
+                 Transactor.authActivity(getBaseContext());
              }
         });
 
-        MiddleMan.newRequest(new MessageOfTheDay(this, rh_motd));
-
-        if(AppInfo.isFirstTimeLaunched(getBaseContext())){
-            Transactor.authActivity(getBaseContext());
-            TaskReporterNotification.enable(getBaseContext());
-            TaskReporterNotification.setScheduleForNotification(getBaseContext(), 17, 0);
+        if(AppInfo.motdADayHasPassed(getBaseContext())) {
+            MiddleMan.newRequest(new MessageOfTheDay(this, new CustomResponseHandler() {
+                @Override
+                public void onPOJOResponse(Object response) {
+                    String motd = (String) response;
+                    if (!motd.equals("") && !SharedPrefs.getString(getBaseContext(), "motd", "message").equals(motd)) {
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+                        alertDialogBuilder.setTitle(R.string.message_from_devs);
+                        alertDialogBuilder
+                                .setMessage(motd)
+                                .setCancelable(true)
+                                .setPositiveButton("Oké", (dialog, id) -> {
+                                    SharedPrefs.save(getBaseContext(), "motd", "message", motd);
+                                    dialog.cancel();
+                                });
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+                        alertDialog.show();
+                    }
+                }
+            }));
         }
 
-        if(AppInfo.isDarkMode(getBaseContext())){
+        if(Theme.isDarkMode(getBaseContext())){
             imageButton_darkMode.setImageDrawable(getResources().getDrawable(R.drawable.ic_sun));
         }else{
             imageButton_darkMode.setImageDrawable(getResources().getDrawable(R.drawable.ic_moon_gray));
         }
 
-        boolean receivedIntentTask = receiveIntentTask();
+        boolean receivedIntentTask = receiveIntentTask(getIntent());
         if(!receivedIntentTask && toMainFrag) {
             toMainFrag();
             toMainFrag = false;
@@ -370,13 +393,18 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onResume() {
-        receiveIntentTask();
+        receiveIntentTask(getIntent());
         super.onResume();
         Log.e("hey", "onResume is trigered");
     }
 
-    private boolean receiveIntentTask(){
-        Intent intent = getIntent();
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        receiveIntentTask(intent);
+    }
+
+    private boolean receiveIntentTask(Intent intent){
         String mode = intent.getStringExtra(key_INTENT_MODE);
         if(mode != null){
             if(mode.equals(value_INTENT_MODE_VIEWTASK)) {
@@ -468,6 +496,10 @@ public class MainActivity extends AppCompatActivity
     public void removeOnBackPressedListener(){
         currentBackPressedListener = null;
     }
+
+
+
+
 
     @Override
     public void onBackPressed() {

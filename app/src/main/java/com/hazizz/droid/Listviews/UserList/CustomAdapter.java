@@ -12,7 +12,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.hazizz.droid.Communication.Strings;
+import com.hazizz.droid.communication.Strings;
 import com.hazizz.droid.converter.Converter;
 import com.hazizz.droid.R;
 
