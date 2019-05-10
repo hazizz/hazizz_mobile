@@ -1,13 +1,13 @@
-package com.hazizz.droid.Communication.responsePojos.taskPojos;
+package com.hazizz.droid.communication.responsePojos.taskPojos;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.hazizz.droid.Communication.responsePojos.Pojo;
-import com.hazizz.droid.Communication.responsePojos.PojoAssignation;
-import com.hazizz.droid.Communication.responsePojos.PojoGroup;
-import com.hazizz.droid.Communication.responsePojos.PojoSubject;
-import com.hazizz.droid.Communication.responsePojos.PojoType;
+import com.hazizz.droid.communication.responsePojos.Pojo;
+import com.hazizz.droid.communication.responsePojos.PojoAssignation;
+import com.hazizz.droid.communication.responsePojos.PojoGroup;
+import com.hazizz.droid.communication.responsePojos.PojoSubject;
+import com.hazizz.droid.communication.responsePojos.PojoType;
 
 import lombok.Data;
 
@@ -19,18 +19,16 @@ public class PojoTask implements Parcelable, Pojo {
     private PojoType type;
     private String title;
     private String description;
-    private String creationDate;
     private String dueDate;
     private PojoCreator creator;
     private PojoGroup group;
     private PojoSubject subject;
 
-    public PojoTask(int id, PojoType type, String title, String description, String creationDate, String dueDate, PojoCreator creator,
+    public PojoTask(int id, PojoType type, String title, String description, String dueDate, PojoCreator creator,
                        PojoGroup group,  PojoSubject subject){
         this.id = id;
         this.type = type;
         this.title = title;
-        this.creationDate = creationDate;
         this.description = description;
         this.subject = subject;
         this.dueDate = dueDate;
@@ -42,7 +40,6 @@ public class PojoTask implements Parcelable, Pojo {
         id = in.readInt();
         title = in.readString();
         description = in.readString();
-        creationDate = in.readString();
         dueDate = in.readString();
     }
 
@@ -68,7 +65,6 @@ public class PojoTask implements Parcelable, Pojo {
         dest.writeInt(id);
         dest.writeString(title);
         dest.writeString(description);
-        dest.writeString(creationDate);
         dest.writeString(dueDate);
     }
 }

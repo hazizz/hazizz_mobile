@@ -4,15 +4,15 @@ import android.app.Activity;
 import android.util.Log;
 import android.util.SparseArray;
 
-import com.hazizz.droid.Communication.MiddleMan;
+import com.hazizz.droid.communication.MiddleMan;
 
-import com.hazizz.droid.Communication.requests.GetGroupMemberPermisions;
-import com.hazizz.droid.Communication.requests.GetGroupMembersProfilePic;
-import com.hazizz.droid.Communication.Strings;
-import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
-import com.hazizz.droid.Communication.responsePojos.PojoMembersProfilePic;
-import com.hazizz.droid.Communication.responsePojos.PojoPermisionUsers;
-import com.hazizz.droid.Communication.responsePojos.PojoUser;
+import com.hazizz.droid.communication.requests.GetGroupMemberPermisions;
+import com.hazizz.droid.communication.requests.GetGroupMembersProfilePic;
+import com.hazizz.droid.communication.Strings;
+import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.communication.responsePojos.PojoMembersProfilePic;
+import com.hazizz.droid.communication.responsePojos.PojoPermisionUsers;
+import com.hazizz.droid.communication.responsePojos.PojoUser;
 import com.hazizz.droid.listeners.GenericListener;
 
 import java.util.HashMap;

@@ -46,6 +46,8 @@
     <color name="colorTheraGradeWeight150">#13a300</color>
 
 
+    <color name="colorIcon_dark">#ECECEC</color>
+    <color name="colorIcon_light">#202020</color>
     <color name="colorTextColorPrimary_light">#2E2E2E</color>
     <color name="colorTextColorSecondary_light">#2E2E2E</color>
 

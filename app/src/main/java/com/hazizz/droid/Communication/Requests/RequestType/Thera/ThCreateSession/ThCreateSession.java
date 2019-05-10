@@ -1,12 +1,12 @@
-package com.hazizz.droid.Communication.requests.RequestType.Thera.ThCreateSession;
+package com.hazizz.droid.communication.requests.RequestType.Thera.ThCreateSession;
 
 import android.app.Activity;
 import android.util.Log;
 
 
-import com.hazizz.droid.Communication.requests.parent.ThRequest;
-import com.hazizz.droid.Communication.requests.RequestType.Thera.PojoSession;
-import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.communication.requests.parent.ThRequest;
+import com.hazizz.droid.communication.requests.RequestType.Thera.PojoSession;
+import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
 
 
 import okhttp3.ResponseBody;

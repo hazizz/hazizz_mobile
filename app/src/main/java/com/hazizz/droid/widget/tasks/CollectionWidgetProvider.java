@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
-import com.hazizz.droid.activities.AuthActivity;
 import com.hazizz.droid.activities.MainActivity;
 import com.hazizz.droid.R;
 
@@ -207,7 +206,7 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
             setRefreshButton(context, widgetView);
             setOpenAppButton(context, widgetView);
 
-            Intent i = new Intent(context, AuthActivity.class);
+            Intent i = new Intent(context, MainActivity.class);
             i.putExtra(MainActivity.key_INTENT_MODE, MainActivity.value_INTENT_MODE_CHOOSER);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(i);

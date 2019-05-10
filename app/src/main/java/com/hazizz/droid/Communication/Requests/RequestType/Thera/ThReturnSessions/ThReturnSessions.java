@@ -1,13 +1,13 @@
-package com.hazizz.droid.Communication.requests.RequestType.Thera.ThReturnSessions;
+package com.hazizz.droid.communication.requests.RequestType.Thera.ThReturnSessions;
 
 import android.app.Activity;
 import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
 
-import com.hazizz.droid.Communication.requests.parent.ThRequest;
-import com.hazizz.droid.Communication.requests.RequestType.Thera.PojoSession;
-import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.communication.requests.parent.ThRequest;
+import com.hazizz.droid.communication.requests.RequestType.Thera.PojoSession;
+import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;

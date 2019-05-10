@@ -15,14 +15,14 @@ import android.widget.TextView;
 
 
 
-import com.hazizz.droid.Communication.requests.RequestType.Thera.PojoSession;
-import com.hazizz.droid.Communication.requests.RequestType.Thera.ThAuthenticateSession;
-import com.hazizz.droid.Communication.requests.RequestType.Thera.ThCreateSession.ThCreateSession;
-import com.hazizz.droid.Communication.requests.RequestType.Thera.ThSchools;
-import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
-import com.hazizz.droid.Communication.responsePojos.PojoError;
+import com.hazizz.droid.communication.requests.RequestType.Thera.PojoSession;
+import com.hazizz.droid.communication.requests.RequestType.Thera.ThAuthenticateSession;
+import com.hazizz.droid.communication.requests.RequestType.Thera.ThCreateSession.ThCreateSession;
+import com.hazizz.droid.communication.requests.RequestType.Thera.ThSchools;
+import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.communication.responsePojos.PojoError;
 import com.hazizz.droid.other.CustomSearchableSpinner;
-import com.hazizz.droid.Communication.MiddleMan;
+import com.hazizz.droid.communication.MiddleMan;
 import com.hazizz.droid.fragments.ParentFragment.ParentFragment;
 import com.hazizz.droid.R;
 import com.hazizz.droid.other.SharedPrefs;
@@ -131,7 +131,7 @@ public class TheraLoginFragment extends ParentFragment {
         spinner_schools.setPositiveButton(getString(R.string.close));
 
 
-        MiddleMan.newThRequest(new ThSchools(getActivity(), rh_getSchools));
+        MiddleMan.newRequest(new ThSchools(getActivity(), rh_getSchools));
 
 
         button_users = v.findViewById(R.id.button_users);
@@ -150,10 +150,10 @@ public class TheraLoginFragment extends ParentFragment {
 
                 if(!username2.isEmpty() || !password2.isEmpty()){
                     if(authSession == defaultValue){
-                        MiddleMan.newThRequest(new ThCreateSession(getActivity(), rh_session, username2, password2, chosenSchool));
+                        MiddleMan.newRequest(new ThCreateSession(getActivity(), rh_session, username2, password2, chosenSchool));
 
                     }else{
-                        MiddleMan.newThRequest(new ThAuthenticateSession(getActivity(), rh_session, authSession, password2));
+                        MiddleMan.newRequest(new ThAuthenticateSession(getActivity(), rh_session, authSession, password2));
                     }
                 }
 

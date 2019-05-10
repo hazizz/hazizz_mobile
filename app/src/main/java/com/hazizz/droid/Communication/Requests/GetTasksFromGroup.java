@@ -1,13 +1,13 @@
-package com.hazizz.droid.Communication.requests;
+package com.hazizz.droid.communication.requests;
 
 import android.app.Activity;
 import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
 
-import com.hazizz.droid.Communication.requests.parent.Request;
-import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
-import com.hazizz.droid.Communication.responsePojos.taskPojos.PojoTask;
+import com.hazizz.droid.communication.requests.parent.Request;
+import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.communication.responsePojos.taskPojos.PojoTask;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -18,7 +18,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 public class GetTasksFromGroup extends Request {
-    String p_groupId;
+    private String p_groupId;
     public GetTasksFromGroup(Activity act, CustomResponseHandler rh, int p_groupId) {
         super(act, rh);
         Log.e("hey", "created GetTasksFromGroup object");
@@ -44,7 +44,6 @@ public class GetTasksFromGroup extends Request {
             e.printStackTrace();
             Log.e("hey", "ioexception lololol");
         }
-
         cOnResponse.onPOJOResponse(castedList);
     }
 }

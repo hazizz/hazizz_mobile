@@ -2,7 +2,7 @@ package com.hazizz.droid.manager;
 
 import android.content.Context;
 
-import com.hazizz.droid.Communication.RequestSenderRunnable;
+import com.hazizz.droid.communication.RequestSenderRunnable;
 
 import java.util.Set;
 

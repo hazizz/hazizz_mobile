@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,11 +18,14 @@ import android.widget.TextView;
 import com.hazizz.droid.cache.CurrentGroup;
 import com.hazizz.droid.cache.HCache;
 
-import com.hazizz.droid.Communication.requests.GetTasksFromGroup;
-import com.hazizz.droid.Communication.Strings;
-import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
-import com.hazizz.droid.Communication.responsePojos.PojoError;
-import com.hazizz.droid.Communication.responsePojos.taskPojos.PojoTask;
+import com.hazizz.droid.communication.requests.GetTasksFromGroup;
+import com.hazizz.droid.communication.Strings;
+import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.communication.responsePojos.PojoError;
+import com.hazizz.droid.communication.responsePojos.taskPojos.PojoTask;
+import com.hazizz.droid.listviews.Item;
+import com.hazizz.droid.listviews.OnTouchListener;
+import com.hazizz.droid.listviews.TaskList.TaskItemAdapter;
 import com.hazizz.droid.other.D8;
 import com.hazizz.droid.fragments.ParentFragment.TabFragment;
 import com.hazizz.droid.fragments.ViewTaskFragment;
@@ -28,7 +33,7 @@ import com.hazizz.droid.listviews.HeaderItem;
 import com.hazizz.droid.listviews.TaskList.Group.CustomAdapter;
 import com.hazizz.droid.listviews.TaskList.TaskItem;
 import com.hazizz.droid.navigation.Transactor;
-import com.hazizz.droid.Communication.MiddleMan;
+import com.hazizz.droid.communication.MiddleMan;
 import com.hazizz.droid.R;
 
 import java.util.ArrayList;
@@ -42,8 +47,8 @@ public class GroupMainFragment extends TabFragment {
     private static int groupId;
     private static String groupName;
 
-    private CustomAdapter adapter;
-    private List<Object> itemList;
+    private TaskItemAdapter adapter;
+    private ArrayList<Item> itemList;
 
     private TextView textView_noContent;
     private SwipeRefreshLayout sRefreshLayout;
@@ -88,22 +93,28 @@ public class GroupMainFragment extends TabFragment {
     void createViewList(){
         itemList = new ArrayList<>();
 
-        ListView listView = (ListView)v.findViewById(R.id.listView2);
+        RecyclerView recyclerView = v.findViewById(R.id.recyclerView);
 
-        adapter = new CustomAdapter(getActivity(), itemList);
-        listView.setAdapter(adapter);
+        adapter = new TaskItemAdapter(getContext(), itemList, TaskItemAdapter.groupTasks);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(adapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        recyclerView.addOnItemTouchListener(new OnTouchListener(getContext(), recyclerView, new OnTouchListener.OnTouchActionListener() {
+            @Override public void onLeftSwipe(View view, int position) { }
+            @Override public void onRightSwipe(View view, int position) {}
+
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Object item = listView.getItemAtPosition(i);
+            public void onClick(View view, int position) {
+                Object item = adapter.getItem(position);
                 if(item instanceof TaskItem){
+                    TaskItem taskItem = (TaskItem)item;
                     Transactor.fragmentViewTask(getFragmentManager().beginTransaction(),
-                            ((TaskItem) item).getTaskId(),
+                            taskItem.getTaskId(),
                             true, Strings.Dest.TOGROUP, ViewTaskFragment.publicMode);
                 }
             }
-        });
+        }));
     }
 
     private void processData(List<PojoTask> data){
@@ -122,7 +133,7 @@ public class GroupMainFragment extends TabFragment {
                         itemList.add(new HeaderItem(date));
                         lastDaysLeft = daysLeft;
                     }
-                    itemList.add(new TaskItem(R.drawable.ic_launcher_background, t.getTitle(),
+                    itemList.add(new TaskItem(t.getTitle(),
                             t.getDescription(), t.getGroup(), t.getCreator(), t.getSubject(), t.getId()));
                 }
                 adapter.notifyDataSetChanged();
@@ -141,7 +152,7 @@ public class GroupMainFragment extends TabFragment {
             @Override
             public void onPOJOResponse(Object response) {
 
-                ArrayList< PojoTask> sortedData = D8.sortTasksByDate((ArrayList< PojoTask>) response);
+                List< PojoTask> sortedData = D8.sortTasksByDate((List< PojoTask>) response);
                 processData(sortedData);
             }
             @Override

@@ -1,6 +1,6 @@
 package com.hazizz.droid.cache.MeInfo;
 
-import com.hazizz.droid.Communication.Strings;
+import com.hazizz.droid.communication.Strings;
 
 import lombok.Data;
 

@@ -15,15 +15,15 @@ import android.widget.TextView;
 
 import com.hazizz.droid.cache.CurrentGroup;
 
-import com.hazizz.droid.Communication.requests.GetSubjects;
-import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
-import com.hazizz.droid.Communication.responsePojos.PojoError;
-import com.hazizz.droid.Communication.responsePojos.PojoSubject;
+import com.hazizz.droid.communication.requests.GetSubjects;
+import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.communication.responsePojos.PojoError;
+import com.hazizz.droid.communication.responsePojos.PojoSubject;
 import com.hazizz.droid.fragments.ParentFragment.TabFragment;
 import com.hazizz.droid.listviews.SubjectList.CustomAdapter;
 import com.hazizz.droid.listviews.SubjectList.SubjectItem;
 import com.hazizz.droid.navigation.Transactor;
-import com.hazizz.droid.Communication.MiddleMan;
+import com.hazizz.droid.communication.MiddleMan;
 import com.hazizz.droid.R;
 
 import java.util.ArrayList;

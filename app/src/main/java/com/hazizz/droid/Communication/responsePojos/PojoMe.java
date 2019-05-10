@@ -1,4 +1,4 @@
-package com.hazizz.droid.Communication.responsePojos;
+package com.hazizz.droid.communication.responsePojos;
 
 import java.util.List;
 

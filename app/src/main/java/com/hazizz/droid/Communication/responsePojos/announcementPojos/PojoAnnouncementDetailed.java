@@ -1,9 +1,9 @@
-package com.hazizz.droid.Communication.responsePojos.announcementPojos;
+package com.hazizz.droid.communication.responsePojos.announcementPojos;
 
-import com.hazizz.droid.Communication.responsePojos.PojoGroup;
-import com.hazizz.droid.Communication.responsePojos.Pojo;
-import com.hazizz.droid.Communication.responsePojos.PojoSubject;
-import com.hazizz.droid.Communication.responsePojos.taskPojos.PojoCreator;
+import com.hazizz.droid.communication.responsePojos.PojoGroup;
+import com.hazizz.droid.communication.responsePojos.Pojo;
+import com.hazizz.droid.communication.responsePojos.PojoSubject;
+import com.hazizz.droid.communication.responsePojos.taskPojos.PojoCreator;
 
 import lombok.Data;
 

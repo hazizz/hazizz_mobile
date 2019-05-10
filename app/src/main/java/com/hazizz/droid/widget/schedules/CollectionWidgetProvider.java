@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.hazizz.droid.activities.AuthActivity;
 import com.hazizz.droid.R;
+import com.hazizz.droid.activities.MainActivity;
 
 public class CollectionWidgetProvider extends AppWidgetProvider {
 
@@ -177,7 +178,7 @@ public class CollectionWidgetProvider extends AppWidgetProvider {
         }
 
         else if (WIDGET_LEFTBUTTON.equals(intent.getAction())) {
-            Intent i = new Intent(context, AuthActivity.class);
+            Intent i = new Intent(context, MainActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(i);
             Log.e("hey", "CLICK WIDGET_OPENAPPBUTTON");

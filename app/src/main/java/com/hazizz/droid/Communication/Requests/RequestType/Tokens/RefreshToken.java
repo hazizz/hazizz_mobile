@@ -1,14 +1,16 @@
-package com.hazizz.droid.Communication.requests.RequestType.Tokens;
+package com.hazizz.droid.communication.requests.RequestType.Tokens;
 
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
-import com.hazizz.droid.Communication.MiddleMan;
-import com.hazizz.droid.Communication.requests.parent.Request;
-import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
-import com.hazizz.droid.Communication.responsePojos.PojoError;
-import com.hazizz.droid.Communication.responsePojos.PojoRefreshToken;
+import com.hazizz.droid.cache.HCache;
+import com.hazizz.droid.communication.MiddleMan;
+import com.hazizz.droid.communication.requests.parent.AuthRequest;
+import com.hazizz.droid.communication.requests.parent.Request;
+import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.communication.responsePojos.PojoError;
+import com.hazizz.droid.communication.responsePojos.PojoRefreshToken;
 import com.hazizz.droid.other.SharedPrefs;
 import com.hazizz.droid.navigation.Transactor;
 import com.hazizz.droid.manager.ThreadManager;
@@ -18,14 +20,14 @@ import java.util.HashMap;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 
-public class RefreshToken extends Request {
+public class RefreshToken extends AuthRequest {
 
     private Context context;
 
     CustomResponseHandler customResponseHandler = new CustomResponseHandler() {
         @Override
         public void onPOJOResponse(Object response) {
-            PojoRefreshToken PojoRefreshToken = (com.hazizz.droid.Communication.responsePojos.PojoRefreshToken)response;
+            PojoRefreshToken PojoRefreshToken = (com.hazizz.droid.communication.responsePojos.PojoRefreshToken)response;
             SharedPrefs.TokenManager.setRefreshToken(context, PojoRefreshToken.getRefresh());
             SharedPrefs.TokenManager.setToken(context, PojoRefreshToken.getToken());
             ThreadManager.getInstance().unfreezeThread();
@@ -55,14 +57,16 @@ public class RefreshToken extends Request {
 
         headerMap.put("Content-Type", "application/json");
         HashMap<String, Object> body = new HashMap<>();
-        body.put("username", SharedPrefs.getString(context, "userInfo", "username"));
+        body.put("username", HCache.getInstance().getUsername(context));
         body.put("refreshToken", SharedPrefs.TokenManager.getRefreshToken(context));
         call = aRequest.refreshToken(headerMap, body);
     }
+    /*
     @Override
     public void makeCall() { independentCall(context,  thisRequest, call, cOnResponse, gson); }
     @Override
     public void makeCallAgain() { callAgain(act,  thisRequest, call, customResponseHandler, gson); }
+    */
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
         PojoRefreshToken pojo = gson.fromJson(response.body().charStream(), PojoRefreshToken.class);

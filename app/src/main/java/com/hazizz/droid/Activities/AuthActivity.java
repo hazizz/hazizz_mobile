@@ -15,6 +15,7 @@ import com.hazizz.droid.other.SharedPrefs;
 import com.hazizz.droid.navigation.Transactor;
 import com.hazizz.droid.R;
 import com.hazizz.droid.manager.ThreadManager;
+import com.hazizz.droid.other.Theme;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -31,7 +32,7 @@ public class AuthActivity extends AppCompatActivity {
 
         Log.e("hey", "AuthActivity created");
 
-        if(AppInfo.isDarkMode(getBaseContext())){
+        if(Theme.isDarkMode(getBaseContext())){
             setTheme(R.style.AppTheme_Dark);
         }else{
             setTheme(R.style.AppTheme_Light);
@@ -39,12 +40,19 @@ public class AuthActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
 
+        ThreadManager.getInstance().startThreadIfNotRunning(this);
+
+        /*
         if(SharedPrefs.getBoolean(this, "autoLogin", "autoLogin") && !SharedPrefs.TokenManager.getRefreshToken(this).equals("used")){
             Log.e("hey", "code: 6469");
             openMainActivity();
+            return;
         }else {
             Transactor.fragmentFirst(getSupportFragmentManager().beginTransaction());
         }
+        */
+
+        Transactor.fragmentFirst(getSupportFragmentManager().beginTransaction());
 
         // only enable bug tracking in release version
         Fabric.with(this, new Crashlytics());
@@ -52,8 +60,6 @@ public class AuthActivity extends AppCompatActivity {
         Fabric.with(this, new Answers());
 
         setContentView(R.layout.activity_auth);
-
-        ThreadManager.getInstance().startThreadIfNotRunning(this);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

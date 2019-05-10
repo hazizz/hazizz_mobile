@@ -22,23 +22,23 @@ import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
 import com.hazizz.droid.activities.MainActivity;
 import com.hazizz.droid.other.AndroidThings;
-import com.hazizz.droid.Communication.requests.CreateAT;
-import com.hazizz.droid.Communication.requests.EditAT;
-import com.hazizz.droid.Communication.requests.GetGroupsFromMe;
-import com.hazizz.droid.Communication.requests.GetSubjects;
-import com.hazizz.droid.Communication.requests.myTask.CreateMyTask;
-import com.hazizz.droid.Communication.requests.myTask.EditMyTask;
-import com.hazizz.droid.Communication.requests.parent.Request;
-import com.hazizz.droid.Communication.Strings;
-import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
-import com.hazizz.droid.Communication.responsePojos.PojoError;
-import com.hazizz.droid.Communication.responsePojos.PojoGroup;
-import com.hazizz.droid.Communication.responsePojos.PojoSubject;
+import com.hazizz.droid.communication.requests.CreateAT;
+import com.hazizz.droid.communication.requests.EditAT;
+import com.hazizz.droid.communication.requests.GetGroupsFromMe;
+import com.hazizz.droid.communication.requests.GetSubjects;
+import com.hazizz.droid.communication.requests.myTask.CreateMyTask;
+import com.hazizz.droid.communication.requests.myTask.EditMyTask;
+import com.hazizz.droid.communication.requests.parent.Request;
+import com.hazizz.droid.communication.Strings;
+import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.communication.responsePojos.PojoError;
+import com.hazizz.droid.communication.responsePojos.PojoGroup;
+import com.hazizz.droid.communication.responsePojos.PojoSubject;
 import com.hazizz.droid.other.D8;
 import com.hazizz.droid.fragments.ParentFragment.ParentFragment;
 import com.hazizz.droid.listeners.OnBackPressedListener;
 import com.hazizz.droid.navigation.Transactor;
-import com.hazizz.droid.Communication.MiddleMan;
+import com.hazizz.droid.communication.MiddleMan;
 import com.hazizz.droid.R;
 
 import java.util.ArrayList;
@@ -370,7 +370,7 @@ public class TaskEditorFragment extends ParentFragment {
                 date = year + "-" + month + "-" + day;
                 textView_deadline.setText(str_year + "." + str_month + "."+ str_day);
             }
-        }, D8.getYear(), D8.getMonth() -2, D8.getDay()+1);
+        }, D8.getYear(D8.getNow()), D8.getMonth(D8.getNow()) -2, D8.getDay(D8.getNow())+1);
         //dpd.getDatePicker().setMaxDate(Calendar.getInstance().getTimeInMillis() - 1000);
 
         Calendar cal = Calendar.getInstance();

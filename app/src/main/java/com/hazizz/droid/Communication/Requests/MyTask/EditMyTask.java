@@ -1,11 +1,11 @@
-package com.hazizz.droid.Communication.requests.myTask;
+package com.hazizz.droid.communication.requests.myTask;
 
 import android.app.Activity;
 import android.util.Log;
 
 
-import com.hazizz.droid.Communication.requests.parent.Request;
-import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.communication.requests.parent.Request;
+import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
 
 import java.util.HashMap;
 

@@ -1,8 +1,8 @@
 package com.hazizz.droid.listviews.AnnouncementList;
 
-import com.hazizz.droid.Communication.responsePojos.PojoGroup;
-import com.hazizz.droid.Communication.responsePojos.PojoSubject;
-import com.hazizz.droid.Communication.responsePojos.taskPojos.PojoCreator;
+import com.hazizz.droid.communication.responsePojos.PojoGroup;
+import com.hazizz.droid.communication.responsePojos.PojoSubject;
+import com.hazizz.droid.communication.responsePojos.taskPojos.PojoCreator;
 
 import lombok.Data;
 

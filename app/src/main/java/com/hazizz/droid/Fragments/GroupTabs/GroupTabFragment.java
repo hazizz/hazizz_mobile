@@ -18,14 +18,14 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import com.hazizz.droid.cache.CurrentGroup;
 
-import com.hazizz.droid.Communication.requests.LeaveGroup;
-import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.communication.requests.LeaveGroup;
+import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
 import com.hazizz.droid.fragments.ParentFragment.ParentFragment;
 import com.hazizz.droid.fragments.ParentFragment.TabFragment;
 import com.hazizz.droid.listeners.GenericListener;
 import com.hazizz.droid.listeners.OnBackPressedListener;
 import com.hazizz.droid.navigation.Transactor;
-import com.hazizz.droid.Communication.MiddleMan;
+import com.hazizz.droid.communication.MiddleMan;
 import com.hazizz.droid.R;
 import com.hazizz.droid.manager.MenuManager;
 

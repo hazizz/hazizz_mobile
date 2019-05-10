@@ -1,8 +1,9 @@
-package com.hazizz.droid.Communication;
+package com.hazizz.droid.communication;
 
 public class Strings {
 
     public enum Path {
+        OBJECT ("object"),
         TASKS ("tasks"),
         ANNOUNCEMENTS("announcements"),
         GROUPS("groups"),

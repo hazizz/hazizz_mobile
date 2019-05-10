@@ -19,12 +19,12 @@ import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.SignUpEvent;
 
 
-import com.hazizz.droid.Communication.requests.RequestType.Register;
-import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
-import com.hazizz.droid.Communication.responsePojos.PojoError;
+import com.hazizz.droid.communication.requests.RequestType.Register;
+import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.communication.responsePojos.PojoError;
 import com.hazizz.droid.converter.Converter;
 import com.hazizz.droid.navigation.Transactor;
-import com.hazizz.droid.Communication.MiddleMan;
+import com.hazizz.droid.communication.MiddleMan;
 import com.hazizz.droid.R;
 
 import java.util.regex.Pattern;

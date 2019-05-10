@@ -4,10 +4,10 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 
-import com.hazizz.droid.Communication.MiddleMan;
+import com.hazizz.droid.communication.MiddleMan;
 
-import com.hazizz.droid.Communication.requests.Feedback;
-import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.communication.requests.Feedback;
+import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
 import com.hazizz.droid.R;
 import com.hazizz.droid.navigation.Transactor;
 

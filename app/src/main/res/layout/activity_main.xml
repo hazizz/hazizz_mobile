@@ -34,7 +34,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="120dp"
@@ -55,21 +54,6 @@
                 app:elevation="0dp"
                 app:srcCompat="@drawable/ic_add_white" />
 
-         <!--   <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fab_createGroup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentStart="true"
-                android:layout_gravity="top|end"
-                android:clickable="true"
-                app:backgroundTint="@color/colorAccent"
-                app:borderWidth="0dp"
-                app:elevation="0dp"
-                app:layout_anchor="@id/fab_action"
-                app:layout_anchorGravity="top"
-                app:srcCompat="@drawable/ic_add_white" /> -->
-
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/fab_joinGroup"
                 android:layout_width="wrap_content"
@@ -85,68 +69,11 @@
                 app:srcCompat="@drawable/ic_group_add_white" />
         </RelativeLayout>
 
-      <!--  <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
-            app:backgroundTint="@color/colorAccent"
-            app:srcCompat="@drawable/ic_create_white" /> -->
     </android.support.design.widget.CoordinatorLayout>
 
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="250dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        android:visibility="visible"
-        app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:clickable="true"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/textView_logout"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:layout_gravity="bottom"
-                android:layout_marginLeft="10dp"
-                android:clickable="true"
-                android:gravity="center"
-                android:onClick="logoutPressed"
-                android:text="@string/textview_logout_drawer" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-
-            <ImageButton
-                android:id="@+id/imageButton_darkMode"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_moon_gray"
-                />
-
-            <!--
-            <Button
-                android:id="@+id/imageButton_darkMode"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                />
-            -->
-        </LinearLayout>
-    </android.support.design.widget.NavigationView>
+    <include
+        layout="@layout/hazizz_nav">
+    </include>
 
 </android.support.v4.widget.DrawerLayout>
 

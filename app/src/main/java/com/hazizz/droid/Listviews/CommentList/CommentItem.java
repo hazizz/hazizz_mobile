@@ -2,8 +2,8 @@ package com.hazizz.droid.listviews.CommentList;
 
 import android.util.Log;
 
-import com.hazizz.droid.Communication.Strings;
-import com.hazizz.droid.Communication.responsePojos.taskPojos.PojoCreator;
+import com.hazizz.droid.communication.Strings;
+import com.hazizz.droid.communication.responsePojos.taskPojos.PojoCreator;
 
 import lombok.Data;
 

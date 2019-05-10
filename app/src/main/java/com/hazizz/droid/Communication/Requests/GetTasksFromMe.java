@@ -1,4 +1,4 @@
-package com.hazizz.droid.Communication.requests;
+package com.hazizz.droid.communication.requests;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,9 +6,9 @@ import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
 
-import com.hazizz.droid.Communication.requests.parent.Request;
-import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
-import com.hazizz.droid.Communication.responsePojos.taskPojos.PojoTask;
+import com.hazizz.droid.communication.requests.parent.Request;
+import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.communication.responsePojos.taskPojos.PojoTask;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -54,7 +54,11 @@ public class GetTasksFromMe extends Request {
         cOnResponse.onPOJOResponse(castedList);
     }
 
+    /*
+
     public void makeIndependentCall(){
-        independentCall(context, this, call, getResponseHandler(), gson);
+        call(context, this, call, getResponseHandler(), gson);
     }
+
+    */
 }

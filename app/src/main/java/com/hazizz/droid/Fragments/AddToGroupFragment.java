@@ -17,9 +17,9 @@ import com.hazizz.droid.activities.MainActivity;
 import com.hazizz.droid.other.AndroidThings;
 
 
-import com.hazizz.droid.Communication.Strings;
-import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
-import com.hazizz.droid.Communication.responsePojos.PojoError;
+import com.hazizz.droid.communication.Strings;
+import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.communication.responsePojos.PojoError;
 import com.hazizz.droid.listviews.GroupList.CustomAdapter;
 import com.hazizz.droid.navigation.Transactor;
 import com.hazizz.droid.R;

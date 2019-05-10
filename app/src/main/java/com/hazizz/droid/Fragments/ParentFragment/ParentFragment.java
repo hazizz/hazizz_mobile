@@ -46,4 +46,10 @@ public class ParentFragment extends Fragment {
         super.onDestroy();
         AndroidThings.closeKeyboard(getContext(), v);
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        AndroidThings.closeKeyboard(getContext(), v);
+    }
 }

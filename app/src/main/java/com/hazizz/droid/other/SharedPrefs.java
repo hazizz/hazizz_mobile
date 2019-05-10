@@ -7,9 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-//import static android.app.PendingIntent.getActivity;
-
-//SharedPreferences manager class
 public class SharedPrefs {
 
     //SharedPreferences file name
@@ -31,7 +28,7 @@ public class SharedPrefs {
         return context.getSharedPreferences(fileName, Context.MODE_PRIVATE);
     }
 
-    private static void clearAll(Context context, String fileName1) {
+    public static void clearAll(Context context, String fileName1) {
         fileName = fileName1;
         SharedPreferences.Editor editor = context.getSharedPreferences(fileName, Context.MODE_PRIVATE).edit();
         editor.clear();

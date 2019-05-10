@@ -3,10 +3,10 @@ package com.hazizz.droid.cache;
 import android.util.Log;
 
 import com.hazizz.droid.cache.MeInfo.MeInfo;
-import com.hazizz.droid.Communication.Strings;
-import com.hazizz.droid.Communication.responsePojos.PojoMembersProfilePic;
-import com.hazizz.droid.Communication.responsePojos.PojoPermisionUsers;
-import com.hazizz.droid.Communication.responsePojos.PojoUser;
+import com.hazizz.droid.communication.Strings;
+import com.hazizz.droid.communication.responsePojos.PojoMembersProfilePic;
+import com.hazizz.droid.communication.responsePojos.PojoPermisionUsers;
+import com.hazizz.droid.communication.responsePojos.PojoUser;
 
 import java.util.ArrayList;
 import java.util.HashMap;

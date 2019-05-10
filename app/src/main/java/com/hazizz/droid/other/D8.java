@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 
-import com.hazizz.droid.Communication.responsePojos.taskPojos.PojoTask;
+import com.hazizz.droid.communication.responsePojos.taskPojos.PojoTask;
 import com.hazizz.droid.R;
 
 import org.joda.time.DateTime;
@@ -15,6 +15,7 @@ import org.joda.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class D8 {
 
@@ -77,34 +78,48 @@ public class D8 {
     public static String getDateTomorrow(){
         return tomorrow.toString();
     }
-    public static int getDay(){
-        return LocalDate.now().getDayOfMonth();
+    public static int getDay(LocalDate localDate){
+        return localDate.getDayOfMonth();
     }
-    public static int getMonth(){
-        return LocalDate.now().getMonthOfYear() + 1;
+    public static int getMonth(LocalDate localDate){
+        return localDate.getMonthOfYear() + 1;
 
     }
-    public static int getYear(){ return LocalDate.now().getYear();
-    }
+    public static int getYear(LocalDate localDate){ return localDate.getYear(); }
 
-    public static int getWeek(){ return LocalDate.now().getWeekOfWeekyear(); }
+    public static int getWeek(LocalDate localDate){ return localDate.getWeekOfWeekyear(); }
 
-    public static int getDayOfWeek(){
-        return LocalDate.now().getDayOfWeek();
-    }
-
-    public static String getTimeInMillis (){
-        return Integer.toString(LocalDate.now().getYear());
+    public static int getDayOfWeek(LocalDate localDate){
+        return localDate.getDayOfWeek();
     }
 
-    public static ArrayList<PojoTask> sortTasksByDate(ArrayList< PojoTask> data) {
 
-        ArrayList<DateTime> dates = new ArrayList<>();
-        for (int i = 0; i <= data.size() - 1; i++) {
-            dates.add(D8.dtf_date.parseDateTime(data.get(i).getDueDate()));
+    public static int getDayOfYear(LocalDate localDate){
+        return localDate.getDayOfYear();
+    }
+
+
+    public static LocalDate getNow(){
+        return LocalDate.now();
+    }
+
+
+
+    public static int getTimeInMillis (LocalDate localDate){
+        return localDate.getYear();
+    }
+
+    public static List<PojoTask> sortTasksByDate(List<PojoTask> data) {
+        if(data != null) {
+            ArrayList<DateTime> dates = new ArrayList<>();
+
+            for (PojoTask task : data) {
+                dates.add(D8.dtf_date.parseDateTime(task.getDueDate()));
+            }
+            Collections.sort(data, (PojoTask a1, PojoTask a2) -> a1.getDueDate().compareTo(a2.getDueDate()));
+            return data;
         }
-        Collections.sort(data, ( PojoTask a1,  PojoTask a2) -> a1.getDueDate().compareTo(a2.getDueDate()));
-        return data;
+        return new ArrayList<PojoTask>();
     }
 
     public static ArrayList< PojoTask> sortCommentsByDate(ArrayList< PojoTask> data) {

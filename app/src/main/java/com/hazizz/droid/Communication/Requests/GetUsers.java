@@ -1,14 +1,14 @@
-package com.hazizz.droid.Communication.requests;
+package com.hazizz.droid.communication.requests;
 
 import android.app.Activity;
 import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
 
-import com.hazizz.droid.Communication.requests.parent.Request;
-import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
-import com.hazizz.droid.Communication.responsePojos.PojoUser;
-import com.hazizz.droid.Communication.responsePojos.taskPojos.PojoTask;
+import com.hazizz.droid.communication.requests.parent.Request;
+import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.communication.responsePojos.PojoUser;
+import com.hazizz.droid.communication.responsePojos.taskPojos.PojoTask;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;

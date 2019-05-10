@@ -10,16 +10,16 @@ public class CBroadcastReceiver extends BroadcastReceiver {
 
     public String[] actions = {};
 
-
     private GenericListener listener;
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
-        listener.execute();
+        if(listener != null) {
+            listener.execute();
+        }
     }
 
     public void setOnReceive(GenericListener listener){
         this.listener = listener;
     }
-
 }

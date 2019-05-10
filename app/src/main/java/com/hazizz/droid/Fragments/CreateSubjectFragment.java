@@ -16,13 +16,13 @@ import com.crashlytics.android.answers.CustomEvent;
 import com.hazizz.droid.other.AndroidThings;
 
 
-import com.hazizz.droid.Communication.requests.CreateSubject;
-import com.hazizz.droid.Communication.responsePojos.CustomResponseHandler;
-import com.hazizz.droid.Communication.responsePojos.PojoError;
+import com.hazizz.droid.communication.requests.CreateSubject;
+import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.communication.responsePojos.PojoError;
 import com.hazizz.droid.fragments.ParentFragment.ParentFragment;
 import com.hazizz.droid.listeners.OnBackPressedListener;
 import com.hazizz.droid.navigation.Transactor;
-import com.hazizz.droid.Communication.MiddleMan;
+import com.hazizz.droid.communication.MiddleMan;
 import com.hazizz.droid.R;
 
 import okhttp3.ResponseBody;

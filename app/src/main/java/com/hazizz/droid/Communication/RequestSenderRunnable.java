@@ -1,4 +1,4 @@
-package com.hazizz.droid.Communication;
+package com.hazizz.droid.communication;
 
 import android.content.Context;
 import android.util.Log;
@@ -40,7 +40,7 @@ public class RequestSenderRunnable implements Runnable{
                         }
                     }
                 }else{
-
+                    Log.e("hey", "isFreezed");
                 }
             }
         }

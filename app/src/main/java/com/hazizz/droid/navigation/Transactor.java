@@ -14,8 +14,9 @@ import android.support.v4.app.FragmentTransaction;
 import com.hazizz.droid.activities.AuthActivity;
 import com.hazizz.droid.activities.FeedbackActivity;
 import com.hazizz.droid.activities.MainActivity;
-import com.hazizz.droid.Communication.Strings;
-import com.hazizz.droid.Communication.responsePojos.PojoType;
+import com.hazizz.droid.communication.Strings;
+import com.hazizz.droid.communication.responsePojos.PojoType;
+import com.hazizz.droid.communication.responsePojos.taskPojos.PojoTask;
 import com.hazizz.droid.fragments.ATChooserFragment;
 import com.hazizz.droid.fragments.AnnouncementEditorFragment;
 import com.hazizz.droid.fragments.AuthFrags.FirstFragment;
@@ -58,6 +59,8 @@ import javax.annotation.Nonnull;
 public class Transactor extends FragmentActivity {
     private static boolean backStack = true;
 
+
+    public static final String KEY_OBJECT = Strings.Path.OBJECT.toString();
     public static final String KEY_GROUPID = Strings.Path.GROUPID.toString();
     public static final String KEY_SUBJECTID = Strings.Path.SUBJECTID.toString();
     public static final String KEY_TASKID = Strings.Path.TASKID.toString();
@@ -267,12 +270,29 @@ public class Transactor extends FragmentActivity {
 
     public static void fragmentViewTask(@Nonnull FragmentTransaction fTransaction,
                                         int taskId, boolean goBackToMain, Strings.Dest dest, boolean mode){
-
         Bundle bundle = new Bundle();
         bundle.putInt(KEY_DEST, dest.getValue());
         bundle.putInt(Strings.Path.TASKID.toString(), taskId);
         bundle.putBoolean(KEY_GOBACKTOMAIN, goBackToMain);
         bundle.putBoolean(KEY_MODE, mode);
+        Fragment frag = new ViewTaskFragment();
+        frag.setArguments(bundle);
+        fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
+        if(backStack){ fTransaction.addToBackStack(null); }
+        fTransaction.commitAllowingStateLoss();
+    }
+
+    public static void fragmentViewTask(@Nonnull FragmentTransaction fTransaction,
+                                        int taskId, boolean goBackToMain, Strings.Dest dest, boolean mode,
+                                        PojoTask taskObject
+                                        ){
+        Bundle bundle = new Bundle();
+        bundle.putInt(KEY_DEST, dest.getValue());
+        bundle.putInt(Strings.Path.TASKID.toString(), taskId);
+        bundle.putBoolean(KEY_GOBACKTOMAIN, goBackToMain);
+        bundle.putBoolean(KEY_MODE, mode);
+        bundle.putParcelable(KEY_OBJECT, taskObject);
+
         Fragment frag = new ViewTaskFragment();
         frag.setArguments(bundle);
         fTransaction.replace(R.id.fragment_container, frag);//.addToBackStack(null);
@@ -594,7 +614,7 @@ public class Transactor extends FragmentActivity {
 
 
     public static void openApp(Context context, Bundle bundle){
-        Intent intent = new Intent(context, AuthActivity.class);
+        Intent intent = new Intent(context, MainActivity.class);
         intent.putExtras(bundle);
         context.startActivity(intent);
     }

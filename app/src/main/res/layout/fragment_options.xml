@@ -71,7 +71,10 @@
         android:src="@drawable/ic_create_black"
         app:backgroundTint="@color/colorAccent"
         app:layout_constraintStart_toEndOf="@+id/editText_displayName"
-        app:layout_constraintTop_toBottomOf="@+id/imageView_profilePic" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView_profilePic"
+
+        android:tint="@color/colorAccent"
+        />
 
     <ListView
         android:id="@+id/listView1"
