@@ -5,9 +5,11 @@ import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
 
+import com.hazizz.droid.communication.RequestSender;
 import com.hazizz.droid.communication.requests.parent.Request;
 import com.hazizz.droid.communication.responsePojos.announcementPojos.PojoAnnouncement;
 import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.converter.Converter;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -25,15 +27,16 @@ public class GetAnnouncementsFromGroup extends Request {
     }
     public void setupCall() {
 
-        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
-        call = aRequest.getAnnouncementsFromGroup(groupId, headerMap);
+        putHeaderAuthToken();
+        buildCall(RequestSender.getHazizzRequestTypes().getAnnouncementsFromGroup(groupId, header));
+
     }
 
 
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
         Type listType = new TypeToken<ArrayList<PojoAnnouncement>>(){}.getType();
-        List<PojoAnnouncement> castedList = gson.fromJson(response.body().charStream(), listType);
+        List<PojoAnnouncement> castedList = Converter.fromJson(response.body().charStream(), listType);
         cOnResponse.onPOJOResponse(castedList);
         Log.e("hey", "size of response list: " + castedList.size());
     }

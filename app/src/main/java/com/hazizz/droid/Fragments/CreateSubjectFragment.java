@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
+import com.hazizz.droid.activities.BaseActivity;
 import com.hazizz.droid.other.AndroidThings;
 
 
@@ -78,7 +79,7 @@ public class CreateSubjectFragment extends ParentFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_addsubject, container, false);
 
-        fragmentSetup(R.string.add_subject);
+        fragmentSetup(((BaseActivity)getActivity()), R.string.add_subject);
         setOnBackPressedListener(new OnBackPressedListener() {
             @Override
             public void onBackPressed() {

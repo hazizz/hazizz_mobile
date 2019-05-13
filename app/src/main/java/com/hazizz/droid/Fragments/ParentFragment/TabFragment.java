@@ -1,5 +1,6 @@
 package com.hazizz.droid.fragments.ParentFragment;
 
+import com.hazizz.droid.activities.BaseActivity;
 import com.hazizz.droid.listeners.GenericListener;
 
 public class TabFragment extends ParentFragment {
@@ -17,8 +18,8 @@ public class TabFragment extends ParentFragment {
     public boolean isViewShown = false;
 
     @Override
-    protected void fragmentSetup() {
-        super.fragmentSetup();
+    protected void fragmentSetup(BaseActivity baseActivity) {
+        super.fragmentSetup(baseActivity);
     }
 
 

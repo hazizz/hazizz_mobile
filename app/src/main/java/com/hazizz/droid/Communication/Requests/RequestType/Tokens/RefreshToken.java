@@ -6,11 +6,13 @@ import android.util.Log;
 
 import com.hazizz.droid.cache.HCache;
 import com.hazizz.droid.communication.MiddleMan;
+import com.hazizz.droid.communication.RequestSender;
 import com.hazizz.droid.communication.requests.parent.AuthRequest;
 import com.hazizz.droid.communication.requests.parent.Request;
 import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
 import com.hazizz.droid.communication.responsePojos.PojoError;
 import com.hazizz.droid.communication.responsePojos.PojoRefreshToken;
+import com.hazizz.droid.converter.Converter;
 import com.hazizz.droid.other.SharedPrefs;
 import com.hazizz.droid.navigation.Transactor;
 import com.hazizz.droid.manager.ThreadManager;
@@ -38,7 +40,7 @@ public class RefreshToken extends AuthRequest {
         public void onErrorResponse(PojoError error) {
             if(error.getErrorCode() == 21){
                 MiddleMan.cancelAllRequest();
-                Transactor.authActivity(context);
+                Transactor.activityAuth(context);
             }
         }
     };
@@ -55,11 +57,10 @@ public class RefreshToken extends AuthRequest {
 
     public void setupCall() {
 
-        headerMap.put("Content-Type", "application/json");
-        HashMap<String, Object> body = new HashMap<>();
+        putHeaderContentType();
         body.put("username", HCache.getInstance().getUsername(context));
         body.put("refreshToken", SharedPrefs.TokenManager.getRefreshToken(context));
-        call = aRequest.refreshToken(headerMap, body);
+        buildCall(RequestSender.getAuthRequestTypes().refreshToken(header, body));
     }
     /*
     @Override
@@ -69,7 +70,7 @@ public class RefreshToken extends AuthRequest {
     */
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
-        PojoRefreshToken pojo = gson.fromJson(response.body().charStream(), PojoRefreshToken.class);
+        PojoRefreshToken pojo = Converter.fromJson(response.body().charStream(), PojoRefreshToken.class);
         customResponseHandler.onPOJOResponse(pojo);
     }
 }

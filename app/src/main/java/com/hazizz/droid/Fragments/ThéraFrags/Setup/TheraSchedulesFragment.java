@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.hazizz.droid.activities.BaseActivity;
 import com.hazizz.droid.cache.HCache;
 import com.hazizz.droid.communication.MiddleMan;
 
@@ -54,7 +55,7 @@ public class TheraSchedulesFragment extends ParentFragment {
         v = inflater.inflate(R.layout.fragment_th_timetable, container, false);
         Log.e("hey", "TheraSchedulesFragment fragment created");
 
-        fragmentSetup(R.string.thera_schedules);
+        fragmentSetup(((BaseActivity)getActivity()), R.string.thera_schedules);
         setOnBackPressedListener(new OnBackPressedListener() {
             @Override
             public void onBackPressed() {
@@ -97,7 +98,7 @@ public class TheraSchedulesFragment extends ParentFragment {
     }
     void createViewList(){
         listClassesCurrentDay = new ArrayList<>();
-        adapter = new CustomAdapter(getActivity(), R.layout.th_class_item, listClassesCurrentDay);
+        adapter = new CustomAdapter(getContext(), R.layout.th_class_item, listClassesCurrentDay);
         ListView listView = (ListView)v.findViewById(R.id.listView_classes);
         listView.setAdapter(adapter);
 
@@ -148,11 +149,11 @@ public class TheraSchedulesFragment extends ParentFragment {
                 if(error.getErrorCode() == 132 || error.getErrorCode() == 136) {
                     Transactor.fragmentThLoginAuthSession(getFragmentManager().beginTransaction(), sessionId,
                             SharedPrefs.ThLoginData.getSchool(getContext(), sessionId),
-                            SharedPrefs.ThLoginData.getUsername(getContext(), sessionId));;
+                            SharedPrefs.ThLoginData.getUsername(getContext(), sessionId));
                 }
             }
         };
-        MiddleMan.newRequest(new ThReturnSchedules(getActivity(),rh, sessionId, weekNumber, year));
+        MiddleMan.newRequest(new ThReturnSchedules(getContext(),rh, sessionId, weekNumber, year));
     }
 
     private void getCurrentDaySchedules(int dayOfWeek){

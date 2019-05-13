@@ -14,7 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 
-
+import com.hazizz.droid.activities.BaseActivity;
 import com.hazizz.droid.communication.requests.RequestType.Thera.PojoSession;
 import com.hazizz.droid.communication.requests.RequestType.Thera.ThAuthenticateSession;
 import com.hazizz.droid.communication.requests.RequestType.Thera.ThCreateSession.ThCreateSession;
@@ -120,7 +120,7 @@ public class TheraLoginFragment extends ParentFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_th_login, container, false);
-        fragmentSetup(R.string.title_kreta_login);
+        fragmentSetup(((BaseActivity)getActivity()), R.string.title_kreta_login);
 
         editText_username = v.findViewById(R.id.editText_username);
         editText_password = v.findViewById(R.id.editText_password);

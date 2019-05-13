@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.util.Log;
 
 
+import com.hazizz.droid.communication.RequestSender;
 import com.hazizz.droid.communication.requests.parent.Request;
 import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
 
@@ -23,10 +24,10 @@ public class AddComment extends Request {
 
     public void setupCall() {
 
-        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
-        headerMap.put("Content-Type", "application/json");
+        putHeaderAuthToken();
+        putHeaderContentType();
+        buildCall(RequestSender.getHazizzRequestTypes().addComment(p_whereName, p_whereId, header, body));
 
-        call = aRequest.addComment(p_whereName, p_whereId, headerMap, body);
         Log.e("hey", "setup call on AddComment");
     }
 

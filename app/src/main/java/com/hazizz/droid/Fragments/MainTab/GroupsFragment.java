@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.hazizz.droid.activities.BaseActivity;
 import com.hazizz.droid.activities.MainActivity;
 
 import com.hazizz.droid.communication.requests.GetGroupsFromMe;
@@ -63,7 +64,7 @@ public class GroupsFragment extends ParentFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_group, container, false);
-        fragmentSetup();
+        fragmentSetup(((BaseActivity)getActivity()));
 
         createViewList();
         textView_noContent = v.findViewById(R.id.textView_noContent);

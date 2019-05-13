@@ -18,6 +18,7 @@ import com.hazizz.droid.communication.requests.RequestType.Tokens.RefreshToken;
 import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
 import com.hazizz.droid.communication.responsePojos.PojoError;
 import com.hazizz.droid.R;
+import com.hazizz.droid.converter.Converter;
 import com.hazizz.droid.navigation.Transactor;
 import com.hazizz.droid.manager.ThreadManager;
 import com.hazizz.droid.other.ErrorHandler;
@@ -28,6 +29,7 @@ import retrofit2.Call;
 
 public interface RequestInterface2 {
 
+    /*
     void setupCall();
 
     default void call(Activity act, RequestInterface request, Call<ResponseBody> call, CustomResponseHandler cOnResponse, Gson gson){
@@ -47,7 +49,7 @@ public interface RequestInterface2 {
                 }
 
                 else if(!response.isSuccessful()){ // response != null
-                    PojoError PojoError = gson.fromJson(response.errorBody().charStream(),PojoError.class);
+                    PojoError PojoError = Converter.fromJson(response.errorBody().charStream(),PojoError.class);
                     Log.e("hey", "errorCOde is: " + PojoError.getErrorCode());
                     Log.e("hey", "errorMessage is: " + PojoError.getMessage());
 
@@ -128,7 +130,7 @@ public interface RequestInterface2 {
                     ThreadManager threadManager = ThreadManager.getInstance();
 
 
-                    PojoError PojoError = gson.fromJson(response.errorBody().charStream(),PojoError.class);
+                    PojoError PojoError = Converter.fromJson(response.errorBody().charStream(),PojoError.class);
                     Log.e("hey", "errorCOde is: " + PojoError.getErrorCode());
                     Log.e("hey", "errorMessage is: " + PojoError.getMessage());
                     if(PojoError.getErrorCode() == 1){
@@ -138,7 +140,7 @@ public interface RequestInterface2 {
 
                     if(PojoError.getErrorCode() == 0) {
                         if(SharedPrefs.TokenManager.tokenInvalidated(act)){
-                            Transactor.authActivity(act);
+                            Transactor.activityAuth(act);
                         }
                     }
 
@@ -179,7 +181,7 @@ public interface RequestInterface2 {
                               }else {
                                    MiddleMan.addToRateLimitQueue(request);
                           }
-                              */
+
 
                     }else {
                         if(cOnResponse != null){
@@ -205,6 +207,7 @@ public interface RequestInterface2 {
         };
         return callback;
     }
+
 
 
     default void callSpec(Activity act, RequestInterface request, Call<ResponseBody> call, CustomResponseHandler cOnResponse, Gson gson){
@@ -235,7 +238,7 @@ public interface RequestInterface2 {
                 else if(!response.isSuccessful()){ // response != null
                     ThreadManager threadManager = ThreadManager.getInstance();
 
-                    PojoError PojoError = gson.fromJson(response.errorBody().charStream(),PojoError.class);
+                    PojoError PojoError = Converter.fromJson(response.errorBody().charStream(),PojoError.class);
                     Log.e("hey", "errorCOde is: " + PojoError.getErrorCode());
                     Log.e("hey", "errorMessage is: " + PojoError.getMessage());
                     if(PojoError.getErrorCode() == 1){
@@ -291,5 +294,6 @@ public interface RequestInterface2 {
     void callIsSuccessful(Response<ResponseBody> response);
 
     void cancelRequest();
+    */
 }
 

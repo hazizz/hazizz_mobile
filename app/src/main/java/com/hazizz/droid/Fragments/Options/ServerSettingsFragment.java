@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.hazizz.droid.activities.AuthActivity;
+import com.hazizz.droid.activities.BaseActivity;
 import com.hazizz.droid.fragments.ParentFragment.ParentFragment;
 import com.hazizz.droid.R;
 import com.hazizz.droid.other.SharedPrefs;
@@ -31,7 +32,7 @@ public class ServerSettingsFragment extends ParentFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_settings_server, container, false);
 
-        fragmentSetup(R.string.title_set_server_address);
+        fragmentSetup(((BaseActivity)getActivity()), R.string.title_set_server_address);
 
 
         editText_serverAddress = v.findViewById(R.id.editText_serverAddress);

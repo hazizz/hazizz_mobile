@@ -13,6 +13,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.hazizz.droid.activities.BaseActivity;
 import com.hazizz.droid.fragments.ParentFragment.ParentFragment;
 import com.hazizz.droid.notification.TaskReporterNotification;
 import com.hazizz.droid.R;
@@ -90,7 +91,7 @@ public class NotificationSettingsFragment extends ParentFragment {
         _minute = TaskReporterNotification.getScheduleMinute(getContext());
         setTextViewTime(_hour, _minute);
 
-        fragmentSetup(R.string.notification_settings);
+        fragmentSetup(((BaseActivity)getActivity()), R.string.notification_settings);
 
         return v;
     }

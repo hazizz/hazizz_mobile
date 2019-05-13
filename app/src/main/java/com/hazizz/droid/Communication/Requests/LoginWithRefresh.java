@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.util.Log;
 
 
+import com.hazizz.droid.communication.RequestSender;
 import com.hazizz.droid.communication.requests.parent.Request;
 import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
 import com.hazizz.droid.communication.responsePojos.PojoAuth;
+import com.hazizz.droid.converter.Converter;
 
 import java.util.HashMap;
 
@@ -22,17 +24,18 @@ public class LoginWithRefresh extends Request {
         this.refreshToken = refreshToken;
     }
     public void setupCall() {
-        HashMap<String, String> headerMap = new HashMap<>();
-        headerMap.put("Content-Type", "application/json");
         body.put("username", b_username);
         body.put("refreshToken", refreshToken);
-        call = aRequest.login(headerMap, body);
+
+        putHeaderAuthToken();
+        putHeaderContentType();
+        buildCall(RequestSender.getAuthRequestTypes().login(header, body));
     }
 
 
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
-        PojoAuth PojoAuth = gson.fromJson(response.body().charStream(), PojoAuth.class);
+        PojoAuth PojoAuth = Converter.fromJson(response.body().charStream(), PojoAuth.class);
         cOnResponse.onPOJOResponse(PojoAuth);
     }
 }

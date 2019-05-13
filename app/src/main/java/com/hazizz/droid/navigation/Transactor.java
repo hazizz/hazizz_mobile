@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentTransaction;
 import com.hazizz.droid.activities.AuthActivity;
 import com.hazizz.droid.activities.FeedbackActivity;
 import com.hazizz.droid.activities.MainActivity;
+import com.hazizz.droid.activities.TheraActivity;
 import com.hazizz.droid.communication.Strings;
 import com.hazizz.droid.communication.responsePojos.PojoType;
 import com.hazizz.droid.communication.responsePojos.taskPojos.PojoTask;
@@ -619,24 +620,25 @@ public class Transactor extends FragmentActivity {
         context.startActivity(intent);
     }
 
-
-    public static void feedbackActivity(Activity thisActivity){
-        Intent i = new Intent(thisActivity, FeedbackActivity.class);
-        thisActivity.startActivity(i);
+    public static void activityThera(Context context){
+        Intent i = new Intent(context, TheraActivity.class);
+        context.startActivity(i);
     }
 
-    public static void AuthActivity(Activity thisActivity){
-        Intent i = new Intent(thisActivity, AuthActivity.class);
-        thisActivity.startActivity(i);
+
+    public static void activityFeedback(Context context){
+        Intent i = new Intent(context, FeedbackActivity.class);
+        context.startActivity(i);
     }
 
-    public static void authActivity(Context context){
+    public static void activityAuth(Context context){
         Intent i = new Intent(context, AuthActivity.class);
         context.startActivity(i);
     }
 
-    public static void activityMain(Activity thisActivity){
-        Intent i = new Intent(thisActivity, MainActivity.class);
-        thisActivity.startActivity(i);
+
+    public static void activityMain(Context context){
+        Intent i = new Intent(context, MainActivity.class);
+        context.startActivity(i);
     }
 }

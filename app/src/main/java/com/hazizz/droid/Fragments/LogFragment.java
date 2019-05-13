@@ -31,7 +31,7 @@ public class LogFragment  extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_log, container, false);
-        ((MainActivity) getActivity()).onFragmentCreated();
+        ((MainActivity) getActivity()).onFragmentAdded();
 
         getActivity().setTitle("Log");
 

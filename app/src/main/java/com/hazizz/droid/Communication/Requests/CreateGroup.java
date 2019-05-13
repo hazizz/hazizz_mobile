@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.util.Log;
 
 
+import com.hazizz.droid.communication.RequestSender;
 import com.hazizz.droid.communication.requests.parent.Request;
 import com.hazizz.droid.communication.Strings;
 import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
@@ -27,10 +28,11 @@ public class CreateGroup extends Request {
     }
     public void setupCall() {
 
-        headerMap.put("Content-Type", "application/json");
-        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
+        putHeaderContentType();
+        putHeaderAuthToken();
 
-        call = aRequest.createGroup(headerMap, body);
+        buildCall(RequestSender.getHazizzRequestTypes().createGroup(header, body));
+
     }
 
 

@@ -5,8 +5,10 @@ import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
 
+import com.hazizz.droid.communication.RequestSender;
 import com.hazizz.droid.communication.requests.parent.ThRequest;
 import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.converter.Converter;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -21,16 +23,17 @@ public class ThSchools extends ThRequest {
     }
     public void setupCall() {
 
-        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
+        putHeaderAuthToken();
 
-        call = aRequest.th_getSchools(headerMap);
+        buildCall(RequestSender.getTheraRequestTypes().th_getSchools(header));
+
     }
 
 
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
         Type listType = new TypeToken<HashMap<String, String>>(){}.getType();
-        HashMap<String, String> castedMap = gson.fromJson(response.body().charStream(), listType);
+        HashMap<String, String> castedMap = Converter.fromJson(response.body().charStream(), listType);
 
         cOnResponse.onPOJOResponse(castedMap);
     }

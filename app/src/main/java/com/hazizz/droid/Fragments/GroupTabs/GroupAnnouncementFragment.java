@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.hazizz.droid.activities.BaseActivity;
 import com.hazizz.droid.cache.CurrentGroup;
 import com.hazizz.droid.communication.requests.GetAnnouncementsFromGroup;
 import com.hazizz.droid.communication.Strings;
@@ -55,7 +56,7 @@ public class GroupAnnouncementFragment extends TabFragment {
 
 
 
-        fragmentSetup();
+        fragmentSetup(((BaseActivity)getActivity()));
         groupId = GroupTabFragment.groupId;
         groupName = GroupTabFragment.groupName;
 

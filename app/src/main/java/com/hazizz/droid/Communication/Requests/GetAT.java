@@ -3,11 +3,13 @@ package com.hazizz.droid.communication.requests;
 import android.app.Activity;
 import android.util.Log;
 
+import com.hazizz.droid.communication.RequestSender;
 import com.hazizz.droid.communication.requests.parent.Request;
 import com.hazizz.droid.communication.Strings;
 import com.hazizz.droid.communication.responsePojos.announcementPojos.PojoAnnouncementDetailed;
 import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
 import com.hazizz.droid.communication.responsePojos.taskPojos.PojoTaskDetailed;
+import com.hazizz.droid.converter.Converter;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -22,19 +24,18 @@ public class GetAT extends Request {
         this.p_whereId = Integer.toString(p_whereId);
     }
     public void setupCall() {
+        putHeaderAuthToken();
+        buildCall(RequestSender.getHazizzRequestTypes().getAT(p_whereName, p_whereId, header));
 
-        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
-
-        call = aRequest.getAT(p_whereName, p_whereId, headerMap);
     }
 
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
         if(p_whereName.equals(Strings.Path.TASKS.toString())) {
-             PojoTaskDetailed pojo = gson.fromJson(response.body().charStream(),  PojoTaskDetailed.class);
+             PojoTaskDetailed pojo = Converter.fromJson(response.body().charStream(),  PojoTaskDetailed.class);
             cOnResponse.onPOJOResponse(pojo);
         }else{
-            PojoAnnouncementDetailed pojo = gson.fromJson(response.body().charStream(), PojoAnnouncementDetailed.class);
+            PojoAnnouncementDetailed pojo = Converter.fromJson(response.body().charStream(), PojoAnnouncementDetailed.class);
             cOnResponse.onPOJOResponse(pojo);
         }
 

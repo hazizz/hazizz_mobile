@@ -20,7 +20,7 @@ public class ErrorHandler {
                     .setMessage(R.string.info_serverUnexpectedResponse)
                     .setCancelable(false)
                     .setPositiveButton(R.string.report_bug, (dialog, id) -> {
-                        Transactor.feedbackActivity(act);
+                        Transactor.activityFeedback(act);
                         dialog.cancel();
                     })
                     .setNegativeButton(R.string.go_back, new DialogInterface.OnClickListener() {

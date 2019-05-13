@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.util.Log;
 
 
+import com.hazizz.droid.communication.RequestSender;
 import com.hazizz.droid.communication.requests.parent.Request;
 import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
 
@@ -19,11 +20,10 @@ public class CreateSubject extends Request {
         body.put("name", b_subjectName);
     }
     public void setupCall() {
+        putHeaderContentType();
+        putHeaderAuthToken();
+        buildCall(RequestSender.getHazizzRequestTypes().createSubject(p_groupId, header, body));
 
-        headerMap.put("Content-Type", "application/json");
-        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
-
-        call = aRequest.createSubject(p_groupId, headerMap, body);
     }
 
 

@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.util.Log;
 
 
+import com.hazizz.droid.communication.RequestSender;
 import com.hazizz.droid.communication.requests.parent.AuthRequest;
 import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
 import com.hazizz.droid.communication.responsePojos.PojoToken;
+import com.hazizz.droid.converter.Converter;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -18,11 +20,9 @@ public class ElevationToken extends AuthRequest {
         body.put("password", b_hashedOldPassword);
     }
     public void setupCall() {
-
-        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
-        headerMap.put("Content-Type", "application/json");
-
-        call = aRequest.elevationToken(headerMap, body);
+        putHeaderAuthToken();
+        putHeaderContentType();
+        buildCall(RequestSender.getAuthRequestTypes().elevationToken(header, body));
     }
     /*
     @Override
@@ -36,7 +36,7 @@ public class ElevationToken extends AuthRequest {
     */
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
-        PojoToken pojoToken = gson.fromJson(response.body().charStream(), PojoToken.class);
+        PojoToken pojoToken = Converter.fromJson(response.body().charStream(), PojoToken.class);
         cOnResponse.onPOJOResponse(pojoToken);
     }
 }

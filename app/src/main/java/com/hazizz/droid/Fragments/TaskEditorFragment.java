@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
+import com.hazizz.droid.activities.BaseActivity;
 import com.hazizz.droid.activities.MainActivity;
 import com.hazizz.droid.other.AndroidThings;
 import com.hazizz.droid.communication.requests.CreateAT;
@@ -149,9 +150,9 @@ public class TaskEditorFragment extends ParentFragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_taskeditor, container, false);
-        ((MainActivity)getActivity()).onFragmentCreated();
+        ((MainActivity)getActivity()).onFragmentAdded();
 
-        fragmentSetup();
+        fragmentSetup(((BaseActivity)getActivity()));
         setOnBackPressedListener(new OnBackPressedListener() {
             @Override
             public void onBackPressed() {

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.util.Log;
 
 
+import com.hazizz.droid.communication.RequestSender;
 import com.hazizz.droid.communication.requests.parent.Request;
 import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
 
@@ -24,17 +25,11 @@ public class EditMyTask extends Request {
         body.put("description", b_description);
         body.put("dueDate", b_dueDate);
     }
-    @Override public void makeCall() {
-        call(act,  thisRequest, call, cOnResponse, gson);
-    }
-    @Override public void makeCallAgain() {
-        callAgain(act,  thisRequest, call, cOnResponse, gson);
-    }
+
     public void setupCall() {
-        HashMap<String, String> headerMap = new HashMap<>();
-        headerMap.put("Content-Type", "application/json");
-        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
-        call = aRequest.updateMyTask(p_taskId, body, headerMap);
+        putHeaderAuthToken();
+        putHeaderContentType();
+        buildCall(RequestSender.getHazizzRequestTypes().updateMyTask(p_taskId, body, header));
     }
     @Override public void callIsSuccessful(Response<ResponseBody> response) {
         cOnResponse.onSuccessfulResponse();

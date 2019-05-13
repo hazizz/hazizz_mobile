@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.util.Log;
 
 
+import com.hazizz.droid.communication.RequestSender;
 import com.hazizz.droid.communication.requests.parent.Request;
 import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
 import com.hazizz.droid.communication.responsePojos.PojoPicSmall;
+import com.hazizz.droid.converter.Converter;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -25,12 +27,12 @@ public class GetMyProfilePic extends Request {
 
     public void setupCall() {
 
-        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
+        putHeaderAuthToken();
 
         if(full){
-            call = aRequest.getMyProfilePic("full", headerMap);
+            buildCall(RequestSender.getHazizzRequestTypes().getMyProfilePic("full", header));
         }else{
-            call = aRequest.getMyProfilePic("",headerMap);
+            buildCall(RequestSender.getHazizzRequestTypes().getMyProfilePic("", header));
         }
 
         Log.e("hey", "setup call on getMyProfilePic");
@@ -39,7 +41,7 @@ public class GetMyProfilePic extends Request {
 
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
-        PojoPicSmall pojoPicSmall = gson.fromJson(response.body().charStream(), PojoPicSmall.class);
+        PojoPicSmall pojoPicSmall = Converter.fromJson(response.body().charStream(), PojoPicSmall.class);
         cOnResponse.onPOJOResponse(pojoPicSmall);
     }
 }

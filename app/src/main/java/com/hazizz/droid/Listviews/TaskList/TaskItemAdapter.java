@@ -108,8 +108,6 @@ public class TaskItemAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
-
-
         if (ItemTypeEnum.HEADER.getValue() == viewType) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.header_item, parent, false);
             return new HeaderTypeViewHolder(view);

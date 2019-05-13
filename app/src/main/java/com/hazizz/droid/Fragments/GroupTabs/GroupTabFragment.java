@@ -16,6 +16,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.hazizz.droid.activities.BaseActivity;
 import com.hazizz.droid.cache.CurrentGroup;
 
 import com.hazizz.droid.communication.requests.LeaveGroup;
@@ -98,7 +100,7 @@ public class GroupTabFragment extends ParentFragment {
             }
         });
 
-        fragmentSetup();
+        fragmentSetup(((BaseActivity)getActivity()));
         setOnBackPressedListener(new OnBackPressedListener() {
             @Override
             public void onBackPressed() {

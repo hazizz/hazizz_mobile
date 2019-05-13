@@ -19,8 +19,8 @@ public class DeleteAnnouncement extends Request {
 
     public void setupCall() {
 
-        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
-     //   call = aRequest.deleteAnnouncement(vars.get(Strings.Path.GROUPID).toString(), vars.get(Strings.Path.ANNOUNCEMENTID).toString(), headerMap); //Integer.toString(groupID)
+        putHeaderAuthToken();
+     //   call = aRequest.deleteAnnouncement(vars.get(Strings.Path.GROUPID).toString(), vars.get(Strings.Path.ANNOUNCEMENTID).toString(), header); //Integer.toString(groupID)
     }
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {

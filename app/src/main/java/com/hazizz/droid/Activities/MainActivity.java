@@ -32,6 +32,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 import com.hazizz.droid.cache.HCache;
+import com.hazizz.droid.communication.RequestSender;
 import com.hazizz.droid.other.AndroidThings;
 import com.hazizz.droid.other.AppInfo;
 import com.hazizz.droid.cache.MeInfo.MeInfo;
@@ -67,7 +68,7 @@ import com.hazizz.droid.other.Theme;
 
 import io.fabric.sdk.android.Fabric;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final int PICK_PHOTO_FOR_AVATAR = 1;
@@ -103,13 +104,11 @@ public class MainActivity extends AppCompatActivity
     private MenuItem menuItem_logs;
 
     private Toolbar toolbar;
-    private Fragment currentFrag;
+
 
     private Activity thisActivity = this;
 
     private MeInfo meInfo;
-
-    private OnBackPressedListener currentBackPressedListener;
 
     public static final String value_INTENT_MODE_CHOOSER = "chooser";
     public static final String value_INTENT_MODE_VIEWTASK = "viewTask";
@@ -142,7 +141,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
         if(AppInfo.isFirstTimeLaunched(getBaseContext())){
-            Transactor.authActivity(getBaseContext());
+            Transactor.activityAuth(getBaseContext());
             TaskReporterNotification.enable(getBaseContext());
             TaskReporterNotification.setScheduleForNotification(getBaseContext(), 17, 0);
         }else{
@@ -155,16 +154,18 @@ public class MainActivity extends AppCompatActivity
             Log.e("hey", "status443 is isAutoLogin: " + AppInfo.isAutoLogin(getBaseContext()));
             Log.e("hey", "status443 is TokenManager: " + SharedPrefs.TokenManager.getRefreshToken(this).equals("used"));
             finish();
-            Transactor.authActivity(getBaseContext());
+            Transactor.activityAuth(getBaseContext());
         }
 
         //if (!BuildConfig.DEBUG) { // only enable bug tracking in release version
         Fabric.with(this, new Crashlytics());
         Fabric.with(this, new Answers());
 
+        /*
         if(!SharedPrefs.Server.hasChangedAddress(this)) {
-            SharedPrefs.Server.setMainAddress(this, Request.BASE_URL);
+            SharedPrefs.Server.setMainAddress(this, RequestSender.BA);
         }
+        */
 
         meInfo = MeInfo.getInstance();
 
@@ -237,11 +238,11 @@ public class MainActivity extends AppCompatActivity
                 } else if (currentFrag instanceof GroupAnnouncementFragment) {
                     ((GroupAnnouncementFragment)currentFrag).toAnnouncementEditor(getSupportFragmentManager());
                 }else if (currentFrag instanceof MainAnnouncementFragment) {
-                    toAnnouncementEditorFrag();
+                    Transactor.fragmentCreatorAT(getSupportFragmentManager().beginTransaction(), GroupsFragment.Dest.TOCREATEANNOUNCEMET);
                 } else if (currentFrag instanceof SubjectsFragment) {
                     ((SubjectsFragment)currentFrag).toCreateSubject(getSupportFragmentManager());
                 } else if (currentFrag instanceof MainFragment) {
-                    toCreateTaskFrag();
+                    Transactor.fragmentCreatorAT(getSupportFragmentManager().beginTransaction(), GroupsFragment.Dest.TOCREATETASK);
                 } else if (currentFrag instanceof GroupsFragment) {
                     ((GroupsFragment)currentFrag).toCreateGroup(getSupportFragmentManager());
                 }else if (currentFrag instanceof MyTasksFragment) {
@@ -352,7 +353,7 @@ public class MainActivity extends AppCompatActivity
                  SharedPrefs.ThLoginData.clearAllData(getBaseContext());
                  HCache.getInstance().clearData(getBaseContext());
                  finish();
-                 Transactor.authActivity(getBaseContext());
+                 Transactor.activityAuth(getBaseContext());
              }
         });
 
@@ -450,19 +451,21 @@ public class MainActivity extends AppCompatActivity
                 toMainFrag();
                 break;
             case R.id.nav_groups:
-                toGroupsFrag();
+                Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction());
                 break;
             case R.id.nav_mytasks:
                 Transactor.fragmentMyTasks(getSupportFragmentManager().beginTransaction());
                 break;
             case R.id.nav_thera:
-                Transactor.fragmentThMain(getSupportFragmentManager().beginTransaction());
+                Transactor.activityThera(getBaseContext());
+                //Transactor.fragmentThMain(getSupportFragmentManager().beginTransaction());
+
                 break;
             case R.id.nav_settings:
                 Transactor.fragmentOptions(getSupportFragmentManager().beginTransaction());
                 break;
             case R.id.nav_feedback:
-                Transactor.feedbackActivity(this);
+                Transactor.activityFeedback(getBaseContext());
                 break;
             case R.id.nav_logs:
                 Transactor.fragmentLogs(getSupportFragmentManager().beginTransaction());
@@ -473,33 +476,9 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-    void toGroupsFrag(){
-        Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction());
-    }
     void toMainFrag(){
         Transactor.fragmentMain(getSupportFragmentManager().beginTransaction());
     }
-
-    void toCreateTaskFrag(){
-        Transactor.fragmentCreatorAT(getSupportFragmentManager().beginTransaction(), GroupsFragment.Dest.TOCREATETASK);
-
-    }
-    void toAnnouncementEditorFrag(){
-        Transactor.fragmentCreatorAT(getSupportFragmentManager().beginTransaction(), GroupsFragment.Dest.TOCREATEANNOUNCEMET);
-
-    }
-
-    public void setOnBackPressedListener(OnBackPressedListener listener){
-        currentBackPressedListener = listener;
-    }
-
-    public void removeOnBackPressedListener(){
-        currentBackPressedListener = null;
-    }
-
-
-
-
 
     @Override
     public void onBackPressed() {
@@ -536,9 +515,9 @@ public class MainActivity extends AppCompatActivity
         fab_joinGroup.setVisibility(View.INVISIBLE);
     }
 
-    public void onFragmentCreated(){
-        currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager(), false);
-
+    public void onFragmentAdded(){
+      //  currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager(), false);
+        super.onFragmentAdded();
         if (currentFrag instanceof GroupAnnouncementFragment || currentFrag instanceof GroupMainFragment
             || currentFrag instanceof MainAnnouncementFragment || currentFrag instanceof MainFragment
             || currentFrag instanceof MyTasksFragment ) {
@@ -582,11 +561,6 @@ public class MainActivity extends AppCompatActivity
             } else {
                 fab_action.setVisibility(View.INVISIBLE);
             }
-    }
-    public void pickImage() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");
-        startActivityForResult(intent, PICK_PHOTO_FOR_AVATAR);
     }
 
     public void setProfileImageInNav(Bitmap bitmap){

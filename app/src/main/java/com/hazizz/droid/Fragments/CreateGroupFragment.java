@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
+import com.hazizz.droid.activities.BaseActivity;
 import com.hazizz.droid.other.AndroidThings;
 
 
@@ -124,7 +125,7 @@ public class CreateGroupFragment extends ParentFragment {
 
         v = inflater.inflate(R.layout.fragment_creategroup, container, false);
 
-        fragmentSetup(R.string.title_fragment_creategroup);
+        fragmentSetup(((BaseActivity)getActivity()), R.string.title_fragment_creategroup);
         setOnBackPressedListener(new OnBackPressedListener() {
             @Override
             public void onBackPressed() {
@@ -134,7 +135,7 @@ public class CreateGroupFragment extends ParentFragment {
         });
 
 
-      //  ((MainActivity)getActivity()).onFragmentCreated();
+      //  ((MainActivity)getActivity()).onFragmentAdded()()()();
      //   getActivity().setTitle(R.string.title_fragment_creategroup);
 
         textView_error = v.findViewById(R.id.textView_error_currentPassword);

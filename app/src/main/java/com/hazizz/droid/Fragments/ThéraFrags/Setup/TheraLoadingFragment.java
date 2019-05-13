@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.hazizz.droid.activities.BaseActivity;
 import com.hazizz.droid.fragments.ParentFragment.ParentFragment;
 import com.hazizz.droid.R;
 import com.hazizz.droid.other.SharedPrefs;
@@ -18,7 +20,7 @@ public class TheraLoadingFragment extends ParentFragment {
         v = inflater.inflate(R.layout.fragment_th_loading, container, false);
         Log.e("hey", "TheraLoadingFragment fragment created");
 
-        fragmentSetup(R.string.loading);
+        fragmentSetup(((BaseActivity)getActivity()), R.string.loading);
 
 
         // check for session state

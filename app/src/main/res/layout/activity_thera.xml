@@ -32,44 +32,7 @@
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="120dp"
-            android:layout_gravity="end|bottom"
-            android:layout_margin="@dimen/fab_margin"
-            app:elevation="0dp">
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fab_action"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="bottom|end"
-                app:backgroundTint="@color/colorAccent"
-                app:borderWidth="0dp"
-                app:elevation="0dp"
-                app:srcCompat="@drawable/ic_add_white" />
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fab_joinGroup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_gravity="top"
-                android:clickable="true"
-                app:backgroundTint="@color/colorAccent"
-                app:borderWidth="0dp"
-                app:elevation="0dp"
-                app:layout_anchor="@id/fab_action"
-                app:layout_anchorGravity="top"
-                app:srcCompat="@drawable/ic_group_add_white" />
-        </RelativeLayout>
-
-    </android.support.design.widget.CoordinatorLayout>
+        android:layout_height="match_parent"/>
 
     <include
         layout="@layout/hazizz_nav">

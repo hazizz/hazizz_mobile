@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.util.Log;
 
 
+import com.hazizz.droid.communication.RequestSender;
 import com.hazizz.droid.communication.requests.parent.Request;
 import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
 
@@ -21,7 +22,8 @@ public class LeaveGroup extends Request {
 
         putHeaderAuthToken();
         putHeaderContentType();
-        call = aRequest.leaveGroup(p_groupId, headerMap);
+        buildCall(RequestSender.getHazizzRequestTypes().leaveGroup(p_groupId, header));
+
     }
 
 

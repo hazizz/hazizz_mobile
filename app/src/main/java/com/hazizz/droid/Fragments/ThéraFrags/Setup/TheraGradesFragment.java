@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.hazizz.droid.activities.BaseActivity;
 import com.hazizz.droid.cache.HCache;
 import com.hazizz.droid.communication.MiddleMan;
 
@@ -46,7 +47,7 @@ public class TheraGradesFragment  extends ParentFragment {
         v = inflater.inflate(R.layout.fragment_th_grades, container, false);
         Log.e("hey", "TheraGradesFragment fragment created");
 
-        fragmentSetup(R.string.thera_grades);
+        fragmentSetup(((BaseActivity)getActivity()), R.string.thera_grades);
         setOnBackPressedListener(new OnBackPressedListener() {
             @Override
             public void onBackPressed() {

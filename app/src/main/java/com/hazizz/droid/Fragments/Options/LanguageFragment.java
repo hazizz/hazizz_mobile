@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.hazizz.droid.R;
+import com.hazizz.droid.activities.BaseActivity;
 import com.hazizz.droid.cache.MeInfo.MeInfo;
 import com.hazizz.droid.fragments.ParentFragment.ParentFragment;
 import com.hazizz.droid.listeners.OnBackPressedListener;
@@ -35,7 +36,7 @@ public class LanguageFragment extends ParentFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_options, container, false);
 
-        fragmentSetup(R.string.settings);
+        fragmentSetup(((BaseActivity)getActivity()), R.string.settings);
 
         setOnBackPressedListener(new OnBackPressedListener() {
             @Override
@@ -83,6 +84,7 @@ public class LanguageFragment extends ParentFragment {
         getResources().updateConfiguration(config,getResources().getDisplayMetrics());
         */
 
+        /*
         Locale locale = new Locale("en");
         Locale.setDefault(locale);
 
@@ -92,6 +94,7 @@ public class LanguageFragment extends ParentFragment {
 
         context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
 
+*/
     }
 
 

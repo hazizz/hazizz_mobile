@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.util.Log;
 
 
+import com.hazizz.droid.communication.RequestSender;
 import com.hazizz.droid.communication.requests.parent.Request;
 import com.hazizz.droid.communication.Strings;
 import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
@@ -24,9 +25,10 @@ public class DeleteAT extends Request {
 
     public void setupCall() {
 
-        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
+        putHeaderAuthToken();
 
-        call = aRequest.deleteAT(whereName, whereId, headerMap);
+        buildCall(RequestSender.getHazizzRequestTypes().deleteAT(whereName, whereId, header));
+
     }
 
 

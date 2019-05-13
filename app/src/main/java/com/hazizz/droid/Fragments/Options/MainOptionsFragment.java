@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.hazizz.droid.activities.BaseActivity;
 import com.hazizz.droid.activities.MainActivity;
 import com.hazizz.droid.cache.HCache;
 import com.hazizz.droid.other.AndroidThings;
@@ -76,7 +77,7 @@ public class MainOptionsFragment extends ParentFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_options, container, false);
 
-        fragmentSetup(R.string.settings);
+        fragmentSetup(((BaseActivity)getActivity()), R.string.settings);
 
         setOnBackPressedListener(new OnBackPressedListener() {
             @Override

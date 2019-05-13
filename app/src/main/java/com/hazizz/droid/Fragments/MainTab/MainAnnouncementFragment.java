@@ -46,7 +46,7 @@ public class MainAnnouncementFragment extends Fragment{
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_announcements, container, false);
         Log.e("hey", "mainGroup fragment created");
-        ((MainActivity)getActivity()).onFragmentCreated();
+        ((MainActivity)getActivity()).onFragmentAdded();
 
         textView_noContent = v.findViewById(R.id.textView_noContent);
         sRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refresh_layout); sRefreshLayout.bringToFront();

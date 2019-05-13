@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.util.Log;
 
 
+import com.hazizz.droid.communication.RequestSender;
 import com.hazizz.droid.communication.requests.parent.Request;
 import com.hazizz.droid.communication.Strings;
 import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
@@ -46,10 +47,12 @@ public class CreateAT extends Request {
 
     public void setupCall() {
 
-        headerMap.put("Content-Type", "application/json");
-        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
-        call = aRequest.createAT(p_whereName.toString(), p_byName.toString(),
-                Integer.toString(p_byId), headerMap, body);
+        putHeaderContentType();
+        putHeaderAuthToken();
+        buildCall(RequestSender.getHazizzRequestTypes().createAT(p_whereName, p_byName,
+                Integer.toString(p_byId), header, body));
+
+
 
     }
     @Override

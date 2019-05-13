@@ -11,10 +11,14 @@ import android.graphics.Rect;
 import android.util.Base64;
 
 import com.google.common.hash.Hashing;
+import com.google.gson.Gson;
 import com.hazizz.droid.R;
+import com.hazizz.droid.communication.RequestSender;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.Reader;
+import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 
 public class Converter {
@@ -86,4 +90,20 @@ public class Converter {
             return null;
         }
     }
+
+    public static  <T> T  fromJson(Reader desirialzedObject, Type type){
+        T object = RequestSender.gson.fromJson(desirialzedObject, type);
+        return object;
+    }
+
+    public static  <T> T  fromJson(String desirialzedObject, Type type){
+        T object = RequestSender.gson.fromJson(desirialzedObject, type);
+        return object;
+    }
+
+    public static Gson getGson(){
+        return RequestSender.gson;
+    }
+
+
 }

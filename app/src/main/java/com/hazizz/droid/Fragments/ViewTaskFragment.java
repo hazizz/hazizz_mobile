@@ -127,7 +127,7 @@ public class ViewTaskFragment extends CommentableFragment implements AdapterView
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_viewtask, container, false);
         Log.e("hey", "im here lol");
-        ((MainActivity)getActivity()).onFragmentCreated();
+        ((MainActivity)getActivity()).onFragmentAdded();
         getActivity().setTitle(R.string.title_fragment_view_task);
         textView_type = v.findViewById(R.id.textView_tasktype);
         textView_title = v.findViewById(R.id.textView_title);

@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.util.Log;
 
 
+import com.hazizz.droid.communication.RequestSender;
 import com.hazizz.droid.communication.requests.parent.ThRequest;
 import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.converter.Converter;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -22,15 +24,16 @@ public class ThAuthenticateSession extends ThRequest {
 
     }
     public void setupCall() {
-        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
-        headerMap.put(HEADER_CONTENTTYPE, HEADER_VALUE_CONTENTTYPE);
+        putHeaderAuthToken();
+        header.put(HEADER_CONTENTTYPE, HEADER_VALUE_CONTENTTYPE);
 
-        call = aRequest.th_authenticateSession(p_session ,headerMap, body);
+        buildCall(RequestSender.getTheraRequestTypes().th_authenticateSession(p_session ,header, body));
+
     }
 
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
-        PojoSession pojo = gson.fromJson(response.body().charStream(), PojoSession.class);
+        PojoSession pojo = Converter.fromJson(response.body().charStream(), PojoSession.class);
         cOnResponse.onPOJOResponse(pojo);
     }
 }

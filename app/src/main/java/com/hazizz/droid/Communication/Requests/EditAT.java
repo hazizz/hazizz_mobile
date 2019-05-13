@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.util.Log;
 
 
+import com.hazizz.droid.communication.RequestSender;
 import com.hazizz.droid.communication.requests.parent.Request;
 import com.hazizz.droid.communication.Strings;
 import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
@@ -15,13 +16,13 @@ import retrofit2.Response;
 
 public class EditAT extends Request {
     private String p_whereName;
-    private int p_whereId;
+    private String p_whereId;
     public EditAT(Activity act, CustomResponseHandler rh, Strings.Path p_whereName, int p_whereId,
                   int b_taskType, String b_taskTitle, String b_description, String b_dueDate) {
         super(act, rh);
         Log.e("hey", "created EditAT object");
         this.p_whereName = p_whereName.toString();
-        this.p_whereId = p_whereId;
+        this.p_whereId = Integer.toString(p_whereId);
         body.put("taskType", b_taskType);
         body.put("taskTitle", b_taskTitle);
         body.put("description", b_description);
@@ -32,21 +33,15 @@ public class EditAT extends Request {
         super(act, rh);
         Log.e("hey", "created EditAT object");
         this.p_whereName = p_whereName.toString();
-        this.p_whereId = p_whereId;
+        this.p_whereId = Integer.toString(p_whereId);
         body.put("announcementTitle", b_announcementTitle);
         body.put("description", b_description);
     }
-    @Override public void makeCall() {
-        call(act,  thisRequest, call, cOnResponse, gson);
-    }
-    @Override public void makeCallAgain() {
-        callAgain(act,  thisRequest, call, cOnResponse, gson);
-    }
+
     public void setupCall() {
-        HashMap<String, String> headerMap = new HashMap<>();
-        headerMap.put("Content-Type", "application/json");
-        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
-        call = aRequest.editAT(p_whereName, Integer.toString(p_whereId), headerMap, body);
+        putHeaderAuthToken();
+        putHeaderContentType();
+        buildCall(RequestSender.getHazizzRequestTypes().editAT(p_whereName, p_whereId, header, body));
     }
     @Override public void callIsSuccessful(Response<ResponseBody> response) {
         cOnResponse.onSuccessfulResponse();

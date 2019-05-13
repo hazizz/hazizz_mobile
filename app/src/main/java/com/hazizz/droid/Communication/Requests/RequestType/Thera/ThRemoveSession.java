@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.util.Log;
 
 
+import com.hazizz.droid.communication.RequestSender;
 import com.hazizz.droid.communication.requests.parent.ThRequest;
 import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
 
@@ -19,10 +20,12 @@ public class ThRemoveSession extends ThRequest {
         this.p_session = Integer.toString(p_session);
     }
     public void setupCall() {
-        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
-        headerMap.put(HEADER_CONTENTTYPE, HEADER_VALUE_CONTENTTYPE);
+        putHeaderAuthToken();
+        //header.put(HEADER_CONTENTTYPE, HEADER_VALUE_CONTENTTYPE);
+        putHeaderContentType();
 
-        call = aRequest.th_removeSession(p_session, headerMap);
+        buildCall(RequestSender.getTheraRequestTypes().th_removeSession(p_session, header));
+
     }
 
     @Override

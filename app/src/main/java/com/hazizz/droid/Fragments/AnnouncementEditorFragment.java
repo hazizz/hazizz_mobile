@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
+import com.hazizz.droid.activities.BaseActivity;
 import com.hazizz.droid.other.AndroidThings;
 
 
@@ -95,7 +96,7 @@ public class AnnouncementEditorFragment extends ParentFragment {
         v = inflater.inflate(R.layout.fragment_announcementeditor, container, false);
 
 
-        fragmentSetup();
+        fragmentSetup(((BaseActivity)getActivity()));
         setOnBackPressedListener(new OnBackPressedListener() {
             @Override
             public void onBackPressed() {

@@ -5,9 +5,11 @@ import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
 
+import com.hazizz.droid.communication.RequestSender;
 import com.hazizz.droid.communication.requests.parent.Request;
 import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
 import com.hazizz.droid.communication.responsePojos.PojoType;
+import com.hazizz.droid.converter.Converter;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -21,16 +23,15 @@ public class GetTaskTypes extends Request {
         Log.e("hey", "created GetTaskTypes object");
     }
 
-
     public void setupCall() {
+        putHeaderAuthToken();
+        buildCall(RequestSender.getHazizzRequestTypes().getTaskTypes(header));
 
-        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
-        call = aRequest.getTaskTypes(headerMap); // vars.get(id").toString()
     }
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
         Type listType = new TypeToken<ArrayList<PojoType>>() {}.getType();
-        ArrayList<PojoType> castedList = gson.fromJson(response.body().charStream(), listType);
+        ArrayList<PojoType> castedList = Converter.fromJson(response.body().charStream(), listType);
         cOnResponse.onPOJOResponse(castedList);
     }
 }

@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.hazizz.droid.activities.BaseActivity;
 import com.hazizz.droid.cache.CurrentGroup;
 import com.hazizz.droid.cache.HCache;
 
@@ -62,7 +63,7 @@ public class GroupMainFragment extends TabFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_main, container, false);
 
-        fragmentSetup();
+        fragmentSetup(((BaseActivity)getActivity()));
 
         Log.e("hey", "mainGroup fragment created");
         groupId = GroupTabFragment.groupId;
