@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.hazizz.droid.activities.BaseActivity;
 import com.hazizz.droid.cache.CurrentGroup;
 import com.hazizz.droid.fragments.ParentFragment.ParentFragment;
 import com.hazizz.droid.fragments.ParentFragment.TabFragment;
@@ -45,7 +46,7 @@ public class TheraSchedulesTabFragmentHoster extends ParentFragment {
         Log.e("hey", "GroupTab fragment created");
 
         activity = getActivity();
-        fragmentSetup(R.string.thera_schedules);
+        fragmentSetup(((BaseActivity)getActivity()), R.string.thera_schedules);
 
         setOnBackPressedListener(new OnBackPressedListener() {
             @Override

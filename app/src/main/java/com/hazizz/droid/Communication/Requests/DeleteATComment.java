@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.util.Log;
 
 
+import com.hazizz.droid.communication.RequestSender;
 import com.hazizz.droid.communication.requests.parent.Request;
 import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
 import com.hazizz.droid.enums.EnumAT;
@@ -23,10 +24,8 @@ public class DeleteATComment extends Request {
 
 
     public void setupCall() {
-
-        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
-
-        call = aRequest.deleteATComment(whereName, whereId, commentId,headerMap);
+        putHeaderAuthToken();
+        buildCall(RequestSender.getHazizzRequestTypes().deleteATComment(whereName, whereId, commentId, header));
     }
 
 

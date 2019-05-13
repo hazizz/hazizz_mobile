@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.util.Log;
 
 
+import com.hazizz.droid.communication.RequestSender;
 import com.hazizz.droid.communication.requests.parent.Request;
 import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
 
@@ -19,9 +20,8 @@ public class JoinGroupByPassword extends Request {
         this.p_password = p_password;
     }
     public void setupCall() {
-
-        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
-        call = aRequest.joinGroupByPassword(p_groupId, p_password, headerMap);
+        putHeaderAuthToken();
+        buildCall(RequestSender.getHazizzRequestTypes().joinGroupByPassword(p_groupId, p_password, header));
     }
 
 

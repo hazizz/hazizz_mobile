@@ -138,7 +138,7 @@ public class ViewAnnouncementFragment extends CommentableFragment implements Ada
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_viewannouncement, container, false);
         Log.e("hey", "im here lol");
-        ((MainActivity)getActivity()).onFragmentCreated();
+        ((MainActivity)getActivity()).onFragmentAdded();
 
         getActivity().setTitle(R.string.title_fragment_view_announcement);
 

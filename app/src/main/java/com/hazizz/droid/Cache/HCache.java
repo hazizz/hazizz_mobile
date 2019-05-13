@@ -11,6 +11,7 @@ import com.hazizz.droid.communication.requests.GetTasksFromGroup;
 import com.hazizz.droid.communication.requests.RequestType.Thera.ThReturnSchedules.PojoClass;
 import com.hazizz.droid.communication.responsePojos.announcementPojos.PojoAnnouncement;
 import com.hazizz.droid.communication.responsePojos.taskPojos.PojoTask;
+import com.hazizz.droid.converter.Converter;
 import com.hazizz.droid.listviews.SubjectList.SubjectItem;
 import com.hazizz.droid.listviews.TheraGradesList.TheraGradesItem;
 import com.hazizz.droid.other.SharedPrefs;
@@ -67,7 +68,7 @@ public class HCache {
     public List< PojoTask> getTasksFromMe(Context context){
         String serialized = SharedPrefs.getString(context, fileName_all, key_tasks, null);
         Type listType = new TypeToken<ArrayList< PojoTask>>(){}.getType();
-        return gson.fromJson(serialized, listType);
+        return Converter.fromJson(serialized, listType);
     }
 
     public void setAnnouncementsFromMe(Context context, String serializedArrayListAnnouncements){
@@ -76,7 +77,7 @@ public class HCache {
     public List<PojoAnnouncement> getAnnouncementsFromMe(Context context){
         String serialized = SharedPrefs.getString(context, fileName_all, key_announcements, null);
         Type listType = new TypeToken<ArrayList<PojoAnnouncement>>(){}.getType();
-        return gson.fromJson(serialized, listType);
+        return Converter.fromJson(serialized, listType);
     }
 
     public void clearData(Context context){
@@ -136,7 +137,7 @@ public class HCache {
         public List<PojoTask> getTasks(Context context){
             String serialized = SharedPrefs.getString(context, fileName_group, key_tasks, null);
             Type listType = new TypeToken<ArrayList< PojoTask>>(){}.getType();
-            return gson.fromJson(serialized, listType);
+            return Converter.fromJson(serialized, listType);
         }
 
         public List<GetAnnouncementsFromGroup> getAnnouncements(Context context){
@@ -144,7 +145,7 @@ public class HCache {
 
             Type listType = new TypeToken<ArrayList<GetAnnouncementsFromGroup>>(){}.getType();
 
-            return gson.fromJson(serialized, listType);
+            return Converter.fromJson(serialized, listType);
         }
 
         public List<SubjectItem> getSubjects(Context context ){
@@ -152,7 +153,7 @@ public class HCache {
 
             Type listType = new TypeToken<ArrayList<SubjectItem>>(){}.getType();
 
-            return gson.fromJson(serialized, listType);
+            return Converter.fromJson(serialized, listType);
         }
 
         public List<Member> getMembers(Context context){
@@ -160,7 +161,7 @@ public class HCache {
 
             Type listType = new TypeToken<ArrayList<Member>>(){}.getType();
 
-            return gson.fromJson(serialized, listType);
+            return Converter.fromJson(serialized, listType);
         }
     }
 
@@ -188,7 +189,7 @@ public class HCache {
         public List<PojoClass> getSchedule(Context context){
             String serialized = SharedPrefs.getString(context, fileName_thera, key_schedules, null);
             Type listType = new TypeToken<ArrayList<PojoClass>>(){}.getType();
-            return gson.fromJson(serialized, listType);
+            return Converter.fromJson(serialized, listType);
         }
 
         public void setGrades(Context context, String serializedTreeMapGrades){
@@ -197,7 +198,7 @@ public class HCache {
         public SortedMap<String, List<TheraGradesItem>> getGrades(Context context){
             String serialized = SharedPrefs.getString(context, fileName_thera, key_grades, null);
             Type listType = new TypeToken<SortedMap<String, List<TheraGradesItem>>>(){}.getType();
-            return gson.fromJson(serialized, listType);
+            return Converter.fromJson(serialized, listType);
         }
 
 

@@ -5,10 +5,12 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.hazizz.droid.communication.RequestSender;
 import com.hazizz.droid.communication.requests.parent.Request;
 import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
 import com.hazizz.droid.communication.responsePojos.PojoError;
 import com.hazizz.droid.communication.responsePojos.taskPojos.PojoTask;
+import com.hazizz.droid.converter.Converter;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -31,9 +33,9 @@ public class GetTasksFromMeSync extends Request {
         Log.e("hey", "created GetTasksFromMeSync object");
     }
     public void setupCall() {
+        putHeaderAuthToken();
+        buildCall(RequestSender.getHazizzRequestTypes().getTasksFromMe(header));
 
-        headerMap.put(HEADER_AUTH, getHeaderAuthToken(context));
-        call = aRequest.getTasksFromMe(headerMap);
     }
     @Override
     public void makeCall() {
@@ -41,10 +43,10 @@ public class GetTasksFromMeSync extends Request {
             Response<ResponseBody> response = call.execute();
             try {
                 Type listType = new TypeToken<ArrayList<PojoTask>>() {}.getType();
-                List< PojoTask> castedList = gson.fromJson(response.body().charStream(), listType);
+                List< PojoTask> castedList = Converter.fromJson(response.body().charStream(), listType);
                 cOnResponse.onPOJOResponse(castedList);
             }catch (Exception e){
-                PojoError error = gson.fromJson(response.errorBody().charStream(), PojoError.class);
+                PojoError error = Converter.fromJson(response.errorBody().charStream(), PojoError.class);
                 cOnResponse.onErrorResponse(error);
             }
         } catch (IOException e) {
@@ -57,7 +59,7 @@ public class GetTasksFromMeSync extends Request {
         try {
             Response<ResponseBody> response = call.execute();
             Type listType = new TypeToken<ArrayList< PojoTask>>() {}.getType();
-            List< PojoTask> castedList = gson.fromJson(response.body().charStream(), listType);
+            List< PojoTask> castedList = Converter.fromJson(response.body().charStream(), listType);
             cOnResponse.onPOJOResponse(castedList);
         } catch (IOException e) {
             e.printStackTrace();
@@ -69,7 +71,7 @@ public class GetTasksFromMeSync extends Request {
         try {
             Response<ResponseBody> response = call.execute();
             Type listType = new TypeToken<ArrayList< PojoTask>>(){}.getType();
-            List< PojoTask> castedList = gson.fromJson(response.body().charStream(), listType);
+            List< PojoTask> castedList = Converter.fromJson(response.body().charStream(), listType);
             return castedList;
         } catch (IOException e) {
             e.printStackTrace();

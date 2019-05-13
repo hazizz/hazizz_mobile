@@ -5,9 +5,11 @@ import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
 
+import com.hazizz.droid.communication.RequestSender;
 import com.hazizz.droid.communication.requests.parent.Request;
 import com.hazizz.droid.communication.responsePojos.announcementPojos.PojoAnnouncement;
 import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
+import com.hazizz.droid.converter.Converter;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -23,20 +25,19 @@ public class GetAnnouncementsFromMe extends Request {
         Log.e("hey", "created GetAnnouncementsFromMe object");
     }
     public void setupCall() {
-        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
-        call = aRequest.getMyAnnouncements(headerMap);
+        putHeaderAuthToken();
+        buildCall(RequestSender.getHazizzRequestTypes().getMyAnnouncements(header));
+
     }
 
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
-
-
         Type listType = new TypeToken<ArrayList<PojoAnnouncement>>(){}.getType();
 
         List<PojoAnnouncement> castedList = null;
         try {
             String rawResponseBody = response.body().string();
-            castedList = gson.fromJson(rawResponseBody, listType);
+            castedList = Converter.fromJson(rawResponseBody, listType);
             cOnResponse.getRawResponseBody(rawResponseBody);
         } catch (IOException e) {
             e.printStackTrace();

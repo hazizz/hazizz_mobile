@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.hazizz.droid.activities.BaseActivity;
 import com.hazizz.droid.cache.CurrentGroup;
 import com.hazizz.droid.cache.Member;
 import com.hazizz.droid.communication.responsePojos.PojoMembersProfilePic;
@@ -42,7 +43,7 @@ public class GetGroupMembersFragment extends TabFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_getgroupmembers, container, false);
 
-        fragmentSetup();
+        fragmentSetup(((BaseActivity)getActivity()));
 
         groupId = GroupTabFragment.groupId;
         textView_noContent = v.findViewById(R.id.textView_noContent);

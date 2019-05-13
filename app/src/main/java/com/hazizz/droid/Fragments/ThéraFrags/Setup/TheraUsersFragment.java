@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.hazizz.droid.activities.BaseActivity;
 import com.hazizz.droid.communication.MiddleMan;
 
 import com.hazizz.droid.communication.requests.RequestType.Thera.PojoSession;
@@ -49,7 +50,7 @@ public class TheraUsersFragment  extends ParentFragment {
         v = inflater.inflate(R.layout.fragment_th_users, container, false);
         Log.e("hey", "TheraUsersFragment fragment created");
 
-        fragmentSetup(R.string.title_kreta_users);
+        fragmentSetup(((BaseActivity)getActivity()), R.string.title_kreta_users);
         setOnBackPressedListener(new OnBackPressedListener() {
             @Override
             public void onBackPressed() {

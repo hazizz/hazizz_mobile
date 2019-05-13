@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.util.Log;
 
 
+import com.hazizz.droid.communication.RequestSender;
 import com.hazizz.droid.communication.requests.parent.Request;
 import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
 import com.hazizz.droid.communication.responsePojos.PojoPermisionUsers;
+import com.hazizz.droid.converter.Converter;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -18,16 +20,14 @@ public class GetGroupMemberPermisions extends Request {
         Log.e("hey", "created GetGroupMemberPermisions object");
         this.p_groupId = Long.toString(p_groupId);
     }
-    @Override public void makeCall() {
-        call(act,  thisRequest, call, cOnResponse, gson);
-    }
+
     public void setupCall() {
-        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
-        call = aRequest.getGroupMemberPermissions(p_groupId, headerMap);
+        putHeaderAuthToken();
+        buildCall(RequestSender.getHazizzRequestTypes().getGroupMemberPermissions(p_groupId, header));
     }
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
-        PojoPermisionUsers pojo = gson.fromJson(response.body().charStream(), PojoPermisionUsers.class);
+        PojoPermisionUsers pojo = Converter.fromJson(response.body().charStream(), PojoPermisionUsers.class);
         cOnResponse.onPOJOResponse(pojo);
     }
 }

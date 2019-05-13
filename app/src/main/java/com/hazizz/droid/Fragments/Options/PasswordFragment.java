@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hazizz.droid.activities.BaseActivity;
 import com.hazizz.droid.activities.MainActivity;
 import com.hazizz.droid.cache.MeInfo.MeInfo;
 import com.hazizz.droid.communication.MiddleMan;
@@ -100,7 +101,7 @@ public class PasswordFragment extends ParentFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_password, container, false);
 
-        fragmentSetup(R.string.changePassword);
+        fragmentSetup(((BaseActivity)getActivity()), R.string.changePassword);
         ((MainActivity)getActivity()).setOnBackPressedListener(new OnBackPressedListener() {
             @Override
             public void onBackPressed() {

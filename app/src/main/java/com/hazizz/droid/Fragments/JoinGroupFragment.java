@@ -14,6 +14,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.hazizz.droid.activities.BaseActivity;
 import com.hazizz.droid.other.AndroidThings;
 
 import com.hazizz.droid.communication.requests.GetGroups;
@@ -165,7 +166,7 @@ public class JoinGroupFragment extends ParentFragment {
         v = inflater.inflate(R.layout.fragment_joingroup, container, false);
 
 
-        fragmentSetup(R.string.title_fragment_joingroup);
+        fragmentSetup(((BaseActivity)getActivity()), R.string.title_fragment_joingroup);
         setOnBackPressedListener(new OnBackPressedListener() {
             @Override
             public void onBackPressed() {

@@ -3,6 +3,7 @@ package com.hazizz.droid.communication.requests;
 import android.app.Activity;
 import android.util.Log;
 
+import com.hazizz.droid.communication.RequestSender;
 import com.hazizz.droid.communication.requests.parent.Request;
 import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
 
@@ -18,12 +19,9 @@ public class Feedback extends Request {
         body.put("message", b_message);
     }
     public void setupCall() {
-
-        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
-        headerMap.put("Content-Type", "application/json");
-
-
-        call = aRequest.feedback(headerMap, body);
+        putHeaderAuthToken();
+        putHeaderContentType();
+        buildCall(RequestSender.getHazizzRequestTypes().feedback(header, body));
         Log.e("hey", "setup call on Feedback");
     }
 

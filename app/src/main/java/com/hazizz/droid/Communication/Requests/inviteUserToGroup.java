@@ -19,9 +19,9 @@ public class inviteUserToGroup extends Request {
     }
     public void setupCall() {
 
-        headerMap.put("Content-Type", "application/json");
-        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
-       // call = aRequest.inviteUserToGroup(vars.get(Strings.Path.GROUPID).toString(), headerMap, body);
+        putHeaderContentType();
+        putHeaderAuthToken();
+       // call = aRequest.inviteUserToGroup(vars.get(Strings.Path.GROUPID).toString(), header, body);
     }
 
 

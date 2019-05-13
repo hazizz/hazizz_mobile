@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.hazizz.droid.activities.BaseActivity;
 import com.hazizz.droid.fragments.ParentFragment.ParentFragment;
 import com.hazizz.droid.listeners.OnBackPressedListener;
 import com.hazizz.droid.R;
@@ -29,7 +30,7 @@ public class TheraMainFragment extends ParentFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_th_main, container, false);
 
-        fragmentSetup(R.string.title_thera);
+        fragmentSetup(((BaseActivity)getActivity()), R.string.title_thera);
         setOnBackPressedListener(new OnBackPressedListener() {
             @Override
             public void onBackPressed() {

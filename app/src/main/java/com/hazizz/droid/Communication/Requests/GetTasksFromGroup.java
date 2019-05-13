@@ -5,9 +5,11 @@ import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
 
+import com.hazizz.droid.communication.RequestSender;
 import com.hazizz.droid.communication.requests.parent.Request;
 import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
 import com.hazizz.droid.communication.responsePojos.taskPojos.PojoTask;
+import com.hazizz.droid.converter.Converter;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -26,8 +28,9 @@ public class GetTasksFromGroup extends Request {
     }
     public void setupCall() {
 
-        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
-        call = aRequest.getTasksFromGroup(p_groupId, headerMap);
+        putHeaderAuthToken();
+        buildCall(RequestSender.getHazizzRequestTypes().getTasksFromGroup(p_groupId, header));
+
     }
 
 
@@ -38,7 +41,7 @@ public class GetTasksFromGroup extends Request {
         List< PojoTask> castedList = null;
         try {
             String rawResponseBody = response.body().string();
-            castedList = gson.fromJson(rawResponseBody, listType);
+            castedList = Converter.fromJson(rawResponseBody, listType);
             cOnResponse.getRawResponseBody(rawResponseBody);
         } catch (IOException e) {
             e.printStackTrace();

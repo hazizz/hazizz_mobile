@@ -8,14 +8,15 @@ public class PojoError implements Pojo {
     private int errorCode = 0;
     private String title = "null";
     private String message = "null";
+    private String url = "null";
 
-    public PojoError(String time, int errorCode, String title, String message){
+    public PojoError(String time, int errorCode, String title, String messag, String url){
         Log.e("hey", "the time: " + time + "|");
         if(time == null || time.length() == 0){this.time = "null";}else{this.time = time;}
         this.errorCode = errorCode;
         if(title == null || title.length() == 0){this.title = "null";}else{this.title = title;}
         if(message == null || message.length() == 0){this.message = "null";}else{this.message = message;}
-
+        this.url = url;
     }
     public String getTime(){
         if(time != null){

@@ -3,6 +3,7 @@ package com.hazizz.droid.communication.requests;
 import android.app.Activity;
 
 
+import com.hazizz.droid.communication.RequestSender;
 import com.hazizz.droid.communication.requests.parent.Request;
 import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
 
@@ -19,8 +20,8 @@ public class GetLog extends Request {
     }
 
     public void setupCall() {
-        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
-        call = aRequest.getLog(p_logSize, headerMap);
+        putHeaderAuthToken();
+        buildCall(RequestSender.getHazizzRequestTypes().getLog(p_logSize, header));
     }
 
 

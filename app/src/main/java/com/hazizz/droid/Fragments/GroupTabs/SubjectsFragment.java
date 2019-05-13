@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.hazizz.droid.activities.BaseActivity;
 import com.hazizz.droid.cache.CurrentGroup;
 
 import com.hazizz.droid.communication.requests.GetSubjects;
@@ -55,7 +56,7 @@ public class SubjectsFragment extends TabFragment {
 
 
         Log.e("hey", "subject group fragment created");
-        fragmentSetup();
+        fragmentSetup(((BaseActivity)getActivity()));
         groupId = GroupTabFragment.groupId;
 
         textView_noContent = v.findViewById(R.id.textView_noContent);

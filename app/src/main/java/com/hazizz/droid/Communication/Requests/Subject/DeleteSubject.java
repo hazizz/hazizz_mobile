@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.util.Log;
 
 
+import com.hazizz.droid.communication.RequestSender;
 import com.hazizz.droid.communication.requests.parent.Request;
 import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
 
@@ -22,9 +23,10 @@ public class DeleteSubject extends Request {
 
     public void setupCall() {
 
-        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
-        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
-        call = aRequest.deleteSubject(p_groupId, p_subjectId, headerMap);
+        putHeaderAuthToken();
+        putHeaderAuthToken();
+        buildCall(RequestSender.getHazizzRequestTypes().deleteSubject(p_groupId, p_subjectId, header));
+
     }
 
 

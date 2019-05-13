@@ -5,9 +5,11 @@ import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
 
+import com.hazizz.droid.communication.RequestSender;
 import com.hazizz.droid.communication.requests.parent.Request;
 import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
 import com.hazizz.droid.communication.responsePojos.PojoMembersProfilePic;
+import com.hazizz.droid.converter.Converter;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -23,15 +25,15 @@ public class GetGroupMembersProfilePic extends Request {
         this.groupId = Long.toString(groupId);
     }
     public void setupCall() {
-        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
-        call = aRequest.getGroupMembersProfilePic(groupId ,headerMap);
+        putHeaderAuthToken();
+        buildCall(RequestSender.getHazizzRequestTypes().getGroupMembersProfilePic(groupId, header));
     }
 
 
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
         Type listType = new TypeToken<HashMap<Long, PojoMembersProfilePic>>(){}.getType();
-        HashMap<Long, PojoMembersProfilePic> castedMap = gson.fromJson(response.body().charStream(), listType);
+        HashMap<Long, PojoMembersProfilePic> castedMap = Converter.fromJson(response.body().charStream(), listType);
         cOnResponse.onPOJOResponse(castedMap);
     }
 }

@@ -3,6 +3,7 @@ package com.hazizz.droid.fragments.ParentFragment;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
+import com.hazizz.droid.activities.BaseActivity;
 import com.hazizz.droid.activities.MainActivity;
 import com.hazizz.droid.other.AndroidThings;
 import com.hazizz.droid.listeners.OnBackPressedListener;
@@ -11,45 +12,51 @@ public class ParentFragment extends Fragment {
 
     protected View v;
 
+    protected BaseActivity baseActivity;
 
-    protected void fragmentSetup(){
-        ((MainActivity)getActivity()).onFragmentCreated();
+    // fragment setup needs to be called first
+    protected void fragmentSetup(BaseActivity baseActivity){
+        this.baseActivity = baseActivity;
+        baseActivity.onFragmentAdded();
     }
-
-    protected void setTitle(int titleId){
-        getActivity().setTitle(titleId);
-    }
-
-    protected void setTitle(CharSequence title){
-        getActivity().setTitle(title);
-    }
-
-
-    protected void fragmentSetup(int titleId){
-        ((MainActivity)getActivity()).onFragmentCreated();
+    // fragment setup needs to be called first
+    protected void fragmentSetup(BaseActivity baseActivity, int titleId){
+        this.baseActivity = baseActivity;
+        baseActivity.onFragmentAdded();
         if(titleId != 0){
             setTitle(titleId);
         }
     }
 
+    protected void setTitle(int titleId){
+        baseActivity.setTitle(titleId);
+    }
+
+    protected void setTitle(CharSequence title){
+        baseActivity.setTitle(title);
+    }
+
+
+
+
     protected void setOnBackPressedListener(OnBackPressedListener onBackPressedListener){
-        ((MainActivity)getActivity()).setOnBackPressedListener(onBackPressedListener);
+        baseActivity.setOnBackPressedListener(onBackPressedListener);
     }
 
     protected void clearFragment(){
-        ((MainActivity)getActivity()).removeOnBackPressedListener();
-        AndroidThings.closeKeyboard(getContext(), v);
+        baseActivity.removeOnBackPressedListener();
+        AndroidThings.closeKeyboard(baseActivity, v);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        AndroidThings.closeKeyboard(getContext(), v);
+        AndroidThings.closeKeyboard(baseActivity, v);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        AndroidThings.closeKeyboard(getContext(), v);
+        AndroidThings.closeKeyboard(baseActivity, v);
     }
 }

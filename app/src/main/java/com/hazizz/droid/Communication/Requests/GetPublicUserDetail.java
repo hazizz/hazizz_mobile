@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.util.Log;
 
 
+import com.hazizz.droid.communication.RequestSender;
 import com.hazizz.droid.communication.requests.parent.Request;
 import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
 import com.hazizz.droid.communication.responsePojos.PojoPublicUserData;
+import com.hazizz.droid.converter.Converter;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -19,15 +21,14 @@ public class GetPublicUserDetail extends Request {
         this.userId = Integer.toString(userId);
     }
     public void setupCall() {
-
-        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
-        call = aRequest.getPublicUserDetail(userId,headerMap);
+        putHeaderAuthToken();
+        buildCall(RequestSender.getHazizzRequestTypes().getPublicUserDetail(userId, header));
     }
 
 
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
-        PojoPublicUserData castedObject = gson.fromJson(response.body().charStream(), PojoPublicUserData.class);
+        PojoPublicUserData castedObject = Converter.fromJson(response.body().charStream(), PojoPublicUserData.class);
         cOnResponse.onPOJOResponse(castedObject);
     }
 }

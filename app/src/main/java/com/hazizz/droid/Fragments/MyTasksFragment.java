@@ -59,7 +59,7 @@ public class MyTasksFragment extends Fragment{
                 getTasks();
             }});
         sRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimaryDarkBlue), getResources().getColor(R.color.colorPrimaryLightBlue), getResources().getColor(R.color.colorPrimaryDarkBlue));
-        ((MainActivity)getActivity()).onFragmentCreated();
+        ((MainActivity)getActivity()).onFragmentAdded();
         createViewList();
         getTasks();
 

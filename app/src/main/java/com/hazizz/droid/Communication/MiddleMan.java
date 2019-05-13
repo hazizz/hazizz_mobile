@@ -11,9 +11,9 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
 public class MiddleMan{
-    public static BlockingQueue<RequestInterface> requestQueue = new LinkedBlockingDeque<>(10);
-    public static BlockingQueue<RequestInterface> waitingForResponseQueue = new LinkedBlockingDeque<>(10);
-    public static BlockingQueue<RequestInterface> rateLimitRequestQueue = new LinkedBlockingDeque<>(10);
+    public static BlockingQueue<ParentRequest> requestQueue = new LinkedBlockingDeque<>(10);
+    public static BlockingQueue<ParentRequest> waitingForResponseQueue = new LinkedBlockingDeque<>(10);
+    public static BlockingQueue<ParentRequest> rateLimitRequestQueue = new LinkedBlockingDeque<>(10);
 
     public static void cancelAllRequest(){
         for (RequestInterface r : requestQueue) {
@@ -25,7 +25,7 @@ public class MiddleMan{
     }
 
     public static void cancelAndSaveAllRequests() {
-        for (RequestInterface r : requestQueue) {
+        for (ParentRequest r : requestQueue) {
             r.cancelRequest();
             try {
                 requestQueue.put(r);
@@ -35,7 +35,7 @@ public class MiddleMan{
         }
     }
 
-    public static void addToCallAgain(RequestInterface r) {
+    public static void addToCallAgain(ParentRequest r) {
         try {
             requestQueue.put(r);
         } catch (InterruptedException e) {
@@ -43,7 +43,7 @@ public class MiddleMan{
         }
     }
 
-    public static void addToRateLimitQueue(RequestInterface r) {
+    public static void addToRateLimitQueue(ParentRequest r) {
         try {
             rateLimitRequestQueue.put(r);
         } catch (InterruptedException e) {
@@ -56,9 +56,9 @@ public class MiddleMan{
             if (r.getClass() == newRequest.getClass()) {
                 requestQueue.remove(r);
             }
-        if(Network.getActiveNetwork(newRequest.getActivity()) == null || !Network.isConnectedOrConnecting(newRequest.getActivity())) {
+        if(Network.getActiveNetwork(newRequest.getContext()) == null || !Network.isConnectedOrConnecting(newRequest.getContext())) {
             newRequest.getResponseHandler().onNoConnection();
-            Toast.makeText(newRequest.getActivity(), R.string.info_noInternetAccess, Toast.LENGTH_LONG).show();
+            Toast.makeText(newRequest.getContext(), R.string.info_noInternetAccess, Toast.LENGTH_LONG).show();
         }
         try {
             requestQueue.put(newRequest);
@@ -109,9 +109,10 @@ public class MiddleMan{
     }
 
     public static void sendRequestsFromQ() {
-        for (RequestInterface request : requestQueue) {
+        for (ParentRequest request : requestQueue) {
             request.setupCall();
-            request.makeCall();
+            RequestSender.callAsync(request);
+           // request.makeCall();
             try {
                 waitingForResponseQueue.put(request);
             } catch (InterruptedException e) { e.printStackTrace(); }

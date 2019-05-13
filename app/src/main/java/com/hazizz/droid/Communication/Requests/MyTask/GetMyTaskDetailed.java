@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.util.Log;
 
 
+import com.hazizz.droid.communication.RequestSender;
 import com.hazizz.droid.communication.requests.parent.Request;
 import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
 import com.hazizz.droid.communication.responsePojos.taskPojos.PojoTaskDetailed;
+import com.hazizz.droid.converter.Converter;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -18,15 +20,16 @@ public class GetMyTaskDetailed extends Request{
     }
     public void setupCall() {
 
-        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
+        putHeaderAuthToken();
 
-        call = aRequest.getMyTaskDetailed(headerMap);
+        buildCall(RequestSender.getHazizzRequestTypes().getMyTaskDetailed(header));
+
     }
 
 
     @Override
     public void callIsSuccessful(Response<ResponseBody> response) {
-         PojoTaskDetailed pojo = gson.fromJson(response.body().charStream(),  PojoTaskDetailed.class);
+         PojoTaskDetailed pojo = Converter.fromJson(response.body().charStream(),  PojoTaskDetailed.class);
         cOnResponse.onPOJOResponse(pojo);
     }
 }

@@ -6,9 +6,11 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.hazizz.droid.communication.RequestSender;
 import com.hazizz.droid.communication.requests.parent.Request;
 import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
 import com.hazizz.droid.communication.responsePojos.PojoMembersProfilePic;
+import com.hazizz.droid.converter.Converter;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -26,15 +28,15 @@ public class GetGroupMembersProfilePicSync extends Request {
         this.groupId = Integer.toString(groupId);
     }
     public void setupCall() {
-        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
-        call = aRequest.getGroupMembersProfilePic(groupId ,headerMap);
+        putHeaderAuthToken();
+        buildCall(RequestSender.getHazizzRequestTypes().getGroupMembersProfilePic(groupId, header));
     }
     @Override
     public void makeCall() {
         try {
             Response<ResponseBody> response = call.execute();
             Type listType = new TypeToken<HashMap<Integer, PojoMembersProfilePic>>(){}.getType();
-            HashMap<Integer, PojoMembersProfilePic> castedMap = gson.fromJson(response.body().charStream(), listType);
+            HashMap<Integer, PojoMembersProfilePic> castedMap = Converter.fromJson(response.body().charStream(), listType);
 
             cOnResponse.onPOJOResponse(castedMap);
         } catch (IOException e) {
@@ -51,7 +53,7 @@ public class GetGroupMembersProfilePicSync extends Request {
             e.printStackTrace();
         }
         Type listType = new TypeToken<HashMap<Integer, PojoMembersProfilePic>>(){}.getType();
-        HashMap<Integer, PojoMembersProfilePic> castedMap = gson.fromJson(response.body().charStream(), listType);
+        HashMap<Integer, PojoMembersProfilePic> castedMap = Converter.fromJson(response.body().charStream(), listType);
         return castedMap;
     }
 

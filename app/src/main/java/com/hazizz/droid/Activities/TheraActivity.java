@@ -7,13 +7,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -37,10 +35,8 @@ import com.hazizz.droid.cache.MeInfo.MeInfo;
 
 import com.hazizz.droid.communication.requests.GetMyProfilePic;
 import com.hazizz.droid.communication.requests.Me;
-import com.hazizz.droid.communication.requests.parent.Request;
 import com.hazizz.droid.communication.Strings;
 import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
-import com.hazizz.droid.communication.responsePojos.PojoError;
 import com.hazizz.droid.communication.responsePojos.PojoMe;
 import com.hazizz.droid.communication.responsePojos.PojoPicSmall;
 import com.hazizz.droid.converter.Converter;
@@ -51,7 +47,6 @@ import com.hazizz.droid.fragments.GroupTabs.SubjectsFragment;
 import com.hazizz.droid.fragments.MainTab.GroupsFragment;
 import com.hazizz.droid.fragments.MainTab.MainAnnouncementFragment;
 import com.hazizz.droid.fragments.MainTab.MainFragment;
-import com.hazizz.droid.fragments.MyTasksFragment;
 import com.hazizz.droid.fragments.ViewTaskFragment;
 import com.hazizz.droid.listeners.OnBackPressedListener;
 import com.hazizz.droid.notification.TaskReporterNotification;
@@ -64,7 +59,7 @@ import com.hazizz.droid.other.Theme;
 
 import io.fabric.sdk.android.Fabric;
 
-public class TheraActivity extends AppCompatActivity
+public class TheraActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final int PICK_PHOTO_FOR_AVATAR = 1;
@@ -85,19 +80,6 @@ public class TheraActivity extends AppCompatActivity
     public static String strNavUsername;
     public static String strNavEmail;
     public static String strNavDisplayName;
-
-    FloatingActionButton fab_joinGroup;
-    FloatingActionButton fab_action;
-
-    private Menu optionsMenu;
-
-    private Menu menu_nav;
-    private MenuItem menuItem_home;
-    private MenuItem menuItem_groups;
-    private MenuItem menuItem_myTasks;
-    private MenuItem menuItem_thera;
-    private MenuItem menuItem_settings;
-    private MenuItem menuItem_logs;
 
     private Toolbar toolbar;
     private Fragment currentFrag;
@@ -135,78 +117,46 @@ public class TheraActivity extends AppCompatActivity
         Fabric.with(this, new Crashlytics());
         Fabric.with(this, new Answers());
 
+        /*
         if(!SharedPrefs.Server.hasChangedAddress(this)) {
             SharedPrefs.Server.setMainAddress(this, Request.BASE_URL);
         }
+        */
 
         meInfo = MeInfo.getInstance();
 
         FirebaseDynamicLinks.getInstance()
-                .getDynamicLink(getIntent())
-                .addOnSuccessListener(this, new OnSuccessListener<PendingDynamicLinkData>() {
-                    @Override
-                    public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
-                        // Get deep link from result (may be null if no link is found)
-                        Uri deepLink = null;
-                        if (pendingDynamicLinkData != null) {
-                            deepLink = pendingDynamicLinkData.getLink();
-                        }
-                        if(deepLink!=null){
-                            int groupId = Integer.parseInt(deepLink.getQueryParameter("group"));
-                        }
-                        Log.e("hey", "dynamic link lol: " + deepLink);
+            .getDynamicLink(getIntent())
+            .addOnSuccessListener(this, new OnSuccessListener<PendingDynamicLinkData>() {
+                @Override
+                public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
+                    // Get deep link from result (may be null if no link is found)
+                    Uri deepLink = null;
+                    if (pendingDynamicLinkData != null) {
+                        deepLink = pendingDynamicLinkData.getLink();
                     }
-                })
-                .addOnFailureListener(this, new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("hey", "getDynamicLink:onFailure", e);
+                    if(deepLink!=null){
+                        int groupId = Integer.parseInt(deepLink.getQueryParameter("group"));
                     }
-                });
+                    Log.e("hey", "dynamic link lol: " + deepLink);
+                }
+            })
+            .addOnFailureListener(this, new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.w("hey", "getDynamicLink:onFailure", e);
+                }
+            });
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_thera);
 
         ThreadManager.getInstance().startThreadIfNotRunning(this);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        fab_joinGroup = findViewById(R.id.fab_joinGroup);
-        fab_joinGroup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Transactor.fragmentJoinGroup(getSupportFragmentManager().beginTransaction());
-                fab_joinGroup.setVisibility(View.INVISIBLE);
-            }
-        });
         toMainFrag = true;
 
-        fab_action = (FloatingActionButton) findViewById(R.id.fab_action);
-        fab_action.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.e("hey", "fab_action CLICKed");
-                currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager(), false);
-
-                if (currentFrag instanceof GroupMainFragment) {
-                    ((GroupMainFragment)currentFrag).toTaskEditor(getSupportFragmentManager());
-                } else if (currentFrag instanceof GroupAnnouncementFragment) {
-                    ((GroupAnnouncementFragment)currentFrag).toAnnouncementEditor(getSupportFragmentManager());
-                }else if (currentFrag instanceof MainAnnouncementFragment) {
-                    toAnnouncementEditorFrag();
-                } else if (currentFrag instanceof SubjectsFragment) {
-                    ((SubjectsFragment)currentFrag).toCreateSubject(getSupportFragmentManager());
-                } else if (currentFrag instanceof MainFragment) {
-                    toCreateTaskFrag();
-                } else if (currentFrag instanceof GroupsFragment) {
-                    ((GroupsFragment)currentFrag).toCreateGroup(getSupportFragmentManager());
-                }else if (currentFrag instanceof MyTasksFragment) {
-                    ((MyTasksFragment)currentFrag).toCreateTask();
-                }else if (currentFrag instanceof GetGroupMembersFragment) {
-                    ((GetGroupMembersFragment)currentFrag).openInviteLinkDialog(getSupportFragmentManager());
-                }
-            }
-        });
         navView = (NavigationView) findViewById(R.id.nav_view);
 
         navView.inflateMenu(R.menu.nav_drawer_thera);
@@ -223,7 +173,6 @@ public class TheraActivity extends AppCompatActivity
         imageButton_darkMode = findViewById(R.id.imageButton_darkMode);
         imageButton_darkMode.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-
                 if(Theme.isDarkMode(getBaseContext())){
                     Theme.setDarkMode(getBaseContext(), false);
                     setTheme(R.style.AppTheme_Light);
@@ -232,7 +181,7 @@ public class TheraActivity extends AppCompatActivity
                     setTheme(R.style.AppTheme_Dark);
                 }
 
-                Intent intent = new Intent(thisActivity, MainActivity.class);
+                Intent intent = new Intent(thisActivity, thisActivity.getClass());
 
                 finish();
 
@@ -243,13 +192,6 @@ public class TheraActivity extends AppCompatActivity
             }
         });
 
-        menu_nav = navView.getMenu();
-        menuItem_home     = menu_nav.getItem(0);
-        menuItem_groups   = menu_nav.getItem(1);
-        menuItem_myTasks  = menu_nav.getItem(2);
-        menuItem_thera    = menu_nav.getItem(3);
-        menuItem_settings = menu_nav.getItem(4);
-        menuItem_logs     = menu_nav.getItem(5);
 
         drawerLayout = findViewById(R.id.drawer_layout);
         drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
@@ -261,18 +203,18 @@ public class TheraActivity extends AppCompatActivity
                     MiddleMan.newRequest(new Me(thisActivity, new CustomResponseHandler() {
                         @Override
                         public void onPOJOResponse(Object response) {
-                            PojoMe pojo = (PojoMe) response;
-                            HCache.getInstance().setUsername(getBaseContext(), pojo.getUsername());
-                            HCache.getInstance().setDisplayUsername(getBaseContext(), pojo.getDisplayName());
-                            strNavEmail = (pojo.getEmailAddress());
-                            strNavUsername = (pojo.getUsername());
-                            strNavDisplayName = (pojo.getDisplayName());
-                            meInfo.setUserId(pojo.getId());
-                            meInfo.setProfileName(strNavUsername);
-                            meInfo.setDisplayName(strNavDisplayName);
-                            meInfo.setProfileEmail(strNavEmail);
-                            navUsername.setText(strNavDisplayName);
-                            navEmail.setText(strNavEmail);
+                        PojoMe pojo = (PojoMe) response;
+                        HCache.getInstance().setUsername(getBaseContext(), pojo.getUsername());
+                        HCache.getInstance().setDisplayUsername(getBaseContext(), pojo.getDisplayName());
+                        strNavEmail = (pojo.getEmailAddress());
+                        strNavUsername = (pojo.getUsername());
+                        strNavDisplayName = (pojo.getDisplayName());
+                        meInfo.setUserId(pojo.getId());
+                        meInfo.setProfileName(strNavUsername);
+                        meInfo.setDisplayName(strNavDisplayName);
+                        meInfo.setProfileEmail(strNavEmail);
+                        navUsername.setText(strNavDisplayName);
+                        navEmail.setText(strNavEmail);
                         }
                     }));
                     MiddleMan.newRequest(new GetMyProfilePic(thisActivity,  new CustomResponseHandler() {
@@ -313,9 +255,8 @@ public class TheraActivity extends AppCompatActivity
             }
         });
 
-
         if(AppInfo.isFirstTimeLaunched(getBaseContext())){
-            Transactor.authActivity(getBaseContext());
+            Transactor.activityAuth(getBaseContext());
             TaskReporterNotification.enable(getBaseContext());
             TaskReporterNotification.setScheduleForNotification(getBaseContext(), 17, 0);
         }
@@ -328,9 +269,11 @@ public class TheraActivity extends AppCompatActivity
 
         boolean receivedIntentTask = receiveIntentTask();
         if(!receivedIntentTask && toMainFrag) {
-            toMainFrag();
+          //  toMainFrag();
             toMainFrag = false;
         }
+
+        Transactor.fragmentThMain(getSupportFragmentManager().beginTransaction());
     }
 
     @Override
@@ -383,55 +326,20 @@ public class TheraActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager(), false);
         switch (item.getItemId()) {
-            case R.id.nav_home:
-                toMainFrag();
+            case R.id.nav_hazizz:
                 break;
-            case R.id.nav_groups:
-                toGroupsFrag();
+            case R.id.nav_schedules:
+                Transactor.fragmentThSchedules(getSupportFragmentManager().beginTransaction());
                 break;
-            case R.id.nav_mytasks:
-                Transactor.fragmentMyTasks(getSupportFragmentManager().beginTransaction());
+            case R.id.nav_grades:
+                Transactor.fragmentThGrades(getSupportFragmentManager().beginTransaction());
                 break;
             case R.id.nav_thera:
                 Transactor.fragmentThMain(getSupportFragmentManager().beginTransaction());
-                break;
-            case R.id.nav_settings:
-                Transactor.fragmentOptions(getSupportFragmentManager().beginTransaction());
-                break;
-            case R.id.nav_feedback:
-                Transactor.feedbackActivity(this);
-                break;
-            case R.id.nav_logs:
-                Transactor.fragmentLogs(getSupportFragmentManager().beginTransaction());
-                break;
-
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-    void toGroupsFrag(){
-        Transactor.fragmentGroups(getSupportFragmentManager().beginTransaction());
-    }
-    void toMainFrag(){
-        Transactor.fragmentMain(getSupportFragmentManager().beginTransaction());
-    }
-
-    void toCreateTaskFrag(){
-        Transactor.fragmentCreatorAT(getSupportFragmentManager().beginTransaction(), GroupsFragment.Dest.TOCREATETASK);
-
-    }
-    void toAnnouncementEditorFrag(){
-        Transactor.fragmentCreatorAT(getSupportFragmentManager().beginTransaction(), GroupsFragment.Dest.TOCREATEANNOUNCEMET);
-
-    }
-
-    public void setOnBackPressedListener(OnBackPressedListener listener){
-        currentBackPressedListener = listener;
-    }
-
-    public void removeOnBackPressedListener(){
-        currentBackPressedListener = null;
     }
 
     @Override
@@ -464,47 +372,15 @@ public class TheraActivity extends AppCompatActivity
         }
     }
 
-    public void hideFabs(){
-        fab_action.setVisibility(View.INVISIBLE);
-        fab_joinGroup.setVisibility(View.INVISIBLE);
-    }
-
-    public void onFragmentCreated(){
-        currentFrag = Transactor.getCurrentFragment(getSupportFragmentManager(), false);
-
-        if (currentFrag instanceof GroupAnnouncementFragment || currentFrag instanceof GroupMainFragment
-                || currentFrag instanceof MainAnnouncementFragment || currentFrag instanceof MainFragment
-                || currentFrag instanceof MyTasksFragment ) {
-            fab_action.setVisibility(View.VISIBLE);
-            if (currentFrag instanceof MainFragment) {
-                navView.getMenu().getItem(0).setChecked(true);
-            } else {
-                navView.getMenu().getItem(0).setChecked(false);
-            }
-        } else {
-            fab_action.setVisibility(View.INVISIBLE);
-        }
-        if (currentFrag instanceof GroupsFragment) {
-            fab_joinGroup.setVisibility(View.VISIBLE);
-            navView.getMenu().getItem(1).setChecked(true);
-            fab_action.setVisibility(View.VISIBLE);
-        } else {
-            fab_joinGroup.setVisibility(View.INVISIBLE);
-            navView.getMenu().getItem(1).setChecked(false);
-        }
-    }
 
     public void onTabSelected(Fragment currentFrag){
         if (currentFrag instanceof GroupAnnouncementFragment || currentFrag instanceof GroupMainFragment
                 || currentFrag instanceof MainAnnouncementFragment || currentFrag instanceof SubjectsFragment
                 || currentFrag instanceof MainFragment || currentFrag instanceof GroupsFragment
                 || currentFrag instanceof GetGroupMembersFragment) {
-            fab_action.setVisibility(View.VISIBLE);
             if (currentFrag instanceof GroupsFragment) {
-                fab_joinGroup.setVisibility(View.VISIBLE);
                 navView.getMenu().getItem(1).setChecked(true);
             } else {
-                fab_joinGroup.setVisibility(View.INVISIBLE);
                 navView.getMenu().getItem(1).setChecked(false);
             }
             if (currentFrag instanceof MainFragment) {
@@ -513,13 +389,7 @@ public class TheraActivity extends AppCompatActivity
                 navView.getMenu().getItem(0).setChecked(false);
             }
         } else {
-            fab_action.setVisibility(View.INVISIBLE);
         }
-    }
-    public void pickImage() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");
-        startActivityForResult(intent, PICK_PHOTO_FOR_AVATAR);
     }
 
     public void setProfileImageInNav(Bitmap bitmap){
@@ -528,10 +398,5 @@ public class TheraActivity extends AppCompatActivity
 
     public void setDisplayNameInNav(String newDisplayName){
         navUsername.setText(newDisplayName);
-    }
-
-    public void activateHiddenFeatures(){
-        menuItem_thera.setVisible(true);
-        menuItem_logs.setVisible(true);
     }
 }

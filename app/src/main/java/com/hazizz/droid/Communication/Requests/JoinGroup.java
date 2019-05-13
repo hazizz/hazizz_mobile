@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.util.Log;
 
 
+import com.hazizz.droid.communication.RequestSender;
 import com.hazizz.droid.communication.requests.parent.Request;
 import com.hazizz.droid.communication.responsePojos.CustomResponseHandler;
 
@@ -19,8 +20,9 @@ public class JoinGroup extends Request {
     }
     public void setupCall() {
 
-        headerMap.put(HEADER_AUTH, getHeaderAuthToken());
-        call = aRequest.joinGroup(groupId, headerMap);
+        putHeaderAuthToken();
+        buildCall(RequestSender.getHazizzRequestTypes().joinGroup(groupId, header));
+
     }
 
 
