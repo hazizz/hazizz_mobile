@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:intl/intl.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hazizz/communication/ResponseHandler.dart';
@@ -43,7 +44,6 @@ class _ViewTaskPage extends State<ViewTaskPage> {
    String _description = "";
    String _title = "";
 
-
   List<PojoTask> task_data = List();
 
   void processData(PojoTask pojoTask){
@@ -55,7 +55,8 @@ class _ViewTaskPage extends State<ViewTaskPage> {
       _creator = pojoTask.creator.displayName;
 
       _type = pojoTask.type.name;
-      _deadline = pojoTask.dueDate.toString();
+      DateTime date_deadline =  pojoTask.dueDate;
+      _deadline = DateFormat("yyyy.MM.dd").format(date_deadline);//"${date_deadline.day}.${date_deadline.month}.${date_deadline.year}";
       _description = pojoTask.description;
       _title = pojoTask.title;
     });
@@ -93,7 +94,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
   @override
   Widget build(BuildContext context) {
     return Hero(
-        tag: "this${widget.pojoTask.id}",
+        tag: "hero_task${widget.pojoTask.id}",
         child: Scaffold(
         appBar: AppBar(
           title: Text("View Task"),
@@ -161,7 +162,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   new Flexible(
-                                      child: Text("2019.01.01",
+                                      child: Text(_deadline,
                                         style: TextStyle(
                                             fontSize: 18
                                         ),)
@@ -222,6 +223,46 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                           ],
                         ),
                       ),
+
+                      Expanded(
+                       // flex: 1,
+                        child:
+                          Align(
+                            alignment: FractionalOffset.bottomCenter,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: <Widget>[
+                                MaterialButton(
+                                  onPressed: (){
+
+                                  },
+                                  child: Text("Comment"),
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                 // crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: <Widget>[
+                                    MaterialButton(
+                                      onPressed: (){
+
+                                      },
+                                      child: Text("Edit"),
+                                    ),
+                                    MaterialButton(
+                                      onPressed: (){
+
+                                      },
+                                      child: Text("Delete"),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          )
+
+                      ),
+
                     ]
                   ),
               )

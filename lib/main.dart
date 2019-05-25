@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hazizz/pages/EditTaskPage.dart';
 import 'package:flutter_hazizz/pages/LoginPage.dart';
 import 'package:flutter_hazizz/pages/TaskPage.dart';
 import 'HazizzDrawer.dart';
@@ -15,6 +16,7 @@ void main() async{
   }else{
     _startPage = LoginPage();
   }
+ // _startPage = EditTaskPage();
 
   runApp(MyApp());
 }
@@ -163,11 +165,15 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
       */
 
 
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      floatingActionButton:
+        FloatingActionButton(
+          heroTag: "hero_task_edit",
+          onPressed: (){
+            Navigator.push(context,MaterialPageRoute(builder: (context) => EditTaskPage()));
+          },
+          tooltip: 'Increment',
+          child: Icon(Icons.add),
+        ), // This trailing comma makes auto-formatting nicer for build methods.
 
       drawer: Drawer(
         child: ListView(
