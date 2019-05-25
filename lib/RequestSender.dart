@@ -183,6 +183,9 @@ class RequestSender{
           lock();
           // elküldi újra ezt a requestet ami errort dobott
           send(request);
+          print("hey2: username: ${await InfoCache.getMyUsername()}");
+          print("hey2: token: ${await TokenManager.getRefreshToken()}");
+
           await tokenRequestSend(new CreateTokenWithRefresh(
               b_username: await InfoCache.getMyUsername(),
               b_refreshToken: await TokenManager.getRefreshToken(),

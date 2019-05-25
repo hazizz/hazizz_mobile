@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class TaskHeaderItemWidget extends StatelessWidget{
  // String days;
@@ -18,7 +19,7 @@ class TaskHeaderItemWidget extends StatelessWidget{
                 children: <Widget>[
                   Text("holnap"),
                   SizedBox(width: 20),
-                  Text("${dateTime.toString()}"),
+                  Text("${DateFormat("yyyy.MM.dd").format(dateTime)}"),
                 ],
               )
           )

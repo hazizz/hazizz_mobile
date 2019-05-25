@@ -12,7 +12,7 @@ class TaskItemWidget extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Hero(
-    tag: "this${pojoTask.id}",
+    tag: "hero_task${pojoTask.id}",
         child:
       Card(
         elevation: 5,
@@ -27,6 +27,15 @@ class TaskItemWidget extends StatelessWidget{
                 children: <Widget>[
                   Row(
                     children: <Widget>[
+                      Chip(
+                          label: Text(
+                            "${pojoTask.type.name}: ",
+
+                          ),
+                          backgroundColor: Colors.green,
+                        labelPadding: EdgeInsets.only(),
+                      ),
+
                       Text(pojoTask.subject != null ? pojoTask.subject.name : ""),
                       Text(pojoTask.title),
                     ],
