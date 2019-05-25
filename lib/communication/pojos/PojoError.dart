@@ -1,9 +1,11 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import 'Pojo.dart';
+
 part 'PojoError.g.dart';
 
 @JsonSerializable()
-class PojoError{
+class PojoError extends Pojo{
   PojoError({
     this.time,
     this.errorCode,

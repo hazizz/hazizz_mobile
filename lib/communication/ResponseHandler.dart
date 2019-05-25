@@ -1,19 +1,22 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_hazizz/communication/pojos/PojoError.dart';
 
 
 class ResponseHandler {
- Function(Response) onResponse;
- Function(Response) onErrorResponse;
+ Function(Response response) onSuccessful;
+ Function(PojoError pojoError) onError;
 
 
  ResponseHandler({
-  Function onResponse
- })  : this.onResponse = onResponse;
+  Function onSuccessful,
+  Function onError
+ })  : this.onSuccessful = onSuccessful,
+      this.onError = onError;
 
 
   void onPOJOResponse(Object response){}
  //  void onFailure(Call<ResponseBody> call, Throwable t){}
- //  void onErrorResponse(PojoError error){}
+ //  void onError(PojoError error){}
    void onSuccessfulResponse(){}
    void onNoConnection(){}
   // void getHeaders(Headers headers){}

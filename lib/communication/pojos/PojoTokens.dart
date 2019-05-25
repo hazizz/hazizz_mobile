@@ -15,5 +15,6 @@ class PojoTokens{
   factory PojoTokens.fromJson(Map<String, dynamic> json) =>
       _$PojoTokensFromJson(json);
 
+  Map<String, dynamic> toJson() => _$PojoTokensToJson(this);
 
 }

@@ -1,4 +1,4 @@
-package com.hazizz.hazizz_flutter
+package com.hazizz.flutter_hazizz
 
 import android.os.Bundle
 
