@@ -1,16 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:hazizz_flutter/MyTapBar.dart';
-import 'package:hazizz_flutter/HazizzDrawer.dart';
+import 'package:flutter_hazizz/pages/LoginPage.dart';
+import 'package:flutter_hazizz/pages/TaskPage.dart';
+import 'HazizzDrawer.dart';
 import 'Page1.dart';
 import 'PlaceHolderWidget.dart';
 import 'RequestSender.dart';
+import 'managers/TokenManager.dart';
 
-void main() => runApp(MyApp());
+Widget _startPage;
+
+void main() async{
+  if(await TokenManager.hasToken()){
+    _startPage = MyHomePage(title: "title",);
+  }else{
+    _startPage = LoginPage();
+  }
+
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
     return MaterialApp(
       title: 'Hazizz Demo',
       showPerformanceOverlay: false,
@@ -26,10 +38,12 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Hazizz Demo Home Page'),
+      home: _startPage, // MyHomePage(title: 'Hazizz Demo Home Page'),
     );
   }
 }
+
+
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -59,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
 
   Widget drawer = new HazizzDrawer();
 
-  final List<Widget> _children = [PlaceholderWidget(color: Colors.red, name1: "111", text1: Text("111"),), PlaceholderWidget(color: Colors.red, name1: "222", text1: Text("222"),)];
+  final List<Widget> _children = [new TaskPage(), PlaceholderWidget(color: Colors.red, name1: "222", text1: Text("222"),)];
 
 
   @override
@@ -87,8 +101,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      RequestSender requestSender = new RequestSender();
-      requestSender.asd();
     });
   }
 
@@ -204,11 +216,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
           ],
         ),
       ),
-      /*
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
-      */
       bottomNavigationBar: BottomNavigationBar(
 
         items: const <BottomNavigationBarItem>[

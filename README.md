@@ -1,6 +1,6 @@
-# hazizz_flutter
+# flutter_hazizz
 
-The Hazizz mobile app written in Flutter
+A new Flutter application.
 
 ## Getting Started
 

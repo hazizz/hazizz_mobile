@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'RequestSender.dart';
-import 'CreateTokenWithPassword.dart';
+import 'communication/pojos/PojoError.dart';
+import 'communication/requests/RequestCollection.dart';
 import 'package:dio/dio.dart';
 import 'communication/pojos/PojoTokens.dart';
 import 'dart:convert';
-import 'communication/pojos/ResponseHandler.dart';
+import 'communication/ResponseHandler.dart';
 
 
 class PlaceholderWidget extends StatefulWidget {
@@ -62,17 +63,23 @@ class _PlaceholderWidget extends State<PlaceholderWidget> with SingleTickerProvi
 
                       print("ökör");
                       RequestSender requestSender = new RequestSender();
-                      requestSender.asd();
                       print("log: 1111");
-                      Response response = await requestSender.send(new CreateTokenWithPassword({"username" : "erik", "password" : "15E2B0D3C33891EBB0F1EF609EC419420C20E320CE94C65FBC8C3312448EB225"},
-                                            new ResponseHandler(onResponse: (Response){
-                                              print("");
-                                            })));
+                      Response response = await requestSender.send(new CreateTokenWithPassword(b_username: "erik", b_password: "15E2B0D3C33891EBB0F1EF609EC419420C20E320CE94C65FBC8C3312448EB225",
+                                                rh: new ResponseHandler(
+                                                    onSuccessful: (Response response){
+                                                      print("raw response is : ${response.data}" );
+                                                      PojoTokens pojoTokens = PojoTokens.fromJson(jsonDecode(response.data));
+                                                      print("log: 3333");
+                                                      print("log: token : ${pojoTokens.token}");
+                                                    },
+                                                    onError: (PojoError pojoError){
+
+                                                      print("log: the annonymus functions work and the errorCode : ${pojoError.errorCode}");
+                                                    }
+                                                )));
                       print("log: 2222");
 
-                      PojoTokens pojoTokens = PojoTokens.fromJson(jsonDecode(response.data));
-                      print("log: 3333");
-                      print("log: token : ${pojoTokens.token}");
+
                     },
                     child: null
 
