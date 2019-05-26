@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_hazizz/communication/pojos/PojoType.dart';
 import 'package:intl/intl.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +50,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
   void processData(PojoTask pojoTask){
     widget.pojoTask = pojoTask;
     setState(() {
-      _subject = pojoTask.subject.name;
+      _subject = pojoTask.subject != null ? pojoTask.subject.name : null;
       _group = pojoTask.group.name;
 
       _creator = pojoTask.creator.displayName;
@@ -123,7 +124,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        color: Colors.green,
+                        color: PojoType.getColor(widget.pojoTask.type),
                       //  width: 400,
 
                         child: Column(
@@ -174,14 +175,15 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                           ],
                         ),
                         ),
-
+                      _subject != null ?
                       Padding(
                         padding: const EdgeInsets.only( left: 10,top: 5),
                         child: new Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             new Flexible(
-                              child: new Text(_subject,
+                              child:
+                              new Text(_subject,
                                 style: TextStyle(
                                     fontSize: 36
                                 ),
@@ -189,8 +191,8 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                             )
                           ],
                         ),
-                      ),
-
+                      )
+                      : Container(),
                       Padding(
                         padding: const EdgeInsets.only( left: 10,top: 5),
                         child: new Row(

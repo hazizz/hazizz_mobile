@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hazizz/communication/ResponseHandler.dart';
 import 'package:flutter_hazizz/communication/pojos/PojoError.dart';
+import 'package:flutter_hazizz/communication/pojos/PojoType.dart';
 import 'package:flutter_hazizz/communication/pojos/task/PojoTask.dart';
 import 'package:flutter_hazizz/communication/requests/RequestCollection.dart';
 
@@ -49,9 +50,109 @@ class _EditTaskPage extends State<EditTaskPage> {
   String _description = "";
   String _title = "";
 
+
+  static Color headerColor = Colors.red;
+ // headerColor.alpha = 10;
+  static Color formColor = Colors.blue;//headerColor.withAlpha(20); //Color.fromRGBO(headerColor.red, headerColor.green, headerColor.blue, 240);
+
+
   String _value = "1";
 
+  static List<String> _colors = <String>['', 'red', 'green', 'blue', 'orange'];
+  static String _color = '';
+
   static final double padding = 8;
+
+  static final FormField groupFormField = new FormField(
+    builder: (FormFieldState state) {
+      return InputDecorator(
+
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: formColor,
+          icon: const Icon(Icons.group),
+          labelText: 'Group',
+        ),
+        isEmpty: _color == '',
+        child: new DropdownButtonHideUnderline(
+          child: new DropdownButton(
+            value: _color,
+            isDense: true,
+            onChanged: (_){},/*(String newValue) {
+                                                    setState(() {
+                                                      newContact.favoriteColor = newValue;
+                                                      _color = newValue;
+                                                      state.didChange(newValue);
+                                                    });
+                                                  },*/
+            items: _colors.map((String value) {
+              return new DropdownMenuItem(
+                value: value,
+                child: new Text(value),
+              );
+            }).toList(),
+          ),
+        ),
+      );
+    },
+  );
+
+  static final FormField subjectFormField = new FormField(
+    builder: (FormFieldState state) {
+      return InputDecorator(
+
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: formColor,
+          icon: const Icon(Icons.subject),
+          labelText: 'Subject',
+        ),
+        isEmpty: _color == '',
+        child: new DropdownButtonHideUnderline(
+          child: new DropdownButton(
+            value: _color,
+            isDense: true,
+            onChanged: (_){},/*(String newValue) {
+                                                    setState(() {
+                                                      newContact.favoriteColor = newValue;
+                                                      _color = newValue;
+                                                      state.didChange(newValue);
+                                                    });
+                                                  },*/
+            items: _colors.map((String value) {
+              return new DropdownMenuItem(
+                value: value,
+                child: new Text(value),
+              );
+            }).toList(),
+          ),
+        ),
+      );
+    },
+  );
+
+  static final FormField deadlineFormField = new FormField(
+
+    builder: (FormFieldState state) {
+      return InputDecorator(
+
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: formColor,
+          icon: const Icon(Icons.date_range),
+          labelText: 'Deadline',
+        ),
+        isEmpty: _color == '',
+     //   child: Text(""),
+      );
+    },
+  );
+
+  static final ExpansionPanel expansionPanel = new ExpansionPanel(
+      headerBuilder: null,
+      body: null)
+  ;
+
 
   static final AppBar appBar = AppBar(
   title: Text("Edit Task"),
@@ -81,6 +182,12 @@ class _EditTaskPage extends State<EditTaskPage> {
     if(widget.pojoTask != null) {
       processData(widget.pojoTask);
     }
+
+    headerColor = Colors.red;
+    // headerColor.alpha = 10;
+    formColor = Colors.grey.withAlpha(120);//headerColor.withOpacity(200); //Color.fromRGBO(headerColor.red, headerColor.green, headerColor.blue, 240);
+
+
     super.initState();
   }
 
@@ -125,7 +232,7 @@ class _EditTaskPage extends State<EditTaskPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
-                                    color: Colors.grey,
+                                    color: headerColor,
                                     //  width: 400,
 
                                     child: Column(
@@ -139,16 +246,16 @@ class _EditTaskPage extends State<EditTaskPage> {
                                                   child: DropdownButton<String>(
 
                                                     elevation: 50,
-                                                    iconSize: 40,
+                                                 //   iconSize: 40,
                                                     hint: Text("asd"),
                                                     items: [
                                                     DropdownMenuItem(
-                                                      value: "1",
+                                                      value: PojoType.pojoTypes[0].id.toString(),
                                                       child: Align(
                                                         alignment: FractionalOffset.bottomCenter,
                                                         child: Text(
 
-                                                        "First",
+                                                          PojoType.pojoTypes[0].name,
                                                         style: TextStyle(
                                                           fontSize: 40,
                                                         ),
@@ -156,7 +263,7 @@ class _EditTaskPage extends State<EditTaskPage> {
                                                     ),
                                                   ),
                                                     DropdownMenuItem(
-                                                      value: "2",
+                                                      value: PojoType.pojoTypes[1].id.toString(),
                                                       child: Align(
                                                         alignment: FractionalOffset.bottomCenter,
                                                         child: Text(
@@ -180,34 +287,16 @@ class _EditTaskPage extends State<EditTaskPage> {
                                           ),
                                         ),
                                         Padding(
-                                          padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10),                              child: new Row(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          children: [
-                                            new Flexible(
-                                                child: Text(_creator,
-                                                  style: TextStyle(
-                                                      fontSize: 18
-                                                  ),)
-                                            ),
+                                          padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                                        child: Column(
+                                          children: <Widget>[
+                                            Padding(padding: EdgeInsets.only(bottom: 4), child: groupFormField,),
+                                            Padding(padding: EdgeInsets.only(bottom: 4), child: subjectFormField,),
+                                            Padding(padding: EdgeInsets.only(bottom: 4), child: deadlineFormField,),
+
                                           ],
                                         ),
                                         ),
-
-                                        Padding(
-                                          padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10),
-                                          child: new Row(
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            children: [
-                                              new Flexible(
-                                                  child: Text("2019.01.01",
-                                                    style: TextStyle(
-                                                        fontSize: 18
-                                                    ),)
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-
                                       ],
                                     ),
                                   ),
@@ -224,6 +313,7 @@ class _EditTaskPage extends State<EditTaskPage> {
                                               children: [
                                                 new Flexible(
                                                   child: TextField(
+                                                    enableInteractiveSelection: true,
                                                     maxLength: 20,
                                                     decoration: new InputDecoration.collapsed(
                                                         hintText: 'title',
