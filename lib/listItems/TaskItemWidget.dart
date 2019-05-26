@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hazizz/communication/pojos/PojoType.dart';
 import 'package:flutter_hazizz/communication/pojos/task/PojoTask.dart';
 import 'package:flutter_hazizz/pages/ViewTaskPage.dart';
 
@@ -29,10 +30,10 @@ class TaskItemWidget extends StatelessWidget{
                     children: <Widget>[
                       Chip(
                           label: Text(
-                            "${pojoTask.type.name}: ",
+                            " ${pojoTask.type.name} ",
 
                           ),
-                          backgroundColor: Colors.green,
+                          backgroundColor: PojoType.getColor(pojoTask.type),
                         labelPadding: EdgeInsets.only(),
                       ),
 
