@@ -8,7 +8,7 @@ import 'communication/pojos/PojoError.dart';
 import 'dart:convert';
 
 import 'communication/pojos/PojoTokens.dart';
-import 'communication/requests/RequestCollection.dart';
+import 'communication/requests/request_collection.dart';
 import 'managers/TokenManager.dart';
 import 'managers/cache_manager.dart';
 import 'package:connectivity/connectivity.dart';
@@ -152,7 +152,6 @@ class RequestSender{
   }
 
   Future<Response> send(Request request) async{
-   // Options options = options2;
     Response response;
     try {
       if (request.httpMethod == HttpMethod.GET) {
@@ -169,50 +168,52 @@ class RequestSender{
       }
     }on DioError catch(error){
 
-      print("log: error response data: ${error.response.data}");
-      PojoError pojoError = PojoError.fromJson(json.decode(error.response?.data));
+      if (error.response != null) {
+        print("log: error response data: ${error.response.data}");
+        PojoError pojoError = PojoError.fromJson(json.decode(error.response?.data));
 
-      if(pojoError.errorCode == 19){// to many requests
-        print("here iam");
-        stop();
-      }
-      else if(pojoError.errorCode == 18 || pojoError.errorCode == 17){// wrong token
-        // a requestet elmenteni hogy újra küldje
-        print("hey: Locked: ${isLocked()}");
-        if(!isLocked()) {
-          lock();
-          // elküldi újra ezt a requestet ami errort dobott
-          send(request);
-          print("hey2: username: ${await InfoCache.getMyUsername()}");
-          print("hey2: token: ${await TokenManager.getRefreshToken()}");
-
-          await tokenRequestSend(new CreateTokenWithRefresh(
-              b_username: await InfoCache.getMyUsername(),
-              b_refreshToken: await TokenManager.getRefreshToken(),
-              rh: ResponseHandler(
-                  onSuccessful: (Response response) {
-                    print("hey: got token reponse");
-                    PojoTokens pojoTokens = PojoTokens.fromJson(jsonDecode(response.data));
-                    TokenManager.setToken(pojoTokens.token);
-                    TokenManager.setRefreshToken(pojoTokens.refresh);
-                    print("hey: got token reponse: ${pojoTokens.token}");
-                    unlock();
-                  },
-                  onError: (PojoError pojoError) {
-                    unlock();
-                  }
-              )
-          ));
-        }else{
-          send(request);
+        if(pojoError.errorCode == 19){// to many requests
+          print("here iam");
+          stop();
         }
-        //  request.rh.onSuccessful();
-      }else if(pojoError.errorCode == 13 || pojoError.errorCode == 14
-              || pojoError.errorCode == 15){
-        // navigate to login/register page
+        else if(pojoError.errorCode == 18 || pojoError.errorCode == 17){// wrong token
+          // a requestet elmenteni hogy újra küldje
+          print("hey: Locked: ${isLocked()}");
+          if(!isLocked()) {
+            lock();
+            // elküldi újra ezt a requestet ami errort dobott
+            send(request);
+            print("hey2: username: ${await InfoCache.getMyUsername()}");
+            print("hey2: token: ${await TokenManager.getRefreshToken()}");
+
+            await tokenRequestSend(new CreateTokenWithRefresh(
+                b_username: await InfoCache.getMyUsername(),
+                b_refreshToken: await TokenManager.getRefreshToken(),
+                rh: ResponseHandler(
+                    onSuccessful: (Response response) {
+                      print("hey: got token reponse");
+                      PojoTokens pojoTokens = PojoTokens.fromJson(jsonDecode(response.data));
+                      TokenManager.setToken(pojoTokens.token);
+                      TokenManager.setRefreshToken(pojoTokens.refresh);
+                      print("hey: got token reponse: ${pojoTokens.token}");
+                      unlock();
+                    },
+                    onError: (PojoError pojoError) {
+                      unlock();
+                    }
+                )
+            ));
+          }else{
+            send(request);
+          }
+          //  request.rh.onSuccessful();
+        }else if(pojoError.errorCode == 13 || pojoError.errorCode == 14
+                || pojoError.errorCode == 15){
+          // navigate to login/register page
+        }
+        https://github.com/hazizz/hazizz-mobile
+        request.onError(pojoError);
       }
-      https://github.com/hazizz/hazizz-mobile
-      request.onError(pojoError);
 
       return error.response;
     }

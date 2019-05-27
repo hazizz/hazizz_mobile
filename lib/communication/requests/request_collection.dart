@@ -119,6 +119,14 @@ class GetTasksFromMe extends HazizzRequest {
   }
 }
 
+class GetMyGroups extends HazizzRequest {
+  GetMyGroups({ResponseHandler rh}) : super(rh) {
+    httpMethod = HttpMethod.GET;
+    PATH = "me/groups";
+    authTokenHeader = true;
+  }
+}
+
 
 
 

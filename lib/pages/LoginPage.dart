@@ -6,7 +6,7 @@ import 'package:crypto/crypto.dart';
 import 'package:flutter_hazizz/communication/ResponseHandler.dart';
 import 'package:flutter_hazizz/communication/pojos/PojoError.dart';
 import 'package:flutter_hazizz/communication/pojos/PojoTokens.dart';
-import 'package:flutter_hazizz/communication/requests/RequestCollection.dart';
+import 'package:flutter_hazizz/communication/requests/request_collection.dart';
 import 'package:flutter_hazizz/managers/TokenManager.dart';
 import 'package:flutter_hazizz/managers/cache_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';

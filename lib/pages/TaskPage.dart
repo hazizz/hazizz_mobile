@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hazizz/communication/ResponseHandler.dart';
 import 'package:flutter_hazizz/communication/pojos/PojoError.dart';
 import 'package:flutter_hazizz/communication/pojos/task/PojoTask.dart';
-import 'package:flutter_hazizz/communication/requests/RequestCollection.dart';
+import 'package:flutter_hazizz/communication/requests/request_collection.dart';
 import 'package:flutter_hazizz/converters/PojoConverter.dart';
 import 'package:flutter_hazizz/listItems/TaskHeaderItemWidget.dart';
 import 'package:flutter_hazizz/listItems/TaskItemWidget.dart';
@@ -80,17 +80,6 @@ class _TaskPage extends State<TaskPage> with SingleTickerProviderStateMixin{
                 TaskItemWidget(pojoTask: task_data[index],
               );
             }
-
-
-
-            /*
-            return TaskItemWidget(
-              subject: task_data[index].subject == null ? null : task_data[index].subject.name,
-              title: task_data[index].title,
-              desription: task_data[index].description,
-              creatorName: task_data[index].creator.displayName,
-            );
-            */
           }
         ),
         onRefresh: ()async => await getData()

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'RequestSender.dart';
 import 'communication/pojos/PojoError.dart';
-import 'communication/requests/RequestCollection.dart';
+import 'communication/requests/request_collection.dart';
 import 'package:dio/dio.dart';
 import 'communication/pojos/PojoTokens.dart';
 import 'dart:convert';

@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hazizz/communication/ResponseHandler.dart';
 import 'package:flutter_hazizz/communication/pojos/PojoError.dart';
 import 'package:flutter_hazizz/communication/pojos/task/PojoTask.dart';
-import 'package:flutter_hazizz/communication/requests/RequestCollection.dart';
+import 'package:flutter_hazizz/communication/requests/request_collection.dart';
 
 import '../RequestSender.dart';
 

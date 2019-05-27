@@ -4,15 +4,22 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hazizz/communication/ResponseHandler.dart';
 import 'package:flutter_hazizz/communication/pojos/PojoError.dart';
+import 'package:flutter_hazizz/communication/pojos/PojoGroup.dart';
+import 'package:flutter_hazizz/communication/pojos/PojoSubject.dart';
 import 'package:flutter_hazizz/communication/pojos/PojoType.dart';
 import 'package:flutter_hazizz/communication/pojos/task/PojoTask.dart';
-import 'package:flutter_hazizz/communication/requests/RequestCollection.dart';
+import 'package:flutter_hazizz/communication/requests/request_collection.dart';
+
+import 'package:expandable/expandable.dart';
+import 'package:flutter_hazizz/dialogs/dialogs.dart';
 
 import '../RequestSender.dart';
 
 class EditTaskPage extends StatefulWidget {
   // This widget is the root of your application.
   int groupId;
+
+
 
   PojoTask pojoTask;
   int taskId;
@@ -56,46 +63,21 @@ class _EditTaskPage extends State<EditTaskPage> {
   static Color formColor = Colors.blue;//headerColor.withAlpha(20); //Color.fromRGBO(headerColor.red, headerColor.green, headerColor.blue, 240);
 
 
-  String _value = "1";
+  static String _value = "1";
 
   static List<String> _colors = <String>['', 'red', 'green', 'blue', 'orange'];
   static String _color = '';
 
   static final double padding = 8;
 
-  static final FormField groupFormField = new FormField(
-    builder: (FormFieldState state) {
-      return InputDecorator(
+  static bool _isExpanded = false;
 
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: formColor,
-          icon: const Icon(Icons.group),
-          labelText: 'Group',
-        ),
-        isEmpty: _color == '',
-        child: new DropdownButtonHideUnderline(
-          child: new DropdownButton(
-            value: _color,
-            isDense: true,
-            onChanged: (_){},/*(String newValue) {
-                                                    setState(() {
-                                                      newContact.favoriteColor = newValue;
-                                                      _color = newValue;
-                                                      state.didChange(newValue);
-                                                    });
-                                                  },*/
-            items: _colors.map((String value) {
-              return new DropdownMenuItem(
-                value: value,
-                child: new Text(value),
-              );
-            }).toList(),
-          ),
-        ),
-      );
-    },
-  );
+  PojoGroup chosenGroup;
+  static PojoSubject chosenSubject;
+
+  FormField groupFormField;
+
+  ExpandableController expandableController = new ExpandableController(true);
 
   static final FormField subjectFormField = new FormField(
     builder: (FormFieldState state) {
@@ -108,34 +90,14 @@ class _EditTaskPage extends State<EditTaskPage> {
           labelText: 'Subject',
         ),
         isEmpty: _color == '',
-        child: new DropdownButtonHideUnderline(
-          child: new DropdownButton(
-            value: _color,
-            isDense: true,
-            onChanged: (_){},/*(String newValue) {
-                                                    setState(() {
-                                                      newContact.favoriteColor = newValue;
-                                                      _color = newValue;
-                                                      state.didChange(newValue);
-                                                    });
-                                                  },*/
-            items: _colors.map((String value) {
-              return new DropdownMenuItem(
-                value: value,
-                child: new Text(value),
-              );
-            }).toList(),
-          ),
-        ),
+        child: Text(chosenSubject?.name ?? "Matek")
       );
     },
   );
 
   static final FormField deadlineFormField = new FormField(
-
     builder: (FormFieldState state) {
       return InputDecorator(
-
         decoration: InputDecoration(
           filled: true,
           fillColor: formColor,
@@ -148,10 +110,124 @@ class _EditTaskPage extends State<EditTaskPage> {
     },
   );
 
-  static final ExpansionPanel expansionPanel = new ExpansionPanel(
-      headerBuilder: null,
-      body: null)
-  ;
+  /*Expandable expandable = new Expandable(
+    collapsed: Container(
+      color: headerColor,
+      child: Row(
+        children: [
+          Expanded(child: Column(),),
+          Expanded(
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 2),
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      new Flexible(
+                          child: Text("Type")
+                      ),
+                    ],
+                  ),
+                ),
+                Text("Group"),
+                Text("Subject"),
+                Text("Deadline"),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Align(
+              alignment: FractionalOffset.bottomRight,
+              child: IconButton(
+                  icon:Icon(Icons.keyboard_arrow_down),
+                  onPressed: (){
+
+                  }),
+            ),
+          ),
+        ]
+      ),
+    ),
+    expanded: Container(
+      color: headerColor,
+      //  width: 400,
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 2),
+            child: new Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                new Flexible(
+                  child: DropdownButton<String>(
+
+                    elevation: 50,
+                    //   iconSize: 40,
+                    hint: Text("asd"),
+                    items: [
+                      DropdownMenuItem(
+                        value: PojoType.pojoTypes[0].id.toString(),
+                        child: Align(
+                          alignment: FractionalOffset.bottomCenter,
+                          child: Text(
+
+                            PojoType.pojoTypes[0].name,
+                            style: TextStyle(
+                              fontSize: 40,
+                            ),
+                          ),
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: PojoType.pojoTypes[1].id.toString(),
+                        child: Align(
+                          alignment: FractionalOffset.bottomCenter,
+                          child: Text(
+                            "Second",
+                            style: TextStyle(
+                              fontSize: 40,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                    /* onChanged: (value) {
+                        setState(() {
+                          _value = value;
+                        });
+                      },
+                      */
+                    value: _value,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+            child: Column(
+              children: <Widget>[
+                Padding(padding: EdgeInsets.only(bottom: 4), child: groupFormField,),
+                Padding(padding: EdgeInsets.only(bottom: 4), child: subjectFormField,),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 4),
+                  child:GestureDetector(
+                      onTap: (){
+                        print("tap");
+                        showDialogGroup(context);
+                      },
+                      child: deadlineFormField
+                  ),
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+    animationDuration: Duration(milliseconds: 200),
+  );*/
 
 
   static final AppBar appBar = AppBar(
@@ -161,6 +237,9 @@ class _EditTaskPage extends State<EditTaskPage> {
   List<PojoTask> task_data = List();
 
   void processData(PojoTask pojoTask){
+   // expandablePanel.c
+
+
     widget.pojoTask = pojoTask;
     setState(() {
       _subject = pojoTask.subject.name;
@@ -178,15 +257,30 @@ class _EditTaskPage extends State<EditTaskPage> {
   // lényegében egy onCreate
   @override
   void initState() {
-    getData();
+   // getData();
     if(widget.pojoTask != null) {
       processData(widget.pojoTask);
     }
 
-    headerColor = Colors.red;
+    groupFormField = new FormField(
+      builder: (FormFieldState state) {
+        return InputDecorator(
+
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: formColor,
+              icon: const Icon(Icons.group),
+              labelText: 'Group',
+            ),
+            isEmpty: _color == '',
+            child: Text(chosenGroup?.name ?? "Hurkáspárt")
+        );
+      },
+    );
+
+    headerColor = Colors.yellow;
     // headerColor.alpha = 10;
     formColor = Colors.grey.withAlpha(120);//headerColor.withOpacity(200); //Color.fromRGBO(headerColor.red, headerColor.green, headerColor.blue, 240);
-
 
     super.initState();
   }
@@ -227,28 +321,91 @@ class _EditTaskPage extends State<EditTaskPage> {
                   child: Card(
                     elevation: 100,
                       child: new Container(
-                            child: new Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
+                        child: ExpandableNotifier(
+                          controller: expandableController,
+                          child: new Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+
+                              children: [
+
+                                Expandable(
+
+                                  collapsed: Container(
+                                  color: headerColor,
+                                    child: Row(
+                                        children: [
+                                          Expanded(child: Column(),),
+                                          Expanded(
+                                            child: Column(
+                                              children: <Widget>[
+                                                Padding(
+                                                  padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 2),
+                                                  child: new Row(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [
+                                                      new Flexible(
+                                                          child: Text("Type",
+                                                            style: TextStyle(
+                                                                fontSize: 30
+                                                            ),)
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Text("Group",
+                                                  style: TextStyle(
+                                                    fontSize: 22
+                                                  ),
+                                                ),
+                                                Text("Subject",
+                                                  style: TextStyle(
+                                                      fontSize: 22
+                                                  ),),
+                                                Text("Deadline",
+                                                  style: TextStyle(
+                                                      fontSize: 22
+                                                  ),),
+                                              ],
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Align(
+                                              alignment: FractionalOffset.bottomRight,
+                                              child: Builder(
+                                                builder: (context) {
+                                                //  var exp = expandableController.of(context);
+                                                  return IconButton(
+                                                    icon:Icon(Icons.keyboard_arrow_down),
+                                                    onPressed: (){
+                                                      expandableController.toggle();
+                                                    });
+                                                }
+                                              ),
+                                            ),
+                                          ),
+                                        ]
+                                    ),
+                                  ),
+
+                                  expanded: Container(
                                     color: headerColor,
                                     //  width: 400,
-
                                     child: Column(
                                       children: <Widget>[
                                         Padding(
                                           padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 2),
                                           child: new Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
+                                              Expanded(child: Column()),
                                               new Flexible(
-                                                  child: DropdownButton<String>(
+                                                child: DropdownButton<String>(
 
-                                                    elevation: 50,
-                                                 //   iconSize: 40,
-                                                    hint: Text("asd"),
-                                                    items: [
+                                                  elevation: 50,
+                                                  //   iconSize: 40,
+                                                  hint: Text("asd"),
+                                                  items: [
                                                     DropdownMenuItem(
                                                       value: PojoType.pojoTypes[0].id.toString(),
                                                       child: Align(
@@ -256,31 +413,41 @@ class _EditTaskPage extends State<EditTaskPage> {
                                                         child: Text(
 
                                                           PojoType.pojoTypes[0].name,
-                                                        style: TextStyle(
-                                                          fontSize: 40,
+                                                          style: TextStyle(
+                                                            fontSize: 40,
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
-                                                  ),
                                                     DropdownMenuItem(
                                                       value: PojoType.pojoTypes[1].id.toString(),
                                                       child: Align(
                                                         alignment: FractionalOffset.bottomCenter,
                                                         child: Text(
-                                                        "Second",
-                                                        style: TextStyle(
-                                                          fontSize: 40,
+                                                          "Second",
+                                                          style: TextStyle(
+                                                            fontSize: 40,
+                                                          ),
                                                         ),
-                                                      ),
                                                       ),
                                                     ),
                                                   ],
-                                                  onChanged: (value) {
-                                                    setState(() {
-                                                      _value = value;
-                                                    });
-                                                  },
                                                   value: _value,
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: Align(
+                                                  alignment: FractionalOffset.bottomRight,
+                                                  child: Builder(
+                                                      builder: (context) {
+                                                      //  var exp = expandableController.of(context);
+                                                        return IconButton(
+                                                            icon:Icon(Icons.keyboard_arrow_up),
+                                                            onPressed: (){
+                                                              expandableController.toggle();
+                                                            });
+                                                      }
+                                                  ),
                                                 ),
                                               ),
                                             ],
@@ -288,93 +455,127 @@ class _EditTaskPage extends State<EditTaskPage> {
                                         ),
                                         Padding(
                                           padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
-                                        child: Column(
-                                          children: <Widget>[
-                                            Padding(padding: EdgeInsets.only(bottom: 4), child: groupFormField,),
-                                            Padding(padding: EdgeInsets.only(bottom: 4), child: subjectFormField,),
-                                            Padding(padding: EdgeInsets.only(bottom: 4), child: deadlineFormField,),
+                                          child: Column(
+                                            children: <Widget>[
+                                              Padding(padding: EdgeInsets.only(bottom: 4),
+                                                child: GestureDetector(
+                                                  child: FormField(
+                                                    builder: (FormFieldState state) {
+                                                      return InputDecorator(
+                                                          decoration: InputDecoration(
+                                                            filled: true,
+                                                            fillColor: formColor,
+                                                            icon: const Icon(Icons.group),
+                                                            labelText: 'Group',
+                                                          ),
+                                                          isEmpty: _color == '',
+                                                          child: Text(chosenGroup?.name ?? "Hurkáspárt")
+                                                      );
+                                                    },
+                                                  ),//groupFormField,
+                                                  onTap: (){
+                                                     showDialogGroup(context, (PojoGroup group){
+                                                       setState(() {
+                                                         chosenGroup = group;
+                                                        // var exp = ExpandableController.of(context);
+                                                        // exp.toggle();
+                                                       });
 
-                                          ],
-                                        ),
+
+                                                       print("log: group: ${chosenGroup.name}");
+                                                     });
+                                                  },
+                                              ),),
+                                              Padding(padding: EdgeInsets.only(bottom: 4), child: subjectFormField,),
+                                              Padding(
+                                                padding: EdgeInsets.only(bottom: 4),
+                                                child: GestureDetector(
+                                                  child: deadlineFormField,
+                                                  onTap: ()async{
+
+                                                    final DateTime picked = await showDatePicker(
+                                                        context: context,
+                                                        initialDate: DateTime.now(),
+                                                        firstDate: DateTime(2015, 8),
+                                                        lastDate: DateTime(2101));
+                                                   // showDialogGroup(context);
+                                                  },
+                                              ),
+                                              ),
+
+                                            ],
+                                          ),
                                         ),
                                       ],
                                     ),
                                   ),
-
-                                  //  flex: 1,
-                                    Column(
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                      //  crossAxisAlignment: CrossAxisAlignment.end,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only( left: 10,top: 5, right: 10),
-                                            child: new Row(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                                new Flexible(
-                                                  child: TextField(
-                                                    enableInteractiveSelection: true,
-                                                    maxLength: 20,
-                                                    decoration: new InputDecoration.collapsed(
-                                                        hintText: 'title',
-                                                      hasFloatingPlaceholder: true,
-                                                       border: OutlineInputBorder(
-                                                         gapPadding: 20
-                                                       )
-
-
-                                                    ),
-                                                    style: TextStyle(
-                                                    fontSize: 30
-                                                    ),
-                                                  )
-                                                )
-                                              ],
-                                            ),
-                                          ),
-
-                                        ]
-                                  ),
-                                  //  flex: 6,
+                                  animationDuration: Duration(milliseconds: 200),
+                                ),
+                                Column(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    //  crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
                                       Padding(
-                                        padding: const EdgeInsets.only( left: 20, right: 20, top: 4),
-                                        child: TextField(
-                                          decoration: new InputDecoration.collapsed(
-                                              hintText: 'desctiption',
-                                              border: OutlineInputBorder()
-                                          ),
-                                          maxLength: 240,
-                                          maxLines: 10,
-                                          minLines: 6,
-                                          expands: false,
-                                          style: TextStyle(
-                                              fontSize: 20
+                                        padding: const EdgeInsets.only( left: 10,top: 5, right: 10),
+                                        child: new Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            new Flexible(
+                                                child: TextField(
+                                                  enableInteractiveSelection: true,
+                                                  maxLength: 20,
+                                                  decoration: new InputDecoration.collapsed(
+                                                      hintText: 'title',
+                                                      hasFloatingPlaceholder: true,
+                                                      border: OutlineInputBorder(
+                                                          gapPadding: 20
+                                                      )
 
-                                          ),
+
+                                                  ),
+                                                  style: TextStyle(
+                                                      fontSize: 30
+                                                  ),
+                                                )
+                                            )
+                                          ],
                                         ),
                                       ),
 
-                                  Expanded(
-                                    child: Align(
-                                        alignment: FractionalOffset.bottomCenter,
-                                     child:
-                                      MaterialButton(
-                                        onPressed: (){
+                                    ]
+                                ),
+                                //  flex: 6,
+                                Padding(
+                                  padding: const EdgeInsets.only( left: 20, right: 20, top: 4),
+                                  child: TextField(
 
-                                        },
-                                        child: Text("Submit"),
-                                      )
+                                    decoration: new InputDecoration.collapsed(
+
+                                        hintText: 'desctiption',
+                                        border: OutlineInputBorder()
                                     ),
-                                  )
+                                    maxLength: 240,
+                                    maxLines: 8,
+                                    minLines: 6,
+                                    expands: false,
+                                    style: TextStyle(
+                                        fontSize: 22
 
-                                ]
-                            ),
+                                    ),
+                                  ),
+                                ),
+
+                              ]
+                          ),
+                        ),
+                      ),
                           ),
                     )
                   ),
               ),
             ),
-            )
+
+
     );
   }
 
