@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter_hazizz/communication/pojos/Pojo.dart';
+import 'package:flutter_hazizz/communication/pojos/PojoSubject.dart';
 import 'package:flutter_hazizz/communication/pojos/PojoType.dart';
 import 'package:intl/intl.dart';
 import 'package:dio/dio.dart';
@@ -75,13 +77,15 @@ class _ViewTaskPage extends State<ViewTaskPage> {
   }
 
   void getData() async{
+ //   RequestSender()
+
     Response response = await RequestSender().send(new GetTaskByTaskId(
         p_taskId: widget.taskId,
         rh: new ResponseHandler(
-            onSuccessful: (Response response) async{
-              print("raw response is : ${response.data}" );
+            onSuccessful: (dynamic data) async{
+            //  print("raw response is : ${response.data}" );
 
-              PojoTaskDetailed pojoTask = PojoTaskDetailed.fromJson(jsonDecode(response.data));
+              PojoTaskDetailed pojoTask = data;
 
               processData(pojoTask);
 

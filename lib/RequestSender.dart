@@ -13,6 +13,11 @@ import 'managers/TokenManager.dart';
 import 'managers/cache_manager.dart';
 import 'package:connectivity/connectivity.dart';
 
+Future<Response> sendRequest(Request request)async{
+  return await RequestSender().send(request);
+}
+
+
 class RequestSender{
   static final RequestSender _instance = new RequestSender._internal();
   
@@ -190,12 +195,8 @@ class RequestSender{
                 b_username: await InfoCache.getMyUsername(),
                 b_refreshToken: await TokenManager.getRefreshToken(),
                 rh: ResponseHandler(
-                    onSuccessful: (Response response) {
-                      print("hey: got token reponse");
-                      PojoTokens pojoTokens = PojoTokens.fromJson(jsonDecode(response.data));
-                      TokenManager.setToken(pojoTokens.token);
-                      TokenManager.setRefreshToken(pojoTokens.refresh);
-                      print("hey: got token reponse: ${pojoTokens.token}");
+                    onSuccessful: (dynamic data) {
+                      print("hey: got token reponse: ${data.token}");
                       unlock();
                     },
                     onError: (PojoError pojoError) {
