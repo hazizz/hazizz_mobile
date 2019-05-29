@@ -87,20 +87,15 @@ class _LoginPage extends State<LoginPage> with SingleTickerProviderStateMixin{
                       b_username: _usernameTextEditingController.text,
                       b_password: _passwordTextEditingController.text,
                       rh: new ResponseHandler(
-                          onSuccessful: (Response response) async{
-                            print("raw response is : ${response.data}" );
-                            PojoTokens pojoTokens = PojoTokens.fromJson(jsonDecode(response.data));
+                          onSuccessful: (dynamic data) async{
+                            print("raw response is : ${data.data}" );
                         //    SharedPreferences
                             InfoCache.setMyUsername(_usernameTextEditingController.text);
-                            TokenManager.setToken(pojoTokens.token);
-                            TokenManager.setRefreshToken(pojoTokens.refresh);
 
                             print("asdasd token: ${await TokenManager.getToken()}");
                             print("asdasd refresh: ${await TokenManager.getRefreshToken()}");
 
                             Navigator.push(context,MaterialPageRoute(builder: (context) => MyHomePage(title: "Main Page",)));
-
-
                           },
                           onError: (PojoError pojoError){
 

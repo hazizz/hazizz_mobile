@@ -14,12 +14,12 @@ import 'package:expandable/expandable.dart';
 import 'package:flutter_hazizz/dialogs/dialogs.dart';
 
 import '../RequestSender.dart';
+import 'package:flutter_hazizz/converters/PojoConverter.dart';
+
 
 class EditTaskPage extends StatefulWidget {
   // This widget is the root of your application.
   int groupId;
-
-
 
   PojoTask pojoTask;
   int taskId;
@@ -57,11 +57,9 @@ class _EditTaskPage extends State<EditTaskPage> {
   String _description = "";
   String _title = "";
 
-
   static Color headerColor = Colors.red;
  // headerColor.alpha = 10;
   static Color formColor = Colors.blue;//headerColor.withAlpha(20); //Color.fromRGBO(headerColor.red, headerColor.green, headerColor.blue, 240);
-
 
   static String _value = "1";
 
@@ -110,131 +108,13 @@ class _EditTaskPage extends State<EditTaskPage> {
     },
   );
 
-  /*Expandable expandable = new Expandable(
-    collapsed: Container(
-      color: headerColor,
-      child: Row(
-        children: [
-          Expanded(child: Column(),),
-          Expanded(
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 2),
-                  child: new Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      new Flexible(
-                          child: Text("Type")
-                      ),
-                    ],
-                  ),
-                ),
-                Text("Group"),
-                Text("Subject"),
-                Text("Deadline"),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Align(
-              alignment: FractionalOffset.bottomRight,
-              child: IconButton(
-                  icon:Icon(Icons.keyboard_arrow_down),
-                  onPressed: (){
-
-                  }),
-            ),
-          ),
-        ]
-      ),
-    ),
-    expanded: Container(
-      color: headerColor,
-      //  width: 400,
-      child: Column(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 2),
-            child: new Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                new Flexible(
-                  child: DropdownButton<String>(
-
-                    elevation: 50,
-                    //   iconSize: 40,
-                    hint: Text("asd"),
-                    items: [
-                      DropdownMenuItem(
-                        value: PojoType.pojoTypes[0].id.toString(),
-                        child: Align(
-                          alignment: FractionalOffset.bottomCenter,
-                          child: Text(
-
-                            PojoType.pojoTypes[0].name,
-                            style: TextStyle(
-                              fontSize: 40,
-                            ),
-                          ),
-                        ),
-                      ),
-                      DropdownMenuItem(
-                        value: PojoType.pojoTypes[1].id.toString(),
-                        child: Align(
-                          alignment: FractionalOffset.bottomCenter,
-                          child: Text(
-                            "Second",
-                            style: TextStyle(
-                              fontSize: 40,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                    /* onChanged: (value) {
-                        setState(() {
-                          _value = value;
-                        });
-                      },
-                      */
-                    value: _value,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
-            child: Column(
-              children: <Widget>[
-                Padding(padding: EdgeInsets.only(bottom: 4), child: groupFormField,),
-                Padding(padding: EdgeInsets.only(bottom: 4), child: subjectFormField,),
-                Padding(
-                  padding: EdgeInsets.only(bottom: 4),
-                  child:GestureDetector(
-                      onTap: (){
-                        print("tap");
-                        showDialogGroup(context);
-                      },
-                      child: deadlineFormField
-                  ),
-                )
-              ],
-            ),
-          ),
-        ],
-      ),
-    ),
-    animationDuration: Duration(milliseconds: 200),
-  );*/
-
-
   static final AppBar appBar = AppBar(
   title: Text("Edit Task"),
   );
 
   List<PojoTask> task_data = List();
+  List<PojoSubject> subjects_data = List();
+
 
   void processData(PojoTask pojoTask){
    // expandablePanel.c
@@ -326,9 +206,7 @@ class _EditTaskPage extends State<EditTaskPage> {
                           child: new Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
-
                               children: [
-
                                 Expandable(
 
                                   collapsed: Container(
@@ -475,8 +353,24 @@ class _EditTaskPage extends State<EditTaskPage> {
                                                   ),//groupFormField,
                                                   onTap: (){
                                                      showDialogGroup(context, (PojoGroup group){
-                                                       setState(() {
+                                                       setState(() async{
                                                          chosenGroup = group;
+
+                                                         Response response = await RequestSender().send(new GetSubjects(
+                                                             rh: new ResponseHandler(
+                                                                 onSuccessful: (Response response) async{
+                                                                   print("raw response is : ${response.data}" );
+                                                                   Iterable iter = getIterable(response.data);
+                                                                   // Iterable parsed = jsonDecode(response.data).cast<Map<String, dynamic>>();
+                                                                   subjects_data =  iter.map<PojoSubject>((json) => PojoSubject.fromJson(json)).toList();
+                                                                 },
+                                                                 onError: (PojoError pojoError){
+                                                                   print("log: the annonymus functions work and the errorCode : ${pojoError.errorCode}");
+                                                                 }
+                                                             ),
+                                                            groupId: chosenGroup.id
+                                                         ));
+
                                                         // var exp = ExpandableController.of(context);
                                                         // exp.toggle();
                                                        });
@@ -486,7 +380,39 @@ class _EditTaskPage extends State<EditTaskPage> {
                                                      });
                                                   },
                                               ),),
-                                              Padding(padding: EdgeInsets.only(bottom: 4), child: subjectFormField,),
+                                              Padding(
+                                                padding: EdgeInsets.only(bottom: 4),
+                                                child: GestureDetector(
+                                                  onTap: (){
+                                                    showDialogSubject(
+                                                        context,
+
+                                                            (PojoSubject subject){
+                                                      setState(() {
+                                                        chosenSubject = subject;
+                                                      });
+                                                    },
+                                                      subjects: subjects_data,
+                                                    );
+                                                  },
+                                                  child: new FormField(
+                                                    builder: (FormFieldState state) {
+                                                      return InputDecorator(
+
+                                                          decoration: InputDecoration(
+                                                            filled: true,
+                                                            fillColor: formColor,
+                                                            icon: const Icon(Icons.subject),
+                                                            labelText: 'Subject',
+                                                          ),
+                                                          isEmpty: _color == '',
+                                                          child: Text(chosenSubject?.name ?? "Matek")
+                                                      );
+                                                    },
+                                                  ),
+                                                ),
+
+                                              ),
                                               Padding(
                                                 padding: EdgeInsets.only(bottom: 4),
                                                 child: GestureDetector(

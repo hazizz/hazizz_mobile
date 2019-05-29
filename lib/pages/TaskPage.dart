@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hazizz/blocs/TasksBloc.dart';
 import 'package:flutter_hazizz/communication/ResponseHandler.dart';
 import 'package:flutter_hazizz/communication/pojos/PojoError.dart';
 import 'package:flutter_hazizz/communication/pojos/task/PojoTask.dart';
@@ -32,7 +33,8 @@ class _TaskPage extends State<TaskPage> with SingleTickerProviderStateMixin{
   // lényegében egy onCreate
   @override
   void initState() {
-    getData();
+   // getData();
+    tasksBloc.fetchMyTasks();
     super.initState();
   }
 
@@ -59,30 +61,44 @@ class _TaskPage extends State<TaskPage> with SingleTickerProviderStateMixin{
     return Scaffold(
 
       body:new RefreshIndicator(
-        child:new ListView.builder(
-          itemCount: task_data.length,
-          itemBuilder: (BuildContext context, int index){
-
-            if(index == 0 || task_data[index].dueDate.difference(task_data[index-1].dueDate).inDays > 0){
-              return new StickyHeader(
-                header: TaskHeaderItemWidget(dateTime: task_data[index].dueDate),
-                content: TaskItemWidget(pojoTask: task_data[index],
-                  /*
-                  subject: task_data[index].subject == null ? null : task_data[index].subject.name,
-                  title: task_data[index].title,
-                  desription: task_data[index].description,
-                  creatorName: task_data[index].creator.displayName,
-                  */
-                ),
-              );
-            }else{
-              return
-                TaskItemWidget(pojoTask: task_data[index],
+        child:StreamBuilder(
+          stream: tasksBloc.subject.stream,
+          builder: (context, AsyncSnapshot<List<PojoTask>> snapshot) {
+            if(snapshot.connectionState == ConnectionState.waiting){
+              print("log: asd: snapshot waiting");
+            }
+            if(snapshot.hasData){
+              print("log: asd: snapshot hasData");
+              task_data = snapshot.data;
+              return new ListView.builder(
+                  itemCount: task_data.length,
+                  itemBuilder: (BuildContext context, int index){
+                    if(index == 0 || task_data[index].dueDate.difference(task_data[index-1].dueDate).inDays > 0){
+                      return new StickyHeader(
+                        header: TaskHeaderItemWidget(dateTime: task_data[index].dueDate),
+                        content: TaskItemWidget(pojoTask: task_data[index],
+                          /*
+                      subject: task_data[index].subject == null ? null : task_data[index].subject.name,
+                      title: task_data[index].title,
+                      desription: task_data[index].description,
+                      creatorName: task_data[index].creator.displayName,
+                      */
+                        ),
+                      );
+                    }else{
+                      return
+                        TaskItemWidget(pojoTask: task_data[index],
+                        );
+                    }
+                  }
               );
             }
+
+            return Text("asd");
+
           }
         ),
-        onRefresh: ()async => await getData()
+        onRefresh: () async=> await tasksBloc.fetchMyTasks()//await getData()
       )
     );
   }
