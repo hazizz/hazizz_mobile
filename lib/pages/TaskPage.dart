@@ -2,12 +2,11 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hazizz/blocs/TasksBloc.dart';
-import 'package:flutter_hazizz/communication/ResponseHandler.dart';
-import 'package:flutter_hazizz/communication/pojos/PojoError.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hazizz/blocs/request_event.dart';
+import 'package:flutter_hazizz/blocs/response_states.dart';
+import 'package:flutter_hazizz/blocs/tasks_bloc.dart';
 import 'package:flutter_hazizz/communication/pojos/task/PojoTask.dart';
-import 'package:flutter_hazizz/communication/requests/request_collection.dart';
-import 'package:flutter_hazizz/converters/PojoConverter.dart';
 import 'package:flutter_hazizz/listItems/TaskHeaderItemWidget.dart';
 import 'package:flutter_hazizz/listItems/TaskItemWidget.dart';
 
@@ -25,20 +24,20 @@ class TaskPage extends StatefulWidget {
 
 class _TaskPage extends State<TaskPage> with SingleTickerProviderStateMixin{
 
-  final TextEditingController _usernameTextEditingController = TextEditingController();
-  final HashedTextEditingController _passwordTextEditingController = HashedTextEditingController();
+  TasksBloc tasksBloc = new TasksBloc();
 
-  List<PojoTask> task_data = List();
+  //List<PojoTask> task_data = List();
 
   // lényegében egy onCreate
   @override
   void initState() {
    // getData();
-    tasksBloc.fetchMyTasks();
+    tasksBloc.dispatch(FetchRequest());
+ //   tasksBloc.fetchMyTasks();
     super.initState();
   }
 
-  void getData() async{
+/*  void getData() async{
     Response response = await RequestSender().send(new GetTasksFromMe(
       rh: new ResponseHandler(
         onSuccessful: (Response response) async{
@@ -54,14 +53,63 @@ class _TaskPage extends State<TaskPage> with SingleTickerProviderStateMixin{
           print("log: the annonymus functions work and the errorCode : ${pojoError.errorCode}");
         }
       )));
-  }
+  } */
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
 
       body:new RefreshIndicator(
-        child:StreamBuilder(
+        child:BlocBuilder(
+          bloc: tasksBloc,
+        //  stream: tasksBloc.subject.stream,
+          builder: (_, ResponseState state){
+            if(state is ResponseDataLoaded){
+              List<PojoTask> tasks = state.data;
+              return new ListView.builder(
+                  itemCount: tasks.length,
+                  itemBuilder: (BuildContext context, int index){
+                    if(index == 0 || tasks[index].dueDate.difference(tasks[index-1].dueDate).inDays > 0){
+                      return new StickyHeader(
+                        header: TaskHeaderItemWidget(dateTime: tasks[index].dueDate),
+                        content: TaskItemWidget(pojoTask: tasks[index],),
+                      );
+                    }else{
+                      return
+                        TaskItemWidget(pojoTask: tasks[index],
+                        );
+                    }
+                  }
+              );
+            }else if(state is ResponseEmpty){
+              return Center(child: Text("Empty"));
+            } else if(state is ResponseWaiting){
+              //return Center(child: Text("Loading Data"));
+              return Center(child: CircularProgressIndicator(),);
+            }
+            return Center(child: Text("Uchecked State: ${state.toString()}" ));
+          }
+
+        ),
+        onRefresh: () async=> tasksBloc.dispatch(FetchRequest())//await getData()
+      )
+    );
+  }
+
+ /* Future<Null> _handleRefresh() async{
+    await getData();
+
+    var now = new DateTime.now();
+    var berlinWallFell = new DateTime.utc(1989, 11, 9);
+    var moonLanding = DateTime.parse("1969-07-20 20:18:04Z");  // 8:18pm
+
+
+
+  } */
+}
+
+/*
+StreamBuilder(
           stream: tasksBloc.subject.stream,
           builder: (context, AsyncSnapshot<List<PojoTask>> snapshot) {
             if(snapshot.connectionState == ConnectionState.waiting){
@@ -98,19 +146,6 @@ class _TaskPage extends State<TaskPage> with SingleTickerProviderStateMixin{
 
           }
         ),
-        onRefresh: () async=> await tasksBloc.fetchMyTasks()//await getData()
-      )
-    );
-  }
-
-  Future<Null> _handleRefresh() async{
-    await getData();
-
-    var now = new DateTime.now();
-    var berlinWallFell = new DateTime.utc(1989, 11, 9);
-    var moonLanding = DateTime.parse("1969-07-20 20:18:04Z");  // 8:18pm
+*/
 
 
-
-  }
-}

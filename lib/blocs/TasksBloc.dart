@@ -8,6 +8,7 @@ import 'package:rxdart/rxdart.dart';
 
 import '../RequestSender.dart';
 
+/*
 class TasksBloc {
   final BehaviorSubject<List<PojoTask>> _subject_myTasks = BehaviorSubject<List<PojoTask>>();
 
@@ -62,5 +63,6 @@ class TaskBloc {
   }
 
   BehaviorSubject<List<PojoTask>> get subject => _subject_task;
-
 }
+
+*/

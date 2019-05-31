@@ -14,6 +14,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../RequestSender.dart';
 import '../main.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 class LoginPage extends StatefulWidget {
 
   String _username;
@@ -25,6 +27,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPage extends State<LoginPage> with SingleTickerProviderStateMixin{
+
+
 
   final TextEditingController _usernameTextEditingController = TextEditingController();
   final HashedTextEditingController _passwordTextEditingController = HashedTextEditingController();
@@ -74,6 +78,7 @@ class _LoginPage extends State<LoginPage> with SingleTickerProviderStateMixin{
               labelText: "Password",
             ),
           ),
+
 
       ButtonBar(
             alignment: MainAxisAlignment.spaceEvenly,

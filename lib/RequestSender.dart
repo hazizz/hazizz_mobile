@@ -156,6 +156,80 @@ class RequestSender{
     }
   }
 
+  Future<dynamic> getResponse(Request request) async{
+    Response response;
+    try {
+      if (request.httpMethod == HttpMethod.GET) {
+        options.headers = await request.buildHeader();
+        response = await dio.get(request.url, options: options);
+      }else if (request.httpMethod == HttpMethod.POST) {
+        options.headers = await request.buildHeader();
+        response =
+        await dio.post(request.url, data: request.body, options: options);
+      }else if (request.httpMethod == HttpMethod.DELETE) {
+        options.headers = await request.buildHeader();
+        response =
+        await dio.delete(request.url, data: request.body, options: options);
+      }
+    }on DioError catch(error){
+
+      if (error.response != null) {
+        print("log: error response data: ${error.response.data}");
+        PojoError pojoError = PojoError.fromJson(json.decode(error.response?.data));
+
+        if(pojoError.errorCode == 19){// to many requests
+          print("here iam");
+          stop();
+        }
+        else if(pojoError.errorCode == 18 || pojoError.errorCode == 17){// wrong token
+          // a requestet elmenteni hogy újra küldje
+          print("hey: Locked: ${isLocked()}");
+          if(!isLocked()) {
+            lock();
+            // elküldi újra ezt a requestet ami errort dobott
+            send(request);
+            print("hey2: username: ${await InfoCache.getMyUsername()}");
+            print("hey2: token: ${await TokenManager.getRefreshToken()}");
+
+            await tokenRequestSend(new CreateTokenWithRefresh(
+                b_username: await InfoCache.getMyUsername(),
+                b_refreshToken: await TokenManager.getRefreshToken(),
+                rh: ResponseHandler(
+                    onSuccessful: (dynamic data) {
+                      print("hey: got token reponse: ${data.token}");
+                      unlock();
+                    },
+                    onError: (PojoError pojoError) {
+                      unlock();
+                    }
+                )
+            ));
+          }else{
+            send(request);
+          }
+          //  request.rh.onSuccessful();
+        }else if(pojoError.errorCode == 13 || pojoError.errorCode == 14
+            || pojoError.errorCode == 15){
+          // navigate to login/register page
+        }
+        https://github.com/hazizz/hazizz-mobile
+        return pojoError;
+        request.onError(pojoError);
+      }
+
+      return error.response;
+    }
+
+    dynamic data = request.convertData(response);
+    request.processData(data);
+    return data;
+    request.onSuccessful(response);
+
+    print("reached");
+    // print("log: error response data: ${response.data}");
+    return response;
+  }
+
   Future<Response> send(Request request) async{
     Response response;
     try {
@@ -215,7 +289,6 @@ class RequestSender{
         https://github.com/hazizz/hazizz-mobile
         request.onError(pojoError);
       }
-
       return error.response;
     }
     request.onSuccessful(response);
