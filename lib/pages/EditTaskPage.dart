@@ -2,6 +2,9 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hazizz/blocs/item_list_picker_bloc/item_list_picker_bloc.dart';
+import 'package:flutter_hazizz/blocs/item_list_picker_bloc/item_list_picker_group_bloc.dart';
 import 'package:flutter_hazizz/communication/ResponseHandler.dart';
 import 'package:flutter_hazizz/communication/pojos/PojoError.dart';
 import 'package:flutter_hazizz/communication/pojos/PojoGroup.dart';
@@ -38,6 +41,8 @@ class EditTaskPage extends StatefulWidget {
 }
 
 class _EditTaskPage extends State<EditTaskPage> {
+
+  ItemListPickerGroupBloc itemListPickerGroupBloc = ItemListPickerGroupBloc();
 
   final TextEditingController _subjectTextEditingController = TextEditingController();
   final TextEditingController _groupTextEditingController = TextEditingController();
@@ -138,6 +143,9 @@ class _EditTaskPage extends State<EditTaskPage> {
   @override
   void initState() {
    // getData();
+
+    itemListPickerGroupBloc.dispatch(ItemListLoadData());
+
     if(widget.pojoTask != null) {
       processData(widget.pojoTask);
     }
@@ -208,7 +216,6 @@ class _EditTaskPage extends State<EditTaskPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Expandable(
-
                                   collapsed: Container(
                                   color: headerColor,
                                     child: Row(
@@ -336,50 +343,42 @@ class _EditTaskPage extends State<EditTaskPage> {
                                           child: Column(
                                             children: <Widget>[
                                               Padding(padding: EdgeInsets.only(bottom: 4),
-                                                child: GestureDetector(
-                                                  child: FormField(
-                                                    builder: (FormFieldState state) {
-                                                      return InputDecorator(
-                                                          decoration: InputDecoration(
-                                                            filled: true,
-                                                            fillColor: formColor,
-                                                            icon: const Icon(Icons.group),
-                                                            labelText: 'Group',
-                                                          ),
-                                                          isEmpty: _color == '',
-                                                          child: Text(chosenGroup?.name ?? "Hurkáspárt")
-                                                      );
-                                                    },
-                                                  ),//groupFormField,
-                                                  onTap: (){
-                                                     showDialogGroup(context, (PojoGroup group){
-                                                       setState(() async{
-                                                         chosenGroup = group;
-
-                                                         Response response = await RequestSender().send(new GetSubjects(
-                                                             rh: new ResponseHandler(
-                                                                 onSuccessful: (Response response) async{
-                                                                   print("raw response is : ${response.data}" );
-                                                                   Iterable iter = getIterable(response.data);
-                                                                   // Iterable parsed = jsonDecode(response.data).cast<Map<String, dynamic>>();
-                                                                   subjects_data =  iter.map<PojoSubject>((json) => PojoSubject.fromJson(json)).toList();
-                                                                 },
-                                                                 onError: (PojoError pojoError){
-                                                                   print("log: the annonymus functions work and the errorCode : ${pojoError.errorCode}");
-                                                                 }
-                                                             ),
-                                                            groupId: chosenGroup.id
-                                                         ));
-
-                                                        // var exp = ExpandableController.of(context);
-                                                        // exp.toggle();
-                                                       });
-
-
-                                                       print("log: group: ${chosenGroup.name}");
-                                                     });
-                                                  },
-                                              ),),
+                                                child: BlocBuilder(
+                                                  bloc: itemListPickerGroupBloc,
+                                                  builder: (_, ItemListState state) {
+                                                    return GestureDetector(
+                                                      child: FormField(
+                                                        builder: (FormFieldState state) {
+                                                          return InputDecorator(
+                                                              decoration: InputDecoration(
+                                                                filled: true,
+                                                                fillColor: formColor,
+                                                                icon: const Icon(
+                                                                    Icons.group),
+                                                                labelText: 'Group',
+                                                              ),
+                                                              isEmpty: _color == '',
+                                                              child: Text(
+                                                                  chosenGroup
+                                                                      ?.name ?? "Hurkáspárt")
+                                                          );
+                                                        },
+                                                      ), //groupFormField,
+                                                      onTap: () {
+                                                        if(state is ItemListLoaded){
+                                                          showDialogGroup(context, (PojoGroup group) {
+                                                            setState((){
+                                                              chosenGroup = group;
+                                                            });
+                                                            print("log: group: ${chosenGroup.name}");
+                                                          },
+                                                          data: state.data,
+                                                          );
+                                                        }
+                                                      },
+                                                    );
+                                                  }
+                                                ),),
                                               Padding(
                                                 padding: EdgeInsets.only(bottom: 4),
                                                 child: GestureDetector(

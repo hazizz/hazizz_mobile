@@ -1,3 +1,4 @@
+//import 'dart:convert';
 import 'dart:convert';
 import 'dart:io';
 
@@ -7,12 +8,19 @@ import 'package:flutter_hazizz/communication/pojos/PojoGroup.dart';
 import 'package:flutter_hazizz/communication/pojos/PojoSubject.dart';
 import 'package:flutter_hazizz/communication/pojos/PojoTokens.dart';
 import 'package:flutter_hazizz/communication/pojos/task/PojoTask.dart';
+import 'package:flutter_hazizz/exceptions/exceptions.dart';
 import 'package:flutter_hazizz/managers/TokenManager.dart';
+import 'package:rxdart/rxdart.dart';
+import 'package:flutter_hazizz/converters/PojoConverter.dart';
 
 import '../../HttpMethod.dart';
 import '../ResponseHandler.dart';
 
 class Request {
+  dynamic responseData;
+
+  BehaviorSubject subject;
+
   bool authTokenHeader = false;
   bool contentTypeHeader = false;
 
@@ -23,6 +31,10 @@ class Request {
 
   Request(ResponseHandler rh){
     this.rh = rh;
+  }
+
+  Request.bloc(dynamic subject){
+    this.subject = subject;
   }
 
   HttpMethod httpMethod = HttpMethod.GET;
@@ -44,14 +56,27 @@ class Request {
   Map<String, dynamic> body = {};
 
   void onSuccessful(Response response){
-    rh.onSuccessful(response);
+    responseData = convertData(response.data);
+    processData(responseData);
+
+   // rh.onSuccessful(response);
+    rh.addToBloc(responseData);
+    rh.onReceivedData(responseData);
   }
 
   void onError(PojoError pojoError){
+    responseData = pojoError;
     rh.onError(pojoError);
   }
 
+  dynamic convertData(Response response){
+    throw new ConverterNotImplementedException();
+    return response;
+  }
 
+  void processData(dynamic data){
+
+  }
 }
 
 class HazizzRequest extends Request{
@@ -59,8 +84,6 @@ class HazizzRequest extends Request{
     super.SERVER_PATH = "hazizz-server/";
     SERVER_PATH = "hazizz-server/";
   }
-
-
 }
 class TheraRequest extends Request{
   TheraRequest(ResponseHandler rh) : super(rh){
@@ -83,6 +106,18 @@ class CreateTokenWithPassword extends AuthRequest{
     body["username"] = b_username;
     body["password"] = b_password;
     contentTypeHeader = true;
+  }
+
+  @override
+  dynamic convertData(Response response) {
+    PojoTokens tokens = PojoTokens.fromJson(jsonDecode(response.data));
+    return tokens;
+  }
+
+  @override
+  void processData(data) {
+    TokenManager.setToken(data.token);
+    TokenManager.setRefreshToken(data.refresh);
   }
 
   @override
@@ -154,6 +189,15 @@ class GetTasksFromMe extends HazizzRequest {
     myTasks.sort();
     rh.onSuccessful(myTasks);
   }
+
+  @override
+  dynamic convertData(Response response) {
+    Iterable iter = getIterable(response.data);
+    List<PojoTask> myTasks = iter.map<PojoTask>((json) => PojoTask.fromJson(json)).toList();
+    myTasks.sort();
+    return myTasks;
+  }
+
 }
 
 class GetMyGroups extends HazizzRequest {
@@ -168,6 +212,13 @@ class GetMyGroups extends HazizzRequest {
     Iterable iter = getIterable(response.data);
     List<PojoGroup> myGroups = iter.map<PojoGroup>((json) => PojoGroup.fromJson(json)).toList();
     rh.onSuccessful(myGroups);
+  }
+
+  @override
+  convertData(Response response) {
+    Iterable iter = getIterable(response.data);
+    List<PojoGroup> myGroups = iter.map<PojoGroup>((json) => PojoGroup.fromJson(json)).toList();
+    return myGroups;
   }
 
 }

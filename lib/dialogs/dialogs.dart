@@ -12,25 +12,25 @@ import 'package:flutter_hazizz/converters/PojoConverter.dart';
 import '../RequestSender.dart';
 
 Future<List<PojoGroup>> _getGroupData()async{
-  List<PojoGroup> myGroups_data;
+  List<PojoGroup> data;
   Response response = await RequestSender().send(new GetMyGroups(
     rh: new ResponseHandler(
         onSuccessful: (dynamic data) async{
-          myGroups_data = data;          },
+          data = data;          },
         onError: (PojoError pojoError){
           print("log: the annonymus functions work and the errorCode : ${pojoError.errorCode}");
         }
     ),
   ));
-  return myGroups_data;
+  return data;
 }
-void showDialogGroup(BuildContext context, Function(PojoGroup) onPicked, {List<PojoGroup> myGroups_data}) async{
- // List<PojoGroup> myGroups_data;
+void showDialogGroup(BuildContext context, Function(PojoGroup) onPicked, {List<PojoGroup> data}) async{
+ // List<PojoGroup> data;
   List<PojoGroup> groups_data;
-  if(myGroups_data == null) {
+  if(data == null) {
     groups_data = await _getGroupData();
   }else{
-    groups_data = myGroups_data;
+    groups_data = data;
   }
 
   showDialog(
