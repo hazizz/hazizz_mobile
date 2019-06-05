@@ -7,6 +7,7 @@ import 'package:flutter_hazizz/communication/requests/request_collection.dart';
 
 import '../RequestSender.dart';
 
+/*
 class TasksBloc extends Bloc<RequestEvent, ResponseState> {
   @override
   ResponseState get initialState => ResponseEmpty();
@@ -41,3 +42,4 @@ class TasksBloc extends Bloc<RequestEvent, ResponseState> {
     }
   }
 }
+*/

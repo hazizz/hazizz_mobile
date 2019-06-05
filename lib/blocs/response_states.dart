@@ -2,14 +2,18 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_hazizz/communication/pojos/PojoError.dart';
 import 'package:meta/meta.dart';
 
-abstract class ResponseState extends Equatable {}
+abstract class HState extends Equatable {
+  HState([List props = const []]) : super(props);
+}
 
-class ResponseEmpty extends ResponseState {
+class ResponseEmpty extends HState {
   @override
   String toString() => 'RequestEmpty';
 }
 
-class ResponseDataLoaded extends ResponseState {
+class ResponseDataLoaded extends HState {
+  
+
   final dynamic data;
   ResponseDataLoaded({@required this.data})
       : assert(data != null);
@@ -18,7 +22,7 @@ class ResponseDataLoaded extends ResponseState {
   String toString() => 'ResponseData';
 }
 
-class ResponseError extends ResponseState {
+class ResponseError extends HState {
   final PojoError error;
   ResponseError({@required this.error})
       : assert(error != null);
@@ -27,7 +31,7 @@ class ResponseError extends ResponseState {
   String toString() => 'ResponseError';
 }
 
-class ResponseWaiting extends ResponseState {
+class ResponseWaiting extends HState {
   @override
   String toString() => 'ResponseWaiting';
 }

@@ -4,7 +4,7 @@ import 'package:flutter_hazizz/communication/pojos/PojoError.dart';
 import 'package:meta/meta.dart';
 
 
-abstract class VariableState extends Equatable {}
+abstract class VariableState  extends Equatable {}
 
 class VariableReady extends VariableState {
   final dynamic data;
@@ -23,38 +23,51 @@ abstract class VariableEvent extends Equatable {
   VariableEvent([List props = const []]) : super(props);
 }
 
+class GetVariable extends VariableEvent {
+  @override
+  String toString() => 'GetVariable';
+}
+
+class SetVariable extends VariableEvent {
+  final dynamic variable;
+  final int  = 1;
+  SetVariable({this.variable})
+      : assert(variable != null);
+
+  @override
+  String toString() => 'SetVariable';
+}
+
+/*
 class InitalizeVariable extends VariableEvent {
   @override
   String toString() => 'ItemListLoadData';
 }
 class InstantiateVariable extends VariableEvent {
-  final dynamic item;
+  final T item;
   InstantiateVariable({this.item})
       : assert(item != null);
   @override
   String toString() => 'ItemListPick';
 }
+*/
 
 
 class VariableBloc extends Bloc<VariableEvent, VariableState> {
-  List<dynamic> listItemData;
+  dynamic variable;
 
   @override
-  VariableBloc get initialState => VariableNotInstantiated();
+  VariableState get initialState => VariableNotInstantiated();
 
 
   @override
-  Stream<ItemListState> mapEventToState(ItemListEvent event) async* {
+  Stream<VariableState> mapEventToState(VariableEvent event) async* {
     print("log: Event2: ${event.toString()}");
-    if (event is ItemListLoadData) {
-      try {
-        yield ItemListWaiting();
-        yield await loadData();
-
-      } on Exception catch(e){
-        print("log: Exception: ${e.toString()}");
-        // yield TasksError();
-      }
+    if(event is SetVariable){
+      variable = event.variable;
+    }
+    else if (event is GetVariable) {
+      yield VariableReady(data: variable);
     }
   }
 }

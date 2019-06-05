@@ -3,8 +3,13 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hazizz/blocs/VariableBloc.dart';
+import 'package:flutter_hazizz/blocs/date_time_picker_bloc.dart';
+import 'package:flutter_hazizz/blocs/edit_task_bloc2.dart';
 import 'package:flutter_hazizz/blocs/item_list_picker_bloc/item_list_picker_bloc.dart';
 import 'package:flutter_hazizz/blocs/item_list_picker_bloc/item_list_picker_group_bloc.dart';
+import 'package:flutter_hazizz/blocs/request_event.dart';
+import 'package:flutter_hazizz/blocs/response_states.dart';
 import 'package:flutter_hazizz/communication/ResponseHandler.dart';
 import 'package:flutter_hazizz/communication/pojos/PojoError.dart';
 import 'package:flutter_hazizz/communication/pojos/PojoGroup.dart';
@@ -12,6 +17,7 @@ import 'package:flutter_hazizz/communication/pojos/PojoSubject.dart';
 import 'package:flutter_hazizz/communication/pojos/PojoType.dart';
 import 'package:flutter_hazizz/communication/pojos/task/PojoTask.dart';
 import 'package:flutter_hazizz/communication/requests/request_collection.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 import 'package:expandable/expandable.dart';
 import 'package:flutter_hazizz/dialogs/dialogs.dart';
@@ -63,7 +69,15 @@ class _EditTaskPage extends State<EditTaskPage> {
   String _title = "";
 
   static Color headerColor = Colors.red;
- // headerColor.alpha = 10;
+
+
+  static Color homeworkColor = Colors.green;
+  static Color testColor = Colors.red;
+  static Color oralTestColor = Colors.purple;
+  static Color assignmentColor = Colors.yellow;
+
+
+  // headerColor.alpha = 10;
   static Color formColor = Colors.blue;//headerColor.withAlpha(20); //Color.fromRGBO(headerColor.red, headerColor.green, headerColor.blue, 240);
 
   static String _value = "1";
@@ -75,13 +89,19 @@ class _EditTaskPage extends State<EditTaskPage> {
 
   static bool _isExpanded = false;
 
-  PojoGroup chosenGroup;
+  VariableBloc chosenGroup = new VariableBloc();
+
+  EditTaskBlocs blocs;
+
+
+//  PojoGroup chosenGroup;
   static PojoSubject chosenSubject;
 
   FormField groupFormField;
 
   ExpandableController expandableController = new ExpandableController(true);
 
+  /*
   static final FormField subjectFormField = new FormField(
     builder: (FormFieldState state) {
       return InputDecorator(
@@ -97,7 +117,6 @@ class _EditTaskPage extends State<EditTaskPage> {
       );
     },
   );
-
   static final FormField deadlineFormField = new FormField(
     builder: (FormFieldState state) {
       return InputDecorator(
@@ -112,6 +131,7 @@ class _EditTaskPage extends State<EditTaskPage> {
       );
     },
   );
+  */
 
   static final AppBar appBar = AppBar(
   title: Text("Edit Task"),
@@ -120,6 +140,7 @@ class _EditTaskPage extends State<EditTaskPage> {
   List<PojoTask> task_data = List();
   List<PojoSubject> subjects_data = List();
 
+  final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
 
   void processData(PojoTask pojoTask){
    // expandablePanel.c
@@ -144,12 +165,18 @@ class _EditTaskPage extends State<EditTaskPage> {
   void initState() {
    // getData();
 
-    itemListPickerGroupBloc.dispatch(ItemListLoadData());
+    blocs = new EditTaskBlocs();
+
+    blocs.groupItemPickerBloc.dispatch(LoadData());
+
+   // itemListPickerGroupBloc.dispatch(LoadData());
+
 
     if(widget.pojoTask != null) {
       processData(widget.pojoTask);
     }
 
+    /*
     groupFormField = new FormField(
       builder: (FormFieldState state) {
         return InputDecorator(
@@ -165,6 +192,7 @@ class _EditTaskPage extends State<EditTaskPage> {
         );
       },
     );
+    */
 
     headerColor = Colors.yellow;
     // headerColor.alpha = 10;
@@ -193,6 +221,213 @@ class _EditTaskPage extends State<EditTaskPage> {
 
   @override
   Widget build(BuildContext context) {
+    var taskTypePicker = BlocBuilder(
+        bloc: blocs.taskTypePickerBloc,
+        builder: (BuildContext context, TaskTypePickerState state) {
+          return GestureDetector(
+            child: FormField(
+              builder: (FormFieldState formState) {
+                return InputDecorator(
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: formColor,
+                      labelText: 'Type',
+                    ),
+                    isEmpty: _color == '',
+                    child: Builder(
+                      builder: (BuildContext context){//, ItemListState state) {
+                        String typeName = "error lol123";
+                        if(state is HomeworkState){
+                          headerColor = homeworkColor;
+                          typeName = "Homework";
+                        }else if(state is TestState){
+                          headerColor = testColor;
+                          typeName = "Test";
+                        } else if(state is OralTestState){
+                          headerColor = oralTestColor;
+                          typeName = "Oral test";
+                        }else if(state is AssignmentState){
+                          headerColor = assignmentColor;
+                          typeName = "Assignment";
+
+                        }
+
+                        return Center(
+                          child: Text('${typeName}',
+                            style: TextStyle(fontSize: 24.0),
+                          ),
+                        );
+                      },
+                    )
+                );
+              },
+            ), //groupFormField,
+            onTap: () {
+              showDialogTaskType(context, (PojoType type) {
+                // chosenGroup = group;
+                blocs.taskTypePickerBloc.dispatch(TaskTypePickedEvent(type));
+               // print("log: group: ${group.name}");
+              }
+              );
+
+
+
+            },
+          );
+        }
+    );
+    var groupPicker = BlocBuilder(
+      bloc: blocs.groupItemPickerBloc,
+      builder: (BuildContext context, ItemListState state) {
+        print("log: widget update111");
+        return GestureDetector(
+          child: FormField(
+            builder: (FormFieldState formState) {
+              return InputDecorator(
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: formColor,
+                    icon: const Icon(Icons.group),
+                    labelText: 'Group',
+                  ),
+                  isEmpty: _color == '',
+                  child: Builder(
+                  //  bloc: blocs.groupItemPickerBloc,
+                    builder: (BuildContext context){//, ItemListState state) {
+                      print("log: widget update2");
+                      if (state is Loaded) {
+                        return Container();
+                      }
+                      if(state is PickedGroupState){
+                        print("log: asdasdGroup: $state.item.name");
+                        return Center(
+                          child: Text('${state.item.name}',
+                            style: TextStyle(fontSize: 24.0),
+                          ),
+                        );
+                      }
+                      return Text("Loading");
+                    },
+                  )
+              );
+            },
+          ), //groupFormField,
+          onTap: () {
+            List<PojoGroup> dataList = blocs.groupItemPickerBloc.dataList;
+            if(dataList != null){
+              if (state is Loaded || state is PickedGroupState) {
+                showDialogGroup(context, (PojoGroup group) {
+                 // chosenGroup = group;
+                  blocs.groupItemPickerBloc.dispatch(PickedGroupEvent(item: group));
+                  print("log: group: ${group.name}");
+                },
+                  data: dataList,
+                );
+              }
+            }
+
+          },
+        );
+      }
+    );
+    var subjectPicker = BlocBuilder(
+        bloc: blocs.subjectItemPickerBloc,
+        builder: (BuildContext context, ItemListState state) {
+          print("log: widget update111");
+          return GestureDetector(
+            child: FormField(
+              builder: (FormFieldState formState) {
+                return InputDecorator(
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: formColor,
+                      icon: const Icon(Icons.group),
+                      labelText: 'Subject',
+                    ),
+                    isEmpty: _color == '',
+                    child: Builder(
+                      builder: (BuildContext context){//, ItemListState state) {
+                        print("log: widget update2");
+                        if (state is Loaded) {
+                          return Container();
+                        }
+                        if(state is PickedSubjectState){
+                          print("log: asdasdGroup: $state.item.name");
+                          return Center(
+                            child: Text('${state.item.name}',
+                              style: TextStyle(fontSize: 24.0),
+                            ),
+                          );
+                        }
+                        return Text("Loading");
+                      },
+                    )
+                );
+              },
+            ), //groupFormField,
+            onTap: () {
+              List<PojoSubject> dataList = blocs.subjectItemPickerBloc.dataList;
+              if(dataList != null){
+                if (state is Loaded || state is PickedSubjectState) {
+                  showDialogSubject(context, (PojoSubject subject) {
+                    // chosenGroup = group;
+                    blocs.subjectItemPickerBloc.dispatch(PickedSubjectEvent(item: subject));
+                    print("log: group: ${subject.name}");
+                  },
+                    data: dataList,
+                  );
+                }
+              }
+
+            },
+          );
+        }
+    );
+    var deadlinePicker = BlocBuilder(
+      bloc: blocs.deadlineBloc,
+      builder: (BuildContext context, DateTimePickerState state) {
+        return GestureDetector(
+          child: FormField(
+            builder: (FormFieldState formState) {
+              return InputDecorator(
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: formColor,
+                  icon: const Icon(Icons.date_range),
+                  labelText: 'Deadline',
+                ),
+                isEmpty: _color == '',
+                child: Builder(
+                  builder: (BuildContext context){
+                    if (state is DateTimeNotPicked) {
+                      return Container();
+                    }
+                    if(state is DateTimePickedState){
+                      return Center(
+                        child: Text('${state.dateTime.toString()}',
+                          style: TextStyle(fontSize: 24.0),
+                        ),
+                      );
+                    }
+                    return Text("Loading");
+                  },
+                ),
+              );
+            },
+          ),
+          onTap: () async {
+            final DateTime picked = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(), firstDate: DateTime.now().subtract(Duration(hours: 24)), lastDate: DateTime.now().add(Duration(days: 364)));
+            blocs.deadlineBloc.dispatch(DateTimePickedEvent(dateTime: picked));
+          },
+        );
+      }
+    );
+
+
+
+
     return Hero(
         tag: "hero_task_edit",
         child: Scaffold(
@@ -272,55 +507,21 @@ class _EditTaskPage extends State<EditTaskPage> {
                                         ]
                                     ),
                                   ),
-
                                   expanded: Container(
                                     color: headerColor,
                                     //  width: 400,
                                     child: Column(
                                       children: <Widget>[
                                         Padding(
-                                          padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 2),
+                                          padding: const EdgeInsets.only(left: 2.0, right: 2.0, bottom: 2),
                                           child: new Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Expanded(child: Column()),
-                                              new Flexible(
-                                                child: DropdownButton<String>(
-
-                                                  elevation: 50,
-                                                  //   iconSize: 40,
-                                                  hint: Text("asd"),
-                                                  items: [
-                                                    DropdownMenuItem(
-                                                      value: PojoType.pojoTypes[0].id.toString(),
-                                                      child: Align(
-                                                        alignment: FractionalOffset.bottomCenter,
-                                                        child: Text(
-
-                                                          PojoType.pojoTypes[0].name,
-                                                          style: TextStyle(
-                                                            fontSize: 40,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    DropdownMenuItem(
-                                                      value: PojoType.pojoTypes[1].id.toString(),
-                                                      child: Align(
-                                                        alignment: FractionalOffset.bottomCenter,
-                                                        child: Text(
-                                                          "Second",
-                                                          style: TextStyle(
-                                                            fontSize: 40,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                  value: _value,
-                                                ),
+                                              Flexible(child: Column()),
+                                              new Expanded(
+                                                child: taskTypePicker
                                               ),
-                                              Expanded(
+                                              Flexible(
                                                 child: Align(
                                                   alignment: FractionalOffset.bottomRight,
                                                   child: Builder(
@@ -343,50 +544,25 @@ class _EditTaskPage extends State<EditTaskPage> {
                                           child: Column(
                                             children: <Widget>[
                                               Padding(padding: EdgeInsets.only(bottom: 4),
-                                                child: BlocBuilder(
-                                                  bloc: itemListPickerGroupBloc,
-                                                  builder: (_, ItemListState state) {
-                                                    return GestureDetector(
-                                                      child: FormField(
-                                                        builder: (FormFieldState state) {
-                                                          return InputDecorator(
-                                                              decoration: InputDecoration(
-                                                                filled: true,
-                                                                fillColor: formColor,
-                                                                icon: const Icon(
-                                                                    Icons.group),
-                                                                labelText: 'Group',
-                                                              ),
-                                                              isEmpty: _color == '',
-                                                              child: Text(
-                                                                  chosenGroup
-                                                                      ?.name ?? "Hurkáspárt")
-                                                          );
-                                                        },
-                                                      ), //groupFormField,
-                                                      onTap: () {
-                                                        if(state is ItemListLoaded){
-                                                          showDialogGroup(context, (PojoGroup group) {
-                                                            setState((){
-                                                              chosenGroup = group;
-                                                            });
-                                                            print("log: group: ${chosenGroup.name}");
-                                                          },
-                                                          data: state.data,
-                                                          );
-                                                        }
-                                                      },
-                                                    );
-                                                  }
-                                                ),),
+                                                child: BlocProviderTree(
+                                                  blocProviders: [
+                                                    BlocProvider<GroupItemPickerBloc>(bloc: blocs.groupItemPickerBloc),
+                                                    BlocProvider<VariableBloc>(bloc: chosenGroup),
+                                                  ],
+                                                  child: groupPicker,
+
+                                                ),
+                                              ),
                                               Padding(
+                                                padding: EdgeInsets.only(bottom: 4),
+                                                child: subjectPicker
+                                              ),
+                                            /*  Padding(
                                                 padding: EdgeInsets.only(bottom: 4),
                                                 child: GestureDetector(
                                                   onTap: (){
                                                     showDialogSubject(
-                                                        context,
-
-                                                            (PojoSubject subject){
+                                                        context, (PojoSubject subject){
                                                       setState(() {
                                                         chosenSubject = subject;
                                                       });
@@ -410,22 +586,10 @@ class _EditTaskPage extends State<EditTaskPage> {
                                                     },
                                                   ),
                                                 ),
-
-                                              ),
+                                              ), */
                                               Padding(
                                                 padding: EdgeInsets.only(bottom: 4),
-                                                child: GestureDetector(
-                                                  child: deadlineFormField,
-                                                  onTap: ()async{
-
-                                                    final DateTime picked = await showDatePicker(
-                                                        context: context,
-                                                        initialDate: DateTime.now(),
-                                                        firstDate: DateTime(2015, 8),
-                                                        lastDate: DateTime(2101));
-                                                   // showDialogGroup(context);
-                                                  },
-                                              ),
+                                                child: deadlinePicker,
                                               ),
 
                                             ],
@@ -446,22 +610,38 @@ class _EditTaskPage extends State<EditTaskPage> {
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             new Flexible(
-                                                child: TextField(
-                                                  enableInteractiveSelection: true,
-                                                  maxLength: 20,
-                                                  decoration: new InputDecoration.collapsed(
-                                                      hintText: 'title',
-                                                      hasFloatingPlaceholder: true,
-                                                      border: OutlineInputBorder(
-                                                          gapPadding: 20
-                                                      )
+                                                child:
+                                                FormBuilder(
+                                                  key: _fbKey,
+                                                  autovalidate: true,
+                                                  child: FormBuilderTextField(
 
-
+                                                    attribute: "title",
+                                                    decoration: InputDecoration(labelText: "Title"),
+                                                    validators: [
+                                                      FormBuilderValidators.minLength(2, errorText: "Min characters is 2"),
+                                                      FormBuilderValidators.maxLength(20, errorText: "Max characters is 20"),
+                                                    ],
                                                   ),
-                                                  style: TextStyle(
-                                                      fontSize: 30
+                                                ),
+                                                /*
+                                                widget(
+                                                  child: TextField(
+                                                    enableInteractiveSelection: true,
+                                                    maxLength: 20,
+                                                    decoration: new InputDecoration.collapsed(
+                                                        hintText: 'title',
+                                                        hasFloatingPlaceholder: true,
+                                                        border: OutlineInputBorder(
+                                                            gapPadding: 20
+                                                        )
+                                                    ),
+                                                    style: TextStyle(
+                                                        fontSize: 30
+                                                    ),
                                                   ),
                                                 )
+                                                    */
                                             )
                                           ],
                                         ),
@@ -469,7 +649,6 @@ class _EditTaskPage extends State<EditTaskPage> {
 
                                     ]
                                 ),
-                                //  flex: 6,
                                 Padding(
                                   padding: const EdgeInsets.only( left: 20, right: 20, top: 4),
                                   child: TextField(
@@ -489,6 +668,17 @@ class _EditTaskPage extends State<EditTaskPage> {
                                     ),
                                   ),
                                 ),
+                                Center(
+                                  child: RaisedButton(
+                                    child: Text("Send"),
+                                      onPressed: (){
+                                        _fbKey.currentState.save();
+                                        if (_fbKey.currentState.validate()) {
+                                          print(_fbKey.currentState.value);
+                                        }
+                                      }
+                                  ),
+                                )
 
                               ]
                           ),

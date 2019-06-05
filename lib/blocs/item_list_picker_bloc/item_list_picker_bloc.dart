@@ -3,74 +3,108 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_hazizz/communication/pojos/PojoError.dart';
 import 'package:meta/meta.dart';
 
+import '../request_event.dart';
+import '../response_states.dart';
 
-abstract class ItemListState extends Equatable {}
 
-class ItemListLoaded extends ItemListState {
+abstract class ItemListState extends HState {
+  ItemListState([List props = const []]) : super(props);
+ // ItemListState(this.name) : super([name]);
+}
+
+
+class NotPicked extends ItemListState {
+ /// NotPicked([List props = const []]) : super(props);
+  @override
+  String toString() => 'ItemListNotPickedEvent';
+}
+
+class Loaded extends ItemListState {
   final List<dynamic> data;
-  ItemListLoaded({@required this.data})
+  Loaded({@required this.data})
       : assert(data != null);
   @override
   String toString() => 'ItemListLoaded';
 }
 
-class ItemListWaiting extends ItemListState {
+class Waiting extends ItemListState {
   @override
   String toString() => 'ItemListLoading';
 }
 
-class ItemListEmpty extends ItemListState {
+class Empty extends ItemListState {
   @override
   String toString() => 'ItemListEmtpy';
 }
 
-class ItemListError extends ItemListState {
+class Error extends ItemListState {
   final PojoError error;
-  ItemListError({this.error})
+  Error({this.error})
       : assert(error != null);
   @override
   String toString() => 'ItemListError';
 }
 
-abstract class ItemListEvent extends Equatable {
+class PickedState extends ItemListState {
+ // PickedState(this.item, [List props = const []]) : assert(item != null), super(props);
+  final dynamic item;
+
+
+ // PickedState() : super(props);
+
+  PickedState({this.item})
+      : assert(item != null), super(item);
+  @override
+  String toString() => 'PickedState';
+}
+
+
+abstract class ItemListEvent extends HEvent {
   ItemListEvent([List props = const []]) : super(props);
 }
 
-class ItemListLoadData extends ItemListEvent {
+class LoadData extends ItemListEvent {
   @override
   String toString() => 'ItemListLoadData';
 }
-class ItemListPick extends ItemListEvent {
+class PickedEvent extends ItemListEvent {
   final dynamic item;
-  ItemListPick({this.item})
-      : assert(item != null);
+  PickedEvent({this.item})
+      : assert(item != null), super([item]);
   @override
-  String toString() => 'ItemListPick';
+  String toString() => 'ItemListPicked';
+}
+
+
+class NotPickedEvent extends ItemListEvent {
+
+  @override
+  String toString() => 'ItemListNotPickedEvent';
 }
 
 
 class ItemListPickerBloc extends Bloc<ItemListEvent, ItemListState> {
   List<dynamic> listItemData;
+  dynamic pickedItem;
 
   @override
-  ItemListState get initialState => ItemListEmpty();
+  ItemListState get initialState => Empty();
 
-  Future<ItemListState> loadData()async{
+  Future<ItemListState> fetchedData()async{
+
+  }
+
+  void onPicked(dynamic item){
 
   }
 
   @override
   Stream<ItemListState> mapEventToState(ItemListEvent event) async* {
     print("log: Event2: ${event.toString()}");
-    if (event is ItemListLoadData) {
-      try {
-        yield ItemListWaiting();
-        yield await loadData();
 
-      } on Exception catch(e){
-        print("log: Exception: ${e.toString()}");
-        // yield TasksError();
-      }
+    if(event is PickedEvent){
+      pickedItem = event.item;
+      onPicked(pickedItem);
     }
   }
 }

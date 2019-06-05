@@ -56,12 +56,14 @@ class Request {
   Map<String, dynamic> body = {};
 
   void onSuccessful(Response response){
-    responseData = convertData(response.data);
-    processData(responseData);
+    if(this.rh.onSuccessful != null) {
+      responseData = convertData(response.data);
+      processData(responseData);
 
-   // rh.onSuccessful(response);
-    rh.addToBloc(responseData);
-    rh.onReceivedData(responseData);
+      // rh.onSuccessful(response);
+      rh.addToBloc(responseData);
+      rh.onReceivedData(responseData);
+    }
   }
 
   void onError(PojoError pojoError){
@@ -187,7 +189,7 @@ class GetTasksFromMe extends HazizzRequest {
     Iterable iter = getIterable(response.data);
     List<PojoTask> myTasks = iter.map<PojoTask>((json) => PojoTask.fromJson(json)).toList();
     myTasks.sort();
-    rh.onSuccessful(myTasks);
+    rh?.onSuccessful(myTasks);
   }
 
   @override
@@ -231,11 +233,19 @@ class GetSubjects extends HazizzRequest {
   }
 
   @override
+  dynamic convertData(Response response) {
+    Iterable iter = getIterable(response.data);
+    List<PojoSubject> subjects = iter.map<PojoSubject>((json) => PojoSubject.fromJson(json)).toList();
+
+    return subjects;
+  }
+
+  @override
   void onSuccessful(Response response) {
     Iterable iter = getIterable(response.data);
     List<PojoSubject> subjects =  iter.map<PojoSubject>((json) => PojoSubject.fromJson(json)).toList();
 
-    rh.onSuccessful(subjects);
+    rh?.onSuccessful(subjects);
   }
 }
 

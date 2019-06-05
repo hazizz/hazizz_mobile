@@ -16,14 +16,14 @@ class ItemListPickerGroupBloc extends ItemListPickerBloc{
     if(responseData is List<PojoGroup>){
       listItemData = responseData;
       if(listItemData.isNotEmpty) {
-        return ItemListLoaded(data: listItemData);
+        return Loaded(data: listItemData);
       }else{
-        return ItemListEmpty();
+        return Empty();
       }
     }
     if(responseData is PojoError){
       print("log: response is List<PojoTask>");
-      return ItemListError(error: responseData);
+      return Error(error: responseData);
     }
   }
 
