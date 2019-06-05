@@ -7,14 +7,15 @@ import 'package:flutter_hazizz/communication/requests/request_collection.dart';
 
 import '../RequestSender.dart';
 
-class TasksBloc extends Bloc<RequestEvent, ResponseState> {
+
+class TasksBloc extends Bloc<HEvent, HState> {
   @override
-  ResponseState get initialState => ResponseEmpty();
+  HState get initialState => ResponseEmpty();
 
   @override
-  Stream<ResponseState> mapEventToState(RequestEvent event) async* {
+  Stream<HState> mapEventToState(HEvent event) async* {
     print("log: Event2: ${event.toString()}");
-    if (event is FetchRequest) {
+    if (event is FetchData) {
       try {
         yield ResponseWaiting();
         dynamic responseData = await RequestSender().getResponse(new GetTasksFromMe());

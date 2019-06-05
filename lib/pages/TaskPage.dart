@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hazizz/blocs/TasksBloc.dart';
 import 'package:flutter_hazizz/blocs/request_event.dart';
 import 'package:flutter_hazizz/blocs/response_states.dart';
 import 'package:flutter_hazizz/blocs/tasks_bloc.dart';
@@ -32,7 +33,7 @@ class _TaskPage extends State<TaskPage> with SingleTickerProviderStateMixin{
   @override
   void initState() {
    // getData();
-    tasksBloc.dispatch(FetchRequest());
+    tasksBloc.dispatch(FetchData());
  //   tasksBloc.fetchMyTasks();
     super.initState();
   }
@@ -63,7 +64,7 @@ class _TaskPage extends State<TaskPage> with SingleTickerProviderStateMixin{
         child:BlocBuilder(
           bloc: tasksBloc,
         //  stream: tasksBloc.subject.stream,
-          builder: (_, ResponseState state){
+          builder: (_, HState state){
             if(state is ResponseDataLoaded){
               List<PojoTask> tasks = state.data;
               return new ListView.builder(
@@ -91,7 +92,7 @@ class _TaskPage extends State<TaskPage> with SingleTickerProviderStateMixin{
           }
 
         ),
-        onRefresh: () async=> tasksBloc.dispatch(FetchRequest())//await getData()
+        onRefresh: () async=> tasksBloc.dispatch(FetchData())//await getData()
       )
     );
   }

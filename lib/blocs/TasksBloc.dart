@@ -40,7 +40,7 @@ class TasksBloc {
 final tasksBloc = TasksBloc();
 
 class TaskBloc {
-  final BehaviorSubject<PojoTask> _subject_task = BehaviorSubject<PojoTask>();
+  final BehaviorSubject<List<PojoTask>> _subject_task = BehaviorSubject<List<PojoTask>>();
 
   void fetchTask() async {
     Response response = await RequestSender().send(new GetTasksFromMe(

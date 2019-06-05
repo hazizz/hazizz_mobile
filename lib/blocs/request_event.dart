@@ -1,10 +1,10 @@
 import 'package:equatable/equatable.dart';
 
-abstract class RequestEvent extends Equatable {
-  RequestEvent([List props = const []]) : super(props);
+abstract class HEvent extends Equatable {
+  HEvent([List props = const []]) : super(props);
 }
 
-class FetchRequest extends RequestEvent {
+class FetchData extends HEvent {
   @override
-  String toString() => 'FetchRequest';
+  String toString() => 'FetchData';
 }

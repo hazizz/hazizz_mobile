@@ -6,6 +6,7 @@ import 'package:flutter_hazizz/communication/ResponseHandler.dart';
 import 'package:flutter_hazizz/communication/pojos/PojoError.dart';
 import 'package:flutter_hazizz/communication/pojos/PojoGroup.dart';
 import 'package:flutter_hazizz/communication/pojos/PojoSubject.dart';
+import 'package:flutter_hazizz/communication/pojos/PojoType.dart';
 import 'package:flutter_hazizz/communication/requests/request_collection.dart';
 import 'package:flutter_hazizz/converters/PojoConverter.dart';
 
@@ -90,12 +91,12 @@ Future<List<PojoSubject>> _getSubjectData(int groupId)async{
   ));
   return subjects_data;
 }
-void showDialogSubject(BuildContext context, Function(PojoSubject) onPicked, {int groupId, List<PojoSubject> subjects}) async{
+void showDialogSubject(BuildContext context, Function(PojoSubject) onPicked, {int groupId, List<PojoSubject> data}) async{
   List<PojoSubject> subjects_data;
   if(groupId != null) {
     subjects_data = await _getSubjectData(groupId);
   }else{
-    subjects_data = subjects;
+    subjects_data = data;
   }
 
   showDialog(
@@ -138,5 +139,48 @@ void showDialogSubject(BuildContext context, Function(PojoSubject) onPicked, {in
   );
 }
 
+
+void showDialogTaskType(BuildContext context, Function(PojoType) onPicked) async{
+  List<PojoType> data = PojoType.pojoTypes;
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      // return object of type Dialog
+      return AlertDialog(
+        // title: new Text("Alert Dialog title"),
+        content: Container(
+          height: 800,
+          width: 800,
+          child: ListView.builder(
+            itemCount: data.length,
+            itemBuilder: (BuildContext context, int index){
+              return GestureDetector(
+                  onTap: (){
+                    onPicked(data[index]);
+                    Navigator.of(context).pop();
+
+                  },
+                  child: Text(data[index].name,
+                    style: TextStyle(
+                        fontSize: 26
+                    ),
+                  )
+              );
+            },
+          ),
+        ),
+        actions: <Widget>[
+          new FlatButton(
+            child: new Text("Close"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
 
 
