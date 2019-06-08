@@ -1,24 +1,20 @@
-import 'dart:convert';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hazizz/communication/ResponseHandler.dart';
-import 'package:flutter_hazizz/communication/pojos/PojoError.dart';
-import 'package:flutter_hazizz/communication/pojos/PojoGroup.dart';
-import 'package:flutter_hazizz/communication/pojos/PojoSubject.dart';
-import 'package:flutter_hazizz/communication/pojos/PojoType.dart';
-import 'package:flutter_hazizz/communication/pojos/task/PojoTask.dart';
-import 'package:flutter_hazizz/communication/requests/request_collection.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hazizz_mobile/blocs/VariableBloc.dart';
+import 'package:hazizz_mobile/blocs/date_time_picker_bloc.dart';
+import 'package:hazizz_mobile/blocs/edit_task_bloc2.dart';
+import 'package:hazizz_mobile/blocs/item_list_picker_bloc/item_list_picker_bloc.dart';
+import 'package:hazizz_mobile/blocs/item_list_picker_bloc/item_list_picker_group_bloc.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoGroup.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoSubject.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoType.dart';
+import 'package:hazizz_mobile/communication/pojos/task/PojoTask.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 import 'package:expandable/expandable.dart';
-import 'package:flutter_hazizz/dialogs/dialogs.dart';
-
-import '../RequestSender.dart';
-import 'package:flutter_hazizz/converters/PojoConverter.dart';
-
+import 'package:hazizz_mobile/dialogs/dialogs.dart';
 
 class EditTaskPage extends StatefulWidget {
-  // This widget is the root of your application.
   int groupId;
 
   PojoTask pojoTask;
@@ -39,74 +35,34 @@ class EditTaskPage extends StatefulWidget {
 
 class _EditTaskPage extends State<EditTaskPage> {
 
-  final TextEditingController _subjectTextEditingController = TextEditingController();
-  final TextEditingController _groupTextEditingController = TextEditingController();
-  final TextEditingController _creatorTextEditingController = TextEditingController();
-  final TextEditingController _taskTypeTextEditingController = TextEditingController();
-  final TextEditingController _deadlineTextEditingController = TextEditingController();
-
+  ItemListPickerGroupBloc itemListPickerGroupBloc = ItemListPickerGroupBloc();
 
   final TextEditingController _descriptionTextEditingController = TextEditingController();
   final TextEditingController _titleTextEditingController = TextEditingController();
 
-  String _subject = "";
-  String _group = "";
-  String _creator = "";
-  String _type = "";
-  String _deadline = "";
-  String _description = "";
-  String _title = "";
 
   static Color headerColor = Colors.red;
- // headerColor.alpha = 10;
-  static Color formColor = Colors.blue;//headerColor.withAlpha(20); //Color.fromRGBO(headerColor.red, headerColor.green, headerColor.blue, 240);
 
-  static String _value = "1";
+  static Color homeworkColor = Colors.green;
+  static Color testColor = Colors.red;
+  static Color oralTestColor = Colors.purple;
+  static Color assignmentColor = Colors.yellow;
 
-  static List<String> _colors = <String>['', 'red', 'green', 'blue', 'orange'];
+  static Color formColor = Colors.blue;
+
   static String _color = '';
 
   static final double padding = 8;
 
   static bool _isExpanded = false;
 
-  PojoGroup chosenGroup;
+  EditTaskBlocs blocs;
+
   static PojoSubject chosenSubject;
 
   FormField groupFormField;
 
   ExpandableController expandableController = new ExpandableController(true);
-
-  static final FormField subjectFormField = new FormField(
-    builder: (FormFieldState state) {
-      return InputDecorator(
-
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: formColor,
-          icon: const Icon(Icons.subject),
-          labelText: 'Subject',
-        ),
-        isEmpty: _color == '',
-        child: Text(chosenSubject?.name ?? "Matek")
-      );
-    },
-  );
-
-  static final FormField deadlineFormField = new FormField(
-    builder: (FormFieldState state) {
-      return InputDecorator(
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: formColor,
-          icon: const Icon(Icons.date_range),
-          labelText: 'Deadline',
-        ),
-        isEmpty: _color == '',
-     //   child: Text(""),
-      );
-    },
-  );
 
   static final AppBar appBar = AppBar(
   title: Text("Edit Task"),
@@ -115,13 +71,13 @@ class _EditTaskPage extends State<EditTaskPage> {
   List<PojoTask> task_data = List();
   List<PojoSubject> subjects_data = List();
 
+  final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
 
   void processData(PojoTask pojoTask){
    // expandablePanel.c
-
-
     widget.pojoTask = pojoTask;
     setState(() {
+      /*
       _subject = pojoTask.subject.name;
       _group = pojoTask.group.name;
 
@@ -131,71 +87,245 @@ class _EditTaskPage extends State<EditTaskPage> {
       _deadline = pojoTask.dueDate.toString();
       _description = pojoTask.description;
       _title = pojoTask.title;
+      */
     });
   }
 
-  // lényegében egy onCreate
   @override
   void initState() {
-   // getData();
+    blocs = new EditTaskBlocs();
+
+    blocs.groupItemPickerBloc.dispatch(LoadData());
+
     if(widget.pojoTask != null) {
       processData(widget.pojoTask);
     }
-
-    groupFormField = new FormField(
-      builder: (FormFieldState state) {
-        return InputDecorator(
-
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: formColor,
-              icon: const Icon(Icons.group),
-              labelText: 'Group',
-            ),
-            isEmpty: _color == '',
-            child: Text(chosenGroup?.name ?? "Hurkáspárt")
-        );
-      },
-    );
-
     headerColor = Colors.yellow;
-    // headerColor.alpha = 10;
-    formColor = Colors.grey.withAlpha(120);//headerColor.withOpacity(200); //Color.fromRGBO(headerColor.red, headerColor.green, headerColor.blue, 240);
+    formColor = Colors.grey.withAlpha(120);
 
     super.initState();
   }
 
-  void getData() async{
-    Response response = await RequestSender().send(new GetTaskByTaskId(
-        p_taskId: widget.taskId,
-        rh: new ResponseHandler(
-            onSuccessful: (Response response) async{
-              print("raw response is : ${response.data}" );
-
-              PojoTaskDetailed pojoTask = PojoTaskDetailed.fromJson(jsonDecode(response.data));
-
-              processData(pojoTask);
-
-            },
-            onError: (PojoError pojoError){
-              print("log: the annonymus functions work and the errorCode : ${pojoError.errorCode}");
-            }
-        )));
+  @override
+  void dispose() {
+    blocs.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    var taskTypePicker = BlocBuilder(
+        bloc: blocs.taskTypePickerBloc,
+        builder: (BuildContext context, TaskTypePickerState state) {
+          return GestureDetector(
+            child: FormField(
+              builder: (FormFieldState formState) {
+                return InputDecorator(
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: formColor,
+                      labelText: 'Type',
+                    ),
+                    isEmpty: _color == '',
+                    child: Builder(
+                      builder: (BuildContext context){//, ItemListState state) {
+                        String typeName = "error lol123";
+                        if(state is TaskTypePickedState) {
+                          if (state.item.id == 1) {
+                            headerColor = homeworkColor;
+                            typeName = "Homework";
+                          }
+                          else if (state.item.id == 2) {
+                            headerColor = assignmentColor;
+                            typeName = "Assignment";
+                          }
+                          else if (state.item.id == 3) {
+                            headerColor = testColor;
+                            typeName = "Test";
+                          }
+                          else if (state.item.id == 4) {
+                            headerColor = oralTestColor;
+                            typeName = "Oral test";
+                          }
+                        }
+
+                        return Center(
+                          child: Text('${typeName}',
+                            style: TextStyle(fontSize: 24.0),
+                          ),
+                        );
+                      },
+                    )
+                );
+              },
+            ),
+            onTap: () {
+              showDialogTaskType(context, (PojoType type) {
+                blocs.taskTypePickerBloc.dispatch(TaskTypePickedEvent(type));
+              }
+              );
+            },
+          );
+        }
+    );
+    var groupPicker = BlocBuilder(
+      bloc: blocs.groupItemPickerBloc,
+      builder: (BuildContext context, ItemListState state) {
+        print("log: widget update111");
+        return GestureDetector(
+          child: FormField(
+            builder: (FormFieldState formState) {
+              return InputDecorator(
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: formColor,
+                    icon: const Icon(Icons.group),
+                    labelText: 'Group',
+                  ),
+                  isEmpty: _color == '',
+                  child: Builder(
+                  //  bloc: blocs.groupItemPickerBloc,
+                    builder: (BuildContext context){//, ItemListState state) {
+                      print("log: widget update2");
+                      if (state is Loaded) {
+                        return Container();
+                      }
+                      if(state is PickedGroupState){
+                        print("log: asdasdGroup: $state.item.name");
+                        return Center(
+                          child: Text('${state.item.name}',
+                            style: TextStyle(fontSize: 24.0),
+                          ),
+                        );
+                      }
+                      return Text("Loading");
+                    },
+                  )
+              );
+            },
+          ), //groupFormField,
+          onTap: () {
+            List<PojoGroup> dataList = blocs.groupItemPickerBloc.dataList;
+            if(dataList != null){
+              if (state is Loaded || state is PickedGroupState) {
+                showDialogGroup(context, (PojoGroup group) {
+                 // chosenGroup = group;
+                  blocs.groupItemPickerBloc.dispatch(PickedGroupEvent(item: group));
+                  print("log: group: ${group.name}");
+                },
+                  data: dataList,
+                );
+              }
+            }
+
+          },
+        );
+      }
+    );
+    var subjectPicker = BlocBuilder(
+        bloc: blocs.subjectItemPickerBloc,
+        builder: (BuildContext context, ItemListState state) {
+          print("log: widget update111");
+          return GestureDetector(
+            child: FormField(
+              builder: (FormFieldState formState) {
+                return InputDecorator(
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: formColor,
+                      icon: const Icon(Icons.group),
+                      labelText: 'Subject',
+                    ),
+                    isEmpty: _color == '',
+                    child: Builder(
+                      builder: (BuildContext context){//, ItemListState state) {
+                        print("log: widget update2");
+                        if (state is Loaded) {
+                          return Container();
+                        }
+                        if(state is PickedSubjectState){
+                          print("log: asdasdGroup: $state.item.name");
+                          return Center(
+                            child: Text('${state.item.name}',
+                              style: TextStyle(fontSize: 24.0),
+                            ),
+                          );
+                        }
+                        return Text("Loading");
+                      },
+                    )
+                );
+              },
+            ), //groupFormField,
+            onTap: () {
+              List<PojoSubject> dataList = blocs.subjectItemPickerBloc.dataList;
+              if(dataList != null){
+                if (state is Loaded || state is PickedSubjectState) {
+                  showDialogSubject(context, (PojoSubject subject) {
+                    // chosenGroup = group;
+                    blocs.subjectItemPickerBloc.dispatch(PickedSubjectEvent(item: subject));
+                    print("log: group: ${subject.name}");
+                  },
+                    data: dataList,
+                  );
+                }
+              }
+
+            },
+          );
+        }
+    );
+    var deadlinePicker = BlocBuilder(
+      bloc: blocs.deadlineBloc,
+      builder: (BuildContext context, DateTimePickerState state) {
+        return GestureDetector(
+          child: FormField(
+            builder: (FormFieldState formState) {
+              return InputDecorator(
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: formColor,
+                  icon: const Icon(Icons.date_range),
+                  labelText: 'Deadline',
+                ),
+                isEmpty: _color == '',
+                child: Builder(
+                  builder: (BuildContext context){
+                    if (state is DateTimeNotPickedState) {
+                      return Container();
+                    }
+                    if(state is DateTimePickedState){
+                      return Center(
+                        child: Text('${state.dateTime.toString()}',
+                          style: TextStyle(fontSize: 24.0),
+                        ),
+                      );
+                    }
+                    return Text("Loading");
+                  },
+                ),
+              );
+            },
+          ),
+          onTap: () async {
+            final DateTime picked = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(), firstDate: DateTime.now().subtract(Duration(hours: 24)), lastDate: DateTime.now().add(Duration(days: 364)));
+            blocs.deadlineBloc.dispatch(DateTimePickedEvent(dateTime: picked));
+          },
+        );
+      }
+    );
+
     return Hero(
         tag: "hero_task_edit",
         child: Scaffold(
-           // resizeToAvoidBottomPadding: false,
             appBar: appBar,
             body:SingleChildScrollView(
               child: Container(
                 width: MediaQuery.of(context).size.width,
                 // valamiért 3* kell megszorozni a paddingot hogy jó legyen
                 height: MediaQuery.of(context).size.height-appBar.preferredSize.height - padding*3,
-
                 child: Padding(
                   padding: EdgeInsets.all(padding),
                   child: Card(
@@ -203,295 +333,257 @@ class _EditTaskPage extends State<EditTaskPage> {
                       child: new Container(
                         child: ExpandableNotifier(
                           controller: expandableController,
-                          child: new Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expandable(
+                          child: BlocBuilder(
+                            bloc: blocs.taskTypePickerBloc,
+                            builder: (BuildContext context, TaskTypePickerState state) {
+                              String typeName = "Not picked";
+                              if(state is TaskTypePickedState){
+                                if(state.item.id == 1) {
+                                headerColor = homeworkColor;
+                                typeName = "Homework";
+                                }
+                                else if(state.item.id == 2) {
+                                headerColor = assignmentColor;
+                                typeName = "Assignment";
+                                }
+                                else if(state.item.id == 3) {
+                                headerColor = testColor;
+                                typeName = "Test";
+                                }
+                                else if(state.item.id == 4) {
+                                headerColor = oralTestColor;
+                                typeName = "Oral test";
+                                }
+                              }
 
-                                  collapsed: Container(
-                                  color: headerColor,
-                                    child: Row(
-                                        children: [
-                                          Expanded(child: Column(),),
-                                          Expanded(
-                                            child: Column(
-                                              children: <Widget>[
-                                                Padding(
-                                                  padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 2),
-                                                  child: new Row(
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    children: [
-                                                      new Flexible(
-                                                          child: Text("Type",
-                                                            style: TextStyle(
-                                                                fontSize: 30
-                                                            ),)
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                Text("Group",
-                                                  style: TextStyle(
-                                                    fontSize: 22
-                                                  ),
-                                                ),
-                                                Text("Subject",
-                                                  style: TextStyle(
-                                                      fontSize: 22
-                                                  ),),
-                                                Text("Deadline",
-                                                  style: TextStyle(
-                                                      fontSize: 22
-                                                  ),),
-                                              ],
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Align(
-                                              alignment: FractionalOffset.bottomRight,
-                                              child: Builder(
-                                                builder: (context) {
-                                                //  var exp = expandableController.of(context);
-                                                  return IconButton(
-                                                    icon:Icon(Icons.keyboard_arrow_down),
-                                                    onPressed: (){
-                                                      expandableController.toggle();
-                                                    });
-                                                }
-                                              ),
-                                            ),
-                                          ),
-                                        ]
-                                    ),
-                                  ),
-
-                                  expanded: Container(
-                                    color: headerColor,
-                                    //  width: 400,
-                                    child: Column(
-                                      children: <Widget>[
-                                        Padding(
-                                          padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 2),
-                                          child: new Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              return new Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expandable(
+                                      collapsed: Container(
+                                        color: headerColor,
+                                        child: Row(
                                             children: [
-                                              Expanded(child: Column()),
-                                              new Flexible(
-                                                child: DropdownButton<String>(
-
-                                                  elevation: 50,
-                                                  //   iconSize: 40,
-                                                  hint: Text("asd"),
-                                                  items: [
-                                                    DropdownMenuItem(
-                                                      value: PojoType.pojoTypes[0].id.toString(),
-                                                      child: Align(
-                                                        alignment: FractionalOffset.bottomCenter,
-                                                        child: Text(
-
-                                                          PojoType.pojoTypes[0].name,
-                                                          style: TextStyle(
-                                                            fontSize: 40,
-                                                          ),
-                                                        ),
+                                              Expanded(child: Column(),),
+                                              Expanded(
+                                                child: Column(
+                                                  children: <Widget>[
+                                                    Text(typeName,
+                                                      style: TextStyle(
+                                                          fontSize: 30
                                                       ),
                                                     ),
-                                                    DropdownMenuItem(
-                                                      value: PojoType.pojoTypes[1].id.toString(),
-                                                      child: Align(
-                                                        alignment: FractionalOffset.bottomCenter,
-                                                        child: Text(
-                                                          "Second",
+                                                    BlocBuilder(
+                                                      bloc: blocs.groupItemPickerBloc,
+                                                      builder: (BuildContext context, ItemListState state) {
+                                                        String groupName = "Not picked group";
+                                                        if(state is PickedGroupState){
+                                                          groupName = state.item.name;
+                                                        }
+                                                        return Text(groupName,
                                                           style: TextStyle(
-                                                            fontSize: 40,
+                                                              fontSize: 22
                                                           ),
-                                                        ),
-                                                      ),
+                                                        );
+                                                      }
+                                                    ),
+                                                    BlocBuilder(
+                                                        bloc: blocs.subjectItemPickerBloc,
+                                                        builder: (BuildContext context, ItemListState state) {
+                                                          String subjectName = "Not picked subject";
+                                                          if(state is PickedSubjectState){
+                                                            subjectName = state.item.name;
+                                                          }
+                                                          return Text(subjectName,
+                                                            style: TextStyle(
+                                                                fontSize: 22
+                                                            ),
+                                                          );
+                                                        }
+                                                    ),
+                                                    BlocBuilder(
+                                                        bloc: blocs.deadlineBloc,
+                                                        builder: (BuildContext context, DateTimePickerState state) {
+                                                          String deadline = "Not picked deadline";
+                                                          if(state is DateTimePickedState){
+                                                            deadline = state.dateTime.toString();
+                                                          }
+                                                          return Text(deadline,
+                                                            style: TextStyle(
+                                                                fontSize: 22
+                                                            ),
+                                                          );
+                                                        }
                                                     ),
                                                   ],
-                                                  value: _value,
                                                 ),
                                               ),
                                               Expanded(
                                                 child: Align(
-                                                  alignment: FractionalOffset.bottomRight,
+                                                  alignment: FractionalOffset
+                                                      .bottomRight,
                                                   child: Builder(
                                                       builder: (context) {
-                                                      //  var exp = expandableController.of(context);
+                                                        //  var exp = expandableController.of(context);
                                                         return IconButton(
-                                                            icon:Icon(Icons.keyboard_arrow_up),
-                                                            onPressed: (){
-                                                              expandableController.toggle();
+                                                            icon: Icon(Icons
+                                                                .keyboard_arrow_down),
+                                                            onPressed: () {
+                                                              expandableController
+                                                                  .toggle();
                                                             });
                                                       }
                                                   ),
                                                 ),
                                               ),
-                                            ],
-                                          ),
+                                            ]
                                         ),
-                                        Padding(
-                                          padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
-                                          child: Column(
-                                            children: <Widget>[
-                                              Padding(padding: EdgeInsets.only(bottom: 4),
-                                                child: GestureDetector(
-                                                  child: FormField(
-                                                    builder: (FormFieldState state) {
-                                                      return InputDecorator(
-                                                          decoration: InputDecoration(
-                                                            filled: true,
-                                                            fillColor: formColor,
-                                                            icon: const Icon(Icons.group),
-                                                            labelText: 'Group',
-                                                          ),
-                                                          isEmpty: _color == '',
-                                                          child: Text(chosenGroup?.name ?? "Hurkáspárt")
-                                                      );
-                                                    },
-                                                  ),//groupFormField,
-                                                  onTap: (){
-                                                     showDialogGroup(context, (PojoGroup group){
-                                                       setState(() async{
-                                                         chosenGroup = group;
-
-                                                         Response response = await RequestSender().send(new GetSubjects(
-                                                             rh: new ResponseHandler(
-                                                                 onSuccessful: (Response response) async{
-                                                                   print("raw response is : ${response.data}" );
-                                                                   Iterable iter = getIterable(response.data);
-                                                                   // Iterable parsed = jsonDecode(response.data).cast<Map<String, dynamic>>();
-                                                                   subjects_data =  iter.map<PojoSubject>((json) => PojoSubject.fromJson(json)).toList();
-                                                                 },
-                                                                 onError: (PojoError pojoError){
-                                                                   print("log: the annonymus functions work and the errorCode : ${pojoError.errorCode}");
-                                                                 }
-                                                             ),
-                                                            groupId: chosenGroup.id
-                                                         ));
-
-                                                        // var exp = ExpandableController.of(context);
-                                                        // exp.toggle();
-                                                       });
-
-
-                                                       print("log: group: ${chosenGroup.name}");
-                                                     });
-                                                  },
-                                              ),),
-                                              Padding(
-                                                padding: EdgeInsets.only(bottom: 4),
-                                                child: GestureDetector(
-                                                  onTap: (){
-                                                    showDialogSubject(
-                                                        context,
-
-                                                            (PojoSubject subject){
-                                                      setState(() {
-                                                        chosenSubject = subject;
-                                                      });
-                                                    },
-                                                      subjects: subjects_data,
-                                                    );
-                                                  },
-                                                  child: new FormField(
-                                                    builder: (FormFieldState state) {
-                                                      return InputDecorator(
-
-                                                          decoration: InputDecoration(
-                                                            filled: true,
-                                                            fillColor: formColor,
-                                                            icon: const Icon(Icons.subject),
-                                                            labelText: 'Subject',
-                                                          ),
-                                                          isEmpty: _color == '',
-                                                          child: Text(chosenSubject?.name ?? "Matek")
-                                                      );
-                                                    },
+                                      ),
+                                      expanded: Container(
+                                        color: headerColor,
+                                        child: Column(
+                                          children: <Widget>[
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 2.0,
+                                                  right: 2.0,
+                                                  bottom: 2),
+                                              child: new Row(
+                                                mainAxisAlignment: MainAxisAlignment
+                                                    .spaceBetween,
+                                                children: [
+                                                  Flexible(child: Column()),
+                                                  new Expanded(
+                                                      child: taskTypePicker
                                                   ),
-                                                ),
-
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsets.only(bottom: 4),
-                                                child: GestureDetector(
-                                                  child: deadlineFormField,
-                                                  onTap: ()async{
-
-                                                    final DateTime picked = await showDatePicker(
-                                                        context: context,
-                                                        initialDate: DateTime.now(),
-                                                        firstDate: DateTime(2015, 8),
-                                                        lastDate: DateTime(2101));
-                                                   // showDialogGroup(context);
-                                                  },
-                                              ),
-                                              ),
-
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  animationDuration: Duration(milliseconds: 200),
-                                ),
-                                Column(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    //  crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only( left: 10,top: 5, right: 10),
-                                        child: new Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            new Flexible(
-                                                child: TextField(
-                                                  enableInteractiveSelection: true,
-                                                  maxLength: 20,
-                                                  decoration: new InputDecoration.collapsed(
-                                                      hintText: 'title',
-                                                      hasFloatingPlaceholder: true,
-                                                      border: OutlineInputBorder(
-                                                          gapPadding: 20
-                                                      )
-
-
+                                                  Flexible(
+                                                    child: Align(
+                                                      alignment: FractionalOffset
+                                                          .bottomRight,
+                                                      child: Builder(
+                                                          builder: (context) {
+                                                            //  var exp = expandableController.of(context);
+                                                            return IconButton(
+                                                                icon: Icon(Icons
+                                                                    .keyboard_arrow_up),
+                                                                onPressed: () {
+                                                                  expandableController
+                                                                      .toggle();
+                                                                });
+                                                          }
+                                                      ),
+                                                    ),
                                                   ),
-                                                  style: TextStyle(
-                                                      fontSize: 30
+                                                ],
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.only(left: 10,
+                                                  right: 10,
+                                                  bottom: 10),
+                                              child: Column(
+                                                children: <Widget>[
+                                                  Padding(
+                                                    padding: EdgeInsets.only(bottom: 4),
+                                                    child: BlocProviderTree(
+                                                      blocProviders: [
+                                                        BlocProvider<GroupItemPickerBloc>(bloc: blocs.groupItemPickerBloc),
+                                                      //  BlocProvider<VariableBloc>(bloc: chosenGroup),
+                                                      ],
+                                                      child: groupPicker,
+                                                    ),
                                                   ),
-                                                )
-                                            )
+                                                  Padding(
+                                                      padding: EdgeInsets.only(
+                                                          bottom: 4),
+                                                      child: subjectPicker
+                                                  ),
+                                                  Padding(
+                                                    padding: EdgeInsets.only(
+                                                        bottom: 4),
+                                                    child: deadlinePicker,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
                                           ],
                                         ),
                                       ),
-
-                                    ]
-                                ),
-                                //  flex: 6,
-                                Padding(
-                                  padding: const EdgeInsets.only( left: 20, right: 20, top: 4),
-                                  child: TextField(
-
-                                    decoration: new InputDecoration.collapsed(
-
-                                        hintText: 'desctiption',
-                                        border: OutlineInputBorder()
+                                      animationDuration: Duration(milliseconds: 200),
                                     ),
-                                    maxLength: 240,
-                                    maxLines: 8,
-                                    minLines: 6,
-                                    expands: false,
-                                    style: TextStyle(
-                                        fontSize: 22
+                                    Column(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 10, top: 5, right: 10),
+                                            child: new Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                new Flexible(
+                                                  child: FormBuilder(
+                                                    key: _fbKey,
+                                                    autovalidate: true,
+                                                    child: FormBuilderTextField(
+                                                      controller: _titleTextEditingController,
+                                                      attribute: "title",
+                                                      decoration: InputDecoration(
+                                                          labelText: "Title"),
+                                                      validators: [
+                                                        FormBuilderValidators.minLength(2, errorText: "Min characters is 2"),
+                                                        FormBuilderValidators.maxLength(20, errorText: "Max characters is 20"),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
 
+                                        ]
                                     ),
-                                  ),
-                                ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 20, right: 20, top: 4),
+                                      child: TextField(
+                                        controller: _descriptionTextEditingController,
+                                        decoration: new InputDecoration.collapsed(
+                                            hintText: 'desctiption',
+                                            border: OutlineInputBorder()
+                                        ),
 
-                              ]
+                                        maxLength: 240,
+                                        maxLines: 8,
+                                        minLines: 6,
+                                        expands: false,
+                                        style: TextStyle(
+                                            fontSize: 22
+                                        ),
+                                      ),
+                                    ),
+                                    Center(
+                                      child: RaisedButton(
+                                          child: Text("Send"),
+                                          onPressed: () {
+                                            _fbKey.currentState.save();
+                                            if (_fbKey.currentState.validate()) {
+                                              print(_fbKey.currentState.value);
+
+                                              blocs.send(
+                                                title: _titleTextEditingController.text,
+                                                description: _descriptionTextEditingController.text,
+                                                onSuccess: (){
+                                                  Navigator.of(context).pop();
+                                                }
+                                              );
+                                            }
+                                          }
+                                      ),
+                                    )
+                                  ]
+                              );
+
+                            }
                           ),
                         ),
                       ),
@@ -500,44 +592,14 @@ class _EditTaskPage extends State<EditTaskPage> {
                   ),
               ),
             ),
-
-
     );
   }
 
   Future<Null> _handleRefresh() async{
-    await getData();
+   // await getData();
 
     var now = new DateTime.now();
     var berlinWallFell = new DateTime.utc(1989, 11, 9);
     var moonLanding = DateTime.parse("1969-07-20 20:18:04Z");  // 8:18pm
-
-
-
   }
 }
-
-/*new Flexible(
-                    child: new Container(
-                      margin: const EdgeInsets.all(15.0),
-                      padding: const EdgeInsets.all(3.0),
-                      decoration: new BoxDecoration(
-                          border: new Border.all(color: Colors.blueAccent)),
-                      child: new TextField(
-                        style: Theme.of(context).textTheme.body1,
-                      ),
-                    ),
-                  ),*/
-
-
-/*new Flexible(
-                    child: new Container(
-                      margin: const EdgeInsets.all(15.0),
-                      padding: const EdgeInsets.all(3.0),
-                      decoration: new BoxDecoration(
-                          border: new Border.all(color: Colors.blueAccent)),
-                      child: new TextField(
-                        style: Theme.of(context).textTheme.body1,
-                      ),
-                    ),
-                  ),*/

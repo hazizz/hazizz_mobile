@@ -2,35 +2,36 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hazizz/communication/ResponseHandler.dart';
-import 'package:flutter_hazizz/communication/pojos/PojoError.dart';
-import 'package:flutter_hazizz/communication/pojos/PojoGroup.dart';
-import 'package:flutter_hazizz/communication/pojos/PojoSubject.dart';
-import 'package:flutter_hazizz/communication/requests/request_collection.dart';
-import 'package:flutter_hazizz/converters/PojoConverter.dart';
+import 'package:hazizz_mobile/communication/ResponseHandler.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoError.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoGroup.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoSubject.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoType.dart';
+import 'package:hazizz_mobile/communication/requests/request_collection.dart';
+import 'package:hazizz_mobile/converters/PojoConverter.dart';
 
 import '../RequestSender.dart';
 
 Future<List<PojoGroup>> _getGroupData()async{
-  List<PojoGroup> myGroups_data;
+  List<PojoGroup> data;
   Response response = await RequestSender().send(new GetMyGroups(
     rh: new ResponseHandler(
         onSuccessful: (dynamic data) async{
-          myGroups_data = data;          },
+          data = data;          },
         onError: (PojoError pojoError){
           print("log: the annonymus functions work and the errorCode : ${pojoError.errorCode}");
         }
     ),
   ));
-  return myGroups_data;
+  return data;
 }
-void showDialogGroup(BuildContext context, Function(PojoGroup) onPicked, {List<PojoGroup> myGroups_data}) async{
- // List<PojoGroup> myGroups_data;
+void showDialogGroup(BuildContext context, Function(PojoGroup) onPicked, {List<PojoGroup> data}) async{
+ // List<PojoGroup> data;
   List<PojoGroup> groups_data;
-  if(myGroups_data == null) {
+  if(data == null) {
     groups_data = await _getGroupData();
   }else{
-    groups_data = myGroups_data;
+    groups_data = data;
   }
 
   showDialog(
@@ -90,12 +91,12 @@ Future<List<PojoSubject>> _getSubjectData(int groupId)async{
   ));
   return subjects_data;
 }
-void showDialogSubject(BuildContext context, Function(PojoSubject) onPicked, {int groupId, List<PojoSubject> subjects}) async{
+void showDialogSubject(BuildContext context, Function(PojoSubject) onPicked, {int groupId, List<PojoSubject> data}) async{
   List<PojoSubject> subjects_data;
   if(groupId != null) {
     subjects_data = await _getSubjectData(groupId);
   }else{
-    subjects_data = subjects;
+    subjects_data = data;
   }
 
   showDialog(
@@ -138,5 +139,48 @@ void showDialogSubject(BuildContext context, Function(PojoSubject) onPicked, {in
   );
 }
 
+
+void showDialogTaskType(BuildContext context, Function(PojoType) onPicked) async{
+  List<PojoType> data = PojoType.pojoTypes;
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      // return object of type Dialog
+      return AlertDialog(
+        // title: new Text("Alert Dialog title"),
+        content: Container(
+          height: 800,
+          width: 800,
+          child: ListView.builder(
+            itemCount: data.length,
+            itemBuilder: (BuildContext context, int index){
+              return GestureDetector(
+                  onTap: (){
+                    onPicked(data[index]);
+                    Navigator.of(context).pop();
+
+                  },
+                  child: Text(data[index].name,
+                    style: TextStyle(
+                        fontSize: 26
+                    ),
+                  )
+              );
+            },
+          ),
+        ),
+        actions: <Widget>[
+          new FlatButton(
+            child: new Text("Close"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
 
 

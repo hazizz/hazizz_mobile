@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hazizz/communication/pojos/PojoType.dart';
-import 'package:flutter_hazizz/communication/pojos/task/PojoTask.dart';
-import 'package:flutter_hazizz/pages/ViewTaskPage.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoType.dart';
+import 'package:hazizz_mobile/communication/pojos/task/PojoTask.dart';
+import 'package:hazizz_mobile/pages/ViewTaskPage.dart';
 
 class TaskItemWidget extends StatelessWidget{
 

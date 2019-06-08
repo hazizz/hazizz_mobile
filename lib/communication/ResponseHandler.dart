@@ -1,9 +1,10 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_hazizz/communication/pojos/Pojo.dart';
-import 'package:flutter_hazizz/communication/pojos/PojoError.dart';
+import 'package:hazizz_mobile/communication/pojos/Pojo.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoError.dart';
 
 
 class ResponseHandler {
+
  Function(dynamic data) onSuccessful;
  Function(dynamic data) convertData;
  Function(dynamic data) processData;
@@ -25,7 +26,6 @@ class ResponseHandler {
  void callBloc(dynamic data){
   addToBloc(data);
  }
-
 
   void onPOJOResponse(Object response){}
  //  void onFailure(Call<ResponseBody> call, Throwable t){}
