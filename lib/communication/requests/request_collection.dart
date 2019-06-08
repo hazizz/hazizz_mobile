@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-<<<<<<< HEAD
 import 'package:hazizz_mobile/communication/pojos/PojoError.dart';
 import 'package:hazizz_mobile/communication/pojos/PojoGroup.dart';
 import 'package:hazizz_mobile/communication/pojos/PojoSubject.dart';
@@ -15,19 +14,7 @@ import 'package:hazizz_mobile/managers/TokenManager.dart';
 import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:hazizz_mobile/converters/PojoConverter.dart';
-=======
-import 'package:flutter_hazizz/communication/pojos/PojoError.dart';
-import 'package:flutter_hazizz/communication/pojos/PojoGroup.dart';
-import 'package:flutter_hazizz/communication/pojos/PojoSubject.dart';
-import 'package:flutter_hazizz/communication/pojos/PojoTokens.dart';
-import 'package:flutter_hazizz/communication/pojos/PojoUser.dart';
-import 'package:flutter_hazizz/communication/pojos/task/PojoTask.dart';
-import 'package:flutter_hazizz/exceptions/exceptions.dart';
-import 'package:flutter_hazizz/managers/TokenManager.dart';
-import 'package:intl/intl.dart';
-import 'package:rxdart/rxdart.dart';
-import 'package:flutter_hazizz/converters/PojoConverter.dart';
->>>>>>> 697a6e3b071e12017449a7ca76eb8a9feb3f5ba0
+
 
 import '../../HttpMethod.dart';
 import '../ResponseHandler.dart';

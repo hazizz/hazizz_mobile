@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
 import 'package:hazizz_mobile/blocs/group_bloc.dart';
-=======
-import 'package:flutter_hazizz/blocs/group_bloc.dart';
->>>>>>> 697a6e3b071e12017449a7ca76eb8a9feb3f5ba0
+
 
 import 'group_members_page.dart';
 import 'group_subjects_page.dart';

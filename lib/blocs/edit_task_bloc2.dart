@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
-import 'package:equatable/equatable.dart';
-<<<<<<< HEAD
 import 'package:hazizz_mobile/blocs/request_event.dart';
 import 'package:hazizz_mobile/blocs/response_states.dart';
 import 'package:hazizz_mobile/blocs/text_field_bloc.dart';
@@ -12,16 +10,7 @@ import 'package:hazizz_mobile/communication/pojos/PojoGroup.dart';
 import 'package:hazizz_mobile/communication/pojos/PojoSubject.dart';
 import 'package:hazizz_mobile/communication/pojos/PojoType.dart';
 import 'package:hazizz_mobile/communication/requests/request_collection.dart';
-=======
-import 'package:flutter_hazizz/blocs/request_event.dart';
-import 'package:flutter_hazizz/blocs/response_states.dart';
-import 'package:flutter_hazizz/blocs/text_field_bloc.dart';
-import 'package:flutter_hazizz/communication/pojos/PojoError.dart';
-import 'package:flutter_hazizz/communication/pojos/PojoGroup.dart';
-import 'package:flutter_hazizz/communication/pojos/PojoSubject.dart';
-import 'package:flutter_hazizz/communication/pojos/PojoType.dart';
-import 'package:flutter_hazizz/communication/requests/request_collection.dart';
->>>>>>> 697a6e3b071e12017449a7ca76eb8a9feb3f5ba0
+
 import 'package:meta/meta.dart';
 
 import '../RequestSender.dart';
