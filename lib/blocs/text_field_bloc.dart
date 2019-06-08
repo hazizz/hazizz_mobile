@@ -1,6 +1,11 @@
 import 'package:bloc/bloc.dart';
+<<<<<<< HEAD
 import 'package:hazizz_mobile/blocs/request_event.dart';
 import 'package:hazizz_mobile/blocs/response_states.dart';
+=======
+import 'package:flutter_hazizz/blocs/request_event.dart';
+import 'package:flutter_hazizz/blocs/response_states.dart';
+>>>>>>> 697a6e3b071e12017449a7ca76eb8a9feb3f5ba0
 
 abstract class TextFieldState extends HState {
   TextFieldState([List props = const []]) : super(props);
