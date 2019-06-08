@@ -5,8 +5,8 @@ import 'package:flutter_hazizz/blocs/response_states.dart';
 abstract class DateTimePickerState extends HState {
   DateTimePickerState([List props = const []]) : super(props);
 }
-class DateTimeNotPicked extends DateTimePickerState {
-  DateTimeNotPicked() : super([]);
+class DateTimeNotPickedState extends DateTimePickerState {
+  DateTimeNotPickedState() : super([]);
   @override
   String toString() => 'NotPicked';
 }
@@ -39,14 +39,14 @@ class DateTimeNotPickedEvent extends DateTimePickerEvent {
 
 class DateTimePickerBloc extends Bloc<DateTimePickerEvent, DateTimePickerState> {
   @override
-  DateTimePickerState get initialState => DateTimeNotPicked();
+  DateTimePickerState get initialState => DateTimeNotPickedState();
 
   @override
   Stream<DateTimePickerState> mapEventToState(DateTimePickerEvent event) async* {
     if(event is DateTimePickedEvent){
       yield DateTimePickedState(dateTime: event.dateTime);
     }else if(event is DateTimeNotPickedEvent){
-      yield DateTimeNotPicked();
+      yield DateTimeNotPickedState();
     }
   }
 }
