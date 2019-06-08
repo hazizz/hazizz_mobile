@@ -7,9 +7,11 @@ import 'package:flutter_hazizz/communication/pojos/PojoError.dart';
 import 'package:flutter_hazizz/communication/pojos/PojoGroup.dart';
 import 'package:flutter_hazizz/communication/pojos/PojoSubject.dart';
 import 'package:flutter_hazizz/communication/pojos/PojoTokens.dart';
+import 'package:flutter_hazizz/communication/pojos/PojoUser.dart';
 import 'package:flutter_hazizz/communication/pojos/task/PojoTask.dart';
 import 'package:flutter_hazizz/exceptions/exceptions.dart';
 import 'package:flutter_hazizz/managers/TokenManager.dart';
+import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:flutter_hazizz/converters/PojoConverter.dart';
 
@@ -68,7 +70,7 @@ class Request {
 
   void onError(PojoError pojoError){
     responseData = pojoError;
-    rh.onError(pojoError);
+    rh?.onError(pojoError);
   }
 
   dynamic convertData(Response response){
@@ -199,7 +201,6 @@ class GetTasksFromMe extends HazizzRequest {
     myTasks.sort();
     return myTasks;
   }
-
 }
 
 class GetMyGroups extends HazizzRequest {
@@ -249,5 +250,67 @@ class GetSubjects extends HazizzRequest {
   }
 }
 
+class CreateTask extends HazizzRequest {
+  CreateTask({ResponseHandler rh, int groupId, int subjectId, int b_taskType, String b_title, String b_description, DateTime b_deadline }) : super(rh) {
+    httpMethod = HttpMethod.POST;
+    if(groupId != null) {
+      PATH = "tasks/groups/${groupId}";
+    }else if(subjectId != null){
+      PATH = "tasks/subjects/${subjectId}";
+    } else{
+      PATH = "tasks/me";
+    }
+    authTokenHeader = true;
+   // contentTypeHeader = true;
 
+    body["taskType"] = b_taskType;
+    body["taskTitle"] = b_title;
+    body["description"] = b_description;
+    body["dueDate"] = DateFormat("yyyy-MM-dd").format(b_deadline);
+  }
+
+  @override
+  dynamic convertData(Response response) {
+    return response;
+  }
+
+  @override
+  void onSuccessful(Response response) {
+    Iterable iter = getIterable(response.data);
+    List<PojoSubject> subjects =  iter.map<PojoSubject>((json) => PojoSubject.fromJson(json)).toList();
+
+    rh?.onSuccessful(subjects);
+  }
+}
+
+class GetTasksFromGroup extends HazizzRequest {
+  GetTasksFromGroup({ResponseHandler rh, int groupId}) : super(rh) {
+    httpMethod = HttpMethod.GET;
+    PATH = "tasks/groups/${groupId}";
+    authTokenHeader = true;
+  }
+
+  @override
+  dynamic convertData(Response response) {
+    Iterable iter = getIterable(response.data);
+    List<PojoTask> myTasks = iter.map<PojoTask>((json) => PojoTask.fromJson(json)).toList();
+    myTasks.sort();
+    return myTasks;
+  }
+}
+
+class GetGroupMembers extends HazizzRequest {
+  GetGroupMembers({ResponseHandler rh, int groupId}) : super(rh) {
+    httpMethod = HttpMethod.GET;
+    PATH = "groups/${groupId}/users";
+    authTokenHeader = true;
+  }
+
+  @override
+  dynamic convertData(Response response) {
+    Iterable iter = getIterable(response.data);
+    List<PojoUser> members = iter.map<PojoUser>((json) => PojoUser.fromJson(json)).toList();
+    return members;
+  }
+}
 

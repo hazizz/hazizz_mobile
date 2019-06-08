@@ -72,14 +72,12 @@ class RequestSender{
         dio.interceptors.requestLock.lock();
         dio.clear();
         */
-
         /*
         connectivity = await Connectivity().checkConnectivity();
         if(!(connectivity == ConnectivityResult.wifi ||connectivity == ConnectivityResult.mobile)){
           dio.lock();
         }
         */
-
         print("log: sent request");
         return options; //continue
         // If you want to resolve the request with some custom data，
@@ -93,7 +91,7 @@ class RequestSender{
         return response; // continue
       },
       onError: (DioError e) async{
-        print("log: got error");
+        print("log: got error: ${e}");
 
         // Do something with response error
        // return  e;//continue
@@ -171,6 +169,7 @@ class RequestSender{
         response =
         await dio.delete(request.url, data: request.body, options: options);
       }
+      print("log: request sent: ${request.toString()}");
     }on DioError catch(error){
 
       if (error.response != null) {
@@ -222,6 +221,7 @@ class RequestSender{
 
     dynamic data = request.convertData(response);
     request.processData(data);
+    print("log: responseData: ${data}");
     return data;
     request.onSuccessful(response);
 

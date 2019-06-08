@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_hazizz/blocs/request_event.dart';
 import 'package:flutter_hazizz/blocs/response_states.dart';
@@ -15,64 +16,6 @@ import 'package:meta/meta.dart';
 import '../RequestSender.dart';
 import 'date_time_picker_bloc.dart';
 import 'item_list_picker_bloc/item_list_picker_bloc.dart';
-
-/*
-
-abstract class SubjectState extends ResponseState {}
-
-class NotPicked extends SubjectState {
-  @override
-  String toString() => 'NotPicked';
-}
-
-class Empty extends SubjectState {
-  @override
-  String toString() => 'NotPicked';
-}
-
-abstract class SubjectEvent extends RequestEvent {
-  SubjectEvent([List props = const []]) : super(props);
-}
-
-class ItemListPick extends SubjectEvent {
-  final dynamic item;
-  ItemListPick({this.item})
-      : assert(item != null);
-  @override
-  String toString() => 'ItemListPick';
-}
-
-class ItemListPickerBloc extends Bloc<SubjectEvent, ResponseState> {
-  List<dynamic> listItemData;
-
-  @override
-  SubjectState get initialState => (Empty());
-
-  Future<SubjectState> loadData()async{
-
-  }
-
-  @override
-  Stream<ResponseState> mapEventToState(SubjectEvent event) async* {
-    print("log: Event2: ${event.toString()}");
-    if(event is ItemListPick){
-
-    }
-    if (event is FetchData) {
-      try {
-        yield ResponseWaiting();
-        yield await loadData();
-
-      } on Exception catch(e){
-        print("log: Exception: ${e.toString()}");
-        // yield TasksError();
-      }
-    }
-  }
-}
-
-*/
-
 
 class PickedGroupEvent extends ItemListEvent {
   final PojoGroup item;
@@ -90,15 +33,15 @@ class PickedGroupState extends ItemListState {
   String toString() => 'PickedGroupState';
 }
 
-class GroupItemPickerBloc extends ItemListPickerBloc{
+class GroupItemPickerBloc extends ItemListPickerBloc {
   final SubjectItemPickerBloc subjectItemPickerBloc;
   StreamSubscription subjectItemPickerBlocSubscription;
   List<PojoGroup> dataList;
 
 
-  GroupItemPickerBloc(this.subjectItemPickerBloc){
+  GroupItemPickerBloc(this.subjectItemPickerBloc) {
     subjectItemPickerBlocSubscription = this.state.listen((state) {
-      if(state is PickedGroupState){
+      if (state is PickedGroupState) {
         print("log: picked Group listen");
         subjectItemPickerBloc.dispatch(SubjectLoadData(state.item.id));
       }
@@ -106,36 +49,36 @@ class GroupItemPickerBloc extends ItemListPickerBloc{
   }
 
   @override
-  Stream<ItemListState> mapEventToState(ItemListEvent event) async*{
-    if(event is PickedGroupEvent){
+  Stream<ItemListState> mapEventToState(ItemListEvent event) async* {
+    if (event is PickedGroupEvent) {
       print("log: PickedState is played");
       yield PickedGroupState(item: event.item);
     }
     if (event is LoadData) {
       try {
         yield Waiting();
-        dynamic responseData = await RequestSender().getResponse(new GetMyGroups());
+        dynamic responseData = await RequestSender().getResponse(
+            new GetMyGroups());
         print("log: responseData: ${responseData}");
-        print("log: responseData type:  ${responseData.runtimeType.toString()}");
+        print(
+            "log: responseData type:  ${responseData.runtimeType.toString()}");
 
-        if(responseData is List<PojoGroup>){
+        if (responseData is List<PojoGroup>) {
           dataList = responseData;
-          if(dataList.isNotEmpty) {
+          if (dataList.isNotEmpty) {
             print("log: response is List");
             yield Loaded(data: responseData);
-          }else{
+          } else {
             yield Empty();
           }
         }
-      } on Exception catch(e){
+      } on Exception catch (e) {
         print("log: Exception: ${e.toString()}");
       }
     }
     super.mapEventToState(event);
   }
 }
-
-
 
 class PickedSubjectEvent extends ItemListEvent {
   final PojoSubject item;
@@ -145,7 +88,6 @@ class PickedSubjectEvent extends ItemListEvent {
   String toString() => 'PickedSubjectEvent';
 }
 class PickedSubjectState extends ItemListState {
-  // PickedState(this.item, [List props = const []]) : assert(item != null), super(props);
   final PojoSubject item;
   PickedSubjectState({this.item})
       : assert(item != null), super([item]);
@@ -200,7 +142,6 @@ class SubjectItemPickerBloc extends ItemListPickerBloc {
   ItemListState get initialState => Empty();
 }
 
-
 class TitleTextFieldBloc extends TextFieldBloc{
   @override
   TextFieldState check(String text) {
@@ -216,6 +157,14 @@ class TitleTextFieldBloc extends TextFieldBloc{
 
 abstract class TaskTypePickerState extends HState {
   TaskTypePickerState([List props = const []]) : super(props);
+}
+class TaskTypePickedState extends TaskTypePickerState {
+  PojoType item;
+
+  TaskTypePickedState(this.item) : assert(item!= null);
+
+  @override
+  String toString() => 'PickedState';
 }
 class HomeworkState extends TaskTypePickerState {
   @override
@@ -256,33 +205,16 @@ class TaskTypePickerBloc extends Bloc<TaskTypePickerEvent, TaskTypePickerState>{
   }
 
   @override
-  TaskTypePickerState get initialState =>HomeworkState();
+  TaskTypePickerState get initialState =>TaskTypePickedState(types[0]);
 
   @override
   Stream<TaskTypePickerState> mapEventToState(TaskTypePickerEvent event) async*{
     if(event is TaskTypePickedEvent){
-      PojoType type = event.type;
-      switch(type.id){
-        case 1:
-          yield HomeworkState();
-          break;
-        case 2:
-          yield AssignmentState();
-          break;
-        case 3:
-          yield TestState();
-          break;
-        case 4:
-          yield OralTestState();
-          break;
-      }
-      pickedType = type;
+      pickedType = event.type;
+      yield TaskTypePickedState(pickedType);
     }
   }
-
-
 }
-
 
 class EditTaskBlocs{
   SubjectItemPickerBloc subjectItemPickerBloc = new SubjectItemPickerBloc();
@@ -295,22 +227,80 @@ class EditTaskBlocs{
     groupItemPickerBloc = new GroupItemPickerBloc(subjectItemPickerBloc);
   }
 
-  void send({PojoGroup group, PojoSubject subject, DateTime deadline, String title, String description}){
-    if(groupItemPickerBloc.state != null){
-      groupItemPickerBloc.dispatch(NotPickedEvent());
+  void send({String title, String description, Function onSuccess})async{
+    int groupId;
+    int subjectId;
+    int typeId;
+    DateTime deadline;
+
+    bool missingInfo = false;
+
+    TaskTypePickerState typeState = await taskTypePickerBloc.state.first;
+    if(typeState is TaskTypePickedState){
+      typeId = typeState.item.id;
     }
-    if(subject == null){
+
+    HState subjectState = await subjectItemPickerBloc.state.first;
+    if(subjectState is PickedSubjectState) {
+      subjectId = subjectState.item.id;
+    }else{
       subjectItemPickerBloc.dispatch(NotPickedEvent());
     }
-    if(deadline == null){
-      subjectItemPickerBloc.dispatch(NotPickedEvent());
+
+    if(subjectId == null) {
+      PickedGroupState groupState = await groupItemPickerBloc.state.first;
+      if (groupState is PickedGroupState) {
+        groupId = groupState.item.id;
+      } else {
+        groupItemPickerBloc.dispatch(NotPickedEvent());
+        missingInfo = true;
+      }
     }
-    if(title == null){
-      subjectItemPickerBloc.dispatch(NotPickedEvent());
+
+    DateTimePickerState deadlineState = await deadlineBloc.state.first;
+    if(deadlineState is DateTimePickedState) {
+      deadline = deadlineState.dateTime;
+    }else{
+      deadlineBloc.dispatch(DateTimeNotPickedEvent());
+      missingInfo = true;
     }
-    if(description == null){
-      subjectItemPickerBloc.dispatch(NotPickedEvent());
+
+    if(missingInfo){
+      return;
     }
+
+    dynamic response;
+
+    if(subjectId != null) {
+      response = await RequestSender().getResponse(new CreateTask(
+          subjectId: subjectId,
+          b_taskType: typeId,
+          b_title: title,
+          b_description: description,
+          b_deadline: deadline
+      ));
+    }else {
+      response = await RequestSender().getResponse(new CreateTask(
+          groupId: groupId,
+          b_taskType: typeId,
+          b_title: title,
+          b_description: description,
+          b_deadline: deadline
+      ));
+    }
+    if(!(response is PojoError)){
+      Response resp = response;
+      if(resp.statusCode == 201){
+        onSuccess();
+      }
+    }
+  }
+
+  void dispose(){
+    groupItemPickerBloc.dispose();
+    deadlineBloc.dispose();
+    titleTextField.dispose();
+    taskTypePickerBloc.dispose();
   }
 }
 
