@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+<<<<<<< HEAD
 import 'package:hazizz_mobile/blocs/VariableBloc.dart';
 import 'package:hazizz_mobile/blocs/date_time_picker_bloc.dart';
 import 'package:hazizz_mobile/blocs/edit_task_bloc2.dart';
@@ -13,6 +14,21 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 import 'package:expandable/expandable.dart';
 import 'package:hazizz_mobile/dialogs/dialogs.dart';
+=======
+import 'package:flutter_hazizz/blocs/VariableBloc.dart';
+import 'package:flutter_hazizz/blocs/date_time_picker_bloc.dart';
+import 'package:flutter_hazizz/blocs/edit_task_bloc2.dart';
+import 'package:flutter_hazizz/blocs/item_list_picker_bloc/item_list_picker_bloc.dart';
+import 'package:flutter_hazizz/blocs/item_list_picker_bloc/item_list_picker_group_bloc.dart';
+import 'package:flutter_hazizz/communication/pojos/PojoGroup.dart';
+import 'package:flutter_hazizz/communication/pojos/PojoSubject.dart';
+import 'package:flutter_hazizz/communication/pojos/PojoType.dart';
+import 'package:flutter_hazizz/communication/pojos/task/PojoTask.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+
+import 'package:expandable/expandable.dart';
+import 'package:flutter_hazizz/dialogs/dialogs.dart';
+>>>>>>> 697a6e3b071e12017449a7ca76eb8a9feb3f5ba0
 
 class EditTaskPage extends StatefulWidget {
   int groupId;

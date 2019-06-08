@@ -28,7 +28,11 @@ packages:
       name: bloc
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "0.14.2"
+=======
+    version: "0.14.1"
+>>>>>>> 697a6e3b071e12017449a7ca76eb8a9feb3f5ba0
   boolean_selector:
     dependency: transitive
     description:
@@ -70,7 +74,11 @@ packages:
       name: build_runner
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "1.5.1"
+=======
+    version: "1.5.0"
+>>>>>>> 697a6e3b071e12017449a7ca76eb8a9feb3f5ba0
   build_runner_core:
     dependency: transitive
     description:
@@ -215,7 +223,11 @@ packages:
       name: flutter_bloc
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "0.15.1"
+=======
+    version: "0.15.0"
+>>>>>>> 697a6e3b071e12017449a7ca76eb8a9feb3f5ba0
   flutter_chips_input:
     dependency: transitive
     description:
@@ -253,7 +265,11 @@ packages:
       name: flutter_typeahead
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "1.6.1"
+=======
+    version: "1.6.0"
+>>>>>>> 697a6e3b071e12017449a7ca76eb8a9feb3f5ba0
   front_end:
     dependency: transitive
     description:

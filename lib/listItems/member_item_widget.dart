@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:hazizz_mobile/communication/pojos/PojoUser.dart';
+=======
+import 'package:flutter_hazizz/communication/pojos/PojoUser.dart';
+>>>>>>> 697a6e3b071e12017449a7ca76eb8a9feb3f5ba0
 
 class MemberItemWidget extends StatelessWidget{
 
