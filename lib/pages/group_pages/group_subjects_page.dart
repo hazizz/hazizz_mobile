@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-<<<<<<< HEAD
 import 'package:hazizz_mobile/blocs/group_bloc.dart';
 import 'package:hazizz_mobile/blocs/request_event.dart';
 import 'package:hazizz_mobile/blocs/response_states.dart';
 import 'package:hazizz_mobile/communication/pojos/PojoSubject.dart';
 import 'package:hazizz_mobile/listItems/subject_item_widget.dart';
-=======
-import 'package:flutter_hazizz/blocs/group_bloc.dart';
-import 'package:flutter_hazizz/blocs/request_event.dart';
-import 'package:flutter_hazizz/blocs/response_states.dart';
-import 'package:flutter_hazizz/communication/pojos/PojoSubject.dart';
-import 'package:flutter_hazizz/listItems/subject_item_widget.dart';
->>>>>>> 697a6e3b071e12017449a7ca76eb8a9feb3f5ba0
+
 
 class GroupSubjectsPage extends StatefulWidget {
   // This widget is the root of your application.

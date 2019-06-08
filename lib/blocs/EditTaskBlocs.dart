@@ -1,17 +1,10 @@
 import 'package:bloc/bloc.dart';
-<<<<<<< HEAD
 import 'package:hazizz_mobile/blocs/request_event.dart';
 import 'package:hazizz_mobile/blocs/response_states.dart';
 import 'package:hazizz_mobile/communication/pojos/PojoError.dart';
 import 'package:hazizz_mobile/communication/pojos/task/PojoTask.dart';
 import 'package:hazizz_mobile/communication/requests/request_collection.dart';
-=======
-import 'package:flutter_hazizz/blocs/request_event.dart';
-import 'package:flutter_hazizz/blocs/response_states.dart';
-import 'package:flutter_hazizz/communication/pojos/PojoError.dart';
-import 'package:flutter_hazizz/communication/pojos/task/PojoTask.dart';
-import 'package:flutter_hazizz/communication/requests/request_collection.dart';
->>>>>>> 697a6e3b071e12017449a7ca76eb8a9feb3f5ba0
+
 
 import '../RequestSender.dart';
 

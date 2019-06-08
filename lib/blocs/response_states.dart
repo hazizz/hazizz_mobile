@@ -1,9 +1,6 @@
 import 'package:equatable/equatable.dart';
-<<<<<<< HEAD
 import 'package:hazizz_mobile/communication/pojos/PojoError.dart';
-=======
-import 'package:flutter_hazizz/communication/pojos/PojoError.dart';
->>>>>>> 697a6e3b071e12017449a7ca76eb8a9feb3f5ba0
+
 import 'package:meta/meta.dart';
 
 abstract class HState extends Equatable {
