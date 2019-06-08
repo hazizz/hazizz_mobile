@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hazizz/communication/pojos/PojoType.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoType.dart';
 
 class TaskTypeColor{
 

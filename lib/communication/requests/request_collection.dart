@@ -1,18 +1,28 @@
+//import 'dart:convert';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter_hazizz/communication/pojos/PojoError.dart';
-import 'package:flutter_hazizz/communication/pojos/PojoGroup.dart';
-import 'package:flutter_hazizz/communication/pojos/PojoSubject.dart';
-import 'package:flutter_hazizz/communication/pojos/PojoTokens.dart';
-import 'package:flutter_hazizz/communication/pojos/task/PojoTask.dart';
-import 'package:flutter_hazizz/managers/TokenManager.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoError.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoGroup.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoSubject.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoTokens.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoUser.dart';
+import 'package:hazizz_mobile/communication/pojos/task/PojoTask.dart';
+import 'package:hazizz_mobile/exceptions/exceptions.dart';
+import 'package:hazizz_mobile/managers/TokenManager.dart';
+import 'package:intl/intl.dart';
+import 'package:rxdart/rxdart.dart';
+import 'package:hazizz_mobile/converters/PojoConverter.dart';
 
 import '../../HttpMethod.dart';
 import '../ResponseHandler.dart';
 
 class Request {
+  dynamic responseData;
+
+  BehaviorSubject subject;
+
   bool authTokenHeader = false;
   bool contentTypeHeader = false;
 
@@ -23,6 +33,10 @@ class Request {
 
   Request(ResponseHandler rh){
     this.rh = rh;
+  }
+
+  Request.bloc(dynamic subject){
+    this.subject = subject;
   }
 
   HttpMethod httpMethod = HttpMethod.GET;
@@ -44,14 +58,29 @@ class Request {
   Map<String, dynamic> body = {};
 
   void onSuccessful(Response response){
-    rh.onSuccessful(response);
+    if(this.rh.onSuccessful != null) {
+      responseData = convertData(response.data);
+      processData(responseData);
+
+      // rh.onSuccessful(response);
+      rh.addToBloc(responseData);
+      rh.onReceivedData(responseData);
+    }
   }
 
   void onError(PojoError pojoError){
-    rh.onError(pojoError);
+    responseData = pojoError;
+    rh?.onError(pojoError);
   }
 
+  dynamic convertData(Response response){
+    throw new ConverterNotImplementedException();
+    return response;
+  }
 
+  void processData(dynamic data){
+
+  }
 }
 
 class HazizzRequest extends Request{
@@ -59,8 +88,6 @@ class HazizzRequest extends Request{
     super.SERVER_PATH = "hazizz-server/";
     SERVER_PATH = "hazizz-server/";
   }
-
-
 }
 class TheraRequest extends Request{
   TheraRequest(ResponseHandler rh) : super(rh){
@@ -83,6 +110,18 @@ class CreateTokenWithPassword extends AuthRequest{
     body["username"] = b_username;
     body["password"] = b_password;
     contentTypeHeader = true;
+  }
+
+  @override
+  dynamic convertData(Response response) {
+    PojoTokens tokens = PojoTokens.fromJson(jsonDecode(response.data));
+    return tokens;
+  }
+
+  @override
+  void processData(data) {
+    TokenManager.setToken(data.token);
+    TokenManager.setRefreshToken(data.refresh);
   }
 
   @override
@@ -152,7 +191,15 @@ class GetTasksFromMe extends HazizzRequest {
     Iterable iter = getIterable(response.data);
     List<PojoTask> myTasks = iter.map<PojoTask>((json) => PojoTask.fromJson(json)).toList();
     myTasks.sort();
-    rh.onSuccessful(myTasks);
+    rh?.onSuccessful(myTasks);
+  }
+
+  @override
+  dynamic convertData(Response response) {
+    Iterable iter = getIterable(response.data);
+    List<PojoTask> myTasks = iter.map<PojoTask>((json) => PojoTask.fromJson(json)).toList();
+    myTasks.sort();
+    return myTasks;
   }
 }
 
@@ -170,6 +217,13 @@ class GetMyGroups extends HazizzRequest {
     rh.onSuccessful(myGroups);
   }
 
+  @override
+  convertData(Response response) {
+    Iterable iter = getIterable(response.data);
+    List<PojoGroup> myGroups = iter.map<PojoGroup>((json) => PojoGroup.fromJson(json)).toList();
+    return myGroups;
+  }
+
 }
 
 class GetSubjects extends HazizzRequest {
@@ -180,13 +234,83 @@ class GetSubjects extends HazizzRequest {
   }
 
   @override
+  dynamic convertData(Response response) {
+    Iterable iter = getIterable(response.data);
+    List<PojoSubject> subjects = iter.map<PojoSubject>((json) => PojoSubject.fromJson(json)).toList();
+
+    return subjects;
+  }
+
+  @override
   void onSuccessful(Response response) {
     Iterable iter = getIterable(response.data);
     List<PojoSubject> subjects =  iter.map<PojoSubject>((json) => PojoSubject.fromJson(json)).toList();
 
-    rh.onSuccessful(subjects);
+    rh?.onSuccessful(subjects);
   }
 }
 
+class CreateTask extends HazizzRequest {
+  CreateTask({ResponseHandler rh, int groupId, int subjectId, int b_taskType, String b_title, String b_description, DateTime b_deadline }) : super(rh) {
+    httpMethod = HttpMethod.POST;
+    if(groupId != null) {
+      PATH = "tasks/groups/${groupId}";
+    }else if(subjectId != null){
+      PATH = "tasks/subjects/${subjectId}";
+    } else{
+      PATH = "tasks/me";
+    }
+    authTokenHeader = true;
+   // contentTypeHeader = true;
 
+    body["taskType"] = b_taskType;
+    body["taskTitle"] = b_title;
+    body["description"] = b_description;
+    body["dueDate"] = DateFormat("yyyy-MM-dd").format(b_deadline);
+  }
+
+  @override
+  dynamic convertData(Response response) {
+    return response;
+  }
+
+  @override
+  void onSuccessful(Response response) {
+    Iterable iter = getIterable(response.data);
+    List<PojoSubject> subjects =  iter.map<PojoSubject>((json) => PojoSubject.fromJson(json)).toList();
+
+    rh?.onSuccessful(subjects);
+  }
+}
+
+class GetTasksFromGroup extends HazizzRequest {
+  GetTasksFromGroup({ResponseHandler rh, int groupId}) : super(rh) {
+    httpMethod = HttpMethod.GET;
+    PATH = "tasks/groups/${groupId}";
+    authTokenHeader = true;
+  }
+
+  @override
+  dynamic convertData(Response response) {
+    Iterable iter = getIterable(response.data);
+    List<PojoTask> myTasks = iter.map<PojoTask>((json) => PojoTask.fromJson(json)).toList();
+    myTasks.sort();
+    return myTasks;
+  }
+}
+
+class GetGroupMembers extends HazizzRequest {
+  GetGroupMembers({ResponseHandler rh, int groupId}) : super(rh) {
+    httpMethod = HttpMethod.GET;
+    PATH = "groups/${groupId}/users";
+    authTokenHeader = true;
+  }
+
+  @override
+  dynamic convertData(Response response) {
+    Iterable iter = getIterable(response.data);
+    List<PojoUser> members = iter.map<PojoUser>((json) => PojoUser.fromJson(json)).toList();
+    return members;
+  }
+}
 

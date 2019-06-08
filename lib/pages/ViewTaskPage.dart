@@ -1,15 +1,15 @@
 import 'dart:convert';
 
-import 'package:flutter_hazizz/communication/pojos/Pojo.dart';
-import 'package:flutter_hazizz/communication/pojos/PojoSubject.dart';
-import 'package:flutter_hazizz/communication/pojos/PojoType.dart';
+import 'package:hazizz_mobile/communication/pojos/Pojo.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoSubject.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoType.dart';
 import 'package:intl/intl.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hazizz/communication/ResponseHandler.dart';
-import 'package:flutter_hazizz/communication/pojos/PojoError.dart';
-import 'package:flutter_hazizz/communication/pojos/task/PojoTask.dart';
-import 'package:flutter_hazizz/communication/requests/request_collection.dart';
+import 'package:hazizz_mobile/communication/ResponseHandler.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoError.dart';
+import 'package:hazizz_mobile/communication/pojos/task/PojoTask.dart';
+import 'package:hazizz_mobile/communication/requests/request_collection.dart';
 
 import '../RequestSender.dart';
 

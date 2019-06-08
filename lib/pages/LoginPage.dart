@@ -3,16 +3,18 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:crypto/crypto.dart';
-import 'package:flutter_hazizz/communication/ResponseHandler.dart';
-import 'package:flutter_hazizz/communication/pojos/PojoError.dart';
-import 'package:flutter_hazizz/communication/pojos/PojoTokens.dart';
-import 'package:flutter_hazizz/communication/requests/request_collection.dart';
-import 'package:flutter_hazizz/managers/TokenManager.dart';
-import 'package:flutter_hazizz/managers/cache_manager.dart';
+import 'package:hazizz_mobile/communication/ResponseHandler.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoError.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoTokens.dart';
+import 'package:hazizz_mobile/communication/requests/request_collection.dart';
+import 'package:hazizz_mobile/managers/TokenManager.dart';
+import 'package:hazizz_mobile/managers/cache_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../RequestSender.dart';
 import '../main.dart';
+
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginPage extends StatefulWidget {
 
@@ -25,6 +27,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPage extends State<LoginPage> with SingleTickerProviderStateMixin{
+
+
 
   final TextEditingController _usernameTextEditingController = TextEditingController();
   final HashedTextEditingController _passwordTextEditingController = HashedTextEditingController();
@@ -74,6 +78,7 @@ class _LoginPage extends State<LoginPage> with SingleTickerProviderStateMixin{
               labelText: "Password",
             ),
           ),
+
 
       ButtonBar(
             alignment: MainAxisAlignment.spaceEvenly,

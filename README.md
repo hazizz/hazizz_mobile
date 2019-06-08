@@ -1,6 +1,6 @@
-# flutter_hazizz
+# hazizz_mobile
 
-A new Flutter application.
+Hazizz mobile application
 
 ## Getting Started
 
