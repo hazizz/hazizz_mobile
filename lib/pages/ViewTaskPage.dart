@@ -31,6 +31,12 @@ class ViewTaskPage extends StatefulWidget {
 
 class _ViewTaskPage extends State<ViewTaskPage> {
 
+  static final AppBar appBar = AppBar(
+    title: Text("Edit Task"),
+  );
+
+  static final double padding = 8;
+
   final TextEditingController _subjectTextEditingController = TextEditingController();
   final TextEditingController _groupTextEditingController = TextEditingController();
   final TextEditingController _creatorTextEditingController = TextEditingController();
@@ -104,175 +110,207 @@ class _ViewTaskPage extends State<ViewTaskPage> {
         appBar: AppBar(
           title: Text("View Task"),
         ),
-        body:Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Card(
-        //    color: ,
-           /* shape: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Color.fromRGBO(93, 216, 105, 1),
-                  style: BorderStyle.solid,
-                  width: 4
-                )),
-                */
+        body:SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width,
+                // valamiért 3* kell megszorozni a paddingot hogy jó legyen
+                height: MediaQuery.of(context).size.height-appBar.preferredSize.height - padding*3,
 
-            elevation: 100,
-            child: new RefreshIndicator(
-              onRefresh: (){
-                getData();
-              },
-              child: new Container(
-                  child: new Column(
-                   //   mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        color: PojoType.getColor(widget.pojoTask.type),
-                      //  width: 400,
+                child: Padding(
+                  padding: EdgeInsets.all(padding),
+                  child:
+                      Card(
+                      elevation: 100,
+                      child: new RefreshIndicator(
+                        onRefresh: (){
+                          getData();
+                        },
+                        child: new Container(
+                            child: new Column(
+                             //   mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  color: PojoType.getColor(widget.pojoTask.type),
+                                //  width: 400,
 
-                        child: Column(
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 2),
-                              child: new Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  new Flexible(
-                                      child: Text(_type,
-                                        style: TextStyle(
-                                          fontSize: 36
-                                        ),)
+                                  child: Column(
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 2),
+                                        child: new Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            new Flexible(
+                                              child: Text(_type,
+                                                style: TextStyle(
+                                                  fontSize: 36
+                                                ),
+                                              )
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10),                              child: new Row(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            new Flexible(
+                                              child: Text(_creator,
+                                                style: TextStyle(
+                                                    fontSize: 18
+                                                ),
+                                              )
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10),
+                                        child: new Row(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            new Flexible(
+                                              child: Text(_deadline,
+                                                style: TextStyle(
+                                                    fontSize: 18
+                                                ),
+                                              )
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10),                              child: new Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  new Flexible(
-                                      child: Text(_creator,
-                                        style: TextStyle(
-                                            fontSize: 18
-                                        ),)
                                   ),
-                                ],
-                              ),
-                            ),
-
-                            Padding(
-                              padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10),
-                              child: new Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  new Flexible(
-                                      child: Text(_deadline,
-                                        style: TextStyle(
-                                            fontSize: 18
-                                        ),)
-                                  ),
-                                ],
-                              ),
-                            ),
-
-                          ],
-                        ),
-                        ),
-                      _subject != null ?
-                      Padding(
-                        padding: const EdgeInsets.only( left: 10,top: 5),
-                        child: new Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            new Flexible(
-                              child:
-                              new Text(_subject,
-                                style: TextStyle(
-                                    fontSize: 36
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      )
-                      : Container(),
-                      Padding(
-                        padding: const EdgeInsets.only( left: 10,top: 5),
-                        child: new Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            new Flexible(
-                              child: new Text(_title,
-                                  style: TextStyle(
-                                  fontSize: 30
-                              ),
-                            ),
-                            )
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only( left: 20, right: 20, top: 4),
-                        child: new Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            new Flexible(
-                                child:
-                                Text(_description,
-                                  style: TextStyle(
-                                      fontSize: 26
+                                _subject != null ?
+                                Padding(
+                                  padding: const EdgeInsets.only( left: 10,top: 5),
+                                  child: new Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      new Flexible(
+                                        child:
+                                        new Text(_subject,
+                                          style: TextStyle(
+                                              fontSize: 36
+                                          ),
+                                        ),
+                                      )
+                                    ],
                                   ),
                                 )
-
-                              )
-                          ],
-                        ),
-                      ),
-
-                      Expanded(
-                       // flex: 1,
-                        child:
-                          Align(
-                            alignment: FractionalOffset.bottomCenter,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: <Widget>[
-                                MaterialButton(
-                                  onPressed: (){
-
-                                  },
-                                  child: Text("Comment"),
+                                : Container(),
+                                Padding(
+                                  padding: const EdgeInsets.only( left: 10,top: 5),
+                                  child: new Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      new Flexible(
+                                        child: new Text(_title,
+                                            style: TextStyle(
+                                            fontSize: 30
+                                        ),
+                                      ),
+                                      )
+                                    ],
+                                  ),
                                 ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                 // crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: <Widget>[
-                                    MaterialButton(
-                                      onPressed: (){
+                                Padding(
+                                  padding: const EdgeInsets.only( left: 20, right: 20, top: 4),
+                                  child: new Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      new Flexible(
+                                        child: Text(_description,
+                                          style: TextStyle(
+                                              fontSize: 26
+                                          ),
+                                        )
+                                        )
+                                    ],
+                                  ),
+                                ),
 
-                                      },
-                                      child: Text("Edit"),
-                                    ),
-                                    MaterialButton(
-                                      onPressed: (){
+                                Expanded(
+                                 // flex: 1,
+                                  child:
+                                    Align(
+                                      alignment: FractionalOffset.bottomCenter,
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment: CrossAxisAlignment.end,
+                                        children: <Widget>[
+                                          MaterialButton(
+                                            onPressed: (){
 
-                                      },
-                                      child: Text("Delete"),
-                                    ),
-                                  ],
-                                )
-                              ],
+                                            },
+                                            child: Text("Comment"),
+                                          ),
+                                          Column(
+                                            mainAxisAlignment: MainAxisAlignment.end,
+                                           // crossAxisAlignment: CrossAxisAlignment.end,
+                                            children: <Widget>[
+                                              MaterialButton(
+                                                onPressed: (){
+
+                                                },
+                                                child: Text("Edit"),
+                                              ),
+                                              MaterialButton(
+                                                onPressed: (){
+
+                                                },
+                                                child: Text("Delete"),
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    )
+
+                                ),
+
+                              ]
                             ),
-                          )
-
+                        )
                       ),
+                    ),
+                      /*
+                      Card(
+                        child: Text("Comments card",
+                          style: TextStyle(
+                            fontSize: 40
+                          ),
+                        ),
+                      )*/
+                ),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                // valamiért 3* kell megszorozni a paddingot hogy jó legyen
+              //  height: MediaQuery.of(context).size.height-appBar.preferredSize.height - padding*3,
 
-                    ]
-                  ),
-              )
-            ),
+                child: Padding(
+                  padding: EdgeInsets.all(padding),
+                  child:
+                  Text("COmments", style: TextStyle(fontSize: 40),)
+                  /*
+                      Card(
+                        child: Text("Comments card",
+                          style: TextStyle(
+                            fontSize: 40
+                          ),
+                        ),
+                      )*/
+                ),
+              ),
+
+            ]
           ),
         )
       )

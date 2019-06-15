@@ -7,19 +7,8 @@ import 'package:hazizz_mobile/communication/pojos/PojoUser.dart';
 import 'package:hazizz_mobile/communication/pojos/task/PojoTask.dart';
 import 'package:hazizz_mobile/communication/requests/request_collection.dart';
 
-import 'package:meta/meta.dart';
 
 import '../RequestSender.dart';
-
-/*
-class FetchGroupTasksData extends HEvent {
-  final int groupId;
-  FetchGroupTasksData({this.groupId})
-      : assert(groupId != null), super([groupId]);
-  @override
-  String toString() => 'PickedSubjectState';
-}
-*/
 
 class GroupTasksBloc extends Bloc<HEvent, HState> {
   @override

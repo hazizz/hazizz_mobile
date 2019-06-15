@@ -14,6 +14,11 @@ class InfoCache{
     return prefs.getString(_keyMe + _username);
   }
 
+  static void forgetMyUsername() async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(_keyMe + _username, null);
+  }
+
   static void setMyUsername(String myUsername) async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(_keyMe + _username, myUsername);

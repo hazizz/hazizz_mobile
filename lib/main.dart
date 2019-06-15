@@ -2,20 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:hazizz_mobile/pages/EditTaskPage.dart';
 import 'package:hazizz_mobile/pages/LoginPage.dart';
 import 'package:hazizz_mobile/pages/TaskPage.dart';
+import 'package:hazizz_mobile/route_generator.dart';
 import 'HazizzDrawer.dart';
 import 'Page1.dart';
 import 'PlaceHolderWidget.dart';
 import 'managers/TokenManager.dart';
+import 'managers/app_state_manager.dart';
+import 'managers/cache_manager.dart';
 import 'pages/group_pages/group_tab_hoster_page.dart';
 
 Widget _startPage;
+String _startPage2;
+//RouteGenerator routeGenerator;
 
 void main() async{
-  if(await TokenManager.hasToken()){
+
+ // routeGenerator = await RouteGeneratorManager.get();
+
+  if(await AppState.isLoggedIn()){
     _startPage = MyHomePage(title: "title",);
+    _startPage2 = "/";
   }else{
     _startPage = LoginPage();
+    _startPage2 = "login";
   }
+ // _startPage = LoginPage();
+ // _startPage2 = "login";
   runApp(MyApp());
 }
 
@@ -23,19 +35,24 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context){
+
     return MaterialApp(
+
       title: 'Hazizz Demo',
       showPerformanceOverlay: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.lightBlue,
       ),
-      home: _startPage, // MyHomePage(title: 'Hazizz Demo Home Page'),
+     // home: _startPage,//MyHomePage(title: 'Hazizz Demo Home Page') //_startPage, // MyHomePage(title: 'Hazizz Demo Home Page'),
+      initialRoute: _startPage2,
+      onGenerateRoute: RouteGenerator.generateRoute,
+    //  onGenerateRoute: routeGenerator.generateRoute,
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key key, @required this.title}) : super(key: key);
   // This class is the configuration for the state. It holds the values (in this
   // case the title) provided by the parent (in this case the App widget) and
   // used by the build method of the State. Fields in a Widget subclass are
@@ -49,7 +66,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
-  int _counter = 0;
   int _selectedIndex = 0;
 
   TabController _tabController;
@@ -98,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
         FloatingActionButton(
           heroTag: "hero_task_edit",
           onPressed: (){
-            Navigator.push(context,MaterialPageRoute(builder: (context) => EditTaskPage()));
+            Navigator.push(context,MaterialPageRoute(builder: (context) => EditTaskPage.createMode()));
           },
           tooltip: 'Increment',
           child: Icon(Icons.add),
@@ -134,22 +150,64 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
             ListTile(
               title: Text('My Tasks'),
               onTap: () {
-                // Update the state of the app
-                // ...
-               // name = "Alaptalan";
                 Navigator.pop(context);
               },
             ),
             ListTile(
               title: Text('Groups'),
               onTap: () {
-                // Update the state of the app
-                // ...
                 Navigator.pop(context);
                 Navigator.push(context,MaterialPageRoute(builder: (context) => GroupTabHosterPage(groupId: 2)));
 
               },
             ),
+
+            Container(
+              // This align moves the children to the bottom
+                child: Align(
+                    alignment: FractionalOffset.bottomCenter,
+                    // This container holds all the children that will be aligned
+                    // on the bottom and should not scroll with the above ListView
+                    child: Container(
+                        child: Column(
+                          children: <Widget>[
+                            Divider(),
+                            ListTile(
+                                leading: Icon(Icons.settings),
+                                title: Text('Settings')),
+                            ListTile(
+                                leading: Icon(Icons.help),
+                                title: Text('Help and Feedback')),
+                            ListTile(
+                              leading: Icon(Icons.exit_to_app),
+                              title: Text('Logout'),
+                              onTap: () {
+                                InfoCache.forgetMyUsername();
+                                Navigator.pushReplacementNamed(context, "login");
+                              },
+                            ),
+
+                          ],
+                        )
+                    )
+                )
+            )
+
+            /*
+            new Expanded(
+              child: new Align(
+                alignment: Alignment.bottomRight,
+                child: ListTile(
+                  title: Text('Logout'),
+                  onTap: () {
+                    Navigator.pushReplacementNamed(context, "login");
+
+                  },
+                ),
+              ),
+            ),
+            */
+
           ],
         ),
       ),

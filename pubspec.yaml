@@ -29,6 +29,8 @@ dependencies:
   intl: 0.15.8
   flutter_local_notifications: 0.7.1
   sticky_headers: 0.1.8
+
+
   connectivity: 0.4.3
   shared_preferences: 0.5.2
   json_annotation: 2.3.0
@@ -55,11 +57,17 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  assets:
+    - assets2/asd.png
+    - assets/
+    - assets/images/
+    - assets/images/asd.png
+    - assets/images/Logo.png
+    - assets/images/Icon.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
