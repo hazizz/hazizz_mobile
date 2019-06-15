@@ -12,7 +12,6 @@ abstract class ItemListState extends HState {
  // ItemListState(this.name) : super([name]);
 }
 
-
 class NotPicked extends ItemListState {
  /// NotPicked([List props = const []]) : super(props);
   @override

@@ -1,10 +1,20 @@
 import 'package:equatable/equatable.dart';
+import 'package:hazizz_mobile/blocs/id.dart';
 import 'package:hazizz_mobile/communication/pojos/PojoError.dart';
 
 import 'package:meta/meta.dart';
 
 abstract class HState extends Equatable {
-  HState([List props = const []]) : super(props);
+  static int id = 0;
+
+ // List<dynamic> props = [Id.get()];
+
+ // HState({this.props}) : super(props = [""]);
+//  static List<dynamic> _props = [Id.get()];
+  HState([List props = const []]) : super(props); // [Id.get()]
+
+
+
 }
 
 class ResponseEmpty extends HState {

@@ -2,6 +2,7 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:hazizz_mobile/exceptions/exceptions.dart';
 import 'HttpMethod.dart';
 import 'communication/ResponseHandler.dart';
 import 'communication/pojos/PojoError.dart';
@@ -156,6 +157,7 @@ class RequestSender{
 
   Future<dynamic> getResponse(Request request) async{
     Response response;
+    print("log: about to start sending request");
     try {
       if (request.httpMethod == HttpMethod.GET) {
         options.headers = await request.buildHeader();
@@ -200,6 +202,7 @@ class RequestSender{
                     },
                     onError: (PojoError pojoError) {
                       unlock();
+                      
                     }
                 )
             ));
@@ -212,7 +215,9 @@ class RequestSender{
           // navigate to login/register page
         }
         https://github.com/hazizz/hazizz-mobile
-        return pojoError;
+        print("log: response error: ${pojoError.toString()}");
+        throw new HResponseError(pojoError);
+      //  return pojoError;
         request.onError(pojoError);
       }
 
