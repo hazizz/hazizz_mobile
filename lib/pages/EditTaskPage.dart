@@ -13,6 +13,8 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:expandable/expandable.dart';
 import 'package:hazizz_mobile/dialogs/dialogs.dart';
 
+import '../hazizz_theme.dart';
+
 
 class EditTaskPage extends StatefulWidget {
   int groupId;
@@ -45,14 +47,12 @@ class _EditTaskPage extends State<EditTaskPage> {
   final TextEditingController _titleTextEditingController = TextEditingController();
 
 
-  static Color headerColor = Colors.red;
+//  Color headerColor;
+//  Color formColor;
 
-  static Color homeworkColor = Colors.green;
-  static Color testColor = Colors.red;
-  static Color oralTestColor = Colors.purple;
-  static Color assignmentColor = Colors.yellow;
+  Color headerColor = HazizzTheme.homeworkColor;
+//  formColor = Colors.grey.withAlpha(120);
 
-  static Color formColor = Colors.blue;
 
   static String _color = '';
 
@@ -94,8 +94,7 @@ class _EditTaskPage extends State<EditTaskPage> {
 
     blocs.groupItemPickerBloc.dispatch(LoadData());
 
-    headerColor = Colors.yellow;
-    formColor = Colors.grey.withAlpha(120);
+
 
     super.initState();
   }
@@ -117,7 +116,7 @@ class _EditTaskPage extends State<EditTaskPage> {
                 return InputDecorator(
                     decoration: InputDecoration(
                       filled: true,
-                      fillColor: formColor,
+                      fillColor: HazizzTheme.formColor,
                       labelText: 'Type',
                     ),
                     isEmpty: _color == '',
@@ -126,19 +125,19 @@ class _EditTaskPage extends State<EditTaskPage> {
                         String typeName = "error lol123";
                         if(state is TaskTypePickedState) {
                           if (state.item.id == 1) {
-                            headerColor = homeworkColor;
+                            headerColor = HazizzTheme.homeworkColor;
                             typeName = "Homework";
                           }
                           else if (state.item.id == 2) {
-                            headerColor = assignmentColor;
+                            headerColor = HazizzTheme.assignmentColor;
                             typeName = "Assignment";
                           }
                           else if (state.item.id == 3) {
-                            headerColor = testColor;
+                            headerColor = HazizzTheme.testColor;
                             typeName = "Test";
                           }
                           else if (state.item.id == 4) {
-                            headerColor = oralTestColor;
+                            headerColor = HazizzTheme.oralTestColor;
                             typeName = "Oral test";
                           }
                         }
@@ -172,7 +171,7 @@ class _EditTaskPage extends State<EditTaskPage> {
               return InputDecorator(
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: formColor,
+                    fillColor: HazizzTheme.formColor,
                     icon: const Icon(Icons.group),
                     labelText: 'Group',
                   ),
@@ -226,7 +225,7 @@ class _EditTaskPage extends State<EditTaskPage> {
                 return InputDecorator(
                     decoration: InputDecoration(
                       filled: true,
-                      fillColor: formColor,
+                      fillColor: HazizzTheme.formColor,
                       icon: const Icon(Icons.group),
                       labelText: 'Subject',
                     ),
@@ -278,7 +277,7 @@ class _EditTaskPage extends State<EditTaskPage> {
               return InputDecorator(
                 decoration: InputDecoration(
                   filled: true,
-                  fillColor: formColor,
+                  fillColor: HazizzTheme.formColor,
                   icon: const Icon(Icons.date_range),
                   labelText: 'Deadline',
                 ),
@@ -319,7 +318,7 @@ class _EditTaskPage extends State<EditTaskPage> {
                 return InputDecorator(
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: formColor,
+                    fillColor: HazizzTheme.formColor,
                     icon: const Icon(Icons.date_range),
                     labelText: 'Deadline',
                   ),
@@ -360,7 +359,7 @@ class _EditTaskPage extends State<EditTaskPage> {
                 return InputDecorator(
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: formColor,
+                    fillColor: HazizzTheme.formColor,
                     icon: const Icon(Icons.date_range),
                     labelText: 'Deadline',
                   ),
@@ -417,19 +416,19 @@ class _EditTaskPage extends State<EditTaskPage> {
                                 String typeName = "Not picked";
                                 if(state is TaskTypePickedState){
                                   if(state.item.id == 1) {
-                                  headerColor = homeworkColor;
+                                  headerColor = HazizzTheme.homeworkColor;
                                   typeName = "Homework";
                                   }
                                   else if(state.item.id == 2) {
-                                  headerColor = assignmentColor;
+                                  headerColor = HazizzTheme.assignmentColor;
                                   typeName = "Assignment";
                                   }
                                   else if(state.item.id == 3) {
-                                  headerColor = testColor;
+                                  headerColor = HazizzTheme.testColor;
                                   typeName = "Test";
                                   }
                                   else if(state.item.id == 4) {
-                                  headerColor = oralTestColor;
+                                  headerColor = HazizzTheme.oralTestColor;
                                   typeName = "Oral test";
                                   }
                                 }

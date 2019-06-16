@@ -37,13 +37,6 @@ class _ViewTaskPage extends State<ViewTaskPage> {
 
   static final double padding = 8;
 
-  final TextEditingController _subjectTextEditingController = TextEditingController();
-  final TextEditingController _groupTextEditingController = TextEditingController();
-  final TextEditingController _creatorTextEditingController = TextEditingController();
-  final TextEditingController _taskTypeTextEditingController = TextEditingController();
-  final TextEditingController _deadlineTextEditingController = TextEditingController();
-  final TextEditingController _descriptionTextEditingController = TextEditingController();
-  final TextEditingController _titleTextEditingController = TextEditingController();
 
    String _subject = "";
    String _group = "";
@@ -86,20 +79,20 @@ class _ViewTaskPage extends State<ViewTaskPage> {
  //   RequestSender()
 
     Response response = await RequestSender().send(new GetTaskByTaskId(
-        p_taskId: widget.taskId,
-        rh: new ResponseHandler(
-            onSuccessful: (dynamic data) async{
-            //  print("raw response is : ${response.data}" );
+      p_taskId: widget.taskId,
+      rh: new ResponseHandler(
+          onSuccessful: (dynamic data) async{
+          //  print("raw response is : ${response.data}" );
 
-              PojoTaskDetailed pojoTask = data;
+            PojoTaskDetailed pojoTask = data;
 
-              processData(pojoTask);
+            processData(pojoTask);
 
-            },
-            onError: (PojoError pojoError){
-              print("log: the annonymus functions work and the errorCode : ${pojoError.errorCode}");
-            }
-        )));
+          },
+          onError: (PojoError pojoError){
+            print("log: the annonymus functions work and the errorCode : ${pojoError.errorCode}");
+          }
+      )));
   }
 
   @override
@@ -262,10 +255,11 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                                 child: Text("Edit"),
                                               ),
                                               MaterialButton(
-                                                onPressed: (){
-
-                                                },
                                                 child: Text("Delete"),
+                                                onPressed: (){
+                                                  showDeleteDialog(context);
+                                                },
+
                                               ),
                                             ],
                                           )
@@ -327,7 +321,97 @@ class _ViewTaskPage extends State<ViewTaskPage> {
 
 
   }
+
+  Future<bool> showDeleteDialog(context) {
+    return showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return Dialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0)),
+              child: Container(
+                  height: 130.0,
+                  width: 200.0,
+                  decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
+                  child: Column(
+                    children: <Widget>[
+                      Stack(
+                        children: <Widget>[
+                         // Container(height: 100.0),
+                          Container(
+                            height: 80.0,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10.0),
+                                  topRight: Radius.circular(10.0),
+                                ),
+                                color: Colors.red),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Text(
+                              "Are you sure you want to delete this task?",
+                              style: TextStyle(
+
+                                fontFamily: 'Quicksand',
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.w300,
+                              ),
+                            ),
+                          ),
+
+                        ],
+                      ),
+                    //  SizedBox(height: 20.0),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          FlatButton(
+                              child: Center(
+                                child: Text(
+                                  'CANCEL',
+                                  style: TextStyle(
+                                      fontFamily: 'Montserrat',
+                                      fontSize: 14.0,
+                                      color: Colors.teal),
+                                ),
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              color: Colors.transparent
+                          ),
+                          FlatButton(
+                              child: Center(
+                                child: Text(
+                                  'DELETE',
+                                  style: TextStyle(
+                                      fontFamily: 'Montserrat',
+                                      fontSize: 14.0,
+                                      color: Colors.red),
+                                ),
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              color: Colors.transparent
+                          ),
+                        ],
+                      )
+
+                    ],
+                  )));
+        });
+  }
+
+
 }
+
+
+
 
 
 /*new Flexible(

@@ -161,15 +161,15 @@ class RequestSender{
     try {
       if (request.httpMethod == HttpMethod.GET) {
         options.headers = await request.buildHeader();
-        response = await dio.get(request.url, options: options);
+        response = await dio.get(request.url, queryParameters: request.query, options: options);
       }else if (request.httpMethod == HttpMethod.POST) {
         options.headers = await request.buildHeader();
         response =
-        await dio.post(request.url, data: request.body, options: options);
+        await dio.post(request.url, queryParameters: request.query, data: request.body, options: options);
       }else if (request.httpMethod == HttpMethod.DELETE) {
         options.headers = await request.buildHeader();
         response =
-        await dio.delete(request.url, data: request.body, options: options);
+        await dio.delete(request.url, queryParameters: request.query, data: request.body, options: options);
       }
       print("log: request sent: ${request.toString()}");
     }on DioError catch(error){
@@ -240,15 +240,15 @@ class RequestSender{
     try {
       if (request.httpMethod == HttpMethod.GET) {
         options.headers = await request.buildHeader();
-        response = await dio.get(request.url, options: options);
+        response = await dio.get(request.url, queryParameters: request.query, options: options);
       }else if (request.httpMethod == HttpMethod.POST) {
         options.headers = await request.buildHeader();
         response =
-        await dio.post(request.url, data: request.body, options: options);
+        await dio.post(request.url, queryParameters: request.query, data: request.body, options: options);
       }else if (request.httpMethod == HttpMethod.DELETE) {
         options.headers = await request.buildHeader();
         response =
-        await dio.delete(request.url, data: request.body, options: options);
+        await dio.delete(request.url, queryParameters: request.query, data: request.body, options: options);
       }
     }on DioError catch(error){
 
