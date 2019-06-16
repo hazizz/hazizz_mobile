@@ -13,7 +13,7 @@ class TaskHeaderItemWidget extends StatelessWidget{
     return SizedBox(
       height: 40.0,
       child: Card(
-          color: Colors.blue,
+          color: Theme.of(context).primaryColorDark,
           child: InkWell(
               child: Row(
                 children: <Widget>[

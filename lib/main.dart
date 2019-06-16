@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hazizz_mobile/pages/EditTaskPage.dart';
 import 'package:hazizz_mobile/pages/LoginPage.dart';
-import 'package:hazizz_mobile/pages/TaskPage.dart';
+import 'package:hazizz_mobile/pages/main_pages/main_tasks_page.dart';
 import 'package:hazizz_mobile/route_generator.dart';
 import 'HazizzDrawer.dart';
 import 'Page1.dart';
 import 'PlaceHolderWidget.dart';
+import 'hazizz_theme.dart';
 import 'managers/TokenManager.dart';
 import 'managers/app_state_manager.dart';
 import 'managers/cache_manager.dart';
@@ -40,9 +41,7 @@ class MyApp extends StatelessWidget {
 
       title: 'Hazizz Demo',
       showPerformanceOverlay: false,
-      theme: ThemeData(
-        primarySwatch: Colors.lightBlue,
-      ),
+      theme: HazizzTheme.lightThemeData,
      // home: _startPage,//MyHomePage(title: 'Hazizz Demo Home Page') //_startPage, // MyHomePage(title: 'Hazizz Demo Home Page'),
       initialRoute: _startPage2,
       onGenerateRoute: RouteGenerator.generateRoute,
@@ -72,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
 
   Widget drawer = new HazizzDrawer();
 
-  final List<Widget> _children = [new TaskPage(), PlaceholderWidget(color: Colors.red, name1: "222", text1: Text("222"),)];
+  final List<Widget> _children = [new TasksPage(), PlaceholderWidget(color: Colors.red, name1: "222", text1: Text("222"),)];
 
   @override
   void initState() {
@@ -98,6 +97,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
+
         title: Text(widget.title),
       ),
       body: _children[_selectedIndex],

@@ -10,15 +10,17 @@ import 'package:hazizz_mobile/listItems/TaskItemWidget.dart';
 
 import 'package:sticky_headers/sticky_headers.dart';
 
-class TaskPage extends StatefulWidget {
+class TasksPage extends StatefulWidget {
   // This widget is the root of your application.
-  TaskPage({Key key}) : super(key: key);
+  TasksPage({Key key}) : super(key: key);
+
+  static final String tabName = "Tasks";
 
   @override
-  _TaskPage createState() => _TaskPage();
+  _TasksPage createState() => _TasksPage();
 }
 
-class _TaskPage extends State<TaskPage> with SingleTickerProviderStateMixin {
+class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin {
 
   TasksBloc tasksBloc = new TasksBloc();
 
@@ -36,7 +38,6 @@ class _TaskPage extends State<TaskPage> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
         body: new RefreshIndicator(
             child: BlocBuilder(
                 bloc: tasksBloc,

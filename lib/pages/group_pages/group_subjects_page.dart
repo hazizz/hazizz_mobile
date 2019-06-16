@@ -4,6 +4,7 @@ import 'package:hazizz_mobile/blocs/group_bloc.dart';
 import 'package:hazizz_mobile/blocs/request_event.dart';
 import 'package:hazizz_mobile/blocs/response_states.dart';
 import 'package:hazizz_mobile/communication/pojos/PojoSubject.dart';
+import 'package:hazizz_mobile/dialogs/dialogs.dart';
 import 'package:hazizz_mobile/listItems/subject_item_widget.dart';
 
 
@@ -35,7 +36,12 @@ class _GroupSubjectsPage extends State<GroupSubjectsPage> with AutomaticKeepAliv
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: FloatingActionButton(onPressed: null, child: Icon(Icons.add),),
+        floatingActionButton: FloatingActionButton(
+          onPressed: (){
+            showAddSubjectDialog(context, groupId: 2);
+          },
+          child: Icon(Icons.add),
+        ),
         body: new RefreshIndicator(
             child: BlocBuilder(
                 bloc: groupSubjectsBloc,
