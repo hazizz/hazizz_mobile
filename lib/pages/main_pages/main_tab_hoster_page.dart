@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hazizz_mobile/blocs/group_bloc.dart';
+import 'package:hazizz_mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
 import 'package:hazizz_mobile/pages/main_pages/main_tasks_page.dart';
 
 
@@ -21,15 +21,14 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
   TasksPage schedulesTabPage;
   TasksPage gradesTabPage;
 
-  GroupBlocs groupBlocs;
+  MainTabBlocs mainTabBlocs;
   _MainTabHosterPage(){
-    groupBlocs = new GroupBlocs(groupId_: groupId);
+    mainTabBlocs = new MainTabBlocs();
 
-    tasksTabPage = TasksPage(groupTasksBloc: groupBlocs.groupTasksBloc,);
-    subjectsTabPage = GroupSubjectsPage(groupSubjectsBloc: groupBlocs.groupSubjectsBloc);
-    membersTabPage = GroupMembersPage(groupMembersBloc: groupBlocs.groupMembersBloc);
+    tasksTabPage = TasksPage(groupTasksBloc: mainTabBlocs.tasksBloc);
+    schedulesTabPage = SchedulesPage(groupSubjectsBloc: mainTabBlocs.schedulesBloc);
+    gradesTabPage = GradesPage(groupMembersBloc: mainTabBlocs.gradesBloc);
   }
-
 
   void _handleTabSelection() {
     setState(() {
@@ -52,22 +51,20 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
         flexibleSpace: SafeArea(
             child: TabBar(controller: _tabController, tabs: [
               Tab(text: TasksPage.tabName),
-              Tab(text: GroupSubjectsPage.tabName),//, icon: Icon(Icons.scatter_plot)),
-              Tab(text: GroupMembersPage.tabName),//, icon: Icon(Icons.group))
-
+              Tab(text: SchedulesPage.tabName),//, icon: Icon(Icons.scatter_plot)),
+              Tab(text: GradesPage.tabName),//, icon: Icon(Icons.group))
             ])
         ),
       ),
-
       body:
-      TabBarView(
-          controller: _tabController,
-          children: [
-            tasksTabPage,
-            subjectsTabPage,
-            membersTabPage
-          ]
-      ),
+        TabBarView(
+            controller: _tabController,
+            children: [
+              tasksTabPage,
+              schedulesTabPage,
+              gradesTabPage
+            ]
+        ),
     );
   }
 }
