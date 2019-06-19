@@ -10,3 +10,9 @@ class HResponseError implements Exception {
   HResponseError(this.error);
   String message() => "The response is an error";
 }
+
+class UnexpectedResponse implements Exception {
+  dynamic unexpectedResponse;
+  UnexpectedResponse(this.unexpectedResponse);
+  String message() => "Unexpected response error";
+}
