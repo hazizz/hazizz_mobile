@@ -250,7 +250,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                             children: <Widget>[
                                               MaterialButton(
                                                 onPressed: (){
-
+                                                  Navigator.pushNamed(context, "/editTask", arguments: widget.pojoTask);
                                                 },
                                                 child: Text("Edit"),
                                               ),

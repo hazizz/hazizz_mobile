@@ -257,7 +257,7 @@ abstract class TaskEditEvent extends HEvent {
 class TaskEditSetEditModeEvent extends TaskEditEvent {
 
   final PojoTask taskToEdit;
-  TaskEditSetEditModeEvent({this.taskToEdit})
+  TaskEditSetEditModeEvent({@required this.taskToEdit})
       : assert(taskToEdit != null), super([taskToEdit]);
 
   @override
@@ -330,12 +330,15 @@ class TaskEditBloc extends Bloc<TaskEditEvent, TaskEditState> {
     @required this.titleBloc, @required this.descripitonBloc,
   }){
     mode = EditTaskMode.create;
+    this.dispatch(TaskEditSetCreateModeEvent());
+
   }
   TaskEditBloc.edit({@required this.groupItemPickerBloc, @required this.subjectItemPickerBloc,
     @required this.deadlineBloc, @required this.taskTypePickerBloc, @required this.titleBloc,
     @required this.descripitonBloc, @required this.taskToEdit
   }){
     mode = EditTaskMode.edit;
+    this.dispatch(TaskEditSetEditModeEvent(taskToEdit: taskToEdit));
   }
 
   @override
@@ -343,6 +346,14 @@ class TaskEditBloc extends Bloc<TaskEditEvent, TaskEditState> {
     if(event is TaskEditSetCreateModeEvent){
       yield TaskEditModeCreateState();
     }else if(event is TaskEditSetEditModeEvent){
+      print("log: TaskEditSetEditModeEvent");
+      groupItemPickerBloc.dispatch(PickedGroupEvent(item: event.taskToEdit.group));
+      subjectItemPickerBloc.dispatch(PickedSubjectEvent(item: event.taskToEdit.subject));
+      deadlineBloc.dispatch(DateTimePickedEvent(dateTime: event.taskToEdit.dueDate));
+      taskTypePickerBloc.dispatch(TaskTypePickedEvent(event.taskToEdit.type));
+
+    //  groupItemPickerBloc.dispatch(PickedGroupEvent(item: event.taskToEdit.group));
+
       yield TaskEditModeEditState(taskToEdit: event.taskToEdit);
     }
     if (event is TaskEditSendEvent) {
@@ -400,8 +411,10 @@ class TaskEditBloc extends Bloc<TaskEditEvent, TaskEditState> {
         }
 
         if(missingInfo){
+          print("log: missing info");
           return;
         }
+        print("log: not missing info");
 
         dynamic response;
 
@@ -581,6 +594,7 @@ class EditTaskBlocs{
         deadlineBloc: deadlineBloc, taskTypePickerBloc: taskTypePickerBloc, titleBloc: titleBloc,
         descripitonBloc: descriptionBloc, taskToEdit: taskToEdit,
     );
+    //titleBloc.dispatch(event);
   }
 
   void dispose(){

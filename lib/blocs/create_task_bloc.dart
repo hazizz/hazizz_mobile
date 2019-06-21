@@ -5,7 +5,6 @@ import 'package:hazizz_mobile/blocs/response_states.dart';
 import 'package:hazizz_mobile/blocs/task_maker_blocs.dart';
 import 'package:hazizz_mobile/communication/pojos/PojoError.dart';
 import 'package:hazizz_mobile/communication/pojos/PojoGroup.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoSubject.dart';
 import 'package:hazizz_mobile/communication/pojos/task/PojoTask.dart';
 import 'package:hazizz_mobile/communication/requests/request_collection.dart';
 import 'package:meta/meta.dart';
@@ -19,34 +18,32 @@ import 'item_list_picker_bloc/item_list_picker_bloc.dart';
 
 
 
+abstract class TaskCreateEvent extends TaskMakerEvent {
+  TaskCreateEvent([List props = const []]) : super(props);
+}
 
+class InitializeTaskCreateEvent extends TaskCreateEvent {
+  final PojoGroup group;
+  InitializeTaskCreateEvent({@required this.group}) : assert(group != null),  super([group]);
+  @override
+  String toString() => 'InitializeTaskCreateState';
+}
 
 //endregion
 
 //region SubjectItemListStates
 
-abstract class TaskEditEvent extends TaskMakerEvent {
-  TaskEditEvent([List props = const []]) : super(props);
+
+abstract class TaskCreateState extends TaskMakerState {
+  TaskCreateState([List props = const []]) : super(props);
 }
 
-class InitializeTaskEditEvent extends TaskEditEvent {
-  final PojoTask taskToEdit;
-  InitializeTaskEditEvent({@required this.taskToEdit}) : assert(taskToEdit != null),  super([taskToEdit]);
-  @override
-  String toString() => 'InitializeTaskEditEvent';
-}
-
-abstract class TaskEditState extends TaskMakerState {
-  TaskEditState([List props = const []]) : super(props);
-}
-
-class InitializedTaskEditState extends TaskEditState {
-  final PojoTask taskToEdit;
-  InitializedTaskEditState({@required this.taskToEdit}) : assert(taskToEdit != null),  super([taskToEdit]);
+class InitializedTaskCreateState extends TaskCreateState {
+  final PojoGroup group;
+  InitializedTaskCreateState({@required this.group}) : assert(group != null),  super([group]);
 
   String toString() => 'InitializeTaskEditState';
 }
-
 
 /*
 class TaskEditSentState extends TaskEditState {
@@ -63,24 +60,21 @@ class TaskEditWaiting extends TaskEditState {
 //endregion
 
 //region SubjectItemListBloc
-class TaskEditBloc extends Bloc<TaskMakerEvent, TaskMakerState> {
+class TaskCreateBloc extends Bloc<TaskMakerEvent, TaskMakerState> {
 
-  final PojoTask taskToEdit;
+  PojoGroup group;
 
- // GroupItemPickerBloc groupItemPickerBloc;
- // SubjectItemPickerBloc subjectItemPickerBloc;
-  final PojoGroup group;
-  final PojoSubject subject;
-
+  GroupItemPickerBloc groupItemPickerBloc;
+  SubjectItemPickerBloc subjectItemPickerBloc;
   DateTimePickerBloc deadlineBloc;
   TaskTypePickerBloc taskTypePickerBloc;
   TextFormBloc titleBloc;
   TextFormBloc descriptionBloc;
 
 
-  TaskEditBloc({@required this.group, @required this.subject,
+  TaskCreateBloc({@required this.groupItemPickerBloc, @required this.subjectItemPickerBloc,
     @required this.deadlineBloc, @required this.taskTypePickerBloc,
-    @required this.titleBloc, @required this.descriptionBloc, this.taskToEdit
+    @required this.titleBloc, @required this.descriptionBloc, this.group
   });
 
   /*
@@ -91,11 +85,12 @@ class TaskEditBloc extends Bloc<TaskMakerEvent, TaskMakerState> {
 
   @override
   Stream<TaskMakerState> mapEventToState(TaskMakerEvent event) async*{
-    if(event is InitializeTaskEditEvent){
+    if(event is InitializeTaskCreateEvent){
+      yield InitializedTaskCreateState(group: event.group);
 
-      yield InitializedTaskEditState(taskToEdit: taskToEdit);
-
-
+      if(group != null) {
+        groupItemPickerBloc.dispatch(PickedGroupEvent(item: group));
+      }
     }
     if (event is TaskMakerSendEvent) {
       try {
@@ -113,12 +108,21 @@ class TaskEditBloc extends Bloc<TaskMakerEvent, TaskMakerState> {
           typeId = typeState.item.id;
         }
 
-        if(subject != null){
-          subjectId = subject.id;
+        HState subjectState = subjectItemPickerBloc.currentState;
+        if(subjectState is PickedSubjectState) {
+          subjectId = subjectState.item.id;
+        }else{
+          subjectItemPickerBloc.dispatch(NotPickedEvent());
         }
 
-        if(group != null){
-          groupId = group.id;
+        if(subjectId == null) {
+          PickedGroupState groupState = await groupItemPickerBloc.currentState;
+          if (groupState is PickedGroupState) {
+            groupId = groupState.item.id;
+          } else {
+            groupItemPickerBloc.dispatch(NotPickedEvent());
+            missingInfo = true;
+          }
         }
 
         DateTimePickerState deadlineState = deadlineBloc.currentState;
@@ -183,7 +187,7 @@ class TaskEditBloc extends Bloc<TaskMakerEvent, TaskMakerState> {
   }
 
   @override
-  TaskEditState get initialState => InitializedTaskEditState(taskToEdit: taskToEdit);
+  TaskCreateState get initialState => InitializedTaskCreateState(group: group);
 
 /*void send() async{
     int groupId, subjectId, typeId;
@@ -283,33 +287,26 @@ class TaskEditBloc extends Bloc<TaskMakerEvent, TaskMakerState> {
 //endregion
 //endregion
 
-class TaskEditBlocs{
-  TaskEditBloc taskEditBloc;
- // GroupItemPickerBloc groupItemPickerBloc;
- // SubjectItemPickerBloc subjectItemPickerBloc = new SubjectItemPickerBloc();
+class TaskCreateBlocs{
+  TaskCreateBloc taskEditBloc;
+  GroupItemPickerBloc groupItemPickerBloc;
+  SubjectItemPickerBloc subjectItemPickerBloc = new SubjectItemPickerBloc();
   DateTimePickerBloc deadlineBloc = new DateTimePickerBloc();
   TaskTypePickerBloc taskTypePickerBloc = new TaskTypePickerBloc();
   TextFormBloc titleBloc = TextFormBloc(validate: null);
   TextFormBloc descriptionBloc = TextFormBloc(validate: null);
 
-  TaskEditBlocs({PojoTask taskToEdit}){
-
-    deadlineBloc.dispatch(DateTimePickedEvent(dateTime: taskToEdit.dueDate));
-    taskTypePickerBloc.dispatch(TaskTypePickedEvent(taskToEdit.type));
-    // TODO this is wrong ˇ
-    titleBloc.dispatch(TextFormValidate(text: taskToEdit.title));
-    descriptionBloc.dispatch(TextFormValidate(text: taskToEdit.description));
-
-
-  //  groupItemPickerBloc = new GroupItemPickerBloc(subjectItemPickerBloc);
-    taskEditBloc = TaskEditBloc(group: taskToEdit.group, subject: taskToEdit.subject,
-        deadlineBloc: deadlineBloc,taskTypePickerBloc: taskTypePickerBloc, titleBloc: titleBloc, descriptionBloc: descriptionBloc
+  TaskCreateBlocs({PojoGroup group}){
+    groupItemPickerBloc = new GroupItemPickerBloc(subjectItemPickerBloc);
+    taskEditBloc = TaskCreateBloc(groupItemPickerBloc: groupItemPickerBloc, subjectItemPickerBloc: subjectItemPickerBloc,
+        deadlineBloc: deadlineBloc,taskTypePickerBloc: taskTypePickerBloc, titleBloc: titleBloc, descriptionBloc: descriptionBloc,
+        group: group
     );
   }
 
   void dispose(){
-   // groupItemPickerBloc.dispose();
-   // subjectItemPickerBloc.dispose();
+    groupItemPickerBloc.dispose();
+    subjectItemPickerBloc.dispose();
     deadlineBloc.dispose();
     taskTypePickerBloc.dispose();
     titleBloc.dispose();

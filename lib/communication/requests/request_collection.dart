@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoClass.dart';
 import 'package:hazizz_mobile/communication/pojos/PojoError.dart';
 import 'package:hazizz_mobile/communication/pojos/PojoGroup.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoSchedules.dart';
 import 'package:hazizz_mobile/communication/pojos/PojoSession.dart';
 import 'package:hazizz_mobile/communication/pojos/PojoSubject.dart';
 import 'package:hazizz_mobile/communication/pojos/PojoTokens.dart';
@@ -273,7 +275,7 @@ class CreateTask extends HazizzRequest {
     authTokenHeader = true;
     contentTypeHeader = true;
 
-    body["taskType"] = b_taskType;
+    body["taskType"] = b_taskType.toString();
     body["taskTitle"] = b_title;
     body["description"] = b_description;
     body["dueDate"] = DateFormat("yyyy-MM-dd").format(b_deadline);
@@ -484,7 +486,7 @@ class GetKretaGrades extends TheraRequest {
 }
 
 class GetKretaSchedules extends TheraRequest {
-  GetKretaSchedules({ResponseHandler rh, @required int p_session, @required int q_weekNumber, @required int q_year}) : super(rh) {
+  GetKretaSchedules({ResponseHandler rh, @required int p_session, int q_weekNumber, int q_year}) : super(rh) {
     httpMethod = HttpMethod.GET;
     PATH = "v2/kreta/sessions/${p_session}/schedule";
     authTokenHeader = true;
@@ -500,9 +502,8 @@ class GetKretaSchedules extends TheraRequest {
 
   @override
   dynamic convertData(Response response) {
-    Iterable iter = getIterable(response.data);
-    List<PojoSession> grades = iter.map<PojoSession>((json) => PojoSession.fromJson(json)).toList();
-    return grades;
+    PojoSchedules schedules = PojoSchedules.fromJson(jsonDecode(response.data));
+    return schedules;
   }
 }
 
