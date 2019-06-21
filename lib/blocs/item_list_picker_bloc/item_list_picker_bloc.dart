@@ -57,9 +57,19 @@ class PickedState extends ItemListState {
   String toString() => 'PickedState';
 }
 
+class InactiveState extends ItemListState {
+  @override
+  String toString() => 'InactiveState';
+}
+
 
 abstract class ItemListEvent extends HEvent {
   ItemListEvent([List props = const []]) : super(props);
+}
+
+class InactiveEvent extends ItemListEvent {
+  @override
+  String toString() => 'InactiveEvent';
 }
 
 class LoadData extends ItemListEvent {

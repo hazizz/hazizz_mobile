@@ -4,6 +4,7 @@ import 'package:hazizz_mobile/blocs/response_states.dart';
 import 'package:hazizz_mobile/communication/pojos/PojoClass.dart';
 import 'package:hazizz_mobile/communication/pojos/PojoError.dart';
 import 'package:hazizz_mobile/communication/pojos/PojoGrade.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoGrades.dart';
 import 'package:hazizz_mobile/communication/pojos/task/PojoTask.dart';
 import 'package:hazizz_mobile/communication/requests/request_collection.dart';
 import 'package:hazizz_mobile/managers/kreta_session_manager.dart';
@@ -83,7 +84,7 @@ class MainSchedulesBloc extends Bloc<HEvent, HState> {
 
 class MainGradesBloc extends Bloc<HEvent, HState> {
 
-  List<PojoGrade> grades;
+  PojoGrades grades;
 
   @override
   HState get initialState => ResponseEmpty();
@@ -93,18 +94,37 @@ class MainGradesBloc extends Bloc<HEvent, HState> {
     if (event is FetchData) {
       try {
         yield ResponseWaiting();
-        dynamic responseData = await RequestSender().getResponse(new GetKretaGrades(p_session: (await KretaSessionManager.getSession()).id));
+      //  dynamic responseData = await RequestSender().getResponse(new GetKretaGrades(p_session: (await KretaSessionManager.getSession()).id));
+        PojoGrades responseData = new PojoGrades(
+          {"asd1" : [
+                PojoGrade(creationDate: DateTime(2010), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: "600%"),
+                PojoGrade(creationDate: DateTime(2011), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: "600%"),
+                PojoGrade(creationDate: DateTime(2012), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: "600%"),
+                PojoGrade(creationDate: DateTime(2013), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: "600%")],
 
-        if(responseData is List<PojoGrade>){
+            "asd2" : [
+              PojoGrade(creationDate: DateTime(2020), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: "600%"),
+              PojoGrade(creationDate: DateTime(2021), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: "600%"),
+              PojoGrade(creationDate: DateTime(2022), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: "600%"),
+              PojoGrade(creationDate: DateTime(2023), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: "600%")],
+
+          "asd3" : [
+            PojoGrade(creationDate: DateTime(2030), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: "600%"),
+            PojoGrade(creationDate: DateTime(2031), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: "600%"),
+            PojoGrade(creationDate: DateTime(2032), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: "600%"),
+            PojoGrade(creationDate: DateTime(2033), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: "600%")]
+          }
+        );
+        if(responseData is PojoGrades){
           grades = responseData;
-          if(grades.isNotEmpty) {
+          if(true) {
             yield ResponseDataLoaded(data: responseData);
           }else{
             yield ResponseEmpty();
           }
         }
         if(responseData is PojoError){
-          yield ResponseError(error: responseData);
+       //   yield ResponseError(error: responseData);
         }
       } on Exception catch(e){
         print("log: Exception: ${e.toString()}");

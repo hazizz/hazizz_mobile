@@ -55,14 +55,13 @@ class _GroupTabHosterPage extends State<GroupTabHosterPage> with SingleTickerPro
     return Scaffold(
      // backgroundColor: widget.color,
       appBar: AppBar(
-        flexibleSpace: SafeArea(
-            child: TabBar(controller: _tabController, tabs: [
-              Tab(text: GroupTasksPage.tabName),
-              Tab(text: GroupSubjectsPage.tabName),//, icon: Icon(Icons.scatter_plot)),
-              Tab(text: GroupMembersPage.tabName),//, icon: Icon(Icons.group))
+        title: Text("Group: ${widget.groupId}"),
+        bottom: TabBar(controller: _tabController, tabs: [
+          Tab(text: GroupTasksPage.tabName),
+          Tab(text: GroupSubjectsPage.tabName),//, icon: Icon(Icons.scatter_plot)),
+          Tab(text: GroupMembersPage.tabName),//, icon: Icon(Icons.group))
 
-          ])
-        ),
+          ]),
       ),
 
       body:

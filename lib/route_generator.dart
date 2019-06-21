@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hazizz_mobile/pages/EditTaskPage.dart';
 import 'package:hazizz_mobile/pages/LoginPage.dart';
+import 'package:hazizz_mobile/pages/main_pages/main_tab_hoster_page.dart';
 import 'package:hazizz_mobile/pages/registration_page.dart';
 
 import 'main.dart';
@@ -30,13 +32,16 @@ class RouteGenerator{
       case 'intro':
         return MaterialPageRoute(builder: (_) => RegistrationPage());
       case '/':
-        return MaterialPageRoute(builder: (_) => MyHomePage(title: "homepage"));
+      //  return MaterialPageRoute(builder: (_) => (title: "homepage"));
+         return MaterialPageRoute(builder: (_) => MainTabHosterPage());
       case '/groups':
         return MaterialPageRoute(builder: (_) => MyHomePage(title: "homepage"));
       case '/group/{groupId}':
         return MaterialPageRoute(builder: (_) => MyHomePage(title: "homepage"));
+      case '/createTask':
+        return MaterialPageRoute(builder: (_) => EditTaskPage.createMode(groupId: args));
       case '/editTask':
-        return MaterialPageRoute(builder: (_) => MyHomePage(title: "homepage"));
+        return MaterialPageRoute(builder: (_) => EditTaskPage.editMode(taskToEdit: args,));
       default:
         return _errorRoute();
     }

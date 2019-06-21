@@ -644,6 +644,7 @@ class _EditTaskPage extends State<EditTaskPage> {
                                               _fbKey.currentState.save();
                                               if (_fbKey.currentState.validate()) {
                                                 print(_fbKey.currentState.value);
+                                                blocs.taskEditBloc.dispatch(TaskEditSendEvent());
                                                 /*
                                                 blocs.send(
                                                   title: _titleTextEditingController.text,
