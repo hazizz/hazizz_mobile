@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hazizz_mobile/pages/EditTaskPage.dart';
 import 'package:hazizz_mobile/pages/LoginPage.dart';
 import 'package:hazizz_mobile/pages/main_pages/main_tasks_page.dart';
+import 'package:hazizz_mobile/pages/task_maker_page.dart';
 import 'package:hazizz_mobile/route_generator.dart';
 import 'HazizzDrawer.dart';
 import 'Page1.dart';
@@ -114,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
         FloatingActionButton(
           heroTag: "hero_task_edit",
           onPressed: (){
-            Navigator.push(context,MaterialPageRoute(builder: (context) => EditTaskPage.createMode()));
+            Navigator.push(context,MaterialPageRoute(builder: (context) => TaskMakerPage.createMode()));
           },
           tooltip: 'Increment',
           child: Icon(Icons.add),

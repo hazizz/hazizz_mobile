@@ -406,8 +406,8 @@ class GetGroupMembers extends HazizzRequest {
 //region Thera server requests
 //region Kreta requests
 //region Kreta session requests
-class GetKretaSessions extends TheraRequest {
-  GetKretaSessions({ResponseHandler rh}) : super(rh) {
+class KretaGetSessions extends TheraRequest {
+  KretaGetSessions({ResponseHandler rh}) : super(rh) {
   httpMethod = HttpMethod.GET;
   PATH = "kreta/sessions";
   authTokenHeader = true;
@@ -421,8 +421,8 @@ class GetKretaSessions extends TheraRequest {
   }
 }
 
-class CreateKretaSessions extends TheraRequest {
-  CreateKretaSessions({ResponseHandler rh, @required String b_username, @required String b_password, @required String b_url}) : super(rh) {
+class KretaCreateSession extends TheraRequest {
+  KretaCreateSession({ResponseHandler rh, @required String b_username, @required String b_password, @required String b_url}) : super(rh) {
     httpMethod = HttpMethod.POST;
     PATH = "kreta/sessions";
     authTokenHeader = true;
@@ -440,8 +440,8 @@ class CreateKretaSessions extends TheraRequest {
   }
 }
 
-class DeleteKretaSessions extends TheraRequest {
-  DeleteKretaSessions({ResponseHandler rh, @required String p_session}) : super(rh) {
+class KretaDeleteSessions extends TheraRequest {
+  KretaDeleteSessions({ResponseHandler rh, @required String p_session}) : super(rh) {
     httpMethod = HttpMethod.DELETE;
     PATH = "kreta/sessions/${p_session}";
     authTokenHeader = true;
@@ -453,8 +453,8 @@ class DeleteKretaSessions extends TheraRequest {
   }
 }
 
-class AuthenticateKretaSessions extends TheraRequest {
-  AuthenticateKretaSessions({ResponseHandler rh, @required String p_session, @required String b_password}) : super(rh) {
+class KretaAuthenticateSessions extends TheraRequest {
+  KretaAuthenticateSessions({ResponseHandler rh, @required String p_session, @required String b_password}) : super(rh) {
     httpMethod = HttpMethod.POST;
     PATH = "kreta/sessions/${p_session}/auth";
     authTokenHeader = true;
@@ -470,8 +470,8 @@ class AuthenticateKretaSessions extends TheraRequest {
 }
 //endregion
 
-class GetKretaGrades extends TheraRequest {
-  GetKretaGrades({ResponseHandler rh, @required int p_session}) : super(rh) {
+class KretaGetGrades extends TheraRequest {
+  KretaGetGrades({ResponseHandler rh, @required int p_session}) : super(rh) {
     httpMethod = HttpMethod.GET;
     PATH = "kreta/sessions/${p_session}/grades";
     authTokenHeader = true;
@@ -485,8 +485,8 @@ class GetKretaGrades extends TheraRequest {
   }
 }
 
-class GetKretaSchedules extends TheraRequest {
-  GetKretaSchedules({ResponseHandler rh, @required int p_session, int q_weekNumber, int q_year}) : super(rh) {
+class KretaGetSchedules extends TheraRequest {
+  KretaGetSchedules({ResponseHandler rh, @required int p_session, int q_weekNumber, int q_year}) : super(rh) {
     httpMethod = HttpMethod.GET;
     PATH = "v2/kreta/sessions/${p_session}/schedule";
     authTokenHeader = true;
@@ -507,8 +507,8 @@ class GetKretaSchedules extends TheraRequest {
   }
 }
 
-class GetKretaSchools extends TheraRequest {
-  GetKretaSchools({ResponseHandler rh}) : super(rh) {
+class KretaGetSchools extends TheraRequest {
+  KretaGetSchools({ResponseHandler rh}) : super(rh) {
     httpMethod = HttpMethod.GET;
     PATH = "kreta/schools";
     authTokenHeader = true;
@@ -516,7 +516,15 @@ class GetKretaSchools extends TheraRequest {
 
   @override
   dynamic convertData(Response response) {
-    Map<String, String> schools = json.decode(response.data);
+    print("log: im here and thats what matters");
+
+
+    print("log: im: ${response.data}");
+    print("log: im: divide");
+    print("log: im2: ${response.data}");
+    final Map schools = json.decode(response.data);
+        print("log: im here and thats what2 matters: $schools");
+
     return schools;
   }
 }

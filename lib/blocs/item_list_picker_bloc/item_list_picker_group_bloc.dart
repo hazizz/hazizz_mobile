@@ -18,7 +18,7 @@ class ItemListPickerGroupBloc extends ItemListPickerBloc{
     if(responseData is List<PojoGroup>){
       listItemData = responseData;
       if(listItemData.isNotEmpty) {
-        return Loaded(data: listItemData);
+        return ItemListLoaded(data: listItemData);
       }else{
         return Empty();
       }

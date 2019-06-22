@@ -78,7 +78,7 @@ class GroupItemPickerBloc extends ItemListPickerBloc {
       print("log: PickedState is played");
       yield PickedGroupState(item: event.item);
     }
-    if (event is LoadData) {
+    if (event is ItemListLoadData) {
       try {
         yield Waiting();
         dynamic responseData = await RequestSender().getResponse(
@@ -91,7 +91,7 @@ class GroupItemPickerBloc extends ItemListPickerBloc {
           dataList = responseData;
           if (dataList.isNotEmpty) {
             print("log: response is List");
-            yield Loaded(data: responseData);
+            yield ItemListLoaded(data: responseData);
           } else {
             yield Empty();
           }
@@ -159,7 +159,7 @@ class SubjectItemPickerBloc extends ItemListPickerBloc {
           dataList = responseData;
           if(dataList.isNotEmpty) {
             print("log: response is List");
-            yield Loaded(data: responseData);
+            yield ItemListLoaded(data: responseData);
           }else{
             yield Empty();
           }

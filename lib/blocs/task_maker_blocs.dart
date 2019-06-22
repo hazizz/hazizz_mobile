@@ -15,7 +15,39 @@ import 'package:hazizz_mobile/communication/requests/request_collection.dart';
 import 'package:meta/meta.dart';
 
 import '../RequestSender.dart';
+import 'TextFormBloc.dart';
+import 'date_time_picker_bloc.dart';
 import 'item_list_picker_bloc/item_list_picker_bloc.dart';
+
+enum TaskMakerMode{
+  create,edit
+}
+
+abstract class TaskMakerBloc extends Bloc<TaskMakerEvent, TaskMakerState> {
+  
+}
+
+
+abstract class TaskMakerBlocs{
+  TaskMakerBloc taskMakerBloc;
+  GroupItemPickerBloc groupItemPickerBloc;
+  SubjectItemPickerBloc subjectItemPickerBloc;
+  DateTimePickerBloc deadlineBloc;
+  TaskTypePickerBloc taskTypePickerBloc;
+  TextFormBloc titleBloc;
+  TextFormBloc descriptionBloc;
+//  void dispose();
+
+  void dispose(){
+    taskMakerBloc.dispose();
+    groupItemPickerBloc.dispose();
+    subjectItemPickerBloc.dispose();
+    deadlineBloc.dispose();
+    taskTypePickerBloc.dispose();
+    titleBloc.dispose();
+    descriptionBloc.dispose();
+  }
+}
 
 //region TitleTextFieldBloc
 class TitleTextFieldBloc extends TextFieldBloc{
@@ -70,13 +102,19 @@ class GroupItemPickerBloc extends ItemListPickerBloc {
     });
   }
 
+  /*
+  @override
+  // TODO: implement initialState
+  ItemListState get initialState => LoadData();
+  */
+
   @override
   Stream<ItemListState> mapEventToState(ItemListEvent event) async* {
     if (event is PickedGroupEvent) {
       print("log: PickedState is played");
       yield PickedGroupState(item: event.item);
     }
-    if (event is LoadData) {
+    if (event is ItemListLoadData) {
       try {
         yield Waiting();
         dynamic responseData = await RequestSender().getResponse(
@@ -89,7 +127,7 @@ class GroupItemPickerBloc extends ItemListPickerBloc {
           dataList = responseData;
           if (dataList.isNotEmpty) {
             print("log: response is List");
-            yield Loaded(data: responseData);
+            yield ItemListLoaded(data: responseData);
           } else {
             yield Empty();
           }
@@ -157,7 +195,7 @@ class SubjectItemPickerBloc extends ItemListPickerBloc {
           dataList = responseData;
           if(dataList.isNotEmpty) {
             print("log: response is List");
-            yield Loaded(data: responseData);
+            yield ItemListLoaded(data: responseData);
           }else{
             yield Empty();
           }

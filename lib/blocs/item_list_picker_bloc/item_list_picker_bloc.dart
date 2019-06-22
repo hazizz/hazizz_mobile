@@ -12,15 +12,15 @@ abstract class ItemListState extends HState {
  // ItemListState(this.name) : super([name]);
 }
 
-class NotPicked extends ItemListState {
+class ItemListNotPickedState extends ItemListState {
  /// NotPicked([List props = const []]) : super(props);
   @override
-  String toString() => 'ItemListNotPickedEvent';
+  String toString() => 'ItemListNotPickedState';
 }
 
-class Loaded extends ItemListState {
-  final List<dynamic> data;
-  Loaded({@required this.data})
+class ItemListLoaded extends ItemListState {
+  final dynamic data;
+  ItemListLoaded({@required this.data})
       : assert(data != null);
   @override
   String toString() => 'ItemListLoaded';
@@ -44,17 +44,17 @@ class Error extends ItemListState {
   String toString() => 'ItemListError';
 }
 
-class PickedState extends ItemListState {
+class ItemListPickedState extends ItemListState {
  // PickedState(this.item, [List props = const []]) : assert(item != null), super(props);
   final dynamic item;
 
 
  // PickedState() : super(props);
 
-  PickedState({this.item})
+  ItemListPickedState({this.item})
       : assert(item != null), super(item);
   @override
-  String toString() => 'PickedState';
+  String toString() => 'ItemListPickedState';
 }
 
 class InactiveState extends ItemListState {
@@ -72,13 +72,13 @@ class InactiveEvent extends ItemListEvent {
   String toString() => 'InactiveEvent';
 }
 
-class LoadData extends ItemListEvent {
+class ItemListLoadData extends ItemListEvent {
   @override
   String toString() => 'ItemListLoadData';
 }
 class PickedEvent extends ItemListEvent {
   final dynamic item;
-  PickedEvent({this.item})
+  PickedEvent({@required this.item})
       : assert(item != null), super([item]);
   @override
   String toString() => 'ItemListPicked';
@@ -91,9 +91,15 @@ class NotPickedEvent extends ItemListEvent {
   String toString() => 'ItemListNotPickedEvent';
 }
 
+class ItemListCheckPickedEvent extends ItemListEvent {
+
+  @override
+  String toString() => 'ItemListCheckPickedEvent';
+}
+
 
 class ItemListPickerBloc extends Bloc<ItemListEvent, ItemListState> {
-  List<dynamic> listItemData;
+  dynamic listItemData;
   dynamic pickedItem;
 
   @override
@@ -114,6 +120,12 @@ class ItemListPickerBloc extends Bloc<ItemListEvent, ItemListState> {
     if(event is PickedEvent){
       pickedItem = event.item;
       onPicked(pickedItem);
+    }else if(event is ItemListCheckPickedEvent){
+      if(pickedItem == null){
+        yield new ItemListNotPickedState();
+      }else{
+        yield new ItemListPickedState(item: pickedItem);
+      }
     }
   }
 }

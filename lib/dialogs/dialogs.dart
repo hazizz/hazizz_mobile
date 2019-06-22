@@ -9,6 +9,7 @@ import 'package:hazizz_mobile/communication/pojos/PojoSubject.dart';
 import 'package:hazizz_mobile/communication/pojos/PojoType.dart';
 import 'package:hazizz_mobile/communication/requests/request_collection.dart';
 import 'package:hazizz_mobile/converters/PojoConverter.dart';
+import 'package:hazizz_mobile/dialogs/school_dialog.dart';
 
 
 import '../RequestSender.dart';
@@ -369,6 +370,20 @@ Future<bool> showAddSubjectDialog(context, {@required int groupId}) {
                 )));
       });
 }
+
+
+
+void showDialogSchools(BuildContext context, {@required Function({String key, String value}) onPicked, @required Map data}) async{
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      // return object of type Dialog
+      return SchoolDialog(onPicked: onPicked, data: data);
+    },
+  );
+}
+
+
 
 
 //TODO a good lookin dialog this is
