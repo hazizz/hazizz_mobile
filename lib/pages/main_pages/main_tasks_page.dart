@@ -10,7 +10,6 @@ import 'package:hazizz_mobile/listItems/TaskItemWidget.dart';
 
 import 'package:sticky_headers/sticky_headers.dart';
 
-import '../EditTaskPage.dart';
 
 class TasksPage extends StatefulWidget {
 
@@ -89,7 +88,11 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin {
       FloatingActionButton(
         heroTag: "hero_task_edit",
         onPressed: (){
-          Navigator.push(context,MaterialPageRoute(builder: (context) => EditTaskPage.createMode()));
+
+
+          
+          Navigator.pushNamed(context, "/createTask");
+       //   Navigator.push(context,MaterialPageRoute(builder: (context) => EditTaskPage.createMode()));
         },
         tooltip: 'Increment',
         child: Icon(Icons.add),

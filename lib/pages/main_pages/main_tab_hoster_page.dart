@@ -6,6 +6,7 @@ import 'package:hazizz_mobile/pages/main_pages/main_grades_page.dart';
 import 'package:hazizz_mobile/pages/main_pages/main_tasks_page.dart';
 
 import '../../Page1.dart';
+import '../kreta_login_page.dart';
 
 
 class MainTabHosterPage extends StatefulWidget {
@@ -23,7 +24,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
   TabController _tabController;
 
   TasksPage tasksTabPage;
-  GradesPage schedulesTabPage;
+  KretaLoginPage schedulesTabPage;
   GradesPage gradesTabPage;
 
   MainTabBlocs mainTabBlocs;
@@ -32,7 +33,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
 
     tasksTabPage = TasksPage(tasksBloc: mainTabBlocs.tasksBloc);
    // schedulesTabPage = SchedulesPage(groupSubjectsBloc: mainTabBlocs.schedulesBloc);
-    schedulesTabPage = GradesPage(gradesBloc: mainTabBlocs.gradesBloc);
+    schedulesTabPage = KretaLoginPage();
     gradesTabPage = GradesPage(gradesBloc: mainTabBlocs.gradesBloc);
   }
 

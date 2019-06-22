@@ -62,7 +62,7 @@ class MainSchedulesBloc extends Bloc<HEvent, HState> {
     if (event is FetchData) {
       try {
         yield ResponseWaiting();
-        dynamic responseData = await RequestSender().getResponse(new GetKretaSchedules(p_session: (await KretaSessionManager.getSession()).id, q_weekNumber: 20, q_year: 2019));
+        dynamic responseData = await RequestSender().getResponse(new KretaGetSchedules(p_session: (await KretaSessionManager.getSession()).id, q_weekNumber: 20, q_year: 2019));
 
         if(responseData is List<PojoClass>){
           classes = responseData;

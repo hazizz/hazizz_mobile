@@ -63,7 +63,7 @@ class TaskEditWaiting extends TaskEditState {
 //endregion
 
 //region SubjectItemListBloc
-class TaskEditBloc extends Bloc<TaskMakerEvent, TaskMakerState> {
+class TaskEditBloc extends TaskMakerBloc {
 
   final PojoTask taskToEdit;
 
@@ -283,7 +283,8 @@ class TaskEditBloc extends Bloc<TaskMakerEvent, TaskMakerState> {
 //endregion
 //endregion
 
-class TaskEditBlocs{
+class TaskEditBlocs extends TaskMakerBlocs{
+  /*
   TaskEditBloc taskEditBloc;
  // GroupItemPickerBloc groupItemPickerBloc;
  // SubjectItemPickerBloc subjectItemPickerBloc = new SubjectItemPickerBloc();
@@ -291,6 +292,7 @@ class TaskEditBlocs{
   TaskTypePickerBloc taskTypePickerBloc = new TaskTypePickerBloc();
   TextFormBloc titleBloc = TextFormBloc(validate: null);
   TextFormBloc descriptionBloc = TextFormBloc(validate: null);
+  */
 
   TaskEditBlocs({PojoTask taskToEdit}){
 
@@ -302,18 +304,15 @@ class TaskEditBlocs{
 
 
   //  groupItemPickerBloc = new GroupItemPickerBloc(subjectItemPickerBloc);
-    taskEditBloc = TaskEditBloc(group: taskToEdit.group, subject: taskToEdit.subject,
+    taskMakerBloc = TaskEditBloc(group: taskToEdit.group, subject: taskToEdit.subject,
         deadlineBloc: deadlineBloc,taskTypePickerBloc: taskTypePickerBloc, titleBloc: titleBloc, descriptionBloc: descriptionBloc
     );
   }
 
-  void dispose(){
-   // groupItemPickerBloc.dispose();
-   // subjectItemPickerBloc.dispose();
-    deadlineBloc.dispose();
-    taskTypePickerBloc.dispose();
-    titleBloc.dispose();
-    descriptionBloc.dispose();
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 }
 

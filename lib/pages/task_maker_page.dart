@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hazizz_mobile/blocs/create_task_bloc.dart';
 import 'package:hazizz_mobile/blocs/date_time_picker_bloc.dart';
-import 'package:hazizz_mobile/blocs/edit_task_bloc2.dart';
+import 'package:hazizz_mobile/blocs/edit_task_bloc.dart';
+//import 'package:hazizz_mobile/blocs/edit_task_bloc2.dart';
 import 'package:hazizz_mobile/blocs/item_list_picker_bloc/item_list_picker_bloc.dart';
 import 'package:hazizz_mobile/blocs/item_list_picker_bloc/item_list_picker_group_bloc.dart';
+import 'package:hazizz_mobile/blocs/task_maker_blocs.dart' as prefix0;
+import 'package:hazizz_mobile/blocs/task_maker_blocs.dart';
 import 'package:hazizz_mobile/communication/pojos/PojoGroup.dart';
 import 'package:hazizz_mobile/communication/pojos/PojoSubject.dart';
 import 'package:hazizz_mobile/communication/pojos/PojoType.dart';
@@ -16,30 +20,32 @@ import 'package:hazizz_mobile/dialogs/dialogs.dart';
 import '../hazizz_theme.dart';
 
 
-class EditTaskPage extends StatefulWidget {
+
+class TaskMakerPage extends StatefulWidget {
   int groupId;
 
+  PojoGroup group;
   PojoTask taskToEdit;
   int taskId;
 
-  EditTaskMode mode;
+  TaskMakerMode mode;
 
  // EditTaskPage({Key key, this.taskId}) : super(key: key);
 
-  EditTaskPage.editMode({Key key, this.taskToEdit}) : super(key: key){
+  TaskMakerPage.editMode({Key key, this.taskToEdit}) : super(key: key){
     taskId = taskToEdit.id;
-    mode = EditTaskMode.edit;
+    mode = TaskMakerMode.edit;
   }
 
-  EditTaskPage.createMode({Key key, this.groupId}) : super(key: key){
-    mode = EditTaskMode.create;
+  TaskMakerPage.createMode({Key key, this.groupId}) : super(key: key){
+    mode = TaskMakerMode.create;
   }
 
   @override
-  _EditTaskPage createState() => _EditTaskPage();
+  _TaskMakerPage createState() => _TaskMakerPage();
 }
 
-class _EditTaskPage extends State<EditTaskPage> {
+class _TaskMakerPage extends State<TaskMakerPage> {
 
   ItemListPickerGroupBloc itemListPickerGroupBloc = ItemListPickerGroupBloc();
 
@@ -60,7 +66,8 @@ class _EditTaskPage extends State<EditTaskPage> {
 
   static bool _isExpanded = false;
 
-  EditTaskBlocs blocs;
+ // EditTaskBlocs blocs;
+  TaskMakerBlocs blocs;
 
   static PojoSubject chosenSubject;
 
@@ -84,15 +91,17 @@ class _EditTaskPage extends State<EditTaskPage> {
 
   @override
   void initState() {
-    if(widget.mode == EditTaskMode.create){
-      blocs = new EditTaskBlocs.create();
-    }else if(widget.mode == EditTaskMode.edit){
-      blocs = new EditTaskBlocs.edit(widget.taskToEdit);
+    if(widget.mode == TaskMakerMode.create){
+      blocs = new TaskEditBlocs(taskToEdit: widget.taskToEdit);
+
+    }else if(widget.mode == TaskMakerMode.edit){
+      blocs = new TaskCreateBlocs(group: widget.group);
+
     }else{
       print("log: Well ...");
     }
 
-    blocs.groupItemPickerBloc.dispatch(LoadData());
+    blocs.groupItemPickerBloc.dispatch(ItemListLoadData());
 
 
 
@@ -142,11 +151,9 @@ class _EditTaskPage extends State<EditTaskPage> {
                           }
                         }
 
-                        return Center(
-                          child: Text('${typeName}',
+                        return Text('${typeName}',
                             style: TextStyle(fontSize: 24.0),
-                          ),
-                        );
+                          );
                       },
                     )
                 );
@@ -180,15 +187,13 @@ class _EditTaskPage extends State<EditTaskPage> {
                   //  bloc: blocs.groupItemPickerBloc,
                     builder: (BuildContext context){//, ItemListState state) {
                       print("log: widget update2");
-                      if (state is Loaded) {
+                      if (state is ItemListLoaded) {
                         return Container();
                       }
                       if(state is PickedGroupState){
                         print("log: asdasdGroup: $state.item.name");
-                        return Center(
-                          child: Text('${state.item.name}',
+                        return Text('${state.item.name}',
                             style: TextStyle(fontSize: 24.0),
-                          ),
                         );
                       }
                       return Text("Loading");
@@ -200,7 +205,7 @@ class _EditTaskPage extends State<EditTaskPage> {
           onTap: () {
             List<PojoGroup> dataList = blocs.groupItemPickerBloc.dataList;
             if(dataList != null){
-              if (state is Loaded || state is PickedGroupState) {
+              if (state is ItemListLoaded || state is PickedGroupState) {
                 showDialogGroup(context, (PojoGroup group) {
                  // chosenGroup = group;
                   blocs.groupItemPickerBloc.dispatch(PickedGroupEvent(item: group));
@@ -233,15 +238,14 @@ class _EditTaskPage extends State<EditTaskPage> {
                     child: Builder(
                       builder: (BuildContext context){//, ItemListState state) {
                         print("log: widget update2");
-                        if (state is Loaded) {
+                        if (state is ItemListLoaded) {
                           return Container();
                         }
                         if(state is PickedSubjectState){
                           print("log: asdasdGroup: $state.item.name");
-                          return Center(
-                            child: Text('${state.item.name}',
+                          return Text('${state.item.name}',
                               style: TextStyle(fontSize: 24.0),
-                            ),
+                            
                           );
                         }
                         return Text("Loading");
@@ -253,7 +257,7 @@ class _EditTaskPage extends State<EditTaskPage> {
             onTap: () {
               List<PojoSubject> dataList = blocs.subjectItemPickerBloc.dataList;
               if(dataList != null){
-                if (state is Loaded || state is PickedSubjectState) {
+                if (state is ItemListLoaded || state is PickedSubjectState) {
                   showDialogSubject(context, (PojoSubject subject) {
                     // chosenGroup = group;
                     blocs.subjectItemPickerBloc.dispatch(PickedSubjectEvent(item: subject));
@@ -288,10 +292,9 @@ class _EditTaskPage extends State<EditTaskPage> {
                       return Container();
                     }
                     if(state is DateTimePickedState){
-                      return Center(
-                        child: Text('${state.dateTime.toString()}',
+                      return Text('${state.dateTime.toString()}',
                           style: TextStyle(fontSize: 24.0),
-                        ),
+                        
                       );
                     }
                     return Text("Loading");
@@ -329,11 +332,9 @@ class _EditTaskPage extends State<EditTaskPage> {
                         return Container();
                       }
                       if(state is DateTimePickedState){
-                        return Center(
-                          child: Text('${state.dateTime.toString()}',
+                        return Text('${state.dateTime.toString()}',
                             style: TextStyle(fontSize: 24.0),
-                          ),
-                        );
+                                                  );
                       }
                       return Text("Loading");
                     },
@@ -370,10 +371,9 @@ class _EditTaskPage extends State<EditTaskPage> {
                         return Container();
                       }
                       if(state is DateTimePickedState){
-                        return Center(
-                          child: Text('${state.dateTime.toString()}',
+                        return Text('${state.dateTime.toString()}',
                             style: TextStyle(fontSize: 24.0),
-                          ),
+                        
                         );
                       }
                       return Text("Loading");
@@ -644,7 +644,7 @@ class _EditTaskPage extends State<EditTaskPage> {
                                               _fbKey.currentState.save();
                                               if (_fbKey.currentState.validate()) {
                                                 print(_fbKey.currentState.value);
-                                                blocs.taskEditBloc.dispatch(TaskEditSendEvent());
+                                                blocs.taskMakerBloc.dispatch(TaskMakerSendEvent());
                                                 /*
                                                 blocs.send(
                                                   title: _titleTextEditingController.text,
