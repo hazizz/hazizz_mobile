@@ -110,9 +110,9 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
             ListTile(
               title: Text('Groups'),
               onTap: () {
-                Navigator.pop(context);
-                Navigator.push(context,MaterialPageRoute(builder: (context) => GroupTabHosterPage(groupId: 2)));
-
+               //Navigator.pop(context);
+               // Navigator.push(context,MaterialPageRoute(builder: (context) => GroupTabHosterPage(groupId: 2)));
+                Navigator.popAndPushNamed(context, "/groups");
               },
             ),
 

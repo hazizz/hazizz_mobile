@@ -10,6 +10,7 @@ import 'package:hazizz_mobile/blocs/TextFormBloc.dart';
 import 'package:hazizz_mobile/blocs/item_list_picker_bloc/item_list_picker_bloc.dart';
 import 'package:hazizz_mobile/blocs/kreta_login_blocs.dart';
 import 'package:hazizz_mobile/blocs/login_bloc.dart';
+import 'package:hazizz_mobile/blocs/task_maker_blocs.dart';
 import 'package:hazizz_mobile/communication/ResponseHandler.dart';
 import 'package:hazizz_mobile/communication/pojos/PojoError.dart';
 import 'package:hazizz_mobile/communication/pojos/PojoTokens.dart';
@@ -21,6 +22,7 @@ import 'package:hazizz_mobile/managers/cache_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../RequestSender.dart';
+import '../hazizz_theme.dart';
 import '../main.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -58,6 +60,7 @@ class _KretaLoginPage extends State<KretaLoginPage> with SingleTickerProviderSta
     var schoolPicker = BlocBuilder(
         bloc: kretaLoginPageBlocs.schoolBloc,
         builder: (BuildContext context, ItemListState state) {
+          print("log: schoolBloc: state: ${state.toString()}");
           return GestureDetector(
             child: FormField(
               builder: (FormFieldState formState) {
@@ -74,7 +77,7 @@ class _KretaLoginPage extends State<KretaLoginPage> with SingleTickerProviderSta
                         if (state is ItemListLoaded) {
                           return Container();
                         }
-                        if(state is PickedSubjectState){
+                        if(state is ItemListPickedState){
                           print("log: asdasdGroup: $state.item.name");
                           return Text('${state.item.name}',
                               style: TextStyle(fontSize: 24.0),
@@ -88,11 +91,13 @@ class _KretaLoginPage extends State<KretaLoginPage> with SingleTickerProviderSta
               },
             ), //groupFormField,
             onTap: () {
-              if(kretaLoginPageBlocs.schoolBloc.currentState is ItemListLoaded){
+              if(kretaLoginPageBlocs.schoolBloc.currentState is ItemListLoaded
+              || kretaLoginPageBlocs.schoolBloc.currentState is ItemListPickedState
+              ){
                   showDialogSchools(context, data: kretaLoginPageBlocs.schoolBloc.data,
                   onPicked: ({String key, String value}){
                     print("log: school: key: $key, value: $value");
-                    kretaLoginPageBlocs.schoolBloc.dispatch(PickedEvent(item: ));
+                    kretaLoginPageBlocs.schoolBloc.dispatch(PickedEvent(item: SchoolItem(key, value)));
                   } 
                   );
                 }
@@ -107,76 +112,84 @@ class _KretaLoginPage extends State<KretaLoginPage> with SingleTickerProviderSta
           title: new Text("Login"),
         ),
         body:
-        Column(
-          children: <Widget>[
-            Image.asset(
-              'assets/images/Logo.png',
-            ),
-            BlocBuilder(
-                bloc: kretaLoginPageBlocs.usernameBloc,
-                builder: (BuildContext context, HFormState state) {
-                  String errorText = null;
-                  if (state is KretaUserNotFoundState) {
-                    errorText = "No such user";
-                  } else if (state is TextFormErrorTooShort) {
-                    errorText = "too short mann...";
-                  }
-                  return TextField(
-                    onChanged: (dynamic text) {
-                      print("change: $text");
-                      kretaLoginPageBlocs.usernameBloc.dispatch(TextFormValidate(text: text));
-                    },
-                    controller: _usernameTextEditingController,
-                    textInputAction: TextInputAction.next,
-                    decoration:
-                        InputDecoration(labelText: "Age", errorText: errorText),
-                  );
-                }),
-            TextFormField(
-              obscureText: true,
-              maxLines: 1,
-              autofocus: false,
-              controller: _passwordTextEditingController,
-              decoration: InputDecoration(
-                labelText: "Password",
+        SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Image.asset(
+                'assets/images/Logo.png',
               ),
-            ),
-
-            RaisedButton(
-              onPressed: (){
-                if(kretaLoginPageBlocs.schoolBloc.currentState is ItemListLoaded){
-                  showDialogSchools(context, data: kretaLoginPageBlocs.schoolBloc.data,
-                  onPicked: ({String key, String value}){
-                    print("log: school: key: $key, value: $value");
-                  } 
-                  );
-                }
-              }
-            ),
-
-            BlocListener(
-                bloc: kretaLoginPageBlocs.kretaLoginBloc,
-                listener: (context, state) {
-                  if (state is LoginSuccessState) {
-                  //  Navigator.of(context).pushNamed('/details');
-                    Navigator.popAndPushNamed(context, "/");
-                  }
-                },
-                child: RaisedButton(
-                    child: Text("Küldés"),
-                    onPressed: () async {
-                      print("log: as1");
-                      kretaLoginPageBlocs.kretaLoginBloc.dispatch(
-                          KretaLoginButtonPressed(
-                              password: _passwordTextEditingController.text,
-                              username: _usernameTextEditingController.text,
-                              schoolUrl: kretaLoginPageBlocs.schoolBloc.pickedItem
-                          )
-                      );
+              BlocBuilder(
+                  bloc: kretaLoginPageBlocs.usernameBloc,
+                  builder: (BuildContext context, HFormState state) {
+                    String errorText = null;
+                    if (state is KretaUserNotFoundState) {
+                      errorText = "No such user";
+                    } else if (state is TextFormErrorTooShort) {
+                      errorText = "too short mann...";
                     }
+                    return TextField(
+                      onChanged: (dynamic text) {
+                        print("change: $text");
+                        kretaLoginPageBlocs.usernameBloc.dispatch(TextFormValidate(text: text));
+                      },
+                      controller: _usernameTextEditingController,
+                      textInputAction: TextInputAction.next,
+                      decoration:
+                          InputDecoration(labelText: "Age", errorText: errorText),
+                    );
+                  }),
+              TextFormField(
+                obscureText: true,
+                maxLines: 1,
+                autofocus: false,
+                controller: _passwordTextEditingController,
+                decoration: InputDecoration(
+                  labelText: "Password",
                 ),
-            )
-          ],
+              ),
+              schoolPicker,
+              /*
+              RaisedButton(
+                onPressed: (){
+                  if(kretaLoginPageBlocs.schoolBloc.currentState is ItemListLoaded){
+                    showDialogSchools(context, data: kretaLoginPageBlocs.schoolBloc.data,
+                    onPicked: ({String key, String value}){
+                      print("log: school: key: $key, value: $value");
+                    } 
+                    );
+                  }
+                }
+              ),
+              */
+
+
+
+              
+              BlocListener(
+                  bloc: kretaLoginPageBlocs.kretaLoginBloc,
+                  listener: (context, state) {
+                    if (state is LoginSuccessState) {
+                    //  Navigator.of(context).pushNamed('/details');
+                      Navigator.popAndPushNamed(context, "/");
+                    }
+                  },
+                  child: RaisedButton(
+                      child: Text("Küldés"),
+                      onPressed: () async {
+                        print("log: as1");
+                        kretaLoginPageBlocs.kretaLoginBloc.dispatch(
+                            KretaLoginButtonPressed(
+                                password: _passwordTextEditingController.text,
+                                username: _usernameTextEditingController.text,
+                                schoolUrl: kretaLoginPageBlocs.schoolBloc.pickedItem
+                            )
+                        );
+                      }
+                  ),
+              )
+              
+            ],
+          ),
         ));
   }
 }

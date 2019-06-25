@@ -90,12 +90,30 @@ class KretaLoginSuccessState extends KretaLoginState {
 
 //endregion
 
+class SchoolItem{
+  final String name, url;
+
+  SchoolItem(this.name, this.url);
+}
+
+
+class SchoolItemState extends ItemListState{
+  SchoolItemState([List props = const []]) : super(props);
+}
+
+class SchoolItemPickedState extends SchoolItemState{
+
+
+  SchoolItemPickedState([List props = const []]) : super(props);
+
+}
 
 
 class SchoolItemPickerBloc extends ItemListPickerBloc {
  // final SubjectItemPickerBloc subjectItemPickerBloc;
  // StreamSubscription subjectItemPickerBlocSubscription;
   Map data;
+
 
 
   SchoolItemPickerBloc() {
@@ -111,17 +129,13 @@ class SchoolItemPickerBloc extends ItemListPickerBloc {
   @override
   Stream<ItemListState> mapEventToState(ItemListEvent event) async* {
     if (event is PickedEvent) {
-      print("log: PickedState is played");
       yield ItemListPickedState(item: event.item);
     }
-    if (event is ItemListLoadData) {
+    else if (event is ItemListLoadData) {
         yield Waiting();
         dynamic responseData = await RequestSender().getResponse(
             new KretaGetSchools()
             );
-        print("log: responseData: ${responseData}");
-        print(
-            "log: responseData type:  ${responseData.runtimeType.toString()}");
 
         if (responseData is Map) {
           data = responseData;
@@ -167,19 +181,20 @@ class KretaLoginBloc extends Bloc<KretaLoginEvent, KretaLoginState> {
 
 
       if(usernameState is TextFormFine || usernameState is KretaUserNotFoundState) {
-        if(passwordState is TextFormFine || schoolState is ItemListPickedState) { //usernameState is TextFormFine && passwordState is TextFormFine) {
+        if(passwordState is TextFormFine && schoolState is ItemListPickedState) { //usernameState is TextFormFine && passwordState is TextFormFine) {
           try {
             print("sentaa22");
             yield KretaLoginWaiting();
             dynamic response = await RequestSender().getResponse(new KretaCreateSession(
               b_username: usernameBloc.lastText, b_password: passwordBloc.lastText,
-              b_url: schoolBloc.pickedItem
+              b_url: schoolBloc.pickedItem.url
               )
             );
+            print(response);
             if(response is PojoSession){
               yield KretaLoginSuccessState();
             }else if(response is PojoError){
-              
+              print("${response.message}");
             }
           }on HResponseError catch(e) {
             print("piritos111");

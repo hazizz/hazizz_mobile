@@ -24,30 +24,45 @@ enum TaskMakerMode{
 }
 
 abstract class TaskMakerBloc extends Bloc<TaskMakerEvent, TaskMakerState> {
-  
-}
-
-
-abstract class TaskMakerBlocs{
-  TaskMakerBloc taskMakerBloc;
   GroupItemPickerBloc groupItemPickerBloc;
   SubjectItemPickerBloc subjectItemPickerBloc;
   DateTimePickerBloc deadlineBloc;
   TaskTypePickerBloc taskTypePickerBloc;
   TextFormBloc titleBloc;
   TextFormBloc descriptionBloc;
-//  void dispose();
 
-  void dispose(){
-    taskMakerBloc.dispose();
+/*
+ TaskMakerBloc({@required this.groupItemPickerBloc, @required this.subjectItemPickerBloc,
+    @required this.deadlineBloc, @required this.taskTypePickerBloc,
+    @required this.titleBloc, @required this.descriptionBloc,
+  });
+  */
+
+  TaskMakerBloc(){
+   subjectItemPickerBloc = SubjectItemPickerBloc();
+   groupItemPickerBloc = GroupItemPickerBloc(subjectItemPickerBloc);
+   deadlineBloc = DateTimePickerBloc();
+   taskTypePickerBloc = TaskTypePickerBloc();
+   titleBloc = TextFormBloc();
+   descriptionBloc = TextFormBloc();
+ }
+
+  @override
+  void dispose() {
     groupItemPickerBloc.dispose();
     subjectItemPickerBloc.dispose();
     deadlineBloc.dispose();
     taskTypePickerBloc.dispose();
     titleBloc.dispose();
     descriptionBloc.dispose();
+  
+    super.dispose();
   }
+
+
 }
+
+
 
 //region TitleTextFieldBloc
 class TitleTextFieldBloc extends TextFieldBloc{

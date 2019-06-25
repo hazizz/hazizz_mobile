@@ -13,7 +13,7 @@ class PojoGrade extends Pojo {
   String topic;
   String gradeType;
   String grade;
-  String weight;
+  int weight;
 
   PojoGrade({this.date, this.creationDate, this.subject, this.topic,
       this.gradeType, this.grade, this.weight});

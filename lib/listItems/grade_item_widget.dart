@@ -42,7 +42,7 @@ class GradeItemWidget extends StatelessWidget{
                         ),
                         Align(
                           alignment: Alignment.bottomLeft,
-                          child: Text(pojoGrade.weight),
+                          child: Text(pojoGrade.weight.toString()),
                         )
                       ],
                     ),
