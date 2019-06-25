@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:hazizz_mobile/pages/LoginPage.dart';
+import 'package:hazizz_mobile/pages/group_pages/group_tab_hoster_page.dart';
 import 'package:hazizz_mobile/pages/kreta_login_page.dart';
 import 'package:hazizz_mobile/pages/main_pages/main_tab_hoster_page.dart';
+import 'package:hazizz_mobile/pages/my_groups_page.dart';
 import 'package:hazizz_mobile/pages/registration_page.dart';
 import 'package:hazizz_mobile/pages/task_maker_page.dart';
 
 import 'main.dart';
 
 class RouteGenerator{
-  static Route<dynamic> _errorRoute() {
+  static Route<dynamic> _errorRoute(String errorLog) {
+    print(errorLog);
     return MaterialPageRoute(builder: (_) {
       return Scaffold(
         appBar: AppBar(
           title: Text('Error'),
         ),
         body: Center(
-          child: Text('ERROR'),
+          child: Text(errorLog),
         ),
       );
     });
@@ -36,9 +39,11 @@ class RouteGenerator{
       //  return MaterialPageRoute(builder: (_) => (title: "homepage"));
          return MaterialPageRoute(builder: (_) => MainTabHosterPage());
       case '/groups':
-        return MaterialPageRoute(builder: (_) => MyHomePage(title: "homepage"));
-      case '/group/{groupId}':
-        return MaterialPageRoute(builder: (_) => MyHomePage(title: "homepage"));
+        return MaterialPageRoute(builder: (_) => MyGroupsPage());
+      case '/group/groupId':
+                //      Navigator.push(context,MaterialPageRoute(builder: (context) => GroupTabHosterPage(groupId: 2)));
+
+        return MaterialPageRoute(builder: (_) => GroupTabHosterPage(groupId: args));
       case '/createTask':
         return MaterialPageRoute(builder: (_) => TaskMakerPage.createMode(groupId: args));
       case '/editTask':
@@ -46,7 +51,8 @@ class RouteGenerator{
       case '/kreta/login':
         return MaterialPageRoute(builder: (_) => KretaLoginPage());
       default:
-        return _errorRoute();
+        String errorLog = "log: route: ${settings.name}, args: ${settings.arguments}";
+        return _errorRoute(errorLog);
     }
   }
 }

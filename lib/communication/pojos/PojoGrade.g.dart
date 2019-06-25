@@ -17,7 +17,7 @@ PojoGrade _$PojoGradeFromJson(Map<String, dynamic> json) {
       topic: json['topic'] as String,
       gradeType: json['gradeType'] as String,
       grade: json['grade'] as String,
-      weight: json['weight'] as String);
+      weight: json['weight'] as int);
 }
 
 Map<String, dynamic> _$PojoGradeToJson(PojoGrade instance) => <String, dynamic>{

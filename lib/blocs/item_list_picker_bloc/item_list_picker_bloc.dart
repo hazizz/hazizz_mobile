@@ -48,11 +48,8 @@ class ItemListPickedState extends ItemListState {
  // PickedState(this.item, [List props = const []]) : assert(item != null), super(props);
   final dynamic item;
 
-
- // PickedState() : super(props);
-
   ItemListPickedState({this.item})
-      : assert(item != null), super(item);
+      : assert(item != null), super([item]);
   @override
   String toString() => 'ItemListPickedState';
 }

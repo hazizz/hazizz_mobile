@@ -94,7 +94,12 @@ class MainGradesBloc extends Bloc<HEvent, HState> {
     if (event is FetchData) {
       try {
         yield ResponseWaiting();
-      //  dynamic responseData = await RequestSender().getResponse(new GetKretaGrades(p_session: (await KretaSessionManager.getSession()).id));
+            print("log: am0 i here?");
+
+        dynamic responseData = await RequestSender().getResponse(new DummyKretaGetGrades());
+        
+        
+        /*
         PojoGrades responseData = new PojoGrades(
           {"asd1" : [
                 PojoGrade(creationDate: DateTime(2010), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: "600%"),
@@ -115,6 +120,7 @@ class MainGradesBloc extends Bloc<HEvent, HState> {
             PojoGrade(creationDate: DateTime(2033), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: "600%")]
           }
         );
+        */
         if(responseData is PojoGrades){
           grades = responseData;
           if(true) {

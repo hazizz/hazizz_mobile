@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hazizz_mobile/blocs/TextFormBloc.dart';
 import 'package:hazizz_mobile/blocs/create_task_bloc.dart';
 import 'package:hazizz_mobile/blocs/date_time_picker_bloc.dart';
 import 'package:hazizz_mobile/blocs/edit_task_bloc.dart';
@@ -67,7 +68,7 @@ class _TaskMakerPage extends State<TaskMakerPage> {
   static bool _isExpanded = false;
 
  // EditTaskBlocs blocs;
-  TaskMakerBlocs blocs;
+  TaskMakerBloc blocs;
 
   static PojoSubject chosenSubject;
 
@@ -92,10 +93,10 @@ class _TaskMakerPage extends State<TaskMakerPage> {
   @override
   void initState() {
     if(widget.mode == TaskMakerMode.create){
-      blocs = new TaskEditBlocs(taskToEdit: widget.taskToEdit);
+      blocs = TaskCreateBloc(group: widget.group);
 
     }else if(widget.mode == TaskMakerMode.edit){
-      blocs = new TaskCreateBlocs(group: widget.group);
+      blocs =  new TaskEditBloc(taskToEdit: widget.taskToEdit); 
 
     }else{
       print("log: Well ...");
@@ -313,47 +314,74 @@ class _TaskMakerPage extends State<TaskMakerPage> {
       }
     );
     var titleTextForm = BlocBuilder(
-        bloc: blocs.deadlineBloc,
-        builder: (BuildContext context, DateTimePickerState state) {
-          return GestureDetector(
-            child: FormField(
-              builder: (FormFieldState formState) {
-                return InputDecorator(
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: HazizzTheme.formColor,
-                    icon: const Icon(Icons.date_range),
-                    labelText: 'Deadline',
-                  ),
-                  isEmpty: _color == '',
-                  child: Builder(
-                    builder: (BuildContext context){
-                      if (state is DateTimeNotPickedState) {
-                        return Container();
-                      }
-                      if(state is DateTimePickedState){
-                        return Text('${state.dateTime.toString()}',
-                            style: TextStyle(fontSize: 24.0),
-                                                  );
-                      }
-                      return Text("Loading");
-                    },
-                  ),
-                );
-              },
-            ),
-            onTap: () async {
-              final DateTime picked = await showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now(), firstDate: DateTime.now().subtract(Duration(hours: 24)), lastDate: DateTime.now().add(Duration(days: 364)));
-              blocs.deadlineBloc.dispatch(DateTimePickedEvent(dateTime: picked));
+        bloc: blocs.titleBloc,
+        builder: (BuildContext context, HFormState state) {
+
+          if(state is TextFormSetState){
+            _titleTextEditingController.text = state.text;
+          }
+          
+          
+          return TextField(
+            
+            onChanged: (dynamic text) {
+              print("change: $text");
+              blocs.titleBloc.dispatch(TextFormValidate(text: text));
             },
+            controller: _titleTextEditingController,
+            textInputAction: TextInputAction.next,
+            decoration:
+                InputDecoration(labelText: "Age", errorText: null,
+                  filled: true,
+                  fillColor: HazizzTheme.formColor,
+                  icon: const Icon(Icons.date_range),
+                ),
           );
+
+  
         }
     );
+
+
     var descriptionTextForm = BlocBuilder(
-        bloc: blocs.deadlineBloc,
-        builder: (BuildContext context, DateTimePickerState state) {
+        bloc: blocs.descriptionBloc,
+        builder: (BuildContext context, HFormState state) {
+
+          if(state is TextFormSetState){
+            _descriptionTextEditingController.text = state.text;
+          }
+        
+
+          return TextField(
+            
+            onChanged: (dynamic text) {
+              print("change: $text");
+              blocs.descriptionBloc.dispatch(TextFormValidate(text: text));
+            },
+            controller: _descriptionTextEditingController,
+            textInputAction: TextInputAction.next,
+            decoration:
+                InputDecoration(labelText: "Age", errorText: null,
+                  filled: true,
+                  fillColor: HazizzTheme.formColor,
+                  icon: const Icon(Icons.date_range),
+            ),
+            maxLength: 240,
+            maxLines: 8,
+            minLines: 6,
+            expands: false,
+            style: TextStyle(
+                fontSize: 22
+            ),
+          );
+
+  
+        }
+    );
+
+    var descriptionTextForm2 = BlocBuilder(
+        bloc: blocs.descriptionBloc,
+        builder: (BuildContext context, HFormState state) {
           return GestureDetector(
             child: FormField(
               builder: (FormFieldState formState) {
@@ -362,18 +390,14 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                     filled: true,
                     fillColor: HazizzTheme.formColor,
                     icon: const Icon(Icons.date_range),
-                    labelText: 'Deadline',
+                    labelText: 'Description',
                   ),
                   isEmpty: _color == '',
                   child: Builder(
                     builder: (BuildContext context){
-                      if (state is DateTimeNotPickedState) {
-                        return Container();
-                      }
-                      if(state is DateTimePickedState){
-                        return Text('${state.dateTime.toString()}',
+                      if(state is TextFormSetState){
+                        return Text('${state.text}',
                             style: TextStyle(fontSize: 24.0),
-                        
                         );
                       }
                       return Text("Loading");
@@ -598,20 +622,7 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                                                 mainAxisAlignment: MainAxisAlignment.center,
                                                 children: [
                                                   new Flexible(
-                                                    child: FormBuilder(
-                                                      key: _fbKey,
-                                                      autovalidate: true,
-                                                      child: FormBuilderTextField(
-                                                        controller: _titleTextEditingController,
-                                                        attribute: "title",
-                                                        decoration: InputDecoration(
-                                                            labelText: "Title"),
-                                                        validators: [
-                                                          FormBuilderValidators.minLength(2, errorText: "Min characters is 2"),
-                                                          FormBuilderValidators.maxLength(20, errorText: "Max characters is 20"),
-                                                        ],
-                                                      ),
-                                                    ),
+                                                    child: titleTextForm
                                                   )
                                                 ],
                                               ),
@@ -621,21 +632,7 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                                       Padding(
                                         padding: const EdgeInsets.only(
                                             left: 20, right: 20, top: 4),
-                                        child: TextField(
-                                          controller: _descriptionTextEditingController,
-                                          decoration: new InputDecoration.collapsed(
-                                              hintText: 'desctiption',
-                                              border: OutlineInputBorder()
-                                          ),
-
-                                          maxLength: 240,
-                                          maxLines: 8,
-                                          minLines: 6,
-                                          expands: false,
-                                          style: TextStyle(
-                                              fontSize: 22
-                                          ),
-                                        ),
+                                        child: descriptionTextForm
                                       ),
                                       Center(
                                         child: RaisedButton(
@@ -644,16 +641,7 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                                               _fbKey.currentState.save();
                                               if (_fbKey.currentState.validate()) {
                                                 print(_fbKey.currentState.value);
-                                                blocs.taskMakerBloc.dispatch(TaskMakerSendEvent());
-                                                /*
-                                                blocs.send(
-                                                  title: _titleTextEditingController.text,
-                                                  description: _descriptionTextEditingController.text,
-                                                  onSuccess: (){
-                                                    Navigator.of(context).pop();
-                                                  }
-                                                );
-                                                */
+                                                blocs.dispatch(TaskMakerSendEvent());
                                               }
                                             }
                                         ),
