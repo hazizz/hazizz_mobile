@@ -1,5 +1,6 @@
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:hazizz_mobile/blocs/request_event.dart';
 import 'package:hazizz_mobile/blocs/response_states.dart';
 import 'package:meta/meta.dart';
@@ -130,22 +131,27 @@ class TextFormBloc extends Bloc<HFormEvent, HFormState> {
 
   String lastText = null;
 
-  final HFormState Function(String text) validate;
+  HFormState Function(String text) validate;
 
-  final HFormState Function(HFormEvent event) handleErrorEvents;
+  HFormState Function(HFormEvent event) handleErrorEvents;
 
-  TextFormBloc({@required this.validate, this.handleErrorEvents});
+  TextFormBloc({this.validate, this.handleErrorEvents}){
+    if(validate == null){
+      validate = (String text){return TextFormFine();};
+    }
+    if(handleErrorEvents == null){
+      handleErrorEvents = (HFormEvent event){return TextFormFine();};
+    }
+
+  }
 
   HFormState get initialState => TextFormFine();
 
   @override
   Stream<HFormState> mapEventToState(HFormEvent event) async* {
     print("state change");
-
-    if(event is TextFormSetEvent){
-      lastText = event.text;
-      yield TextFormSetState(text: event.text);
-    }
+    print("isLocked: $isLocked");
+    print("lastText: $lastText");
 
     if(event is TextFormLock){
       isLocked = true;
@@ -155,9 +161,15 @@ class TextFormBloc extends Bloc<HFormEvent, HFormState> {
       yield TextFormUnlocked();
     }
 
-    if(!isLocked){
+    if(event is TextFormSetEvent){
+      lastText = event.text;
+      print("title is set: $lastText");
+      yield TextFormSetState(text: event.text);
+    }
+
+    else if(!isLocked){
       if (event is TextFormValidate) {
-        if(lastText != event.text){
+        if(lastText != event.text || lastText == null){
           yield validate(event.text);
           lastText = event.text;
         }

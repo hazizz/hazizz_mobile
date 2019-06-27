@@ -5,6 +5,7 @@ import 'package:hazizz_mobile/communication/pojos/PojoClass.dart';
 import 'package:hazizz_mobile/communication/pojos/PojoError.dart';
 import 'package:hazizz_mobile/communication/pojos/PojoGrade.dart';
 import 'package:hazizz_mobile/communication/pojos/PojoGrades.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoSchedules.dart';
 import 'package:hazizz_mobile/communication/pojos/task/PojoTask.dart';
 import 'package:hazizz_mobile/communication/requests/request_collection.dart';
 import 'package:hazizz_mobile/managers/kreta_session_manager.dart';
@@ -52,7 +53,7 @@ class MainTasksBloc extends Bloc<HEvent, HState> {
 
 class MainSchedulesBloc extends Bloc<HEvent, HState> {
 
-  List<PojoClass> classes;
+  PojoSchedules classes;
 
   @override
   HState get initialState => ResponseEmpty();
@@ -62,11 +63,11 @@ class MainSchedulesBloc extends Bloc<HEvent, HState> {
     if (event is FetchData) {
       try {
         yield ResponseWaiting();
-        dynamic responseData = await RequestSender().getResponse(new KretaGetSchedules(p_session: (await KretaSessionManager.getSession()).id, q_weekNumber: 20, q_year: 2019));
+        dynamic responseData = await RequestSender().getResponse(new DummyKretaGetSchedules());
 
-        if(responseData is List<PojoClass>){
+        if(responseData is PojoSchedules){
           classes = responseData;
-          if(classes.isNotEmpty) {
+          if(true) {
             yield ResponseDataLoaded(data: responseData);
           }else{
             yield ResponseEmpty();
@@ -140,9 +141,23 @@ class MainGradesBloc extends Bloc<HEvent, HState> {
 }
 
 class MainTabBlocs{
+
+  static final MainTabBlocs _singleton = new MainTabBlocs._internal();
+  factory MainTabBlocs() {
+    return _singleton;
+  }
+  MainTabBlocs._internal();
+
   MainTasksBloc tasksBloc = new MainTasksBloc();
   MainSchedulesBloc schedulesBloc = new MainSchedulesBloc();
   MainGradesBloc gradesBloc = new MainGradesBloc();
+
+  void fetchAll(){
+    tasksBloc.dispatch(FetchData());
+    schedulesBloc.dispatch(FetchData());
+    gradesBloc.dispatch(FetchData());
+  }
+
 }
 
 

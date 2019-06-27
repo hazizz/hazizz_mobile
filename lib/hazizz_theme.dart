@@ -11,6 +11,13 @@ class HazizzTheme{
   blue = Color.fromRGBO(54, 177, 191, 1),
 
 
+  grade5Color = Colors.green,
+  grade4Color = Colors.lightGreenAccent,
+  grade3Color = Colors.yellowAccent,
+  grade2Color = Colors.orange,
+  grade1Color = Colors.red,
+  gradeNeutralColor = Colors.black,
+
 
   headerColor = Colors.red,
   homeworkColor = Colors.green,

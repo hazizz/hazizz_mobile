@@ -43,7 +43,18 @@ abstract class TaskMakerBloc extends Bloc<TaskMakerEvent, TaskMakerState> {
    groupItemPickerBloc = GroupItemPickerBloc(subjectItemPickerBloc);
    deadlineBloc = DateTimePickerBloc();
    taskTypePickerBloc = TaskTypePickerBloc();
-   titleBloc = TextFormBloc();
+   titleBloc = TextFormBloc(
+     validate: (String text){
+       if(text.length < 2){
+         return TextFormErrorTooShort();
+       }
+       if(text.length > 20){
+         return TextFormErrorTooLong();
+       }
+       return TextFormFine();
+     },
+
+   );
    descriptionBloc = TextFormBloc();
  }
 

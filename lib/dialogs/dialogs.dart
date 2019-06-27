@@ -4,15 +4,18 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:hazizz_mobile/communication/ResponseHandler.dart';
 import 'package:hazizz_mobile/communication/pojos/PojoError.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoGrade.dart';
 import 'package:hazizz_mobile/communication/pojos/PojoGroup.dart';
 import 'package:hazizz_mobile/communication/pojos/PojoSubject.dart';
 import 'package:hazizz_mobile/communication/pojos/PojoType.dart';
 import 'package:hazizz_mobile/communication/requests/request_collection.dart';
 import 'package:hazizz_mobile/converters/PojoConverter.dart';
 import 'package:hazizz_mobile/dialogs/school_dialog.dart';
+import 'package:share/share.dart';
 
 
 import '../RequestSender.dart';
+import '../hazizz_date.dart';
 import '../hazizz_theme.dart';
 
 Future<List<PojoGroup>> _getGroupData()async{
@@ -361,6 +364,221 @@ Future<bool> showAddSubjectDialog(context, {@required int groupId}) {
                               */
 
                               Navigator.of(context).pop();
+                            },
+                            color: Colors.transparent
+                        ),
+                      ],
+                    )
+                  ],
+                )));
+      });
+}
+
+
+Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
+  Widget space = SizedBox(height: 5);
+
+  return showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        print("grade: ${grade.grade}");
+        return Dialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+            child: Container(
+                height: 260.0,
+                width: 200.0,
+                decoration:
+                BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
+                child: Column(
+                  children: <Widget>[
+                    Stack(
+                      children: <Widget>[
+                        // Container(height: 100.0),
+                        Container(
+                          height: 64.0,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10.0),
+                                topRight: Radius.circular(10.0),
+                              ),
+                              color: Theme.of(context).primaryColor
+                          ),
+                        ),
+                        Center(
+                          child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: CircleAvatar(
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      grade.grade == null ? "" : grade.grade,
+                                      style: TextStyle(
+                                        fontSize: 50,
+                                        color: Colors.black
+                                      ),
+                                    ),
+                                    Text(
+                                      grade.weight == null ? "100%" : "${grade.weight}%",
+                                      style: TextStyle(
+                                          fontSize: 22,
+                                          color: Colors.black
+                                      ),
+                                    ),
+                                  ]
+                                ),
+                                backgroundColor: grade.color,
+                                radius: 40,
+                              )
+                          ),
+                        ),
+
+                      ],
+                    ),
+                    //  SizedBox(height: 20.0),
+
+                    Padding(
+                      padding: const EdgeInsets.only(left: 30, right: 30),
+                      child: Column(
+                        children:
+                        [
+
+                          Center(child: Text(grade.subject == null ? "" : (grade.subject), style: TextStyle(fontSize: 20)) ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text("topic: ", style: TextStyle(fontSize: 20)),
+                              Text(grade.topic == null ? "" : (grade.topic), style: TextStyle(fontSize: 20)),
+                            ],
+                          ),
+                          space,
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                            children: <Widget>[
+                              Text("grade type: ", style: TextStyle(fontSize: 20)),
+                              Text(grade.gradeType == null ? "" : grade.gradeType, style: TextStyle(fontSize: 20)),
+                            ],
+                          ),
+                          space,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text("date: ", style: TextStyle(fontSize: 20),),
+                              Text(grade.date == null ? "" : hazizzShowDateFormat(grade.date), style: TextStyle(fontSize: 20)),
+                            ],
+                          ),
+                          space,
+                          Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+
+                          ],
+                        ),
+                        ]
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: FlatButton(
+                            child: Center(
+                              child: Text('OK',
+                                style: TextStyle(
+                                    fontFamily: 'Montserrat',
+                                    fontSize: 14.0,
+                                    color: Colors.teal),
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            color: Colors.transparent
+                          ),
+                        ),
+                      ]
+                    ),
+                  ],
+                )));
+      });
+}
+
+Future<bool> showInviteDialog(context, {@required int groupId}) async {
+  String inviteLink = await RequestSender().getResponse(GetGroupInviteLink(groupId: groupId));
+  TextEditingController _subjectTextEditingController = TextEditingController();
+  return showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Dialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+            child: Container(
+                height: 130.0,
+                width: 200.0,
+                decoration:
+                BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
+                child: Column(
+                  children: <Widget>[
+                    Stack(
+                      children: <Widget>[
+                        // Container(height: 100.0),
+                        Container(
+                          height: 80.0,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10.0),
+                                topRight: Radius.circular(10.0),
+                              ),
+                              color: Theme.of(context).primaryColor
+                          ),
+                        ),
+                        Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Text(inviteLink)
+                        ),
+
+                      ],
+                    ),
+                    //  SizedBox(height: 20.0),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        FlatButton(
+                            child: Center(
+                              child: Text(
+                                'CANCEL',
+                                style: TextStyle(
+                                    fontFamily: 'Montserrat',
+                                    fontSize: 14.0,
+                                    color: Colors.teal),
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            color: Colors.transparent
+                        ),
+                        FlatButton(
+                            child: Center(
+                              child: Text(
+                                'SHARE',
+                                style: TextStyle(
+                                    fontFamily: 'Montserrat',
+                                    fontSize: 14.0,
+                                    color: HazizzTheme.warningColor
+                                ),
+                              ),
+                            ),
+                            onPressed: () {
+                              print("share");
+
+                              Share.share('check out my website $inviteLink');
+                             // Navigator.of(context).pop();
+                             // Navigator.of(context).pop();
                             },
                             color: Colors.transparent
                         ),

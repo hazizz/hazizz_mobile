@@ -16,6 +16,7 @@ class TaskItemWidget extends StatelessWidget{
     tag: "hero_task${pojoTask.id}",
         child:
       Card(
+          clipBehavior: Clip.antiAliasWithSaveLayer,
         elevation: 5,
         child: InkWell(
           onTap: () {

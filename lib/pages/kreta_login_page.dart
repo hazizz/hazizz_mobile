@@ -56,8 +56,53 @@ class _KretaLoginPage extends State<KretaLoginPage> with SingleTickerProviderSta
 
   @override
   Widget build(BuildContext context) {
-    
-    var schoolPicker = BlocBuilder(
+
+    var usernameWidget = BlocBuilder(
+        bloc: kretaLoginPageBlocs.usernameBloc,
+        builder: (BuildContext context, HFormState state) {
+          String errorText = null;
+          if (state is KretaUserNotFoundState) {
+            errorText = "No such user";
+          } else if (state is TextFormErrorTooShort) {
+            errorText = "too short mann...";
+          }
+          return TextField(
+            onChanged: (dynamic text) {
+              print("change: $text");
+              kretaLoginPageBlocs.usernameBloc.dispatch(TextFormValidate(text: text));
+            },
+            controller: _usernameTextEditingController,
+            textInputAction: TextInputAction.next,
+            decoration:
+            InputDecoration(labelText: "Kreta username", errorText: errorText),
+          );
+        }
+    );
+
+    var passwordWidget = BlocBuilder(
+        bloc: kretaLoginPageBlocs.usernameBloc,
+        builder: (BuildContext context, HFormState state) {
+          String errorText = null;
+          if (state is KretaUserNotFoundState) {
+            errorText = "No such user";
+          } else if (state is TextFormErrorTooShort) {
+            errorText = "too short mann...";
+          }
+          return TextField(
+            maxLines: 1,
+            onChanged: (dynamic text) {
+              print("change: $text");
+              kretaLoginPageBlocs.passwordBloc.dispatch(TextFormValidate(text: text));
+            },
+            controller: _passwordTextEditingController,
+            textInputAction: TextInputAction.next,
+            decoration:
+            InputDecoration(labelText: "Kreta password", errorText: errorText),
+          );
+        }
+    );
+
+    var schoolPickerWidget = BlocBuilder(
         bloc: kretaLoginPageBlocs.schoolBloc,
         builder: (BuildContext context, ItemListState state) {
           print("log: schoolBloc: state: ${state.toString()}");
@@ -66,9 +111,8 @@ class _KretaLoginPage extends State<KretaLoginPage> with SingleTickerProviderSta
               builder: (FormFieldState formState) {
                 return InputDecorator(
                     decoration: InputDecoration(
-                      filled: true,
-                      fillColor: HazizzTheme.formColor,
-                      icon: const Icon(Icons.group),
+                   //   filled: true,
+                  //    fillColor: HazizzTheme.formColor,
                       labelText: 'School',
                     ),
                     child: Builder(
@@ -81,7 +125,7 @@ class _KretaLoginPage extends State<KretaLoginPage> with SingleTickerProviderSta
                           print("log: asdasdGroup: $state.item.name");
                           return Text('${state.item.name}',
                               style: TextStyle(fontSize: 24.0),
-                            
+
                           );
                         }
                         return Text("Loading");
@@ -105,12 +149,11 @@ class _KretaLoginPage extends State<KretaLoginPage> with SingleTickerProviderSta
           );
         }
     );
+
+
     
 
     return Scaffold(
-        appBar: AppBar(
-          title: new Text("Login"),
-        ),
         body:
         SingleChildScrollView(
           child: Column(
@@ -118,52 +161,21 @@ class _KretaLoginPage extends State<KretaLoginPage> with SingleTickerProviderSta
               Image.asset(
                 'assets/images/Logo.png',
               ),
-              BlocBuilder(
-                  bloc: kretaLoginPageBlocs.usernameBloc,
-                  builder: (BuildContext context, HFormState state) {
-                    String errorText = null;
-                    if (state is KretaUserNotFoundState) {
-                      errorText = "No such user";
-                    } else if (state is TextFormErrorTooShort) {
-                      errorText = "too short mann...";
-                    }
-                    return TextField(
-                      onChanged: (dynamic text) {
-                        print("change: $text");
-                        kretaLoginPageBlocs.usernameBloc.dispatch(TextFormValidate(text: text));
-                      },
-                      controller: _usernameTextEditingController,
-                      textInputAction: TextInputAction.next,
-                      decoration:
-                          InputDecoration(labelText: "Age", errorText: errorText),
-                    );
-                  }),
-              TextFormField(
-                obscureText: true,
-                maxLines: 1,
-                autofocus: false,
-                controller: _passwordTextEditingController,
-                decoration: InputDecoration(
-                  labelText: "Password",
-                ),
+
+              Padding(
+                padding: EdgeInsets.all(10),
+                child: usernameWidget,
               ),
-              schoolPicker,
-              /*
-              RaisedButton(
-                onPressed: (){
-                  if(kretaLoginPageBlocs.schoolBloc.currentState is ItemListLoaded){
-                    showDialogSchools(context, data: kretaLoginPageBlocs.schoolBloc.data,
-                    onPicked: ({String key, String value}){
-                      print("log: school: key: $key, value: $value");
-                    } 
-                    );
-                  }
-                }
+
+              Padding(
+                padding: EdgeInsets.all(10),
+                child: passwordWidget,
               ),
-              */
 
-
-
+              Padding(
+                padding: EdgeInsets.all(10),
+                child: schoolPickerWidget,
+              ),
               
               BlocListener(
                   bloc: kretaLoginPageBlocs.kretaLoginBloc,
@@ -187,9 +199,9 @@ class _KretaLoginPage extends State<KretaLoginPage> with SingleTickerProviderSta
                       }
                   ),
               )
-              
             ],
           ),
-        ));
+        )
+    );
   }
 }

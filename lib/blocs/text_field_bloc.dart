@@ -2,6 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:hazizz_mobile/blocs/request_event.dart';
 import 'package:hazizz_mobile/blocs/response_states.dart';
 
+import 'TextFormBloc.dart';
+
 abstract class TextFieldState extends HState {
   TextFieldState([List props = const []]) : super(props);
 }
@@ -60,7 +62,7 @@ class TextFieldBloc extends Bloc<TextFieldEvent, TextFieldState> {
 
   @override
   Stream<TextFieldState> mapEventToState(TextFieldEvent event) async* {
-    if(event is CheckEvent || event is SaveEvent) {
+    if(event is CheckEvent || event is SaveEvent || event is TextFormValidate) {
       text = event.text;
       yield check(text);
     }

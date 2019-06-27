@@ -9,25 +9,22 @@ class GroupItemWidget extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return Hero(
-        tag: "hero_user${group.id}",
-        child:
-        Card(
-            elevation: 5,
-            child: InkWell(
-                onTap: () {
-                  print("tap tap");
-                  Navigator.popAndPushNamed(context, "/group/groupId", arguments: group.id);
-                },
+    return Card(
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        elevation: 5,
+        child: InkWell(
+            onTap: () {
+              print("tap tap");
+              Navigator.popAndPushNamed(context, "/group/groupId", arguments: group);
+            },
+            child:
+            Align(
+                alignment: Alignment.centerLeft,
                 child:
-                Align(
-                    alignment: Alignment.centerLeft,
-                    child:
-                    Text(group.name,
-                      style: TextStyle(
-                          fontSize: 30
-                      ),)
-                )
+                Text(group.name,
+                  style: TextStyle(
+                      fontSize: 30
+                  ),)
             )
         )
     );

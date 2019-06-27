@@ -13,6 +13,7 @@ class MemberItemWidget extends StatelessWidget{
         tag: "hero_user${member.id}",
         child:
         Card(
+            clipBehavior: Clip.antiAliasWithSaveLayer,
             elevation: 5,
             child: InkWell(
                 onTap: () {

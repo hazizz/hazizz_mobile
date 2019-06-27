@@ -230,8 +230,8 @@ class _TaskMakerPage extends State<TaskMakerPage> {
               builder: (FormFieldState formState) {
                 return InputDecorator(
                     decoration: InputDecoration(
-                      filled: true,
-                      fillColor: HazizzTheme.formColor,
+                  //    filled: true,
+                   //   fillColor: HazizzTheme.formColor,
                       icon: const Icon(Icons.group),
                       labelText: 'Subject',
                     ),
@@ -316,14 +316,15 @@ class _TaskMakerPage extends State<TaskMakerPage> {
     var titleTextForm = BlocBuilder(
         bloc: blocs.titleBloc,
         builder: (BuildContext context, HFormState state) {
-
+          String errorText = null;
           if(state is TextFormSetState){
             _titleTextEditingController.text = state.text;
+            print("title is set2: ${_titleTextEditingController.text}");
           }
-          
-          
+          else if(state is TextFormErrorTooShort){
+            errorText = "Title is too short";
+          }
           return TextField(
-            
             onChanged: (dynamic text) {
               print("change: $text");
               blocs.titleBloc.dispatch(TextFormValidate(text: text));
@@ -331,18 +332,15 @@ class _TaskMakerPage extends State<TaskMakerPage> {
             controller: _titleTextEditingController,
             textInputAction: TextInputAction.next,
             decoration:
-                InputDecoration(labelText: "Age", errorText: null,
+                InputDecoration(labelText: "Title", errorText: errorText,
                   filled: true,
-                  fillColor: HazizzTheme.formColor,
-                  icon: const Icon(Icons.date_range),
+              //    fillColor: HazizzTheme.formColor
                 ),
           );
 
   
         }
     );
-
-
     var descriptionTextForm = BlocBuilder(
         bloc: blocs.descriptionBloc,
         builder: (BuildContext context, HFormState state) {
@@ -350,10 +348,8 @@ class _TaskMakerPage extends State<TaskMakerPage> {
           if(state is TextFormSetState){
             _descriptionTextEditingController.text = state.text;
           }
-        
 
           return TextField(
-            
             onChanged: (dynamic text) {
               print("change: $text");
               blocs.descriptionBloc.dispatch(TextFormValidate(text: text));
@@ -361,10 +357,9 @@ class _TaskMakerPage extends State<TaskMakerPage> {
             controller: _descriptionTextEditingController,
             textInputAction: TextInputAction.next,
             decoration:
-                InputDecoration(labelText: "Age", errorText: null,
-                  filled: true,
-                  fillColor: HazizzTheme.formColor,
-                  icon: const Icon(Icons.date_range),
+                InputDecoration(labelText: "description", errorText: null,
+                 filled: true,
+              //    fillColor: HazizzTheme.formColor,
             ),
             maxLength: 240,
             maxLines: 8,
@@ -376,43 +371,6 @@ class _TaskMakerPage extends State<TaskMakerPage> {
           );
 
   
-        }
-    );
-
-    var descriptionTextForm2 = BlocBuilder(
-        bloc: blocs.descriptionBloc,
-        builder: (BuildContext context, HFormState state) {
-          return GestureDetector(
-            child: FormField(
-              builder: (FormFieldState formState) {
-                return InputDecorator(
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: HazizzTheme.formColor,
-                    icon: const Icon(Icons.date_range),
-                    labelText: 'Description',
-                  ),
-                  isEmpty: _color == '',
-                  child: Builder(
-                    builder: (BuildContext context){
-                      if(state is TextFormSetState){
-                        return Text('${state.text}',
-                            style: TextStyle(fontSize: 24.0),
-                        );
-                      }
-                      return Text("Loading");
-                    },
-                  ),
-                );
-              },
-            ),
-            onTap: () async {
-              final DateTime picked = await showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now(), firstDate: DateTime.now().subtract(Duration(hours: 24)), lastDate: DateTime.now().add(Duration(days: 364)));
-              blocs.deadlineBloc.dispatch(DateTimePickedEvent(dateTime: picked));
-            },
-          );
         }
     );
 
@@ -430,6 +388,7 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                   child: Padding(
                     padding: EdgeInsets.all(padding),
                     child: Card(
+                      clipBehavior: Clip.antiAliasWithSaveLayer,
                       elevation: 100,
                         child: new Container(
                           child: ExpandableNotifier(
@@ -462,142 +421,118 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Expandable(
-                                        collapsed: Container(
-                                          color: headerColor,
-                                          child: Row(
-                                              children: [
-                                                Expanded(child: Column(),),
-                                                Expanded(
-                                                  child: Column(
-                                                    children: <Widget>[
-                                                      Text(typeName,
-                                                        style: TextStyle(
-                                                            fontSize: 30
+                                        collapsed: InkWell(
+                                          onTap: (){
+                                            expandableController.toggle();
+                                          },
+                                          child: Container(
+
+                                            color: headerColor,
+                                            child: Stack(
+                                                children: [
+                                                  Center(
+                                                    child: Column(
+                                                      children: <Widget>[
+                                                        Text(typeName,
+                                                          style: TextStyle(
+                                                              fontSize: 30
+                                                          ),
                                                         ),
-                                                      ),
-                                                      BlocBuilder(
-                                                        bloc: blocs.groupItemPickerBloc,
-                                                        builder: (BuildContext context, ItemListState state) {
-                                                          String groupName = "Not picked group";
-                                                          if(state is PickedGroupState){
-                                                            groupName = state.item.name;
-                                                          }
-                                                          return Text(groupName,
-                                                            style: TextStyle(
-                                                                fontSize: 22
-                                                            ),
-                                                          );
-                                                        }
-                                                      ),
-                                                      BlocBuilder(
-                                                          bloc: blocs.subjectItemPickerBloc,
+                                                        BlocBuilder(
+                                                          bloc: blocs.groupItemPickerBloc,
                                                           builder: (BuildContext context, ItemListState state) {
-                                                            String subjectName = "Not picked subject";
-                                                            if(state is PickedSubjectState){
-                                                              subjectName = state.item.name;
+                                                            String groupName = "Not picked group";
+                                                            if(state is PickedGroupState){
+                                                              groupName = state.item.name;
                                                             }
-                                                            return Text(subjectName,
+                                                            return Text(groupName,
                                                               style: TextStyle(
                                                                   fontSize: 22
                                                               ),
                                                             );
                                                           }
-                                                      ),
-                                                      BlocBuilder(
-                                                          bloc: blocs.deadlineBloc,
-                                                          builder: (BuildContext context, DateTimePickerState state) {
-                                                            String deadline = "Not picked deadline";
-                                                            if(state is DateTimePickedState){
-                                                              deadline = state.dateTime.toString();
+                                                        ),
+                                                        BlocBuilder(
+                                                            bloc: blocs.subjectItemPickerBloc,
+                                                            builder: (BuildContext context, ItemListState state) {
+                                                              String subjectName = "Not picked subject";
+                                                              if(state is PickedSubjectState){
+                                                                subjectName = state.item.name;
+                                                              }
+                                                              return Text(subjectName,
+                                                                style: TextStyle(
+                                                                    fontSize: 22
+                                                                ),
+                                                              );
                                                             }
-                                                            return Text(deadline,
-                                                              style: TextStyle(
-                                                                  fontSize: 22
-                                                              ),
-                                                            );
-                                                          }
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  child: Align(
-                                                    alignment: FractionalOffset
-                                                        .bottomRight,
-                                                    child: Builder(
-                                                        builder: (context) {
-                                                          //  var exp = expandableController.of(context);
-                                                          return IconButton(
-                                                              icon: Icon(Icons
-                                                                  .keyboard_arrow_down),
-                                                              onPressed: () {
-                                                                expandableController
-                                                                    .toggle();
-                                                              });
-                                                        }
+                                                        ),
+                                                        BlocBuilder(
+                                                            bloc: blocs.deadlineBloc,
+                                                            builder: (BuildContext context, DateTimePickerState state) {
+                                                              String deadline = "Not picked deadline";
+                                                              if(state is DateTimePickedState){
+                                                                deadline = state.dateTime.toString();
+                                                              }
+                                                              return Text(deadline,
+                                                                style: TextStyle(
+                                                                    fontSize: 22
+                                                                ),
+                                                              );
+                                                            }
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),
-                                                ),
-                                              ]
+                                                  Positioned(right: 4, top: 4,
+                                                    child: Align(
+                                                      alignment: FractionalOffset.bottomRight,
+                                                      child: Builder(
+                                                          builder: (context) {
+                                                            //  var exp = expandableController.of(context);
+                                                            return IconButton(
+                                                              icon: Icon(Icons.keyboard_arrow_down),
+                                                              onPressed: () {
+                                                                expandableController.toggle();
+                                                              }
+                                                            );
+                                                          }
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ]
+                                            ),
                                           ),
                                         ),
                                         expanded: Container(
                                           color: headerColor,
-                                          child: Column(
+                                          child: Stack(
                                             children: <Widget>[
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 2.0,
-                                                    right: 2.0,
-                                                    bottom: 2),
-                                                child: new Row(
-                                                  mainAxisAlignment: MainAxisAlignment
-                                                      .spaceBetween,
-                                                  children: [
-                                                    Flexible(child: Column()),
-                                                    new Expanded(
-                                                        child: taskTypePicker
-                                                    ),
-                                                    Flexible(
-                                                      child: Align(
-                                                        alignment: FractionalOffset
-                                                            .bottomRight,
-                                                        child: Builder(
-                                                            builder: (context) {
-                                                              //  var exp = expandableController.of(context);
-                                                              return IconButton(
-                                                                  icon: Icon(Icons
-                                                                      .keyboard_arrow_up),
-                                                                  onPressed: () {
-                                                                    expandableController
-                                                                        .toggle();
-                                                                  });
-                                                            }
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
+                                              Positioned(
+                                                top: 4, right: 4,
+                                                child: IconButton(
+                                                    icon: Icon(Icons.keyboard_arrow_up),
+                                                    onPressed: () {expandableController.toggle();
+                                                    }),
                                               ),
                                               Padding(
-                                                padding: EdgeInsets.only(left: 10,
-                                                    right: 10,
+                                                padding: EdgeInsets.only(left: 20, top: 30,
+                                                    right: 60,
                                                     bottom: 10),
                                                 child: Column(
                                                   children: <Widget>[
                                                     Padding(
-                                                      padding: EdgeInsets.only(bottom: 4),
-                                                      child: BlocProviderTree(
-                                                        blocProviders: [
-                                                          BlocProvider<GroupItemPickerBloc>(bloc: blocs.groupItemPickerBloc),
-                                                        //  BlocProvider<VariableBloc>(bloc: chosenGroup),
-                                                        ],
-                                                        child: groupPicker,
-                                                      ),
+                                                        padding: EdgeInsets.only(
+                                                            bottom: 10),
+                                                        child: taskTypePicker
                                                     ),
                                                     Padding(
+                                                      padding: EdgeInsets.only(bottom: 4),
+                                                      child: groupPicker,
+                                                    ),
+
+                                                    Padding(
                                                         padding: EdgeInsets.only(
-                                                            bottom: 4),
+                                                            bottom: 10),
                                                         child: subjectPicker
                                                     ),
                                                     Padding(
@@ -638,11 +573,14 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                                         child: RaisedButton(
                                             child: Text("Send"),
                                             onPressed: () {
-                                              _fbKey.currentState.save();
+                                         //     _fbKey.currentState.save();
+                                              blocs.dispatch(TaskMakerSendEvent());
+                                              /*
                                               if (_fbKey.currentState.validate()) {
                                                 print(_fbKey.currentState.value);
                                                 blocs.dispatch(TaskMakerSendEvent());
                                               }
+                                              */
                                             }
                                         ),
                                       )

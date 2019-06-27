@@ -18,11 +18,23 @@ class PojoClass extends Pojo{
   String room;
   String topic;
 
+
+
+
+
+
+
+
+
+
   PojoClass({this.date, this.startOfClass, this.endOfClass, this.periodNumber,
       this.cancelled, this.standIn, this.subject, this.className, this.teacher,
       this.room, this.topic});
 
-  factory PojoClass.fromJson(Map<String, dynamic> json) =>
-      _$PojoClassFromJson(json);
+  factory PojoClass.fromJson(Map<String, dynamic> json){
+    PojoClass pojoClass = _$PojoClassFromJson(json);
+    pojoClass.className = "Matek";
+    return pojoClass;
+  }
 
 }

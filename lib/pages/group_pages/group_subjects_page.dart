@@ -7,11 +7,15 @@ import 'package:hazizz_mobile/communication/pojos/PojoSubject.dart';
 import 'package:hazizz_mobile/dialogs/dialogs.dart';
 import 'package:hazizz_mobile/listItems/subject_item_widget.dart';
 
+import '../../hazizz_localizations.dart';
+
 
 class GroupSubjectsPage extends StatefulWidget {
   // This widget is the root of your application.
 
-  static final String tabName = "Subjects";
+  String getTabName(BuildContext context){
+    return locText(context, key: "subjects");
+  }
 
   final GroupSubjectsBloc groupSubjectsBloc;
 
@@ -29,7 +33,9 @@ class _GroupSubjectsPage extends State<GroupSubjectsPage> with AutomaticKeepAliv
 
   @override
   void initState() {
-    groupSubjectsBloc.dispatch(FetchData());
+    if(groupSubjectsBloc.currentState is ResponseError) {
+      groupSubjectsBloc.dispatch(FetchData());
+    }
     super.initState();
   }
 

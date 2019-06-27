@@ -183,34 +183,6 @@ class TaskEditBloc extends TaskMakerBloc {
 }
 //endregion
 //endregion
-/*
-class TaskEditBlocs extends TaskMakerBlocs{
- tFormBloc descriptionBloc = TextFormBloc(validate: null);
-  
-
-  TaskEditBlocs({PojoTask taskToEdit}){
-
-    deadlineBloc.dispatch(DateTimePickedEvent(dateTime: taskToEdit.dueDate));
-    taskTypePickerBloc.dispatch(TaskTypePickedEvent(taskToEdit.type));
-    // TODO this is wrong ˇ
-    titleBloc.dispatch(TextFormValidate(text: taskToEdit.title));
-    descriptionBloc.dispatch(TextFormValidate(text: taskToEdit.description));
-    subjectItemPickerBloc = new SubjectItemPickerBloc();
-    groupItemPickerBloc = new GroupItemPickerBloc(subjectItemPickerBloc);
-
-    taskMakerBloc = TaskEditBloc(group: taskToEdit.group, subject: taskToEdit.subject,
-        deadlineBloc: deadlineBloc,taskTypePickerBloc: taskTypePickerBloc, titleBloc: titleBloc, descriptionBloc: descriptionBloc
-    );
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-  }
-}
-
-*/
 
 
 

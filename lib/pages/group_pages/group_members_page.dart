@@ -4,13 +4,18 @@ import 'package:hazizz_mobile/blocs/group_bloc.dart';
 import 'package:hazizz_mobile/blocs/request_event.dart';
 import 'package:hazizz_mobile/blocs/response_states.dart';
 import 'package:hazizz_mobile/communication/pojos/PojoUser.dart';
+import 'package:hazizz_mobile/dialogs/dialogs.dart';
 import 'package:hazizz_mobile/listItems/member_item_widget.dart';
+
+import '../../hazizz_localizations.dart';
 
 
 class GroupMembersPage extends StatefulWidget {
   // This widget is the root of your application.
 
-  static final String tabName = "Members";
+  String getTabName(BuildContext context){
+    return locText(context, key: "groupMembers");
+  }
 
   final GroupMembersBloc groupMembersBloc;
 
@@ -28,14 +33,16 @@ class _GroupMembersPage extends State<GroupMembersPage> with AutomaticKeepAliveC
 
   @override
   void initState() {
-    groupMembersBloc.dispatch(FetchData());
+    if(groupMembersBloc.currentState is ResponseError) {
+      groupMembersBloc.dispatch(FetchData());
+    }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: FloatingActionButton(onPressed: null, child: Icon(Icons.add),),
+        floatingActionButton: FloatingActionButton(onPressed: (){showInviteDialog(context, groupId: groupMembersBloc.groupId);}, child: Icon(Icons.person_add),),
         body: new RefreshIndicator(
             child: BlocBuilder(
                 bloc: groupMembersBloc,

@@ -111,6 +111,7 @@ class TaskCreateBloc extends TaskMakerBloc {
         HFormState titleState = titleBloc.currentState;
         if(titleState is TextFormFine){
           title = titleBloc.lastText;
+          print("log: title: $title");
         }else{
           missingInfo = true;
         }
