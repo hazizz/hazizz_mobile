@@ -14,6 +14,7 @@ class SubjectItemWidget extends StatelessWidget{
         tag: "hero_subject${subject.id}",
         child:
         Card(
+            clipBehavior: Clip.antiAliasWithSaveLayer,
             elevation: 5,
             child: InkWell(
                 onTap: () {

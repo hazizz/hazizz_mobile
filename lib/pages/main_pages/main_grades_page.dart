@@ -14,13 +14,18 @@ import 'package:hazizz_mobile/listItems/grade_item_widget.dart';
 
 import 'package:sticky_headers/sticky_headers.dart';
 
+import '../../hazizz_localizations.dart';
+
 class GradesPage extends StatefulWidget {
 
   MainGradesBloc gradesBloc;
 
   GradesPage({Key key, this.gradesBloc}) : super(key: key);
 
-  static final String tabName = "Grades";
+  getTabName(BuildContext context){
+    return locText(context, key: "grades");
+  }
+
 
   @override
   _GradesPage createState() => _GradesPage(gradesBloc);
@@ -41,8 +46,11 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
   @override
   void initState() {
     // getData();
-    gradesBloc.dispatch(FetchData());
+  //  gradesBloc.dispatch(FetchData());
     //   gradesBloc.fetchMyTasks();
+    if(gradesBloc.currentState is ResponseError) {
+      gradesBloc.dispatch(FetchData());
+    }
     super.initState();
   }
 
@@ -55,27 +63,11 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
                 //  stream: gradesBloc.subject.stream,
                 builder: (_, HState state) {
                   if (state is ResponseDataLoaded) {
+                    print("sadsadsad?: ${state.data}");
+                    PojoGrades p = state.data;
                     Map<String, List<PojoGrade>> grades = state.data.grades;
-
+                    print("sadsadsad?: ${state.data.grades}");
                     int itemCount = grades.keys.length;
-
-                    List itemList = new List();
-
-
-                    List<int> border = new List();
-
-                    /*
-                    int i = 0;
-                    for(String gradeKey in grades.keys){
-                   //   itemList.add(gradeKey);
-                      border.add(i);
-                      for(PojoGrade grade in grades[gradeKey]){
-                        itemList.add(grade);
-                        i++;
-                      }
-                      itemCount += grades[gradeKey].length;
-                    }
-                    */
 
                     print("log: itme count: $itemCount");
 
@@ -102,41 +94,7 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
                             ),
                           );
 
-                        }else if(item is PojoGrade){
-                          if(border.contains(index)){
-                            return new StickyHeader(
-                              header: GradeHeaderItemWidget(subjectName: "hétfő"),
-                              content: Column(
-                                  children: [GradeItemWidget(pojoGrade: (itemList[index+1])),
-                                    Text("ASD"), Text("ASD"), Text("ASD"), Text("ASD"),
-                                  ]
-
-                              ),
-                            );
-                          }
-                          return new GradeItemWidget(pojoGrade: item);
-
-                        }else{
-                          return Text("ERROR");
                         }
-                        /*
-                        for(String gradeKey in grades.keys){
-                          bool isFirst = true;
-                          print("log: niga");
-                          for(PojoGrade grade in grades[gradeKey]) {
-                            if(isFirst) {
-                              return new StickyHeader(
-                                header: GradeHeaderItemWidget(
-                                  subjectName: gradeKey),
-                                  content: GradeItemWidget(pojoGrade: grade),
-                              );
-                            }else{
-                              GradeItemWidget(pojoGrade: grade);
-                            }
-                            isFirst = false;
-                          }
-                        }
-                        */
                       }
                     );
                   } else if (state is ResponseEmpty) {

@@ -43,7 +43,7 @@ class RouteGenerator{
       case '/group/groupId':
                 //      Navigator.push(context,MaterialPageRoute(builder: (context) => GroupTabHosterPage(groupId: 2)));
 
-        return MaterialPageRoute(builder: (_) => GroupTabHosterPage(groupId: args));
+        return MaterialPageRoute(builder: (_) => GroupTabHosterPage(group: args));
       case '/createTask':
         return MaterialPageRoute(builder: (_) => TaskMakerPage.createMode(groupId: args));
       case '/editTask':

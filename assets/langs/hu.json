@@ -1,0 +1,908 @@
+{
+    "hazizz"
+    : "HázizzHun",
+
+
+    "hazizz_motto"
+    : "Nekünk és nektek mert mi is diákok vagyunk",
+
+
+    "header_item_in"
+    : "",
+
+
+    "header_item_day"
+    : "nap",
+
+
+    "header_item_later"
+    : "múlva",
+
+
+    "days"
+    : "nap",
+
+
+    "tomorrow"
+    : "Holnap",
+
+
+    "days2"
+    : "2 nap múlva",
+
+
+    "today"
+    : "Ma",
+
+
+    "overdays7"
+    : "Több mint 7 nap múlva",
+
+
+    "badge_owner"
+    : "TULAJDONOS",
+
+
+    "group_type_open"
+    : "Nyitott",
+
+
+    "group_type_invite_only"
+    : "Meghívás alapú",
+
+
+    "group_type_password"
+    : "Jelszó alapú",
+
+
+    "appwidget_text"
+    : "EXAMPLE",
+
+
+    "configure"
+    : "Configure",
+
+
+    "add_widget"
+    : "Add widget",
+
+
+    "button_save"
+    : "Mentés",
+
+
+    "button_send"
+    : "Küldés",
+
+
+    "button_add"
+    : "Hozzáad",
+
+
+    "button_create"
+    : "Létrehozás",
+
+
+    "button_join"
+    : "Csatlakozás",
+
+
+    "mainpage_menu"
+    : "Főoldal",
+
+
+    "createGroup_menu"
+    : "Új csoport létrehozása",
+
+
+    "joinGroup_menu"
+    : "Csatlakozás csoportba",
+
+
+    "leaveGroup_menu"
+    : "Kilépés a csoportból",
+
+
+    "uploadProfilePic_menu"
+    : "Profilkép felöltése",
+
+
+    "fragment_title_new_mytask"
+    : "Új feladatom",
+
+
+    "fragment_title_new_task"
+    : "Új feladat",
+
+
+    "fragment_title_edit_task"
+    : "Feladat szerkesztés",
+
+
+    "empty_field"
+    : "Üres mező",
+
+
+    "empty_field_password"
+    : "Üres jelszó",
+
+
+    "ok"
+    : "OK",
+
+
+    "close"
+    : "Bezár",
+
+
+    "thera"
+    : "Théra",
+
+
+    "settings"
+    : "Beállítások",
+
+
+    "feedback"
+    : "Visszajelzés",
+
+
+    "groups"
+    : "Csoportok",
+
+
+    "task"
+    : "Feladat",
+
+
+    "tasks"
+    : "Feladatok",
+
+
+    "announcement"
+    : "Bejegyzés",
+
+
+    "announcements"
+    : "Bejegyzések",
+
+
+    "subject"
+    : "Téma",
+
+
+    "subjects"
+    : "Témák",
+
+
+    "title"
+    : "cím",
+
+
+    "description"
+    : "Leírás",
+
+
+    "login"
+    : "Bejelentkezés",
+
+
+    "enter"
+    : "Belépés",
+
+
+    "register"
+    : "Regisztráció",
+
+
+    "displayName"
+    : "Becenév",
+
+
+    "registrationDate"
+    : "Regisztráció",
+
+
+    "username"
+    : "Felhasználónév",
+
+
+    "users"
+    : "Felhasználók",
+
+
+    "password"
+    : "Jelszó",
+
+
+    "email"
+    : "Email",
+
+
+    "autologin"
+    : "Automatikus bejelentkezés",
+
+
+    "login_remember"
+    : "Felhasználó megyjegyzése",
+
+
+    "comments"
+    : "Megjegyzések",
+
+
+    "edit"
+    : "Szerkesztés",
+
+
+    "delete"
+    : "Törlés",
+
+
+    "leave_group"
+    : "Kilépés a csoportból",
+
+
+    "my_tasks"
+    : "Feladataim",
+
+
+    "view_mytask"
+    : "Saját feladatom megtekintése",
+
+
+    "notification_settings"
+    : "Értesítés beállítások",
+
+
+    "notification"
+    : "Értesítés",
+
+
+    "notifications"
+    : "Értesítések",
+
+
+    "go_back"
+    : "Vissza",
+
+
+    "reply"
+    : "Válasz",
+
+
+    "viewProfile"
+    : "Profil megtekintése",
+
+
+    "later"
+    : "múlva",
+
+
+    "no"
+    : "Nem",
+
+
+    "yes"
+    : "Igen",
+
+
+    "choose_group"
+    : "Válassz csoportot",
+
+
+    "write_comment"
+    : "Írj egy kommentet!",
+
+
+    "schedule"
+    : "Órarend",
+
+
+    "grades"
+    : "Jegyek",
+
+
+    "copy"
+    : "Másolás",
+
+
+    "share"
+    : "Megosztás",
+
+
+    "loading"
+    : "Betöltés...",
+
+
+    "switch_account"
+    : "Fiók váltás",
+
+
+    "server_adress"
+    : "Szerver cím",
+
+
+    "set"
+    : "Beállítás",
+
+
+    "dangerous"
+    : "Veszélyes!!!",
+
+
+    "copied"
+    : "Másolva",
+
+
+    "copied_to_clipboard"
+    : "Vágólapra másolva",
+
+
+    "message_from_devs"
+    : "Üzenet a fejlesztőktől",
+
+
+    "school_"
+    : "Iskola:",
+
+
+    "add_user"
+    : "Új felhasználó",
+
+
+    "no_task"
+    : "Nincs feladat",
+
+
+    "no_announcement"
+    : "Nincs bejegyzés",
+
+
+    "no_subject"
+    : "Nincs téma",
+
+
+    "subject_none"
+    : "&lt;Nincs&gt;",
+
+
+    "no_comment"
+    : "Nincs hozzászólás",
+
+
+    "groupMembers"
+    : "Tagok",
+
+
+    "title_"
+    : "Cím:",
+
+
+    "deadline_"
+    : "Határidő:",
+
+
+    "group"
+    : "Csoport",
+
+
+    "creator_"
+    : "Létrehozó:",
+
+
+    "description_"
+    : "Leírás:",
+
+
+    "subject_"
+    : "Téma:",
+
+
+    "tasktype_"
+    : "Feladat típusa:",
+
+
+    "daysLeft"
+    : "nap múlva",
+
+
+    "displayName"
+    : "Becenév:",
+
+
+    "registrationDate_"
+    : "Regisztráció:",
+
+
+    "username_"
+    : "Felhasználónév:",
+
+
+    "leaveGroup_successful"
+    : "Csoport elhagyva",
+
+
+    "press_again_to_exit"
+    : "Nyomd meg mégegyszer a VISSZA gombot hogy kilépj",
+
+
+    "invite_link_info"
+    : "Küldd el diáktársaidnak ezt a linket hogy csatlakozzanak a",
+
+
+    "invite_link_info_part2"
+    : "csoportba",
+
+
+    "already_in_group"
+    : "Már tagja voltál a csoportnak",
+
+
+    "added_to_group"
+    : "Sikeresen hozzá lettél adva a csoporthoz",
+
+
+    "invite_to_group_text_title"
+    : "Házizz Droid: ",
+
+
+    "invite_to_group_text_part1"
+    : "Csatlakozz a ",
+
+
+    "invite_to_group_text_part2"
+    : " csoportba hogy megkapd a házi feladataidat",
+    
+
+
+    "passwordagain_fragment_register"
+    : "Jelszó mégegyszer",
+
+
+    "areyousure_delete_task"
+    : "Biztos hogy törlöd a feladatot?",
+
+
+    "areyousure_delete_announcement"
+    : "Biztos hogy törlöd a bejegyzést?",
+
+
+    "areyousure_leave_group"
+    : "Biztos hogy kilépsz ebből a csoportból?",
+
+
+    "error_passwordRequiredForGroup"
+    : "Jelszó szükséges a csoportba való belépéshez",
+
+
+    "toast_feedback_thanks"
+    : "Köszönjük a visszajelzésedet",
+
+
+    "hint_description_feedback"
+    : "Visszajelzés",
+
+
+    "hint_fragment_joingroup"
+    : "Csoport név",
+
+
+    "hint_add_subject"
+    : "Új téma",
+
+
+    "hint_newgroup"
+    : "Új csoport",
+
+
+    "title_fragment_tabgroup"
+    : "Csoport:",
+
+
+    "title_set_server_address"
+    : "Szerver cím beállítás",
+
+
+    "title_choose_at"
+    : "Feladat/bejegyzés választó",
+
+
+    "title_activity_feedback"
+    : "Visszajelzés",
+
+
+    "title_fragment_groups"
+    : "Csoportjaid",
+
+
+    "title_fragment_joingroup"
+    : "Belépés egy csoportba",
+
+
+    "title_fragment_taskeditor"
+    : "Új feladat",
+
+
+    "title_newannouncement"
+    : "Új bejegyzés",
+
+
+    "title_editannouncement"
+    : "Bejegyzés szerkesztés",
+
+
+    "title_fragment_comments"
+    : "Megjegyzések",
+
+
+    "title_fragment_creategroup"
+    : "Új csoport létrehozása",
+
+
+    "title_fragment_view_announcement"
+    : "Bejegyzés Megtekintés",
+
+
+    "title_fragment_view_task"
+    : "Feladat Megtekintés",
+
+
+    "tasktype_fragment_taskeditor"
+    : "Feladat típusa:",
+
+
+    "choose_deadline_fragment_taskeditor"
+    : "Válassz határidőt!",
+
+
+    "subject_fragment_taskeditor"
+    : "Téma:",
+
+
+    "textview_logout_drawer"
+    : "Kijelentkezés",
+
+
+    "add_subject"
+    : "Téma hozzáadás",
+
+
+    "report_bug"
+    : "Hiba jelentése",
+
+
+    "info_serverUnexpectedResponse"
+    : "Nem megszokott válasz a szervertől",
+
+
+    "info_serverNotResponding"
+    : "Szerver nem válaszol",
+
+
+    "info_something_went_wrong"
+    : "Valami hiba történt",
+
+
+    "info_noInternetAccess"
+    : "Nincs internet kapcsolat",
+
+
+    "info_server_AddressChange"
+    : "Ha a cím nem helyes az alkalmazást újra kell telepíteni",
+
+
+    "select_school"
+    : "Iskola kiválasztás",
+
+
+    "error"
+    : "Hiba",
+
+
+    "error_termsAndConditionsNotAccepted"
+    : "Nem fogadtad el az adatvédelmi nyilatkozatot",
+
+
+    "error_accountLocked"
+    : "A fiók zárolva van",
+
+
+    "error_accountExpired"
+    : "A fiók lejárt",
+
+
+    "error_accountBanned"
+    : "A fiók le van tiltva",
+
+
+    "error_accountNotFound"
+    : "Felhasználó nem található",
+
+
+    "error_usernameNotFound"
+    : "Csak számokat betűket alsóvonalat és kötőjelet tartalmazhat a felhasználónév",
+
+
+    "error_usernameFormat"
+    : "Csak számokat betűket alsóvonalat és kötőjelet tartalmazhat a felhasználónév",
+
+
+    "error_usernameTaken"
+    : "A felhasználónév már foglalt",
+
+
+    "error_username"
+    : "A felhasználónévnek legalább 4 karakteresnek kell lennie",
+
+
+    "error_usernameLength"
+    : "Felhasználónév 4-8 karakteres kell hogy legyen",
+
+
+    "error_emailWrong"
+    : "Az email helytelen",
+
+
+    "error_emailTaken"
+    : "Ezzel az email címmel már regisztráltak",
+
+
+    "error_registrationLocked"
+    : "A regisztráció zárolva van",
+
+
+    "error_displayNameLength"
+    : "A becenévnek 4-20 karakternek kell lennie",
+
+
+    "error_titleLentgh"
+    : "A cím 2-20 karakter között lehet",
+
+
+    "error_titleNotAccepptable"
+    : "A cím nem megfelelő",
+
+
+    "error_alreadyMemberOfGroup"
+    : "Már tagja vagy a csoportnak",
+
+
+    "error_noPermissionToJoinGroup"
+    : "Nincs jogod belépni",
+
+
+    "error_groupNameNotAcceptable"
+    : "Helytelen csoport név",
+
+
+    "error_groupAlreadyExists"
+    : "A csoport már létezik",
+
+
+    "error_noSuchGroup"
+    : "Nem létezik ilyen csoport",
+
+
+    "error_notMemberOfGroup"
+    : "Nem vagy még tagja egy csoportnak sem",
+
+
+    "error_subjectNotSelected"
+    : "Nincs kiválasztott témád",
+
+
+    "error_deadlineNotSet"
+    : "Nem állítottál be határidőt",
+
+
+    "error_subjectLength"
+    : "A téma 2-20 karakter hosszú lehet",
+
+
+    "changePassword"
+    : "Jelszó módosítás",
+
+
+    "currentPassword"
+    : "Jelszó módosítás",
+
+
+    "newPassword"
+    : "Új jelszó",
+
+
+    "newPasswordAgain"
+    : "Új jelszó mégegyszer",
+
+
+    "password_notMatch"
+    : "Jelszó nem egyezik",
+
+
+    "error_wrongPassword"
+    : "Helytelen jelszó",
+
+
+    "error_passwordDoesntMatch"
+    : "Jelszó nem egyezik",
+
+
+    "error_passwordNotLongEnough"
+    : "A jJelszó legalább 8 karakteres kell hogy legyen",
+
+
+    "error_givenDataWrong"
+    : "Helytelen adatok",
+
+
+    "success_changed_password"
+    : "A jelszó sikeresen megváltoztatva",
+
+
+    "notif_unfinished_tasks1"
+    : "Van",
+
+
+    "notif-unfinished_tasks2"
+    : "feladatod holnapra",
+
+
+    "notif_settings_notify_everyday"
+    : "Értesítés minden nap",
+
+
+    "taskType_homework"
+    : "homework",
+
+
+    "taskType_assignment"
+    : "assignment",
+
+
+    "taskType_test"
+    : "test",
+
+
+    "taskType_oraltest"
+    : "oral test",
+
+
+    "crop_image_activity_header_item_intitle"
+    : " ",
+
+
+    "crop_image_activity_title"
+    : " ",
+
+
+    "crop_image_menu_rotate_right"
+    : "Forgatás",
+
+
+    "crop_image_menu_crop"
+    : "Kivág",
+
+
+    "crop_image_menu_flip_horizontally"
+    : "Forgatás vízszintesen",
+
+
+    "crop_image_menu_flip_vertically"
+    : "Forgatás függőlegesen",
+
+
+    "title_thera"
+    : "Théra",
+
+
+    "title_kreta_users"
+    : "Kréta felhasználók",
+
+
+    "title_kreta_login"
+    : "Kréta bejelentkezés",
+
+
+    "kreta"
+    : "Kréta",
+
+
+    "thera_grades"
+    : "Théra jegyek",
+
+
+    "thera_schedules"
+    : "Théra órák",
+
+
+    "thera_standin"
+    : "helyettesítés",
+
+
+    "thera_canceled"
+    : "elmarad",
+
+
+    "thera_classStart"
+    : "kezdet:",
+
+
+    "thera_classEnd"
+    : "vége:",
+
+
+    "thera_teacher"
+    : "tanár:",
+
+
+    "thera_classRoom"
+    : "terem:",
+
+
+    "thera:classGroup"
+    : "csoport:",
+
+
+    "thera_date"
+    : "dátum:",
+
+
+    "thera_grade_"
+    : "jegy:",
+
+
+    "thera_weight_"
+    : "súly:",
+
+
+    "thera_theme_"
+    : "téma:",
+
+
+    "thera_subject_"
+    : "tantárgy:",
+
+
+    "thera_grade_type_"
+    : "jegy típus:",
+
+
+    "title_activity_thera"
+    : "TheraActivity",
+
+    "days_0" : "Hétfő",
+    "days_1" : "Kedd",
+    "days_2" : "Szerda",
+    "days_3" : "Csütörtök",
+    "days_4" : "Péntek",
+    "days_5" : "Szombat",
+    "days_6" : "Vasárnap",
+
+    "filterType_map": {
+        "new": "Új",
+        "subject" : "Tantárgy",
+        "group": "Csoport",
+        "done": "Kész",
+        "undone": "Késztelen"
+    },
+
+    "homework_map": {
+        "homework": "Házi feladat",
+        "assignment" : "Bejegyzés",
+        "test": "Dolgozat",
+        "oral_test": "Felelés"
+    },
+
+
+
+    "day_array": [
+        "Hétfő",
+        "Kedd",
+        "Szerda",
+        "Csütörtök",
+        "Péntek",
+        "Szombat",
+        "Vasárnap"
+    ]
+}

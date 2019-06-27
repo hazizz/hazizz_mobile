@@ -24,6 +24,7 @@ import 'package:hazizz_mobile/converters/PojoConverter.dart';
 
 
 import '../../HttpMethod.dart';
+import '../../hazizz_date.dart';
 import '../ResponseHandler.dart';
 
 //region The base request
@@ -320,7 +321,7 @@ class CreateTask extends HazizzRequest {
     body["taskType"] = b_taskType.toString();
     body["taskTitle"] = b_title;
     body["description"] = b_description;
-    body["dueDate"] = DateFormat("yyyy-MM-dd").format(b_deadline);
+    body["dueDate"] = hazizzRequestDateFormat(b_deadline);
   }
   @override
   dynamic convertData(Response response) {
@@ -346,7 +347,7 @@ class EditTask extends HazizzRequest {
     body["taskType"] = b_taskType;
     body["taskTitle"] = b_title;
     body["description"] = b_description;
-    body["dueDate"] = DateFormat("yyyy-MM-dd").format(b_deadline);
+    body["dueDate"] = hazizzRequestDateFormat(b_deadline);
   }
   @override
   dynamic convertData(Response response) {
@@ -472,6 +473,7 @@ class CreateGroup extends HazizzRequest {
   }
 }
 
+/*
 class GetGroupInviteLink extends HazizzRequest {
   GetGroupInviteLink({ResponseHandler rh, int groupId}) : super(rh) {
     httpMethod = HttpMethod.GET;
@@ -485,7 +487,7 @@ class GetGroupInviteLink extends HazizzRequest {
     return link;
   }
 }
-
+*/
 
 //endregion
 
@@ -613,6 +615,7 @@ class DummyKretaGetGrades extends TheraRequest {
 
   @override
   dynamic convertData(Response response) {
+    print(response.data);
     PojoGrades pojoGrades = PojoGrades.fromJson(jsonDecode(response.data));
 
     return pojoGrades;
@@ -620,22 +623,16 @@ class DummyKretaGetGrades extends TheraRequest {
 }
 
 class DummyKretaGetSchedules extends TheraRequest {
-  DummyKretaGetSchedules({ResponseHandler rh, @required int p_session, int q_weekNumber, int q_year}) : super(rh) {
+  DummyKretaGetSchedules({ResponseHandler rh}) : super(rh) {
     httpMethod = HttpMethod.GET;
     PATH = "dummy/schedule";
     authTokenHeader = true;
-
-    if(q_weekNumber != null && q_year != null) {
-      query["weekNumber"] = q_weekNumber;
-      query["year"] = q_year;
-    }else{
-      print("query is required");
-    }
 
   }
 
   @override
   dynamic convertData(Response response) {
+    print("schedule response: ${response.data}");
     PojoSchedules schedules = PojoSchedules.fromJson(jsonDecode(response.data));
     return schedules;
   }

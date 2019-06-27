@@ -1,3 +1,4 @@
+//import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hazizz_mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
 import 'package:hazizz_mobile/managers/cache_manager.dart';
@@ -6,13 +7,19 @@ import 'package:hazizz_mobile/pages/main_pages/main_grades_page.dart';
 import 'package:hazizz_mobile/pages/main_pages/main_tasks_page.dart';
 
 import '../../Page1.dart';
+import '../../hazizz_localization.dart';
+import '../../hazizz_localizations.dart';
 import '../kreta_login_page.dart';
+import 'main_schedules_page.dart';
 
 
 class MainTabHosterPage extends StatefulWidget {
 
+  MainTabBlocs mainTabBlocs;
 
-  MainTabHosterPage({Key key}) : super(key: key);
+  MainTabHosterPage({Key key}) : super(key: key){
+    mainTabBlocs = MainTabBlocs();
+  }
 
   @override
   _MainTabHosterPage createState() => _MainTabHosterPage();
@@ -24,18 +31,8 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
   TabController _tabController;
 
   TasksPage tasksTabPage;
-  KretaLoginPage schedulesTabPage;
+  SchedulesPage schedulesTabPage;
   GradesPage gradesTabPage;
-
-  MainTabBlocs mainTabBlocs;
-  _MainTabHosterPage(){
-    mainTabBlocs = new MainTabBlocs();
-
-    tasksTabPage = TasksPage(tasksBloc: mainTabBlocs.tasksBloc);
-   // schedulesTabPage = SchedulesPage(groupSubjectsBloc: mainTabBlocs.schedulesBloc);
-    schedulesTabPage = KretaLoginPage();
-    gradesTabPage = GradesPage(gradesBloc: mainTabBlocs.gradesBloc);
-  }
 
   void _handleTabSelection() {
     setState(() {
@@ -45,6 +42,11 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
 
   @override
   void initState() {
+
+    tasksTabPage = TasksPage(tasksBloc: widget.mainTabBlocs.tasksBloc);
+    schedulesTabPage = SchedulesPage(schedulesBloc: widget.mainTabBlocs.schedulesBloc,);
+    gradesTabPage = GradesPage(gradesBloc: widget.mainTabBlocs.gradesBloc);
+
     _tabController = new TabController(length: 3, vsync: this);
     _tabController.addListener(_handleTabSelection);
     super.initState();
@@ -55,24 +57,25 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
     return Scaffold(
       // backgroundColor: widget.color,
       appBar: AppBar(
-        title: Text("Hazizz"),
+        title: Text(locText(context, key: "hazizz")),
 
         bottom: TabBar(controller: _tabController, tabs: [
-          Tab(text: TasksPage.tabName),
-         // Tab(text: SchedulesPage.tabName),//, icon: Icon(Icons.scatter_plot)),
-          Tab(text: GradesPage.tabName),
-          Tab(text: GradesPage.tabName),//, icon: Icon(Icons.group))
+          Tab(text: tasksTabPage.getTabName(context)),
+          // Tab(text: SchedulesPage.tabName),//, icon: Icon(Icons.scatter_plot)),
+          Tab(text: schedulesTabPage.getTabName(context)),
+          Tab(text: gradesTabPage.getTabName(context)),
+          //, icon: Icon(Icons.group))
         ]),
       ),
       body:
-        TabBarView(
-            controller: _tabController,
-            children: [
-              tasksTabPage,
-              schedulesTabPage,
-              gradesTabPage
-            ]
-        ),
+      TabBarView(
+          controller: _tabController,
+          children: [
+            tasksTabPage,
+            schedulesTabPage,
+            gradesTabPage
+          ]
+      ),
 
       drawer: Drawer(
         child: ListView(
@@ -97,21 +100,30 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
               onTap: () {
                 Navigator.pop(context);
                 // Page1();
-                Navigator.push(context,MaterialPageRoute(builder: (context) => Page1(title: "TITLE",)));
-
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => Page1(title: "TITLE",)));
               },
             ),
             ListTile(
               title: Text('My Tasks'),
               onTap: () {
+                this.setState(() async {
+                  setPreferredLangCode("en");
+                  Locale locale = await getPreferredLocal();
+                //  data.changeLocale(locale);
+                  print(Localizations
+                      .localeOf(context)
+                      .languageCode);
+                });
+
                 Navigator.pop(context);
               },
             ),
             ListTile(
               title: Text('Groups'),
               onTap: () {
-               //Navigator.pop(context);
-               // Navigator.push(context,MaterialPageRoute(builder: (context) => GroupTabHosterPage(groupId: 2)));
+                //Navigator.pop(context);
+                // Navigator.push(context,MaterialPageRoute(builder: (context) => GroupTabHosterPage(groupId: 2)));
                 Navigator.popAndPushNamed(context, "/groups");
               },
             ),
@@ -137,7 +149,8 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
                               title: Text('Logout'),
                               onTap: () {
                                 InfoCache.forgetMyUsername();
-                                Navigator.pushReplacementNamed(context, "login");
+                                Navigator.pushReplacementNamed(
+                                    context, "login");
                               },
                             ),
 
@@ -146,22 +159,6 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
                     )
                 )
             )
-
-            /*
-            new Expanded(
-              child: new Align(
-                alignment: Alignment.bottomRight,
-                child: ListTile(
-                  title: Text('Logout'),
-                  onTap: () {
-                    Navigator.pushReplacementNamed(context, "login");
-
-                  },
-                ),
-              ),
-            ),
-            */
-
           ],
         ),
       ),

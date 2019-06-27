@@ -12,6 +12,7 @@ import 'package:hazizz_mobile/communication/pojos/task/PojoTask.dart';
 import 'package:hazizz_mobile/communication/requests/request_collection.dart';
 
 import '../RequestSender.dart';
+import '../hazizz_date.dart';
 
 class ViewTaskPage extends StatefulWidget {
   // This widget is the root of your application.
@@ -58,7 +59,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
 
       _type = pojoTask.type.name;
       DateTime date_deadline =  pojoTask.dueDate;
-      _deadline = DateFormat("yyyy.MM.dd").format(date_deadline);//"${date_deadline.day}.${date_deadline.month}.${date_deadline.year}";
+      _deadline = hazizzShowDateFormat(date_deadline);//"${date_deadline.day}.${date_deadline.month}.${date_deadline.year}";
       _description = pojoTask.description;
       _title = pojoTask.title;
     });
@@ -115,6 +116,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                   padding: EdgeInsets.all(padding),
                   child:
                       Card(
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
                       elevation: 100,
                       child: new RefreshIndicator(
                         onRefresh: (){
@@ -274,14 +276,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                         )
                       ),
                     ),
-                      /*
-                      Card(
-                        child: Text("Comments card",
-                          style: TextStyle(
-                            fontSize: 40
-                          ),
-                        ),
-                      )*/
+
                 ),
               ),
               Container(
@@ -293,14 +288,6 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                   padding: EdgeInsets.all(padding),
                   child:
                   Text("COmments", style: TextStyle(fontSize: 40),)
-                  /*
-                      Card(
-                        child: Text("Comments card",
-                          style: TextStyle(
-                            fontSize: 40
-                          ),
-                        ),
-                      )*/
                 ),
               ),
 

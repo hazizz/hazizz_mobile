@@ -7,7 +7,7 @@ part of 'PojoSchedules.dart';
 // **************************************************************************
 
 PojoSchedules _$PojoSchedulesFromJson(Map<String, dynamic> json) {
-  return PojoSchedules((json['classes'] as Map<String, dynamic>)?.map(
+  return PojoSchedules((json)?.map(
     (k, e) => MapEntry(
         k,
         (e as List)

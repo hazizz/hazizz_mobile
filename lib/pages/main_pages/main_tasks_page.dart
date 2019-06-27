@@ -10,6 +10,8 @@ import 'package:hazizz_mobile/listItems/TaskItemWidget.dart';
 
 import 'package:sticky_headers/sticky_headers.dart';
 
+import '../../hazizz_localizations.dart';
+
 
 class TasksPage extends StatefulWidget {
 
@@ -17,7 +19,9 @@ class TasksPage extends StatefulWidget {
 
   TasksPage({Key key, @required this.tasksBloc}) : super(key: key);
 
-  static final String tabName = "Tasks";
+  getTabName(BuildContext context){
+    return locText(context, key: "tasks");
+  }
 
   @override
   _TasksPage createState() => _TasksPage(tasksBloc);
@@ -38,7 +42,9 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     // getData();
-    tasksBloc.dispatch(FetchData());
+    if(tasksBloc.currentState is ResponseError) {
+      tasksBloc.dispatch(FetchData());
+    }
     //   tasksBloc.fetchMyTasks();
     super.initState();
   }
