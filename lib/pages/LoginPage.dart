@@ -5,16 +5,15 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:hazizz_mobile/blocs/TextFormBloc.dart';
-import 'package:hazizz_mobile/blocs/login_bloc.dart';
-import 'package:hazizz_mobile/communication/ResponseHandler.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoError.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoTokens.dart';
-import 'package:hazizz_mobile/communication/requests/request_collection.dart';
-import 'package:hazizz_mobile/controller/hashed_text_controller.dart';
-import 'package:hazizz_mobile/managers/TokenManager.dart';
-import 'package:hazizz_mobile/managers/cache_manager.dart';
+import 'package:mobile/blocs/TextFormBloc.dart';
+import 'package:mobile/blocs/login_bloc.dart';
+import 'package:mobile/communication/ResponseHandler.dart';
+import 'package:mobile/communication/pojos/PojoError.dart';
+import 'package:mobile/communication/pojos/PojoTokens.dart';
+import 'package:mobile/communication/requests/request_collection.dart';
+import 'package:mobile/controller/hashed_text_controller.dart';
+import 'package:mobile/managers/TokenManager.dart';
+import 'package:mobile/managers/cache_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../RequestSender.dart';
@@ -40,7 +39,6 @@ class _LoginPage extends State<LoginPage> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
-    FormBuilder asd = FormBuilder(child: null);
 
     super.initState();
   }
@@ -107,7 +105,7 @@ class _LoginPage extends State<LoginPage> with SingleTickerProviderStateMixin {
                 child: RaisedButton(
                     child: Text("Küldés"),
                     onPressed: () async {
-                      print("log: as1");
+                      print("log: pressed login button");
                       loginPageBlocs.loginBloc.dispatch(
                           LoginButtonPressedTEST(
                               password: _passwordTextEditingController.text,

@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:hazizz_mobile/blocs/request_event.dart';
-import 'package:hazizz_mobile/blocs/response_states.dart';
-import 'package:hazizz_mobile/managers/TokenManager.dart';
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
+import 'package:mobile/blocs/request_event.dart';
+import 'package:mobile/blocs/response_states.dart';
+import 'package:mobile/managers/TokenManager.dart';
 
 
 //region Auth states

@@ -1,4 +1,4 @@
-import 'package:hazizz_mobile/communication/pojos/PojoError.dart';
+import 'package:mobile/communication/pojos/PojoError.dart';
 
 class ConverterNotImplementedException implements Exception {
   // can contain constructors, variables and methods
@@ -9,4 +9,10 @@ class HResponseError implements Exception {
   PojoError error;
   HResponseError(this.error);
   String message() => "The response is an error";
+}
+
+class UnexpectedResponse implements Exception {
+  dynamic unexpectedResponse;
+  UnexpectedResponse(this.unexpectedResponse);
+  String message() => "Unexpected response error";
 }

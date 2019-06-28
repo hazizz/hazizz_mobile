@@ -1,16 +1,18 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:hazizz_mobile/blocs/request_event.dart';
-import 'package:hazizz_mobile/blocs/response_states.dart';
-import 'package:hazizz_mobile/communication/errorcode_collection.dart';
-import 'package:hazizz_mobile/managers/TokenManager.dart';
+import 'package:mobile/blocs/request_event.dart';
+import 'package:mobile/blocs/response_states.dart';
+import 'package:mobile/communication/errorcode_collection.dart';
+import 'package:mobile/managers/TokenManager.dart';
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
 import 'TextFormBloc.dart';
 import 'auth_bloc.dart';
 
-import 'package:hazizz_mobile/exceptions/exceptions.dart';
+import 'package:mobile/exceptions/exceptions.dart';
+
+import 'main_tab_blocs/main_tab_blocs.dart';
 
 //region LoginEvents
 abstract class LoginEvent extends HEvent {
@@ -133,6 +135,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           try {
             print("sentaa22");
             await TokenManager.fetchTokens(event.username, event.password);
+            MainTabBlocs().initialize();
             authenticationBloc.dispatch(LoggedIn());
             yield LoginSuccessState();
           }on HResponseError catch(e) {

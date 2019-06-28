@@ -2,15 +2,15 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:hazizz_mobile/blocs/request_event.dart';
-import 'package:hazizz_mobile/blocs/response_states.dart';
-import 'package:hazizz_mobile/communication/errorcode_collection.dart';
-import 'package:hazizz_mobile/communication/requests/request_collection.dart';
+import 'package:mobile/blocs/request_event.dart';
+import 'package:mobile/blocs/response_states.dart';
+import 'package:mobile/communication/errorcode_collection.dart';
+import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
 import '../RequestSender.dart';
 import 'TextFormBloc.dart';
-import 'package:hazizz_mobile/exceptions/exceptions.dart';
+import 'package:mobile/exceptions/exceptions.dart';
 
 
 //region Registration events

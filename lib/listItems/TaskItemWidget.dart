@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoType.dart';
-import 'package:hazizz_mobile/communication/pojos/task/PojoTask.dart';
-import 'package:hazizz_mobile/pages/ViewTaskPage.dart';
+import 'package:mobile/communication/pojos/PojoType.dart';
+import 'package:mobile/communication/pojos/task/PojoTask.dart';
+import 'package:mobile/pages/ViewTaskPage.dart';
 
 class TaskItemWidget extends StatelessWidget{
 
@@ -16,6 +16,7 @@ class TaskItemWidget extends StatelessWidget{
     tag: "hero_task${pojoTask.id}",
         child:
       Card(
+          clipBehavior: Clip.antiAliasWithSaveLayer,
         elevation: 5,
         child: InkWell(
           onTap: () {

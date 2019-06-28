@@ -1,55 +1,162 @@
+import 'dart:async';
+
+import 'package:android_alarm_manager/android_alarm_manager.dart';
+
+
+import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:hazizz_mobile/pages/EditTaskPage.dart';
-import 'package:hazizz_mobile/pages/LoginPage.dart';
-import 'package:hazizz_mobile/pages/TaskPage.dart';
-import 'package:hazizz_mobile/route_generator.dart';
+import 'package:mobile/hazizz_localizations.dart';
+import 'package:mobile/pages/LoginPage.dart';
+import 'package:mobile/pages/main_pages/main_tab_hoster_page.dart';
+import 'package:mobile/pages/main_pages/main_tasks_page.dart';
+import 'package:mobile/pages/task_maker_page.dart';
+import 'package:mobile/route_generator.dart';
 import 'HazizzDrawer.dart';
 import 'Page1.dart';
 import 'PlaceHolderWidget.dart';
-import 'managers/TokenManager.dart';
+import 'blocs/main_tab_blocs/main_tab_blocs.dart';
+import 'blocs/request_event.dart';
+import 'hazizz_theme.dart';
 import 'managers/app_state_manager.dart';
 import 'managers/cache_manager.dart';
 import 'pages/group_pages/group_tab_hoster_page.dart';
 
+import 'package:flutter_localizations/flutter_localizations.dart';
+
+
 Widget _startPage;
 String _startPage2;
+
+bool isLoggedIn = true;
+
+//Locale locale;
 //RouteGenerator routeGenerator;
+
+MainTabBlocs mainTabBlocs = MainTabBlocs();
+
 
 void main() async{
 
- // routeGenerator = await RouteGeneratorManager.get();
 
-  if(await AppState.isLoggedIn()){
-    _startPage = MyHomePage(title: "title",);
-    _startPage2 = "/";
+  await AndroidAlarmManager.initialize();
+
+  if(!(await AppState.isLoggedIn())){
+    isLoggedIn = false;
   }else{
-    _startPage = LoginPage();
-    _startPage2 = "login";
+    mainTabBlocs.initialize();
   }
- // _startPage = LoginPage();
- // _startPage2 = "login";
+
+  // locale = await getPreferredLocal();
+
+  // _startPage = LoginPage();
+  // _startPage2 = "login";
+  // runApp(MyApp());
   runApp(MyApp());
+
 }
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+class MyApp extends StatefulWidget{
   @override
-  Widget build(BuildContext context){
+  _MyApp createState() => _MyApp();
+}
 
-    return MaterialApp(
+class _MyApp extends State<MyApp> {
+  // This widget is the root of your application.
 
-      title: 'Hazizz Demo',
-      showPerformanceOverlay: false,
-      theme: ThemeData(
-        primarySwatch: Colors.lightBlue,
-      ),
-     // home: _startPage,//MyHomePage(title: 'Hazizz Demo Home Page') //_startPage, // MyHomePage(title: 'Hazizz Demo Home Page'),
-      initialRoute: _startPage2,
-      onGenerateRoute: RouteGenerator.generateRoute,
-    //  onGenerateRoute: routeGenerator.generateRoute,
-    );
+  Locale preferredLocale;
+
+  bool timerWentOff = false;
+
+
+  @override
+  initState() {
+    super.initState();
+
+    getPreferredLocal().then((locale) {
+      setState(() {
+        this.preferredLocale = locale;
+      });
+    });
+
+
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // var data = EasyLocalizationProvider.of(context).data;
+    timerWentOff = true;
+    if(timerWentOff) {
+      if(isLoggedIn){
+        _startPage = MainTabHosterPage();
+        _startPage2 = "/";
+      }else{
+        _startPage = LoginPage();
+        _startPage2 = "login";
+      }
+      return MaterialApp(
+        title: 'Hazizz Demo',
+        showPerformanceOverlay: false,
+        theme: HazizzTheme.lightThemeData,
+        // home: _startPage,//MyHomePage(title: 'Hazizz Demo Home Page') //_startPage, // MyHomePage(title: 'Hazizz Demo Home Page'),
+        initialRoute: _startPage2,
+        //  home: _startPage,
+        onGenerateRoute: RouteGenerator.generateRoute,
+        localizationsDelegates: [
+          HazizzLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          //app-specific localization
+        ],
+        supportedLocales: [Locale('en', "EN"), Locale('hu', "HU")],
+
+        localeResolutionCallback: (locale, supportedLocales) {
+          // Check if the current device locale is supported
+          // Locale myLocale = Localizations.localeOf(context);
+          if(preferredLocale != null) {
+            return preferredLocale;
+          }
+          for(var supportedLocale in supportedLocales) {
+            if(supportedLocale.languageCode == locale.languageCode &&
+                supportedLocale.countryCode == locale.countryCode) {
+              return supportedLocale;
+            }
+          }
+          // If the locale of the device is not supported, use the first one
+          // from the list (English, in this case).
+          return supportedLocales.first;
+        },
+      );
+    }else{
+      //  mainTabBlocs = MainTabBlocs();
+      //  mainTabBlocs.tasksBloc.dispatch(FetchData());
+      //   mainTabBlocs.schedulesBloc.dispatch(FetchData());
+      // mainTabBlocs.gradesBloc.dispatch(FetchData());
+
+      //   mainTabBlocs.tasksBloc.dispatch(FetchData());
+      //   mainTabBlocs.schedulesBloc.dispatch(FetchData());
+      //   mainTabBlocs.gradesBloc.dispatch(FetchData());
+
+
+      Timer(Duration(seconds: 1), (){
+        setState(() {
+          timerWentOff = true;
+        });
+      });
+
+
+      return Container(
+        color: Theme.of(context).primaryColor,
+        child: Center(
+          child:Image.asset(
+            'assets/images/Logo.png',
+          ),
+        ),
+      );
+    }
   }
 }
+
+/*
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, @required this.title}) : super(key: key);
@@ -72,7 +179,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
 
   Widget drawer = new HazizzDrawer();
 
-  final List<Widget> _children = [new TaskPage(), PlaceholderWidget(color: Colors.red, name1: "222", text1: Text("222"),)];
+  final List<Widget> _children = [new TasksPage(), PlaceholderWidget(color: Colors.red, name1: "222", text1: Text("222"),)];
 
   @override
   void initState() {
@@ -98,6 +205,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
+
         title: Text(widget.title),
       ),
       body: _children[_selectedIndex],
@@ -114,7 +222,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
         FloatingActionButton(
           heroTag: "hero_task_edit",
           onPressed: (){
-            Navigator.push(context,MaterialPageRoute(builder: (context) => EditTaskPage.createMode()));
+            Navigator.push(context,MaterialPageRoute(builder: (context) => TaskMakerPage.createMode()));
           },
           tooltip: 'Increment',
           child: Icon(Icons.add),
@@ -156,8 +264,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
             ListTile(
               title: Text('Groups'),
               onTap: () {
-                Navigator.pop(context);
-                Navigator.push(context,MaterialPageRoute(builder: (context) => GroupTabHosterPage(groupId: 2)));
+              //  Navigator.pop(context);
+               // Navigator.push(context,MaterialPageRoute(builder: (context) => GroupTabHosterPage(groupId: 2)));
 
               },
             ),
@@ -230,3 +338,5 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
     );
   }
 }
+
+*/

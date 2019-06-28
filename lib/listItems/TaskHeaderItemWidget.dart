@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../hazizz_date.dart';
+
 class TaskHeaderItemWidget extends StatelessWidget{
  // String days;
  // String date;
@@ -13,13 +15,14 @@ class TaskHeaderItemWidget extends StatelessWidget{
     return SizedBox(
       height: 40.0,
       child: Card(
-          color: Colors.blue,
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          color: Theme.of(context).primaryColorDark,
           child: InkWell(
               child: Row(
                 children: <Widget>[
                   Text("holnap"),
                   SizedBox(width: 20),
-                  Text("${DateFormat("yyyy.MM.dd").format(dateTime)}"),
+                  Text("${hazizzShowDateFormat(dateTime)}"),
                 ],
               )
           )

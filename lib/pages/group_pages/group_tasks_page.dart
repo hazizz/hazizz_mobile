@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hazizz_mobile/blocs/group_bloc.dart';
-import 'package:hazizz_mobile/blocs/request_event.dart';
-import 'package:hazizz_mobile/blocs/response_states.dart';
-import 'package:hazizz_mobile/blocs/tasks_bloc.dart';
-import 'package:hazizz_mobile/communication/pojos/task/PojoTask.dart';
-import 'package:hazizz_mobile/listItems/TaskHeaderItemWidget.dart';
-import 'package:hazizz_mobile/listItems/TaskItemWidget.dart';
+import 'package:mobile/blocs/group_bloc.dart';
+import 'package:mobile/blocs/request_event.dart';
+import 'package:mobile/blocs/response_states.dart';
+import 'package:mobile/blocs/tasks_bloc.dart';
+import 'package:mobile/communication/pojos/task/PojoTask.dart';
+import 'package:mobile/listItems/TaskHeaderItemWidget.dart';
+import 'package:mobile/listItems/TaskItemWidget.dart';
 
 
 import 'package:sticky_headers/sticky_headers.dart';
 
+import '../../hazizz_localizations.dart';
+
 class GroupTasksPage extends StatefulWidget {
   // This widget is the root of your application.
 
-  static final String tabName = "Tasks";
+  String getTabName(BuildContext context){
+    return locText(context, key: "tasks");
+  }
 
   GroupTasksBloc groupTasksBloc;
 
@@ -32,7 +36,9 @@ class _GroupTasksPage extends State<GroupTasksPage> with AutomaticKeepAliveClien
 
   @override
   void initState() {
-    groupTasksBloc.dispatch(FetchData());
+    if(groupTasksBloc.currentState is ResponseError) {
+      groupTasksBloc.dispatch(FetchData());
+    }
     super.initState();
   }
 

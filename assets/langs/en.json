@@ -1,0 +1,914 @@
+{
+    "hazizz" : "HazizzEng",
+
+
+    "hazizz_motto" : "From pupils to pupils",
+
+
+    "header_item_in" : "In",
+
+
+    "header_item_day"
+    : "days",
+
+
+    "header_item_later"
+    : "múlva",
+
+
+    "days"
+    : "days",
+
+
+    "tomorrow"
+    : "Tomorrow",
+
+
+    "days2"
+    : "In 2 days",
+
+
+    "today"
+    : "Today",
+
+
+    "overdays7"
+    : "More than 7 days",
+
+
+    "badge_owner"
+    : "OWNER",
+
+
+    "group_type_open"
+    : "Open",
+
+
+    "group_type_invite_only"
+    : "Invite only",
+
+
+    "group_type_password"
+    : "Password",
+
+
+    "appwidget_text"
+    : "EXAMPLE",
+
+
+    "configure"
+    : "Configure",
+
+
+    "add_widget"
+    : "Add widget",
+
+
+    "button_save"
+    : "Save",
+
+
+    "button_send"
+    : "Send",
+
+
+    "button_add"
+    : "Add",
+
+
+    "button_create"
+    : "Create",
+
+
+    "button_join"
+    : "Join",
+
+
+    "mainpage_menu"
+    : "Home",
+
+    "startPage"
+    : "Kezdő oldal",
+
+
+    "createGroup_menu"
+    : "Create new group",
+
+
+    "joinGroup_menu"
+    : "Join group",
+
+
+    "leaveGroup_menu"
+    : "Leave group",
+
+
+    "uploadProfilePic_menu"
+    : "Upload profile picture",
+
+
+    "fragment_title_new_mytask"
+    : "New my task",
+
+
+    "fragment_title_new_task"
+    : "New task",
+
+
+    "fragment_title_edit_task"
+    : "Edit task",
+
+
+    "empty_field"
+    : "Empty field",
+
+
+    "empty_field_password"
+    : "Empty password field",
+
+
+    "ok"
+    : "OK",
+
+
+    "close"
+    : "Close",
+
+
+    "thera"
+    : "Théra",
+
+
+    "settings"
+    : "Settings",
+
+
+    "feedback"
+    : "Feedback",
+
+
+    "groups"
+    : "Groups",
+
+
+    "task"
+    : "Task",
+
+
+    "tasks"
+    : "Tasks",
+
+
+    "announcement"
+    : "Announcement",
+
+
+    "announcements"
+    : "Announcements",
+
+
+    "subject"
+    : "Subject",
+
+
+    "subjects"
+    : "Subjects",
+
+
+    "title"
+    : "Title",
+
+
+    "description"
+    : "Description",
+
+
+    "login"
+    : "Login",
+
+
+    "enter"
+    : "Enter",
+
+
+    "register"
+    : "Register",
+
+
+    "displayName"
+    : "Display Name",
+
+
+    "registrationDate"
+    : "Registration date",
+
+
+    "username"
+    : "Username",
+
+
+    "users"
+    : "Users",
+
+
+    "password"
+    : "Password",
+
+
+    "email"
+    : "Email",
+
+
+    "autologin"
+    : "Automatic login",
+
+
+    "login_remember"
+    : "Remember user",
+
+
+    "comments"
+    : "Comments",
+
+
+    "edit"
+    : "Edit",
+
+
+    "delete"
+    : "Delete",
+
+
+    "leave_group"
+    : "Leave group",
+
+
+    "my_tasks"
+    : "My tasks",
+
+
+    "view_mytask"
+    : "View my task",
+
+
+    "notification_settings"
+    : "Notification settings",
+
+
+    "notification"
+    : "Notification",
+
+
+    "notifications"
+    : "Notifications",
+
+
+    "go_back"
+    : "Back",
+
+
+    "reply"
+    : "Reply",
+
+
+    "viewProfile"
+    : "View profile",
+
+
+    "later"
+    : "later",
+
+
+    "no"
+    : "No",
+
+
+    "yes"
+    : "Yes",
+
+
+    "choose_group"
+    : "Choose group",
+
+
+    "write_comment"
+    : "Write a comment!",
+
+
+    "schedule"
+    : "Schedule",
+
+
+    "grades"
+    : "Grades",
+
+
+    "copy"
+    : "Copy",
+
+
+    "share"
+    : "Share",
+
+
+    "loading"
+    : "Loading...",
+
+
+    "switch_account"
+    : "Switch account",
+
+
+    "server_adress"
+    : "Server address",
+
+
+    "set"
+    : "Set",
+
+
+    "dangerous"
+    : "Dangerous!!!",
+
+
+    "copied"
+    : "Copied",
+
+
+    "copied_to_clipboard"
+    : "Copied to clipboard",
+
+
+    "message_from_devs"
+    : "Message from devs",
+
+
+    "school_"
+    : "School:",
+
+
+    "add_user"
+    : "Add user",
+
+
+    "no_task"
+    : "No tasks",
+
+
+    "no_announcement"
+    : "No announcements",
+
+
+    "no_subject"
+    : "No subjects",
+
+
+    "subject_none"
+    : "&lt;None&gt;",
+
+
+    "no_comment"
+    : "No comments",
+
+
+    "groupMembers"
+    : "Members",
+
+
+    "title_"
+    : "Title:",
+
+
+    "deadline_"
+    : "Deadline:",
+
+    "group"
+    : "Group",
+
+
+    "creator_"
+    : "Creator:",
+
+
+    "description_"
+    : "Description:",
+
+
+    "subject_"
+    : "Subject:",
+
+
+    "tasktype_"
+    : "Type of task:",
+
+
+    "daysLeft"
+    : "days left",
+
+
+    "displayName"
+    : "Display name:",
+
+    "registrationDate_"
+    : "Registration date:",
+
+
+    "username_"
+    : "Username:",
+
+
+    "leaveGroup_successful"
+    : "Group left",
+
+
+    "press_again_to_exit"
+    : "Please click BACK again to exit",
+
+
+    "invite_link_info"
+    : "Send this link to your classmates to join",
+
+
+    "invite_link_info_part2"
+    : "group",
+
+
+    "already_in_group"
+    : "You are already a member of this group",
+
+
+    "added_to_group"
+    : "You were successfully added to this group",
+
+
+    "invite_to_group_text_title"
+    : "Hazizz Droid: ",
+
+
+    "invite_to_group_text_part1"
+    : "Join to ",
+
+
+    "invite_to_group_text_part2"
+    : " group to receive your homeworks:",
+
+
+
+
+    "passwordagain_fragment_register"
+    : "Confirm password",
+
+
+    "areyousure_delete_task"
+    : "Are you sure you want to delete this task?",
+
+
+    "areyousure_delete_announcement"
+    : "Are you sure you want to delete this announcement?",
+
+
+    "areyousure_leave_group"
+    : "Are you sure you want to leave this group?",
+
+
+    "error_passwordRequiredForGroup"
+    : "Password is required to join group",
+
+
+    "toast_feedback_thanks"
+    : "Thanks you for your feedback",
+
+
+    "hint_description_feedback"
+    : "Feedback",
+
+
+    "hint_fragment_joingroup"
+    : "Group name",
+
+
+    "hint_add_subject"
+    : "New subject",
+
+
+    "hint_newgroup"
+    : "New group",
+
+
+    "title_fragment_tabgroup"
+    : "Group:",
+
+
+    "title_set_server_address"
+    : "Szerver cím beállítás",
+
+
+    "title_choose_at"
+    : "Task/announcement chooser",
+
+
+    "title_activity_feedback"
+    : "Feedback",
+
+
+    "title_fragment_groups"
+    : "Your groups",
+
+
+    "title_fragment_joingroup"
+    : "Join group",
+
+
+    "title_fragment_taskeditor"
+    : "New task",
+
+
+    "title_newannouncement"
+    : "New announcement",
+
+
+    "title_editannouncement"
+    : "Edit announcement",
+
+
+    "title_fragment_comments"
+    : "Comments",
+
+
+    "title_fragment_creategroup"
+    : "Create new group",
+
+
+    "title_fragment_view_announcement"
+    : "View Announcement",
+
+
+    "title_fragment_view_task"
+    : "View Task",
+
+
+    "tasktype_fragment_taskeditor"
+    : "Type of task:",
+
+
+    "choose_deadline_fragment_taskeditor"
+    : "Choose deadline!",
+
+
+    "subject_fragment_taskeditor"
+    : "Subject:",
+
+
+    "textview_logout_drawer"
+    : "Logout",
+
+
+    "add_subject"
+    : "Add subject",
+
+
+    "report_bug"
+    : "Report bug",
+
+
+    "info_serverUnexpectedResponse"
+    : "Unexpected response from server",
+
+
+    "info_serverNotResponding"
+    : "Server not responding",
+
+
+    "info_something_went_wrong"
+    : "Something went wrong",
+
+
+    "info_noInternetAccess"
+    : "No internet connection",
+
+
+    "info_server_AddressChange"
+    : "If the address is not correct you will have to reinstall the app",
+
+
+    "select_school"
+    : "Choose school",
+
+
+    "error"
+    : "Error",
+
+
+    "error_termsAndConditionsNotAccepted"
+    : "Privacy policy not accepted",
+
+
+    "error_accountLocked"
+    : "Account is locked",
+
+
+    "error_accountExpired"
+    : "Account is expired",
+
+
+    "error_accountBanned"
+    : "Account is banned",
+
+
+    "error_accountNotFound"
+    : "Couldn't find account",
+
+
+    "error_usernameNotFound"
+    : "Username can only contain numbers letters underscores and dashes",
+
+
+    "error_usernameFormat"
+    : "Username can only contain numbers letters underscores and dashes",
+
+
+    "error_usernameTaken"
+    : "Username already taken",
+
+
+    "error_username"
+    : "Username must be at least 4 characters long",
+
+
+    "error_usernameLength"
+    : "Username must be 4-8 characters long",
+
+
+    "error_emailWrong"
+    : "Incorrect email",
+
+
+    "error_emailTaken"
+    : "Email already in use",
+
+
+    "error_registrationLocked"
+    : "Registration is locked",
+
+
+    "error_displayNameLength"
+    : "Display name length must be 4-20 characters long",
+
+
+    "error_titleLentgh"
+    : "Title must be 2-20 characters long",
+
+
+    "error_titleNotAccepptable"
+    : "Incorrect title",
+
+
+    "error_alreadyMemberOfGroup"
+    : "You're already a member of the group",
+
+
+    "error_noPermissionToJoinGroup"
+    : "You don't have permission to login",
+
+
+    "error_groupNameNotAcceptable"
+    : "Incorrect group name",
+
+
+    "error_groupAlreadyExists"
+    : "Group already exists",
+
+
+    "error_noSuchGroup"
+    : "Group does not exist",
+
+
+    "error_notMemberOfGroup"
+    : "You're not a member of any groups",
+
+
+    "error_subjectNotSelected"
+    : "No subject selected",
+
+
+    "error_deadlineNotSet"
+    : "No deadline set",
+
+
+    "error_subjectLength"
+    : "Subject length must be 2-20 characters long",
+
+
+    "changePassword"
+    : "Change password",
+
+
+    "currentPassword"
+    : "Current password",
+
+
+    "newPassword"
+    : "New password",
+
+
+    "newPasswordAgain"
+    : "New password again",
+
+
+    "password_notMatch"
+    : "Password doesn't match",
+
+
+    "error_wrongPassword"
+    : "Incorrect password",
+
+
+    "error_passwordDoesntMatch"
+    : "Passwords do not match",
+
+
+    "error_passwordNotLongEnough"
+    : "Password must be at least 8 characters long",
+
+
+    "error_givenDataWrong"
+    : "Incorrect date",
+
+
+    "success_changed_password"
+    : "The password was successfully changed",
+
+
+    "notif_unfinished_tasks1"
+    : "You have",
+
+    "notif_unfinished_tasks"
+    : "You have {} task for tomorrow",
+
+
+
+    "notif_unfinished_tasks2"
+    : "task for tomorrow",
+
+
+    "notif_settings_notify_everyday"
+    : "Notify every day",
+
+
+    "taskType_homework"
+    : "homework",
+
+
+    "taskType_assignment"
+    : "assignment",
+
+
+    "taskType_test"
+    : "test",
+
+
+    "taskType_oraltest"
+    : "oral test",
+
+
+    "crop_image_activity_header_item_intitle"
+    : " ",
+
+
+    "crop_image_activity_title"
+    : " ",
+
+
+    "crop_image_menu_rotate_right"
+    : "Rotate",
+
+
+    "crop_image_menu_crop"
+    : "Crop",
+
+
+    "crop_image_menu_flip_horizontally"
+    : "Flip horizontally",
+
+
+    "crop_image_menu_flip_vertically"
+    : "Flip vertically",
+
+
+    "title_thera"
+    : "Thera",
+
+
+    "title_kreta_users"
+    : "Kreta users",
+
+
+    "title_kreta_login"
+    : "Kreta login",
+
+
+    "kreta"
+    : "Kréta",
+
+
+    "thera_grades"
+    : "Thera grades",
+
+
+    "thera_schedules"
+    : "Thera schedules",
+
+
+    "thera_standin"
+    : "replacement:",
+
+
+    "thera_canceled"
+    : "canceled",
+
+
+    "thera_classStart"
+    : "start:",
+
+
+    "thera_classEnd"
+    : "end:",
+
+
+    "thera_teacher"
+    : "teacher:",
+
+
+    "thera_classRoom"
+    : "classroom:",
+
+
+    "thera:classGroup"
+    : "group:",
+
+
+    "thera_date"
+    : "date:",
+
+
+    "thera_grade_"
+    : "grade:",
+
+
+    "thera_weight_"
+    : "weight:",
+
+
+    "thera_theme_"
+    : "theme:",
+
+
+    "thera_subject_"
+    : "subject:",
+
+
+    "thera_grade_type_"
+    : "grade type:",
+
+
+    "title_activity_thera"
+    : "TheraActivity",
+
+    "days_0" : "Monday",
+    "days_1" : "Tuesday",
+    "days_2" : "Wednesday",
+    "days_3" : "Thursday",
+    "days_4" : "Friday",
+    "days_5" : "Saturday",
+    "days_6" : "Sunday",
+
+
+    "filterType_map": {
+        "new": "New",
+        "subject" : "Subject",
+        "group": "Group",
+        "done": "Done",
+        "undone": "Undone"
+    },
+
+    "homework_map": {
+        "homework": "Homework",
+        "assignment" : "Assignment",
+        "test": "Test",
+        "oral_test": "Oral test"
+    },
+
+
+
+    "day_array": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+    ]
+
+
+}

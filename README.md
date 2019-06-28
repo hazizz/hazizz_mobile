@@ -1,6 +1,6 @@
-# hazizz_mobile
+# mobile
 
-Hazizz mobile application
+Hazizz Mobile application.
 
 ## Getting Started
 
