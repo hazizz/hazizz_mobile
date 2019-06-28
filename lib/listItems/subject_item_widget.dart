@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoSubject.dart';
+import 'package:mobile/communication/pojos/PojoSubject.dart';
 
 
 class SubjectItemWidget extends StatelessWidget{
@@ -14,6 +14,7 @@ class SubjectItemWidget extends StatelessWidget{
         tag: "hero_subject${subject.id}",
         child:
         Card(
+            clipBehavior: Clip.antiAliasWithSaveLayer,
             elevation: 5,
             child: InkWell(
                 onTap: () {

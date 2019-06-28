@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:hazizz_mobile/blocs/id.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoError.dart';
+import 'package:mobile/blocs/id.dart';
+import 'package:mobile/communication/pojos/PojoError.dart';
 
 import 'package:meta/meta.dart';
 
@@ -30,7 +30,7 @@ class ResponseDataLoaded extends HState {
       : assert(data != null);
 
   @override
-  String toString() => 'ResponseData';
+  String toString() => 'ResponseDataLoaded';
 }
 
 class ResponseError extends HState {

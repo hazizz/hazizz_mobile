@@ -2,15 +2,15 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
-import 'package:hazizz_mobile/blocs/request_event.dart';
-import 'package:hazizz_mobile/blocs/response_states.dart';
-import 'package:hazizz_mobile/blocs/text_field_bloc.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoError.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoGroup.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoSubject.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoType.dart';
-import 'package:hazizz_mobile/communication/pojos/task/PojoTask.dart';
-import 'package:hazizz_mobile/communication/requests/request_collection.dart';
+import 'package:mobile/blocs/request_event.dart';
+import 'package:mobile/blocs/response_states.dart';
+import 'package:mobile/blocs/text_field_bloc.dart';
+import 'package:mobile/communication/pojos/PojoError.dart';
+import 'package:mobile/communication/pojos/PojoGroup.dart';
+import 'package:mobile/communication/pojos/PojoSubject.dart';
+import 'package:mobile/communication/pojos/PojoType.dart';
+import 'package:mobile/communication/pojos/task/PojoTask.dart';
+import 'package:mobile/communication/requests/request_collection.dart';
 
 import 'package:meta/meta.dart';
 
@@ -78,7 +78,7 @@ class GroupItemPickerBloc extends ItemListPickerBloc {
       print("log: PickedState is played");
       yield PickedGroupState(item: event.item);
     }
-    if (event is LoadData) {
+    if (event is ItemListLoadData) {
       try {
         yield Waiting();
         dynamic responseData = await RequestSender().getResponse(
@@ -91,7 +91,7 @@ class GroupItemPickerBloc extends ItemListPickerBloc {
           dataList = responseData;
           if (dataList.isNotEmpty) {
             print("log: response is List");
-            yield Loaded(data: responseData);
+            yield ItemListLoaded(data: responseData);
           } else {
             yield Empty();
           }
@@ -159,7 +159,7 @@ class SubjectItemPickerBloc extends ItemListPickerBloc {
           dataList = responseData;
           if(dataList.isNotEmpty) {
             print("log: response is List");
-            yield Loaded(data: responseData);
+            yield ItemListLoaded(data: responseData);
           }else{
             yield Empty();
           }
@@ -257,7 +257,7 @@ abstract class TaskEditEvent extends HEvent {
 class TaskEditSetEditModeEvent extends TaskEditEvent {
 
   final PojoTask taskToEdit;
-  TaskEditSetEditModeEvent({this.taskToEdit})
+  TaskEditSetEditModeEvent({@required this.taskToEdit})
       : assert(taskToEdit != null), super([taskToEdit]);
 
   @override
@@ -330,12 +330,15 @@ class TaskEditBloc extends Bloc<TaskEditEvent, TaskEditState> {
     @required this.titleBloc, @required this.descripitonBloc,
   }){
     mode = EditTaskMode.create;
+    this.dispatch(TaskEditSetCreateModeEvent());
+
   }
   TaskEditBloc.edit({@required this.groupItemPickerBloc, @required this.subjectItemPickerBloc,
     @required this.deadlineBloc, @required this.taskTypePickerBloc, @required this.titleBloc,
     @required this.descripitonBloc, @required this.taskToEdit
   }){
     mode = EditTaskMode.edit;
+    this.dispatch(TaskEditSetEditModeEvent(taskToEdit: taskToEdit));
   }
 
   @override
@@ -343,6 +346,14 @@ class TaskEditBloc extends Bloc<TaskEditEvent, TaskEditState> {
     if(event is TaskEditSetCreateModeEvent){
       yield TaskEditModeCreateState();
     }else if(event is TaskEditSetEditModeEvent){
+      print("log: TaskEditSetEditModeEvent");
+      groupItemPickerBloc.dispatch(PickedGroupEvent(item: event.taskToEdit.group));
+      subjectItemPickerBloc.dispatch(PickedSubjectEvent(item: event.taskToEdit.subject));
+      deadlineBloc.dispatch(DateTimePickedEvent(dateTime: event.taskToEdit.dueDate));
+      taskTypePickerBloc.dispatch(TaskTypePickedEvent(event.taskToEdit.type));
+
+    //  groupItemPickerBloc.dispatch(PickedGroupEvent(item: event.taskToEdit.group));
+
       yield TaskEditModeEditState(taskToEdit: event.taskToEdit);
     }
     if (event is TaskEditSendEvent) {
@@ -400,8 +411,10 @@ class TaskEditBloc extends Bloc<TaskEditEvent, TaskEditState> {
         }
 
         if(missingInfo){
+          print("log: missing info");
           return;
         }
+        print("log: not missing info");
 
         dynamic response;
 
@@ -581,6 +594,7 @@ class EditTaskBlocs{
         deadlineBloc: deadlineBloc, taskTypePickerBloc: taskTypePickerBloc, titleBloc: titleBloc,
         descripitonBloc: descriptionBloc, taskToEdit: taskToEdit,
     );
+    //titleBloc.dispatch(event);
   }
 
   void dispose(){

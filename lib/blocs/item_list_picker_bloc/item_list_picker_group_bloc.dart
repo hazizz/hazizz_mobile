@@ -1,11 +1,13 @@
 
-import 'package:hazizz_mobile/blocs/item_list_picker_bloc/item_list_picker_bloc.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoError.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoGroup.dart';
-import 'package:hazizz_mobile/communication/requests/request_collection.dart';
 
+
+
+import 'package:mobile/communication/pojos/PojoError.dart';
+import 'package:mobile/communication/pojos/PojoGroup.dart';
+import 'package:mobile/communication/requests/request_collection.dart';
 
 import '../../RequestSender.dart';
+import 'item_list_picker_bloc.dart';
 
 class ItemListPickerGroupBloc extends ItemListPickerBloc{
 
@@ -18,7 +20,7 @@ class ItemListPickerGroupBloc extends ItemListPickerBloc{
     if(responseData is List<PojoGroup>){
       listItemData = responseData;
       if(listItemData.isNotEmpty) {
-        return Loaded(data: listItemData);
+        return ItemListLoaded(data: listItemData);
       }else{
         return Empty();
       }

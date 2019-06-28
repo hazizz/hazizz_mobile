@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hazizz_mobile/blocs/group_bloc.dart';
-import 'package:hazizz_mobile/blocs/request_event.dart';
-import 'package:hazizz_mobile/blocs/response_states.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoSubject.dart';
-import 'package:hazizz_mobile/listItems/subject_item_widget.dart';
+import 'package:mobile/blocs/group_bloc.dart';
+import 'package:mobile/blocs/request_event.dart';
+import 'package:mobile/blocs/response_states.dart';
+import 'package:mobile/communication/pojos/PojoSubject.dart';
+import 'package:mobile/dialogs/dialogs.dart';
+import 'package:mobile/listItems/subject_item_widget.dart';
+
+import '../../hazizz_localizations.dart';
 
 
 class GroupSubjectsPage extends StatefulWidget {
   // This widget is the root of your application.
 
-  static final String tabName = "Subjects";
+  String getTabName(BuildContext context){
+    return locText(context, key: "subjects");
+  }
 
   final GroupSubjectsBloc groupSubjectsBloc;
 
@@ -28,14 +33,21 @@ class _GroupSubjectsPage extends State<GroupSubjectsPage> with AutomaticKeepAliv
 
   @override
   void initState() {
-    groupSubjectsBloc.dispatch(FetchData());
+    if(groupSubjectsBloc.currentState is ResponseError) {
+      groupSubjectsBloc.dispatch(FetchData());
+    }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: FloatingActionButton(onPressed: null, child: Icon(Icons.add),),
+        floatingActionButton: FloatingActionButton(
+          onPressed: (){
+            showAddSubjectDialog(context, groupId: 2);
+          },
+          child: Icon(Icons.add),
+        ),
         body: new RefreshIndicator(
             child: BlocBuilder(
                 bloc: groupSubjectsBloc,

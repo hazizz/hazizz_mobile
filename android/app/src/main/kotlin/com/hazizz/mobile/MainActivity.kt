@@ -1,4 +1,4 @@
-package mobile.hazizz.com.hazizz_mobile
+package com.hazizz.mobile
 
 import android.os.Bundle
 

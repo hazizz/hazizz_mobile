@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+import '../../hazizz_theme.dart';
 import 'Pojo.dart';
 
 part 'PojoType.g.dart';
@@ -46,31 +47,19 @@ class PojoType implements Pojo {
 
   static Color getColor(PojoType type){
     if(type.id  == PojoType.HOMEWORK_ID){
-      return homeworkColor;
+      return HazizzTheme.homeworkColor;
     }
     if(type.id == PojoType.ASSIGNMENT_ID){
-      return assignmentColor;
+      return HazizzTheme.assignmentColor;
     }
     if(type.id  == PojoType.ORAL_TEST_ID){
-      return oral_testColor;
+      return HazizzTheme.oralTestColor;
     }
     if(type.id  == PojoType.TEST_ID){
-      return testColor;
+      return HazizzTheme.testColor;
     }
   }
 
-  static Color get homeworkColor{
-    return Colors.green;
-  }
-  static Color get assignmentColor{
-    return Colors.yellowAccent;
-  }
-  static Color get testColor{
-    return Colors.redAccent;
-  }
-  static Color get oral_testColor{
-    return Colors.deepPurpleAccent;
-  }
 
 
 

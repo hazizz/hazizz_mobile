@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoUser.dart';
+import 'package:mobile/communication/pojos/PojoUser.dart';
 
 class MemberItemWidget extends StatelessWidget{
 
@@ -13,6 +13,7 @@ class MemberItemWidget extends StatelessWidget{
         tag: "hero_user${member.id}",
         child:
         Card(
+            clipBehavior: Clip.antiAliasWithSaveLayer,
             elevation: 5,
             child: InkWell(
                 onTap: () {

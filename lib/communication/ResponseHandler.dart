@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:hazizz_mobile/communication/pojos/Pojo.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoError.dart';
+import 'package:mobile/communication/pojos/Pojo.dart';
+import 'package:mobile/communication/pojos/PojoError.dart';
 
 
 class ResponseHandler {
