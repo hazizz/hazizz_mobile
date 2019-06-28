@@ -1,44 +1,11 @@
-import 'dart:convert';
-import 'dart:math';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:crypto/crypto.dart';
-import 'package:flutter/scheduler.dart';
-<<<<<<< HEAD
 import 'package:mobile/blocs/TextFormBloc.dart';
 import 'package:mobile/blocs/item_list_picker_bloc/item_list_picker_bloc.dart';
 import 'package:mobile/blocs/kreta_login_blocs.dart';
 import 'package:mobile/blocs/login_bloc.dart';
-import 'package:mobile/blocs/task_maker_blocs.dart';
-import 'package:mobile/communication/ResponseHandler.dart';
-import 'package:mobile/communication/pojos/PojoError.dart';
-import 'package:mobile/communication/pojos/PojoTokens.dart';
-import 'package:mobile/communication/requests/request_collection.dart';
-import 'package:mobile/controller/hashed_text_controller.dart';
 import 'package:mobile/dialogs/dialogs.dart';
-import 'package:mobile/managers/TokenManager.dart';
-import 'package:mobile/managers/cache_manager.dart';
-=======
-import 'package:hazizz_mobile/blocs/TextFormBloc.dart';
-import 'package:hazizz_mobile/blocs/item_list_picker_bloc/item_list_picker_bloc.dart';
-import 'package:hazizz_mobile/blocs/kreta_login_blocs.dart';
-import 'package:hazizz_mobile/blocs/login_bloc.dart';
-import 'package:hazizz_mobile/blocs/task_maker_blocs.dart';
-import 'package:hazizz_mobile/communication/ResponseHandler.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoError.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoTokens.dart';
-import 'package:hazizz_mobile/communication/requests/request_collection.dart';
-import 'package:hazizz_mobile/controller/hashed_text_controller.dart';
-import 'package:hazizz_mobile/dialogs/dialogs.dart';
-import 'package:hazizz_mobile/managers/TokenManager.dart';
-import 'package:hazizz_mobile/managers/cache_manager.dart';
->>>>>>> 4c9d004c5a9e9c416ab5b26080cdb3e8a330b7fc
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../RequestSender.dart';
-import '../hazizz_theme.dart';
-import '../main.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 

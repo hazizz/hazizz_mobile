@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import 'package:mobile/communication/pojos/PojoGrade.dart';
-=======
-import 'package:hazizz_mobile/communication/pojos/PojoGrade.dart';
->>>>>>> 4c9d004c5a9e9c416ab5b26080cdb3e8a330b7fc
+
 import 'package:json_annotation/json_annotation.dart';
 
 import 'Pojo.dart';

@@ -17,14 +17,10 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
-<<<<<<< HEAD
   android_alarm_manager: 0.4.1+6
-=======
   #https://pub.dev/packages/file_picker
   # file_picker: 1.3.4
   #https://pub.dev/packages/flutter_local_notifications
-  android_alarm_manager: 0.4.1
->>>>>>> 4c9d004c5a9e9c416ab5b26080cdb3e8a330b7fc
   preferences: 4.0.0
   share: 0.6.1
   easy_localization: 1.0.3+1

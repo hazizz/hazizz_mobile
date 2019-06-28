@@ -3,10 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-<<<<<<< HEAD
-import 'package:mobile/communication/pojos/PojoClass.dart';
 import 'package:mobile/communication/pojos/PojoError.dart';
-import 'package:mobile/communication/pojos/PojoGrade.dart';
 import 'package:mobile/communication/pojos/PojoGrades.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/pojos/PojoMeInfo.dart';
@@ -18,23 +15,6 @@ import 'package:mobile/communication/pojos/PojoUser.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/exceptions/exceptions.dart';
 import 'package:mobile/managers/TokenManager.dart';
-=======
-import 'package:hazizz_mobile/communication/pojos/PojoClass.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoError.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoGrade.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoGrades.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoGroup.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoMeInfo.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoSchedules.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoSession.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoSubject.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoTokens.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoUser.dart';
-import 'package:hazizz_mobile/communication/pojos/task/PojoTask.dart';
-import 'package:hazizz_mobile/exceptions/exceptions.dart';
-import 'package:hazizz_mobile/managers/TokenManager.dart';
->>>>>>> 4c9d004c5a9e9c416ab5b26080cdb3e8a330b7fc
-import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:mobile/converters/PojoConverter.dart';

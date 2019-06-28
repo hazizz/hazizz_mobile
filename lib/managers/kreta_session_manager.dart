@@ -2,22 +2,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-<<<<<<< HEAD
-import 'package:mobile/communication/errorcode_collection.dart';
-import 'package:mobile/communication/pojos/PojoError.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
-import 'package:mobile/communication/pojos/PojoTokens.dart';
-import 'package:mobile/communication/requests/request_collection.dart';
-import 'package:mobile/exceptions/exceptions.dart';
-=======
-import 'package:hazizz_mobile/communication/errorcode_collection.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoError.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoSession.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoTokens.dart';
-import 'package:hazizz_mobile/communication/requests/request_collection.dart';
-import 'package:hazizz_mobile/exceptions/exceptions.dart';
->>>>>>> 4c9d004c5a9e9c416ab5b26080cdb3e8a330b7fc
-import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../RequestSender.dart';

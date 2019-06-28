@@ -1,23 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-<<<<<<< HEAD
 import 'package:mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
 import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
 import 'package:mobile/communication/pojos/PojoClass.dart';
-import 'package:mobile/communication/pojos/task/PojoTask.dart';
-import 'package:mobile/listItems/TaskHeaderItemWidget.dart';
-import 'package:mobile/listItems/TaskItemWidget.dart';
-=======
-import 'package:hazizz_mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
-import 'package:hazizz_mobile/blocs/request_event.dart';
-import 'package:hazizz_mobile/blocs/response_states.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoClass.dart';
-import 'package:hazizz_mobile/communication/pojos/task/PojoTask.dart';
-import 'package:hazizz_mobile/listItems/TaskHeaderItemWidget.dart';
-import 'package:hazizz_mobile/listItems/TaskItemWidget.dart';
->>>>>>> 4c9d004c5a9e9c416ab5b26080cdb3e8a330b7fc
 
 import '../../hazizz_localizations.dart';
 import 'main_schedules_tab_page.dart';

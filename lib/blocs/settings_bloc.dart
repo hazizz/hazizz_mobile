@@ -1,8 +1,5 @@
-<<<<<<< HEAD
+
 import 'package:mobile/managers/preference_services.dart';
-=======
-import 'package:hazizz_mobile/managers/preference_services.dart';
->>>>>>> 4c9d004c5a9e9c416ab5b26080cdb3e8a330b7fc
 
 import 'item_list_picker_bloc/item_list_picker_bloc.dart';
 
