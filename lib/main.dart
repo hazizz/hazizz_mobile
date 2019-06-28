@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:android_alarm_manager/android_alarm_manager.dart';
+<<<<<<< HEAD
 
 
 import 'package:android_alarm_manager/android_alarm_manager.dart';
@@ -11,6 +12,15 @@ import 'package:mobile/pages/main_pages/main_tab_hoster_page.dart';
 import 'package:mobile/pages/main_pages/main_tasks_page.dart';
 import 'package:mobile/pages/task_maker_page.dart';
 import 'package:mobile/route_generator.dart';
+=======
+import 'package:flutter/material.dart';
+import 'package:hazizz_mobile/hazizz_localizations.dart';
+import 'package:hazizz_mobile/pages/LoginPage.dart';
+import 'package:hazizz_mobile/pages/main_pages/main_tab_hoster_page.dart';
+import 'package:hazizz_mobile/pages/main_pages/main_tasks_page.dart';
+import 'package:hazizz_mobile/pages/task_maker_page.dart';
+import 'package:hazizz_mobile/route_generator.dart';
+>>>>>>> 4c9d004c5a9e9c416ab5b26080cdb3e8a330b7fc
 import 'HazizzDrawer.dart';
 import 'Page1.dart';
 import 'PlaceHolderWidget.dart';
@@ -46,6 +56,7 @@ void main() async{
     mainTabBlocs.initialize();
   }
 
+<<<<<<< HEAD
   // locale = await getPreferredLocal();
 
   // _startPage = LoginPage();
@@ -60,6 +71,22 @@ class MyApp extends StatefulWidget{
   _MyApp createState() => _MyApp();
 }
 
+=======
+ // locale = await getPreferredLocal();
+
+ // _startPage = LoginPage();
+ // _startPage2 = "login";
+ // runApp(MyApp());
+  runApp(MyApp());
+
+}
+
+class MyApp extends StatefulWidget{
+  @override
+  _MyApp createState() => _MyApp();
+}
+
+>>>>>>> 4c9d004c5a9e9c416ab5b26080cdb3e8a330b7fc
 class _MyApp extends State<MyApp> {
   // This widget is the root of your application.
 
@@ -99,7 +126,11 @@ class _MyApp extends State<MyApp> {
         theme: HazizzTheme.lightThemeData,
         // home: _startPage,//MyHomePage(title: 'Hazizz Demo Home Page') //_startPage, // MyHomePage(title: 'Hazizz Demo Home Page'),
         initialRoute: _startPage2,
+<<<<<<< HEAD
         //  home: _startPage,
+=======
+      //  home: _startPage,
+>>>>>>> 4c9d004c5a9e9c416ab5b26080cdb3e8a330b7fc
         onGenerateRoute: RouteGenerator.generateRoute,
         localizationsDelegates: [
           HazizzLocalizations.delegate,
@@ -127,6 +158,7 @@ class _MyApp extends State<MyApp> {
         },
       );
     }else{
+<<<<<<< HEAD
       //  mainTabBlocs = MainTabBlocs();
       //  mainTabBlocs.tasksBloc.dispatch(FetchData());
       //   mainTabBlocs.schedulesBloc.dispatch(FetchData());
@@ -135,6 +167,16 @@ class _MyApp extends State<MyApp> {
       //   mainTabBlocs.tasksBloc.dispatch(FetchData());
       //   mainTabBlocs.schedulesBloc.dispatch(FetchData());
       //   mainTabBlocs.gradesBloc.dispatch(FetchData());
+=======
+    //  mainTabBlocs = MainTabBlocs();
+    //  mainTabBlocs.tasksBloc.dispatch(FetchData());
+   //   mainTabBlocs.schedulesBloc.dispatch(FetchData());
+     // mainTabBlocs.gradesBloc.dispatch(FetchData());
+
+   //   mainTabBlocs.tasksBloc.dispatch(FetchData());
+   //   mainTabBlocs.schedulesBloc.dispatch(FetchData());
+   //   mainTabBlocs.gradesBloc.dispatch(FetchData());
+>>>>>>> 4c9d004c5a9e9c416ab5b26080cdb3e8a330b7fc
 
 
       Timer(Duration(seconds: 1), (){

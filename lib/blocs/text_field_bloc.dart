@@ -4,6 +4,8 @@ import 'package:mobile/blocs/response_states.dart';
 
 import 'TextFormBloc.dart';
 
+import 'TextFormBloc.dart';
+
 abstract class TextFieldState extends HState {
   TextFieldState([List props = const []]) : super(props);
 }

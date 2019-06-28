@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+<<<<<<< HEAD
 import 'package:mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
 import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
@@ -10,6 +11,18 @@ import 'package:mobile/listItems/TaskHeaderItemWidget.dart';
 import 'package:mobile/listItems/TaskItemWidget.dart';
 import 'package:mobile/listItems/grade_header_item_widget.dart';
 import 'package:mobile/listItems/grade_item_widget.dart';
+=======
+import 'package:hazizz_mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
+import 'package:hazizz_mobile/blocs/request_event.dart';
+import 'package:hazizz_mobile/blocs/response_states.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoGrade.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoGrades.dart';
+import 'package:hazizz_mobile/communication/pojos/task/PojoTask.dart';
+import 'package:hazizz_mobile/listItems/TaskHeaderItemWidget.dart';
+import 'package:hazizz_mobile/listItems/TaskItemWidget.dart';
+import 'package:hazizz_mobile/listItems/grade_header_item_widget.dart';
+import 'package:hazizz_mobile/listItems/grade_item_widget.dart';
+>>>>>>> 4c9d004c5a9e9c416ab5b26080cdb3e8a330b7fc
 
 
 import 'package:sticky_headers/sticky_headers.dart';

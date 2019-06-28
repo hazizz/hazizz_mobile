@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+<<<<<<< HEAD
 import 'package:mobile/blocs/group_bloc.dart';
 import 'package:mobile/blocs/my_groups_bloc.dart';
 import 'package:mobile/blocs/request_event.dart';
@@ -8,6 +9,16 @@ import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/pojos/PojoUser.dart';
 import 'package:mobile/listItems/group_item_widget.dart';
 import 'package:mobile/listItems/member_item_widget.dart';
+=======
+import 'package:hazizz_mobile/blocs/group_bloc.dart';
+import 'package:hazizz_mobile/blocs/my_groups_bloc.dart';
+import 'package:hazizz_mobile/blocs/request_event.dart';
+import 'package:hazizz_mobile/blocs/response_states.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoGroup.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoUser.dart';
+import 'package:hazizz_mobile/listItems/group_item_widget.dart';
+import 'package:hazizz_mobile/listItems/member_item_widget.dart';
+>>>>>>> 4c9d004c5a9e9c416ab5b26080cdb3e8a330b7fc
 
 
 class MyGroupsPage extends StatefulWidget {
