@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:mobile/blocs/group_bloc.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
+=======
+import 'package:hazizz_mobile/blocs/group_bloc.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoGroup.dart';
+>>>>>>> 4c9d004c5a9e9c416ab5b26080cdb3e8a330b7fc
 
 
 import '../../hazizz_localizations.dart';

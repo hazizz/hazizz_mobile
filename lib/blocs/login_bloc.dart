@@ -14,6 +14,8 @@ import 'package:mobile/exceptions/exceptions.dart';
 
 import 'main_tab_blocs/main_tab_blocs.dart';
 
+import 'main_tab_blocs/main_tab_blocs.dart';
+
 //region LoginEvents
 abstract class LoginEvent extends HEvent {
   LoginEvent([List props = const []]) : super(props);

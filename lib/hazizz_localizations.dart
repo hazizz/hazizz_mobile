@@ -10,12 +10,15 @@ String locText(BuildContext context, {@required String key, List<String> args}){
   return HazizzLocalizations.of(context).translate(key, args: args);
 }
 
+<<<<<<< HEAD
 Future<String> locTextContextless({@required String key, List<String> args}) async {
   return await HazizzLocalizationsNoContext.translate(key, args: args);
 }
 
 
 
+=======
+>>>>>>> 4c9d004c5a9e9c416ab5b26080cdb3e8a330b7fc
 String locTextFromList(BuildContext context, {@required String key, @required int index}){
   return HazizzLocalizations.of(context).translateFromList(key: key, index: index);
 }
@@ -32,9 +35,12 @@ getPreferredLocal() async{
 Future<String> getPreferredLangCode() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   String langCode = prefs.getString(_keyLangCode);
+<<<<<<< HEAD
   if(langCode == null) {
     langCode = "en";
   }
+=======
+>>>>>>> 4c9d004c5a9e9c416ab5b26080cdb3e8a330b7fc
   return langCode;
 }
 
@@ -44,6 +50,7 @@ Future<void> setPreferredLangCode(String langCode) async {
   return;
 }
 
+<<<<<<< HEAD
 
 class HazizzLocalizationsNoContext{
 
@@ -88,6 +95,8 @@ class HazizzLocalizationsNoContext{
   }
 }
 
+=======
+>>>>>>> 4c9d004c5a9e9c416ab5b26080cdb3e8a330b7fc
 class HazizzLocalizations {
 
 
@@ -101,8 +110,11 @@ class HazizzLocalizations {
     return Localizations.of<HazizzLocalizations>(context, HazizzLocalizations);
   }
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 4c9d004c5a9e9c416ab5b26080cdb3e8a330b7fc
   Map<String, String> _localizedStrings;
 
   Future<bool> load() async {
@@ -118,7 +130,10 @@ class HazizzLocalizations {
     return true;
   }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 4c9d004c5a9e9c416ab5b26080cdb3e8a330b7fc
   // This method will be called from every widget which needs a localized text
   String translate(String key, {@required List<String> args }) {
     String text = _localizedStrings[key];

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:mobile/blocs/item_list_picker_bloc/item_list_picker_bloc.dart';
 import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
@@ -9,13 +10,27 @@ import 'package:mobile/communication/pojos/PojoError.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/managers/TokenManager.dart';
+=======
+import 'package:hazizz_mobile/blocs/item_list_picker_bloc/item_list_picker_bloc.dart';
+import 'package:hazizz_mobile/blocs/request_event.dart';
+import 'package:hazizz_mobile/blocs/response_states.dart';
+import 'package:hazizz_mobile/communication/errorcode_collection.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoError.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoSession.dart';
+import 'package:hazizz_mobile/communication/requests/request_collection.dart';
+import 'package:hazizz_mobile/managers/TokenManager.dart';
+>>>>>>> 4c9d004c5a9e9c416ab5b26080cdb3e8a330b7fc
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
 import '../RequestSender.dart';
 import 'TextFormBloc.dart';
 import 'auth_bloc.dart';
 
+<<<<<<< HEAD
 import 'package:mobile/exceptions/exceptions.dart';
+=======
+import 'package:hazizz_mobile/exceptions/exceptions.dart';
+>>>>>>> 4c9d004c5a9e9c416ab5b26080cdb3e8a330b7fc
 
 //region KretaLoginEvents
 abstract class KretaLoginEvent extends HEvent {

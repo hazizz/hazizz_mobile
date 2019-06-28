@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+<<<<<<< HEAD:lib/pages/task_maker_page.dart
 import 'package:mobile/blocs/TextFormBloc.dart';
 import 'package:mobile/blocs/create_task_bloc.dart';
 import 'package:mobile/blocs/date_time_picker_bloc.dart';
@@ -13,6 +14,21 @@ import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
 import 'package:mobile/communication/pojos/PojoType.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
+=======
+import 'package:hazizz_mobile/blocs/TextFormBloc.dart';
+import 'package:hazizz_mobile/blocs/create_task_bloc.dart';
+import 'package:hazizz_mobile/blocs/date_time_picker_bloc.dart';
+import 'package:hazizz_mobile/blocs/edit_task_bloc.dart';
+//import 'package:hazizz_mobile/blocs/edit_task_bloc2.dart';
+import 'package:hazizz_mobile/blocs/item_list_picker_bloc/item_list_picker_bloc.dart';
+import 'package:hazizz_mobile/blocs/item_list_picker_bloc/item_list_picker_group_bloc.dart';
+import 'package:hazizz_mobile/blocs/task_maker_blocs.dart' as prefix0;
+import 'package:hazizz_mobile/blocs/task_maker_blocs.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoGroup.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoSubject.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoType.dart';
+import 'package:hazizz_mobile/communication/pojos/task/PojoTask.dart';
+>>>>>>> 4c9d004c5a9e9c416ab5b26080cdb3e8a330b7fc:lib/pages/task_maker_page.dart
 
 import 'package:expandable/expandable.dart';
 import 'package:mobile/dialogs/dialogs.dart';

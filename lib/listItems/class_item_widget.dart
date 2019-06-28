@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:mobile/communication/pojos/PojoClass.dart';
 import 'package:mobile/communication/pojos/PojoGrade.dart';
 import 'package:mobile/communication/pojos/PojoType.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/pages/ViewTaskPage.dart';
+=======
+import 'package:hazizz_mobile/communication/pojos/PojoClass.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoGrade.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoType.dart';
+import 'package:hazizz_mobile/dialogs/dialogs.dart';
+import 'package:hazizz_mobile/pages/ViewTaskPage.dart';
+>>>>>>> 4c9d004c5a9e9c416ab5b26080cdb3e8a330b7fc
 import 'package:easy_localization/easy_localization.dart';
 
 import '../hazizz_date.dart';

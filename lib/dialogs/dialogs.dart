@@ -2,6 +2,7 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:mobile/communication/ResponseHandler.dart';
 import 'package:mobile/communication/pojos/PojoError.dart';
 import 'package:mobile/communication/pojos/PojoGrade.dart';
@@ -11,6 +12,17 @@ import 'package:mobile/communication/pojos/PojoType.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/converters/PojoConverter.dart';
 import 'package:mobile/dialogs/school_dialog.dart';
+=======
+import 'package:hazizz_mobile/communication/ResponseHandler.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoError.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoGrade.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoGroup.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoSubject.dart';
+import 'package:hazizz_mobile/communication/pojos/PojoType.dart';
+import 'package:hazizz_mobile/communication/requests/request_collection.dart';
+import 'package:hazizz_mobile/converters/PojoConverter.dart';
+import 'package:hazizz_mobile/dialogs/school_dialog.dart';
+>>>>>>> 4c9d004c5a9e9c416ab5b26080cdb3e8a330b7fc
 import 'package:share/share.dart';
 
 

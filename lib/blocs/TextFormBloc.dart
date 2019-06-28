@@ -1,8 +1,13 @@
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
+=======
+import 'package:hazizz_mobile/blocs/request_event.dart';
+import 'package:hazizz_mobile/blocs/response_states.dart';
+>>>>>>> 4c9d004c5a9e9c416ab5b26080cdb3e8a330b7fc
 import 'package:meta/meta.dart';
 
 //region TextForm events
