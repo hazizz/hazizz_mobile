@@ -742,17 +742,12 @@
     "notif_unfinished_tasks1"
     : "You have",
 
-<<<<<<< HEAD
     "notif_unfinished_tasks"
     : "You have {} task for tomorrow",
 
 
 
     "notif_unfinished_tasks2"
-=======
-
-    "notif-unfinished_tasks2"
->>>>>>> 4c9d004c5a9e9c416ab5b26080cdb3e8a330b7fc
     : "task for tomorrow",
 
 

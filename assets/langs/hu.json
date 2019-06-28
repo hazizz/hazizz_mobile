@@ -748,20 +748,14 @@
     : "Van",
 
 
-<<<<<<< HEAD
     "notif_unfinished_tasks"
     : "Van {} feladatod holnapra",
 
-=======
->>>>>>> 4c9d004c5a9e9c416ab5b26080cdb3e8a330b7fc
     "notif-unfinished_tasks2"
     : "feladatod holnapra",
 
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 4c9d004c5a9e9c416ab5b26080cdb3e8a330b7fc
     "notif_settings_notify_everyday"
     : "Értesítés minden nap",
 
