@@ -5,7 +5,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:hazizz_mobile/blocs/TextFormBloc.dart';
 import 'package:hazizz_mobile/blocs/login_bloc.dart';
 import 'package:hazizz_mobile/blocs/registration_bloc.dart';
@@ -95,9 +94,8 @@ class _RegistrationPage extends State<RegistrationPage> with SingleTickerProvide
                     } else if (state is TextFormErrorTooShort) {
                       errorText = "too short mann...";
                     }
-                    return FormBuilderTextField(
+                    return TextField(
                       controller: _usernameTextEditingController,
-                      attribute: "username",
                       textInputAction: TextInputAction.next,
                       decoration:
                       InputDecoration(labelText: "Username", errorText: errorText),
@@ -111,10 +109,9 @@ class _RegistrationPage extends State<RegistrationPage> with SingleTickerProvide
                     if (state is TextFormEmailInvalidState) {
                       errorText = "Invalid email";
                     }
-                    return FormBuilderTextField(
+                    return TextField(
 
                       controller: _emailTextEditingController,
-                      attribute: "email",
                       textInputAction: TextInputAction.next,
                       decoration: InputDecoration(labelText: "Email", errorText: errorText),
                     );

@@ -13,7 +13,6 @@ import 'package:hazizz_mobile/communication/pojos/PojoGroup.dart';
 import 'package:hazizz_mobile/communication/pojos/PojoSubject.dart';
 import 'package:hazizz_mobile/communication/pojos/PojoType.dart';
 import 'package:hazizz_mobile/communication/pojos/task/PojoTask.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 import 'package:expandable/expandable.dart';
 import 'package:hazizz_mobile/dialogs/dialogs.dart';
@@ -83,7 +82,6 @@ class _TaskMakerPage extends State<TaskMakerPage> {
   List<PojoTask> task_data = List();
   List<PojoSubject> subjects_data = List();
 
-  final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
 
   void processData(PojoTask pojoTask){
    // expandablePanel.c

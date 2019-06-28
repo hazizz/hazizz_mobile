@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hazizz_mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
 import 'package:hazizz_mobile/blocs/request_event.dart';
@@ -38,12 +39,15 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
 
   List<BottomNavigationBarItem> bottomNavBarItems = [];
 
+  bool canBuildBottomNavBar = false;
+
   @override
   void initState() {
     // getData();
    // schedulesBloc.dispatch(FetchData());
     //   schedulesBloc.fetchMyTasks();
     if(schedulesBloc.currentState is ResponseError) {
+      print("log: here233");
       schedulesBloc.dispatch(FetchData());
     }
 
@@ -54,7 +58,7 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
 
   @override
   void dispose() {
-    _tabController.dispose();
+    _tabController?.dispose();
     super.dispose();
   }
 
@@ -91,11 +95,25 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
                       }
                     }
                     _tabController = TabController(vsync: this, length: _tabList.length);
+
+
+                    if(canBuildBottomNavBar == false) {
+                      SchedulerBinding.instance.addPostFrameCallback((_) =>
+                          setState(() {
+                            canBuildBottomNavBar = true;
+                          })
+                      );
+                    }
+
+
                     return TabBarView(
                       physics: NeverScrollableScrollPhysics(),
                       controller: _tabController,
                       children: _tabList,
                     );
+
+
+
                   } else if (state is ResponseEmpty) {
                     return Center(child: Text("Empty"));
                   } else if (state is ResponseWaiting) {
@@ -114,19 +132,23 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
           builder: (_, HState state) {
 
             if (state is ResponseDataLoaded) {
-              return Container(
-                color: Theme.of(context).primaryColorDark,
-                child: BottomNavigationBar(
-                  currentIndex: _currentIndex,
-                  onTap: (int index){
-                    setState(() {
-                      _currentIndex = index;
-                    });
-                    _tabController.animateTo(index);
-                  },
-                  items: bottomNavBarItems
-                )
-              );
+              if(canBuildBottomNavBar){
+                return Container(
+                    color: Theme.of(context).primaryColorDark,
+                    child: BottomNavigationBar(
+                        currentIndex: _currentIndex,
+                        onTap: (int index){
+                          setState(() {
+                            _currentIndex = index;
+                          });
+                          _tabController.animateTo(index);
+                        },
+                        items: bottomNavBarItems
+                    )
+                );
+              }else{
+                return Container();
+              }
             }else{
               return Container();
             }

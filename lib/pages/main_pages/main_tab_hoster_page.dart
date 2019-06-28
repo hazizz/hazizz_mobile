@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:hazizz_mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
 import 'package:hazizz_mobile/managers/cache_manager.dart';
+import 'package:hazizz_mobile/managers/preference_services.dart';
+import 'package:hazizz_mobile/notification/notification.dart';
 import 'package:hazizz_mobile/pages/group_pages/group_tab_hoster_page.dart';
 import 'package:hazizz_mobile/pages/main_pages/main_grades_page.dart';
 import 'package:hazizz_mobile/pages/main_pages/main_tasks_page.dart';
@@ -34,6 +36,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
   SchedulesPage schedulesTabPage;
   GradesPage gradesTabPage;
 
+
   void _handleTabSelection() {
     setState(() {
 
@@ -44,10 +47,10 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
   void initState() {
 
     tasksTabPage = TasksPage(tasksBloc: widget.mainTabBlocs.tasksBloc);
-    schedulesTabPage = SchedulesPage(schedulesBloc: widget.mainTabBlocs.schedulesBloc,);
+    schedulesTabPage = SchedulesPage(schedulesBloc: widget.mainTabBlocs.schedulesBloc);
     gradesTabPage = GradesPage(gradesBloc: widget.mainTabBlocs.gradesBloc);
 
-    _tabController = new TabController(length: 3, vsync: this);
+    _tabController = new TabController(length: 3, vsync: this, initialIndex: widget.mainTabBlocs.initialIndex);
     _tabController.addListener(_handleTabSelection);
     super.initState();
   }
@@ -107,14 +110,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
             ListTile(
               title: Text('My Tasks'),
               onTap: () {
-                this.setState(() async {
-                  setPreferredLangCode("en");
-                  Locale locale = await getPreferredLocal();
-                //  data.changeLocale(locale);
-                  print(Localizations
-                      .localeOf(context)
-                      .languageCode);
-                });
+                HazizzNotification.scheduleNotificationAlarmManager();
 
                 Navigator.pop(context);
               },
@@ -139,6 +135,10 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
                           children: <Widget>[
                             Divider(),
                             ListTile(
+                              onTap: (){
+                                Navigator.pop(context);
+                                Navigator.pushNamed(context, "/settings");
+                              },
                                 leading: Icon(Icons.settings),
                                 title: Text('Settings')),
                             ListTile(

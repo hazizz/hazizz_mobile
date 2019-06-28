@@ -12,6 +12,8 @@ import 'auth_bloc.dart';
 
 import 'package:hazizz_mobile/exceptions/exceptions.dart';
 
+import 'main_tab_blocs/main_tab_blocs.dart';
+
 //region LoginEvents
 abstract class LoginEvent extends HEvent {
   LoginEvent([List props = const []]) : super(props);
@@ -133,6 +135,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           try {
             print("sentaa22");
             await TokenManager.fetchTokens(event.username, event.password);
+            MainTabBlocs().initialize();
             authenticationBloc.dispatch(LoggedIn());
             yield LoginSuccessState();
           }on HResponseError catch(e) {
