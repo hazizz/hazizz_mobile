@@ -5,6 +5,7 @@ import 'package:hazizz_mobile/pages/kreta_login_page.dart';
 import 'package:hazizz_mobile/pages/main_pages/main_tab_hoster_page.dart';
 import 'package:hazizz_mobile/pages/my_groups_page.dart';
 import 'package:hazizz_mobile/pages/registration_page.dart';
+import 'package:hazizz_mobile/pages/settings_page.dart';
 import 'package:hazizz_mobile/pages/task_maker_page.dart';
 
 import 'main.dart';
@@ -36,13 +37,12 @@ class RouteGenerator{
       case 'intro':
         return MaterialPageRoute(builder: (_) => RegistrationPage());
       case '/':
-      //  return MaterialPageRoute(builder: (_) => (title: "homepage"));
          return MaterialPageRoute(builder: (_) => MainTabHosterPage());
+      case '/settings':
+        return MaterialPageRoute(builder: (_) => SettingsPage());
       case '/groups':
         return MaterialPageRoute(builder: (_) => MyGroupsPage());
       case '/group/groupId':
-                //      Navigator.push(context,MaterialPageRoute(builder: (context) => GroupTabHosterPage(groupId: 2)));
-
         return MaterialPageRoute(builder: (_) => GroupTabHosterPage(group: args));
       case '/createTask':
         return MaterialPageRoute(builder: (_) => TaskMakerPage.createMode(groupId: args));

@@ -1,3 +1,4 @@
+import 'package:hazizz_mobile/hazizz_date.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'Pojo.dart';
@@ -7,8 +8,8 @@ part 'PojoClass.g.dart';
 @JsonSerializable()
 class PojoClass extends Pojo{
   DateTime date;
-  String startOfClass;
-  String endOfClass;
+  Duration startOfClass;
+  Duration endOfClass;
   int periodNumber;
   bool cancelled;
   bool standIn;
@@ -17,15 +18,6 @@ class PojoClass extends Pojo{
   String teacher;
   String room;
   String topic;
-
-
-
-
-
-
-
-
-
 
   PojoClass({this.date, this.startOfClass, this.endOfClass, this.periodNumber,
       this.cancelled, this.standIn, this.subject, this.className, this.teacher,

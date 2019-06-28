@@ -87,6 +87,10 @@
     "mainpage_menu"
     : "Home",
 
+    "startPage"
+    : "Kezdő oldal",
+
+
     "createGroup_menu"
     : "Create new group",
 

@@ -91,6 +91,10 @@
     : "Főoldal",
 
 
+    "startPage"
+    : "Kezdő oldal",
+
+
     "createGroup_menu"
     : "Új csoport létrehozása",
 

@@ -30,7 +30,7 @@ class ResponseDataLoaded extends HState {
       : assert(data != null);
 
   @override
-  String toString() => 'ResponseData';
+  String toString() => 'ResponseDataLoaded';
 }
 
 class ResponseError extends HState {

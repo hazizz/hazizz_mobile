@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:hazizz_mobile/hazizz_localizations.dart';
 import 'package:hazizz_mobile/pages/LoginPage.dart';
@@ -33,11 +34,13 @@ MainTabBlocs mainTabBlocs = MainTabBlocs();
 
 void main() async{
 
-  mainTabBlocs.fetchAll();
 
+  await AndroidAlarmManager.initialize();
 
   if(!(await AppState.isLoggedIn())){
     isLoggedIn = false;
+  }else{
+    mainTabBlocs.initialize();
   }
 
  // locale = await getPreferredLocal();

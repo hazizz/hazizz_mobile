@@ -9,6 +9,7 @@ import 'package:hazizz_mobile/communication/pojos/PojoSchedules.dart';
 import 'package:hazizz_mobile/communication/pojos/task/PojoTask.dart';
 import 'package:hazizz_mobile/communication/requests/request_collection.dart';
 import 'package:hazizz_mobile/managers/kreta_session_manager.dart';
+import 'package:hazizz_mobile/managers/preference_services.dart';
 
 import '../../RequestSender.dart';
 
@@ -68,6 +69,7 @@ class MainSchedulesBloc extends Bloc<HEvent, HState> {
         if(responseData is PojoSchedules){
           classes = responseData;
           if(true) {
+            print("log: oy133");
             yield ResponseDataLoaded(data: responseData);
           }else{
             yield ResponseEmpty();
@@ -148,14 +150,22 @@ class MainTabBlocs{
   }
   MainTabBlocs._internal();
 
+  int initialIndex = StartPageService.tasksPage;
+
   MainTasksBloc tasksBloc = new MainTasksBloc();
   MainSchedulesBloc schedulesBloc = new MainSchedulesBloc();
   MainGradesBloc gradesBloc = new MainGradesBloc();
 
   void fetchAll(){
+    print("log: here455");
     tasksBloc.dispatch(FetchData());
     schedulesBloc.dispatch(FetchData());
     gradesBloc.dispatch(FetchData());
+  }
+
+  void initialize()async{
+    fetchAll();
+    initialIndex = await StartPageService.getStartPageIndex();
   }
 
 }
