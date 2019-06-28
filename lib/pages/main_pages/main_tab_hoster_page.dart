@@ -1,6 +1,5 @@
 //import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
 import 'package:mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
 import 'package:mobile/managers/cache_manager.dart';
 import 'package:mobile/managers/preference_services.dart';
@@ -8,15 +7,6 @@ import 'package:mobile/notification/notification.dart';
 import 'package:mobile/pages/group_pages/group_tab_hoster_page.dart';
 import 'package:mobile/pages/main_pages/main_grades_page.dart';
 import 'package:mobile/pages/main_pages/main_tasks_page.dart';
-=======
-import 'package:hazizz_mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
-import 'package:hazizz_mobile/managers/cache_manager.dart';
-import 'package:hazizz_mobile/managers/preference_services.dart';
-import 'package:hazizz_mobile/notification/notification.dart';
-import 'package:hazizz_mobile/pages/group_pages/group_tab_hoster_page.dart';
-import 'package:hazizz_mobile/pages/main_pages/main_grades_page.dart';
-import 'package:hazizz_mobile/pages/main_pages/main_tasks_page.dart';
->>>>>>> 4c9d004c5a9e9c416ab5b26080cdb3e8a330b7fc
 
 import '../../Page1.dart';
 import '../../hazizz_localization.dart';
@@ -120,11 +110,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
             ListTile(
               title: Text('My Tasks'),
               onTap: () {
-<<<<<<< HEAD
                 HazizzNotification.scheduleNotificationAlarmManager(DateTime.now());
-=======
-                HazizzNotification.scheduleNotificationAlarmManager();
->>>>>>> 4c9d004c5a9e9c416ab5b26080cdb3e8a330b7fc
 
                 Navigator.pop(context);
               },

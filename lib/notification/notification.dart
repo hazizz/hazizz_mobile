@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
-<<<<<<< HEAD
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 
 import '../RequestSender.dart';
 import '../hazizz_localizations.dart';
-=======
-import 'package:hazizz_mobile/communication/pojos/task/PojoTask.dart';
-import 'package:hazizz_mobile/communication/requests/request_collection.dart';
-
-import '../RequestSender.dart';
->>>>>>> 4c9d004c5a9e9c416ab5b26080cdb3e8a330b7fc
 
 
 // android:name="io.flutter.app.FlutterApplication"
@@ -103,15 +96,11 @@ class HazizzNotification{
     if(response is List<PojoTask>){
       return response;
     }
-<<<<<<< HEAD
     return response;
-=======
->>>>>>> 4c9d004c5a9e9c416ab5b26080cdb3e8a330b7fc
   }
 
   static Future showHazizzNotification() async {
     print("log: no its works1");
-<<<<<<< HEAD
     List<PojoTask> tasks = await getTasksForNotification();
     if(tasks is List<PojoTask>) {
       List<PojoTask> tasksToShow = List();
@@ -168,10 +157,7 @@ class HazizzNotification{
   }
 
 
-}
 
-
-=======
    // List<PojoTask> tasks = await getTasksForNotification();
     /*
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
@@ -193,20 +179,4 @@ class HazizzNotification{
         0, 'tasks:', tasks.length.toString(), platformChannelSpecifics,
         payload: 'item x');
     */
-    print("log: no its works2");
-
-  }
-
-  static final int taskNotificationId = 435;
-
-  static Future scheduleNotificationAlarmManager() async {
-   // await AndroidAlarmManager.initialize();
-    //run app
-    await AndroidAlarmManager.periodic(const Duration(minutes: 1), taskNotificationId, showHazizzNotification);
-    print("log: alarm manager is set");
-
-  }
-
-
 }
->>>>>>> 4c9d004c5a9e9c416ab5b26080cdb3e8a330b7fc

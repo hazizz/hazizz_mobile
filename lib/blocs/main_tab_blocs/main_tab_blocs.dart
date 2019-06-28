@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-<<<<<<< HEAD
 import 'package:mobile/communication/pojos/PojoError.dart';
 import 'package:mobile/communication/pojos/PojoGrades.dart';
 import 'package:mobile/communication/pojos/PojoSchedules.dart';
@@ -10,21 +9,6 @@ import 'package:mobile/managers/preference_services.dart';
 import '../../RequestSender.dart';
 import '../request_event.dart';
 import '../response_states.dart';
-=======
-import 'package:hazizz_mobile/blocs/request_event.dart';
-import 'package:hazizz_mobile/blocs/response_states.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoClass.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoError.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoGrade.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoGrades.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoSchedules.dart';
-import 'package:hazizz_mobile/communication/pojos/task/PojoTask.dart';
-import 'package:hazizz_mobile/communication/requests/request_collection.dart';
-import 'package:hazizz_mobile/managers/kreta_session_manager.dart';
-import 'package:hazizz_mobile/managers/preference_services.dart';
-
-import '../../RequestSender.dart';
->>>>>>> 4c9d004c5a9e9c416ab5b26080cdb3e8a330b7fc
 
 
 

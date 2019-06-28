@@ -1,22 +1,12 @@
 
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
-<<<<<<< HEAD
 import 'package:meta/meta.dart';
 import 'package:mobile/blocs/response_states.dart';
 import 'package:mobile/blocs/task_maker_blocs.dart';
 import 'package:mobile/communication/pojos/PojoError.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
-=======
-import 'package:hazizz_mobile/blocs/response_states.dart';
-import 'package:hazizz_mobile/blocs/task_maker_blocs.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoError.dart';
-import 'package:hazizz_mobile/communication/pojos/PojoGroup.dart';
-import 'package:hazizz_mobile/communication/pojos/task/PojoTask.dart';
-import 'package:hazizz_mobile/communication/requests/request_collection.dart';
-import 'package:meta/meta.dart';
->>>>>>> 4c9d004c5a9e9c416ab5b26080cdb3e8a330b7fc
 import '../RequestSender.dart';
 import 'TextFormBloc.dart';
 import 'date_time_picker_bloc.dart';

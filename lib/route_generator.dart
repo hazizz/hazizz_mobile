@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
 import 'package:mobile/pages/LoginPage.dart';
 import 'package:mobile/pages/group_pages/group_tab_hoster_page.dart';
 import 'package:mobile/pages/kreta_login_page.dart';
@@ -8,16 +7,6 @@ import 'package:mobile/pages/my_groups_page.dart';
 import 'package:mobile/pages/registration_page.dart';
 import 'package:mobile/pages/settings_page.dart';
 import 'package:mobile/pages/task_maker_page.dart';
-=======
-import 'package:hazizz_mobile/pages/LoginPage.dart';
-import 'package:hazizz_mobile/pages/group_pages/group_tab_hoster_page.dart';
-import 'package:hazizz_mobile/pages/kreta_login_page.dart';
-import 'package:hazizz_mobile/pages/main_pages/main_tab_hoster_page.dart';
-import 'package:hazizz_mobile/pages/my_groups_page.dart';
-import 'package:hazizz_mobile/pages/registration_page.dart';
-import 'package:hazizz_mobile/pages/settings_page.dart';
-import 'package:hazizz_mobile/pages/task_maker_page.dart';
->>>>>>> 4c9d004c5a9e9c416ab5b26080cdb3e8a330b7fc
 
 import 'main.dart';
 
