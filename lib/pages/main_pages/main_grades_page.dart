@@ -22,8 +22,7 @@ class GradesPage extends StatefulWidget {
   getTabName(BuildContext context){
     return locText(context, key: "grades");
   }
-
-
+  
   @override
   _GradesPage createState() => _GradesPage(gradesBloc);
 }
@@ -74,24 +73,22 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
 
                         String key = grades.keys.elementAt(index);
 
-                        dynamic item = 2;// itemList[index];
-                        if(true){
-                          return new StickyHeader(
-                            header: GradeHeaderItemWidget(subjectName: key),
-                            content: Builder(
-                              builder: (context) {
-                                List<GradeItemWidget> gradeSubjects = new List();
-                                for(PojoGrade pojoGrade in grades[key]){
-                                  gradeSubjects.add(GradeItemWidget(pojoGrade: pojoGrade));
-                                }
-                                return Column(
-                                    children: gradeSubjects
-                                );
+                        return new StickyHeader(
+                          header: GradeHeaderItemWidget(subjectName: key),
+                          content: Builder(
+                            builder: (context) {
+                              List<GradeItemWidget> gradeSubjects = new List();
+                              for(PojoGrade pojoGrade in grades[key]){
+                                gradeSubjects.add(GradeItemWidget(pojoGrade: pojoGrade));
                               }
-                            ),
-                          );
+                              return Column(
+                                  children: gradeSubjects
+                              );
+                            }
+                          ),
+                        );
 
-                        }
+
                       }
                     );
                   } else if (state is ResponseEmpty) {
