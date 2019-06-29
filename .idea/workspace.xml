@@ -2,67 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8417306d-630f-4832-8662-4589633a4d72" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.packages" beforeDir="false" afterPath="$PROJECT_DIR$/.packages" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.gradle/4.10.2/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/android/.gradle/4.10.2/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.gradle/4.10.2/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/android/.gradle/4.10.2/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.gradle/4.10.2/taskHistory/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/android/.gradle/4.10.2/taskHistory/taskHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.gradle/4.10.2/taskHistory/taskHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/android/.gradle/4.10.2/taskHistory/taskHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/android/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/app.dill.track.dill" beforeDir="false" afterPath="$PROJECT_DIR$/build/app.dill.track.dill" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/app/intermediates/incremental/mergeDebugAssets/merger.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/app/intermediates/merged_assets/debug/mergeDebugAssets/out/flutter_assets/AssetManifest.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/app/intermediates/merged_assets/debug/mergeDebugAssets/out/flutter_assets/FontManifest.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/app/intermediates/merged_assets/debug/mergeDebugAssets/out/flutter_assets/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/app/intermediates/merged_assets/debug/mergeDebugAssets/out/flutter_assets/assets/images/Icon.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/app/intermediates/merged_assets/debug/mergeDebugAssets/out/flutter_assets/assets/images/Logo.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/app/intermediates/merged_assets/debug/mergeDebugAssets/out/flutter_assets/assets/images/asd.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/app/intermediates/merged_assets/debug/mergeDebugAssets/out/flutter_assets/assets/langs/en.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/app/intermediates/merged_assets/debug/mergeDebugAssets/out/flutter_assets/assets/langs/hu.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/app/intermediates/merged_assets/debug/mergeDebugAssets/out/flutter_assets/assets/logout.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/app/intermediates/merged_assets/debug/mergeDebugAssets/out/flutter_assets/fonts/MaterialIcons-Regular.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/app/intermediates/merged_assets/debug/mergeDebugAssets/out/flutter_assets/isolate_snapshot_data" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/app/intermediates/merged_assets/debug/mergeDebugAssets/out/flutter_assets/kernel_blob.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/app/intermediates/merged_assets/debug/mergeDebugAssets/out/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/app/intermediates/merged_assets/debug/mergeDebugAssets/out/flutter_assets/vm_snapshot_data" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/blocs/TextFormBloc.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/blocs/TextFormBloc.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/blocs/create_task_bloc.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/blocs/create_task_bloc.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/blocs/edit_task_bloc.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/blocs/edit_task_bloc.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/blocs/group_bloc.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/blocs/group_bloc.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/blocs/kreta_login_blocs.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/blocs/kreta_login_blocs.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/blocs/kreta_session_bloc.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/blocs/kreta_session_bloc.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/blocs/main_tab_blocs/main_tab_blocs.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/blocs/main_tab_blocs/main_tab_blocs.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/blocs/my_groups_bloc.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/blocs/my_groups_bloc.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/blocs/settings_bloc.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/blocs/settings_bloc.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/blocs/task_maker_blocs.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/blocs/task_maker_blocs.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/communication/pojos/PojoClass.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/communication/pojos/PojoClass.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/communication/pojos/PojoGrades.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/communication/pojos/PojoGrades.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/communication/pojos/PojoMeInfo.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/communication/pojos/PojoMeInfo.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/communication/requests/request_collection.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/communication/requests/request_collection.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/dialogs/dialogs.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/dialogs/dialogs.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/hazizz_localizations.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/hazizz_localizations.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/listItems/class_item_widget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/listItems/class_item_widget.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/listItems/grade_item_widget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/listItems/grade_item_widget.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/listItems/group_item_widget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/listItems/group_item_widget.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/managers/kreta_session_manager.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/managers/kreta_session_manager.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/notification/notification.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/notification/notification.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/LoginPage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/LoginPage.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/group_pages/group_members_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/group_pages/group_members_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/group_pages/group_subjects_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/group_pages/group_subjects_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/group_pages/group_tab_hoster_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/group_pages/group_tab_hoster_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/kreta_login_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/kreta_login_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/main_pages/main_schedules_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/main_pages/main_schedules_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/main_pages/main_schedules_tab_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/main_pages/main_schedules_tab_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/main_pages/main_tab_hoster_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/main_pages/main_tab_hoster_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/main_pages/main_tasks_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/main_pages/main_tasks_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/my_groups_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/my_groups_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/registration_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/registration_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/settings_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/settings_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/task_maker_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/task_maker_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/route_generator.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/route_generator.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/hazizz_response.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/RequestSender.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/RequestSender.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/pages/main_pages/main_grades_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/main_pages/main_grades_page.dart" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.dart_tool/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
@@ -78,13 +21,27 @@
     <splitter split-orientation="horizontal" split-proportion="0.38631922">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="46">
-                  <caret line="2" column="7" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
+                <state relative-caret-position="230">
+                  <caret line="10" column="31" lean-forward="true" selection-start-line="10" selection-start-column="31" selection-end-line="10" selection-end-column="31" />
                   <folding>
                     <element signature="imports" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/lib/RequestSender.dart">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="-84">
+                  <caret line="207" lean-forward="true" selection-start-line="207" selection-end-line="207" />
+                  <folding>
+                    <element signature="e#61#81#0" expanded="true" />
+                    <element signature="e#4540#6262#0" />
+                    <element signature="e#5989#7711#0" />
                   </folding>
                 </state>
               </provider>
@@ -131,29 +88,26 @@
       </split-first>
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/lib/HazizzDrawer.dart">
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/lib/hazizz_response.dart">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="46">
-                  <caret line="3" column="6" selection-start-line="3" selection-start-column="6" selection-end-line="3" selection-end-column="6" />
+                <state relative-caret-position="399">
+                  <caret line="29" column="70" selection-start-line="29" selection-start-column="70" selection-end-line="29" selection-end-column="70" />
+                  <folding>
+                    <element signature="e#0#30#0" expanded="true" />
+                  </folding>
                 </state>
               </provider>
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/lib/pages/main_pages/main_schedules_page.dart">
+            <entry file="file://$PROJECT_DIR$/lib/communication/requests/request_collection.dart">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="46">
-                  <caret line="2" column="48" selection-start-line="2" selection-start-column="48" selection-end-line="2" selection-end-column="48" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/lib/blocs/item_list_picker_bloc/item_list_picker_group_bloc.dart">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="207">
-                  <caret line="14" column="2" selection-start-line="14" selection-start-column="2" selection-end-line="14" selection-end-column="2" />
+                <state relative-caret-position="460">
+                  <caret line="131" column="3" lean-forward="true" selection-start-line="127" selection-start-column="2" selection-end-line="131" selection-end-column="3" />
+                  <folding>
+                    <element signature="e#25#47#0" expanded="true" />
+                  </folding>
                 </state>
               </provider>
             </entry>
@@ -176,11 +130,23 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/lib/communication/errorcode_collection.dart">
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/lib/notification/notification.dart">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="169">
-                  <caret line="36" column="2" selection-start-line="36" selection-start-column="2" selection-end-line="36" selection-end-column="2" />
+                <state relative-caret-position="3979">
+                  <caret line="180" column="6" selection-start-line="180" selection-start-column="6" selection-end-line="180" selection-end-column="6" />
+                  <folding>
+                    <element signature="e#0#39#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/lib/pages/main_pages/main_grades_page.dart">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="184">
+                  <caret line="8" column="38" selection-start-line="8" selection-start-column="38" selection-end-line="8" selection-end-column="38" />
                 </state>
               </provider>
             </entry>
@@ -188,7 +154,7 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/lib/blocs/item_list_picker_bloc/item_list_picker_bloc.dart">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="169">
+                <state relative-caret-position="2254">
                   <caret line="104" column="2" selection-start-line="104" selection-start-column="2" selection-end-line="104" selection-end-column="2" />
                   <folding>
                     <element signature="e#0#32#0" expanded="true" />
@@ -200,7 +166,7 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/lib/blocs/edit_task_bloc2.dart">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="169">
+                <state relative-caret-position="1518">
                   <caret line="85" column="34" selection-start-line="85" selection-start-column="34" selection-end-line="85" selection-end-column="34" />
                 </state>
               </provider>
@@ -232,6 +198,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="Dart File" />
       </list>
     </option>
   </component>
@@ -258,6 +225,7 @@
       <find>now</find>
       <find>getPreferredLangCode</find>
       <find>HEAD</find>
+      <find>streamConnectionStatus</find>
     </findStrings>
     <replaceStrings>
       <replace>'package:mobile/</replace>
@@ -269,9 +237,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/lib/blocs/auth_bloc.dart" />
-        <option value="$PROJECT_DIR$/lib/blocs/date_time_picker_bloc.dart" />
-        <option value="$PROJECT_DIR$/android/app/src/main/kotlin/com/hazizz/mobile/androidalarmmanager/AndroidAlarmManagerPlugin.java" />
         <option value="$PROJECT_DIR$/android/app/src/main/kotlin/com/hazizz/mobile/androidalarmmanager/RebootBroadcastReceiver.java" />
         <option value="$PROJECT_DIR$/lib/managers/cache_manager.dart" />
         <option value="$PROJECT_DIR$/android/app/src/main/java/io/flutter/plugins/Application2.java" />
@@ -310,7 +275,6 @@
         <option value="$PROJECT_DIR$/lib/pages/registration_page.dart" />
         <option value="$PROJECT_DIR$/lib/pages/task_maker_page.dart" />
         <option value="$PROJECT_DIR$/lib/main.dart" />
-        <option value="$PROJECT_DIR$/lib/notification/notification.dart" />
         <option value="$PROJECT_DIR$/lib/pages/group_pages/group_members_page.dart" />
         <option value="$PROJECT_DIR$/lib/pages/group_pages/group_subjects_page.dart" />
         <option value="$PROJECT_DIR$/lib/pages/group_pages/group_tab_hoster_page.dart" />
@@ -320,10 +284,14 @@
         <option value="$PROJECT_DIR$/lib/route_generator.dart" />
         <option value="$PROJECT_DIR$/lib/pages/main_pages/main_tab_hoster_page.dart" />
         <option value="$PROJECT_DIR$/lib/pages/main_pages/main_schedules_page.dart" />
+        <option value="$PROJECT_DIR$/lib/notification/notification.dart" />
+        <option value="$PROJECT_DIR$/lib/pages/main_pages/main_grades_page.dart" />
+        <option value="$PROJECT_DIR$/lib/hazizz_response.dart" />
+        <option value="$PROJECT_DIR$/lib/RequestSender.dart" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="137" />
     <option name="y" value="-10" />
     <option name="width" value="1294" />
@@ -335,8 +303,23 @@
     </navigator>
     <panes>
       <pane id="Scope" />
-      <pane id="ProjectPane" />
       <pane id="AndroidView" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="hazizz_mobile" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hazizz_mobile" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="hazizz_mobile" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hazizz_mobile" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
       <pane id="PackagesPane" />
     </panes>
   </component>
@@ -373,10 +356,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18176973" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.116204694" />
       <window_info id="Captures" order="1" side_tool="true" />
       <window_info id="Structure" order="2" side_tool="true" />
       <window_info id="Image Layers" order="3" />
@@ -385,8 +368,8 @@
       <window_info id="Resources Explorer" order="6" />
       <window_info id="Capture Tool" order="7" />
       <window_info id="Favorites" order="8" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Dart Analysis" order="0" visible="true" weight="0.39018953" />
-      <window_info anchor="bottom" id="Run" order="1" weight="0.5083612" />
+      <window_info anchor="bottom" id="Dart Analysis" order="0" weight="0.17279822" />
+      <window_info anchor="bottom" id="Run" order="1" weight="0.3567447" />
       <window_info anchor="bottom" id="TODO" order="2" />
       <window_info anchor="bottom" id="Android Profiler" order="3" show_stripe_button="false" />
       <window_info anchor="bottom" id="Logcat" order="4" />
@@ -406,48 +389,6 @@
     </layout>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/lib/blocs/TextFormBloc.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="46">
-          <caret line="2" column="39" selection-start-line="2" selection-start-column="39" selection-end-line="2" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/blocs/create_task_bloc.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="23">
-          <caret line="2" column="30" selection-start-line="2" selection-start-column="30" selection-end-line="2" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/blocs/edit_task_bloc.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="23">
-          <caret line="2" column="30" selection-start-line="2" selection-start-column="30" selection-end-line="2" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/blocs/group_bloc.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="32" selection-start-column="32" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/blocs/kreta_login_blocs.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="161">
-          <caret line="16" selection-start-line="16" selection-end-line="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/blocs/kreta_session_bloc.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="23">
-          <caret line="1" column="32" selection-start-line="1" selection-start-column="32" selection-end-line="1" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lib/blocs/main_tab_blocs/main_tab_blocs.dart">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -502,13 +443,6 @@
           <folding>
             <element signature="e#1#55#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/communication/requests/request_collection.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="17" selection-start-line="17" selection-end-line="17" />
         </state>
       </provider>
     </entry>
@@ -606,26 +540,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="46">
-          <caret line="2" column="7" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/notification/notification.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="526">
-          <caret line="198" selection-start-line="198" selection-end-line="198" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lib/pages/group_pages/group_members_page.dart">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="184">
@@ -644,13 +558,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <caret column="39" selection-start-column="39" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/pages/main_pages/main_grades_page.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="15" selection-start-line="15" selection-end-line="15" />
         </state>
       </provider>
     </entry>
@@ -706,13 +613,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/RequestSender.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="230">
-          <caret line="10" column="7" selection-start-line="10" selection-start-column="7" selection-end-line="10" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lib/MyTapBar.dart">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="46">
@@ -734,34 +634,30 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/blocs/auth_bloc.dart">
+    <entry file="file://$PROJECT_DIR$/android/gradle.properties">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/android/gradlew">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/android/app/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="46">
-          <caret line="2" column="7" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
+        <state relative-caret-position="759">
+          <caret line="33" selection-start-line="33" selection-end-line="33" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/blocs/VariableBloc.dart">
+    <entry file="file://C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/android_alarm_manager-0.4.1/example/android/app/src/main/java/io/flutter/plugins/androidalarmmanagerexample/Application.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="46">
-          <caret line="2" column="7" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
+        <state relative-caret-position="69">
+          <caret line="3" column="47" selection-start-line="3" selection-start-column="47" selection-end-line="3" selection-end-column="47" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/blocs/edit_task_bloc2.dart">
+    <entry file="file://C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/android_alarm_manager-0.4.1+6/lib/android_alarm_manager.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="169">
-          <caret line="85" column="34" selection-start-line="85" selection-start-column="34" selection-end-line="85" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/blocs/item_list_picker_bloc/item_list_picker_bloc.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="169">
-          <caret line="104" column="2" selection-start-line="104" selection-start-column="2" selection-end-line="104" selection-end-column="2" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="920">
+          <caret line="47" selection-start-line="47" selection-end-line="47" />
         </state>
       </provider>
     </entry>
@@ -779,10 +675,61 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/blocs/text_field_bloc.dart">
+    <entry file="file://$PROJECT_DIR$/lib/notification/notification.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="138">
-          <caret line="6" column="7" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
+        <state relative-caret-position="3979">
+          <caret line="180" column="6" selection-start-line="180" selection-start-column="6" selection-end-line="180" selection-end-column="6" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/blocs/item_list_picker_bloc/item_list_picker_bloc.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2254">
+          <caret line="104" column="2" selection-start-line="104" selection-start-column="2" selection-end-line="104" selection-end-column="2" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/blocs/edit_task_bloc2.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1518">
+          <caret line="85" column="34" selection-start-line="85" selection-start-column="34" selection-end-line="85" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/blocs/auth_bloc.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="46">
+          <caret line="2" column="7" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/blocs/VariableBloc.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="46">
+          <caret line="2" column="7" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="230">
+          <caret line="10" column="31" lean-forward="true" selection-start-line="10" selection-start-column="31" selection-end-line="10" selection-end-column="31" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/pages/main_pages/main_grades_page.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="184">
+          <caret line="8" column="38" selection-start-line="8" selection-start-column="38" selection-end-line="8" selection-end-column="38" />
         </state>
       </provider>
     </entry>
@@ -790,6 +737,45 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="169">
           <caret line="36" column="2" selection-start-line="36" selection-start-column="2" selection-end-line="36" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/blocs/text_field_bloc.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="138">
+          <caret line="6" column="7" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/communication/requests/request_collection.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="460">
+          <caret line="131" column="3" lean-forward="true" selection-start-line="127" selection-start-column="2" selection-end-line="131" selection-end-column="3" />
+          <folding>
+            <element signature="e#25#47#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/hazizz_response.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="399">
+          <caret line="29" column="70" selection-start-line="29" selection-start-column="70" selection-end-line="29" selection-end-column="70" />
+          <folding>
+            <element signature="e#0#30#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/RequestSender.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-84">
+          <caret line="207" lean-forward="true" selection-start-line="207" selection-end-line="207" />
+          <folding>
+            <element signature="e#61#81#0" expanded="true" />
+            <element signature="e#4540#6262#0" />
+            <element signature="e#5989#7711#0" />
+          </folding>
         </state>
       </provider>
     </entry>
