@@ -10,6 +10,7 @@ import 'package:mobile/communication/requests/request_collection.dart';
 
 
 import '../RequestSender.dart';
+import '../hazizz_response.dart';
 
 
 class MyGroupsBloc extends Bloc<HEvent, HState> {
@@ -21,18 +22,18 @@ class MyGroupsBloc extends Bloc<HEvent, HState> {
     if (event is FetchData) {
       try {
         yield ResponseWaiting();
-        dynamic responseData = await RequestSender().getResponse(new GetMyGroups());
+        HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetMyGroups());
 
-        if(responseData is List<PojoGroup>){
-          List<PojoGroup> groups = responseData;
+        if(hazizzResponse.isSuccessful){
+          List<PojoGroup> groups = hazizzResponse.convertedData;
           if(groups.isNotEmpty) {
-            yield ResponseDataLoaded(data: responseData);
+            yield ResponseDataLoaded(data: groups);
           }else{
             yield ResponseEmpty();
           }
         }
-        if(responseData is PojoError){
-          yield ResponseError(error: responseData);
+        if(hazizzResponse.hasPojoError){
+          yield ResponseError(error: hazizzResponse.pojoError);
         }
       } on Exception catch(e){
         print("log: Exception: ${e.toString()}");

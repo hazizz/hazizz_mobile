@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/communication/pojos/PojoClass.dart';
+import 'package:mobile/dialogs/dialogs.dart';
 
 import '../hazizz_date.dart';
 import '../hazizz_theme.dart';
@@ -34,35 +35,49 @@ class ClassItemWidget extends StatelessWidget{
       child: InkWell(
           onTap: () {
            // showGradeDialog(context, grade: pojoGrade);
+            showClassDialog(context, pojoClass: pojoClass);
           },
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
 
-              FittedBox(
-                fit: BoxFit.none,
-                child: Container(
-                  width: itemHeight,
-                  child:
-                  AspectRatio(
-                    aspectRatio: 1/1,
-                    child: Container(
-                      color: Theme.of(context).primaryColor,
-                      child: Center(
-                        child: Text(pojoClass.periodNumber == null ? "1." : "${pojoClass.periodNumber}.",
-                          style: TextStyle(fontSize: 38),
-                        ),
+              Container(
+                width: itemHeight,
+                child:
+                AspectRatio(
+                  aspectRatio: 1/1,
+                  child: Container(
+                    color: Theme.of(context).primaryColor,
+                    child: Center(
+                      child: Text(pojoClass.periodNumber == null ? "1." : "${pojoClass.periodNumber}.",
+                        style: TextStyle(fontSize: 38),
                       ),
                     ),
                   ),
                 ),
               ),
-              SizedBox(width: 4,),
+            //  SizedBox(width: 4,),
               Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(pojoClass.className == null ? "className" : pojoClass.className, style: TextStyle(fontSize: 20),),
-                  Text(pojoClass.subject == null ? "subject" : pojoClass.subject),
+              //    Text(pojoClass.className == null ? "className" : pojoClass.className, style: TextStyle(fontSize: 20),),
+              //    Text(pojoClass.subject == null ? "subject" : pojoClass.subject),
+                  Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(bottomRight: Radius.circular(20)),
+                          color: Theme.of(context).primaryColor
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 2, top: 2, right: 8, bottom: 4),
+                        child: Row(
+                            children: [
+                            //  Text(pojoClass.subject == null ? "subject" : pojoClass.subject, style: TextStyle(fontSize: 20)),
+                              Text(pojoClass.className == null ? "className" : pojoClass.className, style: TextStyle(fontSize: 22),),
+                            ]
+                        ),
+                      )
+                  ),
                 ],
               ),
               Spacer(),

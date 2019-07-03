@@ -7,20 +7,20 @@ class GradeHeaderItemWidget extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 40.0,
-      child: Card(
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          color: Theme.of(context).primaryColorDark,
-          child: InkWell(
-              child: Row(
-                children: <Widget>[
-                  Text(subjectName),
-                  SizedBox(width: 20),
-                ],
-              )
-          )
-      ),
+    return Card(
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        color: Theme.of(context).primaryColorDark,
+        child: InkWell(
+            child: Row(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all( 5.0),
+                  child: Text(subjectName, style: TextStyle(fontSize: 18),),
+                ),
+                SizedBox(width: 20),
+              ],
+            )
+        )
     );
   }
 }

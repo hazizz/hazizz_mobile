@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
 import 'package:mobile/communication/pojos/PojoError.dart';
@@ -10,6 +11,7 @@ import 'package:mobile/communication/requests/request_collection.dart';
 
 
 import '../RequestSender.dart';
+import '../hazizz_response.dart';
 
 class GroupTasksBloc extends Bloc<HEvent, HState> {
   @override
@@ -24,19 +26,18 @@ class GroupTasksBloc extends Bloc<HEvent, HState> {
     if (event is FetchData) {
       try {
         yield ResponseWaiting();
-        dynamic responseData = await RequestSender().getResponse(new GetTasksFromGroup(groupId: GroupBlocs().group.id));
-        print("log: responseData: ${responseData}");
+        HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetTasksFromGroup(groupId: GroupBlocs().group.id));
 
-        if(responseData is List<PojoTask>){
-          List<PojoTask> tasks = responseData;
+        if(hazizzResponse.isSuccessful){
+          List<PojoTask> tasks = hazizzResponse.convertedData;
           if(tasks.isNotEmpty) {
-            yield ResponseDataLoaded(data: responseData);
+            yield ResponseDataLoaded(data: tasks);
           }else{
             yield ResponseEmpty();
           }
         }
-        if(responseData is PojoError){
-          yield ResponseError(error: responseData);
+        if(hazizzResponse.isError){
+          yield ResponseError(error: hazizzResponse.pojoError);
         }
       } on Exception catch(e){
         print("log: Exception: ${e.toString()}");
@@ -58,18 +59,18 @@ class GroupSubjectsBloc extends Bloc<HEvent, HState> {
     if (event is FetchData) {
       try {
         yield ResponseWaiting();
-        dynamic responseData = await RequestSender().getResponse(new GetSubjects(groupId: GroupBlocs().group.id));
+        HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetSubjects(groupId: GroupBlocs().group.id));
 
-        if(responseData is List<PojoSubject>){
-          List<PojoSubject> tasks = responseData;
+        if(hazizzResponse.isSuccessful){
+          List<PojoSubject> tasks = hazizzResponse.convertedData;
           if(tasks.isNotEmpty) {
-            yield ResponseDataLoaded(data: responseData);
+            yield ResponseDataLoaded(data: tasks);
           }else{
             yield ResponseEmpty();
           }
         }
-        if(responseData is PojoError){
-          yield ResponseError(error: responseData);
+        if(hazizzResponse.isError){
+          yield ResponseError(error: hazizzResponse.pojoError);
         }
       } on Exception catch(e){
         print("log: Exception: ${e.toString()}");
@@ -91,18 +92,18 @@ class GroupMembersBloc extends Bloc<HEvent, HState> {
     if (event is FetchData) {
       try {
         yield ResponseWaiting();
-        dynamic responseData = await RequestSender().getResponse(new GetGroupMembers(groupId: GroupBlocs().group.id));
+        HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetGroupMembers(groupId: GroupBlocs().group.id));
 
-        if(responseData is List<PojoUser>){
-          List<PojoUser> tasks = responseData;
+        if(hazizzResponse.isSuccessful){
+          List<PojoUser> tasks = hazizzResponse.convertedData;
           if(tasks.isNotEmpty) {
-            yield ResponseDataLoaded(data: responseData);
+            yield ResponseDataLoaded(data: tasks);
           }else{
             yield ResponseEmpty();
           }
         }
-        if(responseData is PojoError){
-          yield ResponseError(error: responseData);
+        if(hazizzResponse.hasPojoError){
+          yield ResponseError(error: hazizzResponse.pojoError);
         }
       } on Exception catch(e){
         print("log: Exception: ${e.toString()}");

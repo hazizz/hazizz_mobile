@@ -6,6 +6,7 @@ import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 
 import '../RequestSender.dart';
+import '../hazizz_response.dart';
 
 class TasksBloc extends Bloc<HEvent, HState> {
   @override
@@ -17,22 +18,22 @@ class TasksBloc extends Bloc<HEvent, HState> {
     if (event is FetchData) {
       try {
         yield ResponseWaiting();
-        dynamic responseData = await RequestSender().getResponse(new GetTasksFromMe());
-        print("log: responseData: ${responseData}");
-        print("log: responseData type:  ${responseData.runtimeType.toString()}");
+        HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetTasksFromMe());
+        print("log: responseData: ${hazizzResponse.convertedData}");
+        print("log: responseData type:  ${hazizzResponse.convertedData.runtimeType.toString()}");
 
-        if(responseData is List<PojoTask>){
-          List<PojoTask> tasks = responseData;
+        if(hazizzResponse.isSuccessful){
+          List<PojoTask> tasks = hazizzResponse.convertedData;
           if(tasks.isNotEmpty) {
             print("log: response is List");
-            yield ResponseDataLoaded(data: responseData);
+            yield ResponseDataLoaded(data: tasks);
           }else{
             yield ResponseEmpty();
           }
         }
-        if(responseData is PojoError){
+        if(hazizzResponse.hasPojoError){
           print("log: response is List<PojoTask>");
-          yield ResponseError(error: responseData);
+          yield ResponseError(error: hazizzResponse.pojoError);
         }
       } on Exception catch(e){
         print("log: Exception: ${e.toString()}");

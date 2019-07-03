@@ -5,15 +5,12 @@ import 'package:mobile/blocs/item_list_picker_bloc/item_list_picker_bloc.dart';
 import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
 import 'package:mobile/communication/errorcode_collection.dart';
-import 'package:mobile/communication/pojos/PojoError.dart';
-import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
-import 'package:mobile/managers/TokenManager.dart';
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
 import '../RequestSender.dart';
+import '../hazizz_response.dart';
 import 'TextFormBloc.dart';
-import 'auth_bloc.dart';
 
 import 'package:mobile/exceptions/exceptions.dart';
 
@@ -110,21 +107,9 @@ class SchoolItemPickedState extends SchoolItemState{
 
 
 class SchoolItemPickerBloc extends ItemListPickerBloc {
- // final SubjectItemPickerBloc subjectItemPickerBloc;
- // StreamSubscription subjectItemPickerBlocSubscription;
   Map data;
 
-
-
-  SchoolItemPickerBloc() {
-    
-  }
-
-  /*
-  @override
-  // TODO: implement initialState
-  ItemListState get initialState => LoadData();
-  */
+  SchoolItemPickerBloc() {}
 
   @override
   Stream<ItemListState> mapEventToState(ItemListEvent event) async* {
@@ -133,14 +118,14 @@ class SchoolItemPickerBloc extends ItemListPickerBloc {
     }
     else if (event is ItemListLoadData) {
         yield Waiting();
-        dynamic responseData = await RequestSender().getResponse(
+        HazizzResponse hazizzResponse = await RequestSender().getResponse(
             new KretaGetSchools()
             );
 
-        if (responseData is Map) {
-          data = responseData;
+        if (hazizzResponse.isSuccessful) {
+          data = hazizzResponse.convertedData;
          // listItemData = responseData;
-            yield ItemListLoaded(data: responseData);
+            yield ItemListLoaded(data: data);
           
         }
       
@@ -185,16 +170,14 @@ class KretaLoginBloc extends Bloc<KretaLoginEvent, KretaLoginState> {
           try {
             print("sentaa22");
             yield KretaLoginWaiting();
-            dynamic response = await RequestSender().getResponse(new KretaCreateSession(
+            HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaCreateSession(
               b_username: usernameBloc.lastText, b_password: passwordBloc.lastText,
               b_url: schoolBloc.pickedItem.url
               )
             );
-            print(response);
-            if(response is PojoSession){
+            if(hazizzResponse.isSuccessful){
               yield KretaLoginSuccessState();
-            }else if(response is PojoError){
-              print("${response.message}");
+            }else if(hazizzResponse.hasPojoError){
             }
           }on HResponseError catch(e) {
             print("piritos111");

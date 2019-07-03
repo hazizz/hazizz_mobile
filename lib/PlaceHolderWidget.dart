@@ -62,7 +62,8 @@ class _PlaceholderWidget extends State<PlaceholderWidget> with SingleTickerProvi
                   print("ökör");
                   RequestSender requestSender = new RequestSender();
                   print("log: 1111");
-                  Response response = await requestSender.send(new CreateTokenWithPassword(b_username: "erik", b_password: "15E2B0D3C33891EBB0F1EF609EC419420C20E320CE94C65FBC8C3312448EB225",
+                  /*
+                  Response response = await requestSender.send2(new CreateTokenWithPassword(b_username: "erik", b_password: "15E2B0D3C33891EBB0F1EF609EC419420C20E320CE94C65FBC8C3312448EB225",
                       rh: new ResponseHandler(
                           onSuccessful: (Response response){
                             print("raw response is : ${response.data}" );
@@ -75,6 +76,7 @@ class _PlaceholderWidget extends State<PlaceholderWidget> with SingleTickerProvi
                             print("log: the annonymus functions work and the errorCode : ${pojoError.errorCode}");
                           }
                       )));
+                  */
                   print("log: 2222");
                 },
                 child: null

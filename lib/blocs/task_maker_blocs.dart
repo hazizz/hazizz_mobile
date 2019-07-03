@@ -15,6 +15,7 @@ import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:meta/meta.dart';
 
 import '../RequestSender.dart';
+import '../hazizz_response.dart';
 import 'TextFormBloc.dart';
 import 'date_time_picker_bloc.dart';
 import 'item_list_picker_bloc/item_list_picker_bloc.dart';
@@ -143,17 +144,17 @@ class GroupItemPickerBloc extends ItemListPickerBloc {
     if (event is ItemListLoadData) {
       try {
         yield Waiting();
-        dynamic responseData = await RequestSender().getResponse(
+        HazizzResponse hazizzResponse = await RequestSender().getResponse(
             new GetMyGroups());
-        print("log: responseData: ${responseData}");
+        print("log: responseData: ${hazizzResponse.convertedData}");
         print(
-            "log: responseData type:  ${responseData.runtimeType.toString()}");
+            "log: responseData type:  ${hazizzResponse.convertedData.runtimeType.toString()}");
 
-        if (responseData is List<PojoGroup>) {
-          dataList = responseData;
+        if (hazizzResponse.isSuccessful) {
+          dataList = hazizzResponse.convertedData;
           if (dataList.isNotEmpty) {
             print("log: response is List");
-            yield ItemListLoaded(data: responseData);
+            yield ItemListLoaded(data: dataList);
           } else {
             yield Empty();
           }
@@ -213,15 +214,15 @@ class SubjectItemPickerBloc extends ItemListPickerBloc {
     if (event is SubjectLoadData) {
       try {
         yield Waiting();
-        dynamic responseData = await RequestSender().getResponse(new GetSubjects(groupId: event.groupId));
-        print("log: responseData: $responseData");
-        print("log: responseData type:  ${responseData.runtimeType.toString()}");
+        HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetSubjects(groupId: event.groupId));
+       // print("log: responseData: ${hazizzResponse.convertedData}");
+     //   print("log: responseData type:  ${hazizzResponse.runtimeType.toString()}");
 
-        if(responseData is List<PojoSubject>){
-          dataList = responseData;
+        if(hazizzResponse.isSuccessful){
+          dataList = hazizzResponse.convertedData;
           if(dataList.isNotEmpty) {
             print("log: response is List");
-            yield ItemListLoaded(data: responseData);
+            yield ItemListLoaded(data: dataList);
           }else{
             yield Empty();
           }

@@ -11,6 +11,7 @@ import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../RequestSender.dart';
+import '../hazizz_response.dart';
 
 class LoginError implements Exception{
 
@@ -85,14 +86,15 @@ class KretaSessionBloc extends Bloc<HEvent, HState> {
 
   static Future<void> fetchTokens(@required String username, @required String password) async{
     print("asdsadsadsaASADA");
-    dynamic responseData = await RequestSender().getResponse(new CreateTokenWithPassword(b_username: username, b_password: password));
-    if(responseData is PojoTokens){
+    HazizzResponse hazizzResponse = await RequestSender().getResponse(new CreateTokenWithPassword(b_username: username, b_password: password));
+    if(hazizzResponse.isSuccessful){
       print("log: token: tokens set");
+      PojoTokens tokens = hazizzResponse.convertedData;
       InfoCache.setMyUsername(username);
-      setToken(responseData.token);
-      setRefreshToken(responseData.refresh);
-    }else if(responseData is PojoError){
-      int errorCode = responseData.errorCode;
+      setToken(tokens.token);
+      setRefreshToken(tokens.refresh);
+    }else if(hazizzResponse.hasPojoError){
+      int errorCode = hazizzResponse.pojoError.errorCode;
       print("log: errorCode: $errorCode");
       if(ErrorCodes.INVALID_PASSWORD.equals(errorCode)){
         throw new WrongPasswordException();
@@ -104,13 +106,14 @@ class KretaSessionBloc extends Bloc<HEvent, HState> {
   }
 
   static Future<void> fetchRefreshTokens(@required String username, @required String refreshToken) async{
-    dynamic responseData = await RequestSender().getResponse(new CreateTokenWithRefresh(b_username: username, b_refreshToken: refreshToken));
-    if(responseData is PojoTokens){
+    HazizzResponse hazizzResponse = await RequestSender().getResponse(new CreateTokenWithRefresh(b_username: username, b_refreshToken: refreshToken));
+    if(hazizzResponse.isSuccessful){
+      PojoTokens tokens = hazizzResponse.convertedData;
       InfoCache.setMyUsername(username);
-      setToken(responseData.token);
-      setRefreshToken(responseData.refresh);
-    }else if(responseData is PojoError){
-      int errorCode = responseData.errorCode;
+      setToken(tokens.token);
+      setRefreshToken(tokens.refresh);
+    }else if(hazizzResponse.hasPojoError){
+      int errorCode = hazizzResponse.pojoError.errorCode;
       if(ErrorCodes.INVALID_PASSWORD.equals(errorCode)){
         throw WrongPasswordException;
       }else if(ErrorCodes.USER_NOT_FOUND.equals(errorCode)){

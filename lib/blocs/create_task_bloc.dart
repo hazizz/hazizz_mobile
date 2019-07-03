@@ -8,6 +8,7 @@ import 'package:mobile/communication/pojos/PojoError.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import '../RequestSender.dart';
+import '../hazizz_response.dart';
 import 'TextFormBloc.dart';
 import 'date_time_picker_bloc.dart';
 import 'item_list_picker_bloc/item_list_picker_bloc.dart';
@@ -127,10 +128,10 @@ class TaskCreateBloc extends TaskMakerBloc {
         }
         print("log: not missing info");
 
-        dynamic response;
+        HazizzResponse hazizzResponse;
 
         if(subjectId != null) {
-          response = await RequestSender().getResponse(new CreateTask(
+          hazizzResponse = await RequestSender().getResponse(new CreateTask(
               subjectId: subjectId,
               b_taskType: typeId,
               b_title: title,
@@ -138,7 +139,7 @@ class TaskCreateBloc extends TaskMakerBloc {
               b_deadline: deadline
           ));
         }else {
-          response = await RequestSender().getResponse(new CreateTask(
+          hazizzResponse = await RequestSender().getResponse(new CreateTask(
               groupId: groupId,
               b_taskType: typeId,
               b_title: title,
@@ -147,11 +148,9 @@ class TaskCreateBloc extends TaskMakerBloc {
           ));
         }
 
-        if(!(response is PojoError)){
-          Response resp = response;
-          if(resp.statusCode == 201){
-            yield TaskMakerSentState();
-          }
+        if(!(hazizzResponse.isSuccessful)){
+          yield TaskMakerSentState();
+
         }
         //endregion
 

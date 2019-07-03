@@ -7,6 +7,7 @@ import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/managers/preference_services.dart';
 
 import '../../RequestSender.dart';
+import '../../hazizz_response.dart';
 import '../request_event.dart';
 import '../response_states.dart';
 
@@ -24,22 +25,23 @@ class MainTasksBloc extends Bloc<HEvent, HState> {
     if (event is FetchData) {
       try {
         yield ResponseWaiting();
-        dynamic responseData = await RequestSender().getResponse(new GetTasksFromMe());
-        print("log: responseData: ${responseData}");
-        print("log: responseData type:  ${responseData.runtimeType.toString()}");
+        HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetTasksFromMe());
+        print("log: responseData: ${hazizzResponse}");
+        print("log: responseData type:  ${hazizzResponse.runtimeType.toString()}");
 
-        if(responseData is List<PojoTask>){
-          tasks = responseData;
+
+        if(hazizzResponse.isSuccessful){
+          tasks = hazizzResponse.convertedData;
           if(tasks.isNotEmpty) {
             print("log: response is List");
-            yield ResponseDataLoaded(data: responseData);
+            yield ResponseDataLoaded(data: tasks);
           }else{
             yield ResponseEmpty();
           }
         }
-        if(responseData is PojoError){
+        else if(hazizzResponse.isError){
           print("log: response is List<PojoTask>");
-          yield ResponseError(error: responseData);
+          yield ResponseError(error: hazizzResponse.pojoError);
         }
       } on Exception catch(e){
         print("log: Exception: ${e.toString()}");
@@ -61,19 +63,16 @@ class MainSchedulesBloc extends Bloc<HEvent, HState> {
     if (event is FetchData) {
       try {
         yield ResponseWaiting();
-        dynamic responseData = await RequestSender().getResponse(new DummyKretaGetSchedules());
+        HazizzResponse hazizzResponse = await RequestSender().getResponse(new DummyKretaGetSchedules());
 
-        if(responseData is PojoSchedules){
-          classes = responseData;
-          if(true) {
-            print("log: oy133");
-            yield ResponseDataLoaded(data: responseData);
-          }else{
-            yield ResponseEmpty();
-          }
+        if(hazizzResponse.isSuccessful){
+          classes = hazizzResponse.convertedData;
+          print("log: oy133");
+          yield ResponseDataLoaded(data: classes);
+
         }
-        if(responseData is PojoError){
-          yield ResponseError(error: responseData);
+        else if(hazizzResponse.isError){
+          yield ResponseError(error: hazizzResponse.pojoError);
         }
       } on Exception catch(e){
         print("log: Exception: ${e.toString()}");
@@ -96,7 +95,7 @@ class MainGradesBloc extends Bloc<HEvent, HState> {
         yield ResponseWaiting();
             print("log: am0 i here?");
 
-        dynamic responseData = await RequestSender().getResponse(new DummyKretaGetGrades());
+        HazizzResponse hazizzResponse = await RequestSender().getResponse(new DummyKretaGetGrades());
         
         
         /*
@@ -121,15 +120,11 @@ class MainGradesBloc extends Bloc<HEvent, HState> {
           }
         );
         */
-        if(responseData is PojoGrades){
-          grades = responseData;
-          if(true) {
-            yield ResponseDataLoaded(data: responseData);
-          }else{
-            yield ResponseEmpty();
-          }
+        if(hazizzResponse.isSuccessful){
+          grades = hazizzResponse.convertedData;
+          yield ResponseDataLoaded(data: grades);
         }
-        if(responseData is PojoError){
+        else if(hazizzResponse.isError){
        //   yield ResponseError(error: responseData);
         }
       } on Exception catch(e){
@@ -140,6 +135,12 @@ class MainGradesBloc extends Bloc<HEvent, HState> {
 }
 
 class MainTabBlocs{
+
+   bool isBooked = false;
+
+   void bookBloc(){
+    isBooked = true;
+  }
 
   static final MainTabBlocs _singleton = new MainTabBlocs._internal();
   factory MainTabBlocs() {
@@ -154,7 +155,6 @@ class MainTabBlocs{
   MainGradesBloc gradesBloc = new MainGradesBloc();
 
   void fetchAll(){
-    print("log: here455");
     tasksBloc.dispatch(FetchData());
     schedulesBloc.dispatch(FetchData());
     gradesBloc.dispatch(FetchData());
