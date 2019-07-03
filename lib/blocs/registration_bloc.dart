@@ -9,6 +9,7 @@ import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
 import '../RequestSender.dart';
+import '../hazizz_response.dart';
 import 'TextFormBloc.dart';
 import 'package:mobile/exceptions/exceptions.dart';
 
@@ -85,13 +86,13 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
         if(passwordState is TextFormFine) { //usernameState is TextFormFine && passwordState is TextFormFine) {
           try {
             print("sentaa22");
-            Response response = await RequestSender().getResponse(
+            HazizzResponse hazizzResponse = await RequestSender().getResponse(
                 new RegisterUser(
                     b_username: event.username,
                     b_emailAddress: event.email,
                     b_password: event.password
             ));
-            if(response.statusCode == 201){
+            if(hazizzResponse.isSuccessful){
               yield RegisterSuccessState();
             }else{
               print("log: not successful registration!");

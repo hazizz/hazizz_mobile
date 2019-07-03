@@ -6,6 +6,7 @@ import 'package:mobile/communication/requests/request_collection.dart';
 
 import '../RequestSender.dart';
 import '../hazizz_localizations.dart';
+import '../hazizz_response.dart';
 
 
 // android:name="io.flutter.app.FlutterApplication"
@@ -92,11 +93,11 @@ class HazizzNotification{
 
 
   static Future<List<PojoTask>> getTasksForNotification() async {
-    dynamic response = await RequestSender().getResponse(GetTasksFromMe());
-    if(response is List<PojoTask>){
-      return response;
+    HazizzResponse hazizzResponse = await RequestSender().getResponse(GetTasksFromMe());
+    if(hazizzResponse.isSuccessful){
+      return hazizzResponse.convertedData;
     }
-    return response;
+    return List();
   }
 
   static Future showHazizzNotification() async {

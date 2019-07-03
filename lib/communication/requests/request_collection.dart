@@ -165,6 +165,12 @@ class CreateTokenWithRefresh extends AuthRequest{
     rh.onSuccessful(tokens);
   }
 
+  @override
+  convertData(Response response) {
+    PojoTokens tokens = PojoTokens.fromJson(jsonDecode(response.data));
+    return tokens;
+  }
+
 }
 
 class CreateElevationToken extends AuthRequest{

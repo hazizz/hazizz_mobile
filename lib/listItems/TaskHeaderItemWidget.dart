@@ -12,21 +12,21 @@ class TaskHeaderItemWidget extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 40.0,
-      child: Card(
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          color: Theme.of(context).primaryColorDark,
+    return Card(
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        color: Theme.of(context).primaryColorDark,
+        child: Padding(
+          padding: const EdgeInsets.all(5.0),
           child: InkWell(
               child: Row(
                 children: <Widget>[
-                  Text("holnap"),
+                  Text("holnap", style: TextStyle(fontSize: 20),),
                   SizedBox(width: 20),
-                  Text("${hazizzShowDateFormat(dateTime)}"),
+                  Text("${hazizzShowDateFormat(dateTime)}", style: TextStyle(fontSize: 20)),
                 ],
               )
-          )
-      ),
+          ),
+        )
     );
   }
 }

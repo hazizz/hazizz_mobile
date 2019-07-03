@@ -2,40 +2,124 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/communication/ResponseHandler.dart';
-import 'package:mobile/communication/pojos/PojoError.dart';
+import 'package:mobile/communication/pojos/PojoClass.dart';
 import 'package:mobile/communication/pojos/PojoGrade.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
 import 'package:mobile/communication/pojos/PojoType.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
-import 'package:mobile/converters/PojoConverter.dart';
 import 'package:mobile/dialogs/school_dialog.dart';
 import 'package:share/share.dart';
 
 
 import '../RequestSender.dart';
 import '../hazizz_date.dart';
+import '../hazizz_response.dart';
 import '../hazizz_theme.dart';
 
-Future<List<PojoGroup>> _getGroupData()async{
-  List<PojoGroup> data;
-  Response response = await RequestSender().send(new GetMyGroups(
-    rh: new ResponseHandler(
-        onSuccessful: (dynamic data) async{
-          data = data;          },
-        onError: (PojoError pojoError){
-          print("log: the annonymus functions work and the errorCode : ${pojoError.errorCode}");
-        }
-    ),
-  ));
-  return data;
+
+
+class HazizzDialog extends Dialog{
+
+  Container header, content;
+
+  Row actionButtons;
+
+  double height, width;
+
+  HazizzDialog(this.header, this.content, this.actionButtons, this.height, this.width){
+
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        child: Container(
+            height: height,
+            width: width,
+            decoration:
+            BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  //  height: 64.0,
+                  width: width*2,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10.0),
+                        topRight: Radius.circular(10.0),
+                      ),
+                      color: Theme.of(context).primaryColor
+                  ),
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10.0),
+                        topRight: Radius.circular(10.0),
+                      ),
+                      child: Center(child: header),
+                  ),
+                ),
+
+                Builder(
+                    builder: (BuildContext context){
+                      if(content != null){
+                        return content;
+                      }
+                      return Container();
+                    }
+                ),
+                Spacer(),
+
+                //  SizedBox(height: 20.0),
+
+                Row(
+
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    actionButtons,
+                  ],
+                )
+              ],
+            )
+    ));
+  }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void showDialogGroup(BuildContext context, Function(PojoGroup) onPicked, {List<PojoGroup> data}) async{
  // List<PojoGroup> data;
   List<PojoGroup> groups_data;
   if(data == null) {
-    groups_data = await _getGroupData();
+    HazizzResponse response = await RequestSender().getResponse(new GetMyGroups());
+
+    if(response.isSuccessful){
+      groups_data = response.convertedData;
+    }
   }else{
     groups_data = data;
   }
@@ -82,25 +166,16 @@ void showDialogGroup(BuildContext context, Function(PojoGroup) onPicked, {List<P
   );
 }
 
-Future<List<PojoSubject>> _getSubjectData(int groupId)async{
-  List<PojoSubject> subjects_data;
-  Response response = await RequestSender().send(new GetSubjects(
-      rh: new ResponseHandler(
-          onSuccessful: (dynamic data) async{
-            subjects_data = data;
-          },
-          onError: (PojoError pojoError){
-            print("log: the annonymus functions work and the errorCode : ${pojoError.errorCode}");
-          }
-      ),
-      groupId: groupId
-  ));
-  return subjects_data;
-}
+
 void showDialogSubject(BuildContext context, Function(PojoSubject) onPicked, {int groupId, List<PojoSubject> data}) async{
   List<PojoSubject> subjects_data;
   if(groupId != null) {
-    subjects_data = await _getSubjectData(groupId);
+
+    HazizzResponse response = await RequestSender().getResponse(new GetSubjects(groupId: groupId));
+
+    if(response.isSuccessful){
+      subjects_data = response.convertedData;
+    }
   }else{
     subjects_data = data;
   }
@@ -262,8 +337,8 @@ Future<bool> showDeleteDialog(context, {@required int taskId}) {
                           ),
                           onPressed: () async {
 
-                            Response response = await RequestSender().getResponse(DeleteTask(taskId: taskId));
-                            if(response.statusCode == 200){
+                            HazizzResponse response = await RequestSender().getResponse(DeleteTask(taskId: taskId));
+                            if(response.isSuccessful){
                               Navigator.of(context).pop();
                             }
 
@@ -383,6 +458,10 @@ Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
       barrierDismissible: true,
       builder: (BuildContext context) {
         print("grade: ${grade.grade}");
+
+        return HazizzDialog(Container(child: Text("heee")), Container(child: Text("heee")), Row(children:[ Text("heee")]), 300, 200);
+
+
         return Dialog(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
             child: Container(
@@ -507,8 +586,67 @@ Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
 }
 
 Future<bool> showInviteDialog(context, {@required int groupId}) async {
-  String inviteLink = await RequestSender().getResponse(GetGroupInviteLink(groupId: groupId));
-  TextEditingController _subjectTextEditingController = TextEditingController();
+  HazizzResponse hazizzResponse = await RequestSender().getResponse(GetGroupInviteLink(groupId: groupId));
+  String inviteLink = "Waiting...";
+  if(hazizzResponse.isSuccessful){
+    inviteLink = hazizzResponse.convertedData;
+  }
+
+  HazizzDialog h = HazizzDialog(
+      Container(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(inviteLink),
+          )
+      ),
+      null,
+      Row(
+    mainAxisAlignment: MainAxisAlignment.end,
+    children: <Widget>[
+      FlatButton(
+          child: Center(
+            child: Text(
+              'CANCEL',
+              style: TextStyle(
+                  fontFamily: 'Montserrat',
+                  fontSize: 14.0,
+                  color: Colors.teal),
+            ),
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          color: Colors.transparent
+      ),
+      FlatButton(
+          child: Center(
+            child: Text(
+              'SHARE',
+              style: TextStyle(
+                  fontFamily: 'Montserrat',
+                  fontSize: 14.0,
+                  color: HazizzTheme.warningColor
+              ),
+            ),
+          ),
+          onPressed: () {
+            print("share");
+
+            Share.share('check out my website $inviteLink');
+            // Navigator.of(context).pop();
+            // Navigator.of(context).pop();
+          },
+          color: Colors.transparent
+      ),
+    ],
+  ) , 130, 200);
+
+  return showDialog(context: context, barrierDismissible: true,
+      builder: (BuildContext context) {
+        return h;
+      }
+  );
+
   return showDialog(
       context: context,
       barrierDismissible: true,
@@ -591,7 +729,7 @@ Future<bool> showInviteDialog(context, {@required int groupId}) async {
 
 
 
-void showDialogSchools(BuildContext context, {@required Function({String key, String value}) onPicked, @required Map data}) async{
+void showSchoolsDialog(BuildContext context, {@required Function({String key, String value}) onPicked, @required Map data}) async{
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -600,6 +738,161 @@ void showDialogSchools(BuildContext context, {@required Function({String key, St
     },
   );
 }
+
+Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
+  Widget space = SizedBox(height: 5);
+
+  HazizzDialog hazizzDialog = HazizzDialog(
+    Container(
+      child: Row(children: <Widget>[
+        Container(
+          color: Theme.of(context).primaryColorDark,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 8, right: 2),
+            child: Text("${pojoClass.periodNumber}.", style: TextStyle(fontSize: 40)),
+          )
+        ),
+        Center(child: Text("${pojoClass.className}", style: TextStyle(fontSize: 40)))
+      ],),
+    ),
+    Container(
+      child: Padding(
+        padding: const EdgeInsets.only(left: 16, right: 16),
+        child: Column(
+            children:
+            [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text("subject: ", style: TextStyle(fontSize: 20)),
+                  Text(pojoClass.subject == null ? "" : (pojoClass.subject), style: TextStyle(fontSize: 20)),
+                ],
+              ),
+              space,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                children: <Widget>[
+                  Text("class: ", style: TextStyle(fontSize: 20)),
+                  Text(pojoClass.room == null ? "" : pojoClass.room, style: TextStyle(fontSize: 20)),
+                ],
+              ),
+            ]
+        ),
+      ),
+    ),
+      Row(
+        children: <Widget>[
+          FlatButton(
+            child: Text("CLOSE"),
+            onPressed: (){
+              Navigator.pop(context) ;
+            },
+          )
+        ],
+      ),
+      260, 200);
+
+  return showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return hazizzDialog;
+      });
+}
+
+
+Future<bool> showClassDialo2g(context, {@required PojoClass pojoClass}) async {
+  return showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Dialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+            child: Container(
+                height: 130.0,
+                width: 200.0,
+                decoration:
+                BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
+                child: Column(
+                  children: <Widget>[
+                    Stack(
+                      children: <Widget>[
+                        // Container(height: 100.0),
+                        Container(
+                          height: 80.0,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10.0),
+                                topRight: Radius.circular(10.0),
+                              ),
+                              color: Theme.of(context).primaryColor
+                          ),
+                        ),
+                        Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Column(
+                              children: <Widget>[
+                                Text(pojoClass.periodNumber.toString()),
+                                Text(pojoClass.className)
+                              ],
+                            )
+                        ),
+
+                      ],
+                    ),
+                    //  SizedBox(height: 20.0),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        FlatButton(
+                            child: Center(
+                              child: Text(
+                                'CANCEL',
+                                style: TextStyle(
+                                    fontFamily: 'Montserrat',
+                                    fontSize: 14.0,
+                                    color: Colors.teal),
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            color: Colors.transparent
+                        ),
+                        FlatButton(
+                            child: Center(
+                              child: Text(
+                                'SHARE',
+                                style: TextStyle(
+                                    fontFamily: 'Montserrat',
+                                    fontSize: 14.0,
+                                    color: HazizzTheme.warningColor
+                                ),
+                              ),
+                            ),
+                            onPressed: () {
+                              print("share");
+
+                              Share.share('check out my website inviteLink');
+                              // Navigator.of(context).pop();
+                              // Navigator.of(context).pop();
+                            },
+                            color: Colors.transparent
+                        ),
+                      ],
+                    )
+                  ],
+                )));
+      });
+}
+
+
+
+
+
+
 
 
 

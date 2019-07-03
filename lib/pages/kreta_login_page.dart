@@ -120,7 +120,7 @@ class _KretaLoginPage extends State<KretaLoginPage> with SingleTickerProviderSta
               if(kretaLoginPageBlocs.schoolBloc.currentState is ItemListLoaded
               || kretaLoginPageBlocs.schoolBloc.currentState is ItemListPickedState
               ){
-                  showDialogSchools(context, data: kretaLoginPageBlocs.schoolBloc.data,
+                  showSchoolsDialog(context, data: kretaLoginPageBlocs.schoolBloc.data,
                   onPicked: ({String key, String value}){
                     print("log: school: key: $key, value: $value");
                     kretaLoginPageBlocs.schoolBloc.dispatch(PickedEvent(item: SchoolItem(key, value)));

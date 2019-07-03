@@ -2,21 +2,15 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
-import 'package:mobile/exceptions/exceptions.dart';
 import 'HttpMethod.dart';
-import 'communication/ResponseHandler.dart';
-import 'communication/pojos/PojoError.dart';
-import 'dart:convert';
 
 import 'communication/requests/request_collection.dart';
-import 'managers/TokenManager.dart';
-import 'managers/cache_manager.dart';
+import 'hazizz_response.dart';
 import 'package:connectivity/connectivity.dart';
 
-Future<Response> sendRequest(Request request)async{
-  return await RequestSender().send(request);
+Future<HazizzResponse> getResponse(Request request)async{
+  return await RequestSender().getResponse(request);
 }
-
 
 class RequestSender{
   static final RequestSender _instance = new RequestSender._internal();
@@ -32,8 +26,7 @@ class RequestSender{
   static bool hasConnection;
   Future<Null> getConnectionStatus() async {
     streamConnectionStatus = new Connectivity()
-    .onConnectivityChanged
-    .listen((ConnectivityResult result) {
+    .onConnectivityChanged.listen((ConnectivityResult result) {
       print(result.toString());
       if (result == ConnectivityResult.mobile || result == ConnectivityResult.wifi) {
          // hasConnection = true;
@@ -114,17 +107,18 @@ class RequestSender{
       int maxRedirects,
   */
   final Options options = new Options(
-      connectTimeout: 5000,
-      sendTimeout: 5000,
-      receiveTimeout: 5000,
-    //  headers: request.header,
-      responseType: ResponseType.plain,
-      receiveDataWhenStatusError: true,
-      followRedirects: true);
+    connectTimeout: 5000,
+    sendTimeout: 5000,
+    receiveTimeout: 5000,
+  //  headers: request.header,
+    responseType: ResponseType.plain,
+    receiveDataWhenStatusError: true,
+    followRedirects: true
+  );
 
   static final Dio dio = new Dio();
 
-  void stop() async{
+  Future<void> waitCooldown() async{
     dio.interceptors.requestLock.lock();
     print("logtest: locked");
     await new Future.delayed(const Duration(milliseconds: 1000));
@@ -141,20 +135,25 @@ class RequestSender{
   bool isLocked(){
     return _isLocked;
   }
-  Future<Response> tokenRequestSend(AuthRequest authRequest) async{
+  Future<HazizzResponse> getTokenResponse(AuthRequest authRequest) async{
+    HazizzResponse hazizzResponse;
     try{
       options.headers = await authRequest.buildHeader();
       Dio authDio = Dio();
       Response response = await authDio.post(authRequest.url, data: authRequest.body, options: options);
-      authRequest.onSuccessful(response);
+      hazizzResponse = HazizzResponse.onSuccess(response: response, request: authRequest);
+
       print("hey: sent token request");
     }on DioError catch(error){
-     // PojoError pojoError = PojoError.fromJson(json.decode(error.response?.data));
       print("log: error response data: ${error.response.data}");
+      hazizzResponse = await HazizzResponse.onError(dioError: error, request: authRequest);
+      print(hazizzResponse);
     }
+    return hazizzResponse;
   }
 
-  Future<void> onPojoError(PojoError pojoError, Request request) async{
+  /*
+  Future<void> onPojoError2(PojoError pojoError, Request request) async{
     if (true) {
       // print("log: error response data: ${error.response.data}");
       // PojoError pojoError = PojoError.fromJson(json.decode(error.response?.data));
@@ -205,9 +204,14 @@ class RequestSender{
 
     //  return error.response;
   }
+  */
 
+  Future<HazizzResponse> getResponse(Request request) async{
 
-  Future<dynamic> getResponse(Request request) async{
+    HazizzResponse hazizzResponse;
+
+  //  hazizzResponse.request = request;
+
     Response response;
     print("log: about to start sending request");
     try {
@@ -216,34 +220,21 @@ class RequestSender{
         response = await dio.get(request.url, queryParameters: request.query, options: options);
       }else if (request.httpMethod == HttpMethod.POST) {
         options.headers = await request.buildHeader();
-        response =
-        await dio.post(request.url, queryParameters: request.query, data: request.body, options: options);
+        response = await dio.post(request.url, queryParameters: request.query, data: request.body, options: options);
       }else if (request.httpMethod == HttpMethod.DELETE) {
         options.headers = await request.buildHeader();
-        response =
-        await dio.delete(request.url, queryParameters: request.query, data: request.body, options: options);
+        response = await dio.delete(request.url, queryParameters: request.query, data: request.body, options: options);
       }
+      hazizzResponse = HazizzResponse.onSuccess(response: response, request: request);
       print("log: request sent: ${request.toString()}");
-    }on DioError catch(error){
-
-      if (error.response != null) {
-        print("log: error response data: ${error.response.data}");
-        PojoError pojoError = PojoError.fromJson(json.decode(error.response?.data));
-        onPojoError(pojoError, request);
-      }
-
-      dynamic data = request.convertData(response);
-      request.processData(data);
-      print("log: responseData: ${data}");
-      return data;
-    request.onSuccessful(response);
-
-    print("reached");
-    // print("log: error response data: ${response.data}");
-    return response;
+    }on DioError catch(error) {
+      hazizzResponse = await HazizzResponse.onError(dioError: error, request: request);
+    }
+    return hazizzResponse;
   }
 
 
+  /*
   Future<void> onPojoError2(PojoError pojoError, Request request) async{
     if (true) {
      // print("log: error response data: ${error.response.data}");
@@ -296,7 +287,7 @@ class RequestSender{
   //  return error.response;
   }
 
-  Future<Response> send(Request request) async{
+  Future<Response> send2(Request request) async{
     Response response;
     try {
       if (request.httpMethod == HttpMethod.GET) {
@@ -363,4 +354,5 @@ class RequestSender{
    // print("log: error response data: ${response.data}");
     return response;
   }
+  */
 }

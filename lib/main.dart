@@ -8,11 +8,9 @@ import 'package:mobile/pages/LoginPage.dart';
 import 'package:mobile/pages/main_pages/main_tab_hoster_page.dart';
 import 'package:mobile/route_generator.dart';
 import 'blocs/main_tab_blocs/main_tab_blocs.dart';
-import 'blocs/request_event.dart';
 import 'hazizz_theme.dart';
+import 'managers/TokenManager.dart';
 import 'managers/app_state_manager.dart';
-import 'managers/cache_manager.dart';
-import 'pages/group_pages/group_tab_hoster_page.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -27,25 +25,27 @@ bool isLoggedIn = true;
 
 MainTabBlocs mainTabBlocs = MainTabBlocs();
 
-
 void main() async{
-
 
   await AndroidAlarmManager.initialize();
 
   if(!(await AppState.isLoggedIn())){
     isLoggedIn = false;
   }else{
+    if(await TokenManager.checkIfTokenRefreshIsNeeded()){
+      await TokenManager.fetchToken();
+    }
     mainTabBlocs.initialize();
+
+    /*
+    TokenManager.checkAndFetchTokenRefreshIfNeeded().then(
+            (dynamic value){
+          mainTabBlocs.initialize();
+        }
+    );
+    */
   }
-
-  // locale = await getPreferredLocal();
-
-  // _startPage = LoginPage();
-  // _startPage2 = "login";
-  // runApp(MyApp());
   runApp(MyApp());
-
 }
 
 class MyApp extends StatefulWidget{
