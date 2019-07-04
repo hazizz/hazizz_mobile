@@ -383,8 +383,8 @@
     : "Cím:",
 
 
-    "deadline_"
-    : "Határidő:",
+    "deadline"
+    : "Határidő",
 
 
     "group"

@@ -6,7 +6,8 @@ import 'Pojo.dart';
 
 part 'PojoClass.g.dart';
 
-@JsonSerializable()
+// removing so it wont recreate
+//@JsonSerializable()
 class PojoClass extends Pojo{
   DateTime date;
   Duration startOfClass;

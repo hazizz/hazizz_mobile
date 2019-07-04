@@ -21,14 +21,15 @@ import '../hazizz_theme.dart';
 
 class HazizzDialog extends Dialog{
 
+  static final double buttonBarHeight = 50.0;
+
   Container header, content;
 
   Row actionButtons;
 
   double height, width;
 
-  HazizzDialog(this.header, this.content, this.actionButtons, this.height, this.width){
-
+  HazizzDialog({this.header, this.content, this.actionButtons,@required this.height,@required this.width}){
   }
 
   @override
@@ -36,7 +37,7 @@ class HazizzDialog extends Dialog{
     return Dialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
         child: Container(
-            height: height,
+            height: height + buttonBarHeight,
             width: width,
             decoration:
             BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
@@ -265,6 +266,88 @@ void showDialogTaskType(BuildContext context, Function(PojoType) onPicked) async
 }
 
 Future<bool> showDeleteDialog(context, {@required int taskId}) {
+
+  double height = 80;
+  double width = 200;
+
+  HazizzDialog hazizzDialog = new HazizzDialog(
+      header:
+      Container(
+        height: height,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10.0),
+              topRight: Radius.circular(10.0),
+            ),
+            color: HazizzTheme.warningColor),
+        child: Padding(
+          padding: EdgeInsets.all(10),
+          child: Text(
+            "Are you sure you want to delete this task?",
+            style: TextStyle(
+
+              fontFamily: 'Quicksand',
+              fontSize: 20.0,
+              fontWeight: FontWeight.w300,
+            ),
+          ),
+        ),
+      ),
+      content:
+      Container(),
+      actionButtons:
+      Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          FlatButton(
+              child: Center(
+                child: Text(
+                  'CANCEL',
+                  style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 14.0,
+                      color: Colors.teal),
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              color: Colors.transparent
+          ),
+          FlatButton(
+              child: Center(
+                child: Text(
+                  'DELETE',
+                  style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 14.0,
+                      color: HazizzTheme.warningColor),
+                ),
+              ),
+              onPressed: () async {
+
+                HazizzResponse response = await RequestSender().getResponse(DeleteTask(taskId: taskId));
+                if(response.isSuccessful){
+                  Navigator.of(context).pop();
+                }
+
+                Navigator.of(context).pop();
+              },
+              color: Colors.transparent
+          ),
+        ],
+      )
+      ,height: height,width: width);
+
+  return showDialog(
+    context: context,
+    barrierDismissible: true,
+    builder: (BuildContext context) {
+      return hazizzDialog;
+    }
+  );
+
+
   return showDialog(
       context: context,
       barrierDismissible: true,
@@ -459,14 +542,18 @@ Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
       builder: (BuildContext context) {
         print("grade: ${grade.grade}");
 
-        return HazizzDialog(Container(child: Text("heee")), Container(child: Text("heee")), Row(children:[ Text("heee")]), 300, 200);
+         HazizzDialog(
+            header: Container(child: Text("heee")),
+            content: Container(child: Text("heee")),
+            actionButtons: Row(children:[ Text("heee")]),
+            height: 300,
+            width: 200);
 
 
         return Dialog(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
             child: Container(
-                height: 260.0,
-                width: 200.0,
+                height: 210.0,
                 decoration:
                 BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
                 child: Column(
@@ -593,13 +680,15 @@ Future<bool> showInviteDialog(context, {@required int groupId}) async {
   }
 
   HazizzDialog h = HazizzDialog(
+    header:
       Container(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(inviteLink),
           )
       ),
-      null,
+      content: Container(),
+      actionButtons:
       Row(
     mainAxisAlignment: MainAxisAlignment.end,
     children: <Widget>[
@@ -639,7 +728,7 @@ Future<bool> showInviteDialog(context, {@required int groupId}) async {
           color: Colors.transparent
       ),
     ],
-  ) , 130, 200);
+  ) ,height: 130,width: 200);
 
   return showDialog(context: context, barrierDismissible: true,
       builder: (BuildContext context) {
@@ -743,6 +832,7 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
   Widget space = SizedBox(height: 5);
 
   HazizzDialog hazizzDialog = HazizzDialog(
+    header:
     Container(
       child: Row(children: <Widget>[
         Container(
@@ -755,6 +845,7 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
         Center(child: Text("${pojoClass.className}", style: TextStyle(fontSize: 40)))
       ],),
     ),
+    content:
     Container(
       child: Padding(
         padding: const EdgeInsets.only(left: 16, right: 16),
@@ -781,6 +872,7 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
         ),
       ),
     ),
+      actionButtons:
       Row(
         children: <Widget>[
           FlatButton(
@@ -791,7 +883,7 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
           )
         ],
       ),
-      260, 200);
+      height: 260, width: 200);
 
   return showDialog(
       context: context,

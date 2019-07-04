@@ -8,12 +8,12 @@ part of 'PojoSchedules.dart';
 
 PojoSchedules _$PojoSchedulesFromJson(Map<String, dynamic> json) {
   return PojoSchedules((json)?.map(
-    (k, e) => MapEntry(
+        (k, e) => MapEntry(
         k,
         (e as List)
             ?.map((e) => e == null
-                ? null
-                : PojoClass.fromJson(e as Map<String, dynamic>))
+            ? null
+            : PojoClass.fromJson(e as Map<String, dynamic>))
             ?.toList()),
   ));
 }
