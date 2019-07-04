@@ -5,7 +5,8 @@ import 'Pojo.dart';
 
 part 'PojoGrades.g.dart';
 
-@JsonSerializable()
+// removing so it wont recreate
+//@JsonSerializable()
 class PojoGrades extends Pojo{
 
   // final Map<String, List<PojoClass>> classes;

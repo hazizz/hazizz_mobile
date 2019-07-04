@@ -7,7 +7,6 @@ import 'package:mobile/blocs/edit_task_bloc.dart';
 //import 'package:mobile/blocs/edit_task_bloc2.dart';
 import 'package:mobile/blocs/item_list_picker_bloc/item_list_picker_bloc.dart';
 import 'package:mobile/blocs/item_list_picker_bloc/item_list_picker_group_bloc.dart';
-import 'package:mobile/blocs/task_maker_blocs.dart' as prefix0;
 import 'package:mobile/blocs/task_maker_blocs.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
@@ -17,6 +16,7 @@ import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:expandable/expandable.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 
+import '../hazizz_localizations.dart';
 import '../hazizz_theme.dart';
 
 
@@ -125,7 +125,7 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: HazizzTheme.formColor,
-                      labelText: 'Type',
+                  //    labelText: 'Type',
                     ),
                     isEmpty: _color == '',
                     child: Builder(
@@ -174,12 +174,16 @@ class _TaskMakerPage extends State<TaskMakerPage> {
         return GestureDetector(
           child: FormField(
             builder: (FormFieldState formState) {
+              String hint;
+              if(state is ItemListLoaded){
+                hint = locText(context, key: "group");
+              }
               return InputDecorator(
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: HazizzTheme.formColor,
                     icon: const Icon(Icons.group),
-                    labelText: 'Group',
+                    labelText: hint,
                   ),
                   isEmpty: _color == '',
                   child: Builder(
@@ -226,12 +230,16 @@ class _TaskMakerPage extends State<TaskMakerPage> {
           return GestureDetector(
             child: FormField(
               builder: (FormFieldState formState) {
+                String hint;
+                if(state is ItemListLoaded){
+                  hint = locText(context, key: "subject");
+                }
                 return InputDecorator(
                     decoration: InputDecoration(
                   //    filled: true,
                    //   fillColor: HazizzTheme.formColor,
                       icon: const Icon(Icons.group),
-                      labelText: 'Subject',
+                      labelText: hint,
                     ),
                     isEmpty: _color == '',
                     child: Builder(
@@ -277,12 +285,16 @@ class _TaskMakerPage extends State<TaskMakerPage> {
         return GestureDetector(
           child: FormField(
             builder: (FormFieldState formState) {
+              String hint;
+              if(state is DateTimeNotPickedState){
+                hint = locText(context, key: "deadline");
+              }
               return InputDecorator(
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: HazizzTheme.formColor,
                   icon: const Icon(Icons.date_range),
-                  labelText: 'Deadline',
+                  labelText: hint,
                 ),
                 isEmpty: _color == '',
                 child: Builder(
@@ -546,25 +558,20 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                                         ),
                                         animationDuration: Duration(milliseconds: 200),
                                       ),
-                                      Column(
-                                          mainAxisAlignment: MainAxisAlignment.end,
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 12, top: 5, right: 12),
+                                        child: new Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(left: 10, top: 5, right: 10),
-                                              child: new Row(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                children: [
-                                                  new Flexible(
-                                                    child: titleTextForm
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          ]
+                                            new Flexible(
+                                              child: titleTextForm
+                                            )
+                                          ],
+                                        ),
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.only(
-                                            left: 20, right: 20, top: 4),
+                                            left: 12, right: 12, top: 4),
                                         child: descriptionTextForm
                                       ),
                                       Center(

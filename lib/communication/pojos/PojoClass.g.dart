@@ -9,11 +9,11 @@ part of 'PojoClass.dart';
 PojoClass _$PojoClassFromJson(Map<String, dynamic> json) {
   return PojoClass(
       date:
-          json['date'] == null ? null : DateTime.parse(json['date'] as String),
+      json['date'] == null ? null : DateTime.parse(json['date'] as String),
       startOfClass:
-          json['startOfClass'] == null ? null : hazizzParseDuration(json['startOfClass'] as String),
+      json['startOfClass'] == null ? null : hazizzParseDuration(json['startOfClass'] as String),
       endOfClass:
-          json['endOfClass'] == null ? null : hazizzParseDuration(json['endOfClass'] as String),
+      json['endOfClass'] == null ? null : hazizzParseDuration(json['endOfClass'] as String),
       periodNumber: json['periodNumber'] as int,
       cancelled: json['cancelled'] as bool,
       standIn: json['standIn'] as bool,
@@ -26,8 +26,8 @@ PojoClass _$PojoClassFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$PojoClassToJson(PojoClass instance) => <String, dynamic>{
       'date': instance.date?.toIso8601String(),
-      'startOfClass': instance.startOfClass,
-      'endOfClass': instance.endOfClass,
+      'startOfClass': instance.startOfClass?.inMicroseconds,
+      'endOfClass': instance.endOfClass?.inMicroseconds,
       'periodNumber': instance.periodNumber,
       'cancelled': instance.cancelled,
       'standIn': instance.standIn,

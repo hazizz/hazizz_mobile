@@ -10,6 +10,7 @@ import 'package:mobile/communication/ResponseHandler.dart';
 import 'package:mobile/communication/pojos/PojoError.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
+import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/widgets/comment_widget.dart';
 
 import '../RequestSender.dart';
@@ -19,7 +20,7 @@ import '../hazizz_localizations.dart';
 class ViewTaskPage extends StatefulWidget {
   // This widget is the root of your application.
 
-  bool showComments = false;
+
 
   int taskId;
   PojoTask pojoTask;
@@ -54,6 +55,8 @@ class _ViewTaskPage extends State<ViewTaskPage> {
    String _title = "";
 
   List<PojoTask> task_data = List();
+
+  bool showComments = false;
 
   void processData(PojoTask pojoTask){
     widget.pojoTask = pojoTask;
@@ -250,7 +253,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                       MaterialButton(
                                         onPressed: () async {
                                           setState(() {
-                                            widget.showComments = true;
+                                            showComments = true;
                                           });
                                           await Future.delayed(const Duration(milliseconds: 20));
                                           _scrollController.animateTo(_scrollController.position.maxScrollExtent, curve: Curves.ease, duration: Duration(milliseconds: 340));
@@ -292,7 +295,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
           ),
           Builder(
             builder: (BuildContext context){
-              if(widget.showComments) {
+              if(showComments) {
                 return Container(
                   width: MediaQuery.of(context).size.width,
                   // valamiért 3* kell megszorozni a paddingot hogy jó legyen
@@ -314,7 +317,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
     );
   }
 
-
+  /*
   Future<bool> showDeleteDialog(context) {
     return showDialog(
         context: context,
@@ -399,6 +402,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                   )));
         });
   }
+  */
 
 
 }

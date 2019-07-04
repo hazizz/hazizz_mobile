@@ -379,8 +379,8 @@
     : "Title:",
 
 
-    "deadline_"
-    : "Deadline:",
+    "deadline"
+    : "Deadline",
 
     "group"
     : "Group",
