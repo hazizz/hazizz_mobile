@@ -3,7 +3,7 @@ import 'package:mobile/communication/errorcode_collection.dart';
 import 'package:mobile/communication/pojos/PojoError.dart';
 import 'package:mobile/communication/pojos/PojoTokens.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
-import 'package:mobile/managers/TokenManager.dart';
+import 'package:mobile/managers/token_manager.dart';
 import 'package:meta/meta.dart';
 
 import '../RequestSender.dart';

@@ -2,13 +2,17 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:meta/meta.dart';
+//import 'package:mobile/packages/hazizz-dio-2.1.3/lib/dio.dart';
+//import 'package:mobile/packages/hazizz-dio-2.1.3/lib/dio.dart';
+
+//import 'package:dio/dio.dart';
 
 import 'RequestSender.dart';
 import 'communication/ResponseHandler.dart';
 import 'communication/pojos/PojoError.dart';
 import 'communication/pojos/PojoTokens.dart';
 import 'communication/requests/request_collection.dart';
-import 'managers/TokenManager.dart';
+import 'managers/token_manager.dart';
 import 'managers/cache_manager.dart';
 
 class HazizzResponse{
@@ -31,12 +35,19 @@ class HazizzResponse{
 
   HazizzResponse._();
 
-  static HazizzResponse onSuccess({@required response, @required request}){
+  static HazizzResponse onSuccess({@required Response response, @required Request request}){
+    print("log: header2: ${response.headers.toString()}");
     HazizzResponse hazizzResponse = new HazizzResponse._();
+    print("im alive 1");
     hazizzResponse.response = response;
+    print("im alive 2");
     hazizzResponse.request = request;
+    print("im alive 3");
+    print("im alive ${request}");
     hazizzResponse.convertedData = request.convertData(response);
+    print("im alive 4");
     hazizzResponse.isSuccessful = true;
+    print("im alive 5");
     return hazizzResponse;
   }
 
@@ -52,6 +63,7 @@ class HazizzResponse{
   }
 
   onErrorResponse()async {
+    print("log: dioError: ${dioError.type}");
     if(response != null) {
       print("log: error response data: ${response.data}");
       pojoError = PojoError.fromJson(json.decode(response?.data));
@@ -109,6 +121,11 @@ class HazizzResponse{
         // throw new HResponseError(pojoError);
         //  return pojoError;
         //request.onError(pojoError);
+      }
+      else{
+        if(dioError.type == DioErrorType.CONNECT_TIMEOUT){
+          dioError.response.headers.contentType.toString();
+        }
       }
     }
   }

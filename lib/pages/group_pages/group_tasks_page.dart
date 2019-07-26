@@ -5,8 +5,8 @@ import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
 import 'package:mobile/blocs/tasks_bloc.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
-import 'package:mobile/listItems/TaskHeaderItemWidget.dart';
-import 'package:mobile/listItems/TaskItemWidget.dart';
+import 'package:mobile/listItems/task_header_item_widget.dart';
+import 'package:mobile/listItems/task_item_widget.dart';
 
 
 import 'package:sticky_headers/sticky_headers.dart';

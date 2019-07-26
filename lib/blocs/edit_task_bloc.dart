@@ -1,9 +1,5 @@
 
-import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
-import 'package:mobile/blocs/response_states.dart';
 import 'package:mobile/blocs/task_maker_blocs.dart';
-import 'package:mobile/communication/pojos/PojoError.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
@@ -13,7 +9,6 @@ import '../RequestSender.dart';
 import '../hazizz_response.dart';
 import 'TextFormBloc.dart';
 import 'date_time_picker_bloc.dart';
-import 'item_list_picker_bloc/item_list_picker_bloc.dart';
 
 //region EditTask bloc parts
 //region EditTask events
@@ -70,17 +65,7 @@ class TaskEditBloc extends TaskMakerBloc {
     
     titleBloc.dispatch(TextFormSetEvent(text: taskToEdit.title));
     descriptionBloc.dispatch(TextFormSetEvent(text: taskToEdit.description));
-  // TODO this is wrong ˇ
-  //  subjectItemPickerBloc.dispatch(TextFormSetEvent(text: taskToEdit.subject.name));
-  //  groupItemPickerBloc = new GroupItemPickerBloc(subjectItemPickerBloc);
-
   }
-
-  /*
-  TaskCreateBloc({this.group}){
-    groupItemPickerBloc = new GroupItemPickerBloc(subjectItemPickerBloc);
-  }
-  */
 
   @override
   Stream<TaskMakerState> mapEventToState(TaskMakerEvent event) async*{
@@ -118,25 +103,29 @@ class TaskEditBloc extends TaskMakerBloc {
         if(deadlineState is DateTimePickedState) {
           deadline = deadlineState.dateTime;
         }else{
+          print("log: missing: deadline");
           deadlineBloc.dispatch(DateTimeNotPickedEvent());
           missingInfo = true;
         }
 
         HFormState titleState = titleBloc.currentState;
-        if(titleState is TextFormFine){
+        if(titleState is TextFormFine || titleState is TextFormSetState){
           title = titleBloc.lastText;
         }else{
+          print("log: missing: title");
           missingInfo = true;
         }
         HFormState descriptionState = descriptionBloc.currentState;
-        if(descriptionState is TextFormFine){
+        if(descriptionState is TextFormFine ||descriptionState is TextFormSetState){
           description = descriptionBloc.lastText;
         }else{
+          print("log: missing: description");
           missingInfo = true;
         }
 
         if(missingInfo){
           print("log: missing info");
+          this.dispatch(TaskMakerFailedEvent());
           return;
         }
         print("log: not missing info");
@@ -163,7 +152,8 @@ class TaskEditBloc extends TaskMakerBloc {
 
         if(hazizzResponse.isSuccessful){
           yield TaskMakerSentState();
-
+        }else{
+          yield TaskMakerFailedState();
         }
         //endregion
 

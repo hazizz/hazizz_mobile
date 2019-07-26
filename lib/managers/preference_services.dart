@@ -11,13 +11,11 @@ class StartPageItem{
 
 class StartPageService{
 
+  static const String _key = "key_startPage";
 
-
-  static final String _key = "key_startPage";
-
-  static final int tasksPage = 0;
-  static final int schedulePage = 1;
-  static final int gradesPage = 2;
+  static const int tasksPage = 0;
+  static const int schedulePage = 1;
+  static const int gradesPage = 2;
 
   static List<StartPageItem> getStartPages(BuildContext context){
     List<StartPageItem> pages = [StartPageItem(locText(context, key: "tasks"), 0),

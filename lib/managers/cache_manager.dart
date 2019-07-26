@@ -3,9 +3,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class InfoCache{
 
-  static final String _keyMe = "key_me";
-  static final String _username = "username";
-  static final String _displayName = "displayName";
+  static const String _keyMe = "key_me";
+  static const String _username = "username";
+  static const String _displayName = "displayName";
 
   SharedPreferences prefs;
 

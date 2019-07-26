@@ -1,11 +1,10 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
+
 import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
 import 'package:mobile/blocs/text_field_bloc.dart';
-import 'package:mobile/communication/pojos/PojoError.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
 import 'package:mobile/communication/pojos/PojoType.dart';
@@ -376,7 +375,7 @@ class TaskEditBloc extends Bloc<TaskEditEvent, TaskEditState> {
         }
 
         if(subjectId == null) {
-          PickedGroupState groupState = await groupItemPickerBloc.currentState;
+          PickedGroupState groupState = groupItemPickerBloc.currentState;
           if (groupState is PickedGroupState) {
             groupId = groupState.item.id;
           } else {

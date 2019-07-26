@@ -65,8 +65,8 @@ class KretaSessionBloc extends Bloc<HEvent, HState> {
 
 
 
-  static final String _keyToken = "key_token";
-  static final String _keyRefreshToken = "key_refreshToken";
+  static const String _keyToken = "key_token";
+  static const String _keyRefreshToken = "key_refreshToken";
   static bool tokenIsValid = true;
 
   SharedPreferences prefs;

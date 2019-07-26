@@ -21,10 +21,13 @@ class GroupItemWidget extends StatelessWidget{
             Align(
                 alignment: Alignment.centerLeft,
                 child:
-                Text(group.name,
-                  style: TextStyle(
-                      fontSize: 30
-                  ),)
+                Padding(
+                  padding: const EdgeInsets.only(left: 8, top: 5, bottom: 5),
+                  child: Text(group.name,
+                    style: TextStyle(
+                        fontSize: 30
+                    ),),
+                )
             )
         )
     );

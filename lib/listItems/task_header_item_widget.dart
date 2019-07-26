@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../hazizz_date.dart';
+import '../hazizz_localizations.dart';
 
 class TaskHeaderItemWidget extends StatelessWidget{
  // String days;
@@ -12,17 +12,27 @@ class TaskHeaderItemWidget extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    int days = dateTime.difference(DateTime.now()).inDays;
+    String title;
+    if(days == 0){
+      title = locText(context, key: "today");
+    }
+    else if(days == 1){
+      title = locText(context, key: "tomorrow");
+    }else{
+      title = locText(context, key: "days_later", args: [days.toString()]);
+    }
     return Card(
         clipBehavior: Clip.antiAliasWithSaveLayer,
         color: Theme.of(context).primaryColorDark,
         child: Padding(
-          padding: const EdgeInsets.all(5.0),
+          padding: const EdgeInsets.all(4.0),
           child: InkWell(
               child: Row(
                 children: <Widget>[
-                  Text("holnap", style: TextStyle(fontSize: 20),),
+                  Text(title, style: TextStyle(fontSize: 24),),
                   SizedBox(width: 20),
-                  Text("${hazizzShowDateFormat(dateTime)}", style: TextStyle(fontSize: 20)),
+                  Text("${hazizzShowDateFormat(dateTime)}", style: TextStyle(fontSize: 26)),
                 ],
               )
           ),

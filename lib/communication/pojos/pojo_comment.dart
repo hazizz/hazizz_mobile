@@ -7,8 +7,6 @@ part 'pojo_comment.g.dart';
 
 @JsonSerializable()
 class PojoComment  implements Pojo {
-
-
   String content;
   DateTime creationDate;
   PojoCreator creator;
@@ -24,5 +22,4 @@ class PojoComment  implements Pojo {
 
   @override
   Map<String, dynamic> toJson() => _$PojoCommentToJson(this);
-
 }

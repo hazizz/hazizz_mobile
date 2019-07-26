@@ -13,6 +13,7 @@ public class Application extends FlutterApplication implements PluginRegistrantC
         AlarmService.setPluginRegistrant(this);
     }
 
+
     @Override
     public void registerWith(PluginRegistry registry) {
         GeneratedPluginRegistrant.registerWith(registry);

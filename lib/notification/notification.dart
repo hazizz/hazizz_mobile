@@ -1,183 +1,159 @@
+import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../RequestSender.dart';
+import '../hazizz_alarm_manager.dart';
 import '../hazizz_localizations.dart';
 import '../hazizz_response.dart';
 
-
-// android:name="io.flutter.app.FlutterApplication"
-
-/*
-<application
-        android:name=".Application"
-        >
-
-    </application>
-    */
-
-
 class HazizzNotification{
 
+  static const String
+  tasksTomorrowChannelName =  'Tasks for tomorrow',
+  tasksTomorrowChanneDescription ='Shows your tasks for tomorrow at a given time'
+  ;
 
-  static Future create() async {
+  static final String tasksTomorrowChannelId = tasksTomorrowNotificationId.toString();
 
-    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
-// initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
-    var initializationSettingsAndroid = new AndroidInitializationSettings("@mipmap/ic_launcher");
-    var initializationSettingsIOS = new IOSInitializationSettings(onDidReceiveLocalNotification: onDidReceiveLocalNotification);
-    var initializationSettings = new InitializationSettings(initializationSettingsAndroid, initializationSettingsIOS);
-    flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: onSelectNotification);
+  static FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
 
-    // displaying
-    // az id visszajön az appba
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        'your channel id', 'your channel name', 'your channel description',
-        importance: Importance.Max, priority: Priority.High, ticker: 'ticker');
-    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
-    var platformChannelSpecifics = NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.show(
-        0, 'plain title', 'plain body', platformChannelSpecifics,
-        payload: 'item x');
-
+  static bool isInitialized = false;
+  static FlutterLocalNotificationsPlugin get flutterLocalNotificationsPlugin{
+    if(!isInitialized){
+      _flutterLocalNotificationsPlugin.initialize(
+          initializationSettings, onSelectNotification: onSelectNotification);
+    }
+    return _flutterLocalNotificationsPlugin;
   }
 
-  static Future scheduleNotification() async {
-    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
-// initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
-    var initializationSettingsAndroid = new AndroidInitializationSettings("@mipmap/ic_launcher");
-    var initializationSettingsIOS = new IOSInitializationSettings(onDidReceiveLocalNotification: onDidReceiveLocalNotification);
-    var initializationSettings = new InitializationSettings(initializationSettingsAndroid, initializationSettingsIOS);
-    flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: onSelectNotification);
+  static BuildContext context;
 
-  /*
-    var time = new Time(10, 0, 0);
-    var androidPlatformChannelSpecifics =
-    new AndroidNotificationDetails('repeatDailyAtTime channel id',
-        'repeatDailyAtTime channel name', 'repeatDailyAtTime description');
-    var iOSPlatformChannelSpecifics = new IOSNotificationDetails();
-    var platformChannelSpecifics = new NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.showDailyAtTime(
-        0,
-        'show daily title',
-        'Daily notification shown at approximately ${_toTwoDigitString(time.hour)}:${_toTwoDigitString(time.minute)}:${_toTwoDigitString(time.second)}',
-        time,
-        platformChannelSpecifics,
-        payload:
-    );
-    */
-  }
-
-  static Future<dynamic> onDidReceiveLocalNotification(int zz, String asd, String asd2, String asd3 ){
-    print("log: notification onDidReceiveLocalNotification()");
-  }
+  bool con = false;
 
   static Future onSelectNotification(String payload) async {
     if (payload != null) {
       debugPrint('notification payload: ' + payload);
     }
-
     print("log: notification onSelectNotification()");
-    /*
-    await Navigator.push(
-      context,
-      new MaterialPageRoute(builder: (context) => new SecondScreen(payload)),
-    );
-    */
   }
 
+  static var initializationSettingsAndroid = new AndroidInitializationSettings(
+      "@mipmap/ic_launcher");
+  static var initializationSettingsIOS = new IOSInitializationSettings(
+    //  onDidReceiveLocalNotification: onDidReceiveLocalNotification
+  );
+  static var initializationSettings = new InitializationSettings(
+      initializationSettingsAndroid, initializationSettingsIOS);
 
-  static Future<List<PojoTask>> getTasksForNotification() async {
-    HazizzResponse hazizzResponse = await RequestSender().getResponse(GetTasksFromMe());
-    if(hazizzResponse.isSuccessful){
-      return hazizzResponse.convertedData;
+  /*
+  static Future showHazizzNotification2() async {
+
+    while(true){
+      print("log: performing work in background.");
     }
-    return List();
   }
+  */
 
   static Future showHazizzNotification() async {
     print("log: no its works1");
-    List<PojoTask> tasks = await getTasksForNotification();
-    if(tasks is List<PojoTask>) {
-      List<PojoTask> tasksToShow = List();
 
-      for(PojoTask task in tasks) {
-        if(task.dueDate.day - DateTime
-            .now()
-            .day >= 1) {
-          tasksToShow.add(task);
-        }
-      }
-
-      FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
-// initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
-      var initializationSettingsAndroid = new AndroidInitializationSettings(
-          "@mipmap/ic_launcher");
-      var initializationSettingsIOS = new IOSInitializationSettings(
-          onDidReceiveLocalNotification: onDidReceiveLocalNotification);
-      var initializationSettings = new InitializationSettings(
-          initializationSettingsAndroid, initializationSettingsIOS);
-      flutterLocalNotificationsPlugin.initialize(
-          initializationSettings, onSelectNotification: onSelectNotification);
-
-      // displaying
-      // az id visszajön az appba
-      var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-          'your channel id', 'your channel name', 'your channel description',
-          importance: Importance.Max,
-          priority: Priority.High,
-          ticker: 'ticker');
-      var iOSPlatformChannelSpecifics = IOSNotificationDetails();
-      var platformChannelSpecifics = NotificationDetails(
-          androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-      await flutterLocalNotificationsPlugin.show(
-          0, 'tasks:', "${await locTextContextless(key: "notif_unfinished_tasks", args: [tasksToShow.length.toString()])}",
-          platformChannelSpecifics,
-          payload: 'item x');
-
-      print("log: no its works2");
-    }
-
-
-  }
-
-  static final int taskNotificationId = 435853681315;
-
-  static Future scheduleNotificationAlarmManager(DateTime when) async {
-    // await AndroidAlarmManager.initialize();
-    //run app
-    await AndroidAlarmManager.periodic(
-        const Duration(hours: 24, minutes: 1), taskNotificationId, showHazizzNotification,
-        from: when, rescheduleOnReboot: true);
-    print("log: alarm manager is set");
-  }
-
-
-
-   // List<PojoTask> tasks = await getTasksForNotification();
-    /*
-    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
-// initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
-    var initializationSettingsAndroid = new AndroidInitializationSettings("@mipmap/ic_launcher");
-    var initializationSettingsIOS = new IOSInitializationSettings(onDidReceiveLocalNotification: onDidReceiveLocalNotification);
-    var initializationSettings = new InitializationSettings(initializationSettingsAndroid, initializationSettingsIOS);
-    flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: onSelectNotification);
-
+    // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
     // displaying
     // az id visszajön az appba
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        'your channel id', 'your channel name', 'your channel description',
-        importance: Importance.Max, priority: Priority.High, ticker: 'ticker');
-    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
-    var platformChannelSpecifics = NotificationDetails(
+    final androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      tasksTomorrowChannelId, tasksTomorrowChannelName, tasksTomorrowChanneDescription,
+      importance: Importance.Max,
+      priority: Priority.High,
+      // ticker: 'ticker'
+    );
+    final iOSPlatformChannelSpecifics = IOSNotificationDetails();
+    final platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.show(
-        0, 'tasks:', tasks.length.toString(), platformChannelSpecifics,
-        payload: 'item x');
-    */
+
+    HazizzResponse hazizzResponse = await RequestSender().getResponse(GetTasksFromMe());
+    if(hazizzResponse.isSuccessful){
+      List<PojoTask> tasks = hazizzResponse.convertedData;
+      if(tasks is List<PojoTask>){
+        List<PojoTask> tasksToShow = List();
+
+        for(PojoTask task in tasks) {
+          if(task.dueDate.day - DateTime
+              .now()
+              .day >= 1) {
+            tasksToShow.add(task);
+          }
+        }
+
+        await flutterLocalNotificationsPlugin.show(
+          0, 'tasks:', "${await locTextContextless(key: "notif_unfinished_tasks", args: [tasksToShow.length.toString()])}",
+          platformChannelSpecifics,
+          payload: tasksToShow.map((e) => e.toJson()).toList().toString()
+        );
+
+        print("log: no its works2");
+      }else{
+        await _flutterLocalNotificationsPlugin.show(
+            0, await locTextContextless(key: "tasks_tomorrow"), "${await locTextContextless(key: "check_your_homework")}",
+            platformChannelSpecifics,
+            payload: 'none'
+        );
+      }
+    }
+    else{
+
+
+
+
+      await _flutterLocalNotificationsPlugin.show(
+        0, await locTextContextless(key: "tasks_tomorrow"), "${await locTextContextless(key: "check_your_homework")}",
+        platformChannelSpecifics,
+        payload: 'none'
+      );
+    }
+  }
+
+  static const int tasksTomorrowNotificationId = 5587346431;
+  static const int classesNotificationId = 5587346432;
+
+  static Future scheduleNotificationAlarmManager(TimeOfDay timeOfDay) async {
+
+    DateTime now = DateTime.now();
+    DateTime dateTime = DateTime(now.year, now.month, now.day, timeOfDay.hour, timeOfDay.minute);
+
+    bool p = await HazizzAlarmManager.periodic(
+        const Duration(hours: 24, minutes: 0, ), tasksTomorrowNotificationId, showHazizzNotification,
+        from: dateTime, rescheduleOnReboot: true, exact: true, wakeup: true);
+    print("AndroidAlarmManager.periodic has been set successfully: $p");
+    setNotificationTime(timeOfDay);
+    print("log: alarm manager is set : ${timeOfDay.hour}.${timeOfDay.minute}");
+  }
+
+   static const String key_notificationTime = "key_notificationTime";
+
+   static Future<TimeOfDay> getNotificationTime() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    String str_time = sp.getString(key_notificationTime);
+    if(str_time != null) {
+      List<String> str_list_time = str_time.split(":");
+      List<int> time = [];
+      for(String s in str_list_time) {
+        int t = int.parse(s);
+        if(t == null) {
+          return const TimeOfDay(hour: 17, minute: 0);
+        }
+        time.add(t);
+      }
+      return TimeOfDay(hour: time[0], minute: time[1]);
+    }else
+    return TimeOfDay(hour: 17, minute: 0);
+  }
+
+   static Future<void> setNotificationTime(TimeOfDay time) async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    await sp.setString(key_notificationTime, "${time.hour}:${time.minute}");
+  }
 }

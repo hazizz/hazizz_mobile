@@ -1,5 +1,4 @@
-
-
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
 
@@ -7,9 +6,23 @@ String hazizzShowDateFormat(DateTime dateTime){
   return DateFormat("yyyy.MM.dd").format(dateTime);
 }
 
-String hazizzRequestDateFormat(DateTime dateTime){
-  return DateFormat("yyyy.MM.dd").format(dateTime);
+String hazizzShowDateAndTimeFormat(DateTime dateTime){
+  return DateFormat("yyyy.MM.dd HH:mm").format(dateTime);
 }
+
+
+String hazizzRequestDateFormat(DateTime dateTime){
+  return DateFormat("yyyy-MM-dd").format(dateTime);
+}
+
+String hazizzTimeOfDayToShow(TimeOfDay timeOfDay){
+  if(timeOfDay != null) {
+    return "${timeOfDay.hour}:${timeOfDay.minute}";
+  }
+  return "ERROR FORMATING";
+}
+
+
 
 Duration hazizzParseDuration(String hhmmss){
   List<String> timeList = hhmmss.split(":");
@@ -24,20 +37,20 @@ Duration hazizzParseDuration(String hhmmss){
 }
 
 
-bool hazizzIsAfterHHMMSS({@required DateTime mainTime, @required Duration compareTime}){
+bool hazizzIsAfterHHMMSS({@required DateTime mainTime, @required TimeOfDay compareTime}){
   Duration mainDuration = Duration(hours: mainTime.hour, minutes: mainTime.minute, seconds: mainTime.second);
 
   int mainInSec = mainDuration.inSeconds;
-  int compareInSec = compareTime.inSeconds;
+  int compareInSec = compareTime.hour * 60 * 60 + compareTime.minute * 60;
 
   return compareInSec > mainInSec;
 }
 
-bool hazizzIsBeforeHHMMSS({@required DateTime mainTime, @required Duration compareTime}){
+bool hazizzIsBeforeHHMMSS({@required DateTime mainTime, @required TimeOfDay compareTime}){
   Duration mainDuration = Duration(hours: mainTime.hour, minutes: mainTime.minute, seconds: mainTime.second);
 
   int mainInSec = mainDuration.inSeconds;
-  int compareInSec = compareTime.inSeconds;
+  int compareInSec = compareTime.hour * 60 * 60 + compareTime.minute * 60;
 
   return compareInSec < mainInSec;
 }

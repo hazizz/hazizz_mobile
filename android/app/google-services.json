@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "425675787763",
+    "firebase_url": "https://hazizz.firebaseio.com",
+    "project_id": "hazizz",
+    "storage_bucket": "hazizz.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:425675787763:android:f92ccecbee274af2",
+        "android_client_info": {
+          "package_name": "com.hazizz.droid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "425675787763-751dukg0oookea8tltaeboudlg0g555q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtah_9uR-4UacgV-UUyDELKSx7CKEocb0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "425675787763-751dukg0oookea8tltaeboudlg0g555q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:425675787763:android:4a041f928e9955e6",
+        "android_client_info": {
+          "package_name": "com.hazizz.mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "425675787763-751dukg0oookea8tltaeboudlg0g555q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtah_9uR-4UacgV-UUyDELKSx7CKEocb0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "425675787763-751dukg0oookea8tltaeboudlg0g555q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

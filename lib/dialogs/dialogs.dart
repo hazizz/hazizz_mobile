@@ -1,6 +1,6 @@
 
 
-import 'package:dio/dio.dart';
+
 import 'package:flutter/material.dart';
 import 'package:mobile/communication/pojos/PojoClass.dart';
 import 'package:mobile/communication/pojos/PojoGrade.dart';
@@ -10,10 +10,12 @@ import 'package:mobile/communication/pojos/PojoType.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/dialogs/school_dialog.dart';
 import 'package:share/share.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 
 import '../RequestSender.dart';
 import '../hazizz_date.dart';
+import '../hazizz_localizations.dart';
 import '../hazizz_response.dart';
 import '../hazizz_theme.dart';
 
@@ -553,7 +555,8 @@ Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
         return Dialog(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
             child: Container(
-                height: 210.0,
+                width: 1000,
+                height: 310.0,
                 decoration:
                 BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
                 child: Column(
@@ -677,6 +680,8 @@ Future<bool> showInviteDialog(context, {@required int groupId}) async {
   String inviteLink = "Waiting...";
   if(hazizzResponse.isSuccessful){
     inviteLink = hazizzResponse.convertedData;
+  }else{
+    return false;
   }
 
   HazizzDialog h = HazizzDialog(
@@ -842,34 +847,105 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
             child: Text("${pojoClass.periodNumber}.", style: TextStyle(fontSize: 40)),
           )
         ),
-        Center(child: Text("${pojoClass.className}", style: TextStyle(fontSize: 40)))
+        Expanded(
+          child: AutoSizeText("${pojoClass.className}",
+            style: TextStyle(fontSize: 40),
+            maxLines: 1,
+            maxFontSize: 40,
+            minFontSize: 20,
+          ),
+        )
       ],),
     ),
     content:
     Container(
       child: Padding(
         padding: const EdgeInsets.only(left: 16, right: 16),
-        child: Column(
-            children:
-            [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text("subject: ", style: TextStyle(fontSize: 20)),
-                  Text(pojoClass.subject == null ? "" : (pojoClass.subject), style: TextStyle(fontSize: 20)),
-                ],
-              ),
-              space,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Builder(builder: (BuildContext context){
+          List<Widget> rows =
+          [
+            space,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
 
-                children: <Widget>[
-                  Text("class: ", style: TextStyle(fontSize: 20)),
-                  Text(pojoClass.room == null ? "" : pojoClass.room, style: TextStyle(fontSize: 20)),
-                ],
-              ),
-            ]
-        ),
+              children: <Widget>[
+                Text(hazizzTimeOfDayToShow(pojoClass.startOfClass), style: TextStyle(fontSize: 20)),
+                Text("-", style: TextStyle(fontSize: 20)),
+                Text(hazizzTimeOfDayToShow(pojoClass.startOfClass), style: TextStyle(fontSize: 20)),
+              ],
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text("subject: ", style: TextStyle(fontSize: 20)),
+                Expanded(
+                  child: Text(pojoClass.subject == null ? "" : (pojoClass.subject),
+                  style: TextStyle(fontSize: 20))),
+              ],
+            ),
+
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+              children: <Widget>[
+                Text("class: ", style: TextStyle(fontSize: 20)),
+                Expanded(child: Text(pojoClass.room == null ? "" : pojoClass.room, style: TextStyle(fontSize: 20))),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+              children: <Widget>[
+                Text("teacher: ", style: TextStyle(fontSize: 20)),
+                Expanded(child: Text(pojoClass.teacher == null ? "" : pojoClass.teacher, style: TextStyle(fontSize: 20))),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+              children: <Widget>[
+                Text("room: ", style: TextStyle(fontSize: 20)),
+                Expanded(child: Text(pojoClass.room == null ? "" : pojoClass.room, style: TextStyle(fontSize: 20))),
+              ],
+            ),
+
+          ];
+          if(pojoClass.topic != null){
+            rows.add(Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+              children: <Widget>[
+                Text("topic: ", style: TextStyle(fontSize: 20)),
+                Expanded(child: Text(pojoClass.topic, style: TextStyle(fontSize: 20))),
+              ],
+            ));
+          }
+          if(pojoClass.cancelled != null){
+            rows.add(Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+              children: <Widget>[
+                Text("${locText(context, key: "thera_canceled")}:", style: TextStyle(fontSize: 20)),
+              ],
+            ));
+          }
+          if(pojoClass.standIn != null){
+            rows.add(Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+              children: <Widget>[
+                Text("${locText(context, key: "thera_standin")}:", style: TextStyle(fontSize: 20)),
+              ],
+            ));
+          }
+
+          return Column(children: rows,);
+
+
+        }
+        )
       ),
     ),
       actionButtons:
@@ -883,7 +959,7 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
           )
         ],
       ),
-      height: 260, width: 200);
+      height: 260, width: 300);
 
   return showDialog(
       context: context,

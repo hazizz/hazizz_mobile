@@ -4,16 +4,13 @@ import 'package:mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
 import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
 import 'package:mobile/communication/pojos/PojoGrade.dart';
-import 'package:mobile/communication/pojos/PojoGrades.dart';
 import 'package:mobile/listItems/grade_header_item_widget.dart';
 import 'package:mobile/listItems/grade_item_widget.dart';
-
-
-import 'package:sticky_headers/sticky_headers.dart';
+import 'package:sticky_header_list/sticky_header_list.dart';
 
 import '../../hazizz_localizations.dart';
 
-class GradesPage extends StatefulWidget {
+class GradesPage extends StatefulWidget  {
 
   MainGradesBloc gradesBloc;
 
@@ -27,7 +24,7 @@ class GradesPage extends StatefulWidget {
   _GradesPage createState() => _GradesPage(gradesBloc);
 }
 
-class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin {
+class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin , AutomaticKeepAliveClientMixin {
 
   final MainGradesBloc gradesBloc;
 
@@ -44,6 +41,7 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
     // getData();
   //  gradesBloc.dispatch(FetchData());
     //   gradesBloc.fetchMyTasks();
+    print("created Grades PAge");
     if(gradesBloc.currentState is ResponseError) {
       gradesBloc.dispatch(FetchData());
     }
@@ -51,22 +49,43 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
   }
 
   @override
+  void dispose() {
+    gradesBloc.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: new RefreshIndicator(
-            child: BlocBuilder(
-                bloc: gradesBloc,
-                //  stream: gradesBloc.subject.stream,
-                builder: (_, HState state) {
-                  if (state is ResponseDataLoaded) {
-                    print("sadsadsad?: ${state.data}");
-                    PojoGrades p = state.data;
-                    Map<String, List<PojoGrade>> grades = state.data.grades;
-                    print("sadsadsad?: ${state.data.grades}");
-                    int itemCount = grades.keys.length;
+            child: Stack(
+              children: <Widget>[
+                ListView(),
+                BlocBuilder(
+                    bloc: gradesBloc,
+                    //  stream: gradesBloc.subject.stream,
+                    builder: (_, HState state) {
+                      if (state is ResponseDataLoaded) {
+                        print("sadsadsad?: ${state.data}");
+                        Map<String, List<PojoGrade>> grades = state.data.grades;
+                        print("sadsadsad?: ${state.data.grades}");
+                        int itemCount = grades.keys.length;
 
-                    print("log: itme count: $itemCount");
+                        /*
+                    for(List<PojoGrade> listOfGrades in grades){
 
+                    }
+                    */
+
+                        /*
+                    grades.forEach((String key, List<PojoGrade> value){
+                      itemCount += value.length;
+                    });
+                    */
+
+                        print("log: itme count: $itemCount");
+
+                        /*
                     return new ListView.builder(
                       itemCount: itemCount,
                       itemBuilder: (BuildContext context, int index) {
@@ -91,22 +110,68 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
 
                       }
                     );
-                  } else if (state is ResponseEmpty) {
-                    return Center(child: Text("Empty"));
-                  } else if (state is ResponseWaiting) {
-                    //return Center(child: Text("Loading Data"));
-                    return Center(child: CircularProgressIndicator(),);
-                  }
-                  return Center(
-                      child: Text("Uchecked State: ${state.toString()}"));
-                }
+                    */
 
+                        return new StickyList.builder(
+                            itemCount: itemCount,
+                            builder: (BuildContext context, int index) {
+
+                              String key = grades.keys.elementAt(index);
+
+                              List<Widget> widgetList = List();
+                              widgetList.add(GradeHeaderItemWidget(subjectName: key,));
+                              for(PojoGrade grade2 in grades[key]){
+                                widgetList.add(GradeItemWidget(pojoGrade: grade2,));
+                              }
+
+                              return new HeaderRow(
+                                  child: Column(
+                                      children: widgetList
+                                  ));
+                              /*
+                          if (index == 0 || tasks[index].dueDate
+                              .difference(tasks[index - 1].dueDate)
+                              .inDays > 0) {
+                            return new HeaderRow(
+                                child: Column(
+                                    children: [
+                                      TaskHeaderItemWidget(dateTime: tasks[index].dueDate),
+                                      TaskItemWidget(pojoTask: tasks[index])
+                                    ]
+                                ));
+                          } else {
+                            return RegularRow(child: TaskItemWidget(pojoTask: tasks[index]),
+                            );
+                          }
+                          */
+                            }
+                        );
+
+
+
+                      } else if (state is ResponseEmpty) {
+                        return Center(child: Text("Empty"));
+                      } else if (state is ResponseWaiting) {
+                        //return Center(child: Text("Loading Data"));
+                        return Center(child: CircularProgressIndicator(),);
+                      }
+                      return Center(
+                          child: Text("Uchecked State: ${state.toString()}"));
+                    }
+
+                ),
+
+              ],
             ),
             onRefresh: () async =>
                 gradesBloc.dispatch(FetchData()) //await getData()
         )
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
 
 

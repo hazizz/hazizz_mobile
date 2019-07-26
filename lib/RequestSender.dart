@@ -1,9 +1,12 @@
 // EZT NÉZD MEG -->https://github.com/Solido/awesome-flutter
 import 'dart:async';
+import 'dart:collection';
 
 import 'package:dio/dio.dart';
+//import 'package:mobile/packages/hazizz-dio-2.1.3/lib/dio.dart';
 import 'HttpMethod.dart';
 
+import 'communication/connection.dart';
 import 'communication/requests/request_collection.dart';
 import 'hazizz_response.dart';
 import 'package:connectivity/connectivity.dart';
@@ -21,42 +24,7 @@ class RequestSender{
     return _instance;
   }
 
-  static StreamSubscription streamConnectionStatus;
-  static ConnectivityResult connectivity;
-  static bool hasConnection;
-  Future<Null> getConnectionStatus() async {
-    streamConnectionStatus = new Connectivity()
-    .onConnectivityChanged.listen((ConnectivityResult result) {
-      print(result.toString());
-      if (result == ConnectivityResult.mobile || result == ConnectivityResult.wifi) {
-         // hasConnection = true;
-        print("log: connection: available");
-        unlock();
-      } else {
-         // hasConnection = false;
-        print("log: connection: not available");
-
-        lock();
-      }
-    });
-  }
-
-  /*
-  // dispose function inside class
-  @override
-  void dispose() {
-    try {
-      streamConnectionStatus?.cancel();
-    } catch (exception, stackTrace) {
-      print(exception.toString());
-    } finally {
-      super.dispose();
-    }
-  }
-  */
-
   RequestSender._internal(){
-    getConnectionStatus();
 
     dio.interceptors.add(InterceptorsWrapper(
       onRequest:(RequestOptions options) async{
@@ -80,7 +48,8 @@ class RequestSender{
       },
       onResponse:(Response response) {
         // Do something with response data
-        print("log: got response");
+        print("log: got response: ${response.data}");
+
         return response; // continue
       },
       onError: (DioError e) async{
@@ -107,13 +76,20 @@ class RequestSender{
       int maxRedirects,
   */
   final Options options = new Options(
+    /*
+    responseDecoder: (List<int> responseBytes, RequestOptions options, ResponseBody responseBody){
+      responseBody.
+    },
+    */
     connectTimeout: 5000,
     sendTimeout: 5000,
     receiveTimeout: 5000,
   //  headers: request.header,
     responseType: ResponseType.plain,
     receiveDataWhenStatusError: true,
-    followRedirects: true
+    followRedirects: true,
+
+
   );
 
   static final Dio dio = new Dio();
@@ -145,7 +121,9 @@ class RequestSender{
 
       print("hey: sent token request");
     }on DioError catch(error){
-      print("log: error response data: ${error.response.data}");
+      if(error.response != null) {
+        print("log: error response data: ${error.response.data}");
+      }
       hazizzResponse = await HazizzResponse.onError(dioError: error, request: authRequest);
       print(hazizzResponse);
     }
@@ -206,6 +184,36 @@ class RequestSender{
   }
   */
 
+
+  Set<Request> noConnectionRequestsPrioritized = Set();
+  List<Request> noConnectionRequests = List();
+
+  void addToNoConnectionRequestList(Request newRequest){
+
+    if(newRequest is CreateTokenWithRefresh){
+      noConnectionRequestsPrioritized.add(newRequest);
+    }
+
+    if(noConnectionRequests.isNotEmpty){
+      for(int i = 0; i < noConnectionRequests.length; i++){
+        if(noConnectionRequests[i] == newRequest){
+          noConnectionRequests[i] = newRequest;
+        }
+      }
+    }else{
+      noConnectionRequests.add(newRequest);
+    }
+  }
+
+  Future sendNoConnectionRequests() async {
+    for(Request request in noConnectionRequestsPrioritized){
+      await RequestSender().getResponse(request);
+    }
+
+
+  }
+
+
   Future<HazizzResponse> getResponse(Request request) async{
 
     HazizzResponse hazizzResponse;
@@ -214,20 +222,27 @@ class RequestSender{
 
     Response response;
     print("log: about to start sending request");
+    bool isConnected = await Connection.isOnline();
     try {
-      if (request.httpMethod == HttpMethod.GET) {
-        options.headers = await request.buildHeader();
-        response = await dio.get(request.url, queryParameters: request.query, options: options);
-      }else if (request.httpMethod == HttpMethod.POST) {
-        options.headers = await request.buildHeader();
-        response = await dio.post(request.url, queryParameters: request.query, data: request.body, options: options);
-      }else if (request.httpMethod == HttpMethod.DELETE) {
-        options.headers = await request.buildHeader();
-        response = await dio.delete(request.url, queryParameters: request.query, data: request.body, options: options);
+      if(isConnected) {
+        if(request.httpMethod == HttpMethod.GET) {
+          options.headers = await request.buildHeader();
+          response = await dio.get(request.url, queryParameters: request.query, options: options);
+
+        }else if(request.httpMethod == HttpMethod.POST) {
+          options.headers = await request.buildHeader();
+          response = await dio.post(request.url, queryParameters: request.query, data: request.body, options: options);
+        }else if(request.httpMethod == HttpMethod.DELETE) {
+          options.headers = await request.buildHeader();
+          response = await dio.delete(request.url, queryParameters: request.query, data: request.body, options: options);
+        }
+        hazizzResponse = HazizzResponse.onSuccess(response: response, request: request);
+        print("log: request sent: ${request.toString()}");
+      }else{
+       // throw DioError(type: D);
       }
-      hazizzResponse = HazizzResponse.onSuccess(response: response, request: request);
-      print("log: request sent: ${request.toString()}");
     }on DioError catch(error) {
+      print("log: error damn");
       hazizzResponse = await HazizzResponse.onError(dioError: error, request: request);
     }
     return hazizzResponse;
