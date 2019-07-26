@@ -1,7 +1,7 @@
 
 import 'dart:convert';
 
-import 'package:dio/dio.dart';
+
 import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,7 +24,7 @@ class WrongPasswordException implements LoginError{
 
 class KretaSessionManager {
 
-  static final String _keySession = "key_session";
+  static const String _keySession = "key_session";
 
 //  static bool tokenIsValid = true;
 

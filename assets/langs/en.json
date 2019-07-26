@@ -1,4 +1,6 @@
 {
+    "hazizz_appname" : "Hazizz Mobile",
+
     "hazizz" : "HazizzEng",
 
 
@@ -27,6 +29,9 @@
     "days2"
     : "In 2 days",
 
+
+    "days_later"
+    : "{} days latter",
 
     "today"
     : "Today",
@@ -76,8 +81,11 @@
     : "Add",
 
 
-    "button_create"
+    "create"
     : "Create",
+
+    "edit"
+    : "Edit",
 
 
     "button_join"
@@ -115,7 +123,7 @@
     : "New task",
 
 
-    "fragment_title_edit_task"
+    "editTask"
     : "Edit task",
 
 
@@ -230,10 +238,11 @@
     "comments"
     : "Comments",
 
+    "no_comments_yet"
+    : "No comments yet",
 
-    "edit"
-    : "Edit",
-
+    "write_comment"
+    : "Write a comment",
 
     "delete"
     : "Delete",
@@ -519,8 +528,8 @@
     : "Join group",
 
 
-    "title_fragment_taskeditor"
-    : "New task",
+    "createTask"
+    : "Create task",
 
 
     "title_newannouncement"
@@ -593,6 +602,9 @@
 
     "select_school"
     : "Choose school",
+
+    "no_school_with_that_name"
+    : "There is no school with this name",
 
 
     "error"
@@ -743,7 +755,22 @@
     : "You have",
 
     "notif_unfinished_tasks"
-    : "You have {} task for tomorrow",
+: "You have {} task for tomorrow",
+
+  "set_time_for_notification"
+  : "Notification time",
+
+  "tasks_tomorrow"
+  : "Homework for tomorrow",
+
+    "title_tasks_tomorrow"
+    : "Homeworks for tomorrow",
+
+  "do_your_homework"
+  : "Time to do your homework",
+
+  "check_your_homework"
+  : "You may have homework for tomorrow",
 
 
 
@@ -874,6 +901,10 @@
     "title_activity_thera"
     : "TheraActivity",
 
+  "sign_in_google"
+  : "Sign in with Google",
+
+
     "days_0" : "Monday",
     "days_1" : "Tuesday",
     "days_2" : "Wednesday",
@@ -881,6 +912,14 @@
     "days_4" : "Friday",
     "days_5" : "Saturday",
     "days_6" : "Sunday",
+
+    "days_m_0" : "M",
+    "days_m_1" : "Tu",
+    "days_m_2" : "W",
+    "days_m_3" : "Th",
+    "days_m_4" : "F",
+    "days_m_5" : "Sa",
+    "days_m_6" : "Su",
 
 
     "filterType_map": {

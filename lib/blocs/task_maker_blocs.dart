@@ -2,7 +2,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
+
 import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
 import 'package:mobile/blocs/text_field_bloc.dart';
@@ -70,8 +70,6 @@ abstract class TaskMakerBloc extends Bloc<TaskMakerEvent, TaskMakerState> {
   
     super.dispose();
   }
-
-
 }
 
 
@@ -100,6 +98,17 @@ class PickedGroupEvent extends ItemListEvent {
   @override
   String toString() => 'PickedGroupEvent';
 }
+
+class SetGroupEvent extends ItemListEvent {
+  final PojoGroup item;
+  SetGroupEvent({@required this.item})
+      : assert(item != null), super([item]);
+  @override
+  String toString() => 'SetGroupEvent';
+}
+
+
+
 //endregion
 
 //region GroupItemListStates
@@ -119,6 +128,11 @@ class GroupItemPickerBloc extends ItemListPickerBloc {
   StreamSubscription subjectItemPickerBlocSubscription;
   List<PojoGroup> dataList;
 
+  bool isLocked = false;
+
+
+  @override
+  ItemListState get initialState => Empty();
 
   GroupItemPickerBloc(this.subjectItemPickerBloc) {
     subjectItemPickerBlocSubscription = this.state.listen((state) {
@@ -129,38 +143,39 @@ class GroupItemPickerBloc extends ItemListPickerBloc {
     });
   }
 
-  /*
-  @override
-  // TODO: implement initialState
-  ItemListState get initialState => LoadData();
-  */
-
   @override
   Stream<ItemListState> mapEventToState(ItemListEvent event) async* {
-    if (event is PickedGroupEvent) {
-      print("log: PickedState is played");
+    if(event is SetGroupEvent){
+      isLocked = true;
       yield PickedGroupState(item: event.item);
     }
-    if (event is ItemListLoadData) {
-      try {
-        yield Waiting();
-        HazizzResponse hazizzResponse = await RequestSender().getResponse(
-            new GetMyGroups());
-        print("log: responseData: ${hazizzResponse.convertedData}");
-        print(
-            "log: responseData type:  ${hazizzResponse.convertedData.runtimeType.toString()}");
+    if(!isLocked) {
+      if(event is PickedGroupEvent) {
+        print("log: PickedState is played");
+        yield PickedGroupState(item: event.item);
+      }
+      if(event is ItemListLoadData) {
+        try {
+          yield Waiting();
+          HazizzResponse hazizzResponse = await RequestSender().getResponse(
+              new GetMyGroups());
+          print("log: responseData: ${hazizzResponse.convertedData}");
+          print(
+              "log: responseData type:  ${hazizzResponse.convertedData
+                  .runtimeType.toString()}");
 
-        if (hazizzResponse.isSuccessful) {
-          dataList = hazizzResponse.convertedData;
-          if (dataList.isNotEmpty) {
-            print("log: response is List");
-            yield ItemListLoaded(data: dataList);
-          } else {
-            yield Empty();
+          if(hazizzResponse.isSuccessful) {
+            dataList = hazizzResponse.convertedData;
+            if(dataList.isNotEmpty) {
+              print("log: response is List");
+              yield ItemListLoaded(data: dataList);
+            }else {
+              yield Empty();
+            }
           }
+        }on Exception catch(e) {
+          print("log: Exception: ${e.toString()}");
         }
-      } on Exception catch (e) {
-        print("log: Exception: ${e.toString()}");
       }
     }
     super.mapEventToState(event);
@@ -177,6 +192,19 @@ class PickedSubjectEvent extends ItemListEvent {
       : assert(item != null), super([item]);
   @override
   String toString() => 'PickedSubjectEvent';
+}
+
+
+
+
+
+
+class SetSubjectEvent extends ItemListEvent {
+  final PojoSubject item;
+  SetSubjectEvent({@required this.item})
+      : super([item, 5]);
+  @override
+  String toString() => 'SetSubjectEvent';
 }
 
 class SubjectLoadData extends ItemListEvent {
@@ -205,39 +233,107 @@ class PickedSubjectState extends ItemListState {
 class SubjectItemPickerBloc extends ItemListPickerBloc {
   List<PojoSubject> dataList;
 
+  bool isLocked = false;
+
   @override
   Stream<ItemListState> mapEventToState(ItemListEvent event) async*{
-    if(event is PickedSubjectEvent){
-      print("log: PickedState is played");
+    print("ohhohh : ${event.toString()} isLocked: $isLocked");
+    if(event is SetSubjectEvent){
+      isLocked = true;
       yield PickedSubjectState(item: event.item);
     }
-    if (event is SubjectLoadData) {
-      try {
-        yield Waiting();
-        HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetSubjects(groupId: event.groupId));
-       // print("log: responseData: ${hazizzResponse.convertedData}");
-     //   print("log: responseData type:  ${hazizzResponse.runtimeType.toString()}");
-
-        if(hazizzResponse.isSuccessful){
-          dataList = hazizzResponse.convertedData;
-          if(dataList.isNotEmpty) {
-            print("log: response is List");
-            yield ItemListLoaded(data: dataList);
-          }else{
-            yield Empty();
-          }
-        }
-      } on Exception catch(e){
-        print("log: Exception: ${e.toString()}");
+    if(!isLocked) {
+      if(event is PickedSubjectEvent){
+        print("log: PickedState is played");
+        yield PickedSubjectState(item: event.item);
       }
+
+      if(event is SubjectLoadData) {
+        print("imp log");
+        try {
+          yield Waiting();
+          HazizzResponse hazizzResponse = await RequestSender().getResponse(
+              new GetSubjects(groupId: event.groupId));
+          // print("log: responseData: ${hazizzResponse.convertedData}");
+          //   print("log: responseData type:  ${hazizzResponse.runtimeType.toString()}");
+
+          if(hazizzResponse.isSuccessful) {
+            dataList = hazizzResponse.convertedData;
+            if(dataList.isNotEmpty) {
+              print("log: response is List");
+              yield ItemListLoaded(data: dataList);
+            }else {
+              yield Empty();
+            }
+          }
+        }on Exception catch(e) {
+          print("log: Exception: ${e.toString()}");
+        }
+      }
+      super.mapEventToState(event);
     }
-    super.mapEventToState(event);
+
   }
+
 
   @override
   // TODO: implement initialState
   ItemListState get initialState => Empty();
+
 }
+
+
+
+
+class SubjectItemPickerBloc2 extends ItemListPickerBloc {
+  List<PojoGroup> dataList;
+
+  bool isLocked = false;
+
+  @override
+  Stream<ItemListState> mapEventToState(ItemListEvent event) async* {
+    if(event is SetSubjectEvent){
+      isLocked = true;
+      yield PickedSubjectState(item: event.item);
+    }
+    if(!isLocked) {
+      if(event is PickedGroupEvent) {
+        print("log: PickedState is played");
+        yield PickedGroupState(item: event.item);
+      }
+      if(event is ItemListLoadData) {
+        try {
+          yield Waiting();
+          HazizzResponse hazizzResponse = await RequestSender().getResponse(
+              new GetMyGroups());
+          print("log: responseData: ${hazizzResponse.convertedData}");
+          print(
+              "log: responseData type:  ${hazizzResponse.convertedData
+                  .runtimeType.toString()}");
+
+          if(hazizzResponse.isSuccessful) {
+            dataList = hazizzResponse.convertedData;
+            if(dataList.isNotEmpty) {
+              print("log: response is List");
+              yield ItemListLoaded(data: dataList);
+            }else {
+              yield Empty();
+            }
+          }
+        }on Exception catch(e) {
+          print("log: Exception: ${e.toString()}");
+        }
+      }
+    }
+    super.mapEventToState(event);
+  }
+}
+
+
+
+
+
+
 //endregion
 //endregion
 
@@ -325,6 +421,11 @@ class TaskMakerSentState extends TaskMakerState {
   String toString() => 'TaskMakerSentState';
 }
 
+class TaskMakerFailedState extends TaskMakerState {
+  @override
+  String toString() => 'TaskMakerFailedState';
+}
+
 
 abstract class TaskMakerEvent extends HEvent {
   TaskMakerEvent([List props = const []]) : super(props);
@@ -334,5 +435,10 @@ class TaskMakerSendEvent extends TaskMakerEvent {
   @override
   String toString() => 'TaskMakerSendEvent';
 }
+class TaskMakerFailedEvent extends TaskMakerEvent {
+  @override
+  String toString() => 'TaskMakerFailedEvent';
+}
+
 
 

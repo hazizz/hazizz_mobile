@@ -1,71 +1,137 @@
 import 'dart:async';
 
 import 'package:android_alarm_manager/android_alarm_manager.dart';
+import 'package:easy_localization/easy_localization_provider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:mobile/hazizz_localizations.dart';
-import 'package:mobile/pages/LoginPage.dart';
-import 'package:mobile/pages/main_pages/main_tab_hoster_page.dart';
 import 'package:mobile/route_generator.dart';
 import 'blocs/main_tab_blocs/main_tab_blocs.dart';
+import 'communication/connection.dart';
+import 'communication/pojos/task/PojoTask.dart';
+import 'hazizz_alarm_manager.dart';
 import 'hazizz_theme.dart';
-import 'managers/TokenManager.dart';
+import 'managers/token_manager.dart';
 import 'managers/app_state_manager.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+import 'package:dynamic_theme/dynamic_theme.dart';
 
-Widget _startPage;
-String _startPage2;
+import 'notification/notification.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+
+String startPage;
+
+ThemeData themeData;
+
+bool newComer = false;
 
 bool isLoggedIn = true;
 
-//Locale locale;
-//RouteGenerator routeGenerator;
+bool isFromNotification = false;
+
+
+String tasksTomorrowSerialzed;
+List<PojoTask> tasksForTomorrow;
 
 MainTabBlocs mainTabBlocs = MainTabBlocs();
 
+final GoogleSignIn _googleSignIn = GoogleSignIn();
+final FirebaseAuth _auth = FirebaseAuth.instance;
+
+Future<FirebaseUser> _handleSignIn() async {
+  final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+  final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+  final AuthCredential credential = GoogleAuthProvider.getCredential(
+    accessToken: googleAuth.accessToken,
+
+    idToken: googleAuth.idToken,
+  );
+
+  final FirebaseUser user = await _auth.signInWithCredential(credential);
+  print("signed in " + user.displayName);
+  return user;
+}
+
+Future<void> fromDynamicLink(BuildContext context) async {
+  final PendingDynamicLinkData data = await FirebaseDynamicLinks.instance.retrieveDynamicLink();
+  final Uri deepLink = data?.link;
+
+  if (deepLink != null) {
+    String str_groupId =  deepLink.queryParameters["group"];
+    if(str_groupId != null && str_groupId != ""){
+      int groupId = int.parse(str_groupId);
+      if(groupId != null){
+        Navigator.pushNamed(context, "/group/groupId", arguments:groupId);
+      }
+    }
+  }
+}
+
+
+Future<bool> fromNotification() async {
+  var notificationAppLaunchDetails = await HazizzNotification.flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+  if(notificationAppLaunchDetails.didNotificationLaunchApp) {
+    isFromNotification = true;
+    String payload = notificationAppLaunchDetails.payload;
+    if(payload != null) {
+      tasksTomorrowSerialzed = payload;
+      //  tasksForTomorrow = getIterable(payload).map<PojoTask>((json) => PojoTask.fromJson(json)).toList();
+    }
+  }
+  return isFromNotification;
+}
+
+
 void main() async{
 
-  await AndroidAlarmManager.initialize();
+  Connection.listener();
 
-  if(!(await AppState.isLoggedIn())){
-    isLoggedIn = false;
-  }else{
-    if(await TokenManager.checkIfTokenRefreshIsNeeded()){
-      await TokenManager.fetchToken();
+  Crashlytics.instance.enableInDevMode = true;
+  FlutterError.onError = (FlutterErrorDetails details) {
+    Crashlytics.instance.onError(details);
+  };
+
+
+  await HazizzAlarmManager.initialize();
+
+  themeData = await HazizzTheme.getCurrentTheme();
+
+  if(!(await AppState.isNewComer())) {
+    if(!(await AppState.isLoggedIn())) { // !(await AppState.isLoggedIn())
+      isLoggedIn = false;
+    }else {
+      if(await TokenManager.checkIfTokenRefreshIsNeeded()) {
+        await TokenManager.fetchToken();
+      }
+
+      fromNotification();
+
+
+      mainTabBlocs.initialize();
     }
-    mainTabBlocs.initialize();
-
-    /*
-    TokenManager.checkAndFetchTokenRefreshIfNeeded().then(
-            (dynamic value){
-          mainTabBlocs.initialize();
-        }
-    );
-    */
+  }else{
+    isLoggedIn = false;
+    newComer = true;
+    AppState.setIsntNewComer();
   }
-  runApp(MyApp());
+  runApp(EasyLocalization(child: HazizzApp()));
 }
 
-class MyApp extends StatefulWidget{
+class HazizzApp extends StatefulWidget{
   @override
-  _MyApp createState() => _MyApp();
+  _HazizzApp createState() => _HazizzApp();
 }
 
- // locale = await getPreferredLocal();
-
- // _startPage = LoginPage();
- // _startPage2 = "login";
- // runApp(MyApp());
-
-class _MyApp extends State<MyApp> {
-  // This widget is the root of your application.
-
+class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
   Locale preferredLocale;
 
   bool timerWentOff = false;
-
 
   @override
   initState() {
@@ -77,257 +143,96 @@ class _MyApp extends State<MyApp> {
       });
     });
 
-
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // var data = EasyLocalizationProvider.of(context).data;
-    timerWentOff = true;
-    if(timerWentOff) {
-      if(isLoggedIn){
-        _startPage = MainTabHosterPage();
-        _startPage2 = "/";
-      }else{
-        _startPage = LoginPage();
-        _startPage2 = "login";
-      }
-      return MaterialApp(
-        title: 'Hazizz Demo',
-        showPerformanceOverlay: false,
-        theme: HazizzTheme.lightThemeData,
-        // home: _startPage,//MyHomePage(title: 'Hazizz Demo Home Page') //_startPage, // MyHomePage(title: 'Hazizz Demo Home Page'),
-        initialRoute: _startPage2,
-        //  home: _startPage,
-        onGenerateRoute: RouteGenerator.generateRoute,
-        localizationsDelegates: [
-          HazizzLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          //app-specific localization
-        ],
-        supportedLocales: [Locale('en', "EN"), Locale('hu', "HU")],
-
-        localeResolutionCallback: (locale, supportedLocales) {
-          // Check if the current device locale is supported
-          // Locale myLocale = Localizations.localeOf(context);
-          if(preferredLocale != null) {
-            return preferredLocale;
-          }
-          for(var supportedLocale in supportedLocales) {
-            if(supportedLocale.languageCode == locale.languageCode &&
-                supportedLocale.countryCode == locale.countryCode) {
-              return supportedLocale;
-            }
-          }
-          // If the locale of the device is not supported, use the first one
-          // from the list (English, in this case).
-          return supportedLocales.first;
-        },
-      );
-    }else{
-
-
-      Timer(Duration(seconds: 1), (){
-        setState(() {
-          timerWentOff = true;
-        });
-      });
-
-
-      return Container(
-        color: Theme.of(context).primaryColor,
-        child: Center(
-          child:Image.asset(
-            'assets/images/Logo.png',
-          ),
-        ),
-      );
-    }
-  }
-}
-
-/*
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, @required this.title}) : super(key: key);
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-  final String title2 = "sa";
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin{
-  int _selectedIndex = 0;
-
-  TabController _tabController;
-
-  Widget drawer = new HazizzDrawer();
-
-  final List<Widget> _children = [new TasksPage(), PlaceholderWidget(color: Colors.red, name1: "222", text1: Text("222"),)];
-
-  @override
-  void initState() {
-    super.initState();
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
-    _tabController.dispose();
+    // TODO: implement dispose
     super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
   }
+  
+  @override
+  Future didChangeAppLifecycleState(AppLifecycleState state) async {
+    print('log: state = $state');
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    if(state == AppLifecycleState.resumed){
+
+
+      var notificationAppLaunchDetails = await HazizzNotification.flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+        String payload = notificationAppLaunchDetails.payload;
+        if(payload != null) {
+          print("log: payload: $payload");
+          Navigator.pushNamed(context, "/tasksTomorrow");
+
+          tasksTomorrowSerialzed = payload;
+          //  tasksForTomorrow = getIterable(payload).map<PojoTask>((json) => PojoTask.fromJson(json)).toList();
+        }else  print("log: no payload");
+
+
+
+
+      if(await fromNotification()) {
+        Navigator.pushNamed(context, "/tasksTomorrow");
+      }
+      try {
+        await fromDynamicLink(context);
+      }catch(Ex){
+
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    timerWentOff = true;
 
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
+      if(isLoggedIn){
+        if(!isFromNotification){
+          startPage = "/";
+        }else {
+          startPage = "/tasksTomorrow";
+        }
+      }else{
+        startPage = "login";
+      }
 
-        title: Text(widget.title),
-      ),
-      body: _children[_selectedIndex],
-       /* TabBarView(
-              controller: _tabController,
-              children: [
-                Icon(Icons.directions_car),
-                Icon(Icons.directions_transit),
-              ]
-        ),
-        */
+      return new DynamicTheme(
+          data: (brightness) => themeData,
+          themedWidgetBuilder: (context, theme) {
+            return MaterialApp(
+              title: 'Hazizz Mobile',
+              showPerformanceOverlay: false,
+              theme: theme,//HazizzTheme. darkThemeData,//lightThemeData,
+              // home: _startPage,//MyHomePage(title: 'Hazizz Demo Home Page') //_startPage, // MyHomePage(title: 'Hazizz Demo Home Page'),
+              initialRoute: startPage,
+              onGenerateRoute: RouteGenerator.generateRoute,
+              localizationsDelegates: [
+                HazizzLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+              ],
+              supportedLocales: getSupportedLocales(),
 
-      floatingActionButton:
-        FloatingActionButton(
-          heroTag: "hero_task_edit",
-          onPressed: (){
-            Navigator.push(context,MaterialPageRoute(builder: (context) => TaskMakerPage.createMode()));
-          },
-          tooltip: 'Increment',
-          child: Icon(Icons.add),
-        ), // This trailing comma makes auto-formatting nicer for build methods.
-
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-                child: UserAccountsDrawerHeader(
-                  accountName: new Text("ASD"),
-                  accountEmail: new Text("email"),
-                  currentAccountPicture: CircleAvatar(
-                    backgroundColor: Theme
-                        .of(context)
-                        .platform == TargetPlatform.iOS
-                        ? Colors.tealAccent[200]
-                        : Colors.amber[300],
-                    child: new Text("oiasdasd"),
-                  ),
-                )
-            ),
-            ListTile(
-              title: Text('Home'),
-              onTap: () {
-                Navigator.pop(context);
-               // Page1();
-                Navigator.push(context,MaterialPageRoute(builder: (context) => Page1(title: "TITLE",)));
-
+              localeResolutionCallback: (locale, supportedLocales) {
+                // Check if the current device locale is supported
+                // Locale myLocale = Localizations.localeOf(context);
+                if(preferredLocale != null) {
+                  return preferredLocale;
+                }
+                for(var supportedLocale in supportedLocales) {
+                  if(supportedLocale.languageCode == locale.languageCode &&
+                      supportedLocale.countryCode == locale.countryCode) {
+                    return supportedLocale;
+                  }
+                }
+                // If the locale of the device is not supported, use the first one
+                // from the list (English, in this case).
+                return supportedLocales.first;
               },
-            ),
-            ListTile(
-              title: Text('My Tasks'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: Text('Groups'),
-              onTap: () {
-              //  Navigator.pop(context);
-               // Navigator.push(context,MaterialPageRoute(builder: (context) => GroupTabHosterPage(groupId: 2)));
-
-              },
-            ),
-
-            Container(
-              // This align moves the children to the bottom
-                child: Align(
-                    alignment: FractionalOffset.bottomCenter,
-                    // This container holds all the children that will be aligned
-                    // on the bottom and should not scroll with the above ListView
-                    child: Container(
-                        child: Column(
-                          children: <Widget>[
-                            Divider(),
-                            ListTile(
-                                leading: Icon(Icons.settings),
-                                title: Text('Settings')),
-                            ListTile(
-                                leading: Icon(Icons.help),
-                                title: Text('Help and Feedback')),
-                            ListTile(
-                              leading: Icon(Icons.exit_to_app),
-                              title: Text('Logout'),
-                              onTap: () {
-                                InfoCache.forgetMyUsername();
-                                Navigator.pushReplacementNamed(context, "login");
-                              },
-                            ),
-
-                          ],
-                        )
-                    )
-                )
-            )
-
-            /*
-            new Expanded(
-              child: new Align(
-                alignment: Alignment.bottomRight,
-                child: ListTile(
-                  title: Text('Logout'),
-                  onTap: () {
-                    Navigator.pushReplacementNamed(context, "login");
-
-                  },
-                ),
-              ),
-            ),
-            */
-
-          ],
-        ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            title: Text('Hazizz'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.assistant_photo),
-            title: Text('Thera'),
-          )
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue[400],
-        onTap: _onItemTapped,
-      ),
-
-    );
+            );
+          }
+      );
   }
 }
-
-*/

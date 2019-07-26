@@ -1,6 +1,8 @@
 
+import 'package:flutter/material.dart';
 import 'package:mobile/hazizz_date.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:mobile/hazizz_time_of_day.dart';
 
 import 'Pojo.dart';
 
@@ -10,8 +12,8 @@ part 'PojoClass.g.dart';
 //@JsonSerializable()
 class PojoClass extends Pojo{
   DateTime date;
-  Duration startOfClass;
-  Duration endOfClass;
+  HazizzTimeOfDay startOfClass;
+  HazizzTimeOfDay endOfClass;
   int periodNumber;
   bool cancelled;
   bool standIn;
@@ -27,7 +29,7 @@ class PojoClass extends Pojo{
 
   factory PojoClass.fromJson(Map<String, dynamic> json){
     PojoClass pojoClass = _$PojoClassFromJson(json);
-    pojoClass.className = "Matek";
+    pojoClass.className = "MatekMatekMatekMatekMatekMatekMatekMatekMatekMatekMatekMatek";
     return pojoClass;
   }
 

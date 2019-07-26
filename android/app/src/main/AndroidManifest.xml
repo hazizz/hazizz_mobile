@@ -18,6 +18,12 @@
         android:name=".Application"
         android:label="Hazizz Mobile"
         android:icon="@mipmap/ic_launcher">
+
+        <activity
+            android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

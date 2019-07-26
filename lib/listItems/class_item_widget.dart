@@ -41,21 +41,17 @@ class ClassItemWidget extends StatelessWidget{
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
 
-              Container(
-                width: itemHeight,
-                child:
-                AspectRatio(
-                  aspectRatio: 1/1,
-                  child: Container(
-                    color: Theme.of(context).primaryColor,
-                    child: Center(
-                      child: Text(pojoClass.periodNumber == null ? "1." : "${pojoClass.periodNumber}.",
-                        style: TextStyle(fontSize: 38),
-                      ),
-                    ),
-                  ),
+
+            Container(
+             // height: double.infinity,
+              color: Theme.of(context).primaryColor,
+              child: Center(
+                child: Text(pojoClass.periodNumber == null ? "1." : "${pojoClass.periodNumber}.",
+                  style: TextStyle(fontSize: 38),
                 ),
               ),
+            ),
+
             //  SizedBox(width: 4,),
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -78,6 +74,16 @@ class ClassItemWidget extends StatelessWidget{
                         ),
                       )
                   ),
+
+                  Row(
+                    children: <Widget>[
+                      Text(pojoClass.startOfClass.toHazizzFormat(), style: TextStyle(fontSize: 20),),
+                      Text("-", style: TextStyle(fontSize: 20),),
+                      Text(pojoClass.endOfClass.toHazizzFormat(), style: TextStyle(fontSize: 20),)
+                    ],
+                  )
+
+
                 ],
               ),
               Spacer(),

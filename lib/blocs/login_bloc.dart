@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
 import 'package:mobile/communication/errorcode_collection.dart';
-import 'package:mobile/managers/TokenManager.dart';
+import 'package:mobile/managers/token_manager.dart';
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
+import 'package:mobile/notification/notification.dart';
 import 'TextFormBloc.dart';
 import 'auth_bloc.dart';
 
@@ -140,6 +141,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             MainTabBlocs().initialize();
             authenticationBloc.dispatch(LoggedIn());
             yield LoginSuccessState();
+            HazizzNotification.scheduleNotificationAlarmManager(await HazizzNotification.getNotificationTime());
+
           }on HResponseError catch(e) {
             print("piritos111");
             int errorCode = e.error.errorCode;

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/pages/LoginPage.dart';
 import 'package:mobile/pages/group_pages/group_tab_hoster_page.dart';
+import 'package:mobile/pages/intro_page.dart';
 import 'package:mobile/pages/kreta_login_page.dart';
 import 'package:mobile/pages/main_pages/main_tab_hoster_page.dart';
 import 'package:mobile/pages/my_groups_page.dart';
 import 'package:mobile/pages/registration_page.dart';
 import 'package:mobile/pages/settings_page.dart';
 import 'package:mobile/pages/task_maker_page.dart';
+import 'package:mobile/pages/tomorrow_tasks_page.dart';
 
 import 'main.dart';
 
@@ -35,9 +37,11 @@ class RouteGenerator{
       case 'registration':
         return MaterialPageRoute(builder: (_) => RegistrationPage());
       case 'intro':
-        return MaterialPageRoute(builder: (_) => RegistrationPage());
+        return MaterialPageRoute(builder: (_) => IntroPage());
       case '/':
          return MaterialPageRoute(builder: (_) => MainTabHosterPage());
+      case '/tasksTomorrow':
+        return MaterialPageRoute(builder: (_) => TasksTomorrowPage());
       case '/settings':
         return MaterialPageRoute(builder: (_) => SettingsPage());
       case '/groups':

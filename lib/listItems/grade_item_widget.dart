@@ -26,8 +26,8 @@ class GradeItemWidget extends StatelessWidget{
               showGradeDialog(context, grade: pojoGrade);
             },
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-
               FittedBox(
                 fit: BoxFit.none,
                 child: Container(
@@ -65,7 +65,10 @@ class GradeItemWidget extends StatelessWidget{
                     Align(
                         alignment: Alignment.topRight,
                         child:
-                        Text(hazizzShowDateFormat(pojoGrade.creationDate))
+                        Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Text(hazizzShowDateAndTimeFormat(pojoGrade.creationDate),style: Theme.of(context).textTheme.subtitle,),
+                        )
                     )
                   ],
                 )

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final _keyLangCode = "key_langCode";
+const _keyLangCode = "key_langCode";
 
 String locText(BuildContext context, {@required String key, List<String> args}){
   return HazizzLocalizations.of(context).translate(key, args: args);
@@ -42,6 +42,13 @@ Future<void> setPreferredLangCode(String langCode) async {
   return;
 }
 
+List<Locale> getSupportedLocales() {
+  List<Locale> locales = [Locale('en', "EN"), Locale('hu', "HU")];
+
+  return locales;
+}
+
+
 
 class HazizzLocalizationsNoContext{
 
@@ -67,13 +74,22 @@ class HazizzLocalizationsNoContext{
   // This method will be called from every widget which needs a localized text
   static Future<String> translate(String key, {@required List<String> args }) async {
 
+    String nullCheckAndReturn(String text){
+      if(text == null){
+        return "ERROR: KEY NOT FOUND";
+      }
+      return text;
+    }
+
     if(localizedStrings == null){
       await load();
     }
 
+    print("log: args: $args");
+
     String text = localizedStrings[key];
     if(args == null) {
-      return text;
+      return nullCheckAndReturn(text);
     }
 
     print("log: args length: ${args.length}");
@@ -82,7 +98,7 @@ class HazizzLocalizationsNoContext{
       print("log: iteration: $i");
       text = text.replaceFirst(RegExp('{}'), args[i]);
     }
-    return text;
+    return nullCheckAndReturn(text);
   }
 }
 
@@ -103,8 +119,7 @@ class HazizzLocalizations {
 
   Future<bool> load() async {
     // Load the language JSON file from the "lang" folder
-    String jsonString =
-    await rootBundle.loadString('assets/langs/${locale.languageCode}.json');
+    String jsonString = await rootBundle.loadString('assets/langs/${locale.languageCode}.json');
     Map<String, dynamic> jsonMap = json.decode(jsonString);
 
     _localizedStrings = jsonMap.map((key, value) {
@@ -116,15 +131,26 @@ class HazizzLocalizations {
 
   // This method will be called from every widget which needs a localized text
   String translate(String key, {@required List<String> args }) {
-    String text = _localizedStrings[key];
-    if(args == null) {
+    String nullCheckAndReturn(String text){
+      if(text == null){
+        return "ERROR: KEY NOT FOUND";
+      }
       return text;
     }
 
-    for(int i = 0; i < args.length; i++) {
-      text.replaceFirst(RegExp('{}'), args[i]);
+    String text = _localizedStrings[key];
+
+    if(args == null) {
+      return nullCheckAndReturn(text);
     }
-    return text;
+
+    print("log: args length: ${args.length}");
+
+    for(int i = 0; i < args.length; i++) {
+      print("log: iter: $i");
+      text = text.replaceFirst(RegExp('{}'), args[i]);
+    }
+    return nullCheckAndReturn(text);
   }
 
   String translateFromList({@required String key, @required int index}) {

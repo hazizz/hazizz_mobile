@@ -1,4 +1,7 @@
 {
+    "hazizz_appname" : "Házizz Mobil",
+
+
     "hazizz"
     : "HázizzHun",
 
@@ -21,6 +24,10 @@
 
     "days"
     : "nap",
+
+
+    "days_later"
+    : "{} nap múlva",
 
 
     "tomorrow"
@@ -79,8 +86,11 @@
     : "Hozzáad",
 
 
-    "button_create"
+    "create"
     : "Létrehozás",
+
+    "edit"
+    : "Szerkesztés",
 
 
     "button_join"
@@ -113,6 +123,12 @@
 
     "fragment_title_new_mytask"
     : "Új feladatom",
+
+    "editTask"
+    : "Edit task",
+
+    "createTask"
+    : "Create task",
 
 
     "fragment_title_new_task"
@@ -234,10 +250,11 @@
     "comments"
     : "Megjegyzések",
 
+    "no_comments_yet"
+    : "Még nincsenek megjegyzések",
 
-    "edit"
-    : "Szerkesztés",
-
+    "write_comment"
+    : "Írj egy megjegyzést",
 
     "delete"
     : "Törlés",
@@ -599,6 +616,9 @@
     "select_school"
     : "Iskola kiválasztás",
 
+    "no_school_with_that_name"
+    : "Nincs iskola ilyen névvel",
+
 
     "error"
     : "Hiba",
@@ -755,6 +775,24 @@
     : "feladatod holnapra",
 
 
+  "tasks_tomorrow"
+  : "Házi feladat holnapra",
+
+    "title_tasks_tomorrow"
+    : "Házi feladatok holnapra",
+
+
+  "do_your_homework"
+  : "Ideje hogy megírd a házi felataidat",
+
+  "check_your_homework"
+  : "Nézd meg a holnapi házi feladataidat",
+
+  "set_time_for_notification"
+  : "Értesítés időpont beállítás",
+
+  "set_time_for_notification"
+  : "Értesítés minden nap",
 
     "notif_settings_notify_everyday"
     : "Értesítés minden nap",
@@ -879,6 +917,10 @@
     "title_activity_thera"
     : "TheraActivity",
 
+  "sign_in_google"
+  : "Google bejelentkezés",
+
+
     "days_0" : "Hétfő",
     "days_1" : "Kedd",
     "days_2" : "Szerda",
@@ -886,6 +928,14 @@
     "days_4" : "Péntek",
     "days_5" : "Szombat",
     "days_6" : "Vasárnap",
+
+    "days_m_0" : "H",
+    "days_m_1" : "K",
+    "days_m_2" : "Sz",
+    "days_m_3" : "Cs",
+    "days_m_4" : "P",
+    "days_m_5" : "Sz",
+    "days_m_6" : "V",
 
     "filterType_map": {
         "new": "Új",

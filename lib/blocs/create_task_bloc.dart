@@ -1,10 +1,6 @@
 
-import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
-import 'package:meta/meta.dart';
 import 'package:mobile/blocs/response_states.dart';
 import 'package:mobile/blocs/task_maker_blocs.dart';
-import 'package:mobile/communication/pojos/PojoError.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import '../RequestSender.dart';
@@ -60,6 +56,9 @@ class TaskCreateBloc extends TaskMakerBloc {
  
   @override
   Stream<TaskMakerState> mapEventToState(TaskMakerEvent event) async*{
+    if(event is TaskMakerFailedEvent){
+      yield TaskMakerFailedState();
+    }
     if(event is InitializeTaskCreateEvent){
       yield InitializedTaskCreateState(group: event.group);
 
@@ -68,8 +67,11 @@ class TaskCreateBloc extends TaskMakerBloc {
       }
     }
     if (event is TaskMakerSendEvent) {
+      print("log: event: TaskMakerSendEvent");
       try {
         yield TaskMakerWaitingState();
+
+        print("log: lul1");
 
         //region send
         int groupId, subjectId, typeId;
@@ -83,22 +85,38 @@ class TaskCreateBloc extends TaskMakerBloc {
           typeId = typeState.item.id;
         }
 
+        print("log: lul11");
+
         HState subjectState = subjectItemPickerBloc.currentState;
         if(subjectState is PickedSubjectState) {
           subjectId = subjectState.item.id;
         }else{
           subjectItemPickerBloc.dispatch(NotPickedEvent());
+          missingInfo = true;
         }
+        print("log: lul12");
+
 
         if(subjectId == null) {
-          PickedGroupState groupState = await groupItemPickerBloc.currentState;
+          print("log: uff: ${groupItemPickerBloc.currentState}");
+          print("log: lulu0000");
+
+          ItemListState groupState =  groupItemPickerBloc.currentState;
+          print("log: lulu00");
           if (groupState is PickedGroupState) {
             groupId = groupState.item.id;
+            print("log: lulu0");
           } else {
+            print("log: lulu1");
             groupItemPickerBloc.dispatch(NotPickedEvent());
+            print("log: lulu2");
             missingInfo = true;
+
           }
         }
+
+        print("log: lul2");
+
 
         DateTimePickerState deadlineState = deadlineBloc.currentState;
         if(deadlineState is DateTimePickedState) {
@@ -122,13 +140,19 @@ class TaskCreateBloc extends TaskMakerBloc {
           missingInfo = true;
         }
 
+        print("log: lul3");
+
+
         if(missingInfo){
           print("log: missing info");
+          this.dispatch(TaskMakerFailedEvent());
           return;
         }
         print("log: not missing info");
 
         HazizzResponse hazizzResponse;
+
+
 
         if(subjectId != null) {
           hazizzResponse = await RequestSender().getResponse(new CreateTask(
@@ -148,10 +172,12 @@ class TaskCreateBloc extends TaskMakerBloc {
           ));
         }
 
-        if(!(hazizzResponse.isSuccessful)){
+        if(hazizzResponse.isSuccessful){
           yield TaskMakerSentState();
-
+        }else{
+          yield TaskMakerFailedState();
         }
+
         //endregion
 
       } on Exception catch(e){

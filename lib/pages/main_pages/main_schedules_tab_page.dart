@@ -5,8 +5,8 @@ import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
 import 'package:mobile/communication/pojos/PojoClass.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
-import 'package:mobile/listItems/TaskHeaderItemWidget.dart';
-import 'package:mobile/listItems/TaskItemWidget.dart';
+import 'package:mobile/listItems/task_header_item_widget.dart';
+import 'package:mobile/listItems/task_item_widget.dart';
 import 'package:mobile/listItems/class_item_widget.dart';
 
 
@@ -43,16 +43,12 @@ class _SchedulesTabPage extends State<SchedulesTabPage> with TickerProviderState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: new RefreshIndicator(
-
-          onRefresh: () async => print("refresh"),//schedulesBloc.dispatch(FetchData()) //await getData()
-          child: ListView.builder(
+      body: ListView.builder(
             itemCount: widget.classes.length,
             itemBuilder: (BuildContext context, int index) {
               return ClassItemWidget(pojoClass: widget.classes[index]);
             }
           )
-      ),
     );
   }
 }

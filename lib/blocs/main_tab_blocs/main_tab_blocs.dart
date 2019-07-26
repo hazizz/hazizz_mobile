@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:mobile/communication/pojos/PojoError.dart';
+//import 'package:flutter/material.dart';
+import 'package:mobile/communication/pojos/PojoClass.dart';
 import 'package:mobile/communication/pojos/PojoGrades.dart';
 import 'package:mobile/communication/pojos/PojoSchedules.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
@@ -8,10 +9,9 @@ import 'package:mobile/managers/preference_services.dart';
 
 import '../../RequestSender.dart';
 import '../../hazizz_response.dart';
+import '../../hazizz_time_of_day.dart';
 import '../request_event.dart';
 import '../response_states.dart';
-
-
 
 class MainTasksBloc extends Bloc<HEvent, HState> {
   List<PojoTask> tasks;
@@ -55,11 +55,27 @@ class MainSchedulesBloc extends Bloc<HEvent, HState> {
 
   PojoSchedules classes;
 
+  int currentDayIndex = DateTime.now().weekday-1;
+
   @override
   HState get initialState => ResponseEmpty();
 
   @override
   Stream<HState> mapEventToState(HEvent event) async* {
+
+
+    int timeOfDayToMinutes(HazizzTimeOfDay timeOfDay){
+      return timeOfDay.minute + timeOfDay.hour * 60;
+    }
+
+    HazizzTimeOfDay minutesToTimeOfDay(int minutes){
+
+      int hour = minutes ~/ 60;
+      int minute = minutes % 60;
+
+      return HazizzTimeOfDay(hour: hour, minute: minute);
+    }
+
     if (event is FetchData) {
       try {
         yield ResponseWaiting();
@@ -69,6 +85,53 @@ class MainSchedulesBloc extends Bloc<HEvent, HState> {
           classes = hazizzResponse.convertedData;
           print("log: oy133");
           yield ResponseDataLoaded(data: classes);
+
+
+
+          List<PojoClass> todayClasses = classes.classes[currentDayIndex.toString()];
+
+          HazizzTimeOfDay now = HazizzTimeOfDay.now();
+
+
+          HazizzTimeOfDay closestBefore;
+          HazizzTimeOfDay closestAfter;
+
+          for(int i = 0; i < todayClasses.length; i++){
+            PojoClass pojoClass = todayClasses[i];
+
+            if(i == 0){
+              // még nem történt meg
+              if(pojoClass.startOfClass > now){
+                // első óra még nem indult el
+              }else if(pojoClass.startOfClass < now && pojoClass.endOfClass > now){
+                // első óra már el indult, de nem ért végett
+              }
+            }
+
+            else if(i-1 == todayClasses.length){
+              if(pojoClass.startOfClass > now){
+                // utlsó óra még nem indult el
+              }else if(pojoClass.startOfClass < now && pojoClass.endOfClass > now){
+                // utlsó óra már el indult, de nem ért végett
+              }else{
+                // az utlsó órának vége
+              }
+            }
+
+
+            else{
+
+              // itt már error mentesen lehet az elöző és a következő órához hasónlitani
+
+
+            }
+
+
+
+
+          }
+
+
 
         }
         else if(hazizzResponse.isError){
@@ -164,7 +227,6 @@ class MainTabBlocs{
     fetchAll();
     initialIndex = await StartPageService.getStartPageIndex();
   }
-
 }
 
 

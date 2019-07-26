@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+
 import 'package:dio/dio.dart';
 import 'package:mobile/communication/pojos/PojoError.dart';
 import 'package:mobile/communication/pojos/PojoGrades.dart';
@@ -12,10 +13,12 @@ import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
 import 'package:mobile/communication/pojos/PojoTokens.dart';
 import 'package:mobile/communication/pojos/PojoUser.dart';
+import 'package:mobile/communication/pojos/pojo_comment.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/exceptions/exceptions.dart';
-import 'package:mobile/managers/TokenManager.dart';
+import 'package:mobile/managers/token_manager.dart';
 import 'package:meta/meta.dart';
+//import 'package:mobile/packages/hazizz-dio-2.1.3/lib/dio.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:mobile/converters/PojoConverter.dart';
 
@@ -33,7 +36,7 @@ class Request {
   bool authTokenHeader = false;
   bool contentTypeHeader = false;
 
-  static final String BASE_URL = "https://hazizz.duckdns.org:9000/";
+  static const String BASE_URL = "https://hazizz.duckdns.org:9000/";
   String SERVER_PATH;
   String PATH;
   ResponseHandler rh;
@@ -409,6 +412,7 @@ class GetTasksFromMe extends HazizzRequest {
 
   @override
   dynamic convertData(Response response) {
+    print("log: in convertData: ${response}");
     Iterable iter = getIterable(response.data);
     List<PojoTask> myTasks = iter.map<PojoTask>((json) => PojoTask.fromJson(json)).toList();
     myTasks.sort();
@@ -432,6 +436,36 @@ class GetTasksFromGroup extends HazizzRequest {
   }
 }
 //endregion
+
+
+class GetTaskComments extends HazizzRequest {
+  GetTaskComments({ResponseHandler rh, int taskId}) : super(rh) {
+    httpMethod = HttpMethod.GET;
+    PATH = "tasks/${taskId}/comments";
+    authTokenHeader = true;
+  }
+
+  @override
+  dynamic convertData(Response response) {
+    Iterable iter = getIterable(response.data);
+    List<PojoComment> taskComments = iter.map<PojoComment>((json) => PojoComment.fromJson(json)).toList();
+    return taskComments;
+  }
+}
+
+class CreateTaskComment extends HazizzRequest {
+  CreateTaskComment({ResponseHandler rh, @required int p_taskId, @required String b_content}) : super(rh) {
+    httpMethod = HttpMethod.POST;
+    PATH = "tasks/${p_taskId}/comments";
+    authTokenHeader = true;
+    body["content"] = b_content;
+  }
+
+  @override
+  dynamic convertData(Response response) {
+    return response;
+  }
+}
 
 class GetGroupMembers extends HazizzRequest {
   GetGroupMembers({ResponseHandler rh, int groupId}) : super(rh) {
@@ -618,8 +652,10 @@ class DummyKretaGetGrades extends TheraRequest {
 
   @override
   dynamic convertData(Response response) {
-    print(response.data);
+    print("log: in convertData: ${response}");
     PojoGrades pojoGrades = PojoGrades.fromJson(jsonDecode(response.data));
+
+    print("log: in convertData: pojoGrades: ${pojoGrades.grades}");
 
     return pojoGrades;
   }

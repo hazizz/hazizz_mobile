@@ -1,17 +1,13 @@
-//import 'package:easy_localization/easy_localization.dart';
+import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
 import 'package:mobile/managers/cache_manager.dart';
-import 'package:mobile/managers/preference_services.dart';
-import 'package:mobile/notification/notification.dart';
-import 'package:mobile/pages/group_pages/group_tab_hoster_page.dart';
 import 'package:mobile/pages/main_pages/main_grades_page.dart';
 import 'package:mobile/pages/main_pages/main_tasks_page.dart';
 
-import '../../Page1.dart';
-import '../../hazizz_localization.dart';
 import '../../hazizz_localizations.dart';
-import '../kreta_login_page.dart';
+import '../../hazizz_theme.dart';
+import '../../test2.dart';
 import 'main_schedules_page.dart';
 
 
@@ -51,8 +47,16 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
     gradesTabPage = GradesPage(gradesBloc: widget.mainTabBlocs.gradesBloc);
 
     _tabController = new TabController(length: 3, vsync: this, initialIndex: widget.mainTabBlocs.initialIndex);
+
     _tabController.addListener(_handleTabSelection);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override
@@ -74,92 +78,131 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
       TabBarView(
           controller: _tabController,
           children: [
+
             tasksTabPage,
             schedulesTabPage,
             gradesTabPage
+
+            /*
+            tasksTabPage
+            ,
+            gradesTabPage,
+          schedulesTabPage
+            */
           ]
       ),
 
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-                child: UserAccountsDrawerHeader(
-                  accountName: new Text("ASD"),
-                  accountEmail: new Text("email"),
-                  currentAccountPicture: CircleAvatar(
-                    backgroundColor: Theme
-                        .of(context)
-                        .platform == TargetPlatform.iOS
-                        ? Colors.tealAccent[200]
-                        : Colors.amber[300],
-                    child: new Text("oiasdasd"),
-                  ),
-                )
-            ),
-            ListTile(
-              title: Text('Home'),
-              onTap: () {
-                Navigator.pop(context);
-                // Page1();
-                Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => Page1(title: "TITLE",)));
-              },
-            ),
-            ListTile(
-              title: Text('My Tasks'),
-              onTap: () {
-                HazizzNotification.scheduleNotificationAlarmManager(DateTime.now());
+      drawer: SizedBox(
+        width: 270,
+        child: Drawer(
 
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: Text('Groups'),
-              onTap: () {
-                //Navigator.pop(context);
-                // Navigator.push(context,MaterialPageRoute(builder: (context) => GroupTabHosterPage(groupId: 2)));
-                Navigator.popAndPushNamed(context, "/groups");
-              },
-            ),
 
-            Container(
-              // This align moves the children to the bottom
-                child: Align(
-                    alignment: FractionalOffset.bottomCenter,
-                    // This container holds all the children that will be aligned
-                    // on the bottom and should not scroll with the above ListView
-                    child: Container(
-                        child: Column(
-                          children: <Widget>[
-                            Divider(),
-                            ListTile(
-                              onTap: (){
-                                Navigator.pop(context);
-                                Navigator.pushNamed(context, "/settings");
-                              },
-                                leading: Icon(Icons.settings),
-                                title: Text('Settings')),
-                            ListTile(
-                                leading: Icon(Icons.help),
-                                title: Text('Help and Feedback')),
-                            ListTile(
-                              leading: Icon(Icons.exit_to_app),
-                              title: Text('Logout'),
-                              onTap: () {
-                                InfoCache.forgetMyUsername();
-                                Navigator.pushReplacementNamed(
-                                    context, "login");
-                              },
-                            ),
+          child: Column(
+           // padding: EdgeInsets.zero,
+            children: <Widget>[
+              /*
+              DrawerHeader(
 
-                          ],
+                  child:
+              ),
+
+              */
+              UserAccountsDrawerHeader(
+
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColorDark,
+                ),
+                accountName: new Text("ASD"),
+                accountEmail: new Text(""),
+
+                currentAccountPicture: CircleAvatar(
+                  child: new Text("oiasdasd"),
+                ),
+              ),
+
+
+              ListTile(
+                title: Text(locText(context, key: "my_tasks")),
+                onTap: () {
+                 // HazizzNotification.scheduleNotificationAlarmManager(DateTime.now());
+                  Navigator.popAndPushNamed(context, "intro");
+
+                  /*
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SimpleExample()),
+                  );
+                  */
+
+                },
+              ),
+              ListTile(
+                title: Text(locText(context, key: "groups")),
+                onTap: () {
+                  //Navigator.pop(context);
+                  // Navigator.push(context,MaterialPageRoute(builder: (context) => GroupTabHosterPage(groupId: 2)));
+                  Navigator.popAndPushNamed(context, "/groups");
+                },
+              ),
+
+
+              Expanded(
+                child: Column(
+                   mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                 //   Divider(),
+                    ListTile(
+                      onTap: (){
+                        Navigator.pop(context);
+                        Navigator.pushNamed(context, "/settings");
+                      },
+                        leading: Icon(Icons.settings),
+                        title: Text(locText(context, key: "settings"))),
+                    Row(
+                      children: [
+                        Expanded(child:
+                        ListTile(
+                          leading: Icon(Icons.exit_to_app),
+                          title: Text(locText(context, key: "textview_logout_drawer")),
+                          onTap: () {
+                            InfoCache.forgetMyUsername();
+                            Navigator.pushReplacementNamed(
+                                context, "login"
+                            );
+                          },
+                        ),),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8.0, left: 10),
+                          child: IconButton(
+                            iconSize: 50,
+                            icon: Icon(Icons.wb_sunny,
+                            color: Colors.orangeAccent,),
+                            onPressed: () async {
+                              /*
+                              DynamicTheme.of(context).setBrightness(Theme.of(context).brightness == Brightness.dark? Brightness.light: Brightness.dark);
+                              */
+
+
+                            //  DynamicTheme.of(context).setThemeData(HazizzTheme.darkThemeData);
+                              if(await HazizzTheme.isDark()) {
+                                DynamicTheme.of(context).setThemeData(HazizzTheme.lightThemeData);
+                                await HazizzTheme.setLight();
+                              }else{
+                                DynamicTheme.of(context).setThemeData(HazizzTheme.darkThemeData);
+                                await HazizzTheme.setDark();
+                              }
+
+                            },
+                          ),
                         )
-                    )
-                )
-            )
-          ],
+                      ],
+                    ),
+
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
