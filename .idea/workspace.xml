@@ -8,9 +8,7 @@
     <bookmark url="file://$PROJECT_DIR$/lib/notification/notification.dart" line="26" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8417306d-630f-4832-8662-4589633a4d72" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.travis.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.travis.yml" afterDir="false" />
-    </list>
+    <list default="true" id="8417306d-630f-4832-8662-4589633a4d72" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/.dart_tool/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
     <ignored path="$PROJECT_DIR$/.pub/" />
@@ -97,8 +95,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/.travis.yml">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="465">
-                  <caret line="85" lean-forward="true" selection-start-line="85" selection-end-line="85" />
+                <state relative-caret-position="439">
+                  <caret line="93" column="8" selection-start-line="93" selection-start-column="5" selection-end-line="93" selection-end-column="8" />
                 </state>
               </provider>
             </entry>
@@ -106,8 +104,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/.travis/utils/runUpload.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="306">
-                  <caret line="21" column="7" lean-forward="true" selection-start-line="21" selection-start-column="7" selection-end-line="21" selection-end-column="54" />
+                <state relative-caret-position="255">
+                  <caret line="15" column="20" lean-forward="true" selection-start-line="15" selection-start-column="20" selection-end-line="15" selection-end-column="20" />
                 </state>
               </provider>
             </entry>
@@ -254,7 +252,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>CommentBlocs</find>
       <find>widget.commentSectionWidget</find>
       <find>commentSectionWidget</find>
       <find>onRefresh</find>
@@ -284,6 +281,7 @@
       <find>log: descr</find>
       <find>grade</find>
       <find>addList</find>
+      <find>npm</find>
     </findStrings>
     <replaceStrings>
       <replace>'package:mobile/</replace>
@@ -500,12 +498,12 @@
       <window_info id="Capture Tool" order="7" />
       <window_info id="Favorites" order="8" sideWeight="0.5008104" side_tool="true" weight="0.124200426" />
       <window_info anchor="bottom" id="Dart Analysis" order="0" sideWeight="0.49946696" weight="0.156013" />
-      <window_info anchor="bottom" x="57" y="683" width="1198" height="300" id="Run" order="1" type="WINDOWED" visible="true" weight="0.25083613" />
+      <window_info active="true" anchor="bottom" x="57" y="683" width="1198" height="300" id="Run" order="1" type="WINDOWED" visible="true" weight="0.25083613" />
       <window_info anchor="bottom" id="TODO" order="2" weight="0.082340196" />
       <window_info anchor="bottom" id="Android Profiler" order="3" show_stripe_button="false" />
       <window_info anchor="bottom" id="Logcat" order="4" weight="0.112676054" />
       <window_info anchor="bottom" id="Debug" order="5" weight="0.2524377" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="6" sideWeight="0.49946696" visible="true" weight="0.30010834" />
+      <window_info anchor="bottom" id="Terminal" order="6" sideWeight="0.49946696" visible="true" weight="0.30010834" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.50053304" side_tool="true" weight="0.156013" />
       <window_info anchor="bottom" id="Flutter Performance" order="8" sideWeight="0.50053304" side_tool="true" weight="0.33802816" />
       <window_info anchor="bottom" id="Version Control" order="9" />
@@ -932,15 +930,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.travis/utils/runUpload.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="21" column="7" lean-forward="true" selection-start-line="21" selection-start-column="7" selection-end-line="21" selection-end-column="54" />
+        <state relative-caret-position="255">
+          <caret line="15" column="20" lean-forward="true" selection-start-line="15" selection-start-column="20" selection-end-line="15" selection-end-column="20" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/.travis.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="85" lean-forward="true" selection-start-line="85" selection-end-line="85" />
+        <state relative-caret-position="439">
+          <caret line="93" column="8" selection-start-line="93" selection-start-column="5" selection-end-line="93" selection-end-column="8" />
         </state>
       </provider>
     </entry>
