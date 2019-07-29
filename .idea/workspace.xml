@@ -95,8 +95,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/.travis.yml">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="439">
-                  <caret line="93" column="8" selection-start-line="93" selection-start-column="5" selection-end-line="93" selection-end-column="8" />
+                <state relative-caret-position="252">
+                  <caret line="85" column="14" selection-start-line="85" selection-start-column="14" selection-end-line="85" selection-end-column="14" />
                 </state>
               </provider>
             </entry>
@@ -937,8 +937,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.travis.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="439">
-          <caret line="93" column="8" selection-start-line="93" selection-start-column="5" selection-end-line="93" selection-end-column="8" />
+        <state relative-caret-position="252">
+          <caret line="85" column="14" selection-start-line="85" selection-start-column="14" selection-end-line="85" selection-end-column="14" />
         </state>
       </provider>
     </entry>
