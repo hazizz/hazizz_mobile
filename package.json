@@ -1,0 +1,17 @@
+{
+  "name": "erik",
+  "version": "1.0.0",
+  "description": "descriptio goes here",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "script"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/hazizz/hazizz-mobile.git"
+  },
+  "author": "erik",
+  "license": "ISC"
+}
