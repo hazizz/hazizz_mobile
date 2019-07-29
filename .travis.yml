@@ -80,7 +80,7 @@ script:
   # Run Flutter build
   - ./flutter/bin/flutter build apk
 
-  - rtn=$(curl --upload-file ./mvnw https://transfer.sh/mvn)
+  - rtn=$(curl --upload-file ./build/app/outputs/apk/release/app-release.apk https://transfer.sh/hazizz-apk)
   - echo $rtn
  # - curl --upload-file ./build/app/outputs/apk/release/app-release.apk https://transfer.sh/hazizz-apk > address.txt
  # - cat address.txt
