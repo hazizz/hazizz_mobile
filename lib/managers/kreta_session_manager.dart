@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../RequestSender.dart';
+import '../request_sender.dart';
 import 'cache_manager.dart';
 
 class LoginError implements Exception{

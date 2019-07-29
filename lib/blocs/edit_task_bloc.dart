@@ -1,20 +1,18 @@
 
+import 'package:flutter/material.dart';
 import 'package:mobile/blocs/task_maker_blocs.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:meta/meta.dart';
-import '../RequestSender.dart';
+import '../request_sender.dart';
 import '../hazizz_response.dart';
 import 'TextFormBloc.dart';
 import 'date_time_picker_bloc.dart';
 
 //region EditTask bloc parts
 //region EditTask events
-
-
-
 
 
 //endregion
@@ -59,7 +57,18 @@ class TaskEditBloc extends TaskMakerBloc {
     group = taskToEdit.group;
     subject = taskToEdit.subject;
 
-    
+
+    descriptionController.text = taskToEdit.description;
+    titleController.text = taskToEdit.title;
+
+    descriptionController.selection = TextSelection.fromPosition(TextPosition(offset: descriptionController.text.length));
+    titleController.selection = TextSelection.fromPosition(TextPosition(offset: titleController.text.length));
+
+
+    print("log: descr: ${descriptionController.text}");
+    print("log: title: ${titleController.text}");
+
+
     deadlineBloc.dispatch(DateTimePickedEvent(dateTime: taskToEdit.dueDate));
     taskTypePickerBloc.dispatch(TaskTypePickedEvent(taskToEdit.type));
     

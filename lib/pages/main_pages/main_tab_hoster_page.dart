@@ -7,7 +7,6 @@ import 'package:mobile/pages/main_pages/main_tasks_page.dart';
 
 import '../../hazizz_localizations.dart';
 import '../../hazizz_theme.dart';
-import '../../test2.dart';
 import 'main_schedules_page.dart';
 
 

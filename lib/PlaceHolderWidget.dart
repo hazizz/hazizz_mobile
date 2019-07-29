@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'RequestSender.dart';
+import 'request_sender.dart';
 
 class PlaceholderWidget extends StatefulWidget {
   final Color color;

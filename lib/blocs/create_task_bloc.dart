@@ -1,13 +1,15 @@
 
+import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
 import 'package:mobile/blocs/task_maker_blocs.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
-import '../RequestSender.dart';
+import '../request_sender.dart';
 import '../hazizz_response.dart';
 import 'TextFormBloc.dart';
 import 'date_time_picker_bloc.dart';
 import 'item_list_picker_bloc/item_list_picker_bloc.dart';
+import 'main_tab_blocs/main_tab_blocs.dart';
 
 //region EditTask bloc parts
 //region EditTask events
@@ -91,6 +93,8 @@ class TaskCreateBloc extends TaskMakerBloc {
         if(subjectState is PickedSubjectState) {
           subjectId = subjectState.item.id;
         }else{
+          print("log: subjectItemPickerBloc.dispatch(NotPickedEvent());");
+
           subjectItemPickerBloc.dispatch(NotPickedEvent());
           missingInfo = true;
         }
@@ -130,12 +134,16 @@ class TaskCreateBloc extends TaskMakerBloc {
         if(titleState is TextFormFine){
           title = titleBloc.lastText;
           print("log: title: $title");
+          if(title == null || title == ""){
+            missingInfo = true;
+          }
         }else{
           missingInfo = true;
         }
         HFormState descriptionState = descriptionBloc.currentState;
         if(descriptionState is TextFormFine){
           description = descriptionBloc.lastText;
+
         }else{
           missingInfo = true;
         }
@@ -173,7 +181,9 @@ class TaskCreateBloc extends TaskMakerBloc {
         }
 
         if(hazizzResponse.isSuccessful){
+          print("log: task making was succcessful");
           yield TaskMakerSentState();
+          MainTabBlocs().tasksBloc.dispatch(FetchData());
         }else{
           yield TaskMakerFailedState();
         }

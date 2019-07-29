@@ -7,7 +7,7 @@ import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/managers/preference_services.dart';
 
-import '../../RequestSender.dart';
+import '../../request_sender.dart';
 import '../../hazizz_response.dart';
 import '../../hazizz_time_of_day.dart';
 import '../request_event.dart';

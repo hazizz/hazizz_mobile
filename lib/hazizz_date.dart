@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
 
+
+
 String hazizzShowDateFormat(DateTime dateTime){
   return DateFormat("yyyy.MM.dd").format(dateTime);
 }
 
 String hazizzShowDateAndTimeFormat(DateTime dateTime){
-  return DateFormat("yyyy.MM.dd HH:mm").format(dateTime);
+  return DateFormat("yyyy.MM.dd HH:mm").format(dateTime.add(DateTime.now().timeZoneOffset));
 }
 
 
@@ -21,6 +23,7 @@ String hazizzTimeOfDayToShow(TimeOfDay timeOfDay){
   }
   return "ERROR FORMATING";
 }
+
 
 
 

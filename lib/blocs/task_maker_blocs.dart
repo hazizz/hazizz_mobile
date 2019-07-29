@@ -2,6 +2,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 
 import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
@@ -14,7 +15,7 @@ import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:meta/meta.dart';
 
-import '../RequestSender.dart';
+import '../request_sender.dart';
 import '../hazizz_response.dart';
 import 'TextFormBloc.dart';
 import 'date_time_picker_bloc.dart';
@@ -32,6 +33,9 @@ abstract class TaskMakerBloc extends Bloc<TaskMakerEvent, TaskMakerState> {
   TextFormBloc titleBloc;
   TextFormBloc descriptionBloc;
 
+  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController titleController = TextEditingController();
+
 /*
  TaskMakerBloc({@required this.groupItemPickerBloc, @required this.subjectItemPickerBloc,
     @required this.deadlineBloc, @required this.taskTypePickerBloc,
@@ -40,11 +44,11 @@ abstract class TaskMakerBloc extends Bloc<TaskMakerEvent, TaskMakerState> {
   */
 
   TaskMakerBloc(){
-   subjectItemPickerBloc = SubjectItemPickerBloc();
-   groupItemPickerBloc = GroupItemPickerBloc(subjectItemPickerBloc);
-   deadlineBloc = DateTimePickerBloc();
-   taskTypePickerBloc = TaskTypePickerBloc();
-   titleBloc = TextFormBloc(
+    subjectItemPickerBloc = SubjectItemPickerBloc();
+    groupItemPickerBloc = GroupItemPickerBloc(subjectItemPickerBloc);
+    deadlineBloc = DateTimePickerBloc();
+    taskTypePickerBloc = TaskTypePickerBloc();
+    titleBloc = TextFormBloc(
      validate: (String text){
        if(text.length < 2){
          return TextFormErrorTooShort();
@@ -54,10 +58,25 @@ abstract class TaskMakerBloc extends Bloc<TaskMakerEvent, TaskMakerState> {
        }
        return TextFormFine();
      },
+    );
+    descriptionBloc = TextFormBloc();
+    titleController.addListener((){
 
-   );
-   descriptionBloc = TextFormBloc();
- }
+      String text = titleController.text;
+
+      print("change: $text");
+      titleBloc.dispatch(TextFormValidate(text: text));
+
+    });
+
+    descriptionController.addListener((){
+
+      String text = descriptionController.text;
+
+      print("change: $text");
+      descriptionBloc.dispatch(TextFormValidate(text: text));
+    });
+  }
 
   @override
   void dispose() {
@@ -241,6 +260,9 @@ class SubjectItemPickerBloc extends ItemListPickerBloc {
     if(event is SetSubjectEvent){
       isLocked = true;
       yield PickedSubjectState(item: event.item);
+    }
+    if(event is NotPickedEvent){
+      yield ItemListNotPickedState();
     }
     if(!isLocked) {
       if(event is PickedSubjectEvent){

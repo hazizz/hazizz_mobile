@@ -8,12 +8,16 @@ import '../hazizz_localizations.dart';
 
 class CommentSectionWidget extends StatefulWidget {
 
-  CommentSectionBloc commentSectionBloc;
+ // CommentSectionBloc commentSectionBloc;
 
   int taskId;
 
-  CommentSectionWidget({Key key, @required this.commentSectionBloc}) : super(key: key){
-    commentSectionBloc.dispatch(CommentSectionFetchEvent());
+  CommentBlocs commentBlocs;
+
+  CommentSectionWidget({Key key, @required this.taskId}) : super(key: key){
+    commentBlocs = CommentBlocs(taskId: taskId);
+
+    commentBlocs.commentSectionBloc.dispatch(CommentSectionFetchEvent());
   }
 
   getTabName(BuildContext context){
@@ -29,17 +33,16 @@ class _CommentSectionWidget extends State<CommentSectionWidget>{
 
   List<PojoComment> comments = List();
 
-  final TextEditingController _commentController = TextEditingController();
 
-  CommentSectionBloc commentSectionBloc;
+  CommentBlocs commentBlocs;
+
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-
-    commentSectionBloc = widget.commentSectionBloc;
+    commentBlocs = widget.commentBlocs;
 
   }
 
@@ -47,7 +50,7 @@ class _CommentSectionWidget extends State<CommentSectionWidget>{
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    _commentController.dispose();
+    commentBlocs.dispose();
   }
 
   @override
@@ -59,7 +62,7 @@ class _CommentSectionWidget extends State<CommentSectionWidget>{
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             BlocBuilder(
-              bloc: commentSectionBloc,
+              bloc: commentBlocs.commentSectionBloc,
               builder: (_, CommentSectionState state){
 
                 if(state is CommentSectionLoadedState){
@@ -106,50 +109,69 @@ class _CommentSectionWidget extends State<CommentSectionWidget>{
 
             Padding(
               padding: const EdgeInsets.only(bottom: 0.0),
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 6.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: <Widget>[
-                      Expanded(
-                        flex: 1,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 8),
-                          child: TextField(
-                            decoration:
-                            InputDecoration(labelText: locText(context, key: "write_comment"), ),
-                            controller: _commentController,
-                            autofocus: false,
-                            maxLines: null,
-                          //  minLines: 2,
-                          //  maxLines: 5,
-                            style: TextStyle(fontSize: 20),
-                          //  controller: _commentController,
-                          ),
-                        ),
-                      ),
+              child:
 
-                        Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0, bottom: 5),
-                            child: IconButton(
-                              color: Theme.of(context).accentColor,
-                              icon: Icon(Icons.send, size: 30,),
-                              onPressed: () async {
-                                bool success = await commentSectionBloc.addComment(_commentController.text);
-                                if(success){
-                                  _commentController.clear();
-                                }
-                              },
+              BlocBuilder(
+                bloc: commentBlocs.commentWriterBloc,
+                builder: (_, CommentWriterState commentWriterState) {
+                  String error;
+                  if(commentWriterState is CommentWriterSentState){
+
+                  }
+                  else if(commentWriterState is CommentWriterEmptyState){
+                    error = "No comment written";
+                  }
+
+                  return Card(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 6.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: <Widget>[
+                          Expanded(
+                            flex: 1,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 8),
+                              child: TextField(
+                                decoration:
+                                InputDecoration(
+                                  errorText: error,
+                                  labelText: locText(context, key: "write_comment"),),
+                                controller: commentBlocs.commentWriterBloc
+                                    .commentController,
+                                autofocus: false,
+                                maxLines: null,
+                                //  minLines: 2,
+                                //  maxLines: 5,
+                                style: TextStyle(fontSize: 20),
+                                //  controller: _commentController,
+                              ),
                             ),
                           ),
-                        ),
-                    ],
-                  ),
-                ),
-              ),
+
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 8.0, left: 8.0, right: 8.0, bottom: 5),
+                              child: IconButton(
+                                color: Theme
+                                    .of(context)
+                                    .accentColor,
+                                icon: Icon(Icons.send, size: 30,),
+                                onPressed: () async {
+                                  commentBlocs.commentWriterBloc.dispatch(CommentWriterSendEvent());
+                                  FocusScope.of(context).requestFocus(new FocusNode());
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }
+              )
             )
           ],
         )

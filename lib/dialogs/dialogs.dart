@@ -13,7 +13,7 @@ import 'package:share/share.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 
-import '../RequestSender.dart';
+import '../request_sender.dart';
 import '../hazizz_date.dart';
 import '../hazizz_localizations.dart';
 import '../hazizz_response.dart';
@@ -53,7 +53,7 @@ class HazizzDialog extends Dialog{
                         topLeft: Radius.circular(10.0),
                         topRight: Radius.circular(10.0),
                       ),
-                      color: Theme.of(context).primaryColor
+                   //   color: Theme.of(context).primaryColor
                   ),
                   child: ClipRRect(
                       borderRadius: BorderRadius.only(
@@ -267,10 +267,14 @@ void showDialogTaskType(BuildContext context, Function(PojoType) onPicked) async
   );
 }
 
-Future<bool> showDeleteDialog(context, {@required int taskId}) {
+Future<bool> showDeleteDialog(context, {@required int taskId}) async {
 
   double height = 80;
   double width = 200;
+
+  bool success;
+
+  bool pressed = false;
 
   HazizzDialog hazizzDialog = new HazizzDialog(
       header:
@@ -327,13 +331,18 @@ Future<bool> showDeleteDialog(context, {@required int taskId}) {
                 ),
               ),
               onPressed: () async {
-
-                HazizzResponse response = await RequestSender().getResponse(DeleteTask(taskId: taskId));
-                if(response.isSuccessful){
+                if(!pressed) {
+                  pressed = true;
+                  HazizzResponse response = await RequestSender().getResponse(
+                      DeleteTask(taskId: taskId));
+                  if(response.isSuccessful) {
+                    success = true;
+                  }else {
+                    success = false;
+                  }
                   Navigator.of(context).pop();
+                  pressed = false;
                 }
-
-                Navigator.of(context).pop();
               },
               color: Colors.transparent
           ),
@@ -341,15 +350,17 @@ Future<bool> showDeleteDialog(context, {@required int taskId}) {
       )
       ,height: height,width: width);
 
-  return showDialog(
+  await showDialog(
     context: context,
     barrierDismissible: true,
     builder: (BuildContext context) {
       return hazizzDialog;
     }
   );
+  return success;
 
 
+  /*
   return showDialog(
       context: context,
       barrierDismissible: true,
@@ -436,6 +447,7 @@ Future<bool> showDeleteDialog(context, {@required int taskId}) {
                   ],
                 )));
       });
+  */
 }
 
 Future<bool> showAddSubjectDialog(context, {@required int groupId}) {
@@ -544,10 +556,247 @@ Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
       builder: (BuildContext context) {
         print("grade: ${grade.grade}");
 
-         HazizzDialog(
-            header: Container(child: Text("heee")),
-            content: Container(child: Text("heee")),
-            actionButtons: Row(children:[ Text("heee")]),
+        Dialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+            child: Container(
+                width: 1000,
+                height: 310.0,
+                decoration:
+                BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
+                child: Column(
+                  children: <Widget>[
+                    Stack(
+                      children: <Widget>[
+                        // Container(height: 100.0),
+                        Container(
+                          height: 64.0,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10.0),
+                                topRight: Radius.circular(10.0),
+                              ),
+                              color: Theme.of(context).primaryColor
+                          ),
+                        ),
+                        Center(
+                          child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: CircleAvatar(
+                                child: Column(
+                                    children: [
+                                      Text(
+                                        grade.grade == null ? "" : grade.grade,
+                                        style: TextStyle(
+                                            fontSize: 50,
+                                            color: Colors.black
+                                        ),
+                                      ),
+                                      Text(
+                                        grade.weight == null ? "100%" : "${grade.weight}%",
+                                        style: TextStyle(
+                                            fontSize: 22,
+                                            color: Colors.black
+                                        ),
+                                      ),
+                                    ]
+                                ),
+                                backgroundColor: grade.color,
+                                radius: 40,
+                              )
+                          ),
+                        ),
+
+                      ],
+                    ),
+                    //  SizedBox(height: 20.0),
+
+                    Padding(
+                      padding: const EdgeInsets.only(left: 30, right: 30),
+                      child: Column(
+                          children:
+                          [
+
+                            Center(child: Text(grade.subject == null ? "" : (grade.subject), style: TextStyle(fontSize: 20)) ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text("topic: ", style: TextStyle(fontSize: 20)),
+                                Text(grade.topic == null ? "" : (grade.topic), style: TextStyle(fontSize: 20)),
+                              ],
+                            ),
+                            space,
+
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                              children: <Widget>[
+                                Text("grade type: ", style: TextStyle(fontSize: 20)),
+                                Text(grade.gradeType == null ? "" : grade.gradeType, style: TextStyle(fontSize: 20)),
+                              ],
+                            ),
+                            space,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text("date: ", style: TextStyle(fontSize: 20),),
+                                Text(grade.date == null ? "" : hazizzShowDateFormat(grade.date), style: TextStyle(fontSize: 20)),
+                              ],
+                            ),
+                            space,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: <Widget>[
+
+                              ],
+                            ),
+                          ]
+                      ),
+                    ),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: FlatButton(
+                                child: Center(
+                                  child: Text('OK',
+                                    style: TextStyle(
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 14.0,
+                                        color: Colors.teal),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                color: Colors.transparent
+                            ),
+                          ),
+                        ]
+                    ),
+                  ],
+                )));
+
+
+         return HazizzDialog(
+            header: Container(
+              color: Theme.of(context).dialogBackgroundColor,
+              height: 98,
+              child: Stack(
+                children: <Widget>[
+                 //  Container(color: Theme.of(context).dialogBackgroundColor,),
+                  Container(
+                    height: 70.0,
+                      color: Theme.of(context).primaryColor
+
+                    //  width: 50,
+                      /*
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10.0),
+                          topRight: Radius.circular(10.0),
+                        ),
+                        color: Theme.of(context).primaryColor
+                    ),
+                    */
+                  ),
+                  Center(
+                    child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: CircleAvatar(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  grade.grade == null ? "5" : grade.grade,
+                                  style: TextStyle(
+                                      fontSize: 50,
+                                      color: Colors.white
+                                  ),
+                                ),
+
+                                Text(
+                                  grade.weight == null ? "100%" : "${grade.weight}%",
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.white
+                                  ),
+                                ),
+
+                              ]
+                          ),
+                          backgroundColor: grade.color,
+                          radius: 46,
+                        )
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            content: Container(child:  Padding(
+              padding: const EdgeInsets.only(left: 30, right: 30),
+              child: Column(
+                  children:
+                  [
+
+                    Center(child: Text(grade.subject == null ? "" : (grade.subject), style: TextStyle(fontSize: 20)) ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text("topic: ", style: TextStyle(fontSize: 20)),
+                        Text(grade.topic == null ? "" : (grade.topic), style: TextStyle(fontSize: 20)),
+                      ],
+                    ),
+                    space,
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                      children: <Widget>[
+                        Text("grade type: ", style: TextStyle(fontSize: 20)),
+                        Text(grade.gradeType == null ? "" : grade.gradeType, style: TextStyle(fontSize: 20)),
+                      ],
+                    ),
+                    space,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text("date: ", style: TextStyle(fontSize: 20),),
+                        Text(grade.date == null ? "" : hazizzShowDateFormat(grade.date), style: TextStyle(fontSize: 20)),
+                      ],
+                    ),
+                    space,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+
+                      ],
+                    ),
+                  ]
+              ),
+            ),),
+            actionButtons: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: FlatButton(
+                        child: Center(
+                          child: Text('OK',
+                            style: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 14.0,
+                                color: Colors.teal),
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        color: Colors.transparent
+                    ),
+                  ),
+                ]
+            ),
             height: 300,
             width: 200);
 
@@ -862,58 +1111,63 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
       child: Padding(
         padding: const EdgeInsets.only(left: 16, right: 16),
         child: Builder(builder: (BuildContext context){
-          List<Widget> rows =
-          [
-            space,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
 
-              children: <Widget>[
-                Text(hazizzTimeOfDayToShow(pojoClass.startOfClass), style: TextStyle(fontSize: 20)),
-                Text("-", style: TextStyle(fontSize: 20)),
-                Text(hazizzTimeOfDayToShow(pojoClass.startOfClass), style: TextStyle(fontSize: 20)),
-              ],
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text("subject: ", style: TextStyle(fontSize: 20)),
-                Expanded(
+          List<Widget> rows = List();
+
+          void addToColumn(Widget widget){
+            if(rows.length != 0){
+             // rows.add(Spacer());
+            }
+            rows.add(widget);
+          }
+
+          addToColumn(Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+
+            children: <Widget>[
+              Text(hazizzTimeOfDayToShow(pojoClass.startOfClass), style: TextStyle(fontSize: 20)),
+              Text("-", style: TextStyle(fontSize: 20)),
+              Text(hazizzTimeOfDayToShow(pojoClass.startOfClass), style: TextStyle(fontSize: 20)),
+            ],
+          ));
+          addToColumn(Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text("subject: ", style: TextStyle(fontSize: 20)),
+              Expanded(
                   child: Text(pojoClass.subject == null ? "" : (pojoClass.subject),
-                  style: TextStyle(fontSize: 20))),
-              ],
-            ),
+                      style: TextStyle(fontSize: 20))),
+            ],
+          ));
+          addToColumn(Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+            children: <Widget>[
+              Text("class: ", style: TextStyle(fontSize: 20)),
+              Expanded(child: Text(pojoClass.room == null ? "" : pojoClass.room, style: TextStyle(fontSize: 20))),
+            ],
+          ),);
+          addToColumn(Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+            children: <Widget>[
+              Text("teacher: ", style: TextStyle(fontSize: 20)),
+              Expanded(child: Text(pojoClass.teacher == null ? "" : pojoClass.teacher, style: TextStyle(fontSize: 20))),
+            ],
+          ),);
+          addToColumn(Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+            children: <Widget>[
+              Text("room: ", style: TextStyle(fontSize: 20)),
+              Expanded(child: Text(pojoClass.room == null ? "" : pojoClass.room, style: TextStyle(fontSize: 20))),
+            ],
+          ),);
 
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-              children: <Widget>[
-                Text("class: ", style: TextStyle(fontSize: 20)),
-                Expanded(child: Text(pojoClass.room == null ? "" : pojoClass.room, style: TextStyle(fontSize: 20))),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-              children: <Widget>[
-                Text("teacher: ", style: TextStyle(fontSize: 20)),
-                Expanded(child: Text(pojoClass.teacher == null ? "" : pojoClass.teacher, style: TextStyle(fontSize: 20))),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-              children: <Widget>[
-                Text("room: ", style: TextStyle(fontSize: 20)),
-                Expanded(child: Text(pojoClass.room == null ? "" : pojoClass.room, style: TextStyle(fontSize: 20))),
-              ],
-            ),
-
-          ];
           if(pojoClass.topic != null){
-            rows.add(Row(
+            addToColumn(Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
               children: <Widget>[
@@ -923,7 +1177,7 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
             ));
           }
           if(pojoClass.cancelled != null){
-            rows.add(Row(
+            addToColumn(Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
               children: <Widget>[
@@ -932,7 +1186,7 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
             ));
           }
           if(pojoClass.standIn != null){
-            rows.add(Row(
+            addToColumn(Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
               children: <Widget>[

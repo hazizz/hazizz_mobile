@@ -12,7 +12,7 @@ import 'main_schedules_tab_page.dart';
 
 class SchedulesPage extends StatefulWidget {
 
-  MainSchedulesBloc schedulesBloc;
+  final MainSchedulesBloc schedulesBloc;
 
   SchedulesPage({Key key, this.schedulesBloc}) : super(key: key);
 
@@ -41,9 +41,6 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
 
   @override
   void initState() {
-    // getData();
-   // schedulesBloc.dispatch(FetchData());
-    //   schedulesBloc.fetchMyTasks();
 
     _currentIndex = schedulesBloc.currentDayIndex;
 
@@ -55,8 +52,6 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
       schedulesBloc.dispatch(FetchData());
     }
 
-
-  //  _currentIndex = DateTime.now().weekday-1;
     super.initState();
   }
 
@@ -82,9 +77,6 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
 
                         _tabList.clear();
                         bottomNavBarItems.clear();
-
-                        //    print("log: days array:  ${locTextFromList(context, key: "days_${2}")}");
-
                         for(String dayIndex in schedule.keys){
                           if( schedule[dayIndex].isNotEmpty) {
                             String dayName = locText(context, key: "days_$dayIndex");
@@ -102,65 +94,32 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
                                 style: TextStyle(color: Colors.red, fontSize: 28, fontWeight: FontWeight.bold),
                               ),
                             ));
-
                           }
                         }
                         _tabController = TabController(vsync: this, length: _tabList.length);
 
-
                         if(canBuildBottomNavBar == false) {
                           SchedulerBinding.instance.addPostFrameCallback((_) =>
-                              setState(() {
-                                canBuildBottomNavBar = true;
-                              })
+                            setState(() {
+                              canBuildBottomNavBar = true;
+                            })
                           );
                         }
 
                         return Stack(
-                            children: [
-                              TabBarView(
-                                physics: NeverScrollableScrollPhysics(),
-                                controller: _tabController,
-                                children: _tabList,
-                              ),
-                              Positioned(
-
-                                bottom: 0,
-                                child:
-                                /* Container(
-                              width: double.infinity,
-                                child: ScheduleEventWidget())
-                                */
-                                /*new SizedBox(
-                              width: double.infinity,
-                              // height: double.infinity,
-                              child: ScheduleEventWidget()
+                          children: [
+                            TabBarView(
+                              physics: NeverScrollableScrollPhysics(),
+                              controller: _tabController,
+                              children: _tabList,
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              child:
+                              Container( width: MediaQuery.of(context).size.width,child: ScheduleEventWidget()),
                             )
-                  */
-
-                                Container( width: MediaQuery.of(context).size.width,child: ScheduleEventWidget()),
-
-
-                                /*
-                  Column(
-                     // crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    mainAxisSize: MainAxisSize.max,
-                    children:[ Container(
-                      height: 80,
-                      child: Expanded(
-                        child: ScheduleEventWidget(),
-                      ),
-                    ),]
-                  )
-                  */
-
-
-                                //  Expanded(child: ScheduleEventWidget())
-                              )
-                            ]
+                          ]
                         );
-
                       } else if (state is ResponseEmpty) {
                         return Center(child: Text("Empty"));
                       } else if (state is ResponseWaiting) {
@@ -171,7 +130,6 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
                           children: [Expanded(child: Text("Uchecked State: ${state.toString()}"))]);
                     }
                 ),
-
               ],
             ),
             onRefresh: () async =>
@@ -184,17 +142,17 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
             if (state is ResponseDataLoaded) {
               if(canBuildBottomNavBar){
                 return Container(
-                    color: Theme.of(context).primaryColorDark,
-                    child: BottomNavigationBar(
-                        currentIndex: _currentIndex,
-                        onTap: (int index){
-                          setState(() {
-                            _currentIndex = index;
-                          });
-                          _tabController.animateTo(index);
-                        },
-                        items: bottomNavBarItems
-                    )
+                  color: Theme.of(context).primaryColorDark,
+                  child: BottomNavigationBar(
+                    currentIndex: _currentIndex,
+                    onTap: (int index){
+                      setState(() {
+                        _currentIndex = index;
+                      });
+                      _tabController.animateTo(index);
+                    },
+                    items: bottomNavBarItems
+                  )
                 );
               }else{
                 return Container();
@@ -203,7 +161,6 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
               return Container();
             }
           }
-
         ),
     );
   }

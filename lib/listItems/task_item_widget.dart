@@ -5,8 +5,6 @@ import 'package:mobile/pages/view_task_page.dart';
 
 import '../hazizz_localizations.dart';
 
-import 'package:flutter_sidekick/flutter_sidekick.dart';
-
 import '../hazizz_theme.dart';
 
 class TaskItemWidget extends StatefulWidget  {
@@ -45,10 +43,6 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
 
       return  Opacity(
           opacity: opacity,
-          child: Sidekick(
-            targetTag: "target",
-
-      tag:"hero_task${widget.pojoTask.id}",
             child:
               Card(
                   clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -143,7 +137,6 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
                       )
                   )
               ),
-      ),
         );
 
   }
