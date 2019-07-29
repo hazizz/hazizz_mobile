@@ -8,7 +8,9 @@
     <bookmark url="file://$PROJECT_DIR$/lib/notification/notification.dart" line="26" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8417306d-630f-4832-8662-4589633a4d72" name="Default Changelist" comment="" />
+    <list default="true" id="8417306d-630f-4832-8662-4589633a4d72" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.travis.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.travis.yml" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/.dart_tool/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
     <ignored path="$PROJECT_DIR$/.pub/" />
@@ -92,20 +94,20 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="false">
+          <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/.travis.yml">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="295">
-                  <caret line="80" column="18" selection-start-line="80" selection-start-column="18" selection-end-line="80" selection-end-column="35" />
+                <state relative-caret-position="414">
+                  <caret line="88" column="70" lean-forward="true" selection-start-line="88" selection-start-column="70" selection-end-line="88" selection-end-column="70" />
                 </state>
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/.travis/utils/runUpload.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="672">
-                  <caret line="43" column="5" selection-start-line="43" selection-start-column="5" selection-end-line="43" selection-end-column="5" />
+                <state relative-caret-position="306">
+                  <caret line="21" column="7" lean-forward="true" selection-start-line="21" selection-start-column="7" selection-end-line="21" selection-end-column="54" />
                 </state>
               </provider>
             </entry>
@@ -150,8 +152,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/lib/pages/task_maker_page.dart">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="289">
-                  <caret line="357" column="44" selection-start-line="357" selection-start-column="44" selection-end-line="357" selection-end-column="44" />
+                <state relative-caret-position="425">
+                  <caret line="365" column="4" selection-start-line="365" selection-start-column="4" selection-end-line="365" selection-end-column="4" />
                 </state>
               </provider>
             </entry>
@@ -357,11 +359,11 @@
         <option value="$PROJECT_DIR$/lib/pages/main_pages/main_grades_page.dart" />
         <option value="$PROJECT_DIR$/lib/pages/main_pages/main_tasks_page.dart" />
         <option value="$PROJECT_DIR$/lib/blocs/edit_task_bloc.dart" />
-        <option value="$PROJECT_DIR$/lib/pages/task_maker_page.dart" />
         <option value="$PROJECT_DIR$/lib/dialogs/dialogs.dart" />
         <option value="$PROJECT_DIR$/lib/blocs/task_maker_blocs.dart" />
-        <option value="$PROJECT_DIR$/.travis.yml" />
         <option value="$PROJECT_DIR$/.travis/utils/runUpload.js" />
+        <option value="$PROJECT_DIR$/lib/pages/task_maker_page.dart" />
+        <option value="$PROJECT_DIR$/.travis.yml" />
       </list>
     </option>
   </component>
@@ -486,6 +488,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49918962" visible="true" weight="0.13752665" />
       <window_info id="Captures" order="1" side_tool="true" />
@@ -913,13 +916,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/pages/task_maker_page.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="357" column="44" selection-start-line="357" selection-start-column="44" selection-end-line="357" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lib/blocs/task_maker_blocs.dart">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
@@ -927,17 +923,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.travis.yml">
+    <entry file="file://$PROJECT_DIR$/lib/pages/task_maker_page.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="295">
-          <caret line="80" column="18" selection-start-line="80" selection-start-column="18" selection-end-line="80" selection-end-column="35" />
+        <state relative-caret-position="425">
+          <caret line="365" column="4" selection-start-line="365" selection-start-column="4" selection-end-line="365" selection-end-column="4" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/.travis/utils/runUpload.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="672">
-          <caret line="43" column="5" selection-start-line="43" selection-start-column="5" selection-end-line="43" selection-end-column="5" />
+        <state relative-caret-position="306">
+          <caret line="21" column="7" lean-forward="true" selection-start-line="21" selection-start-column="7" selection-end-line="21" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.travis.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="414">
+          <caret line="88" column="70" lean-forward="true" selection-start-line="88" selection-start-column="70" selection-end-line="88" selection-end-column="70" />
         </state>
       </provider>
     </entry>
