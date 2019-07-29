@@ -6,7 +6,7 @@ import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/managers/token_manager.dart';
 import 'package:meta/meta.dart';
 
-import '../RequestSender.dart';
+import '../request_sender.dart';
 
 class UserRepository {
 

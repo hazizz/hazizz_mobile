@@ -7,7 +7,7 @@ import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../RequestSender.dart';
+import '../request_sender.dart';
 import '../hazizz_response.dart';
 import 'cache_manager.dart';
 

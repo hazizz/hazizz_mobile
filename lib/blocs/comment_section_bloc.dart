@@ -1,11 +1,12 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
 import 'package:mobile/communication/pojos/pojo_comment.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 
-import '../RequestSender.dart';
+import '../request_sender.dart';
 import '../hazizz_response.dart';
 
 
@@ -80,16 +81,7 @@ class CommentSectionBloc extends Bloc<CommentSectionEvent, CommentSectionState> 
   }
 
 
-  Future<bool> addComment(String content) async {
-    HazizzResponse hazizzResponse = await RequestSender().getResponse(CreateTaskComment(p_taskId: taskId, b_content: content));
-    if(hazizzResponse.isSuccessful){
-      this.dispatch(CommentSectionFetchEvent());
-      return true;
-    }else{
 
-    }
-    return false;
-  }
 
 
   @override
@@ -129,3 +121,135 @@ class CommentSectionBloc extends Bloc<CommentSectionEvent, CommentSectionState> 
 
   }
 }
+
+
+class CommentBlocs{
+  int taskId;
+
+  CommentSectionBloc commentSectionBloc;
+  CommentWriterBloc commentWriterBloc;
+
+  CommentBlocs({@required this.taskId}){
+    commentSectionBloc = CommentSectionBloc(taskId: taskId);
+    commentWriterBloc = CommentWriterBloc(taskId: taskId, commentSectionBloc: commentSectionBloc );
+  }
+
+  dispose(){
+    commentSectionBloc.dispose();
+    commentWriterBloc.dispose();
+  }
+
+
+}
+
+
+
+abstract class CommentWriterEvent extends HEvent {
+  CommentWriterEvent([List props = const []]) : super(props);
+}
+abstract class CommentWriterState extends HState {
+  CommentWriterState([List props = const []]) : super(props);
+}
+
+class CommentWriterSendEvent extends CommentWriterEvent {
+  CommentWriterSendEvent();
+}
+
+class CommentWriterUpdateContentEvent extends CommentWriterEvent {
+  String content;
+  CommentWriterUpdateContentEvent({@required String this.content}): assert(content != null), super([content]){
+
+  }
+}
+
+class CommentWriterFineEvent extends CommentWriterEvent {
+}
+
+
+class CommentWriterEmptyState extends CommentWriterState {
+  CommentWriterEmptyState();
+}
+
+class CommentWriterFineState extends CommentWriterState {
+}
+
+class CommentWriterSentState extends CommentWriterState {
+  CommentWriterSentState();
+}
+
+class CommentWriterErrorState extends CommentWriterState {
+  CommentWriterErrorState();
+}
+
+
+class CommentWriterBloc extends Bloc<CommentWriterEvent,  CommentWriterState> {
+
+
+  final TextEditingController commentController = TextEditingController();
+
+  List<PojoComment> tasksTomorrow;
+
+  int taskId;
+
+  CommentSectionBloc commentSectionBloc;
+
+  String content;
+
+
+  CommentWriterBloc({@required this.taskId, @required this.commentSectionBloc}){
+    commentController.addListener((){
+      content = commentController.text;
+      if(content.length > 0 && this.currentState is CommentWriterEmptyState){
+        this.dispatch(CommentWriterFineEvent());
+      }
+    });
+  }
+
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    commentSectionBloc.dispose();
+    super.dispose();
+  }
+
+  @override
+  CommentWriterState get initialState => CommentWriterFineState();
+
+  @override
+  Stream<CommentWriterState> mapEventToState(CommentWriterEvent event) async* {
+    print("log: Event2: ${event.toString()}");
+    if(event is CommentWriterFineEvent){
+      yield CommentWriterFineState();
+    }
+    if(event is CommentWriterUpdateContentEvent){
+      content = event.content;
+    }
+    if (event is CommentWriterSendEvent) {
+      if(content == null || content == "") {
+        yield CommentWriterEmptyState();
+      }else {
+        HazizzResponse hazizzResponse = await RequestSender().getResponse(
+            CreateTaskComment(p_taskId: taskId, b_content: content));
+        if(hazizzResponse.isSuccessful) {
+          commentController.clear();
+          commentSectionBloc.dispatch(CommentSectionFetchEvent());
+          yield CommentWriterSentState();
+        }else {
+          yield CommentWriterErrorState();
+        }
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+

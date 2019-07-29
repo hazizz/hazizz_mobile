@@ -6,6 +6,8 @@ class InfoCache{
   static const String _keyMe = "key_me";
   static const String _username = "username";
   static const String _displayName = "displayName";
+  static const String _id = "id";
+
 
   SharedPreferences prefs;
 
@@ -33,6 +35,19 @@ class InfoCache{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(_keyMe + _displayName, myDisplayName);
   }
+
+  static Future<int> getMyId() async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    int myId = prefs.getInt(_keyMe + _id);
+
+    return myId;
+  }
+
+  static void setMyId(int userId) async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt(_keyMe + _id, userId);
+  }
+
 
 
 }

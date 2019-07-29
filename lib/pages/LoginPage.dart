@@ -4,7 +4,7 @@ import 'package:mobile/blocs/TextFormBloc.dart';
 import 'package:mobile/blocs/login_bloc.dart';
 import 'package:mobile/controller/hashed_text_controller.dart';
 
-import '../RequestSender.dart';
+import '../request_sender.dart';
 import '../main.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';

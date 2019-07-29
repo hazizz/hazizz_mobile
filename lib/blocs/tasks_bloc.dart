@@ -5,7 +5,7 @@ import 'package:mobile/communication/pojos/PojoError.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 
-import '../RequestSender.dart';
+import '../request_sender.dart';
 import '../hazizz_response.dart';
 
 class TasksBloc extends Bloc<HEvent, HState> {

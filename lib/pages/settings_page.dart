@@ -246,6 +246,7 @@ class _SettingsPage extends State<SettingsPage> with AutomaticKeepAliveClientMix
                 print("huh2");
                 TimeOfDay newTime = await showTimePicker(
                   context: context,
+
                   initialTime: await HazizzNotification.getNotificationTime(),
 
                 );

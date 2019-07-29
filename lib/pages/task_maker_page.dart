@@ -52,16 +52,13 @@ class _TaskMakerPage extends State<TaskMakerPage> {
 
   ItemListPickerGroupBloc itemListPickerGroupBloc = ItemListPickerGroupBloc();
 
-  final TextEditingController _descriptionTextEditingController = TextEditingController();
-  final TextEditingController _titleTextEditingController = TextEditingController();
+//  final TextEditingController _descriptionTextEditingController = TextEditingController();
+//  final TextEditingController _titleTextEditingController = TextEditingController();
 
-
-//  Color headerColor;
-//  Color formColor;
+  final FocusNode _descriptionFocusNode = FocusNode();
+  final FocusNode _titleFocusNode = FocusNode();
 
   Color headerColor = HazizzTheme.homeworkColor;
-//  formColor = Colors.grey.withAlpha(120);
-
 
   static String _color = '';
 
@@ -69,7 +66,6 @@ class _TaskMakerPage extends State<TaskMakerPage> {
 
   static bool _isExpanded = false;
 
- // EditTaskBlocs blocs;
   TaskMakerBloc blocs;
 
   static PojoSubject chosenSubject;
@@ -82,15 +78,16 @@ class _TaskMakerPage extends State<TaskMakerPage> {
   List<PojoTask> task_data = List();
   List<PojoSubject> subjects_data = List();
 
+ // TextEditingController titleController = new TextEditingController();
+
+//  FocusNode titleTextFocus = new FocusNode();
+
 
   AppBar getAppBar(BuildContext context){
     return AppBar(
         title: Text(widget.mode == TaskMakerMode.create ? locText(context, key: "createTask") : locText(context, key: "editTask") )
     );
   }
-
-
-
 
   void processData(PojoTask pojoTask){
    // expandablePanel.c
@@ -99,6 +96,7 @@ class _TaskMakerPage extends State<TaskMakerPage> {
 
   @override
   void initState() {
+
     if(widget.mode == TaskMakerMode.create){
       blocs = TaskCreateBloc(group: widget.group);
 
@@ -110,14 +108,11 @@ class _TaskMakerPage extends State<TaskMakerPage> {
       blocs.groupItemPickerBloc.dispatch(SetGroupEvent(item: widget.taskToEdit.group));
       blocs.subjectItemPickerBloc.dispatch(SetSubjectEvent(item: widget.taskToEdit.subject));
 
-
     }else{
       print("log: Well ...");
     }
 
     blocs.groupItemPickerBloc.dispatch(ItemListLoadData());
-
-
 
     super.initState();
   }
@@ -127,6 +122,13 @@ class _TaskMakerPage extends State<TaskMakerPage> {
     blocs.dispose();
     super.dispose();
   }
+
+  _fieldFocusChange(BuildContext context, FocusNode currentFocus,FocusNode nextFocus) {
+
+    currentFocus.unfocus();
+    FocusScope.of(context).requestFocus(nextFocus);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -246,20 +248,28 @@ class _TaskMakerPage extends State<TaskMakerPage> {
     var subjectPicker = BlocBuilder(
         bloc: blocs.subjectItemPickerBloc,
         builder: (BuildContext context, ItemListState state) {
-          print("log: widget update111");
+          print("log: subject picker state: $state");
           return GestureDetector(
             child: FormField(
+
               builder: (FormFieldState formState) {
                 String hint;
+                String error;
+                if(state is ItemListNotPickedState){
+                  error = "Not picked";
+                }
                 if(!(state is PickedSubjectState)){
                   hint = locText(context, key: "subject");
                 }
+
                 return InputDecorator(
+
                     decoration: InputDecoration(
                   //    filled: true,
                    //   fillColor: HazizzTheme.formColor,
                  //     icon: const Icon(Icons.group),
                       labelText: hint,
+                      errorText: error
                     ),
                     isEmpty: _color == '',
                     child: Builder(
@@ -268,12 +278,17 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                         if (state is ItemListLoaded) {
                           return Container();
                         }
-                        if(state is PickedSubjectState){
+                        if(state is PickedSubjectState) {
                           print("log: ööö");
-                          return Text('${ state.item.name != null ?  state.item.name :  "no Subject"}',
-                              style: TextStyle(fontSize: 24.0),
-                            
+                          return Text('${ state.item.name != null
+                              ? state.item.name
+                              : "no Subject"}',
+                            style: TextStyle(fontSize: 24.0),
+
                           );
+                        }
+                        else if(state is NotPickedEvent){
+
                         }
                         return Container();
                       },
@@ -284,7 +299,7 @@ class _TaskMakerPage extends State<TaskMakerPage> {
             onTap: () {
               List<PojoSubject> dataList = blocs.subjectItemPickerBloc.dataList;
               if(dataList != null){
-                if (state is ItemListLoaded || state is PickedSubjectState) {
+                if (state is ItemListLoaded || state is PickedSubjectState || state is ItemListNotPickedState) {
                   showDialogSubject(context, (PojoSubject subject) {
                     // chosenGroup = group;
                     blocs.subjectItemPickerBloc.dispatch(PickedSubjectEvent(item: subject));
@@ -325,7 +340,7 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                     if(state is DateTimePickedState){
                       return Text('${hazizzShowDateFormat(state.dateTime)}',
                           style: TextStyle(fontSize: 24.0),
-                        
+
                       );
                     }
                     return Text("Loading");
@@ -354,27 +369,42 @@ class _TaskMakerPage extends State<TaskMakerPage> {
         builder: (BuildContext context, HFormState state) {
           String errorText = null;
           if(state is TextFormSetState){
-            _titleTextEditingController.text = state.text;
-            print("title is set2: ${_titleTextEditingController.text}");
+            blocs.titleController.text = state.text;
+            print("title is set2: ${blocs.titleController.text}");
           }
           else if(state is TextFormErrorTooShort){
             errorText = "Title is too short";
           }
-          return TextField(
+          return TextFormField(
+            /*
             onChanged: (dynamic text) {
               print("change: $text");
               blocs.titleBloc.dispatch(TextFormValidate(text: text));
             },
-            controller: _titleTextEditingController,
+            */
+
+            style: TextStyle(
+                fontSize: 24,
+            ),
+
+            maxLength: 20,
+            focusNode: _titleFocusNode,
+            controller: blocs.titleController,
             textInputAction: TextInputAction.next,
+            onFieldSubmitted: (String value){
+              print("onFieldSubmitted: $value");
+              _fieldFocusChange(context, _titleFocusNode, _descriptionFocusNode);
+            },
             decoration:
                 InputDecoration(labelText: locText(context, key: "title"), errorText: errorText,
+                  hintStyle: TextStyle(fontSize: 20),
+                  errorStyle: TextStyle(fontSize: 16),
                   filled: true,
               //    fillColor: HazizzTheme.formColor
                 ),
           );
 
-  
+
         }
     );
     var descriptionTextForm = BlocBuilder(
@@ -382,18 +412,27 @@ class _TaskMakerPage extends State<TaskMakerPage> {
         builder: (BuildContext context, HFormState state) {
 
           if(state is TextFormSetState){
-            _descriptionTextEditingController.text = state.text;
+            blocs.descriptionController.text = state.text;
           }
 
-          return TextField(
+          return TextFormField(
+            /*
             onChanged: (dynamic text) {
               print("change: $text");
               blocs.descriptionBloc.dispatch(TextFormValidate(text: text));
             },
-            controller: _descriptionTextEditingController,
-            textInputAction: TextInputAction.next,
+            */
+
+            focusNode: _descriptionFocusNode,
+            controller: blocs.descriptionController,
+            textInputAction: TextInputAction.done,
+            onFieldSubmitted: (String value){
+              print("onFieldSubmitted: $value");
+              FocusScope.of(context).requestFocus(new FocusNode());
+            },
             decoration:
                 InputDecoration(labelText: locText(context, key: "description"), errorText: null,
+                 alignLabelWithHint: true,
                  filled: true,
               //    fillColor: HazizzTheme.formColor,
             ),
@@ -406,7 +445,7 @@ class _TaskMakerPage extends State<TaskMakerPage> {
             ),
           );
 
-  
+
         }
     );
 
@@ -462,7 +501,7 @@ class _TaskMakerPage extends State<TaskMakerPage> {
 
                                   return new Column(
                                       mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
                                         Expandable(
                                           collapsed: InkWell(
@@ -592,8 +631,9 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                                           ),
                                           animationDuration: Duration(milliseconds: 200),
                                         ),
+                                        Spacer(),
                                         Padding(
-                                          padding: const EdgeInsets.only(left: 12, top: 5, right: 12),
+                                          padding: const EdgeInsets.only(left: 12, top: 0, right: 12),
                                           child: new Row(
                                             mainAxisAlignment: MainAxisAlignment.center,
                                             children: [
@@ -603,11 +643,16 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                                             ],
                                           ),
                                         ),
+                                        Spacer(flex: 1,),
+
+
                                         Padding(
                                           padding: const EdgeInsets.only(
-                                              left: 12, right: 12, top: 4),
+                                              left: 12, right: 12, top: 0),
                                           child: descriptionTextForm
                                         ),
+                                        Spacer(flex: 1,),
+
                                         Center(
                                           child:
 
@@ -665,7 +710,8 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                                             ),
                                           )
                                               */
-                                        )
+                                        ),
+                                        Spacer(flex: 2,),
                                       ]
                                   );
                                 }

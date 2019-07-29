@@ -9,7 +9,7 @@ ThemeData theme(BuildContext context){
 
 class HazizzTheme{
 
-  static final Color
+  static const Color
   red = Color.fromRGBO(242, 59, 80, 1),
   yellow = Color.fromRGBO(255, 202, 4, 1),
   white = Color.fromRGBO(232, 240, 223, 1),
@@ -31,9 +31,10 @@ class HazizzTheme{
   homeworkColor = Colors.green,
   testColor = Colors.red,
   oralTestColor = Colors.purple,
-  assignmentColor = Colors.yellow,
+  assignmentColor = Colors.yellow
+  ;
 
-  formColor = Colors.grey.withAlpha(120);
+  static final Color formColor = Colors.grey.withAlpha(120);
 
 
   static Color get warningColor => red;

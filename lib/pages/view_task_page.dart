@@ -1,6 +1,7 @@
-import 'package:animated_card/animated_card.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:mobile/blocs/comment_section_bloc.dart';
+import 'package:mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
+import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/communication/pojos/PojoType.dart';
 
 import 'package:flutter/material.dart';
@@ -15,23 +16,23 @@ import '../hazizz_theme.dart';
 
 class ViewTaskPage extends StatefulWidget {
 
-  CommentSectionBloc commentSectionBloc;
+//  CommentSectionBloc commentSectionBloc;
 
-  Widget commentSectionWidget;
+  CommentSectionWidget commentSectionWidget;
 
   int taskId;
   PojoTask pojoTask;
 
   ViewTaskPage({Key key, this.taskId}) : super(key: key){
-    commentSectionBloc = CommentSectionBloc(taskId: taskId);
-    commentSectionWidget = CommentSectionWidget(commentSectionBloc: commentSectionBloc,);
+   // commentSectionBloc = CommentSectionBloc(taskId: taskId);
+    commentSectionWidget = CommentSectionWidget(taskId: taskId,);
   }
 
   ViewTaskPage.fromPojo({Key key, this.pojoTask}) : super(key: key){
     taskId = pojoTask.id;
 
-    commentSectionBloc = CommentSectionBloc(taskId: taskId);
-    commentSectionWidget = CommentSectionWidget(commentSectionBloc: commentSectionBloc,);
+   // commentSectionBloc = CommentSectionBloc(taskId: taskId);
+    commentSectionWidget = CommentSectionWidget(taskId: taskId,);
   }
 
   @override
@@ -85,6 +86,8 @@ class _ViewTaskPage extends State<ViewTaskPage> {
       processData(widget.pojoTask);
     }
 
+
+
     super.initState();
   }
 
@@ -118,357 +121,374 @@ class _ViewTaskPage extends State<ViewTaskPage> {
         appBar: AppBar(
           title: Text("View Task"),
         ),
-        body:ListView(
-          controller: _scrollController,
-          children: [Container(
-            width: MediaQuery.of(context).size.width,
-            // valamiért 3* kell megszorozni a paddingot hogy jó legyen
-            height: MediaQuery.of(context).size.height-appBar.preferredSize.height - padding*3,
+        body:RefreshIndicator(
+          onRefresh: () async{
+            widget.commentSectionWidget.commentBlocs.commentSectionBloc.dispatch(CommentSectionFetchEvent());
+          },
+          child: Stack(
+            children: [ListView(
+              controller: _scrollController,
+              children: [Container(
+                width: MediaQuery.of(context).size.width,
+                // valamiért 3* kell megszorozni a paddingot hogy jó legyen
+                height: MediaQuery.of(context).size.height-appBar.preferredSize.height - padding*3,
 
-            child: Padding(
-              padding: EdgeInsets.all(padding),
-              child:
-                  Slidable(
-                    actionExtentRatio: 0.25,
-                    actionPane: SlidableBehindActionPane (),
-                    actions: <Widget>[
-                      IconSlideAction(
-                        caption: 'Done',
-                        color: Colors.green,
-                        icon: Icons.check,
-                      ),
-                    ],
-                    secondaryActions: <Widget>[
-                      IconSlideAction(
-                        caption: 'Done',
-                        color: Colors.green,
-                        icon: Icons.check,
-                      ),
-                    ],
-                    child: Card(
-                      clipBehavior: Clip.antiAliasWithSaveLayer,
-                      elevation: 100,
-                      child: new RefreshIndicator(
-                      onRefresh: (){
-                     //   getData();
-                      },
-                      child: new Container(
-                          child: new Column(
-                           //   mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                color: PojoType.getColor(widget.pojoTask.type),
-                              //  width: 400,
+                child: Padding(
+                  padding: EdgeInsets.all(padding),
+                  child:
+                      Slidable(
+                        actionExtentRatio: 0.25,
+                        actionPane: SlidableBehindActionPane (),
+                        actions: <Widget>[
+                          IconSlideAction(
+                            caption: 'Done',
+                            color: Colors.green,
+                            icon: Icons.check,
+                          ),
+                        ],
+                        secondaryActions: <Widget>[
+                          IconSlideAction(
+                            caption: 'Done',
+                            color: Colors.green,
+                            icon: Icons.check,
+                          ),
+                        ],
+                        child: Card(
+                          clipBehavior: Clip.antiAliasWithSaveLayer,
+                          elevation: 100,
+                          child: new RefreshIndicator(
+                          onRefresh: (){
+                         //   getData();
+                          },
+                          child: new Container(
+                              child: new Column(
+                               //   mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    color: PojoType.getColor(widget.pojoTask.type),
+                                  //  width: 400,
 
-                                child: Column(
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 2),
-                                      child: new Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          new Flexible(
-                                            child: Text(_type,
-                                              style: TextStyle(
-                                                fontSize: 36
-                                              ),
-                                            )
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10),                              child: new Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: [
-                                          new Flexible(
-                                            child: Text(_creator,
-                                              style: TextStyle(
-                                                  fontSize: 18
-                                              ),
-                                            )
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10),
-                                      child: new Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: [
-                                          new Flexible(
-                                            child: Text(_deadline,
-                                              style: TextStyle(
-                                                  fontSize: 18
-                                              ),
-                                            )
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                ),
-
-                              Stack(
-                                children: <Widget>[
-
-                                  /*
-                                  new SizedBox(
-                                    width: double.infinity,
-                                  //   height: double.infinity,
-                                    child: CustomPaint(
-                                      size: Size(300, 150),
-                                      foregroundPainter: NoteBookPainter(),
-                                    ),
-                                  ),
-                                  */
-
-
-                                  Column(
-                                    children: <Widget>[
-                                      _subject != null ? Padding(
-                                        padding: const EdgeInsets.only( left: 10,top: 0),
-                                        child: new Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            new Flexible(
-                                              child:
-                                              new Container(
-                                                // color: PojoType.getColor(pojoTask.type),
-                                                  decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius.only(bottomRight: Radius.circular(20), bottomLeft: Radius.circular(20)),
-                                                      color: PojoType.getColor(widget.pojoTask.type)
-                                                  ),
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.only(left: 8, top: 0, right: 8, bottom: 6),
-                                                    child: Text(widget.pojoTask.subject.name,
-                                                      style: TextStyle(fontSize: 32),
-                                                    ),
-                                                  )
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ) : Container(),
-                                      Padding(
-                                        padding: const EdgeInsets.only( left: 10,top: 5),
-                                        child: new Row(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          children: [
-                                            new Flexible(
-                                              child: new Text(_title,
-                                                style: TextStyle(
-                                                    fontFamily: "ShortStack",
-                                                    fontSize: 30
-                                                ),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only( left: 20, right: 20, top: 4),
-                                        child: new Row(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          children: [
-                                            new Flexible(
-                                                child: Text(_description,
-
+                                    child: Column(
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 2),
+                                          child: new Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              new Flexible(
+                                                child: Text(_type,
                                                   style: TextStyle(
-                                                      fontFamily: shortStackFont,
-                                                      fontWeight: FontWeight.w400,
-                                                      fontSize: 26
+                                                    fontSize: 36
                                                   ),
                                                 )
-                                            )
-                                          ],
-                                        ),
-                                      ),
-
-                                    ],
-                                  ),
-
-                                  /*
-                                  Column(
-                                    children: <Widget>[
-                                      Padding(
-                                        padding: const EdgeInsets.only( left: 10,top: 5, right: 10),
-                                        child: new Row(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          children: [
-                                            new Flexible(
-                                              child: new RichText(
-                                                text: TextSpan(
-                                                  text: " " * 500,
-
-                                                  style:  TextStyle(
-                                                    fontFamily: "ShortStack",
-                                                    decorationColor: Colors.black,
-                                                    color: Colors.transparent,
-                                                    fontSize: 30,
-                                                    decoration: TextDecoration.underline
-                                                  ),
-
-                                                ),
                                               ),
-                                            )
-                                          ],
+                                            ],
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10),                              child: new Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              new Flexible(
+                                                child: Text(_creator,
+                                                  style: TextStyle(
+                                                      fontSize: 18
+                                                  ),
+                                                )
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10),
+                                          child: new Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              new Flexible(
+                                                child: Text(_deadline,
+                                                  style: TextStyle(
+                                                      fontSize: 18
+                                                  ),
+                                                )
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    ),
+
+                                  Stack(
+                                    children: <Widget>[
+
+                                      /*
+                                      new SizedBox(
+                                        width: double.infinity,
+                                      //   height: double.infinity,
+                                        child: CustomPaint(
+                                          size: Size(300, 150),
+                                          foregroundPainter: NoteBookPainter(),
                                         ),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.only( left: 0, right: 0, top: 4),
-                                        child: new Row(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          children: [
-                                            new Flexible(
-                                                  child: RichText(
-                                                  text: TextSpan(
-                                                    text: "a" * 500,
-                                                    style:  TextStyle(
-                                                      decorationThickness: 2,
-                                                        decorationColor: Colors.black54,
-                                                        color: Colors.transparent,
-                                                        fontSize: 26,
-                                                        decoration: TextDecoration.underline
+                                      */
+
+
+                                      Column(
+                                        children: <Widget>[
+                                          _subject != null ? Padding(
+                                            padding: const EdgeInsets.only( left: 0,top: 0),
+                                            child: new Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                new Flexible(
+                                                  child:
+                                                  new Container(
+                                                    // color: PojoType.getColor(pojoTask.type),
+                                                      decoration: BoxDecoration(
+                                                          borderRadius: BorderRadius.only(bottomRight: Radius.circular(20), bottomLeft: Radius.circular(20)),
+                                                          color: PojoType.getColor(widget.pojoTask.type)
+                                                      ),
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.only(left: 12, top: 0, right: 12, bottom: 6),
+                                                        child: Text(widget.pojoTask.subject.name,
+                                                          style: TextStyle(fontSize: 32),
+                                                        ),
+                                                      )
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ) : Container(),
+                                          Padding(
+                                            padding: const EdgeInsets.only( left: 10,top: 5),
+                                            child: new Row(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              children: [
+                                                new Flexible(
+                                                  child: new Text(_title,
+                                                    style: TextStyle(
+                                                        fontFamily: "ShortStack",
+                                                        fontSize: 30
                                                     ),
                                                   ),
-                                                ),
-                                            )
-                                          ],
-                                        ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only( left: 20, right: 20, top: 4),
+                                            child: new Row(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              children: [
+                                                new Flexible(
+                                                    child: Text(_description,
+
+                                                      style: TextStyle(
+                                                          fontFamily: shortStackFont,
+                                                          fontWeight: FontWeight.w400,
+                                                          fontSize: 26
+                                                      ),
+                                                    )
+                                                )
+                                              ],
+                                            ),
+                                          ),
+
+                                        ],
                                       ),
 
+                                      /*
+                                      Column(
+                                        children: <Widget>[
+                                          Padding(
+                                            padding: const EdgeInsets.only( left: 10,top: 5, right: 10),
+                                            child: new Row(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              children: [
+                                                new Flexible(
+                                                  child: new RichText(
+                                                    text: TextSpan(
+                                                      text: " " * 500,
+
+                                                      style:  TextStyle(
+                                                        fontFamily: "ShortStack",
+                                                        decorationColor: Colors.black,
+                                                        color: Colors.transparent,
+                                                        fontSize: 30,
+                                                        decoration: TextDecoration.underline
+                                                      ),
+
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only( left: 0, right: 0, top: 4),
+                                            child: new Row(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              children: [
+                                                new Flexible(
+                                                      child: RichText(
+                                                      text: TextSpan(
+                                                        text: "a" * 500,
+                                                        style:  TextStyle(
+                                                          decorationThickness: 2,
+                                                            decorationColor: Colors.black54,
+                                                            color: Colors.transparent,
+                                                            fontSize: 26,
+                                                            decoration: TextDecoration.underline
+                                                        ),
+                                                      ),
+                                                    ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+
+                                        ],
+                                      ),
+                                      */
                                     ],
                                   ),
-                                  */
-                                ],
-                              ),
-                              /*
-                              _subject != null ? Padding(
-                                padding: const EdgeInsets.only( left: 10,top: 5),
-                                child: new Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    new Flexible(
-                                      child:
-                                      new Text(_subject,
-                                        style: TextStyle(
-                                            fontSize: 36
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ) : Container(),
-                              Padding(
-                                padding: const EdgeInsets.only( left: 10,top: 5),
-                                child: new Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    new Flexible(
-                                      child: new Text(_title,
-                                          style: TextStyle(
-                                          fontSize: 30
-                                      ),
-                                    ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only( left: 20, right: 20, top: 4),
-                                child: new Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    new Flexible(
-                                      child: Text(_description,
-                                        style: TextStyle(
-                                            fontSize: 26
-                                        ),
-                                      )
-                                      )
-                                  ],
-                                ),
-                              ),
-                              */
-
-                              Expanded(
-                               // flex: 1,
-                                child:
-                                  Align(
-                                    alignment: FractionalOffset.bottomCenter,
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.end,
-                                      children: <Widget>[
-                                        FlatButton(
-                                          onPressed: () async {
-                                            setState(() {
-                                              showComments = true;
-                                            });
-                                            await Future.delayed(const Duration(milliseconds: 50));
-                                            _scrollController.animateTo(_scrollController.position.maxScrollExtent, curve: Curves.ease, duration: Duration(milliseconds: 340));
-                                          },
-                                          child: Text(locText(context, key: "comments").toUpperCase(), style: theme(context).textTheme.button),
-                                        ),
-                                        Column(
-                                          mainAxisAlignment: MainAxisAlignment.end,
-                                         // crossAxisAlignment: CrossAxisAlignment.end,
-                                          children: <Widget>[
-                                            FlatButton(
-                                              onPressed: (){
-                                                Navigator.pushNamed(context, "/editTask", arguments: widget.pojoTask);
-                                              },
-                                              child: Text(locText(context, key: "edit").toUpperCase(), style: theme(context).textTheme.button,),
+                                  /*
+                                  _subject != null ? Padding(
+                                    padding: const EdgeInsets.only( left: 10,top: 5),
+                                    child: new Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        new Flexible(
+                                          child:
+                                          new Text(_subject,
+                                            style: TextStyle(
+                                                fontSize: 36
                                             ),
-                                            FlatButton(
-                                              child: Text(locText(context, key: "delete").toUpperCase(), style: theme(context).textTheme.button),
-                                              onPressed: (){
-                                                showDeleteDialog(context);
-                                              },
-
-                                            ),
-                                          ],
+                                          ),
                                         )
                                       ],
                                     ),
-                                  )
+                                  ) : Container(),
+                                  Padding(
+                                    padding: const EdgeInsets.only( left: 10,top: 5),
+                                    child: new Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        new Flexible(
+                                          child: new Text(_title,
+                                              style: TextStyle(
+                                              fontSize: 30
+                                          ),
+                                        ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only( left: 20, right: 20, top: 4),
+                                    child: new Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        new Flexible(
+                                          child: Text(_description,
+                                            style: TextStyle(
+                                                fontSize: 26
+                                            ),
+                                          )
+                                          )
+                                      ],
+                                    ),
+                                  ),
+                                  */
 
+                                  Expanded(
+                                   // flex: 1,
+                                    child:
+                                      Align(
+                                        alignment: FractionalOffset.bottomCenter,
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment: CrossAxisAlignment.end,
+                                          children: <Widget>[
+                                            FlatButton(
+                                              onPressed: () async {
+                                                setState(() {
+                                                  showComments = true;
+                                                });
+                                                await Future.delayed(const Duration(milliseconds: 50));
+                                                _scrollController.animateTo(_scrollController.position.maxScrollExtent, curve: Curves.ease, duration: Duration(milliseconds: 340));
+                                              },
+                                              child: Text(locText(context, key: "comments").toUpperCase(), style: theme(context).textTheme.button),
+                                            ),
+                                            Column(
+                                              mainAxisAlignment: MainAxisAlignment.end,
+                                             // crossAxisAlignment: CrossAxisAlignment.end,
+                                              children: <Widget>[
+                                                FlatButton(
+                                                  onPressed: (){
+                                                    Navigator.pushNamed(context, "/editTask", arguments: widget.pojoTask);
+                                                  },
+                                                  child: Text(locText(context, key: "edit").toUpperCase(), style: theme(context).textTheme.button,),
+                                                ),
+                                                FlatButton(
+                                                  child: Text(locText(context, key: "delete").toUpperCase(), style: theme(context).textTheme.button),
+                                                  onPressed: () async {
+                                                    if(await showDeleteDialog(context, taskId: widget.taskId)){
+                                                      print("success");
+                                                      MainTabBlocs().tasksBloc.dispatch(FetchData());
+                                                      Navigator.of(context).pop();
+
+                                                    }else{
+                                                      print("no success");
+
+                                                    }
+
+                                                  },
+
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                      )
+
+                                  ),
+
+
+                                ]
                               ),
-
-
-                            ]
-                          ),
-                      )
+                          )
+                        ),
                     ),
+                      ),
+
                 ),
-                  ),
+              ),
+              Builder(
+                builder: (BuildContext context){
+                  if(showComments) {
+                    return Container(
+                      width: MediaQuery.of(context).size.width,
+                      // valamiért 3* kell megszorozni a paddingot hogy jó legyen
+                      //  height: MediaQuery.of(context).size.height-appBar.preferredSize.height - padding*3,
+                      child: Padding(
+                          padding: EdgeInsets.all(padding),
+                          child:
+                          widget.commentSectionWidget
+                      ),
+                    );
+                  }
+                  return Container();
 
+                },
+              )
+              ],
             ),
+          ]
           ),
-          Builder(
-            builder: (BuildContext context){
-              if(showComments) {
-                return Container(
-                  width: MediaQuery.of(context).size.width,
-                  // valamiért 3* kell megszorozni a paddingot hogy jó legyen
-                  //  height: MediaQuery.of(context).size.height-appBar.preferredSize.height - padding*3,
-                  child: Padding(
-                      padding: EdgeInsets.all(padding),
-                      child:
-                      widget.commentSectionWidget
-                  ),
-                );
-              }
-              return Container();
-
-            },
-          )
-          ],
         )
       )
     );

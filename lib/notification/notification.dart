@@ -5,7 +5,7 @@ import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../RequestSender.dart';
+import '../request_sender.dart';
 import '../hazizz_alarm_manager.dart';
 import '../hazizz_localizations.dart';
 import '../hazizz_response.dart';
@@ -75,7 +75,7 @@ class HazizzNotification{
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
 
     HazizzResponse hazizzResponse = await RequestSender().getResponse(GetTasksFromMe());
-    if(hazizzResponse.isSuccessful){
+    if(hazizzResponse != null && hazizzResponse.isSuccessful){
       List<PojoTask> tasks = hazizzResponse.convertedData;
       if(tasks is List<PojoTask>){
         List<PojoTask> tasksToShow = List();
@@ -104,10 +104,6 @@ class HazizzNotification{
       }
     }
     else{
-
-
-
-
       await _flutterLocalNotificationsPlugin.show(
         0, await locTextContextless(key: "tasks_tomorrow"), "${await locTextContextless(key: "check_your_homework")}",
         platformChannelSpecifics,

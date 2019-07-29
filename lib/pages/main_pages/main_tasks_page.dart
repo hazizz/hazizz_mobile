@@ -1,4 +1,3 @@
-import 'package:animated_card/animated_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
@@ -8,7 +7,6 @@ import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/listItems/task_header_item_widget.dart';
 import 'package:mobile/listItems/task_item_widget.dart';
 import 'package:sticky_header_list/sticky_header_list.dart';
-import "package:flutter_slidable/flutter_slidable.dart";
 
 import 'package:sticky_headers/sticky_headers.dart';
 
@@ -25,19 +23,17 @@ class TasksPage extends StatefulWidget {
   }
 
   @override
-  _TasksPage createState() => _TasksPage(tasksBloc);
+  _TasksPage createState() => _TasksPage();
 }
 
 class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , AutomaticKeepAliveClientMixin {
 
-  final MainTasksBloc tasksBloc;
+  MainTasksBloc tasksBloc;
 
-  _TasksPage(this.tasksBloc){
-
-  }
   @override
   void initState() {
     // getData();
+    tasksBloc = widget.tasksBloc;
     print("created tasks PAge");
 
     if(tasksBloc.currentState is ResponseError) {
@@ -203,8 +199,11 @@ Container(color: Colors.transparent, width: MediaQuery.of(context).size.width * 
 
             ],
           ),
-          onRefresh: () async =>
-              tasksBloc.dispatch(FetchData()) //await getData()
+          onRefresh: () async{
+            tasksBloc.dispatch(FetchData()); //await getData()
+            print("log: refreshing tasks");
+            return;
+          }
       ),
       floatingActionButton:
       FloatingActionButton(

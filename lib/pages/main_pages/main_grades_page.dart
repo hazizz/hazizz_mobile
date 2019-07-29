@@ -57,115 +57,118 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: new RefreshIndicator(
-            child: Stack(
-              children: <Widget>[
-                ListView(),
-                BlocBuilder(
-                    bloc: gradesBloc,
-                    //  stream: gradesBloc.subject.stream,
-                    builder: (_, HState state) {
-                      if (state is ResponseDataLoaded) {
-                        print("sadsadsad?: ${state.data}");
-                        Map<String, List<PojoGrade>> grades = state.data.grades;
-                        print("sadsadsad?: ${state.data.grades}");
-                        int itemCount = grades.keys.length;
+      body: new RefreshIndicator(
+        child: Stack(
+          children: <Widget>[
+            ListView(),
+            BlocBuilder(
+                bloc: gradesBloc,
+                //  stream: gradesBloc.subject.stream,
+                builder: (_, HState state) {
+                  if (state is ResponseDataLoaded) {
+                    print("sadsadsad?: ${state.data}");
+                    Map<String, List<PojoGrade>> grades = state.data.grades;
+                    print("sadsadsad?: ${state.data.grades}");
+                    int itemCount = grades.keys.length;
 
-                        /*
-                    for(List<PojoGrade> listOfGrades in grades){
+                    /*
+                for(List<PojoGrade> listOfGrades in grades){
 
-                    }
-                    */
+                }
+                */
 
-                        /*
-                    grades.forEach((String key, List<PojoGrade> value){
-                      itemCount += value.length;
-                    });
-                    */
+                    /*
+                grades.forEach((String key, List<PojoGrade> value){
+                  itemCount += value.length;
+                });
+                */
 
-                        print("log: itme count: $itemCount");
+                    print("log: itme count: $itemCount");
 
-                        /*
-                    return new ListView.builder(
-                      itemCount: itemCount,
-                      itemBuilder: (BuildContext context, int index) {
+                    /*
+                return new ListView.builder(
+                  itemCount: itemCount,
+                  itemBuilder: (BuildContext context, int index) {
 
-                        String key = grades.keys.elementAt(index);
+                    String key = grades.keys.elementAt(index);
 
-                        return new StickyHeader(
-                          header: GradeHeaderItemWidget(subjectName: key),
-                          content: Builder(
-                            builder: (context) {
-                              List<GradeItemWidget> gradeSubjects = new List();
-                              for(PojoGrade pojoGrade in grades[key]){
-                                gradeSubjects.add(GradeItemWidget(pojoGrade: pojoGrade));
-                              }
-                              return Column(
-                                  children: gradeSubjects
-                              );
-                            }
-                          ),
-                        );
-
-
-                      }
-                    );
-                    */
-
-                        return new StickyList.builder(
-                            itemCount: itemCount,
-                            builder: (BuildContext context, int index) {
-
-                              String key = grades.keys.elementAt(index);
-
-                              List<Widget> widgetList = List();
-                              widgetList.add(GradeHeaderItemWidget(subjectName: key,));
-                              for(PojoGrade grade2 in grades[key]){
-                                widgetList.add(GradeItemWidget(pojoGrade: grade2,));
-                              }
-
-                              return new HeaderRow(
-                                  child: Column(
-                                      children: widgetList
-                                  ));
-                              /*
-                          if (index == 0 || tasks[index].dueDate
-                              .difference(tasks[index - 1].dueDate)
-                              .inDays > 0) {
-                            return new HeaderRow(
-                                child: Column(
-                                    children: [
-                                      TaskHeaderItemWidget(dateTime: tasks[index].dueDate),
-                                      TaskItemWidget(pojoTask: tasks[index])
-                                    ]
-                                ));
-                          } else {
-                            return RegularRow(child: TaskItemWidget(pojoTask: tasks[index]),
-                            );
+                    return new StickyHeader(
+                      header: GradeHeaderItemWidget(subjectName: key),
+                      content: Builder(
+                        builder: (context) {
+                          List<GradeItemWidget> gradeSubjects = new List();
+                          for(PojoGrade pojoGrade in grades[key]){
+                            gradeSubjects.add(GradeItemWidget(pojoGrade: pojoGrade));
                           }
-                          */
-                            }
+                          return Column(
+                              children: gradeSubjects
+                          );
+                        }
+                      ),
+                    );
+
+
+                  }
+                );
+                */
+
+                    return new StickyList.builder(
+                        itemCount: itemCount,
+                        builder: (BuildContext context, int index) {
+
+                          String key = grades.keys.elementAt(index);
+
+                          List<Widget> widgetList = List();
+                          widgetList.add(GradeHeaderItemWidget(subjectName: key,));
+                          for(PojoGrade grade2 in grades[key]){
+                            widgetList.add(GradeItemWidget(pojoGrade: grade2,));
+                          }
+
+                          return new HeaderRow(
+                              child: Column(
+                                  children: widgetList
+                              ));
+                          /*
+                      if (index == 0 || tasks[index].dueDate
+                          .difference(tasks[index - 1].dueDate)
+                          .inDays > 0) {
+                        return new HeaderRow(
+                            child: Column(
+                                children: [
+                                  TaskHeaderItemWidget(dateTime: tasks[index].dueDate),
+                                  TaskItemWidget(pojoTask: tasks[index])
+                                ]
+                            ));
+                      } else {
+                        return RegularRow(child: TaskItemWidget(pojoTask: tasks[index]),
                         );
-
-
-
-                      } else if (state is ResponseEmpty) {
-                        return Center(child: Text("Empty"));
-                      } else if (state is ResponseWaiting) {
-                        //return Center(child: Text("Loading Data"));
-                        return Center(child: CircularProgressIndicator(),);
                       }
-                      return Center(
-                          child: Text("Uchecked State: ${state.toString()}"));
-                    }
+                      */
+                        }
+                    );
 
-                ),
 
-              ],
+
+                  } else if (state is ResponseEmpty) {
+                    return Center(child: Text("Empty"));
+                  } else if (state is ResponseWaiting) {
+                    //return Center(child: Text("Loading Data"));
+                    return Center(child: CircularProgressIndicator(),);
+                  }
+                  return Center(
+                      child: Text("Uchecked State: ${state.toString()}"));
+                }
+
             ),
-            onRefresh: () async =>
-                gradesBloc.dispatch(FetchData()) //await getData()
-        )
+
+          ],
+        ),
+        onRefresh: () async{
+          gradesBloc.dispatch(FetchData()); //await getData()
+          print("log: refreshing grades");
+          return;
+        }
+      )
     );
   }
 

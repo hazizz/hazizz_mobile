@@ -10,7 +10,7 @@ import 'package:mobile/blocs/login_bloc.dart';
 import 'package:mobile/blocs/registration_bloc.dart';
 import 'package:mobile/controller/hashed_text_controller.dart';
 
-import '../RequestSender.dart';
+import '../request_sender.dart';
 import '../hazizz_localizations.dart';
 import '../main.dart';
 import 'package:flutter/material.dart';

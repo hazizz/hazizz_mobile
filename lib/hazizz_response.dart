@@ -7,7 +7,7 @@ import 'package:meta/meta.dart';
 
 //import 'package:dio/dio.dart';
 
-import 'RequestSender.dart';
+import 'request_sender.dart';
 import 'communication/ResponseHandler.dart';
 import 'communication/pojos/PojoError.dart';
 import 'communication/pojos/PojoTokens.dart';

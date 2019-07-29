@@ -9,7 +9,6 @@ import 'HttpMethod.dart';
 import 'communication/connection.dart';
 import 'communication/requests/request_collection.dart';
 import 'hazizz_response.dart';
-import 'package:connectivity/connectivity.dart';
 
 Future<HazizzResponse> getResponse(Request request)async{
   return await RequestSender().getResponse(request);
