@@ -81,7 +81,10 @@ script:
   - ./flutter/bin/flutter build apk
 
 after_success:
-  - curl --upload-file ./build/app/outputs/apk/release/app-release.apk https://transfer.sh/hazizz-apk
+  - curl --upload-file ./build/app/outputs/apk/release/app-release.apk https://transfer.sh/hazizz-apk > address.txt
+  - cat address.txt
+
+  # - curl --upload-file ./build/app/outputs/apk/release/app-release.apk https://transfer.sh/hazizz-apk
   ## Export commit info
  # - export AUTHOR_NAME=`git log -1 "$TRAVIS_COMMIT" --pretty="%aN"`
  # - export COMMITTER_NAME=`git log -1 "$TRAVIS_COMMIT" --pretty="%cN"`
