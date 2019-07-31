@@ -80,9 +80,9 @@ class RequestSender{
       responseBody.
     },
     */
-    connectTimeout: 5000,
-    sendTimeout: 5000,
-    receiveTimeout: 5000,
+    connectTimeout: 7000,
+    sendTimeout: 7000,
+    receiveTimeout: 7000,
   //  headers: request.header,
     responseType: ResponseType.plain,
     receiveDataWhenStatusError: true,

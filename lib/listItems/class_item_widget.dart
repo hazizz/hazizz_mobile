@@ -15,7 +15,7 @@ class ClassItemWidget extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
 
-    final double itemHeight = 50;
+    const double itemHeight = 66;
 
     DateTime currentDateTime = DateTime.now();
 
@@ -28,75 +28,95 @@ class ClassItemWidget extends StatelessWidget{
       bgColor = HazizzTheme.blue;
     }
 
-    return Card(
-      color: bgColor,
-      clipBehavior: Clip.antiAliasWithSaveLayer,
-      elevation: 5,
-      child: InkWell(
-          onTap: () {
-           // showGradeDialog(context, grade: pojoGrade);
-            showClassDialog(context, pojoClass: pojoClass);
-          },
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-
-
-            Container(
-             // height: double.infinity,
-              color: Theme.of(context).primaryColor,
-              child: Center(
-                child: Text(pojoClass.periodNumber == null ? "1." : "${pojoClass.periodNumber}.",
-                  style: TextStyle(fontSize: 38),
-                ),
-              ),
-            ),
-
-            //  SizedBox(width: 4,),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+    return Container(
+      height: itemHeight,
+      child: Card(
+        color: bgColor,
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        elevation: 5,
+        child: InkWell(
+            onTap: () {
+             // showGradeDialog(context, grade: pojoGrade);
+              showClassDialog(context, pojoClass: pojoClass);
+            },
+            child: Stack(
+              children: [Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-              //    Text(pojoClass.className == null ? "className" : pojoClass.className, style: TextStyle(fontSize: 20),),
-              //    Text(pojoClass.subject == null ? "subject" : pojoClass.subject),
+
+
                   Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(bottomRight: Radius.circular(20)),
-                          color: Theme.of(context).primaryColor
+                    width: itemHeight/100*80,
+                    height: double.infinity,
+                    color: Theme.of(context).primaryColor,
+                    child: Center(
+                      child: Text(pojoClass.periodNumber == null ? "1." : "${pojoClass.periodNumber}.",
+                        style: TextStyle(fontSize: 44),
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 2, top: 2, right: 8, bottom: 4),
-                        child: Row(
-                            children: [
-                            //  Text(pojoClass.subject == null ? "subject" : pojoClass.subject, style: TextStyle(fontSize: 20)),
-                              Text(pojoClass.className == null ? "className" : pojoClass.className, style: TextStyle(fontSize: 22),),
-                            ]
-                        ),
-                      )
+                    ),
                   ),
 
-                  Row(
+                //  SizedBox(width: 4,),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(pojoClass.startOfClass.toHazizzFormat(), style: TextStyle(fontSize: 20),),
-                      Text("-", style: TextStyle(fontSize: 20),),
-                      Text(pojoClass.endOfClass.toHazizzFormat(), style: TextStyle(fontSize: 20),)
+                  //    Text(pojoClass.className == null ? "className" : pojoClass.className, style: TextStyle(fontSize: 20),),
+                  //    Text(pojoClass.subject == null ? "subject" : pojoClass.subject),
+                      Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(bottomRight: Radius.circular(20)),
+                              color: Theme.of(context).primaryColor
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 2, top: 2, right: 8, bottom: 4),
+                            child: Row(
+                                children: [
+                                //  Text(pojoClass.subject == null ? "subject" : pojoClass.subject, style: TextStyle(fontSize: 20)),
+                                  Text(pojoClass.className == null ? "className" : pojoClass.className, style: TextStyle(fontSize: 22),),
+                                ]
+                            ),
+                          )
+                      ),
+
+                      Padding(
+                        padding: const EdgeInsets.only(left: 4),
+                        child: Row(
+                          children: <Widget>[
+                            Text(pojoClass.startOfClass.toHazizzFormat(), style: TextStyle(fontSize: 20),),
+                            Text("-", style: TextStyle(fontSize: 20),),
+                            Text(pojoClass.endOfClass.toHazizzFormat(), style: TextStyle(fontSize: 20),),
+                           // Spacer(),
+                          //  Text(pojoClass.room == null ? " " : pojoClass.room, style: TextStyle(fontSize: 20),)
+                          ],
+                        ),
+                      )
+
+
                     ],
-                  )
-
-
+                  ),
+                  Spacer(),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Text(pojoClass.room == null ? "U125" : pojoClass.room, style: TextStyle(fontSize: 20),)
+                    ],
+                  ),
+                  SizedBox(width: 4,),
                 ],
               ),
-              Spacer(),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Text(hazizzShowDateFormat(pojoClass.date))
-                ],
-              ),
-              SizedBox(width: 4,),
-            ],
-          )
-      )
+                /*
+                Positioned(
+                  right: 2,
+                  bottom: 2,
+                  child: Text(pojoClass.room == null ? "U125" : pojoClass.room, style: TextStyle(fontSize: 20),)
+                )
+                */
+
+              ]
+            )
+        )
+      ),
     );
   }
 }

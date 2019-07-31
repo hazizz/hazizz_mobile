@@ -272,7 +272,7 @@ Future<bool> showDeleteDialog(context, {@required int taskId}) async {
   double height = 80;
   double width = 200;
 
-  bool success;
+  bool success = false;
 
   bool pressed = false;
 
@@ -337,8 +337,6 @@ Future<bool> showDeleteDialog(context, {@required int taskId}) async {
                       DeleteTask(taskId: taskId));
                   if(response.isSuccessful) {
                     success = true;
-                  }else {
-                    success = false;
                   }
                   Navigator.of(context).pop();
                   pressed = false;
@@ -556,6 +554,7 @@ Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
       builder: (BuildContext context) {
         print("grade: ${grade.grade}");
 
+        /*
         Dialog(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
             child: Container(
@@ -676,7 +675,7 @@ Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
                     ),
                   ],
                 )));
-
+        */
 
          return HazizzDialog(
             header: Container(
@@ -686,7 +685,7 @@ Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
                 children: <Widget>[
                  //  Container(color: Theme.of(context).dialogBackgroundColor,),
                   Container(
-                    height: 70.0,
+                    height: 62.0,
                       color: Theme.of(context).primaryColor
 
                     //  width: 50,
@@ -702,7 +701,7 @@ Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
                   ),
                   Center(
                     child: Padding(
-                        padding: EdgeInsets.all(10),
+                        padding: EdgeInsets.only(top: 6, bottom: 4),
                         child: CircleAvatar(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -718,7 +717,7 @@ Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
                                 Text(
                                   grade.weight == null ? "100%" : "${grade.weight}%",
                                   style: TextStyle(
-                                      fontSize: 14,
+                                      fontSize: 20,
                                       color: Colors.white
                                   ),
                                 ),
@@ -726,7 +725,7 @@ Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
                               ]
                           ),
                           backgroundColor: grade.color,
-                          radius: 46,
+                          radius: 50,
                         )
                     ),
                   ),
@@ -734,7 +733,7 @@ Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
               ),
             ),
             content: Container(child:  Padding(
-              padding: const EdgeInsets.only(left: 30, right: 30),
+              padding: const EdgeInsets.only(left: 20, right: 20),
               child: Column(
                   children:
                   [
@@ -797,7 +796,7 @@ Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
                   ),
                 ]
             ),
-            height: 300,
+            height: 220,
             width: 200);
 
 
@@ -1088,6 +1087,7 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
   HazizzDialog hazizzDialog = HazizzDialog(
     header:
     Container(
+      color: Theme.of(context).primaryColor,
       child: Row(children: <Widget>[
         Container(
           color: Theme.of(context).primaryColorDark,
@@ -1097,11 +1097,14 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
           )
         ),
         Expanded(
-          child: AutoSizeText("${pojoClass.className}",
-            style: TextStyle(fontSize: 40),
-            maxLines: 1,
-            maxFontSize: 40,
-            minFontSize: 20,
+          child: Container(
+
+            child: AutoSizeText("${pojoClass.className}",
+              style: TextStyle(fontSize: 40),
+              maxLines: 1,
+              maxFontSize: 40,
+              minFontSize: 20,
+            ),
           ),
         )
       ],),
@@ -1125,9 +1128,9 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
             mainAxisAlignment: MainAxisAlignment.center,
 
             children: <Widget>[
-              Text(hazizzTimeOfDayToShow(pojoClass.startOfClass), style: TextStyle(fontSize: 20)),
-              Text("-", style: TextStyle(fontSize: 20)),
-              Text(hazizzTimeOfDayToShow(pojoClass.startOfClass), style: TextStyle(fontSize: 20)),
+              Text(hazizzTimeOfDayToShow(pojoClass.startOfClass), style: TextStyle(fontSize: 22)),
+              Text("-", style: TextStyle(fontSize: 22)),
+              Text(hazizzTimeOfDayToShow(pojoClass.startOfClass), style: TextStyle(fontSize: 22)),
             ],
           ));
           addToColumn(Row(
@@ -1213,7 +1216,7 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
           )
         ],
       ),
-      height: 260, width: 300);
+      height: 230, width: 300);
 
   return showDialog(
       context: context,

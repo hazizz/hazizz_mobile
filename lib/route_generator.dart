@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/pages/LoginPage.dart';
+import 'package:mobile/pages/login_page.dart';
 import 'package:mobile/pages/group_pages/group_tab_hoster_page.dart';
 import 'package:mobile/pages/intro_page.dart';
 import 'package:mobile/pages/kreta_login_page.dart';

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/blocs/comment_section_bloc.dart';
+import 'package:mobile/blocs/view_task_bloc.dart';
 import 'package:mobile/communication/pojos/pojo_comment.dart';
 import 'package:mobile/listItems/comment_item_widget.dart';
 
@@ -10,14 +11,13 @@ class CommentSectionWidget extends StatefulWidget {
 
  // CommentSectionBloc commentSectionBloc;
 
-  int taskId;
 
-  CommentBlocs commentBlocs;
+ // static CommentBlocs commentBlocs;
 
-  CommentSectionWidget({Key key, @required this.taskId}) : super(key: key){
-    commentBlocs = CommentBlocs(taskId: taskId);
+  CommentSectionWidget({Key key,}) : super(key: key){
+   // commentBlocs = CommentBlocs();
 
-    commentBlocs.commentSectionBloc.dispatch(CommentSectionFetchEvent());
+   // commentBlocs.commentSectionBloc.dispatch(CommentSectionFetchEvent());
   }
 
   getTabName(BuildContext context){
@@ -34,7 +34,7 @@ class _CommentSectionWidget extends State<CommentSectionWidget>{
   List<PojoComment> comments = List();
 
 
-  CommentBlocs commentBlocs;
+ // CommentBlocs commentBlocs = ViewTaskBloc().commentBlocs;
 
 
   @override
@@ -42,7 +42,7 @@ class _CommentSectionWidget extends State<CommentSectionWidget>{
     // TODO: implement initState
     super.initState();
 
-    commentBlocs = widget.commentBlocs;
+   // commentBlocs = CommentSectionWidget.commentBlocs;
 
   }
 
@@ -50,7 +50,7 @@ class _CommentSectionWidget extends State<CommentSectionWidget>{
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    commentBlocs.dispose();
+   // commentBlocs.dispose();
   }
 
   @override
@@ -62,10 +62,18 @@ class _CommentSectionWidget extends State<CommentSectionWidget>{
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             BlocBuilder(
-              bloc: commentBlocs.commentSectionBloc,
-              builder: (_, CommentSectionState state){
+              condition: (CommentSectionState beforeState, CommentSectionState currentState){
+                if(beforeState is CommentSectionLoadedState && currentState is CommentSectionWaitingState){
+                  return false;
+                }
 
+                return true;
+              },
+              bloc: ViewTaskBloc().commentBlocs.commentSectionBloc,
+              builder: (_, CommentSectionState state){
+                print("log CommentSectionState change? $state");
                 if(state is CommentSectionLoadedState){
+                  print("state is CommentSectionLoadedState: ${state.items}");
                   comments = state.items;
                   if(comments.isNotEmpty) {
                     return ListView.builder(
@@ -79,7 +87,7 @@ class _CommentSectionWidget extends State<CommentSectionWidget>{
                               //      onPicked(groups_data[index]);
 
                             },
-                            child: CommentItemWidget(comment: comments[index],)
+                            child: CommentItemWidget(taskId: ViewTaskBloc().commentBlocs.taskId ,comment: comments[index],)
                         );
                       },
                     );
@@ -112,7 +120,7 @@ class _CommentSectionWidget extends State<CommentSectionWidget>{
               child:
 
               BlocBuilder(
-                bloc: commentBlocs.commentWriterBloc,
+                bloc: ViewTaskBloc().commentBlocs.commentWriterBloc,
                 builder: (_, CommentWriterState commentWriterState) {
                   String error;
                   if(commentWriterState is CommentWriterSentState){
@@ -137,7 +145,7 @@ class _CommentSectionWidget extends State<CommentSectionWidget>{
                                 InputDecoration(
                                   errorText: error,
                                   labelText: locText(context, key: "write_comment"),),
-                                controller: commentBlocs.commentWriterBloc
+                                controller: ViewTaskBloc().commentBlocs.commentWriterBloc
                                     .commentController,
                                 autofocus: false,
                                 maxLines: null,
@@ -160,7 +168,7 @@ class _CommentSectionWidget extends State<CommentSectionWidget>{
                                     .accentColor,
                                 icon: Icon(Icons.send, size: 30,),
                                 onPressed: () async {
-                                  commentBlocs.commentWriterBloc.dispatch(CommentWriterSendEvent());
+                                  ViewTaskBloc().commentBlocs.commentWriterBloc.dispatch(CommentWriterSendEvent());
                                   FocusScope.of(context).requestFocus(new FocusNode());
                                 },
                               ),

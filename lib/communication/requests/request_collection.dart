@@ -7,7 +7,8 @@ import 'package:dio/dio.dart';
 import 'package:mobile/communication/pojos/PojoError.dart';
 import 'package:mobile/communication/pojos/PojoGrades.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
-import 'package:mobile/communication/pojos/PojoMeInfo.dart';
+import 'package:mobile/communication/pojos/PojoMeInfoPrivate.dart';
+import 'package:mobile/communication/pojos/PojoMeInfoPublic.dart';
 import 'package:mobile/communication/pojos/PojoSchedules.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
@@ -85,8 +86,9 @@ class Request {
   }
 
   dynamic convertData(Response response){
-    throw new ConverterNotImplementedException();
-    return response;
+    print("log: WARNING: convertData function not implemented");
+   // throw new ConverterNotImplementedException();
+    return null;
   }
 
   void processData(dynamic data){
@@ -207,8 +209,8 @@ class RegisterUser extends AuthRequest{
 
 //region Hazizz server requests
 
-class GetMyInfo extends HazizzRequest {
-  GetMyInfo({ResponseHandler rh}) : super(rh) {
+class GetMyInfoPrivate extends HazizzRequest {
+  GetMyInfoPrivate({ResponseHandler rh}) : super(rh) {
     PATH = "me/details";
     httpMethod = HttpMethod.GET;
     authTokenHeader = true;
@@ -216,7 +218,21 @@ class GetMyInfo extends HazizzRequest {
 
   @override
   convertData(Response response) {
-    PojoMeInfo meInfo = PojoMeInfo.fromJson(response.data);
+    PojoMeInfoPrivate meInfo = PojoMeInfoPrivate.fromJson(jsonDecode(response.data));
+    return meInfo;
+  }
+}
+
+class GetMyInfoPublic extends HazizzRequest {
+  GetMyInfoPublic({ResponseHandler rh}) : super(rh) {
+    PATH = "me";
+    httpMethod = HttpMethod.GET;
+    authTokenHeader = true;
+  }
+
+  @override
+  convertData(Response response) {
+    PojoMeInfoPublic meInfo = PojoMeInfoPublic.fromJson(jsonDecode(response.data));
     return meInfo;
   }
 }
@@ -459,6 +475,19 @@ class CreateTaskComment extends HazizzRequest {
     PATH = "tasks/${p_taskId}/comments";
     authTokenHeader = true;
     body["content"] = b_content;
+  }
+
+  @override
+  dynamic convertData(Response response) {
+    return response;
+  }
+}
+
+class DeleteTaskComment extends HazizzRequest {
+  DeleteTaskComment({ResponseHandler rh, @required int p_taskId, @required int p_commentId}) : super(rh) {
+    httpMethod = HttpMethod.DELETE;
+    PATH = "tasks/${p_taskId}/comments/$p_commentId";
+    authTokenHeader = true;
   }
 
   @override

@@ -120,9 +120,10 @@ class HazizzNotification{
     DateTime now = DateTime.now();
     DateTime dateTime = DateTime(now.year, now.month, now.day, timeOfDay.hour, timeOfDay.minute);
 
-    bool p = await HazizzAlarmManager.periodic(
+   // AndroidAlarmManager()
+    bool p = await AndroidAlarmManager.periodic(
         const Duration(hours: 24, minutes: 0, ), tasksTomorrowNotificationId, showHazizzNotification,
-        from: dateTime, rescheduleOnReboot: true, exact: true, wakeup: true);
+        startAt: dateTime, rescheduleOnReboot: true, exact: true, wakeup: true);
     print("AndroidAlarmManager.periodic has been set successfully: $p");
     setNotificationTime(timeOfDay);
     print("log: alarm manager is set : ${timeOfDay.hour}.${timeOfDay.minute}");

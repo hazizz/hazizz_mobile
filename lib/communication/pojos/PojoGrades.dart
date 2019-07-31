@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'Pojo.dart';
 
-part 'PojoGrades.g.dart';
+part 'PojoGrades.gg.dart';
 
 // removing so it wont recreate
 //@JsonSerializable()

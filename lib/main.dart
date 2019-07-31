@@ -98,7 +98,7 @@ void main() async{
   };
 
 
-  await HazizzAlarmManager.initialize();
+  await AndroidAlarmManager.initialize();
 
   themeData = await HazizzTheme.getCurrentTheme();
 
@@ -120,6 +120,12 @@ void main() async{
     newComer = true;
     AppState.setIsntNewComer();
   }
+
+
+  
+
+
+
   runApp(EasyLocalization(child: HazizzApp()));
 }
 

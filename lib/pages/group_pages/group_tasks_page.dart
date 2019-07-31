@@ -45,7 +45,7 @@ class _GroupTasksPage extends State<GroupTasksPage> with AutomaticKeepAliveClien
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: FloatingActionButton(onPressed: null, child: Icon(Icons.add),),
+      //  floatingActionButton: FloatingActionButton(onPressed: null, child: Icon(Icons.add),),
         body: new RefreshIndicator(
             child: BlocBuilder(
                 bloc: groupTasksBloc,

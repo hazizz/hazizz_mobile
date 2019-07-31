@@ -21,13 +21,14 @@ class MemberItemWidget extends StatelessWidget{
                   //   Navigator.push(context,MaterialPageRoute(builder: (context) => ViewTaskPage.fromPojo(pojoTask: pojoTask)));
                 },
                 child:
-                Align(
-                    alignment: Alignment.centerLeft,
-                    child:
-                    Text(member.displayName,
-                      style: TextStyle(
-                          fontSize: 30
-                      ),)
+                Padding(
+                  padding: EdgeInsets.only(left: 6),
+                  child:
+                  Text(member.displayName,
+                    style: TextStyle(
+                        fontSize: 30
+                    ),
+                  )
                 )
             )
         )

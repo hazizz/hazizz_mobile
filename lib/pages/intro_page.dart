@@ -1,29 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import "package:intro_slider/intro_slider.dart";
-import 'package:intro_slider/slide_object.dart';
-import 'package:mobile/blocs/item_list_picker_bloc/item_list_picker_bloc.dart';
-import 'package:mobile/blocs/kreta_login_blocs.dart';
-import 'package:mobile/blocs/login_bloc.dart';
-import 'package:mobile/controller/hashed_text_controller.dart';
-import 'package:mobile/dialogs/dialogs.dart';
+import 'package:mobile/widgets/google_sign_in_widget.dart';
+import 'package:mobile/widgets/kreta_login_widget.dart';
+import 'package:mobile/widgets/login_widget.dart';
+import 'package:mobile/widgets/registration_widget.dart';
 
+import 'package:mobile/custom/hazizz_tab_bar_view.dart';
+import 'package:mobile/custom/hazizz_tab_controller.dart';
 import '../hazizz_localizations.dart';
-import 'package:mobile/blocs/TextFormBloc.dart';
-import 'package:mobile/blocs/registration_bloc.dart';
 
+import "dart:math" show pi;
 
-import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
-
+import '../hazizz_theme.dart';
 
 
 class IntroPage extends StatefulWidget {
 
-  String getTabName(BuildContext context){
-    return locText(context, key: "subjects");
+  IntroPage({Key key}) : super(key: key){
   }
-
-  IntroPage({Key key}) : super(key: key);
 
   @override
   _IntroPage createState() => _IntroPage();
@@ -32,9 +25,13 @@ class IntroPage extends StatefulWidget {
 class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin{
 
 
-  TabController _tabController;
+  static const double angle = pi / 16;
 
-  List<Widget> slides;
+  static const double dy = -86;
+
+  HazizzTabController _tabController;
+
+  //List<Widget> slides;
 
   void _handleTabSelection() {
     setState(() {
@@ -42,302 +39,313 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
     });
   }
 
+  var slides;
+
+
+
   @override
   void initState() {
 
-    slides = [
-      Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Text("What is Hazizz?"),
-
-          ],
-        )
-      ),
-      Builder(
-          builder: (BuildContext context){
-
-            final RegistrationPageBlocs registrationPageBlocs = new RegistrationPageBlocs();
-
-            final TextEditingController _usernameTextEditingController = TextEditingController();
-            final TextEditingController _emailTextEditingController = TextEditingController();
-            final HashedTextEditingController _passwordTextEditingController = HashedTextEditingController();
-
-            return Padding(
-              padding: const EdgeInsets.all(10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-
-
-                  Center(
-                    child: Text("Sign in to"),
-                  ),
-                  Center(
-                    child: Image.asset(
-                      'assets/images/Logo.png',
-                    ),
-                  ),
-
-                  BlocBuilder(
-                      bloc: registrationPageBlocs.usernameBloc,
-                      builder: (BuildContext context, HFormState state) {
-                        String errorText = null;
-                        if (state is TextFormUsernameTakenState) {
-                          errorText = "This username is already taken";
-                        } else if (state is TextFormErrorTooShort) {
-                          errorText = "too short mann...";
-                        }
-                        return TextField(
-                          controller: _usernameTextEditingController,
-                          textInputAction: TextInputAction.next,
-                          decoration:
-                          InputDecoration(labelText: "Username", errorText: errorText),
-                        );
-                      }
-                  ),
-                  BlocBuilder(
-                      bloc: registrationPageBlocs.emailBloc,
-                      builder: (BuildContext context, HFormState state) {
-                        String errorText = null;
-                        if (state is TextFormEmailInvalidState) {
-                          errorText = "Invalid email";
-                        }
-                        return TextField(
-
-                          controller: _emailTextEditingController,
-                          textInputAction: TextInputAction.next,
-                          decoration: InputDecoration(labelText: "Email", errorText: errorText),
-                        );
-                      }
-                  ),
-                  TextFormField(
-                    obscureText: true,
-                    maxLines: 1,
-                    autofocus: false,
-                    controller: _passwordTextEditingController,
-                    decoration: InputDecoration(
-                      labelText: "Password",
-                    ),
-                  ),
-                  BlocListener(
-                    bloc: registrationPageBlocs.registrationBloc,
-                    listener: (context, state) {
-                      if (state is RegisterSuccessState) {
-                        Navigator.pushReplacementNamed(context, "login");
-                        // Navigator
-                      }
-                    },
-                    child: RaisedButton(
-                        child: Text("Küldés"),
-                        onPressed: () async {
-                          print("log: as1");
-                          registrationPageBlocs.registrationBloc.dispatch(
-                              RegisterButtonPressed(
-                                  username: _usernameTextEditingController.text,
-                                  password: _passwordTextEditingController.text,
-                                  email: _emailTextEditingController.text
-                              )
-                          );
-                        }
-                    ),
-                  ),
-                  RaisedButton(
-                      child: Text("Login"),
-                      onPressed: () async {
-                        Navigator.pushReplacementNamed(context, "login");
-                      }
-                  ),
-
-                  GoogleSignInButton(
-                    text: locText(context, key: "sign_in_google"),
-                    onPressed: (){
-                      print("log: pressed google button");
-                    },
-                    darkMode: true,
-                  ),
-                ],
-              ),
-            );
-
-          }
-      ),
-      Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Text("Kréta"),
-
-            ],
-          )
-      ),
-      Builder(
-        builder: (BuildContext context){
-
-          final KretaLoginPageBlocs kretaLoginPageBlocs = new KretaLoginPageBlocs();
-
-          final TextEditingController _usernameTextEditingController = TextEditingController();
-          final TextEditingController _passwordTextEditingController =TextEditingController();
-
-          var usernameWidget = BlocBuilder(
-              bloc: kretaLoginPageBlocs.usernameBloc,
-              builder: (BuildContext context, HFormState state) {
-                String errorText = null;
-                if (state is KretaUserNotFoundState) {
-                  errorText = "No such user";
-                } else if (state is TextFormErrorTooShort) {
-                  errorText = "too short mann...";
-                }
-                return TextField(
-                  onChanged: (dynamic text) {
-                    print("change: $text");
-                    kretaLoginPageBlocs.usernameBloc.dispatch(TextFormValidate(text: text));
-                  },
-                  controller: _usernameTextEditingController,
-                  textInputAction: TextInputAction.next,
-                  decoration:
-                  InputDecoration(labelText: "Kreta username", errorText: errorText),
-                );
-              }
-          );
-
-          var passwordWidget = BlocBuilder(
-              bloc: kretaLoginPageBlocs.usernameBloc,
-              builder: (BuildContext context, HFormState state) {
-                String errorText = null;
-                if (state is KretaUserNotFoundState) {
-                  errorText = "No such user";
-                } else if (state is TextFormErrorTooShort) {
-                  errorText = "too short mann...";
-                }
-                return TextField(
-                  maxLines: 1,
-                  onChanged: (dynamic text) {
-                    print("change: $text");
-                    kretaLoginPageBlocs.passwordBloc.dispatch(TextFormValidate(text: text));
-                  },
-                  controller: _passwordTextEditingController,
-                  textInputAction: TextInputAction.next,
-                  decoration:
-                  InputDecoration(labelText: "Kreta password", errorText: errorText),
-                );
-              }
-          );
-
-          var schoolPickerWidget = BlocBuilder(
-              bloc: kretaLoginPageBlocs.schoolBloc,
-              builder: (BuildContext context, ItemListState state) {
-                print("log: schoolBloc: state: ${state.toString()}");
-                return GestureDetector(
-                  child: FormField(
-                    builder: (FormFieldState formState) {
-                      return InputDecorator(
-                          decoration: InputDecoration(
-                            //   filled: true,
-                            //    fillColor: HazizzTheme.formColor,
-                            labelText: 'School',
-                          ),
-                          child: Builder(
-                            builder: (BuildContext context){//, ItemListState state) {
-                              print("log: widget update2");
-                              if (state is ItemListLoaded) {
-                                return Container();
-                              }
-                              if(state is ItemListPickedState){
-                                print("log: asdasdGroup: $state.item.name");
-                                return Text('${state.item.name}',
-                                  style: TextStyle(fontSize: 24.0),
-
-                                );
-                              }
-                              return Text("Loading");
-                            },
-                          )
-                      );
-                    },
-                  ), //groupFormField,
-                  onTap: () {
-                    if(kretaLoginPageBlocs.schoolBloc.currentState is ItemListLoaded
-                        || kretaLoginPageBlocs.schoolBloc.currentState is ItemListPickedState
-                    ){
-                      showSchoolsDialog(context, data: kretaLoginPageBlocs.schoolBloc.data,
-                          onPicked: ({String key, String value}){
-                            print("log: school: key: $key, value: $value");
-                            kretaLoginPageBlocs.schoolBloc.dispatch(PickedEvent(item: SchoolItem(key, value)));
-                          }
-                      );
-                    }
-                  },
-                );
-              }
-          );
-
-
-          return Column(
-                  children: <Widget>[
-                    Image.asset(
-                      'assets/images/Logo.png',
-                    ),
-
-                    Padding(
-                      padding: EdgeInsets.all(10),
-                      child: usernameWidget,
-                    ),
-
-                    Padding(
-                      padding: EdgeInsets.all(10),
-                      child: passwordWidget,
-                    ),
-
-                    Padding(
-                      padding: EdgeInsets.all(10),
-                      child: schoolPickerWidget,
-                    ),
-
-                    BlocListener(
-                      bloc: kretaLoginPageBlocs.kretaLoginBloc,
-                      listener: (context, state) {
-                        if (state is LoginSuccessState) {
-                          //  Navigator.of(context).pushNamed('/details');
-                          Navigator.popAndPushNamed(context, "/");
-                        }
-                      },
-                      child: RaisedButton(
-                          child: Text("Küldés"),
-                          onPressed: () async {
-                            print("log: as1");
-                            kretaLoginPageBlocs.kretaLoginBloc.dispatch(
-                                KretaLoginButtonPressed(
-                                    password: _passwordTextEditingController.text,
-                                    username: _usernameTextEditingController.text,
-                                    schoolUrl: kretaLoginPageBlocs.schoolBloc.pickedItem
-                                )
-                            );
-                          }
-                      ),
-                    )
-                  ],
-                );
-        }
-      )
-    ];
-
-    _tabController = new TabController(length: slides.length, vsync: this);
+    _tabController = new HazizzTabController(length: 4, vsync: this);
     _tabController.addListener(_handleTabSelection);
+
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: TabBarView(
 
-          physics: ClampingScrollPhysics(),
+
+
+
+    Widget decorBottomToTop(Color decorColor1, Color decorColor2 ){
+      return Transform.scale(
+        scale: 1.2,
+        child: Transform.rotate(
+          alignment: Alignment.topRight,
+          angle: -angle,
+          child: Transform.translate(
+            offset: Offset(-0, dy),
+            child: Container(
+
+              decoration: BoxDecoration(
+
+                // shape: BoxShape.circle, // BoxShape.circle or BoxShape.retangle
+                  gradient: LinearGradient(colors: [decorColor1, decorColor2]),
+                  // backgroundBlendMode: BlendMode.colorBurn,
+                  color: Colors.blue,
+                  boxShadow: [
+                    BoxShadow(
+                      spreadRadius: 4,
+                      color: Colors.grey,
+                      blurRadius: 60.0,
+                    ),
+                  ]
+              ),
+              //  color: Colors.blue,
+              height: MediaQuery.of(context).size.height/100*18/1.2,
+              width:  MediaQuery.of(context).size.width*10,
+            ),
+          ),
+        ),
+      );
+    }
+
+    Widget decorTopToBottom(Color decorColor1, Color decorColor2 ){
+      return Transform.scale(
+        scale: 1.2,
+        child: Transform.rotate(
+          alignment: Alignment.topLeft,
+          angle: angle,
+          child: Transform.translate(
+            offset: Offset(-0, dy),
+            child: Container(
+
+              decoration: BoxDecoration(
+
+                // shape: BoxShape.circle, // BoxShape.circle or BoxShape.retangle
+                  gradient: LinearGradient(colors: [decorColor1, decorColor2 ]),
+                  // backgroundBlendMode: BlendMode.colorBurn,
+                  color: Colors.blue,
+                  boxShadow: [
+                    BoxShadow(
+                      spreadRadius: 4,
+                      color: Colors.grey,
+                      blurRadius: 60.0,
+                    ),
+                  ]
+              ),
+              //  color: Colors.blue,
+              height: MediaQuery.of(context).size.height/100*18/1.2,
+              width:  MediaQuery.of(context).size.width*10,
+            ),
+          ),
+        ),
+      );
+    }
+
+
+    /*
+    return Transform(  // Transform widget
+      transform: Matrix4.identity()
+        ..setEntry(3, 2, 0.001) // perspective
+        ..rotateX(0)
+        ..rotateY(0),
+      alignment: FractionalOffset.center,
+      child: _defaultApp(context),   // <<< set your widget here
+    );
+    */
+
+
+  //  MediaQuery.of(context).
+
+
+
+    EdgeInsets padding = MediaQuery.of(context).padding;
+    double height = MediaQuery.of(context).size.height;
+
+    double height1 = height - padding.top - padding.bottom;
+
+    // 5 db
+    List<Color> gradientColor = [HazizzTheme.blue, Colors.green, Colors.yellow,  Colors.red, HazizzTheme.blue];
+
+    int _counter = 0;
+
+    Widget pageGenerator(Widget content, {bool withSingleChildScrollView} ){
+
+
+      Widget decorWidget;
+
+      if(_counter%2 == 0){
+        decorWidget = decorBottomToTop(gradientColor[_counter], gradientColor[_counter+1]);
+      }else{
+        decorWidget = decorTopToBottom(gradientColor[_counter], gradientColor[_counter+1]);
+
+      }
+      _counter++;
+
+
+
+      if(withSingleChildScrollView == true){
+        return Stack(
+          //  fit: StackFit.,
+            children: [
+              SingleChildScrollView(
+                child: Container(
+                  height: height1,//-appBar.preferredSize.height - padding*3,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      decorWidget,
+                    ],
+                  ),
+                ),
+              ),
+              /*
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+              //  crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  Spacer(),
+                  decorBackground2
+                ],
+              ),
+             */
+              // decorBackground2,
+              SingleChildScrollView(
+                  child: content
+              )
+            ]
+        );
+      }
+
+      return Stack(
+        //  fit: StackFit.,
+          children: [
+            SingleChildScrollView(
+              child: Container(
+                height: height1,//-appBar.preferredSize.height - padding*3,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    decorWidget,
+                  ],
+                ),
+              ),
+            ),
+            /*
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+              //  crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  Spacer(),
+                  decorBackground2
+                ],
+              ),
+             */
+            // decorBackground2,
+             content
+
+          ]
+      );
+    }
+
+
+    slides = [
+      pageGenerator(
+        Center(
+          child: Stack(
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  Image.asset(
+                    'assets/images/Logo.png',
+                  ),
+                  Center(
+                      child: Text("What is Hazizz?")
+                  ),
+                ],
+              ),
+              Positioned(
+                right: 4,
+                bottom: 4,
+                child: FlatButton(child: Text("NEXT"),
+                  onPressed: (){
+                    _tabController.animateTo(_tabController.index+1, curve: Curves.linear, duration: Duration(milliseconds:  2000));
+                  },
+                ),
+              )
+
+
+            ],
+          ),
+        ),
+      ),
+
+      pageGenerator(
+        Center(
+          child: Column(
+            children: <Widget>[
+              RegistrationWidget(),
+              Text("OR"),
+              GoogleSignInButtonWidget(
+                onSuccess: (){
+                _tabController.animateTo(_tabController.index+1,  duration: Duration(milliseconds:  2000));
+              },),
+            ],
+          ),
+        ),
+          withSingleChildScrollView: true
+
+      ),
+
+      pageGenerator(
+          SingleChildScrollView(
+            child: Container(
+              height: height1,
+              child: Stack(
+                children: <Widget>[
+                  Center(
+                      child: Text("Kréta integráció2")
+                  ),
+                  Positioned(
+                      bottom: 10,
+                      right: 4,
+                      child:
+                      Row(
+                        children: <Widget>[
+                          FlatButton(child: Text("SKIP"),
+                            onPressed: (){
+                              Navigator.pop(context);
+                            },
+                          ),
+                          FlatButton(child: Text("NEXT"),
+                            onPressed: (){
+                              _tabController.animateTo(_tabController.index+1,duration: Duration(milliseconds: 4000));
+                            },
+                          )
+                        ],
+                      )
+                  )
+                ],
+              ),
+            ),
+          ),
+      //  withSingleChildScrollView: true
+
+      ),
+
+      pageGenerator(
+          Container(
+            height: height1,
+            child: Stack(
+              children: <Widget>[
+                KretaLoginWidget(),
+
+                Positioned(
+                  bottom: 10,
+                  right: 4,
+                  child:
+                  FlatButton(child: Text("SKIP"),
+                    onPressed: (){
+                      Navigator.pop(context);
+                    },
+                  ),
+                )
+              ],
+            ),
+          ),
+          withSingleChildScrollView: true
+      ),
+    ];
+
+
+    return Scaffold(
+     //   resizeToAvoidBottomPadding: false,
+      body: SafeArea(
+        child: HazizzTabBarView(
+          physics: AlwaysScrollableScrollPhysics(),
           controller: _tabController,
           children: slides,
         ),

@@ -17,6 +17,7 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
+  app_settings: 1.0.6
   flutter_slidable: 0.5.3
   intro_slider: 2.2.5
 

@@ -6,8 +6,6 @@ part of 'PojoClass.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-
-
 TimeOfDay convertToHazizzTimeOfDay(String str_time){
   try{
     List<String> timePeriod = str_time.split(":");
@@ -43,15 +41,15 @@ PojoClass _$PojoClassFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$PojoClassToJson(PojoClass instance) => <String, dynamic>{
-      'date': instance.date?.toIso8601String(),
-      'startOfClass': instance.startOfClass,
-      'endOfClass': instance.endOfClass,
-      'periodNumber': instance.periodNumber,
-      'cancelled': instance.cancelled,
-      'standIn': instance.standIn,
-      'subject': instance.subject,
-      'className': instance.className,
-      'teacher': instance.teacher,
-      'room': instance.room,
-      'topic': instance.topic
-    };
+  'date': instance.date?.toIso8601String(),
+  'startOfClass': instance.startOfClass,
+  'endOfClass': instance.endOfClass,
+  'periodNumber': instance.periodNumber,
+  'cancelled': instance.cancelled,
+  'standIn': instance.standIn,
+  'subject': instance.subject,
+  'className': instance.className,
+  'teacher': instance.teacher,
+  'room': instance.room,
+  'topic': instance.topic
+};

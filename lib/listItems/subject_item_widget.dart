@@ -22,8 +22,8 @@ class SubjectItemWidget extends StatelessWidget{
                //   Navigator.push(context,MaterialPageRoute(builder: (context) => ViewTaskPage.fromPojo(pojoTask: pojoTask)));
                 },
                 child:
-                  Align(
-                      alignment: Alignment.centerLeft,
+                  Padding(
+                      padding: EdgeInsets.only(left: 6),
                       child:
                       Text(subject.name,
                         style: TextStyle(

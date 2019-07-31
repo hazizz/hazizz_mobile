@@ -50,7 +50,7 @@ class CommentSectionWaitingState extends CommentSectionState {
 class CommentSectionLoadedState extends CommentSectionState {
   final List<PojoComment> items;
   CommentSectionLoadedState({@required this.items})
-      :  assert(items != null), super([items]);
+      :  assert(items != null), super(items);
   @override
   String toString() => 'CommentSectionLoadedState';
 }
@@ -72,17 +72,13 @@ class CommentSectionInitialState extends CommentSectionState {
 
 
 class CommentSectionBloc extends Bloc<CommentSectionEvent, CommentSectionState> {
-  List<PojoComment> tasksTomorrow;
+  List<PojoComment> comments;
 
   int taskId;
 
   CommentSectionBloc({@required this.taskId}){
 
   }
-
-
-
-
 
   @override
   CommentSectionState get initialState => CommentSectionInitialState();
@@ -98,9 +94,14 @@ class CommentSectionBloc extends Bloc<CommentSectionEvent, CommentSectionState> 
         print("log: responseData type:  ${hazizzResponse.runtimeType.toString()}");
 
         if(hazizzResponse.isSuccessful){
-          tasksTomorrow = hazizzResponse.convertedData;
-          print("log: response is List");
-          yield CommentSectionLoadedState(items: tasksTomorrow);
+          comments = hazizzResponse.convertedData;
+          print("log: comments: $comments");
+          print("log: response is List2134");
+          if(comments.isEmpty) {
+            yield CommentSectionLoadedState(items: comments);
+          }else {
+            yield CommentSectionLoadedState(items: comments);
+          }
         }
         else if(hazizzResponse.isError){
           print("log: response is List<PojoComment>");
@@ -132,6 +133,7 @@ class CommentBlocs{
   CommentBlocs({@required this.taskId}){
     commentSectionBloc = CommentSectionBloc(taskId: taskId);
     commentWriterBloc = CommentWriterBloc(taskId: taskId, commentSectionBloc: commentSectionBloc );
+    commentSectionBloc.dispatch(CommentSectionFetchEvent());
   }
 
   dispose(){
@@ -187,7 +189,6 @@ class CommentWriterBloc extends Bloc<CommentWriterEvent,  CommentWriterState> {
 
   final TextEditingController commentController = TextEditingController();
 
-  List<PojoComment> tasksTomorrow;
 
   int taskId;
 

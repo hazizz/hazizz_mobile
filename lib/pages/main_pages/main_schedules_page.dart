@@ -12,23 +12,21 @@ import 'main_schedules_tab_page.dart';
 
 class SchedulesPage extends StatefulWidget {
 
-  final MainSchedulesBloc schedulesBloc;
 
-  SchedulesPage({Key key, this.schedulesBloc}) : super(key: key);
+  SchedulesPage({Key key}) : super(key: key);
 
   getTabName(BuildContext context){
     return locText(context, key: "schedule");
   }
 
   @override
-  _SchedulesPage createState() => _SchedulesPage(schedulesBloc);
+  _SchedulesPage createState() => _SchedulesPage();
 }
 
 class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin , AutomaticKeepAliveClientMixin {
 
-  final MainSchedulesBloc schedulesBloc;
 
-  _SchedulesPage(this.schedulesBloc){}
+  _SchedulesPage(){}
 
   TabController _tabController;
   int _currentIndex;
@@ -42,15 +40,17 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
   @override
   void initState() {
 
-    _currentIndex = schedulesBloc.currentDayIndex;
+    _currentIndex = MainTabBlocs().schedulesBloc.currentDayIndex;
 
     print("created schedules PAge");
 
 
+    /*
     if(schedulesBloc.currentState is ResponseError) {
       print("log: here233");
       schedulesBloc.dispatch(FetchData());
     }
+    */
 
     super.initState();
   }
@@ -63,105 +63,113 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: new RefreshIndicator(
-            child: Stack(
-              children: <Widget>[
-                ListView(),
-                BlocBuilder(
-                    bloc: schedulesBloc,
-                    builder: (_, HState state) {
-                      print("schedule state: $state");
-                      if (state is ResponseDataLoaded) {
-                        Map<String, List<PojoClass>> schedule = state.data.classes;
+    return RefreshIndicator(
+        onRefresh: () async {
+          print("log: refreshing: schedulesBloc");
+          MainTabBlocs().schedulesBloc.dispatch(FetchData());
+        },
+      child: Scaffold(
+          body: new RefreshIndicator(
+              child: Stack(
+                children: <Widget>[
+                  ListView(),
+                  BlocBuilder(
+                      bloc:  MainTabBlocs().schedulesBloc,
+                      builder: (_, HState state) {
+                        print("schedule state: $state");
+                        if (state is ResponseDataLoaded) {
+                          Map<String, List<PojoClass>> schedule = state.data.classes;
 
-                        _tabList.clear();
-                        bottomNavBarItems.clear();
-                        for(String dayIndex in schedule.keys){
-                          if( schedule[dayIndex].isNotEmpty) {
-                            String dayName = locText(context, key: "days_$dayIndex");
-                            String dayMName = locText(context, key: "days_m_$dayIndex");
-                            _tabList.add(SchedulesTabPage(classes: schedule[dayIndex]));
-                            bottomNavBarItems.add(BottomNavigationBarItem(
-                              title: Container(),
-                              icon: Padding(
-                                padding: const EdgeInsets.only(bottom: 4.0),
-                                child: Text(dayMName,
-                                  style: TextStyle(color: Colors.red, fontSize: 22, fontWeight: FontWeight.w500, fontFamily: "Montserrat"),
+                          _tabList.clear();
+                          bottomNavBarItems.clear();
+                          for(String dayIndex in schedule.keys){
+                            if( schedule[dayIndex].isNotEmpty) {
+                              String dayName = locText(context, key: "days_$dayIndex");
+                              String dayMName = locText(context, key: "days_m_$dayIndex");
+                              _tabList.add(SchedulesTabPage(classes: schedule[dayIndex]));
+                              bottomNavBarItems.add(BottomNavigationBarItem(
+                                title: Container(),
+                                icon: Padding(
+                                  padding: const EdgeInsets.only(bottom: 4.0),
+                                  child: Text(dayMName,
+                                    style: TextStyle(color: Colors.red, fontSize: 22, fontWeight: FontWeight.w500, fontFamily: "Montserrat"),
+                                  ),
                                 ),
-                              ),
-                              activeIcon: Text(dayName,
-                                style: TextStyle(color: Colors.red, fontSize: 28, fontWeight: FontWeight.bold),
-                              ),
-                            ));
+                                activeIcon: Text(dayName,
+                                  style: TextStyle(color: Colors.red, fontSize: 28, fontWeight: FontWeight.bold),
+                                ),
+                              ));
+                            }
                           }
-                        }
-                        _tabController = TabController(vsync: this, length: _tabList.length);
+                          _tabController = TabController(vsync: this, length: _tabList.length);
 
-                        if(canBuildBottomNavBar == false) {
-                          SchedulerBinding.instance.addPostFrameCallback((_) =>
-                            setState(() {
-                              canBuildBottomNavBar = true;
-                            })
+                          if(canBuildBottomNavBar == false) {
+                            SchedulerBinding.instance.addPostFrameCallback((_) =>
+                              setState(() {
+                                canBuildBottomNavBar = true;
+                              })
+                            );
+                          }
+
+                          return Stack(
+                            children: [
+                              TabBarView(
+                                physics: NeverScrollableScrollPhysics(),
+                                controller: _tabController,
+                                children: _tabList,
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                child:
+                                Container( width: MediaQuery.of(context).size.width,child: ScheduleEventWidget()),
+                              )
+                            ]
                           );
+                        } else if (state is ResponseEmpty) {
+                          return Center(child: Text("Empty"));
+                        } else if (state is ResponseWaiting) {
+                          //return Center(child: Text("Loading Data"));
+                          return Center(child: CircularProgressIndicator(),);
                         }
-
-                        return Stack(
-                          children: [
-                            TabBarView(
-                              physics: NeverScrollableScrollPhysics(),
-                              controller: _tabController,
-                              children: _tabList,
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              child:
-                              Container( width: MediaQuery.of(context).size.width,child: ScheduleEventWidget()),
-                            )
-                          ]
-                        );
-                      } else if (state is ResponseEmpty) {
-                        return Center(child: Text("Empty"));
-                      } else if (state is ResponseWaiting) {
-                        //return Center(child: Text("Loading Data"));
-                        return Center(child: CircularProgressIndicator(),);
+                        return Row(
+                            children: [Expanded(child: Text("Uchecked State: ${state.toString()}"))]);
                       }
-                      return Row(
-                          children: [Expanded(child: Text("Uchecked State: ${state.toString()}"))]);
-                    }
-                ),
-              ],
-            ),
-            onRefresh: () async =>
-                schedulesBloc.dispatch(FetchData()) //await getData()
-        ),
-        bottomNavigationBar: BlocBuilder(
-          bloc: schedulesBloc,
-          builder: (_, HState state) {
+                  ),
+                ],
+              ),
+              onRefresh: () async {
+                print("log: refreshing: schedulesBloc");
+                MainTabBlocs().schedulesBloc.dispatch(FetchData());
+              }
+          ),
+          bottomNavigationBar: BlocBuilder(
+            bloc:  MainTabBlocs().schedulesBloc,
+            builder: (_, HState state) {
 
-            if (state is ResponseDataLoaded) {
-              if(canBuildBottomNavBar){
-                return Container(
-                  color: Theme.of(context).primaryColorDark,
-                  child: BottomNavigationBar(
-                    currentIndex: _currentIndex,
-                    onTap: (int index){
-                      setState(() {
-                        _currentIndex = index;
-                      });
-                      _tabController.animateTo(index);
-                    },
-                    items: bottomNavBarItems
-                  )
-                );
+              if (state is ResponseDataLoaded) {
+                if(canBuildBottomNavBar){
+                  return Container(
+                    color: Theme.of(context).primaryColorDark,
+                    child: BottomNavigationBar(
+                      currentIndex: _currentIndex,
+                      onTap: (int index){
+                        setState(() {
+                          _currentIndex = index;
+                        });
+                        _tabController.animateTo(index);
+                      },
+                      items: bottomNavBarItems
+                    )
+                  );
+                }else{
+                  return Container();
+                }
               }else{
                 return Container();
               }
-            }else{
-              return Container();
             }
-          }
-        ),
+          ),
+      ),
     );
   }
 

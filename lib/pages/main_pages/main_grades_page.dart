@@ -12,23 +12,20 @@ import '../../hazizz_localizations.dart';
 
 class GradesPage extends StatefulWidget  {
 
-  MainGradesBloc gradesBloc;
-
-  GradesPage({Key key, this.gradesBloc}) : super(key: key);
+  GradesPage({Key key}) : super(key: key);
 
   getTabName(BuildContext context){
     return locText(context, key: "grades");
   }
   
   @override
-  _GradesPage createState() => _GradesPage(gradesBloc);
+  _GradesPage createState() => _GradesPage();
 }
 
 class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin , AutomaticKeepAliveClientMixin {
 
-  final MainGradesBloc gradesBloc;
 
-  _GradesPage(this.gradesBloc){
+  _GradesPage(){
 
   }
 
@@ -42,15 +39,17 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
   //  gradesBloc.dispatch(FetchData());
     //   gradesBloc.fetchMyTasks();
     print("created Grades PAge");
+    /*
     if(gradesBloc.currentState is ResponseError) {
       gradesBloc.dispatch(FetchData());
     }
+    */
     super.initState();
   }
 
   @override
   void dispose() {
-    gradesBloc.dispose();
+   // gradesBloc.dispose();
     super.dispose();
   }
 
@@ -62,7 +61,7 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
           children: <Widget>[
             ListView(),
             BlocBuilder(
-                bloc: gradesBloc,
+                bloc: MainTabBlocs().gradesBloc,
                 //  stream: gradesBloc.subject.stream,
                 builder: (_, HState state) {
                   if (state is ResponseDataLoaded) {
@@ -164,7 +163,7 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
           ],
         ),
         onRefresh: () async{
-          gradesBloc.dispatch(FetchData()); //await getData()
+          MainTabBlocs().gradesBloc.dispatch(FetchData()); //await getData()
           print("log: refreshing grades");
           return;
         }

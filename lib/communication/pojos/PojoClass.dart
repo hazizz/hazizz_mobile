@@ -6,7 +6,7 @@ import 'package:mobile/hazizz_time_of_day.dart';
 
 import 'Pojo.dart';
 
-part 'PojoClass.g.dart';
+part 'PojoClass.gg.dart';
 
 // removing so it wont recreate
 //@JsonSerializable()
@@ -29,7 +29,7 @@ class PojoClass extends Pojo{
 
   factory PojoClass.fromJson(Map<String, dynamic> json){
     PojoClass pojoClass = _$PojoClassFromJson(json);
-    pojoClass.className = "MatekMatekMatekMatekMatekMatekMatekMatekMatekMatekMatekMatek";
+    pojoClass.className = "MatekMatekMatek";
     return pojoClass;
   }
 

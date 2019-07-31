@@ -1,9 +1,7 @@
-import 'package:json_annotation/json_annotation.dart';
-
 import 'Pojo.dart';
 import 'PojoClass.dart';
 
-part 'PojoSchedules.g.dart';
+part 'PojoSchedules.gg.dart';
 
 // removing so it wont recreate
 //@JsonSerializable()

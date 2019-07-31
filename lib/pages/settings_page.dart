@@ -1,4 +1,5 @@
 
+import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:mobile/blocs/settings_bloc.dart';
@@ -283,6 +284,15 @@ class _SettingsPage extends State<SettingsPage> with AutomaticKeepAliveClientMix
                 value: currentLocale,
               ),
             ),
+
+            ListTile(
+              title: Text("go to app settings"),
+              subtitle: Text("subbtitle"),
+              onTap: () async {
+                await AppSettings.openAppSettings();
+              },
+            ),
+
           ],
         ),
       )

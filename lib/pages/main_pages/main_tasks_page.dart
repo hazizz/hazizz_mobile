@@ -14,9 +14,9 @@ import '../../hazizz_localizations.dart';
 
 class TasksPage extends StatefulWidget {
 
-  MainTasksBloc tasksBloc;
+ // MainTasksBloc tasksBloc;
 
-  TasksPage({Key key, @required this.tasksBloc}) : super(key: key);
+  TasksPage({Key key}) : super(key: key);
 
   getTabName(BuildContext context){
     return locText(context, key: "tasks");
@@ -28,24 +28,26 @@ class TasksPage extends StatefulWidget {
 
 class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , AutomaticKeepAliveClientMixin {
 
-  MainTasksBloc tasksBloc;
+ // MainTasksBloc tasksBloc;
 
   @override
   void initState() {
     // getData();
-    tasksBloc = widget.tasksBloc;
+   // tasksBloc = widget.tasksBloc;
     print("created tasks PAge");
 
+    /*
     if(tasksBloc.currentState is ResponseError) {
       tasksBloc.dispatch(FetchData());
     }
+    */
     //   tasksBloc.fetchMyTasks();
     super.initState();
   }
 
   @override
   void dispose() {
-    tasksBloc.dispose();
+   // tasksBloc.dispose();
     super.dispose();
   }
 
@@ -57,7 +59,7 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
             children: <Widget>[
               ListView(),
               BlocBuilder(
-                  bloc: tasksBloc,
+                  bloc: MainTabBlocs().tasksBloc,
                   //  stream: tasksBloc.subject.stream,
                   builder: (_, HState state) {
                     if (state is ResponseDataLoaded) {
@@ -200,7 +202,7 @@ Container(color: Colors.transparent, width: MediaQuery.of(context).size.width * 
             ],
           ),
           onRefresh: () async{
-            tasksBloc.dispatch(FetchData()); //await getData()
+            MainTabBlocs().tasksBloc.dispatch(FetchData()); //await getData()
             print("log: refreshing tasks");
             return;
           }

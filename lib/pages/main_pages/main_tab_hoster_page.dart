@@ -31,6 +31,8 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
   SchedulesPage schedulesTabPage;
   GradesPage gradesTabPage;
 
+  String displayName = "name";
+
 
   void _handleTabSelection() {
     setState(() {
@@ -41,9 +43,21 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
   @override
   void initState() {
 
-    tasksTabPage = TasksPage(tasksBloc: widget.mainTabBlocs.tasksBloc);
-    schedulesTabPage = SchedulesPage(schedulesBloc: widget.mainTabBlocs.schedulesBloc);
-    gradesTabPage = GradesPage(gradesBloc: widget.mainTabBlocs.gradesBloc);
+
+    InfoCache.getMyDisplayName().then(
+      (value){
+        print("log: getMyDisplayName: $value");
+
+        setState(() {
+          displayName = value;
+        });
+      }
+    );
+
+
+    tasksTabPage = TasksPage();
+    schedulesTabPage = SchedulesPage();
+    gradesTabPage = GradesPage();
 
     _tabController = new TabController(length: 3, vsync: this, initialIndex: widget.mainTabBlocs.initialIndex);
 
@@ -111,7 +125,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
                 decoration: BoxDecoration(
                   color: Theme.of(context).primaryColorDark,
                 ),
-                accountName: new Text("ASD"),
+                accountName: new Text(displayName, style: TextStyle(fontSize: 18),),
                 accountEmail: new Text(""),
 
                 currentAccountPicture: CircleAvatar(

@@ -117,22 +117,12 @@ class MainSchedulesBloc extends Bloc<HEvent, HState> {
                 // az utlsó órának vége
               }
             }
-
-
             else{
 
               // itt már error mentesen lehet az elöző és a következő órához hasónlitani
-
-
             }
 
-
-
-
           }
-
-
-
         }
         else if(hazizzResponse.isError){
           yield ResponseError(error: hazizzResponse.pojoError);
@@ -213,9 +203,9 @@ class MainTabBlocs{
 
   int initialIndex = StartPageService.tasksPage;
 
-  MainTasksBloc tasksBloc = new MainTasksBloc();
-  MainSchedulesBloc schedulesBloc = new MainSchedulesBloc();
-  MainGradesBloc gradesBloc = new MainGradesBloc();
+  final MainTasksBloc tasksBloc = new MainTasksBloc();
+  final MainSchedulesBloc schedulesBloc = new MainSchedulesBloc();
+  final MainGradesBloc gradesBloc = new MainGradesBloc();
 
   void fetchAll(){
     tasksBloc.dispatch(FetchData());

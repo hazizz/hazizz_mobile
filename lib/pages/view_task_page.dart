@@ -2,11 +2,13 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:mobile/blocs/comment_section_bloc.dart';
 import 'package:mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
 import 'package:mobile/blocs/request_event.dart';
+import 'package:mobile/blocs/view_task_bloc.dart';
 import 'package:mobile/communication/pojos/PojoType.dart';
 
 import 'package:flutter/material.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/dialogs/dialogs.dart';
+import 'package:mobile/managers/cache_manager.dart';
 import 'package:mobile/widgets/comment_section_widget.dart';
 
 import '../hazizz_date.dart';
@@ -18,21 +20,23 @@ class ViewTaskPage extends StatefulWidget {
 
 //  CommentSectionBloc commentSectionBloc;
 
-  CommentSectionWidget commentSectionWidget;
+  CommentSectionWidget commentSectionWidget = CommentSectionWidget();
 
   int taskId;
   PojoTask pojoTask;
 
   ViewTaskPage({Key key, this.taskId}) : super(key: key){
    // commentSectionBloc = CommentSectionBloc(taskId: taskId);
-    commentSectionWidget = CommentSectionWidget(taskId: taskId,);
+   // commentSectionWidget = CommentSectionWidget(taskId: taskId,);
   }
 
   ViewTaskPage.fromPojo({Key key, this.pojoTask}) : super(key: key){
-    taskId = pojoTask.id;
+   // taskId = pojoTask.id;
+    print("log: recreated blocs");
 
-   // commentSectionBloc = CommentSectionBloc(taskId: taskId);
-    commentSectionWidget = CommentSectionWidget(taskId: taskId,);
+
+    // commentSectionBloc = CommentSectionBloc(taskId: taskId);
+   // commentSectionWidget = CommentSectionWidget(taskId: taskId,);
   }
 
   @override
@@ -78,10 +82,25 @@ class _ViewTaskPage extends State<ViewTaskPage> {
     });
   }
 
+  bool imTheAuthor = false;
   // lényegében egy onCreate
   @override
   void initState() {
    // getData();
+
+
+    InfoCache.getMyId().then((int result){
+      if(widget.pojoTask.creator.id == result){
+        setState(() {
+          imTheAuthor = true;
+        });
+      }
+    });
+
+    ViewTaskBloc().reCreate(pojoTask: widget.pojoTask);
+
+
+
     if(widget.pojoTask != null) {
       processData(widget.pojoTask);
     }
@@ -91,27 +110,6 @@ class _ViewTaskPage extends State<ViewTaskPage> {
     super.initState();
   }
 
-  /*
-  void getData() async{
- //   RequestSender()
-
-    Response response = await RequestSender().send(new GetTaskByTaskId(
-      p_taskId: widget.taskId,
-      rh: new ResponseHandler(
-          onSuccessful: (dynamic data) async{
-          //  print("raw response is : ${response.data}" );
-
-            PojoTaskDetailed pojoTask = data;
-
-            processData(pojoTask);
-
-          },
-          onError: (PojoError pojoError){
-            print("log: the annonymus functions work and the errorCode : ${pojoError.errorCode}");
-          }
-      )));
-  }
-  */
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +121,9 @@ class _ViewTaskPage extends State<ViewTaskPage> {
         ),
         body:RefreshIndicator(
           onRefresh: () async{
-            widget.commentSectionWidget.commentBlocs.commentSectionBloc.dispatch(CommentSectionFetchEvent());
+           // widget.commentSectionWidget.commentBlocs.commentSectionBloc.dispatch(CommentSectionFetchEvent());
+            ViewTaskBloc().commentBlocs.commentSectionBloc.dispatch(CommentSectionFetchEvent());
+
           },
           child: Stack(
             children: [ListView(
@@ -188,29 +188,43 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                           ),
                                         ),
                                         Padding(
-                                          padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10),                              child: new Row(
+                                          padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 2),                              child: new Row(
                                             mainAxisAlignment: MainAxisAlignment.start,
                                             children: [
                                               new Flexible(
-                                                child: Text(_creator,
+                                                child: Text(widget.pojoTask.creator.displayName,
                                                   style: TextStyle(
-                                                      fontSize: 18
+                                                      fontSize: 23
                                                   ),
                                                 )
                                               ),
                                             ],
                                           ),
                                         ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 2),                              child: new Row(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            new Flexible(
+                                                child: Text(widget.pojoTask.group.name,
+                                                  style: TextStyle(
+                                                      fontSize: 23
+                                                  ),
+                                                )
+                                            ),
+                                          ],
+                                        ),
+                                        ),
 
                                         Padding(
-                                          padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10),
+                                          padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 4),
                                           child: new Row(
                                             mainAxisAlignment: MainAxisAlignment.start,
                                             children: [
                                               new Flexible(
                                                 child: Text(_deadline,
                                                   style: TextStyle(
-                                                      fontSize: 18
+                                                      fontSize: 23
                                                   ),
                                                 )
                                               ),
@@ -423,33 +437,41 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                               },
                                               child: Text(locText(context, key: "comments").toUpperCase(), style: theme(context).textTheme.button),
                                             ),
-                                            Column(
-                                              mainAxisAlignment: MainAxisAlignment.end,
-                                             // crossAxisAlignment: CrossAxisAlignment.end,
-                                              children: <Widget>[
-                                                FlatButton(
-                                                  onPressed: (){
-                                                    Navigator.pushNamed(context, "/editTask", arguments: widget.pojoTask);
-                                                  },
-                                                  child: Text(locText(context, key: "edit").toUpperCase(), style: theme(context).textTheme.button,),
-                                                ),
-                                                FlatButton(
-                                                  child: Text(locText(context, key: "delete").toUpperCase(), style: theme(context).textTheme.button),
-                                                  onPressed: () async {
-                                                    if(await showDeleteDialog(context, taskId: widget.taskId)){
-                                                      print("success");
-                                                      MainTabBlocs().tasksBloc.dispatch(FetchData());
-                                                      Navigator.of(context).pop();
 
-                                                    }else{
-                                                      print("no success");
+                                            Builder(
+                                              builder: (context){
+                                                if(imTheAuthor){
+                                                  return Column(
+                                                    mainAxisAlignment: MainAxisAlignment.end,
+                                                    // crossAxisAlignment: CrossAxisAlignment.end,
+                                                    children: <Widget>[
+                                                      FlatButton(
+                                                        onPressed: (){
+                                                          Navigator.pushNamed(context, "/editTask", arguments: widget.pojoTask);
+                                                        },
+                                                        child: Text(locText(context, key: "edit").toUpperCase(), style: theme(context).textTheme.button,),
+                                                      ),
+                                                      FlatButton(
+                                                        child: Text(locText(context, key: "delete").toUpperCase(), style: theme(context).textTheme.button),
+                                                        onPressed: () async {
+                                                          if(await showDeleteDialog(context, taskId: widget.taskId)){
+                                                            print("success");
+                                                            MainTabBlocs().tasksBloc.dispatch(FetchData());
+                                                            Navigator.of(context).pop();
 
-                                                    }
+                                                          }else{
+                                                            print("no success");
 
-                                                  },
+                                                          }
 
-                                                ),
-                                              ],
+                                                        },
+
+                                                      ),
+                                                    ],
+                                                  );
+                                                }
+                                                else return Container();
+                                              }
                                             )
                                           ],
                                         ),

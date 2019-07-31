@@ -4,10 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
 import 'package:mobile/communication/errorcode_collection.dart';
+import 'package:mobile/communication/pojos/PojoMeInfoPrivate.dart';
+import 'package:mobile/communication/pojos/PojoMeInfoPublic.dart';
+import 'package:mobile/communication/requests/request_collection.dart';
+import 'package:mobile/managers/cache_manager.dart';
 import 'package:mobile/managers/token_manager.dart';
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
 import 'package:mobile/notification/notification.dart';
+import '../hazizz_response.dart';
+import '../request_sender.dart';
 import 'TextFormBloc.dart';
 import 'auth_bloc.dart';
 
@@ -104,8 +110,6 @@ class LoginSuccessState extends LoginState {
   @override
   String toString() => 'LoginSuccess';
 }
-
-
 //endregion
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
@@ -138,10 +142,22 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           try {
             print("sentaa22");
             await TokenManager.fetchTokens(event.username, event.password);
-            MainTabBlocs().initialize();
-            authenticationBloc.dispatch(LoggedIn());
-            yield LoginSuccessState();
-            HazizzNotification.scheduleNotificationAlarmManager(await HazizzNotification.getNotificationTime());
+            HazizzResponse hazizzResponse = await RequestSender().getResponse(GetMyInfoPublic());
+            if(hazizzResponse.isSuccessful){
+              print("log: info: 1");
+
+              PojoMeInfoPublic meInfo = hazizzResponse.convertedData;
+              print("log: info: 2");
+
+              InfoCache.setMyId(meInfo.id);
+              InfoCache.setMyUsername(meInfo.username);
+              InfoCache.setMyDisplayName(meInfo.displayName);
+
+              MainTabBlocs().initialize();
+              authenticationBloc.dispatch(LoggedIn());
+              yield LoginSuccessState();
+              HazizzNotification.scheduleNotificationAlarmManager(await HazizzNotification.getNotificationTime());
+            }
 
           }on HResponseError catch(e) {
             print("piritos111");

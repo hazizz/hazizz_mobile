@@ -4,6 +4,7 @@
 
 #import "GeneratedPluginRegistrant.h"
 #import <android_alarm_manager/AndroidAlarmManagerPlugin.h>
+#import <app_settings/AppSettingsPlugin.h>
 #import <connectivity/ConnectivityPlugin.h>
 #import <firebase_analytics/FirebaseAnalyticsPlugin.h>
 #import <firebase_auth/FirebaseAuthPlugin.h>
@@ -20,6 +21,7 @@
 
 + (void)registerWithRegistry:(NSObject<FlutterPluginRegistry>*)registry {
   [FLTAndroidAlarmManagerPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTAndroidAlarmManagerPlugin"]];
+  [AppSettingsPlugin registerWithRegistrar:[registry registrarForPlugin:@"AppSettingsPlugin"]];
   [FLTConnectivityPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTConnectivityPlugin"]];
   [FLTFirebaseAnalyticsPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseAnalyticsPlugin"]];
   [FLTFirebaseAuthPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseAuthPlugin"]];
