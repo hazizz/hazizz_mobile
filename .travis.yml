@@ -80,8 +80,8 @@ script:
   # Run Flutter build
   - ./flutter/bin/flutter build apk
 
-  - rtn=$(curl --upload-file ./build/app/outputs/apk/release/app-release.apk https://transfer.sh/hazizz-apk)
-  - echo $rtn
+  - apk_address=$(curl --upload-file ./build/app/outputs/apk/release/app-release.apk https://transfer.sh/hazizz-apk)
+  - echo $apk_address
  # - curl --upload-file ./build/app/outputs/apk/release/app-release.apk https://transfer.sh/hazizz-apk > address.txt
  # - cat address.txt
 
@@ -98,6 +98,12 @@ after_success:
  # # Upload to WeTransfer
  # - npm install --save @wetransfer/js-sdk
  # - export BUILD_OUTPUT_URL=`node ./.travis/utils/runUpload.js`
+  - chmod +x discord.sh
+  - ./discord.sh success $WEBHOOK_URL $apk_address
+  
+after_failure:
+  - chmod +x discord.sh
+  - ./discord.sh failure $WEBHOOK_URL
 
 
 
