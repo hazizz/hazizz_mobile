@@ -15,7 +15,7 @@
 
 
     <application
-        android:name=".Application"
+        android:name=".App"
         android:label="Hazizz Mobile"
         android:icon="@mipmap/ic_launcher">
 

@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:android_alarm_manager/android_alarm_manager.dart';
+//import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/services.dart';
 
 import 'dart:async';
@@ -46,7 +46,7 @@ void _alarmManagerCallbackDispatcher() {
   _channel.invokeMethod<void>('AlarmService.initialized');
 }
 
-class HazizzAlarmManager extends AndroidAlarmManager{
+class HazizzAlarmManager { //extends AndroidAlarmManager{
 
   static const String _channelName = 'plugins.flutter.io/android_alarm_manager';
   static const MethodChannel _channel = MethodChannel(_channelName, JSONMethodCodec());

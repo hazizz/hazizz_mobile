@@ -14,9 +14,9 @@ class Connection{
       if (result == ConnectivityResult.mobile || result == ConnectivityResult.wifi) {
         // hasConnection = true;
         print("log: connection: available");
-        for(Function f in listeners){
-          f();
-        }
+        listeners.forEach((k,v) => v());
+
+
         listeners.clear();
 
 
@@ -29,10 +29,16 @@ class Connection{
     });
   }
 
-  static List<Function> listeners = List();
+  static Map<String, Function> listeners = Map();
 
-  static void addConnectionOnlineListener(Function listener){
-    listeners.add(listener);
+  static void addConnectionOnlineListener(Function listener, String identifier){
+    print("log: about to add listener: ${identifier}");
+
+  //  listeners.
+    listeners[identifier] = listener;
+  //  listeners.add(listener);
+    print("log: added listener: ${listeners}");
+
   }
 
 

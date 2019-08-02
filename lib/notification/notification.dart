@@ -1,14 +1,34 @@
-import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:workmanager/workmanager.dart';
 
 import '../request_sender.dart';
 import '../hazizz_alarm_manager.dart';
 import '../hazizz_localizations.dart';
 import '../hazizz_response.dart';
+
+
+
+
+void callbackDispatcher2() {
+  Workmanager.executeTask((backgroundTask) {
+    print("log: work manager: fired: keep");
+   // HazizzNotification.showHazizzNotification();
+    return Future.value(true);
+  });
+}
+
+void callbackDispatcher() {
+  Workmanager.executeTask((backgroundTask)  async {
+    print("log: work manager: fired");
+    await HazizzNotification.showHazizzNotification();
+    print("log: work manager: fired2");
+    return Future.value(true);
+  });
+}
 
 class HazizzNotification{
 
@@ -57,6 +77,10 @@ class HazizzNotification{
     }
   }
   */
+
+
+
+
 
   static Future showHazizzNotification() async {
     print("log: no its works1");
@@ -112,6 +136,19 @@ class HazizzNotification{
     }
   }
 
+  /*
+  static void callbackDispatcher() {
+    Workmanager.executeTask((backgroundTask)  {
+      print("log: work manager: fired");
+      showHazizzNotification();
+      print("log: work manager: fired2");
+      return Future.value(true);
+    });
+  }
+  */
+
+
+
   static const int tasksTomorrowNotificationId = 5587346431;
   static const int classesNotificationId = 5587346432;
 
@@ -120,11 +157,38 @@ class HazizzNotification{
     DateTime now = DateTime.now();
     DateTime dateTime = DateTime(now.year, now.month, now.day, timeOfDay.hour, timeOfDay.minute);
 
+
+
+
+
+
+    Workmanager.initialize(
+      callbackDispatcher, // The top level function, aka Flutter entry point
+      isInDebugMode: true // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
+    );
+
+    Workmanager.cancelByUniqueName("1");
+
+
+
+    Workmanager.registerPeriodicTask(
+      "1",  // unique name
+      "simpleTask", // this goes to the callback
+      existingWorkPolicy: ExistingWorkPolicy.keep,
+      backoffPolicy: BackoffPolicy.linear,
+      frequency: Duration(hours: 24),
+      initialDelay: dateTime.difference(DateTime.now()),
+    );
+
+
+
    // AndroidAlarmManager()
+    /*
     bool p = await AndroidAlarmManager.periodic(
         const Duration(hours: 24, minutes: 0, ), tasksTomorrowNotificationId, showHazizzNotification,
         startAt: dateTime, rescheduleOnReboot: true, exact: true, wakeup: true);
-    print("AndroidAlarmManager.periodic has been set successfully: $p");
+    */
+    print("AndroidAlarmManager.periodic has been set successfully: ");
     setNotificationTime(timeOfDay);
     print("log: alarm manager is set : ${timeOfDay.hour}.${timeOfDay.minute}");
   }

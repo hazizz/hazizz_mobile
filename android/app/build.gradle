@@ -83,3 +83,20 @@ dependencies {
 
 apply plugin: 'io.fabric'
 apply plugin: 'com.google.gms.google-services'
+
+configurations.all {
+
+    exclude group: 'com.google.guava', module: 'listenablefuture'
+    exclude group: 'com.google.guava', module: 'failureaccess'
+
+    resolutionStrategy {
+        eachDependency { details ->
+            if('guava' == details.requested.name) {
+                details.useVersion '27.0-android'
+            }
+        }
+    }
+}
+
+
+

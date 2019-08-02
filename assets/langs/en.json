@@ -275,6 +275,17 @@
     "go_back"
     : "Back",
 
+    "cancel"
+    : "Cancel",
+
+    "next"
+    : "Next",
+
+    "skip"
+    : "Skip",
+
+    "or"
+    : "Or",
 
     "reply"
     : "Reply",

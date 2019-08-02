@@ -7,6 +7,7 @@ import 'package:dio/dio.dart';
 import 'HttpMethod.dart';
 
 import 'communication/connection.dart';
+import 'communication/errors.dart';
 import 'communication/requests/request_collection.dart';
 import 'hazizz_response.dart';
 
@@ -238,7 +239,7 @@ class RequestSender{
         hazizzResponse = HazizzResponse.onSuccess(response: response, request: request);
         print("log: request sent: ${request.toString()}");
       }else{
-       // throw DioError(type: D);
+        throw noConnectionError;
       }
     }on DioError catch(error) {
       print("log: error damn");

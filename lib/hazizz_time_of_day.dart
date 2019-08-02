@@ -25,7 +25,24 @@ class HazizzTimeOfDay extends TimeOfDay{
   }
 
 
-  factory HazizzTimeOfDay.now() { return TimeOfDay.now(); }
+  Duration compare(HazizzTimeOfDay other){
+
+    int minutesDifference = other.inMinutes() - this.inMinutes();
+    Duration inDuration = Duration(minutes: minutesDifference);
+
+    return inDuration;
+  }
+
+
+//  factory HazizzTimeOfDay.now() { return TimeOfDay.now(); }
+
+  static now() {
+    var t = TimeOfDay.now(); 
+    
+    return HazizzTimeOfDay(hour: t.hour, minute: t.minute);
+    
+    
+  }
 
 
   @override

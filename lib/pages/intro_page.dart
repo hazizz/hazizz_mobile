@@ -3,7 +3,7 @@ import 'package:mobile/widgets/google_sign_in_widget.dart';
 import 'package:mobile/widgets/kreta_login_widget.dart';
 import 'package:mobile/widgets/login_widget.dart';
 import 'package:mobile/widgets/registration_widget.dart';
-
+import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/custom/hazizz_tab_bar_view.dart';
 import 'package:mobile/custom/hazizz_tab_controller.dart';
 import '../hazizz_localizations.dart';
@@ -77,9 +77,9 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
                   color: Colors.blue,
                   boxShadow: [
                     BoxShadow(
-                      spreadRadius: 4,
+                      spreadRadius: 6,
                       color: Colors.grey,
-                      blurRadius: 60.0,
+                      blurRadius: 50.0,
                     ),
                   ]
               ),
@@ -107,12 +107,12 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
                 // shape: BoxShape.circle, // BoxShape.circle or BoxShape.retangle
                   gradient: LinearGradient(colors: [decorColor1, decorColor2 ]),
                   // backgroundBlendMode: BlendMode.colorBurn,
-                  color: Colors.blue,
+                 // color: Colors.blue,
                   boxShadow: [
                     BoxShadow(
-                      spreadRadius: 4,
+                      spreadRadius: 6,
                       color: Colors.grey,
-                      blurRadius: 60.0,
+                      blurRadius: 50.0,
                     ),
                   ]
               ),
@@ -124,23 +124,6 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
         ),
       );
     }
-
-
-    /*
-    return Transform(  // Transform widget
-      transform: Matrix4.identity()
-        ..setEntry(3, 2, 0.001) // perspective
-        ..rotateX(0)
-        ..rotateY(0),
-      alignment: FractionalOffset.center,
-      child: _defaultApp(context),   // <<< set your widget here
-    );
-    */
-
-
-  //  MediaQuery.of(context).
-
-
 
     EdgeInsets padding = MediaQuery.of(context).padding;
     double height = MediaQuery.of(context).size.height;
@@ -165,8 +148,6 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
       }
       _counter++;
 
-
-
       if(withSingleChildScrollView == true){
         return Stack(
           //  fit: StackFit.,
@@ -182,17 +163,6 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
                   ),
                 ),
               ),
-              /*
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-              //  crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  Spacer(),
-                  decorBackground2
-                ],
-              ),
-             */
-              // decorBackground2,
               SingleChildScrollView(
                   child: content
               )
@@ -214,23 +184,10 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
                 ),
               ),
             ),
-            /*
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-              //  crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  Spacer(),
-                  decorBackground2
-                ],
-              ),
-             */
-            // decorBackground2,
              content
-
           ]
       );
     }
-
 
     slides = [
       pageGenerator(
@@ -250,7 +207,7 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
               Positioned(
                 right: 4,
                 bottom: 4,
-                child: FlatButton(child: Text("NEXT"),
+                child: FlatButton(child: Text(locText(context, key: "next").toUpperCase()),
                   onPressed: (){
                     _tabController.animateTo(_tabController.index+1, curve: Curves.linear, duration: Duration(milliseconds:  2000));
                   },
@@ -268,11 +225,17 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
           child: Column(
             children: <Widget>[
               RegistrationWidget(),
-              Text("OR"),
-              GoogleSignInButtonWidget(
-                onSuccess: (){
-                _tabController.animateTo(_tabController.index+1,  duration: Duration(milliseconds:  2000));
-              },),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Text(locText(context, key: "or").toUpperCase()),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10.0),
+                child: GoogleSignInButtonWidget(
+                  onSuccess: (){
+                  _tabController.animateTo(_tabController.index+1,  duration: Duration(milliseconds:  2000));
+                },),
+              ),
             ],
           ),
         ),
@@ -295,12 +258,14 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
                       child:
                       Row(
                         children: <Widget>[
-                          FlatButton(child: Text("SKIP"),
-                            onPressed: (){
-                              Navigator.pop(context);
+                          FlatButton(child: Text(locText(context, key: "skip").toUpperCase()),
+                            onPressed: () async {
+                              if(await showIntroCancelDialog(context)){
+                                Navigator.pop(context);
+                              }
                             },
                           ),
-                          FlatButton(child: Text("NEXT"),
+                          FlatButton(child: Text(locText(context, key: "next").toUpperCase()),
                             onPressed: (){
                               _tabController.animateTo(_tabController.index+1,duration: Duration(milliseconds: 4000));
                             },
@@ -312,8 +277,6 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
               ),
             ),
           ),
-      //  withSingleChildScrollView: true
-
       ),
 
       pageGenerator(
@@ -327,9 +290,11 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
                   bottom: 10,
                   right: 4,
                   child:
-                  FlatButton(child: Text("SKIP"),
-                    onPressed: (){
-                      Navigator.pop(context);
+                  FlatButton(child: Text(locText(context, key:  "skip").toUpperCase()),
+                    onPressed: () async {
+                      if(await showIntroCancelDialog(context)){
+                        Navigator.pop(context);
+                      }
                     },
                   ),
                 )
@@ -341,17 +306,47 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
     ];
 
 
-    return Scaffold(
-     //   resizeToAvoidBottomPadding: false,
-      body: SafeArea(
-        child: HazizzTabBarView(
-          physics: AlwaysScrollableScrollPhysics(),
-          controller: _tabController,
-          children: slides,
+    return WillPopScope(
+      onWillPop: _onWillPop,
+
+      child: Scaffold(
+       //   resizeToAvoidBottomPadding: false,
+        body: SafeArea(
+          child: HazizzTabBarView(
+            physics: AlwaysScrollableScrollPhysics(),
+            controller: _tabController,
+            children: slides,
+          ),
         ),
       ),
     );
   }
+
+
+  Future<bool> _onWillPop() async {
+    return await false;
+    /*
+    return showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text('Are you sure?'),
+        content: new Text('Do you want to exit an App'),
+        actions: <Widget>[
+          new FlatButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: new Text('No'),
+          ),
+          new FlatButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: new Text('Yes'),
+          ),
+        ],
+      ),
+    ) ?? false;
+    */
+  }
+
+
 
   @override
   // TODO: implement wantKeepAlive

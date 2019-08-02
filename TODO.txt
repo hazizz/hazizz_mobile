@@ -1,3 +1,6 @@
 TODO:
 
 - automata refresh token
+- órarend eventek
+- frissítés idejének kiírása
+

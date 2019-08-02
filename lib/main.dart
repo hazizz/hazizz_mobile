@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:easy_localization/easy_localization_provider.dart';
 
 import 'package:flutter/material.dart';
@@ -98,7 +97,7 @@ void main() async{
   };
 
 
-  await AndroidAlarmManager.initialize();
+  //await AndroidAlarmManager.initialize();
 
   themeData = await HazizzTheme.getCurrentTheme();
 

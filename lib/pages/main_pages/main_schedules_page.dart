@@ -31,6 +31,8 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
   TabController _tabController;
   int _currentIndex;
 
+  int currentDayIndex;
+
   List<SchedulesTabPage> _tabList = [];
 
   List<BottomNavigationBarItem> bottomNavBarItems = [];
@@ -39,8 +41,8 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
 
   @override
   void initState() {
-
-    _currentIndex = MainTabBlocs().schedulesBloc.currentDayIndex;
+    currentDayIndex = MainTabBlocs().schedulesBloc.currentDayIndex;
+    _currentIndex = currentDayIndex;
 
     print("created schedules PAge");
 
@@ -82,21 +84,29 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
 
                           _tabList.clear();
                           bottomNavBarItems.clear();
+                          int i = 0;
                           for(String dayIndex in schedule.keys){
+                            i++;
                             if( schedule[dayIndex].isNotEmpty) {
+                              Color currentDayColor;
+                              if(i == currentDayIndex ){
+                                currentDayColor = Colors.blue;
+                              }
+
                               String dayName = locText(context, key: "days_$dayIndex");
                               String dayMName = locText(context, key: "days_m_$dayIndex");
                               _tabList.add(SchedulesTabPage(classes: schedule[dayIndex]));
                               bottomNavBarItems.add(BottomNavigationBarItem(
+
                                 title: Container(),
                                 icon: Padding(
                                   padding: const EdgeInsets.only(bottom: 4.0),
                                   child: Text(dayMName,
-                                    style: TextStyle(color: Colors.red, fontSize: 22, fontWeight: FontWeight.w500, fontFamily: "Montserrat"),
+                                    style: TextStyle(color: Colors.red, fontSize: 22, fontWeight: FontWeight.w500, fontFamily: "Montserrat", backgroundColor: currentDayColor),
                                   ),
                                 ),
                                 activeIcon: Text(dayName,
-                                  style: TextStyle(color: Colors.red, fontSize: 28, fontWeight: FontWeight.bold),
+                                  style: TextStyle(color: Colors.red, fontSize: 28, fontWeight: FontWeight.bold, backgroundColor: currentDayColor),
                                 ),
                               ));
                             }

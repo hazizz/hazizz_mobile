@@ -23,13 +23,13 @@ import '../hazizz_theme.dart';
 
 class HazizzDialog extends Dialog{
 
-  static final double buttonBarHeight = 50.0;
+  static const double buttonBarHeight = 48.0;
 
-  Container header, content;
+  final Container header, content;
 
-  Row actionButtons;
+  final Row actionButtons;
 
-  double height, width;
+  final double height, width;
 
   HazizzDialog({this.header, this.content, this.actionButtons,@required this.height,@required this.width}){
   }
@@ -77,7 +77,6 @@ class HazizzDialog extends Dialog{
                 //  SizedBox(height: 20.0),
 
                 Row(
-
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
@@ -554,129 +553,6 @@ Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
       builder: (BuildContext context) {
         print("grade: ${grade.grade}");
 
-        /*
-        Dialog(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-            child: Container(
-                width: 1000,
-                height: 310.0,
-                decoration:
-                BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
-                child: Column(
-                  children: <Widget>[
-                    Stack(
-                      children: <Widget>[
-                        // Container(height: 100.0),
-                        Container(
-                          height: 64.0,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10.0),
-                                topRight: Radius.circular(10.0),
-                              ),
-                              color: Theme.of(context).primaryColor
-                          ),
-                        ),
-                        Center(
-                          child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: CircleAvatar(
-                                child: Column(
-                                    children: [
-                                      Text(
-                                        grade.grade == null ? "" : grade.grade,
-                                        style: TextStyle(
-                                            fontSize: 50,
-                                            color: Colors.black
-                                        ),
-                                      ),
-                                      Text(
-                                        grade.weight == null ? "100%" : "${grade.weight}%",
-                                        style: TextStyle(
-                                            fontSize: 22,
-                                            color: Colors.black
-                                        ),
-                                      ),
-                                    ]
-                                ),
-                                backgroundColor: grade.color,
-                                radius: 40,
-                              )
-                          ),
-                        ),
-
-                      ],
-                    ),
-                    //  SizedBox(height: 20.0),
-
-                    Padding(
-                      padding: const EdgeInsets.only(left: 30, right: 30),
-                      child: Column(
-                          children:
-                          [
-
-                            Center(child: Text(grade.subject == null ? "" : (grade.subject), style: TextStyle(fontSize: 20)) ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text("topic: ", style: TextStyle(fontSize: 20)),
-                                Text(grade.topic == null ? "" : (grade.topic), style: TextStyle(fontSize: 20)),
-                              ],
-                            ),
-                            space,
-
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-                              children: <Widget>[
-                                Text("grade type: ", style: TextStyle(fontSize: 20)),
-                                Text(grade.gradeType == null ? "" : grade.gradeType, style: TextStyle(fontSize: 20)),
-                              ],
-                            ),
-                            space,
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text("date: ", style: TextStyle(fontSize: 20),),
-                                Text(grade.date == null ? "" : hazizzShowDateFormat(grade.date), style: TextStyle(fontSize: 20)),
-                              ],
-                            ),
-                            space,
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: <Widget>[
-
-                              ],
-                            ),
-                          ]
-                      ),
-                    ),
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(right: 10),
-                            child: FlatButton(
-                                child: Center(
-                                  child: Text('OK',
-                                    style: TextStyle(
-                                        fontFamily: 'Montserrat',
-                                        fontSize: 14.0,
-                                        color: Colors.teal),
-                                  ),
-                                ),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                color: Colors.transparent
-                            ),
-                          ),
-                        ]
-                    ),
-                  ],
-                )));
-        */
-
          return HazizzDialog(
             header: Container(
               color: Theme.of(context).dialogBackgroundColor,
@@ -688,16 +564,6 @@ Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
                     height: 62.0,
                       color: Theme.of(context).primaryColor
 
-                    //  width: 50,
-                      /*
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10.0),
-                          topRight: Radius.circular(10.0),
-                        ),
-                        color: Theme.of(context).primaryColor
-                    ),
-                    */
                   ),
                   Center(
                     child: Padding(
@@ -798,128 +664,6 @@ Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
             ),
             height: 220,
             width: 200);
-
-
-        return Dialog(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-            child: Container(
-                width: 1000,
-                height: 310.0,
-                decoration:
-                BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
-                child: Column(
-                  children: <Widget>[
-                    Stack(
-                      children: <Widget>[
-                        // Container(height: 100.0),
-                        Container(
-                          height: 64.0,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10.0),
-                                topRight: Radius.circular(10.0),
-                              ),
-                              color: Theme.of(context).primaryColor
-                          ),
-                        ),
-                        Center(
-                          child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: CircleAvatar(
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      grade.grade == null ? "" : grade.grade,
-                                      style: TextStyle(
-                                        fontSize: 50,
-                                        color: Colors.black
-                                      ),
-                                    ),
-                                    Text(
-                                      grade.weight == null ? "100%" : "${grade.weight}%",
-                                      style: TextStyle(
-                                          fontSize: 22,
-                                          color: Colors.black
-                                      ),
-                                    ),
-                                  ]
-                                ),
-                                backgroundColor: grade.color,
-                                radius: 40,
-                              )
-                          ),
-                        ),
-
-                      ],
-                    ),
-                    //  SizedBox(height: 20.0),
-
-                    Padding(
-                      padding: const EdgeInsets.only(left: 30, right: 30),
-                      child: Column(
-                        children:
-                        [
-
-                          Center(child: Text(grade.subject == null ? "" : (grade.subject), style: TextStyle(fontSize: 20)) ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text("topic: ", style: TextStyle(fontSize: 20)),
-                              Text(grade.topic == null ? "" : (grade.topic), style: TextStyle(fontSize: 20)),
-                            ],
-                          ),
-                          space,
-
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-                            children: <Widget>[
-                              Text("grade type: ", style: TextStyle(fontSize: 20)),
-                              Text(grade.gradeType == null ? "" : grade.gradeType, style: TextStyle(fontSize: 20)),
-                            ],
-                          ),
-                          space,
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text("date: ", style: TextStyle(fontSize: 20),),
-                              Text(grade.date == null ? "" : hazizzShowDateFormat(grade.date), style: TextStyle(fontSize: 20)),
-                            ],
-                          ),
-                          space,
-                          Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-
-                          ],
-                        ),
-                        ]
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 10),
-                          child: FlatButton(
-                            child: Center(
-                              child: Text('OK',
-                                style: TextStyle(
-                                    fontFamily: 'Montserrat',
-                                    fontSize: 14.0,
-                                    color: Colors.teal),
-                              ),
-                            ),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            color: Colors.transparent
-                          ),
-                        ),
-                      ]
-                    ),
-                  ],
-                )));
       });
 }
 
@@ -988,85 +732,6 @@ Future<bool> showInviteDialog(context, {@required int groupId}) async {
         return h;
       }
   );
-
-  return showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        return Dialog(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-            child: Container(
-                height: 130.0,
-                width: 200.0,
-                decoration:
-                BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
-                child: Column(
-                  children: <Widget>[
-                    Stack(
-                      children: <Widget>[
-                        // Container(height: 100.0),
-                        Container(
-                          height: 80.0,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10.0),
-                                topRight: Radius.circular(10.0),
-                              ),
-                              color: Theme.of(context).primaryColor
-                          ),
-                        ),
-                        Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Text(inviteLink)
-                        ),
-
-                      ],
-                    ),
-                    //  SizedBox(height: 20.0),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        FlatButton(
-                            child: Center(
-                              child: Text(
-                                'CANCEL',
-                                style: TextStyle(
-                                    fontFamily: 'Montserrat',
-                                    fontSize: 14.0,
-                                    color: Colors.teal),
-                              ),
-                            ),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            color: Colors.transparent
-                        ),
-                        FlatButton(
-                            child: Center(
-                              child: Text(
-                                'SHARE',
-                                style: TextStyle(
-                                    fontFamily: 'Montserrat',
-                                    fontSize: 14.0,
-                                    color: HazizzTheme.warningColor
-                                ),
-                              ),
-                            ),
-                            onPressed: () {
-                              print("share");
-
-                              Share.share('check out my website $inviteLink');
-                             // Navigator.of(context).pop();
-                             // Navigator.of(context).pop();
-                            },
-                            color: Colors.transparent
-                        ),
-                      ],
-                    )
-                  ],
-                )));
-      });
 }
 
 
@@ -1314,7 +979,86 @@ Future<bool> showClassDialo2g(context, {@required PojoClass pojoClass}) async {
 }
 
 
+Future<bool> showIntroCancelDialog(context) async {
+  Widget space = SizedBox(height: 5);
 
+  bool success = false;
+
+  double height = 80;
+
+
+
+  Container(
+    height: height,
+    decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(10.0),
+          topRight: Radius.circular(10.0),
+        ),
+        color: HazizzTheme.warningColor),
+    child: Padding(
+      padding: EdgeInsets.all(10),
+      child: Text(
+        "Are you sure you want to delete this task?",
+        style: TextStyle(
+
+          fontFamily: 'Quicksand',
+          fontSize: 20.0,
+          fontWeight: FontWeight.w300,
+        ),
+      ),
+    ),
+  );
+
+
+  HazizzDialog hazizzDialog = HazizzDialog(
+      header:
+      Container(
+        height: height,
+        color: Theme.of(context).primaryColor,
+        child: Padding(
+          padding: const EdgeInsets.all(5),
+          child:
+          Text("Krétába késöbbb is be tudsz jelentkezni a beállitások menűben",
+              style: TextStyle(
+                fontFamily: 'Quicksand',
+                fontSize: 20.0,
+                fontWeight: FontWeight.w300,
+              )
+          ),
+
+
+      ),
+      ),
+      content: Container(),
+      actionButtons:
+      Row(
+        children: <Widget>[
+          FlatButton(
+            child: Text("MÉGSE"),
+            onPressed: (){
+              Navigator.pop(context) ;
+            },
+          ),
+          FlatButton(
+            child: Text("OK"),
+            onPressed: (){
+              success = true;
+              Navigator.pop(context) ;
+            },
+          )
+        ],
+      ),
+      height: height, width: 200);
+
+  await showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return hazizzDialog;
+      });
+  return success;
+}
 
 
 

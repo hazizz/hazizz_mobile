@@ -161,11 +161,13 @@ class TextFormBloc extends Bloc<HFormEvent, HFormState> {
       yield TextFormUnlocked();
     }
 
-    if(event is TextFormSetEvent){
+    /*
+    if(event is TextFormSetEvent) {
       lastText = event.text;
       print("title is set: $lastText");
       yield TextFormSetState(text: event.text);
     }
+      */
 
     else if(!isLocked){
       if (event is TextFormValidate) {

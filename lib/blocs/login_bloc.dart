@@ -156,7 +156,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
               MainTabBlocs().initialize();
               authenticationBloc.dispatch(LoggedIn());
               yield LoginSuccessState();
-              HazizzNotification.scheduleNotificationAlarmManager(await HazizzNotification.getNotificationTime());
+            //  HazizzNotification.scheduleNotificationAlarmManager(await HazizzNotification.getNotificationTime());
             }
 
           }on HResponseError catch(e) {

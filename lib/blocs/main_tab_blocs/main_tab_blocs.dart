@@ -1,10 +1,13 @@
 import 'package:bloc/bloc.dart';
+import 'package:mobile/communication/connection.dart';
+import 'package:mobile/communication/errors.dart';
 //import 'package:flutter/material.dart';
 import 'package:mobile/communication/pojos/PojoClass.dart';
 import 'package:mobile/communication/pojos/PojoGrades.dart';
 import 'package:mobile/communication/pojos/PojoSchedules.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
+import 'package:mobile/dummy/schedule_dummy.dart';
 import 'package:mobile/managers/preference_services.dart';
 
 import '../../request_sender.dart';
@@ -12,6 +15,7 @@ import '../../hazizz_response.dart';
 import '../../hazizz_time_of_day.dart';
 import '../request_event.dart';
 import '../response_states.dart';
+import '../schedule_event_bloc.dart';
 
 class MainTasksBloc extends Bloc<HEvent, HState> {
   List<PojoTask> tasks;
@@ -41,7 +45,17 @@ class MainTasksBloc extends Bloc<HEvent, HState> {
         }
         else if(hazizzResponse.isError){
           print("log: response is List<PojoTask>");
+
+
+          if(hazizzResponse.dioError == noConnectionError){
+            Connection.addConnectionOnlineListener((){
+              this.dispatch(FetchData());
+            },
+            "tasks_fetch"
+            );
+          }
           yield ResponseError(error: hazizzResponse.pojoError);
+
         }
       } on Exception catch(e){
         print("log: Exception: ${e.toString()}");
@@ -53,6 +67,14 @@ class MainTasksBloc extends Bloc<HEvent, HState> {
 
 class MainSchedulesBloc extends Bloc<HEvent, HState> {
 
+  ScheduleEventBloc scheduleEventBloc;
+
+
+  MainSchedulesBloc(){
+    scheduleEventBloc = ScheduleEventBloc();
+  }
+
+
   PojoSchedules classes;
 
   int currentDayIndex = DateTime.now().weekday-1;
@@ -62,70 +84,58 @@ class MainSchedulesBloc extends Bloc<HEvent, HState> {
 
   @override
   Stream<HState> mapEventToState(HEvent event) async* {
-
-
-    int timeOfDayToMinutes(HazizzTimeOfDay timeOfDay){
-      return timeOfDay.minute + timeOfDay.hour * 60;
-    }
-
-    HazizzTimeOfDay minutesToTimeOfDay(int minutes){
-
-      int hour = minutes ~/ 60;
-      int minute = minutes % 60;
-
-      return HazizzTimeOfDay(hour: hour, minute: minute);
-    }
-
     if (event is FetchData) {
       try {
         yield ResponseWaiting();
         HazizzResponse hazizzResponse = await RequestSender().getResponse(new DummyKretaGetSchedules());
 
-        if(hazizzResponse.isSuccessful){
-          classes = hazizzResponse.convertedData;
-          print("log: oy133");
-          yield ResponseDataLoaded(data: classes);
+        if(hazizzResponse.isSuccessful || true ){
+       //   classes = hazizzResponse.convertedData;
+          print("log: opsie: 0");
+
+          classes = classesDummy;
 
 
+          print("log: opsie: 0");
+
+          scheduleEventBloc.dispatch(ScheduleEventUpdateClassesEvent());
+
+
+          print("log: opsie: 1");
 
           List<PojoClass> todayClasses = classes.classes[currentDayIndex.toString()];
 
+          print("log: opsie: 2");
           HazizzTimeOfDay now = HazizzTimeOfDay.now();
+          print("log: opsie: 3");
 
 
           HazizzTimeOfDay closestBefore;
           HazizzTimeOfDay closestAfter;
 
-          for(int i = 0; i < todayClasses.length; i++){
-            PojoClass pojoClass = todayClasses[i];
 
-            if(i == 0){
-              // még nem történt meg
-              if(pojoClass.startOfClass > now){
-                // első óra még nem indult el
-              }else if(pojoClass.startOfClass < now && pojoClass.endOfClass > now){
-                // első óra már el indult, de nem ért végett
-              }
-            }
+          print("log: oy1334: todayClasses.length: ${todayClasses.length}");
 
-            else if(i-1 == todayClasses.length){
-              if(pojoClass.startOfClass > now){
-                // utlsó óra még nem indult el
-              }else if(pojoClass.startOfClass < now && pojoClass.endOfClass > now){
-                // utlsó óra már el indult, de nem ért végett
-              }else{
-                // az utlsó órának vége
-              }
-            }
-            else{
 
-              // itt már error mentesen lehet az elöző és a következő órához hasónlitani
-            }
+          yield ResponseDataLoaded(data: classes);
 
-          }
+          print("log: oy133");
+
+
         }
         else if(hazizzResponse.isError){
+
+          if(hazizzResponse.dioError == noConnectionError){
+            print("log: noConnectionError22");
+            Connection.addConnectionOnlineListener((){
+              this.dispatch(FetchData());
+            },
+            "schedule_fetch"
+            );
+          }
           yield ResponseError(error: hazizzResponse.pojoError);
+
+
         }
       } on Exception catch(e){
         print("log: Exception: ${e.toString()}");
@@ -149,7 +159,8 @@ class MainGradesBloc extends Bloc<HEvent, HState> {
             print("log: am0 i here?");
 
         HazizzResponse hazizzResponse = await RequestSender().getResponse(new DummyKretaGetGrades());
-        
+
+        print("log: hazizzResponse: ${hazizzResponse.dioError}");
         
         /*
         PojoGrades responseData = new PojoGrades(
@@ -178,7 +189,13 @@ class MainGradesBloc extends Bloc<HEvent, HState> {
           yield ResponseDataLoaded(data: grades);
         }
         else if(hazizzResponse.isError){
-       //   yield ResponseError(error: responseData);
+          if(hazizzResponse.dioError == noConnectionError){
+            Connection.addConnectionOnlineListener((){
+              this.dispatch(FetchData());
+            },
+            "grades_fetch"
+            );
+          }
         }
       } on Exception catch(e){
         print("log: Exception: ${e.toString()}");

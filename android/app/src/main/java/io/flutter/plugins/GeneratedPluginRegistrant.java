@@ -14,6 +14,7 @@ import io.flutter.plugins.googlesignin.GoogleSignInPlugin;
 import com.dfa.introslider.IntroSliderPlugin;
 import io.flutter.plugins.share.SharePlugin;
 import io.flutter.plugins.sharedpreferences.SharedPreferencesPlugin;
+import be.tramckrijte.workmanager.WorkmanagerPlugin;
 
 /**
  * Generated file. Do not edit.
@@ -36,6 +37,7 @@ public final class GeneratedPluginRegistrant {
     IntroSliderPlugin.registerWith(registry.registrarFor("com.dfa.introslider.IntroSliderPlugin"));
     SharePlugin.registerWith(registry.registrarFor("io.flutter.plugins.share.SharePlugin"));
     SharedPreferencesPlugin.registerWith(registry.registrarFor("io.flutter.plugins.sharedpreferences.SharedPreferencesPlugin"));
+    WorkmanagerPlugin.registerWith(registry.registrarFor("be.tramckrijte.workmanager.WorkmanagerPlugin"));
   }
 
   private static boolean alreadyRegisteredWith(PluginRegistry registry) {

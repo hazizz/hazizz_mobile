@@ -287,6 +287,17 @@
     "go_back"
     : "Vissza",
 
+    "cancel"
+    : "Mégsem",
+
+    "next"
+    : "Következő",
+
+    "skip"
+    : "Kihagyás",
+
+    "or"
+    : "vagy",
 
     "reply"
     : "Válasz",
