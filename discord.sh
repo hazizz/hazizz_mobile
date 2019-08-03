@@ -1,4 +1,5 @@
 #!/bin/bash
+# https://github.com/DiscordHooks/travis-ci-discord-webhook
 
 if [ -z "$2" ]; then
   echo -e "WARNING!!\nYou need to pass the WEBHOOK_URL environment variable as the second argument to this script.\nFor details & guide, visit: https://github.com/DiscordHooks/travis-ci-discord-webhook" && exit
@@ -9,33 +10,31 @@ echo -e "[Webhook]: Sending webhook to Discord...\\n";
 case $1 in
   "success" )
     EMBED_COLOR=3066993
-    STATUS_MESSAGE="Successful build! Downloading link: $3"
-    AVATAR="https://travis-ci.org/images/logos/TravisCI-Mascot-blue.png"
+    STATUS = "Successful"
+    STATUS_MESSAGE="Successful build!  Downloading link: $3"
+    AVATAR="https://travis-ci.org/images/logos/TravisCI-Mascot-2.png"
     ;;
 
   "failure" )
     EMBED_COLOR=15158332
-    STATUS_MESSAGE="Failed"
+    STATUS = "Failure"
+    STATUS_MESSAGE="Build failed"
     AVATAR="https://travis-ci.org/images/logos/TravisCI-Mascot-red.png"
     ;;
 
   * )
     EMBED_COLOR=0
+    STATUS = "Unknown"
     STATUS_MESSAGE="Status Unknown"
     AVATAR="https://travis-ci.org/images/logos/TravisCI-Mascot-1.png"
     ;;
 esac
 
-AUTHOR_NAME="$(git log -1 "$TRAVIS_COMMIT" --pretty="%aN")"
 COMMITTER_NAME="$(git log -1 "$TRAVIS_COMMIT" --pretty="%cN")"
 COMMIT_SUBJECT="$(git log -1 "$TRAVIS_COMMIT" --pretty="%s")"
 COMMIT_MESSAGE="$(git log -1 "$TRAVIS_COMMIT" --pretty="%b")" | sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g'
 
-if [ "$AUTHOR_NAME" == "$COMMITTER_NAME" ]; then
-  CREDITS="$AUTHOR_NAME authored & committed"
-else
-  CREDITS="$AUTHOR_NAME authored & $COMMITTER_NAME committed"
-fi
+CREDITS="$COMMITTER_NAME committed"
 
 if [[ $TRAVIS_PULL_REQUEST != false ]]; then
   URL="https://github.com/$TRAVIS_REPO_SLUG/pull/$TRAVIS_PULL_REQUEST"
@@ -45,12 +44,13 @@ fi
 
 TIMESTAMP=$(date --utc +%FT%TZ)
 WEBHOOK_DATA='{
-  "username": "",
-  "avatar_url": "https://travis-ci.org/images/logos/TravisCI-Mascot-1.png",
+  "username": "[BOT] Flutter deployer",
+  "avatar_url": "https://i.ibb.co/LPyJH8c/default3.jpg",
+  "content": "'"$STATUS_MESSAGE"'",
   "embeds": [ {
     "color": '$EMBED_COLOR',
     "author": {
-      "name": "Job #'"$TRAVIS_JOB_NUMBER"' (Build #'"$TRAVIS_BUILD_NUMBER"') '"$STATUS_MESSAGE"' - '"$TRAVIS_REPO_SLUG"'",
+      "name": "Job #'"$TRAVIS_JOB_NUMBER"' (Build #'"$TRAVIS_BUILD_NUMBER"') - '"$TRAVIS_REPO_SLUG"'",
       "url": "'"$3"'",
       "icon_url": "'$AVATAR'"
     },
@@ -73,5 +73,5 @@ WEBHOOK_DATA='{
   } ]
 }'
 
-(curl --fail --progress-bar -A "TravisCI-Webhook" -H Content-Type:application/json -H X-Author:k3rn31p4nic#8383 -d "${WEBHOOK_DATA//	/ }" "$2" \
+(curl --fail --progress-bar -A "TravisCI-Webhook" -H Content-Type:application/json -H X-Author:szepfejuede1#5173 -d "${WEBHOOK_DATA//	/ }" "$2" \
   && echo -e "\\n[Webhook]: Successfully sent the webhook.") || echo -e "\\n[Webhook]: Unable to send webhook."
