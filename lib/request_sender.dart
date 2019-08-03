@@ -10,6 +10,7 @@ import 'communication/connection.dart';
 import 'communication/errors.dart';
 import 'communication/requests/request_collection.dart';
 import 'hazizz_response.dart';
+import 'logger.dart';
 
 Future<HazizzResponse> getResponse(Request request)async{
   return await RequestSender().getResponse(request);
@@ -96,17 +97,20 @@ class RequestSender{
 
   Future<void> waitCooldown() async{
     dio.interceptors.requestLock.lock();
-    print("logtest: locked");
     await new Future.delayed(const Duration(milliseconds: 1000));
     dio.interceptors.requestLock.unlock();
   }
   void lock(){
     dio.lock();
     _isLocked = true;
+    logger.w("request_sender.dart: dio interceptors: locked");
+
   }
   void unlock(){
     dio.unlock();
     _isLocked = false;
+    logger.w("request_sender.dart: dio interceptors: UNlocked");
+
   }
   bool isLocked(){
     return _isLocked;
@@ -218,10 +222,10 @@ class RequestSender{
 
     HazizzResponse hazizzResponse;
 
-  //  hazizzResponse.request = request;
-
     Response response;
-    print("log: about to start sending request");
+
+    logger.i("request_sender.dart: about to start sending request");
+
     bool isConnected = await Connection.isOnline();
     try {
       if(isConnected) {
@@ -237,137 +241,18 @@ class RequestSender{
           response = await dio.delete(request.url, queryParameters: request.query, data: request.body, options: options);
         }
         hazizzResponse = HazizzResponse.onSuccess(response: response, request: request);
-        print("log: request sent: ${request.toString()}");
+       // print("log: request sent: ${request.toString()}");
+        logger.i("request_sender.dart: request sent: ${request.toString()}");
+
       }else{
+        logger.w("request_sender.dart: no connection");
         throw noConnectionError;
       }
     }on DioError catch(error) {
-      print("log: error damn");
+      logger.i("request_sender.dart: request error: ${request.toString()}");
+
       hazizzResponse = await HazizzResponse.onError(dioError: error, request: request);
     }
     return hazizzResponse;
   }
-
-
-  /*
-  Future<void> onPojoError2(PojoError pojoError, Request request) async{
-    if (true) {
-     // print("log: error response data: ${error.response.data}");
-     // PojoError pojoError = PojoError.fromJson(json.decode(error.response?.data));
-
-      if(pojoError.errorCode == 19){// to many requests
-        print("here iam");
-        stop();
-      }
-      else if(pojoError.errorCode == 18 || pojoError.errorCode == 17){// wrong token
-        // a requestet elmenteni hogy újra küldje
-        print("hey: Locked: ${isLocked()}");
-      if(!isLocked()) {
-          lock();
-          // elküldi újra ezt a requestet ami errort dobott
-          send(request);
-          print("hey2: username: ${await InfoCache.getMyUsername()}");
-          print("hey2: token: ${await TokenManager.getRefreshToken()}");
-
-          await tokenRequestSend(new CreateTokenWithRefresh(
-            b_username: await InfoCache.getMyUsername(),
-            b_refreshToken: await TokenManager.getRefreshToken(),
-            rh: ResponseHandler(
-              onSuccessful: (dynamic data) {
-                print("hey: got token reponse: ${data.token}");
-                unlock();
-              },
-              onError: (PojoError pojoError) {
-                unlock();
-
-              }
-            )
-          ));
-    }else{
-      send(request);
-    }
-    //  request.rh.onSuccessful();
-    }else if(pojoError.errorCode == 13 || pojoError.errorCode == 14
-    || pojoError.errorCode == 15){
-    // navigate to login/register page
-    }
-    https://github.com/hazizz/hazizz-mobile
-    print("log: response error: ${pojoError.toString()}");
-  //  throw new HResponseError(pojoError);
-    return pojoError;
-    //  return pojoError;
-    request.onError(pojoError);
-  }
-
-  //  return error.response;
-  }
-
-  Future<Response> send2(Request request) async{
-    Response response;
-    try {
-      if (request.httpMethod == HttpMethod.GET) {
-        options.headers = await request.buildHeader();
-        response = await dio.get(request.url, queryParameters: request.query, options: options);
-      }else if (request.httpMethod == HttpMethod.POST) {
-        options.headers = await request.buildHeader();
-        response =
-        await dio.post(request.url, queryParameters: request.query, data: request.body, options: options);
-      }else if (request.httpMethod == HttpMethod.DELETE) {
-        options.headers = await request.buildHeader();
-        response =
-        await dio.delete(request.url, queryParameters: request.query, data: request.body, options: options);
-      }
-    }on DioError catch(error){
-
-      if (error.response != null) {
-        print("log: error response data: ${error.response.data}");
-        PojoError pojoError = PojoError.fromJson(json.decode(error.response?.data));
-
-        if(pojoError.errorCode == 19){// to many requests
-          print("here iam");
-          stop();
-        }
-        else if(pojoError.errorCode == 18 || pojoError.errorCode == 17){// wrong token
-          // a requestet elmenteni hogy újra küldje
-          print("hey: Locked: ${isLocked()}");
-          if(!isLocked()) {
-            lock();
-            // elküldi újra ezt a requestet ami errort dobott
-            send(request);
-            print("hey2: username: ${await InfoCache.getMyUsername()}");
-            print("hey2: token: ${await TokenManager.getRefreshToken()}");
-
-            await tokenRequestSend(new CreateTokenWithRefresh(
-                b_username: await InfoCache.getMyUsername(),
-                b_refreshToken: await TokenManager.getRefreshToken(),
-                rh: ResponseHandler(
-                    onSuccessful: (dynamic data) {
-                      print("hey: got token reponse: ${data.token}");
-                      unlock();
-                    },
-                    onError: (PojoError pojoError) {
-                      unlock();
-                    }
-                )
-            ));
-          }else{
-            send(request);
-          }
-          //  request.rh.onSuccessful();
-        }else if(pojoError.errorCode == 13 || pojoError.errorCode == 14
-                || pojoError.errorCode == 15){
-          // navigate to login/register page
-        }
-        https://github.com/hazizz/hazizz-mobile
-        request.onError(pojoError);
-      }
-      return error.response;
-    }
-    request.onSuccessful(response);
-
-    print("reached");
-   // print("log: error response data: ${response.data}");
-    return response;
-  }
-  */
 }

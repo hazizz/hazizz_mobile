@@ -3,4 +3,5 @@ TODO:
 - automata refresh token
 - órarend eventek
 - frissítés idejének kiírása
+- dedikált screen a main tabeknek
 

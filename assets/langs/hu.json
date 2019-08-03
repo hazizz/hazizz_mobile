@@ -460,7 +460,7 @@
 
 
     "invite_link_info"
-    : "Küldd el diáktársaidnak ezt a linket hogy csatlakozzanak a",
+    : "Küldd el diáktársaidnak ezt a linket hogy csatlakozzanak a {} csoportba!",
 
 
     "invite_link_info_part2"
@@ -476,16 +476,7 @@
 
 
     "invite_to_group_text_title"
-    : "Házizz Droid: ",
-
-
-    "invite_to_group_text_part1"
-    : "Csatlakozz a ",
-
-
-    "invite_to_group_text_part2"
-    : " csoportba hogy megkapd a házi feladataidat",
-    
+    : "Házizz Mobile: Csatlakozz a {} csoportba hogy megkapd a házi feladataidat: \n{}",
 
 
     "passwordagain_fragment_register"

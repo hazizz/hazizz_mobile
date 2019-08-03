@@ -219,83 +219,86 @@ class _SettingsPage extends State<SettingsPage> with AutomaticKeepAliveClientMix
     
     
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.getTitle(context)),
-      ),
-      body: Container(
-        child: Column(
-          children: <Widget>[
-            ListTile(
-              title: Text(locText(context, key: "startPage")),
-              subtitle: Text("subbtitle"),
-              trailing: DropdownButton(
-
-                items: startPageItems,
-                onChanged: (dynamic newStartPageIndex) async {
-                  StartPageService.setStartPageIndex(newStartPageIndex);
-                  setState(() {
-                    currentStartPageItemIndex = newStartPageIndex;
-                  });
-                },
-                value: currentStartPageItemIndex,
-              ),
-            ),
-            Divider(),
-            ListTile(
-              onTap: () async {
-                print("huh2");
-                TimeOfDay newTime = await showTimePicker(
-                  context: context,
-
-                  initialTime: await HazizzNotification.getNotificationTime(),
-
-                );
-                if(newTime != null) {
-                  HazizzNotification.scheduleNotificationAlarmManager(newTime);
-                }
-              },
-              title: Text(locText(context, key: "set_time_for_notification")),
-              trailing: Text("time")
-            ),
-
-            ListTile(
-              title: Text(locText(context, key: "startPage")),
-              subtitle: Text("subbtitle"),
-              trailing: DropdownButton(
-
-                items: supportedLocaleItems,
-                onChanged: (dynamic selectedLocale) async {
-                //  StartPageService.setStartPageIndex(newStartPageIndex);
-                  print(selectedLocale);
-                  setState(() {
-                    currentLocale = selectedLocale;
-
-
-                    this.setState(() {
-                      var data = EasyLocalizationProvider.of(context).data;
-                      data.changeLocale(Locale(selectedLocale.toLowerCase()));
-                      print(Localizations.localeOf(context).languageCode);
-                    });
-
-
-                  });
-                },
-                value: currentLocale,
-              ),
-            ),
-
-            ListTile(
-              title: Text("go to app settings"),
-              subtitle: Text("subbtitle"),
-              onTap: () async {
-                await AppSettings.openAppSettings();
-              },
-            ),
-
-          ],
+    return Hero(
+      tag: "settings",
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.getTitle(context)),
         ),
-      )
+        body: Container(
+          child: Column(
+            children: <Widget>[
+              ListTile(
+                title: Text(locText(context, key: "startPage")),
+                subtitle: Text("subbtitle"),
+                trailing: DropdownButton(
+
+                  items: startPageItems,
+                  onChanged: (dynamic newStartPageIndex) async {
+                    StartPageService.setStartPageIndex(newStartPageIndex);
+                    setState(() {
+                      currentStartPageItemIndex = newStartPageIndex;
+                    });
+                  },
+                  value: currentStartPageItemIndex,
+                ),
+              ),
+              Divider(),
+              ListTile(
+                onTap: () async {
+                  print("huh2");
+                  TimeOfDay newTime = await showTimePicker(
+                    context: context,
+
+                    initialTime: await HazizzNotification.getNotificationTime(),
+
+                  );
+                  if(newTime != null) {
+                    HazizzNotification.scheduleNotificationAlarmManager(newTime);
+                  }
+                },
+                title: Text(locText(context, key: "set_time_for_notification")),
+                trailing: Text("time")
+              ),
+
+              ListTile(
+                title: Text(locText(context, key: "startPage")),
+                subtitle: Text("subbtitle"),
+                trailing: DropdownButton(
+
+                  items: supportedLocaleItems,
+                  onChanged: (dynamic selectedLocale) async {
+                  //  StartPageService.setStartPageIndex(newStartPageIndex);
+                    print(selectedLocale);
+                    setState(() {
+                      currentLocale = selectedLocale;
+
+
+                      this.setState(() {
+                        var data = EasyLocalizationProvider.of(context).data;
+                        data.changeLocale(Locale(selectedLocale.toLowerCase()));
+                        print(Localizations.localeOf(context).languageCode);
+                      });
+
+
+                    });
+                  },
+                  value: currentLocale,
+                ),
+              ),
+
+              ListTile(
+                title: Text("go to app settings"),
+                subtitle: Text("subbtitle"),
+                onTap: () async {
+                  await AppSettings.openAppSettings();
+                },
+              ),
+
+            ],
+          ),
+        )
+      ),
     );
   }
 

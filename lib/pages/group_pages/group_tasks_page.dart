@@ -17,7 +17,7 @@ class GroupTasksPage extends StatefulWidget {
   // This widget is the root of your application.
 
   String getTabName(BuildContext context){
-    return locText(context, key: "tasks");
+    return locText(context, key: "tasks").toUpperCase();
   }
 
   GroupTasksBloc groupTasksBloc;
@@ -46,40 +46,46 @@ class _GroupTasksPage extends State<GroupTasksPage> with AutomaticKeepAliveClien
   Widget build(BuildContext context) {
     return Scaffold(
       //  floatingActionButton: FloatingActionButton(onPressed: null, child: Icon(Icons.add),),
-        body: new RefreshIndicator(
-            child: BlocBuilder(
-                bloc: groupTasksBloc,
-                builder: (_, HState state) {
-                  if (state is ResponseDataLoaded) {
-                    List<PojoTask> tasks = state.data;
-                    return new ListView.builder(
-                        itemCount: tasks.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          if (index == 0 ||
-                              tasks[index].dueDate.difference(tasks[index - 1].dueDate).inDays > 0) {
-                            return new StickyHeader(
-                              header: TaskHeaderItemWidget(dateTime: tasks[index].dueDate),
-                              content: TaskItemWidget(pojoTask: tasks[index],),
+        body: RefreshIndicator(
+                child: Stack(
+                  children: <Widget>[
+                    ListView(),
+                    BlocBuilder(
+                        bloc: groupTasksBloc,
+                        builder: (_, HState state) {
+                          if (state is ResponseDataLoaded) {
+                            List<PojoTask> tasks = state.data;
+                            return new ListView.builder(
+                                itemCount: tasks.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  if (index == 0 ||
+                                      tasks[index].dueDate.difference(tasks[index - 1].dueDate).inDays > 0) {
+                                    return new StickyHeader(
+                                      header: TaskHeaderItemWidget(dateTime: tasks[index].dueDate),
+                                      content: TaskItemWidget(pojoTask: tasks[index],),
+                                    );
+                                  } else {
+                                    return
+                                      TaskItemWidget(pojoTask: tasks[index],
+                                      );
+                                  }
+                                }
                             );
-                          } else {
-                            return
-                              TaskItemWidget(pojoTask: tasks[index],
-                              );
+                          } else if (state is ResponseEmpty) {
+                            return Center(child: Text("Empty"));
+                          } else if (state is ResponseWaiting) {
+                            return Center(child: CircularProgressIndicator(),);
                           }
+                          return Center(
+                              child: Text("Uchecked State: ${state.toString()}"));
                         }
-                    );
-                  } else if (state is ResponseEmpty) {
-                      return Center(child: Text("Empty"));
-                  } else if (state is ResponseWaiting) {
-                      return Center(child: CircularProgressIndicator(),);
-                  }
-                  return Center(
-                      child: Text("Uchecked State: ${state.toString()}"));
-                }
+                    ),
 
+                  ],
+                ),
+                onRefresh: () async => groupTasksBloc.dispatch(FetchData()) //await getData()
             ),
-            onRefresh: () async => groupTasksBloc.dispatch(FetchData()) //await getData()
-        )
+
     );
   }
 

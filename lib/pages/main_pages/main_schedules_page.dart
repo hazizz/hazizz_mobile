@@ -8,6 +8,7 @@ import 'package:mobile/communication/pojos/PojoClass.dart';
 import 'package:mobile/listItems/schedule_event_widget.dart';
 
 import '../../hazizz_localizations.dart';
+import '../../logger.dart';
 import 'main_schedules_tab_page.dart';
 
 class SchedulesPage extends StatefulWidget {
@@ -16,7 +17,7 @@ class SchedulesPage extends StatefulWidget {
   SchedulesPage({Key key}) : super(key: key);
 
   getTabName(BuildContext context){
-    return locText(context, key: "schedule");
+    return locText(context, key: "schedule").toUpperCase();
   }
 
   @override
@@ -43,9 +44,6 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
   void initState() {
     currentDayIndex = MainTabBlocs().schedulesBloc.currentDayIndex;
     _currentIndex = currentDayIndex;
-
-    print("created schedules PAge");
-
 
     /*
     if(schedulesBloc.currentState is ResponseError) {
@@ -82,13 +80,19 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
                         if (state is ResponseDataLoaded) {
                           Map<String, List<PojoClass>> schedule = state.data.classes;
 
+
+
+                          if(_currentIndex > schedule.length-1){
+                            _currentIndex = schedule.length-1;
+                          }
+
                           _tabList.clear();
                           bottomNavBarItems.clear();
                           int i = 0;
                           for(String dayIndex in schedule.keys){
                             i++;
                             if( schedule[dayIndex].isNotEmpty) {
-                              Color currentDayColor;
+                              Color currentDayColor = Colors.transparent;
                               if(i == currentDayIndex ){
                                 currentDayColor = Colors.blue;
                               }
@@ -102,11 +106,11 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
                                 icon: Padding(
                                   padding: const EdgeInsets.only(bottom: 4.0),
                                   child: Text(dayMName,
-                                    style: TextStyle(color: Colors.red, fontSize: 22, fontWeight: FontWeight.w500, fontFamily: "Montserrat", backgroundColor: currentDayColor),
+                                    style: TextStyle(color: Colors.red, fontSize: 22, fontWeight: FontWeight.w500, fontFamily: "Montserrat", /*backgroundColor: currentDayColor*/),
                                   ),
                                 ),
                                 activeIcon: Text(dayName,
-                                  style: TextStyle(color: Colors.red, fontSize: 28, fontWeight: FontWeight.bold, backgroundColor: currentDayColor),
+                                  style: TextStyle(color: Colors.red, fontSize: 28, fontWeight: FontWeight.bold, /*backgroundColor: currentDayColor*/),
                                 ),
                               ));
                             }

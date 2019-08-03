@@ -16,7 +16,7 @@ class GroupSubjectsPage extends StatefulWidget {
   // This widget is the root of your application.
 
   String getTabName(BuildContext context){
-    return locText(context, key: "subjects");
+    return locText(context, key: "subjects").toUpperCase();
   }
 
   final GroupSubjectsBloc groupSubjectsBloc;
@@ -51,26 +51,31 @@ class _GroupSubjectsPage extends State<GroupSubjectsPage> with AutomaticKeepAliv
           child: Icon(Icons.add),
         ),
         body: new RefreshIndicator(
-            child: BlocBuilder(
-                bloc: groupSubjectsBloc,
-                builder: (_, HState state) {
-                  if (state is ResponseDataLoaded) {
-                    List<PojoSubject> subjects = state.data;
-                    return new ListView.builder(
-                        itemCount: subjects.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return SubjectItemWidget(subject: subjects[index]);
+            child: Stack(
+              children: <Widget>[
+                ListView(),
+                BlocBuilder(
+                    bloc: groupSubjectsBloc,
+                    builder: (_, HState state) {
+                      if (state is ResponseDataLoaded) {
+                        List<PojoSubject> subjects = state.data;
+                        return new ListView.builder(
+                            itemCount: subjects.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return SubjectItemWidget(subject: subjects[index]);
 
-                        }
-                    );
-                  } else if (state is ResponseEmpty) {
-                    return Center(child: Text("Empty"));
-                  } else if (state is ResponseWaiting) {
-                    return Center(child: CircularProgressIndicator(),);
-                  }
-                  return Center(
-                      child: Text("Uchecked State: ${state.toString()}"));
-                }
+                            }
+                        );
+                      } else if (state is ResponseEmpty) {
+                        return Center(child: Text("Empty"));
+                      } else if (state is ResponseWaiting) {
+                        return Center(child: CircularProgressIndicator(),);
+                      }
+                      return Center(
+                          child: Text("Uchecked State: ${state.toString()}"));
+                    }
+                ),
+              ],
             ),
             onRefresh: () async => groupSubjectsBloc.dispatch(FetchData()) //await getData()
         )

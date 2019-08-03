@@ -19,7 +19,7 @@ class TasksPage extends StatefulWidget {
   TasksPage({Key key}) : super(key: key);
 
   getTabName(BuildContext context){
-    return locText(context, key: "tasks");
+    return locText(context, key: "tasks").toUpperCase();
   }
 
   @override

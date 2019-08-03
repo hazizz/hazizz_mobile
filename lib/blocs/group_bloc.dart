@@ -81,8 +81,8 @@ class GroupMembersBloc extends Bloc<HEvent, HState> {
   @override
   HState get initialState => ResponseEmpty();
 
-  int get groupId{
-    return GroupBlocs().group.id;
+  PojoGroup get group{
+    return GroupBlocs().group;
   }
 
   @override

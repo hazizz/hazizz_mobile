@@ -15,7 +15,7 @@ class GradesPage extends StatefulWidget  {
   GradesPage({Key key}) : super(key: key);
 
   getTabName(BuildContext context){
-    return locText(context, key: "grades");
+    return locText(context, key: "grades").toUpperCase();
   }
   
   @override

@@ -113,10 +113,6 @@ class MainSchedulesBloc extends Bloc<HEvent, HState> {
           HazizzTimeOfDay closestBefore;
           HazizzTimeOfDay closestAfter;
 
-
-          print("log: oy1334: todayClasses.length: ${todayClasses.length}");
-
-
           yield ResponseDataLoaded(data: classes);
 
           print("log: oy133");

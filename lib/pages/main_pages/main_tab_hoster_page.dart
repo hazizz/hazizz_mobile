@@ -80,10 +80,25 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
         title: Text(locText(context, key: "hazizz")),
 
         bottom: TabBar(controller: _tabController, tabs: [
-          Tab(text: tasksTabPage.getTabName(context)),
+          GestureDetector(
+            onLongPress: (){
+              print("log: long press");
+            },
+            child: Tab(text: tasksTabPage.getTabName(context))
+          ),
+          GestureDetector(
+            onLongPress: (){
+              print("log: long press");
+            },
+            child: Tab(text: schedulesTabPage.getTabName(context)),
+          ),
+          GestureDetector(
+            onLongPress: (){
+              print("log: long press");
+            },
+            child: Tab(text: gradesTabPage.getTabName(context)),
+          ),
           // Tab(text: SchedulesPage.tabName),//, icon: Icon(Icons.scatter_plot)),
-          Tab(text: schedulesTabPage.getTabName(context)),
-          Tab(text: gradesTabPage.getTabName(context)),
           //, icon: Icon(Icons.group))
         ]),
       ),
@@ -149,13 +164,16 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
 
                 },
               ),
-              ListTile(
-                title: Text(locText(context, key: "groups")),
-                onTap: () {
-                  //Navigator.pop(context);
-                  // Navigator.push(context,MaterialPageRoute(builder: (context) => GroupTabHosterPage(groupId: 2)));
-                  Navigator.popAndPushNamed(context, "/groups");
-                },
+              Hero(
+                tag: "group",
+                child: ListTile(
+                  title: Text(locText(context, key: "groups")),
+                  onTap: () {
+                    //Navigator.pop(context);
+                    // Navigator.push(context,MaterialPageRoute(builder: (context) => GroupTabHosterPage(groupId: 2)));
+                    Navigator.popAndPushNamed(context, "/groups");
+                  },
+                ),
               ),
 
 
@@ -164,13 +182,16 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
                    mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
                  //   Divider(),
-                    ListTile(
-                      onTap: (){
-                        Navigator.pop(context);
-                        Navigator.pushNamed(context, "/settings");
-                      },
-                        leading: Icon(Icons.settings),
-                        title: Text(locText(context, key: "settings"))),
+                    Hero(
+                      tag: "settings",
+                      child: ListTile(
+                        onTap: (){
+                          Navigator.pop(context);
+                          Navigator.pushNamed(context, "/settings");
+                        },
+                          leading: Icon(Icons.settings),
+                          title: Text(locText(context, key: "settings"))),
+                    ),
                     Row(
                       children: [
                         Expanded(child:

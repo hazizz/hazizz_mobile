@@ -446,7 +446,7 @@
 
 
     "invite_link_info"
-    : "Send this link to your classmates to join",
+    : "Send this link to your classmates to join {} group!",
 
 
     "invite_link_info_part2"
@@ -462,16 +462,7 @@
 
 
     "invite_to_group_text_title"
-    : "Hazizz Droid: ",
-
-
-    "invite_to_group_text_part1"
-    : "Join to ",
-
-
-    "invite_to_group_text_part2"
-    : " group to receive your homeworks:",
-
+    : "Hazizz Mobile: Join to {} group to receive your homeworks: \n{}",
 
 
 

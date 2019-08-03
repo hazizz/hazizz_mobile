@@ -21,7 +21,6 @@ class HazizzTimeOfDay extends TimeOfDay{
 
   String toHazizzFormat(){
     return "$hour:$minute";
-
   }
 
 

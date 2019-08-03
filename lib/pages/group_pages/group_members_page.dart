@@ -15,7 +15,7 @@ class GroupMembersPage extends StatefulWidget {
   // This widget is the root of your application.
 
   String getTabName(BuildContext context){
-    return locText(context, key: "groupMembers");
+    return locText(context, key: "groupMembers").toUpperCase();
   }
 
   final GroupMembersBloc groupMembersBloc;
@@ -43,28 +43,33 @@ class _GroupMembersPage extends State<GroupMembersPage> with AutomaticKeepAliveC
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: FloatingActionButton(onPressed: (){showInviteDialog(context, groupId: groupMembersBloc.groupId);}, child: Icon(Icons.person_add),),
+        floatingActionButton: FloatingActionButton(onPressed: (){showInviteDialog(context, group: groupMembersBloc.group);}, child: Icon(Icons.person_add),),
         body: new RefreshIndicator(
-            child: BlocBuilder(
-                bloc: groupMembersBloc,
-                builder: (_, HState state) {
-                  if (state is ResponseDataLoaded) {
-                    List<PojoUser> members = state.data;
-                    return new ListView.builder(
-                        itemCount: members.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return MemberItemWidget(member: members[index]);
+            child: Stack(
+              children: <Widget>[
+                ListView(),
+                BlocBuilder(
+                    bloc: groupMembersBloc,
+                    builder: (_, HState state) {
+                      if (state is ResponseDataLoaded) {
+                        List<PojoUser> members = state.data;
+                        return new ListView.builder(
+                            itemCount: members.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return MemberItemWidget(member: members[index]);
 
-                        }
-                    );
-                  } else if (state is ResponseEmpty) {
-                    return Center(child: Text("Empty"));
-                  } else if (state is ResponseWaiting) {
-                    return Center(child: CircularProgressIndicator(),);
-                  }
-                  return Center(
-                      child: Text("Uchecked State: ${state.toString()}"));
-                }
+                            }
+                        );
+                      } else if (state is ResponseEmpty) {
+                        return Center(child: Text("Empty"));
+                      } else if (state is ResponseWaiting) {
+                        return Center(child: CircularProgressIndicator(),);
+                      }
+                      return Center(
+                          child: Text("Uchecked State: ${state.toString()}"));
+                    }
+                ),
+              ],
             ),
             onRefresh: () async => groupMembersBloc.dispatch(FetchData()) //await getData()
         )

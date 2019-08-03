@@ -667,8 +667,8 @@ Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
       });
 }
 
-Future<bool> showInviteDialog(context, {@required int groupId}) async {
-  HazizzResponse hazizzResponse = await RequestSender().getResponse(GetGroupInviteLink(groupId: groupId));
+Future<bool> showInviteDialog(context, {@required PojoGroup group}) async {
+  HazizzResponse hazizzResponse = await RequestSender().getResponse(GetGroupInviteLink(groupId: group.id));
   String inviteLink = "Waiting...";
   if(hazizzResponse.isSuccessful){
     inviteLink = hazizzResponse.convertedData;
@@ -679,12 +679,18 @@ Future<bool> showInviteDialog(context, {@required int groupId}) async {
   HazizzDialog h = HazizzDialog(
     header:
       Container(
+        color: Theme.of(context).primaryColor,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(inviteLink),
+            child: Text(locText(context, key: "invite_link_info", args: [group.name]), style: TextStyle(fontSize: 18),),
           )
       ),
-      content: Container(),
+      content: Container(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(inviteLink, style: TextStyle(fontSize: 15),),
+        )
+      ),
       actionButtons:
       Row(
     mainAxisAlignment: MainAxisAlignment.end,
@@ -718,14 +724,14 @@ Future<bool> showInviteDialog(context, {@required int groupId}) async {
           onPressed: () {
             print("share");
 
-            Share.share('check out my website $inviteLink');
+            Share.share(locText(context, key: "invite_to_group_text_title", args: [group.name, inviteLink]));
             // Navigator.of(context).pop();
             // Navigator.of(context).pop();
           },
           color: Colors.transparent
       ),
     ],
-  ) ,height: 130,width: 200);
+  ) ,height: 170,width: 200);
 
   return showDialog(context: context, barrierDismissible: true,
       builder: (BuildContext context) {
@@ -748,6 +754,19 @@ void showSchoolsDialog(BuildContext context, {@required Function({String key, St
 
 Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
   Widget space = SizedBox(height: 5);
+
+  double height = 230;
+  double width = 300;
+  int v = 20;
+  if(pojoClass.topic == null){
+    height -= v;
+  }
+  if(pojoClass.cancelled == null){
+    height -= v;
+  }
+  if(pojoClass.standIn == null){
+    height -= v;
+  }
 
   HazizzDialog hazizzDialog = HazizzDialog(
     header:
@@ -881,7 +900,7 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
           )
         ],
       ),
-      height: 230, width: 300);
+      height: height, width: width);
 
   return showDialog(
       context: context,

@@ -17,6 +17,10 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
+
+  logger: 0.7.0+2
+  logger_flutter: 0.7.0
+
   workmanager: ^0.0.10
 
   app_settings: 1.0.6

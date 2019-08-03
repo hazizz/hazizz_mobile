@@ -24,6 +24,11 @@ String hazizzTimeOfDayToShow(TimeOfDay timeOfDay){
   return "ERROR FORMATING";
 }
 
+DateTime timeOfDayToDateTime(TimeOfDay timeOfDay){
+  final now = DateTime.now();
+  return DateTime(now.year, now.month, now.day, timeOfDay.hour, timeOfDay.minute);
+}
+
 
 
 

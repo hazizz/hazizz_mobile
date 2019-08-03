@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
 import 'package:mobile/blocs/schedule_event_bloc.dart';
 
+import '../logger.dart';
+
 class ScheduleEventWidget extends StatelessWidget{
 
   ScheduleEventWidget();
@@ -15,8 +17,29 @@ class ScheduleEventWidget extends StatelessWidget{
 
         String text = "error";
         if(state is ScheduleEventFineState){
+
+          logger.d("ScheduleEventFineState: currentEvent: ${state.currentEvent}, nextEvent: ${state.nextEvent}");
+
           var currentEvent = state.currentEvent;
+          var nextEvent = state.nextEvent;
+
           text = "event will be over: ${currentEvent.end.hour}:${currentEvent.end.minute}";
+
+          if(currentEvent is NoSchoolEventItem){
+            text = "Tanítási szünet: ${currentEvent.end.hour}:${currentEvent.end.minute}";
+          }
+
+          if(currentEvent is AfterClassesEventItem) {
+            if(currentEvent.tomorrowClass != null) {
+              text = "Az óráknak vége\nHolnap: ${currentEvent.tomorrowClass.startOfClass
+                  .toHazizzFormat()} - ${currentEvent.tomorrowClass.className}";
+            }else{
+              text = "Az óráknak vége\n"
+                     "Holnap: tanítási szünet";
+            }
+          }
+
+
         }else if(state is ScheduleEventInitializeState){
           text = "log: state is ScheduleEventInitializeState";
         }
