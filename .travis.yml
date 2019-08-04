@@ -82,8 +82,13 @@ script:
 
   - apk_address=$(curl --upload-file ./build/app/outputs/apk/release/app-release.apk https://transfer.sh/hazizz-apk)
   - echo $apk_address
+<<<<<<< HEAD
   # - curl --upload-file ./build/app/outputs/apk/release/app-release.apk https://transfer.sh/hazizz-apk > address.txt
   # - cat address.txt
+=======
+ # - curl --upload-file ./build/app/outputs/apk/release/app-release.apk https://transfer.sh/hazizz-apk > address.txt
+ # - cat address.txt
+>>>>>>> 76f08bb2d6cdcd5fa10cf51762f8dbc3f393f5cb
 
 after_success:
   # - curl --upload-file ./build/app/outputs/apk/release/app-release.apk https://transfer.sh/hazizz-apk > address.txt
@@ -91,6 +96,7 @@ after_success:
 
   # - curl --upload-file ./build/app/outputs/apk/release/app-release.apk https://transfer.sh/hazizz-apk
   ## Export commit info
+<<<<<<< HEAD
   # - export AUTHOR_NAME=`git log -1 "$TRAVIS_COMMIT" --pretty="%aN"`
   # - export COMMITTER_NAME=`git log -1 "$TRAVIS_COMMIT" --pretty="%cN"`
   # - export COMMIT_SUBJECT=`git log -1 "$TRAVIS_COMMIT" --pretty="%s"`
@@ -104,5 +110,21 @@ after_success:
 after_failure:
   - chmod +x discord.sh
   - ./discord.sh failure $WEBHOOK_URL
+=======
+ # - export AUTHOR_NAME=`git log -1 "$TRAVIS_COMMIT" --pretty="%aN"`
+ # - export COMMITTER_NAME=`git log -1 "$TRAVIS_COMMIT" --pretty="%cN"`
+ # - export COMMIT_SUBJECT=`git log -1 "$TRAVIS_COMMIT" --pretty="%s"`
+ # - export COMMIT_MESSAGE=`git log -1 "$TRAVIS_COMMIT" --pretty="%b"`
+ # # Upload to WeTransfer
+ # - npm install --save @wetransfer/js-sdk
+ # - export BUILD_OUTPUT_URL=`node ./.travis/utils/runUpload.js`
+  - chmod +x discord.sh
+  - ./discord.sh success $WEBHOOK_URL $apk_address
+  
+after_failure:
+  - chmod +x discord.sh
+  - ./discord.sh failure $WEBHOOK_URL
+
+>>>>>>> 76f08bb2d6cdcd5fa10cf51762f8dbc3f393f5cb
 
 
