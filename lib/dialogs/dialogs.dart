@@ -18,6 +18,7 @@ import '../hazizz_date.dart';
 import '../hazizz_localizations.dart';
 import '../hazizz_response.dart';
 import '../hazizz_theme.dart';
+import 'join_group_dialog.dart';
 
 
 
@@ -106,6 +107,14 @@ class HazizzDialog extends Dialog{
 
 
 
+Future showJoinGroupDialog(BuildContext context,) async{
+  // List<PojoGroup> data;
+  var d = JoinGroupDialog();
+  var result = showDialog(context: context, builder: (context2){
+    return d;
+  });
+  return result;
+}
 
 
 
@@ -280,11 +289,12 @@ Future<bool> showDeleteDialog(context, {@required int taskId}) async {
       Container(
         height: height,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10.0),
-              topRight: Radius.circular(10.0),
-            ),
-            color: HazizzTheme.warningColor),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10.0),
+            topRight: Radius.circular(10.0),
+          ),
+          color: HazizzTheme.warningColor
+        ),
         child: Padding(
           padding: EdgeInsets.all(10),
           child: Text(
@@ -808,14 +818,24 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
             rows.add(widget);
           }
 
-          addToColumn(Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          addToColumn(Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(bottomRight: Radius.circular(12), bottomLeft: Radius.circular(12)),
+                color: Theme.of(context).primaryColor
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 4.0, right: 4),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
 
-            children: <Widget>[
-              Text(hazizzTimeOfDayToShow(pojoClass.startOfClass), style: TextStyle(fontSize: 22)),
-              Text("-", style: TextStyle(fontSize: 22)),
-              Text(hazizzTimeOfDayToShow(pojoClass.startOfClass), style: TextStyle(fontSize: 22)),
-            ],
+                children: <Widget>[
+                  Text(hazizzTimeOfDayToShow(pojoClass.startOfClass), style: TextStyle(fontSize: 25)),
+                  Text("-", style: TextStyle(fontSize: 25)),
+                  Text(hazizzTimeOfDayToShow(pojoClass.endOfClass), style: TextStyle(fontSize: 25)),
+                ],
+              ),
+            ),
           ));
           addToColumn(Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1047,7 +1067,7 @@ Future<bool> showIntroCancelDialog(context) async {
           ),
 
 
-      ),
+        ),
       ),
       content: Container(),
       actionButtons:

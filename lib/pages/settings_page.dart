@@ -287,14 +287,6 @@ class _SettingsPage extends State<SettingsPage> with AutomaticKeepAliveClientMix
                 ),
               ),
 
-              ListTile(
-                title: Text("go to app settings"),
-                subtitle: Text("subbtitle"),
-                onTap: () async {
-                  await AppSettings.openAppSettings();
-                },
-              ),
-
             ],
           ),
         )

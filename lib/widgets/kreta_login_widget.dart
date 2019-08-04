@@ -20,6 +20,8 @@ class KretaLoginWidget extends StatefulWidget {
 class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin{
   final KretaLoginPageBlocs kretaLoginBlocs = new KretaLoginPageBlocs();
 
+  bool passwordVisible = true;
+
   final TextEditingController _usernameTextEditingController = TextEditingController();
   final TextEditingController _passwordTextEditingController =TextEditingController();
 
@@ -64,22 +66,54 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
     var passwordWidget = BlocBuilder(
         bloc: kretaLoginBlocs.usernameBloc,
         builder: (BuildContext context, HFormState state) {
+
+
+
           String errorText = null;
           if (state is KretaUserNotFoundState) {
             errorText = "No such user";
           } else if (state is TextFormErrorTooShort) {
             errorText = "too short mann...";
           }
-          return TextField(
-            maxLines: 1,
-            onChanged: (dynamic text) {
-              print("change: $text");
-              kretaLoginBlocs.passwordBloc.dispatch(TextFormValidate(text: text));
-            },
-            controller: _passwordTextEditingController,
-            textInputAction: TextInputAction.next,
-            decoration:
-            InputDecoration(labelText: "Kreta password", errorText: errorText),
+
+
+          return Container(
+            height: 60,
+            child: TextField(
+              maxLines: 1,
+              onChanged: (dynamic text) {
+                print("change: $text");
+                kretaLoginBlocs.passwordBloc.dispatch(TextFormValidate(text: text));
+              },
+              controller: _passwordTextEditingController,
+              textInputAction: TextInputAction.next,
+              obscureText: passwordVisible,
+              decoration:
+              InputDecoration(labelText: "Kreta password", errorText: errorText,
+                alignLabelWithHint: true,
+                labelStyle: TextStyle(
+
+                ),
+                suffix: IconButton(
+                  padding: const EdgeInsets.only(top:  20),
+                  icon: Icon(
+                    // Based on passwordVisible state choose the icon
+
+                    passwordVisible
+                        ? Icons.visibility_off
+                        : Icons.visibility,
+                    color: Theme.of(context).primaryColorDark,
+                  ),
+                  onPressed: () {
+                    // Update the state i.e. toogle the state of passwordVisible variable
+                    setState(() {
+                      passwordVisible = !passwordVisible;
+                    });
+                  },
+                ),
+              ),
+
+            ),
           );
         }
     );

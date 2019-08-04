@@ -1,15 +1,12 @@
-
 import 'package:flutter/material.dart';
 
 import '../hazizz_localizations.dart';
 import 'dialogs.dart';
 
-
 class SchoolDialog extends StatefulWidget {
 
   final Map data;
   final Function({String key, String value}) onPicked;
-
 
   SchoolDialog({@required this.onPicked, @required this.data});
 
@@ -18,9 +15,6 @@ class SchoolDialog extends StatefulWidget {
 }
 
 class _SchoolDialog extends State<SchoolDialog> {
-
- // final Function({String key, String value}) onPicked;
- // final Map data;
 
   List<String> keys;
   List<dynamic> values;
@@ -42,10 +36,8 @@ class _SchoolDialog extends State<SchoolDialog> {
     searchData = widget.data;
 
     super.initState();
-    
   }
   
-
   TextEditingController searchController;
 
   final double width = 400;
@@ -76,7 +68,6 @@ class _SchoolDialog extends State<SchoolDialog> {
               },
               controller: searchController,
               decoration: InputDecoration(
-                  labelText: "Search",
                   hintText: "Search",
                   prefixIcon: Icon(Icons.search),
                 //  border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(25.0)))
@@ -135,11 +126,7 @@ class _SchoolDialog extends State<SchoolDialog> {
       ),
     ),
     actionButtons: Row(children:[ FlatButton(child: Text("CLOSE"), onPressed: (){Navigator.pop(context);},)]),
-
-
-
     );
-
     return dialog;
   }
 }

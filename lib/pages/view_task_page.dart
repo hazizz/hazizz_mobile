@@ -129,7 +129,8 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                 child: Padding(
                   padding: EdgeInsets.all(padding),
                   child:
-                      Slidable(
+                      Container(
+                        /*
                         actionExtentRatio: 0.25,
                         actionPane: SlidableBehindActionPane (),
                         actions: <Widget>[
@@ -146,6 +147,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                             icon: Icons.check,
                           ),
                         ],
+                        */
                         child: Card(
                           clipBehavior: Clip.antiAliasWithSaveLayer,
                           elevation: 100,

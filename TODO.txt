@@ -4,4 +4,11 @@ TODO:
 - órarend eventek
 - frissítés idejének kiírása
 - dedikált screen a main tabeknek
+- taskoknál "remind me later"
+- fixelni az edit taskot
+- add debug page (https://pub.dev/packages/alice)
+- app lokalizálása
+- offline mode
+- crashlytics nem reportol minden crasht. NÉZD MEG!!!
+- jegyek átlag
 

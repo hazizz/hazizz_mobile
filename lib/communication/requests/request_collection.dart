@@ -16,6 +16,7 @@ import 'package:mobile/communication/pojos/PojoTokens.dart';
 import 'package:mobile/communication/pojos/PojoUser.dart';
 import 'package:mobile/communication/pojos/pojo_comment.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
+import 'package:mobile/enums/groupTypesEnum.dart';
 import 'package:mobile/exceptions/exceptions.dart';
 import 'package:mobile/managers/token_manager.dart';
 import 'package:meta/meta.dart';
@@ -261,6 +262,39 @@ class GetMyProfilePicture extends HazizzRequest {
     return myGroups;
   }
 }
+
+class CreateGroup extends HazizzRequest {
+
+  CreateGroup({ResponseHandler rh, @required String b_groupName, @required GroupType type}) : super(rh) {
+    httpMethod = HttpMethod.POST;
+    PATH = "groups";
+    authTokenHeader = true;
+    body["groupName"] = b_groupName;
+    body["type"] = type.toString();
+  }
+
+  @override
+  convertData(Response response) {
+    return response;
+  }
+}
+
+// you can also join group with this
+class RetrieveGroup extends HazizzRequest {
+
+  RetrieveGroup({ResponseHandler rh, @required int p_groupId,}) : super(rh) {
+    httpMethod = HttpMethod.GET;
+    PATH = "groups/${p_groupId}";
+    authTokenHeader = true;
+  }
+
+  @override
+  convertData(Response response) {
+    PojoGroup group = PojoGroup.fromJson(jsonDecode(response.data));
+    return group;
+  }
+}
+
 
 class GetMyGroups extends HazizzRequest {
   GetMyGroups({ResponseHandler rh}) : super(rh) {
@@ -525,19 +559,6 @@ class GetGroupInviteLink extends HazizzRequest {
   }
 }
 
-class CreateGroup extends HazizzRequest {
-  CreateGroup({ResponseHandler rh, int groupId}) : super(rh) {
-    httpMethod = HttpMethod.GET;
-    PATH = "groups/${groupId}/invitelink";
-    authTokenHeader = true;
-  }
-
-  @override
-  dynamic convertData(Response response) {
-    String link = response.data;
-    return link;
-  }
-}
 
 /*
 class GetGroupInviteLink extends HazizzRequest {

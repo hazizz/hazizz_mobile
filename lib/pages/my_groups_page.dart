@@ -5,6 +5,7 @@ import 'package:mobile/blocs/my_groups_bloc.dart';
 import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
+import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/listItems/group_item_widget.dart';
 
 
@@ -38,15 +39,16 @@ class _MyGroupsPage extends State<MyGroupsPage> with AutomaticKeepAliveClientMix
       child: Scaffold(
           floatingActionButton: FloatingActionButton(
             child: Icon(Icons.person_add),
-            onPressed: (){
-
+            onPressed: () async {
+              await showJoinGroupDialog(context);
             }
           ),
           appBar: AppBar(
             actions: <Widget>[
-              IconButton(icon: Icon(Icons.create), onPressed: (){
+              IconButton(icon: Icon(Icons.add_circle_outline),
+                onPressed: () async {
 
-              })
+                })
             ],
             title: Text(widget.title),
           ),

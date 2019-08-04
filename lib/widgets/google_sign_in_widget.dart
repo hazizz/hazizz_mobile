@@ -33,7 +33,9 @@ class _GoogleSignInButtonWidget extends State<GoogleSignInButtonWidget> {
 
   Future<FirebaseUser> _handleSignIn() async {
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+
     final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+
 
     final AuthCredential credential = GoogleAuthProvider.getCredential(
       accessToken: googleAuth.accessToken,

@@ -156,11 +156,11 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
                   Navigator.popAndPushNamed(context, "intro");
 
                   /*
-                  Navigator.push(
+                 Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => SimpleExample()),
                   );
-                  */
+                   */
 
                 },
               ),
