@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/enums/groupTypesEnum.dart';
 import 'dialogs.dart';
 
@@ -105,9 +106,8 @@ class _JoinGroupDialog extends State<JoinGroupDialog> {
                               // Based on passwordVisible state choose the icon
 
                               passwordVisible
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
-                              color: Theme.of(context).primaryColorDark,
+                                  ? FontAwesomeIcons.solidEyeSlash
+                                  : FontAwesomeIcons.solidEye,
                             ),
                             onPressed: () {
                               // Update the state i.e. toogle the state of passwordVisible variable

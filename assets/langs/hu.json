@@ -93,6 +93,9 @@
     : "Szerkesztés",
 
 
+    "edit_profile_picture"
+    : "Profilkép szerkesztés",
+
     "button_join"
     : "Csatlakozás",
 
@@ -119,6 +122,9 @@
 
     "uploadProfilePic_menu"
     : "Profilkép felöltése",
+
+    "profile_editor"
+    : "Profil szerketés",
 
 
     "fragment_title_new_mytask"
@@ -169,6 +175,9 @@
 
     "groups"
     : "Csoportok",
+
+    "my_groups"
+    : "Csoportjaim",
 
 
     "task"
@@ -383,8 +392,24 @@
     : "Új felhasználó",
 
 
-    "no_task"
-    : "Nincs feladat",
+
+    "no_tasks_yet"
+    : "Nincs feladatod",
+
+    "no_my_groups_yet"
+    : "Még nem vagy tagja még egy csoportnak sem",
+
+    "no_subjects_yet"
+    : "Még nincs téma ebben a csportban",
+
+    "no_tasks_in_group_yet"
+    : "Nincs feladat ebben a csoportban",
+
+    "no_schedule"
+    : "Nincs órarend",
+
+    "no_grades_yet"
+    : "Nincs még jegyed",
 
 
     "no_announcement"
@@ -456,7 +481,7 @@
 
 
     "press_again_to_exit"
-    : "Nyomd meg mégegyszer a VISSZA gombot hogy kilépj",
+    : "Nyomd meg mégegyszer a VISSZA gombot hogy kilépj!",
 
 
     "invite_link_info"
@@ -625,6 +650,8 @@
     "error"
     : "Hiba",
 
+    "error_signing_in_with_google"
+    : "Google bejelentkezés sikertelen, probáld újra késöbb",
 
     "error_termsAndConditionsNotAccepted"
     : "Nem fogadtad el az adatvédelmi nyilatkozatot",
@@ -755,12 +782,14 @@
 
 
     "error_passwordNotLongEnough"
-    : "A jJelszó legalább 8 karakteres kell hogy legyen",
+    : "A jelszó legalább 8 karakteres kell hogy legyen",
 
 
     "error_givenDataWrong"
     : "Helytelen adatok",
 
+    "error_noGroupSelected"
+    : "Nincs választott csoport!",
 
     "success_changed_password"
     : "A jelszó sikeresen megváltoztatva",
@@ -800,20 +829,20 @@
     : "Értesítés minden nap",
 
 
-    "taskType_homework"
-    : "homework",
+    "taskType_1"
+    : "Házi feladat",
 
 
-    "taskType_assignment"
-    : "assignment",
+    "taskType_2"
+    : "Beadandó",
 
 
-    "taskType_test"
-    : "test",
+    "taskType_3"
+    : "Dolgozat",
 
 
-    "taskType_oraltest"
-    : "oral test",
+    "taskType_4"
+    : "Felelés",
 
 
     "crop_image_activity_header_item_intitle"
@@ -854,6 +883,15 @@
 
     "kreta"
     : "Kréta",
+
+    "kreta_accounts"
+    : "Kréta fiókok",
+
+    "add_account"
+    : "fiók hozzáadás",
+
+    "no_kreta_account_added_yet"
+    : "Még nincs kréta fiók hozzáadva",
 
 
     "thera_grades"

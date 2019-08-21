@@ -151,26 +151,34 @@ class GroupItemPickerBloc extends ItemListPickerBloc {
 
 
   @override
-  ItemListState get initialState => Empty();
+  ItemListState get initialState => InitialState();
 
   GroupItemPickerBloc(this.subjectItemPickerBloc) {
     subjectItemPickerBlocSubscription = this.state.listen((state) {
       if (state is PickedGroupState) {
         print("log: picked Group listen");
-        subjectItemPickerBloc.dispatch(SubjectLoadData(state.item.id));
+        if(state.item.id != 0) {
+          subjectItemPickerBloc.dispatch(SubjectLoadData(state.item.id));
+        }
       }
     });
   }
 
   @override
   Stream<ItemListState> mapEventToState(ItemListEvent event) async* {
+
+    print("GroupBloc: $state");
+
     if(event is SetGroupEvent){
       isLocked = true;
+      pickedItem = event.item;
       yield PickedGroupState(item: event.item);
     }
     if(!isLocked) {
       if(event is PickedGroupEvent) {
         print("log: PickedState is played");
+        pickedItem = event.item;
+
         yield PickedGroupState(item: event.item);
       }
       if(event is ItemListLoadData) {
@@ -188,8 +196,6 @@ class GroupItemPickerBloc extends ItemListPickerBloc {
             if(dataList.isNotEmpty) {
               print("log: response is List");
               yield ItemListLoaded(data: dataList);
-            }else {
-              yield Empty();
             }
           }
         }on Exception catch(e) {
@@ -250,7 +256,7 @@ class PickedSubjectState extends ItemListState {
 
 //region SubjectItemListBloc
 class SubjectItemPickerBloc extends ItemListPickerBloc {
-  List<PojoSubject> dataList;
+  List<PojoSubject> dataList = List();
 
   bool isLocked = false;
 
@@ -281,12 +287,9 @@ class SubjectItemPickerBloc extends ItemListPickerBloc {
 
           if(hazizzResponse.isSuccessful) {
             dataList = hazizzResponse.convertedData;
-            if(dataList.isNotEmpty) {
-              print("log: response is List");
-              yield ItemListLoaded(data: dataList);
-            }else {
-              yield Empty();
-            }
+            yield ItemListLoaded(data: dataList);
+          }else{
+            yield ItemListFail();
           }
         }on Exception catch(e) {
           print("log: Exception: ${e.toString()}");
@@ -300,7 +303,7 @@ class SubjectItemPickerBloc extends ItemListPickerBloc {
 
   @override
   // TODO: implement initialState
-  ItemListState get initialState => Empty();
+  ItemListState get initialState => InitialState();
 
 }
 
@@ -367,26 +370,10 @@ abstract class TaskTypePickerState extends HState {
 class TaskTypePickedState extends TaskTypePickerState {
   PojoType item;
 
-  TaskTypePickedState(this.item) : assert(item!= null);
+  TaskTypePickedState(this.item) : assert(item!= null), super([item]);
 
   @override
   String toString() => 'PickedState';
-}
-class HomeworkState extends TaskTypePickerState {
-  @override
-  String toString() => 'HomeworkState';
-}
-class TestState extends TaskTypePickerState {
-  @override
-  String toString() => 'TestState';
-}
-class OralTestState extends TaskTypePickerState {
-  @override
-  String toString() => 'OralTestState';
-}
-class AssignmentState extends TaskTypePickerState {
-  @override
-  String toString() => 'AssignmentState';
 }
 //endregion
 
@@ -398,7 +385,7 @@ abstract class TaskTypePickerEvent extends HEvent {
 class TaskTypePickedEvent extends TaskTypePickerEvent {
   PojoType type;
 
-  TaskTypePickedEvent(this.type) : assert(type != null);
+  TaskTypePickedEvent(this.type) : assert(type != null), super([type]);
 
   @override
   String toString() => 'TaskTypePickEvent';
@@ -422,6 +409,7 @@ class TaskTypePickerBloc extends Bloc<TaskTypePickerEvent, TaskTypePickerState>{
   Stream<TaskTypePickerState> mapEventToState(TaskTypePickerEvent event) async*{
     if(event is TaskTypePickedEvent){
       pickedType = event.type;
+      print("print, name: ${event.type.name}");
       yield TaskTypePickedState(pickedType);
     }
   }

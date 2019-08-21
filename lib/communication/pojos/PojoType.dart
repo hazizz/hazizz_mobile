@@ -8,9 +8,6 @@ part 'PojoType.g.dart';
 
 @JsonSerializable()
 class PojoType implements Pojo {
-
-
-
   String name;
   int id;
   PojoType({this.name, this.id});
@@ -45,17 +42,17 @@ class PojoType implements Pojo {
   static final TEST_ID = 3;
   static final ORAL_TEST_ID = 4;
 
-  static Color getColor(PojoType type){
-    if(type.id  == PojoType.HOMEWORK_ID){
+  Color getColor(){
+    if(id  == PojoType.HOMEWORK_ID){
       return HazizzTheme.homeworkColor;
     }
-    if(type.id == PojoType.ASSIGNMENT_ID){
+    if(id == PojoType.ASSIGNMENT_ID){
       return HazizzTheme.assignmentColor;
     }
-    if(type.id  == PojoType.ORAL_TEST_ID){
+    if(id  == PojoType.ORAL_TEST_ID){
       return HazizzTheme.oralTestColor;
     }
-    if(type.id  == PojoType.TEST_ID){
+    if(id  == PojoType.TEST_ID){
       return HazizzTheme.testColor;
     }
   }

@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:mobile/blocs/item_list_picker_bloc/item_list_picker_bloc.dart';
 import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
+import 'package:mobile/blocs/selected_session_bloc.dart';
 import 'package:mobile/communication/errorcode_collection.dart';
+import 'package:mobile/communication/pojos/PojoError.dart';
+import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
@@ -53,7 +56,7 @@ class KretaLoginWaiting extends KretaLoginState {
 }
 
 class KretaLoginFailure extends KretaLoginState {
-  final String error;
+  final PojoError error;
 
   KretaLoginFailure({@required this.error}) : super([error]);
 
@@ -114,6 +117,7 @@ class SchoolItemPickerBloc extends ItemListPickerBloc {
   @override
   Stream<ItemListState> mapEventToState(ItemListEvent event) async* {
     if (event is PickedEvent) {
+      pickedItem = event.item;
       yield ItemListPickedState(item: event.item);
     }
     else if (event is ItemListLoadData) {
@@ -172,12 +176,16 @@ class KretaLoginBloc extends Bloc<KretaLoginEvent, KretaLoginState> {
             yield KretaLoginWaiting();
             HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaCreateSession(
               b_username: usernameBloc.lastText, b_password: passwordBloc.lastText,
-              b_url: schoolBloc.pickedItem.url
-              )
+              b_url: schoolBloc.pickedItem.url)
             );
             if(hazizzResponse.isSuccessful){
+              PojoSession newSession = hazizzResponse.convertedData;
+              SelectedSessionBloc().dispatch(SelectedSessionSetEvent(newSession));
               yield KretaLoginSuccessState();
             }else if(hazizzResponse.hasPojoError){
+              if(hazizzResponse.pojoError.errorCode == ErrorCodes.BAD_AUTHENTICATION_REQUEST.code){
+                yield KretaLoginFailure(error: hazizzResponse.pojoError);
+              }
             }
           }on HResponseError catch(e) {
             print("piritos111");

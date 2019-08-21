@@ -6,7 +6,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workmanager/workmanager.dart';
 
 import '../request_sender.dart';
-import '../hazizz_alarm_manager.dart';
 import '../hazizz_localizations.dart';
 import '../hazizz_response.dart';
 
@@ -67,7 +66,7 @@ class HazizzNotification{
     //  onDidReceiveLocalNotification: onDidReceiveLocalNotification
   );
   static var initializationSettings = new InitializationSettings(
-      initializationSettingsAndroid, initializationSettingsIOS);
+  initializationSettingsAndroid, initializationSettingsIOS);
 
   /*
   static Future showHazizzNotification2() async {
@@ -148,18 +147,16 @@ class HazizzNotification{
   */
 
 
+  static const int hazizzNotifId = 5587346431808710000;
 
-  static const int tasksTomorrowNotificationId = 5587346431;
+
+  static const int tasksTomorrowNotificationId = 5587346431000000000;
   static const int classesNotificationId = 5587346432;
 
   static Future scheduleNotificationAlarmManager(TimeOfDay timeOfDay) async {
 
     DateTime now = DateTime.now();
     DateTime dateTime = DateTime(now.year, now.month, now.day, timeOfDay.hour, timeOfDay.minute);
-
-
-
-
 
 
     Workmanager.initialize(
@@ -169,8 +166,6 @@ class HazizzNotification{
 
     Workmanager.cancelByUniqueName("1");
 
-
-
     Workmanager.registerPeriodicTask(
       "1",  // unique name
       "simpleTask", // this goes to the callback
@@ -179,8 +174,6 @@ class HazizzNotification{
       frequency: Duration(hours: 24),
       initialDelay: dateTime.difference(DateTime.now()),
     );
-
-
 
    // AndroidAlarmManager()
     /*

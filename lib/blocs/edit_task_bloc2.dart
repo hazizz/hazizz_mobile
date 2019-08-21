@@ -152,12 +152,9 @@ class SubjectItemPickerBloc extends ItemListPickerBloc {
 
         if(hazizzResponse.isSuccessful){
           dataList = hazizzResponse.convertedData;
-          if(dataList.isNotEmpty) {
-            print("log: response is List");
-            yield ItemListLoaded(data: dataList);
-          }else{
-            yield Empty();
-          }
+          print("log: response is List");
+          yield ItemListLoaded(data: dataList);
+
         }
       } on Exception catch(e){
         print("log: Exception: ${e.toString()}");
@@ -168,7 +165,7 @@ class SubjectItemPickerBloc extends ItemListPickerBloc {
 
   @override
   // TODO: implement initialState
-  ItemListState get initialState => Empty();
+  ItemListState get initialState => InitialState();
 }
 //endregion
 //endregion
@@ -181,7 +178,7 @@ abstract class TaskTypePickerState extends HState {
 class TaskTypePickedState extends TaskTypePickerState {
   PojoType item;
 
-  TaskTypePickedState(this.item) : assert(item!= null);
+  TaskTypePickedState(this.item) : assert(item!= null), super([item]);
 
   @override
   String toString() => 'PickedState';

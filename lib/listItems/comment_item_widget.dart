@@ -90,6 +90,7 @@ class _CommentItemWidget extends State<CommentItemWidget>{
             ),
 
             Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

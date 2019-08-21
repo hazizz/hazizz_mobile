@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/group_bloc.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
+import 'package:mobile/widgets/hazizz_back_button.dart';
 
 
 import '../../hazizz_localizations.dart';
@@ -61,11 +63,12 @@ class _GroupTabHosterPage extends State<GroupTabHosterPage> with SingleTickerPro
     return Scaffold(
      // backgroundColor: widget.color,
       appBar: AppBar(
+        leading: HazizzBackButton(),
         title: Text(title),
         bottom: TabBar(controller: _tabController, tabs: [
-          Tab(text: tasksTabPage.getTabName(context)),
-          Tab(text: subjectsTabPage.getTabName(context)),//, icon: Icon(Icons.scatter_plot)),
-          Tab(text: membersTabPage.getTabName(context)),//, icon: Icon(Icons.group))
+          Tab(text: tasksTabPage.getTabName(context), icon: Icon(FontAwesomeIcons.bookOpen),),
+          Tab(text: subjectsTabPage.getTabName(context), icon: Icon(FontAwesomeIcons.solidCalendarAlt)),//, icon: Icon(Icons.scatter_plot)),
+          Tab(text: membersTabPage.getTabName(context), icon: Icon(FontAwesomeIcons.users)),//, icon: Icon(Icons.group))
 
           ]),
       ),

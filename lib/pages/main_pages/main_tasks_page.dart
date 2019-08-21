@@ -1,5 +1,7 @@
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
 import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
@@ -42,6 +44,17 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
     }
     */
     //   tasksBloc.fetchMyTasks();
+
+
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FeatureDiscovery.discoverFeatures(
+        context,
+        ['featureId1'],
+      );
+    });
+
+
     super.initState();
   }
 
@@ -188,7 +201,16 @@ Container(color: Colors.transparent, width: MediaQuery.of(context).size.width * 
 
 
                     } else if (state is ResponseEmpty) {
-                      return Center(child: Text("Empty"));
+                      return Column(
+                          children: [
+                            Center(
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 50.0),
+                                child: Text(locText(context, key: "no_tasks_yet")),
+                              ),
+                            )
+                          ]
+                      );
                     } else if (state is ResponseWaiting) {
                       //return Center(child: Text("Loading Data"));
                       return Center(child: CircularProgressIndicator(),);
@@ -208,16 +230,25 @@ Container(color: Colors.transparent, width: MediaQuery.of(context).size.width * 
           }
       ),
       floatingActionButton:
-      FloatingActionButton(
-        heroTag: "hero_task_edit",
-        onPressed: (){
+        DescribedFeatureOverlay(
+          child: FloatingActionButton(
+           // heroTag: "hero_fab_tasks_main",
+            onPressed: (){
 
-          Navigator.pushNamed(context, "/createTask");
-       //   Navigator.push(context,MaterialPageRoute(builder: (context) => EditTaskPage.createMode()));
-        },
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ),
+              Navigator.pushNamed(context, "/createTask");
+           //   Navigator.push(context,MaterialPageRoute(builder: (context) => EditTaskPage.createMode()));
+            },
+            tooltip: 'Increment',
+            child: Icon(FontAwesomeIcons.plus),
+          ),
+          featureId: 'featureId1',
+          icon: FontAwesomeIcons.plus,
+          color: Colors.purple,
+          contentLocation: ContentOrientation.above, // look at note
+          title: 'Just how you want it',
+          description:
+          'Tap the menu icon to switch account, change s'
+        ),
     );
   }
 

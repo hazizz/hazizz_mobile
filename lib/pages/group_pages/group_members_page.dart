@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/group_bloc.dart';
 import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
@@ -43,7 +44,8 @@ class _GroupMembersPage extends State<GroupMembersPage> with AutomaticKeepAliveC
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: FloatingActionButton(onPressed: (){showInviteDialog(context, group: groupMembersBloc.group);}, child: Icon(Icons.person_add),),
+        floatingActionButton: FloatingActionButton(          heroTag: "hero_fab_members",
+          onPressed: (){showInviteDialog(context, group: groupMembersBloc.group);}, child: Icon(FontAwesomeIcons.userPlus),),
         body: new RefreshIndicator(
             child: Stack(
               children: <Widget>[
@@ -61,7 +63,7 @@ class _GroupMembersPage extends State<GroupMembersPage> with AutomaticKeepAliveC
                             }
                         );
                       } else if (state is ResponseEmpty) {
-                        return Center(child: Text("Empty"));
+                        return Container();
                       } else if (state is ResponseWaiting) {
                         return Center(child: CircularProgressIndicator(),);
                       }

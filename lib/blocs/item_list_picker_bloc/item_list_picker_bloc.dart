@@ -35,12 +35,17 @@ class Empty extends ItemListState {
   String toString() => 'ItemListEmtpy';
 }
 
-class Error extends ItemListState {
+class InitialState extends ItemListState {
+  @override
+  String toString() => 'InitialState';
+}
+
+class ItemListFail extends ItemListState {
   final PojoError error;
-  Error({this.error})
+  ItemListFail({this.error})
       : assert(error != null);
   @override
-  String toString() => 'ItemListError';
+  String toString() => 'ItemListFail';
 }
 
 class ItemListPickedState extends ItemListState {
@@ -99,7 +104,7 @@ class ItemListPickerBloc extends Bloc<ItemListEvent, ItemListState> {
   dynamic pickedItem;
 
   @override
-  ItemListState get initialState => Empty();
+  ItemListState get initialState => InitialState();
 
   Future<ItemListState> fetchedData()async{
 

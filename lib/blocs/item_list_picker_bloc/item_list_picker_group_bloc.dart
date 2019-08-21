@@ -21,7 +21,7 @@ class ItemListPickerGroupBloc extends ItemListPickerBloc{
     }
     if(hazizzResponse.hasPojoError){
       print("log: response is List<PojoTask>");
-      return Error(error: hazizzResponse.pojoError);
+      return ItemListFail(error: hazizzResponse.pojoError);
     }
   }
 

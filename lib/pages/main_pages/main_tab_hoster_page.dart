@@ -1,9 +1,17 @@
+import 'dart:async';
+
 import 'package:dynamic_theme/dynamic_theme.dart';
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mobile/blocs/UserDataBloc.dart';
 import 'package:mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
+import 'package:mobile/managers/app_state_manager.dart';
 import 'package:mobile/managers/cache_manager.dart';
 import 'package:mobile/pages/main_pages/main_grades_page.dart';
 import 'package:mobile/pages/main_pages/main_tasks_page.dart';
+import 'package:toast/toast.dart';
 
 import '../../hazizz_localizations.dart';
 import '../../hazizz_theme.dart';
@@ -25,6 +33,9 @@ class MainTabHosterPage extends StatefulWidget {
 
 class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProviderStateMixin{
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+
   TabController _tabController;
 
   TasksPage tasksTabPage;
@@ -34,11 +45,14 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
   String displayName = "name";
 
 
+  bool isDark = false;
+
   void _handleTabSelection() {
     setState(() {
 
     });
   }
+
 
   @override
   void initState() {
@@ -62,6 +76,14 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
     _tabController = new TabController(length: 3, vsync: this, initialIndex: widget.mainTabBlocs.initialIndex);
 
     _tabController.addListener(_handleTabSelection);
+
+
+    HazizzTheme.isDark().then((value){
+      setState(() {
+        isDark = value;
+      });
+    });
+
     super.initState();
   }
 
@@ -72,170 +94,253 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
     super.dispose();
   }
 
+  DateTime currentBackPressTime;
+
+  Future<bool> onWillPop(){
+    DateTime now = DateTime.now();
+    if (currentBackPressTime == null ||
+        now.difference(currentBackPressTime) > Duration(seconds: 2)) {
+      currentBackPressTime = now;
+      Toast.show(locText(context, key: "press_again_to_exit"), context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
+      return Future.value(false);
+    }
+    return Future.value(true);
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // backgroundColor: widget.color,
-      appBar: AppBar(
-        title: Text(locText(context, key: "hazizz")),
+    return FeatureDiscovery(
+      child: WillPopScope(
+        onWillPop: onWillPop,
+        child: Scaffold(
+          key: _scaffoldKey,
+          // backgroundColor: widget.color,
+          appBar: AppBar(
+            leading: IconButton(
+              icon: Icon(FontAwesomeIcons.bars),
+              onPressed: () => _scaffoldKey.currentState.openDrawer()
+            ),
+            title: Text(locText(context, key: "hazizz")),
 
-        bottom: TabBar(controller: _tabController, tabs: [
-          GestureDetector(
-            onLongPress: (){
-              print("log: long press");
-            },
-            child: Tab(text: tasksTabPage.getTabName(context))
-          ),
-          GestureDetector(
-            onLongPress: (){
-              print("log: long press");
-            },
-            child: Tab(text: schedulesTabPage.getTabName(context)),
-          ),
-          GestureDetector(
-            onLongPress: (){
-              print("log: long press");
-            },
-            child: Tab(text: gradesTabPage.getTabName(context)),
-          ),
-          // Tab(text: SchedulesPage.tabName),//, icon: Icon(Icons.scatter_plot)),
-          //, icon: Icon(Icons.group))
-        ]),
-      ),
-      body:
-      TabBarView(
-          controller: _tabController,
-          children: [
-
-            tasksTabPage,
-            schedulesTabPage,
-            gradesTabPage
+            bottom: TabBar(controller: _tabController, tabs: [
+            Tab(text: tasksTabPage.getTabName(context), icon: Icon(FontAwesomeIcons.bookOpen),),
+            Tab(text: schedulesTabPage.getTabName(context), icon: Icon(FontAwesomeIcons.calendarAlt)),
+              Tab(text: gradesTabPage.getTabName(context), icon: Icon(FontAwesomeIcons.listOl)),
 
             /*
-            tasksTabPage
-            ,
-            gradesTabPage,
-          schedulesTabPage
-            */
-          ]
-      ),
-
-      drawer: SizedBox(
-        width: 270,
-        child: Drawer(
-
-
-          child: Column(
-           // padding: EdgeInsets.zero,
-            children: <Widget>[
-              /*
-              DrawerHeader(
-
-                  child:
-              ),
-
-              */
-              UserAccountsDrawerHeader(
-
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColorDark,
-                ),
-                accountName: new Text(displayName, style: TextStyle(fontSize: 18),),
-                accountEmail: new Text(""),
-
-                currentAccountPicture: CircleAvatar(
-                  child: new Text("oiasdasd"),
-                ),
-              ),
-
-
-              ListTile(
-                title: Text(locText(context, key: "my_tasks")),
-                onTap: () {
-                 // HazizzNotification.scheduleNotificationAlarmManager(DateTime.now());
-                  Navigator.popAndPushNamed(context, "intro");
-
-                  /*
-                 Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SimpleExample()),
-                  );
-                   */
-
+            GestureDetector(
+                onLongPress: (){
+                  print("log: long press");
                 },
+                child: Tab(text: tasksTabPage.getTabName(context), icon: Icon(FontAwesomeIcons.bookOpen),)
               ),
-              Hero(
-                tag: "group",
-                child: ListTile(
-                  title: Text(locText(context, key: "groups")),
-                  onTap: () {
-                    //Navigator.pop(context);
-                    // Navigator.push(context,MaterialPageRoute(builder: (context) => GroupTabHosterPage(groupId: 2)));
-                    Navigator.popAndPushNamed(context, "/groups");
-                  },
-                ),
+              GestureDetector(
+                onLongPress: (){
+                  print("log: long press");
+                },
+                child: Tab(text: schedulesTabPage.getTabName(context), icon: Icon(FontAwesomeIcons.calendarAlt)),
               ),
+              GestureDetector(
+                onLongPress: (){
+                  print("log: long press");
+                },
+                child: Tab(text: gradesTabPage.getTabName(context), icon: Icon(FontAwesomeIcons.listOl)),
+              ),
+              */
+              // Tab(text: SchedulesPage.tabName),//, icon: Icon(Icons.scatter_plot)),
+              //, icon: Icon(Icons.group))
+            ]),
+          ),
+          body:
+          TabBarView(
+              controller: _tabController,
+              children: [
+                tasksTabPage,
+                schedulesTabPage,
+                gradesTabPage
+              ]
+          ),
+
+          drawer: SizedBox(
+            width: 270,
+            child: Drawer(
 
 
-              Expanded(
-                child: Column(
-                   mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                 //   Divider(),
-                    Hero(
-                      tag: "settings",
-                      child: ListTile(
-                        onTap: (){
-                          Navigator.pop(context);
-                          Navigator.pushNamed(context, "/settings");
-                        },
-                          leading: Icon(Icons.settings),
-                          title: Text(locText(context, key: "settings"))),
+              child: Column(
+               // padding: EdgeInsets.zero,
+                children: <Widget>[
+                  /*
+                  DrawerHeader(
+
+                      child:
+                  ),
+
+                  */
+                  UserAccountsDrawerHeader(
+
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColorDark,
                     ),
-                    Row(
-                      children: [
-                        Expanded(child:
-                        ListTile(
-                          leading: Icon(Icons.exit_to_app),
-                          title: Text(locText(context, key: "textview_logout_drawer")),
-                          onTap: () {
-                            InfoCache.forgetMyUsername();
-                            Navigator.pushReplacementNamed(
-                                context, "login"
-                            );
-                          },
-                        ),),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8.0, left: 10),
-                          child: IconButton(
-                            iconSize: 50,
-                            icon: Icon(Icons.wb_sunny,
-                            color: Colors.orangeAccent,),
-                            onPressed: () async {
-                              /*
-                              DynamicTheme.of(context).setBrightness(Theme.of(context).brightness == Brightness.dark? Brightness.light: Brightness.dark);
-                              */
+                    accountName: BlocBuilder(
+                      bloc: UserDataBlocs().userDataBloc,
+                      builder: (context, state){
+                        if(UserDataBlocs().userDataBloc.myUserData != null) {
+                          return Text(
+                            UserDataBlocs().userDataBloc.myUserData.displayName,
+                            style: TextStyle(fontSize: 18),);
+                        }
+                        return Text("loading", style: TextStyle(fontSize: 18),);
 
 
-                            //  DynamicTheme.of(context).setThemeData(HazizzTheme.darkThemeData);
-                              if(await HazizzTheme.isDark()) {
-                                DynamicTheme.of(context).setThemeData(HazizzTheme.lightThemeData);
-                                await HazizzTheme.setLight();
-                              }else{
-                                DynamicTheme.of(context).setThemeData(HazizzTheme.darkThemeData);
-                                await HazizzTheme.setDark();
-                              }
+                      },
+                    ),
+                    accountEmail: new Text(""),
 
+                    currentAccountPicture: BlocBuilder(
+                      bloc: UserDataBlocs().pictureBloc,
+                      builder: (context, state){
+
+                        if(UserDataBlocs().pictureBloc.profilePictureBytes != null){
+                          Image img = Image.memory(UserDataBlocs().pictureBloc.profilePictureBytes);
+
+                          return CircleAvatar(
+                            child: Container(
+                              decoration: new BoxDecoration(
+                                image: new DecorationImage(
+                                  image: img.image,
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: new BorderRadius.all(const Radius.circular(80.0)),
+                              ),
+                            )
+                          );
+                        }
+
+
+                        return CircleAvatar(
+                          child: new Text("laoding"),
+                        );
+                      },
+                    ),
+                  ),
+
+
+                  ListTile(
+                    title: Text(locText(context, key: "my_tasks")),
+                    onTap: () async {
+                      Navigator.popAndPushNamed(context, "intro");
+
+                      /*
+                     Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SimpleExample()),
+                      );
+                       */
+
+                    },
+                  ),
+                  Hero(
+                    tag: "group",
+                    child: ListTile(
+                      leading: Icon(FontAwesomeIcons.users),
+
+                      title: Text(locText(context, key: "my_groups")),
+                      onTap: () {
+                        //Navigator.pop(context);
+                        // Navigator.push(context,MaterialPageRoute(builder: (context) => GroupTabHosterPage(groupId: 2)));
+                        Navigator.popAndPushNamed(context, "/groups");
+                      },
+                    ),
+                  ),
+
+                  ListTile(
+                    leading: Icon(FontAwesomeIcons.landmark),
+                    title: Text(locText(context, key: "kreta_accounts")),
+                    onTap: () {
+                      Navigator.popAndPushNamed(context, "/kreta/accountSelector");
+                    },
+                  ),
+
+
+                  Expanded(
+                    child: Column(
+                       mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                     //   Divider(),
+                        Hero(
+                          tag: "settings",
+                          child: ListTile(
+                            onTap: (){
+                              Navigator.pop(context);
+                              Navigator.pushNamed(context, "/settings");
                             },
-                          ),
-                        )
+                              leading: Icon(FontAwesomeIcons.cog),
+                              title: Text(locText(context, key: "settings"))),
+                        ),
+                        Row(
+                          children: [
+                            Expanded(child:
+                            ListTile(
+                              leading: Icon(FontAwesomeIcons.signOutAlt),
+                              title: Text(locText(context, key: "textview_logout_drawer")),
+                              onTap: () {
+
+                                AppState.logout();
+                                /*
+                                AppState.logOutProcedure();
+
+
+                                Navigator.of(context).pushNamedAndRemoveUntil('login', (Route<dynamic> route) => false);
+                                */
+                              },
+                            ),),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8.0, left: 10),
+                              child: Builder(
+                                builder:(context){
+                                  IconData themeIcon;
+                                  Color themeIconColor;
+                                  if(isDark){
+                                    themeIcon = FontAwesomeIcons.solidSun;
+                                    themeIconColor = Colors.orangeAccent;
+                                  }else{
+                                    themeIcon = FontAwesomeIcons.solidMoon;
+                                    themeIconColor = Colors.black45;
+                                  }
+
+                                  return IconButton(
+                                    iconSize: 50,
+                                    icon: Icon(themeIcon,
+                                      color: themeIconColor,),
+                                    onPressed: () async {
+                                      /*
+                                    DynamicTheme.of(context).setBrightness(Theme.of(context).brightness == Brightness.dark? Brightness.light: Brightness.dark);
+                                    */
+
+                                      //  DynamicTheme.of(context).setThemeData(HazizzTheme.darkThemeData);
+                                      if(await HazizzTheme.isDark()) {
+                                        DynamicTheme.of(context).setThemeData(HazizzTheme.lightThemeData);
+                                        await HazizzTheme.setLight();
+                                        isDark = false;
+                                      }else{
+                                        DynamicTheme.of(context).setThemeData(HazizzTheme.darkThemeData);
+                                        await HazizzTheme.setDark();
+                                        isDark = true;
+                                      }
+                                    },
+                                  );
+                                }
+                              ),
+                            )
+                          ],
+                        ),
                       ],
                     ),
-
-                  ],
-                ),
-              )
-            ],
+                  )
+                ],
+              ),
+            ),
           ),
         ),
       ),

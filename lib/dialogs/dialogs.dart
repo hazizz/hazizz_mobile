@@ -18,10 +18,11 @@ import '../hazizz_date.dart';
 import '../hazizz_localizations.dart';
 import '../hazizz_response.dart';
 import '../hazizz_theme.dart';
+import 'create_group_dialog.dart';
 import 'join_group_dialog.dart';
 
 
-
+// 280 min width
 class HazizzDialog extends Dialog{
 
   static const double buttonBarHeight = 48.0;
@@ -77,12 +78,14 @@ class HazizzDialog extends Dialog{
 
                 //  SizedBox(height: 20.0),
 
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    actionButtons,
-                  ],
+                Center(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      actionButtons,
+                    ],
+                  ),
                 )
               ],
             )
@@ -116,15 +119,24 @@ Future showJoinGroupDialog(BuildContext context,) async{
   return result;
 }
 
+Future showCreateGroupDialog(BuildContext context,) async{
+  // List<PojoGroup> data;
+  var d = CreateGroupDialog();
+  bool result = await showDialog(context: context, builder: (context2){
+    return d;
+  });
+  return result;
+}
 
 
 
 
 
 
-void showDialogGroup(BuildContext context, Function(PojoGroup) onPicked, {List<PojoGroup> data}) async{
+
+Future<PojoGroup> showDialogGroup(BuildContext context, {List<PojoGroup> data}) async{
  // List<PojoGroup> data;
-  List<PojoGroup> groups_data;
+  List<PojoGroup> groups_data = List();
   if(data == null) {
     HazizzResponse response = await RequestSender().getResponse(new GetMyGroups());
 
@@ -132,147 +144,325 @@ void showDialogGroup(BuildContext context, Function(PojoGroup) onPicked, {List<P
       groups_data = response.convertedData;
     }
   }else{
-    groups_data = data;
+    groups_data.addAll(data);
   }
 
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      // return object of type Dialog
-      return AlertDialog(
-       // title: new Text("Alert Dialog title"),
-        content: Container(
-          height: 800,
-          width: 800,
-          child: ListView.builder(
-              itemCount: groups_data.length,
-              itemBuilder: (BuildContext context, int index){
+
+  groups_data.insert(0, PojoGroup(0, "<Saját>", "null", "null", 0));
+
+
+  double height = 200;
+  double width = 280;
+
+  HazizzDialog d = HazizzDialog(height: height, width: width,
+    header: Container(
+      width: width,
+      height: 40,
+      color: Theme.of(context).primaryColor,
+      child: Padding(
+        padding: const EdgeInsets.all(5),
+        child:
+        Text("Choose group",
+            style: TextStyle(
+              fontFamily: 'Quicksand',
+              fontSize: 20.0,
+              fontWeight: FontWeight.w300,
+            )
+        ),
+
+
+      ),
+    ),
+    content: Container(
+      height: 160,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 4.0),
+
+
+
+
+
+        child: Column(
+          children: <Widget>[
+            Builder(
+              builder: (context){
+                if(groups_data.length <= 1){
+                  return Text("You are not a member of a group");
+                }
+                return Container();
+              },
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: groups_data.length,
+                itemBuilder: (BuildContext context, int index){
                   return GestureDetector(
-                    onTap: (){
-                      Navigator.of(context).pop();
-                      onPicked(groups_data[index]);
-
-                    },
-                    child: Text(groups_data[index].name,
-                      style: TextStyle(
-                        fontSize: 26
-                      ),
-                    )
-
+                      onTap: (){
+                        Navigator.pop(context, groups_data[index]);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 30.0, right: 30, top: 4,bottom: 4),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(20)),
+                              color: Theme.of(context).primaryColor
+                          ),
+                          width: width,
+                          child: Center(
+                            child: Text( groups_data[index].name ,//   data[index].name,
+                              style: TextStyle(
+                                  fontSize: 26
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
                   );
                 },
-          ),
+              ),
+            ),
+          ],
+        )
+      ),
+    ),
+    actionButtons: Row(
+      children: <Widget>[
+        FlatButton(
+          child: new Text(locText(context, key: "close")),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
-
-        actions: <Widget>[
-          new FlatButton(
-            child: new Text("Close"),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
+      ],
+    ),
   );
-}
 
+  //return d;
 
-void showDialogSubject(BuildContext context, Function(PojoSubject) onPicked, {int groupId, List<PojoSubject> data}) async{
-  List<PojoSubject> subjects_data;
-  if(groupId != null) {
-
-    HazizzResponse response = await RequestSender().getResponse(new GetSubjects(groupId: groupId));
-
-    if(response.isSuccessful){
-      subjects_data = response.convertedData;
-    }
-  }else{
-    subjects_data = data;
-  }
-
-  showDialog(
+  var result = await showDialog(
     context: context,
     builder: (BuildContext context) {
       // return object of type Dialog
-      return AlertDialog(
-        // title: new Text("Alert Dialog title"),
-        content: Container(
-          height: 800,
-          width: 800,
-          child: ListView.builder(
-            itemCount: subjects_data.length,
-            itemBuilder: (BuildContext context, int index){
-              return GestureDetector(
-                  onTap: (){
-                    onPicked(subjects_data[index]);
-                    Navigator.of(context).pop();
-
-                  },
-                  child: Text(subjects_data[index].name,
-                    style: TextStyle(
-                        fontSize: 26
-                    ),
-                  )
-              );
-            },
-          ),
-        ),
-        actions: <Widget>[
-          new FlatButton(
-            child: new Text("Close"),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
+      return d;
     },
   );
+  return result;
+
+
+
+
 }
 
 
-void showDialogTaskType(BuildContext context, Function(PojoType) onPicked) async{
+Future<PojoSubject> showDialogSubject(BuildContext context, {@required PojoGroup group, List<PojoSubject> data}) async{
+  List<PojoSubject> subjects_data = List();
+  int groupId = group.id;
+
+
+  subjects_data.addAll(data);
+
+
+
+  subjects_data.insert(0, PojoSubject(0, "<Tantárgy nélkül>"));
+
+
+  double height = 200;
+  double width = 280;
+
+  HazizzDialog d = HazizzDialog(height: height, width: width,
+    header: Container(
+      width: width,
+      height: 40,
+      color: Theme.of(context).primaryColor,
+      child: Padding(
+        padding: const EdgeInsets.all(5),
+        child:
+        Text("Choose task type",
+          style: TextStyle(
+            fontFamily: 'Quicksand',
+            fontSize: 20.0,
+            fontWeight: FontWeight.w300,
+          )
+        ),
+      ),
+    ),
+    content: Container(
+      height: 160,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 4.0),
+        child: Column(
+              children: <Widget>[
+                Builder(
+                  builder: (context){
+                    if(subjects_data.length <= 1){
+                      return Text("No subject in this group");
+                    }
+                    return Container();
+                  },
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: subjects_data.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context, subjects_data[index]);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 30.0, right: 30, top: 4, bottom: 4),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                                  color: Theme
+                                      .of(context)
+                                      .primaryColor
+                              ),
+                              width: width,
+                              child: Center(
+                                child: Text(
+                                  subjects_data[index].name, //   data[index].name,
+                                  style: TextStyle(
+                                      fontSize: 26
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                      );
+                    },
+                  ),
+                ),
+              ],
+        ),
+      ),
+    ),
+    actionButtons: Row(
+      children: <Widget>[
+        Builder(
+          builder: (context){
+            if(subjects_data.isEmpty) {
+              return FlatButton(
+                child: new Text(locText(context, key: "add_subject")),
+                onPressed: () {
+                  showAddSubjectDialog(context, groupId: groupId);
+                },
+              );
+          }
+            return Container();
+          },
+        ),
+        FlatButton(
+          child: new Text(locText(context, key: "close")),
+          onPressed: () {
+            Navigator.pop(context, null);
+          },
+        ),
+      ],
+    ),
+  );
+
+  //return d;
+
+  var result = await showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      // return object of type Dialog
+      return d;
+    },
+  );
+  return result;
+}
+
+
+Future<PojoType> showDialogTaskType(BuildContext context) async{
   List<PojoType> data = PojoType.pojoTypes;
 
-  showDialog(
+  /*
+  var d = JoinGroupDialog();
+  var result = showDialog(context: context, builder: (context2){
+    return d;
+  });
+  return result;
+  */
+
+  double height = 200;
+  double width = 280;
+
+  HazizzDialog d = HazizzDialog(height: height, width: width,
+    header: Container(
+      width: width,
+      height: 40,
+      color: Theme.of(context).primaryColor,
+      child: Padding(
+        padding: const EdgeInsets.all(5),
+        child:
+        Text("Choose task type",
+            style: TextStyle(
+              fontFamily: 'Quicksand',
+              fontSize: 20.0,
+              fontWeight: FontWeight.w300,
+            )
+        ),
+
+
+      ),
+    ),
+    content: Container(
+      height: 160,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 4.0),
+        child: ListView.builder(
+          itemCount: data.length,
+          itemBuilder: (BuildContext context, int index){
+            return GestureDetector(
+                onTap: (){
+                  Navigator.pop(context, data[index]);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 30.0, right: 30, top: 4,bottom: 4),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        color: data[index].getColor()
+                    ),
+                    width: width,
+                    child: Center(
+                      child: Text( locText(context, key: "taskType_${data[index].id}" ),//   data[index].name,
+                        style: TextStyle(
+                            fontSize: 26
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+            );
+          },
+        ),
+      ),
+    ),
+    actionButtons: Row(
+      children: <Widget>[
+        FlatButton(
+          child: new Text(locText(context, key: "close")),
+          onPressed: () {
+            Navigator.pop(context, null);
+          },
+        ),
+      ],
+    ),
+  );
+
+  //return d;
+
+  var result = await showDialog(
     context: context,
     builder: (BuildContext context) {
       // return object of type Dialog
-      return AlertDialog(
-        // title: new Text("Alert Dialog title"),
-        content: Container(
-          height: 800,
-          width: 800,
-          child: ListView.builder(
-            itemCount: data.length,
-            itemBuilder: (BuildContext context, int index){
-              return GestureDetector(
-                  onTap: (){
-                    onPicked(data[index]);
-                    Navigator.of(context).pop();
-
-                  },
-                  child: Text(data[index].name,
-                    style: TextStyle(
-                        fontSize: 26
-                    ),
-                  )
-              );
-            },
-          ),
-        ),
-        actions: <Widget>[
-          new FlatButton(
-            child: new Text("Close"),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
+      return d;
     },
   );
+  return result;
 }
 
 Future<bool> showDeleteDialog(context, {@required int taskId}) async {
@@ -1097,6 +1287,82 @@ Future<bool> showIntroCancelDialog(context) async {
         return hazizzDialog;
       });
   return success;
+}
+
+
+
+Future<bool> showDialogSessionReauth(BuildContext context) async{
+
+  /*
+  var d = JoinGroupDialog();
+  var result = showDialog(context: context, builder: (context2){
+    return d;
+  });
+  return result;
+  */
+
+  double height = 80;
+  double width = 360;
+
+  HazizzDialog d = HazizzDialog(height: height, width: width,
+    header: Container(
+      width: width,
+      height: 40,
+      color: Theme.of(context).primaryColor,
+      child: Padding(
+        padding: const EdgeInsets.all(5),
+        child:
+        Text("Csak aktív fiókot használhatsz",
+            style: TextStyle(
+              fontFamily: 'Quicksand',
+              fontSize: 20.0,
+              fontWeight: FontWeight.w300,
+            )
+        ),
+
+
+      ),
+    ),
+    content: Container(
+      height: 40,
+      child: Text("Bejelentkezel újra a fiókba?"),
+    ),
+    actionButtons: Row(
+      children: <Widget>[
+        /*
+        FlatButton(
+          child: new Text("FIÓK ELTÁVOLITÁSA"),
+          onPressed: () {
+            Navigator.pop(context, null);
+          },
+        ),
+        */
+        FlatButton(
+          child: new Text("NO"),
+          onPressed: () {
+            Navigator.pop(context, false);
+          },
+        ),
+        FlatButton(
+          child: new Text("YES"),
+          onPressed: () {
+            Navigator.pop(context, true);
+          },
+        ),
+      ],
+    ),
+  );
+
+  //return d;
+
+  bool result = await showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      // return object of type Dialog
+      return d;
+    },
+  );
+  return result;
 }
 
 

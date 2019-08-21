@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 //import 'package:mobile/packages/hazizz-dio-2.1.3/lib/dio.dart';
 import 'HttpMethod.dart';
 
@@ -11,6 +12,7 @@ import 'communication/errors.dart';
 import 'communication/requests/request_collection.dart';
 import 'hazizz_response.dart';
 import 'logger.dart';
+import 'managers/app_state_manager.dart';
 
 Future<HazizzResponse> getResponse(Request request)async{
   return await RequestSender().getResponse(request);
@@ -82,9 +84,9 @@ class RequestSender{
       responseBody.
     },
     */
-    connectTimeout: 7000,
-    sendTimeout: 7000,
-    receiveTimeout: 7000,
+    connectTimeout: 5000,
+    sendTimeout: 5000,
+    receiveTimeout: 5000,
   //  headers: request.header,
     responseType: ResponseType.plain,
     receiveDataWhenStatusError: true,
@@ -129,6 +131,11 @@ class RequestSender{
         print("log: error response data: ${error.response.data}");
       }
       hazizzResponse = await HazizzResponse.onError(dioError: error, request: authRequest);
+      if(hazizzResponse.hasPojoError && hazizzResponse.pojoError.errorCode == 21){
+        AppState.logout();
+      }
+
+
       print(hazizzResponse);
     }
     return hazizzResponse;
@@ -224,7 +231,9 @@ class RequestSender{
 
     Response response;
 
-    logger.i("request_sender.dart: about to start sending request");
+    logger.i("request_sender.dart: about to start sending request: ${request.toString()}");
+
+    if(isLocked()) logger.i("DIO INTERCEPTOR LOCKED");
 
     bool isConnected = await Connection.isOnline();
     try {

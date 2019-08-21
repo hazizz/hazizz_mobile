@@ -38,8 +38,6 @@ class ScheduleEventWidget extends StatelessWidget{
                      "Holnap: tanítási szünet";
             }
           }
-
-
         }else if(state is ScheduleEventInitializeState){
           text = "log: state is ScheduleEventInitializeState";
         }

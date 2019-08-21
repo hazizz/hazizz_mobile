@@ -4,16 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
 import 'package:mobile/communication/errorcode_collection.dart';
-import 'package:mobile/communication/pojos/PojoMeInfoPrivate.dart';
-import 'package:mobile/communication/pojos/PojoMeInfoPublic.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
+import 'package:mobile/managers/app_state_manager.dart';
 import 'package:mobile/managers/cache_manager.dart';
 import 'package:mobile/managers/token_manager.dart';
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
 import 'package:mobile/notification/notification.dart';
 import '../hazizz_response.dart';
+import '../logger.dart';
 import '../request_sender.dart';
+import 'google_login_bloc.dart';
 import 'TextFormBloc.dart';
 import 'auth_bloc.dart';
 
@@ -69,9 +70,9 @@ class LoginInitial extends LoginState {
   String toString() => 'LoginInitial';
 }
 
-class LoginLoading extends LoginState {
+class LoginWaiting extends LoginState {
   @override
-  String toString() => 'LoginLoading';
+  String toString() => 'LoginWaiting';
 }
 
 class LoginStock extends LoginState {
@@ -112,14 +113,23 @@ class LoginSuccessState extends LoginState {
 }
 //endregion
 
-class LoginBloc extends Bloc<LoginEvent, LoginState> {
+class BasicLoginBloc extends Bloc<LoginEvent, LoginState> {
   final AuthBloc authenticationBloc = AuthBloc();
   final TextFormBloc usernameBloc;
   final TextFormBloc passwordBloc;
 
-  LoginBloc(this.usernameBloc, this.passwordBloc);
+  BasicLoginBloc(this.usernameBloc, this.passwordBloc);
 
   LoginState get initialState => LoginInitial();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    authenticationBloc.dispose();
+    usernameBloc.dispose();
+    passwordBloc.dispose();
+    super.dispose();
+  }
 
 
   @override
@@ -140,20 +150,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       if(usernameState is TextFormFine || usernameState is UserNotFoundState) {
         if(passwordState is TextFormFine) { //usernameState is TextFormFine && passwordState is TextFormFine) {
           try {
-            print("sentaa22");
-            await TokenManager.fetchTokens(event.username, event.password);
-            HazizzResponse hazizzResponse = await RequestSender().getResponse(GetMyInfoPublic());
+
+            HazizzResponse hazizzResponse = await RequestSender().getResponse(CreateTokenWithPassword(b_username: event.username, b_password: event.password));
             if(hazizzResponse.isSuccessful){
-              print("log: info: 1");
 
-              PojoMeInfoPublic meInfo = hazizzResponse.convertedData;
-              print("log: info: 2");
+              await AppState.logInProcedure(tokens: hazizzResponse.convertedData);
 
-              InfoCache.setMyId(meInfo.id);
-              InfoCache.setMyUsername(meInfo.username);
-              InfoCache.setMyDisplayName(meInfo.displayName);
 
-              MainTabBlocs().initialize();
               authenticationBloc.dispatch(LoggedIn());
               yield LoginSuccessState();
             //  HazizzNotification.scheduleNotificationAlarmManager(await HazizzNotification.getNotificationTime());
@@ -176,6 +179,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 }
 
+
+
+
+
+
+
 class UserNotFoundEvent extends HFormEvent {
   @override
   String toString() => 'UserNotFoundEvent';
@@ -196,7 +205,17 @@ class PasswordIncorrectState extends HFormState {
 }
 
 
-class LoginPageBlocs{
+class LoginWidgetBlocs{
+
+  Function onLogInSuccessful;
+
+  dispose(){
+    passwordBloc.dispose();
+    usernameBloc.dispose();
+    basicLoginBloc.dispose();
+   // LoginBlocs().googleLoginBloc.dispose();
+  }
+
   TextFormBloc usernameBloc = new TextFormBloc(
     validate: (String text){
       if(text.length <= 2){
@@ -228,10 +247,20 @@ class LoginPageBlocs{
         }
       }
   );
-  LoginBloc loginBloc;
+  BasicLoginBloc basicLoginBloc;
+ // LoginBlocs().googleLoginBloc googleLoginBloc;
 
-  LoginPageBlocs(){
-    loginBloc = new LoginBloc(usernameBloc, passwordBloc);
+  LoginWidgetBlocs(){
+    basicLoginBloc = new BasicLoginBloc(usernameBloc, passwordBloc);
+  //  googleLoginBloc = new LoginBlocs().googleLoginBloc();
+
+
+    basicLoginBloc.state.listen((LoginState state){
+      if(state is LoginSuccessState){
+
+      }
+    });
+
   }
 }
 

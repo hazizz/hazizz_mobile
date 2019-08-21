@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/comment_section_bloc.dart';
 import 'package:mobile/blocs/view_task_bloc.dart';
 import 'package:mobile/communication/pojos/pojo_comment.dart';
@@ -28,18 +30,16 @@ class CommentSectionWidget extends StatefulWidget {
   _CommentSectionWidget createState() => _CommentSectionWidget();
 }
 
-
 class _CommentSectionWidget extends State<CommentSectionWidget>{
 
   List<PojoComment> comments = List();
 
 
- // CommentBlocs commentBlocs = ViewTaskBloc().commentBlocs;
-
-
   @override
   void initState() {
     // TODO: implement initState
+
+
     super.initState();
 
    // commentBlocs = CommentSectionWidget.commentBlocs;
@@ -141,6 +141,10 @@ class _CommentSectionWidget extends State<CommentSectionWidget>{
                             child: Padding(
                               padding: const EdgeInsets.only(left: 8),
                               child: TextField(
+                                inputFormatters:[
+                                  LengthLimitingTextInputFormatter(300),
+                                ],
+
                                 decoration:
                                 InputDecoration(
                                   errorText: error,
@@ -161,12 +165,12 @@ class _CommentSectionWidget extends State<CommentSectionWidget>{
                             alignment: Alignment.bottomCenter,
                             child: Padding(
                               padding: const EdgeInsets.only(
-                                  top: 8.0, left: 8.0, right: 8.0, bottom: 5),
+                                  top: 8.0, left: 7.0, right: 7.0, bottom: 5),
                               child: IconButton(
                                 color: Theme
                                     .of(context)
                                     .accentColor,
-                                icon: Icon(Icons.send, size: 30,),
+                                icon: Icon(FontAwesomeIcons.paperPlane, size: 30,),
                                 onPressed: () async {
                                   ViewTaskBloc().commentBlocs.commentWriterBloc.dispatch(CommentWriterSendEvent());
                                   FocusScope.of(context).requestFocus(new FocusNode());

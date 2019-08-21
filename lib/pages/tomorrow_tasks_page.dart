@@ -7,6 +7,7 @@ import 'package:mobile/blocs/tasks_tomorrow_bloc.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/listItems/task_header_item_widget.dart';
 import 'package:mobile/listItems/task_item_widget.dart';
+import 'package:mobile/widgets/hazizz_back_button.dart';
 import 'package:sticky_header_list/sticky_header_list.dart';
 
 import 'package:sticky_headers/sticky_headers.dart';
@@ -69,6 +70,7 @@ class _TasksTomorrowPage extends State<TasksTomorrowPage> with SingleTickerProvi
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: HazizzBackButton(),
         title: Text(widget.getTitleName(context)),
       ),
       body: new RefreshIndicator(

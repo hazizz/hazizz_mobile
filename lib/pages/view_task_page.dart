@@ -10,6 +10,7 @@ import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/managers/cache_manager.dart';
 import 'package:mobile/widgets/comment_section_widget.dart';
+import 'package:mobile/widgets/hazizz_back_button.dart';
 
 import '../hazizz_date.dart';
 import '../hazizz_fonts.dart';
@@ -110,6 +111,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
         tag: "hero_task${widget.pojoTask.id}",
         child: Scaffold(
         appBar: AppBar(
+          leading: HazizzBackButton(),
           title: Text("View Task"),
         ),
         body:RefreshIndicator(
@@ -162,7 +164,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
-                                    color: PojoType.getColor(widget.pojoTask.type),
+                                    color: widget.pojoTask.type.getColor(),
                                   //  width: 400,
 
                                     child: Column(
@@ -248,7 +250,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                                     // color: PojoType.getColor(pojoTask.type),
                                                       decoration: BoxDecoration(
                                                           borderRadius: BorderRadius.only(bottomRight: Radius.circular(20), bottomLeft: Radius.circular(20)),
-                                                          color: PojoType.getColor(widget.pojoTask.type)
+                                                          color: widget.pojoTask.type.getColor()
                                                       ),
                                                       child: Padding(
                                                         padding: const EdgeInsets.only(left: 12, top: 0, right: 12, bottom: 6),

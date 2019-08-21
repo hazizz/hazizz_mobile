@@ -7,6 +7,8 @@ import 'package:meta/meta.dart';
 
 //import 'package:dio/dio.dart';
 
+import 'blocs/selected_session_bloc.dart';
+import 'logger.dart';
 import 'request_sender.dart';
 import 'communication/ResponseHandler.dart';
 import 'communication/pojos/PojoError.dart';
@@ -65,6 +67,7 @@ class HazizzResponse{
   onErrorResponse()async {
     print("log: dioError: ${dioError.type}");
     if(response != null) {
+      logger.i("RESPONSE: $response");
       print("log: error response data: ${response.data}");
       pojoError = PojoError.fromJson(json.decode(response?.data));
 
@@ -85,15 +88,6 @@ class HazizzResponse{
                 new CreateTokenWithRefresh(
                     b_username: await InfoCache.getMyUsername(),
                     b_refreshToken: await TokenManager.getRefreshToken(),
-                    rh: ResponseHandler(
-                        onSuccessful: (dynamic data) {
-                          print("hey: got token reponse: ${data.token}");
-                          RequestSender().unlock();
-                        },
-                        onError: (PojoError pojoError) {
-                          RequestSender().unlock();
-                        }
-                    )
                 ));
 
             if(tokenResponse.isSuccessful) {
@@ -116,6 +110,8 @@ class HazizzResponse{
         }else if(pojoError.errorCode == 13 || pojoError.errorCode == 14 ||
             pojoError.errorCode == 15) {
           // navigate to login/register page
+        }else if(pojoError.errorCode == 136){
+          SelectedSessionBloc().dispatch(SelectedSessionInactiveEvent());
         }
         print("log: response error: ${pojoError.toString()}");
         // throw new HResponseError(pojoError);

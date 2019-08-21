@@ -72,7 +72,7 @@ class _GroupTasksPage extends State<GroupTasksPage> with AutomaticKeepAliveClien
                                 }
                             );
                           } else if (state is ResponseEmpty) {
-                            return Center(child: Text("Empty"));
+                            return Center(child: Text(locText(context, key: "no_tasks_in_group_yet")));
                           } else if (state is ResponseWaiting) {
                             return Center(child: CircularProgressIndicator(),);
                           }

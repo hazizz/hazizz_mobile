@@ -14,10 +14,6 @@ Future<String> locTextContextless({@required String key, List<String> args}) asy
   return await HazizzLocalizationsNoContext.translate(key, args: args);
 }
 
-String locTextFromList(BuildContext context, {@required String key, @required int index}){
-  return HazizzLocalizations.of(context).translateFromList(key: key, index: index);
-}
-
 getPreferredLocal() async{
   String preferredLangCode = (await getPreferredLangCode());
   print("log: preferredLangCode:  ${preferredLangCode}");

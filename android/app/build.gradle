@@ -78,11 +78,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:17.0.1'
     // Add dependency
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
+    implementation "com.google.gms:google-services:4.2.0"
 }
 
 
-apply plugin: 'io.fabric'
-apply plugin: 'com.google.gms.google-services'
+
 
 configurations.all {
 
@@ -97,6 +97,9 @@ configurations.all {
         }
     }
 }
+
+apply plugin: 'io.fabric'
+apply plugin: 'com.google.gms.google-services'
 
 
 

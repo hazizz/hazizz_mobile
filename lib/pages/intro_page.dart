@@ -1,30 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/blocs/google_login_bloc.dart';
+import 'package:mobile/dialogs/loading_dialog.dart';
 import 'package:mobile/widgets/google_sign_in_widget.dart';
 import 'package:mobile/widgets/kreta_login_widget.dart';
-import 'package:mobile/widgets/login_widget.dart';
 import 'package:mobile/widgets/registration_widget.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/custom/hazizz_tab_bar_view.dart';
 import 'package:mobile/custom/hazizz_tab_controller.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import '../hazizz_localizations.dart';
 
 import "dart:math" show pi;
 
 import '../hazizz_theme.dart';
 
-
 class IntroPage extends StatefulWidget {
 
-  IntroPage({Key key}) : super(key: key){
-  }
+  IntroPage({Key key}) : super(key: key);
 
   @override
   _IntroPage createState() => _IntroPage();
 }
 
 class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin{
-
-
   static const double angle = pi / 16;
 
   static const double dy = -86;
@@ -33,31 +32,42 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
 
   //List<Widget> slides;
 
+  /*
   void _handleTabSelection() {
     setState(() {
 
     });
   }
+  */
+
+  bool googleSignInButtonPressed = false;
 
   var slides;
+
+  @override
+  void initState() {
+    _tabController = new HazizzTabController(length: 4, vsync: this);
+  //  _tabController.addListener(_handleTabSelection);
+    super.initState();
+  }
 
 
 
   @override
-  void initState() {
+  void dispose() {
+    // TODO: implement dispose
+    LoginBlocs().googleLoginBloc.reset();
 
-    _tabController = new HazizzTabController(length: 4, vsync: this);
-    _tabController.addListener(_handleTabSelection);
-
-
-    super.initState();
+  //  LoginBlocs().googleLoginBloc().dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
 
-
-
+    void nextPage(){
+      _tabController.animateTo(_tabController.index+1,  duration: Duration(milliseconds:  2000));
+    }
 
     Widget decorBottomToTop(Color decorColor1, Color decorColor2 ){
       return Transform.scale(
@@ -70,10 +80,7 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
             child: Container(
 
               decoration: BoxDecoration(
-
-                // shape: BoxShape.circle, // BoxShape.circle or BoxShape.retangle
                   gradient: LinearGradient(colors: [decorColor1, decorColor2]),
-                  // backgroundBlendMode: BlendMode.colorBurn,
                   color: Colors.blue,
                   boxShadow: [
                     BoxShadow(
@@ -83,7 +90,6 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
                     ),
                   ]
               ),
-              //  color: Colors.blue,
               height: MediaQuery.of(context).size.height/100*18/1.2,
               width:  MediaQuery.of(context).size.width*10,
             ),
@@ -101,9 +107,7 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
           child: Transform.translate(
             offset: Offset(-0, dy),
             child: Container(
-
               decoration: BoxDecoration(
-
                 // shape: BoxShape.circle, // BoxShape.circle or BoxShape.retangle
                   gradient: LinearGradient(colors: [decorColor1, decorColor2 ]),
                   // backgroundBlendMode: BlendMode.colorBurn,
@@ -116,7 +120,6 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
                     ),
                   ]
               ),
-              //  color: Colors.blue,
               height: MediaQuery.of(context).size.height/100*18/1.2,
               width:  MediaQuery.of(context).size.width*10,
             ),
@@ -137,14 +140,12 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
 
     Widget pageGenerator(Widget content, {bool withSingleChildScrollView} ){
 
-
       Widget decorWidget;
 
       if(_counter%2 == 0){
         decorWidget = decorBottomToTop(gradientColor[_counter], gradientColor[_counter+1]);
       }else{
         decorWidget = decorTopToBottom(gradientColor[_counter], gradientColor[_counter+1]);
-
       }
       _counter++;
 
@@ -171,7 +172,6 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
       }
 
       return Stack(
-        //  fit: StackFit.,
           children: [
             SingleChildScrollView(
               child: Container(
@@ -209,7 +209,7 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
                 bottom: 4,
                 child: FlatButton(child: Text(locText(context, key: "next").toUpperCase()),
                   onPressed: (){
-                    _tabController.animateTo(_tabController.index+1, curve: Curves.linear, duration: Duration(milliseconds:  2000));
+                    nextPage();
                   },
                 ),
               )
@@ -221,26 +221,75 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
       ),
 
       pageGenerator(
-        Center(
-          child: Column(
-            children: <Widget>[
-              RegistrationWidget(),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Text(locText(context, key: "or").toUpperCase()),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10.0),
-                child: GoogleSignInButtonWidget(
-                  onSuccess: (){
-                  _tabController.animateTo(_tabController.index+1,  duration: Duration(milliseconds:  2000));
-                },),
-              ),
-            ],
-          ),
-        ),
-          withSingleChildScrollView: true
+        Builder(
+          builder: (context){
+            GoogleSignInButtonWidget googleSignInButtonWidget = GoogleSignInButtonWidget();
 
+            return BlocBuilder(
+              bloc: LoginBlocs().googleLoginBloc,
+              builder: (context, state){
+
+                bool _isLoading;
+
+                print("log: ggoogle: $state");
+
+               // ProgressDialog pg;
+              //  pg = new ProgressDialog(context,ProgressDialogType.Normal);
+
+
+                if(state is GoogleLoginSuccessfulState && !googleSignInButtonPressed){
+                  _isLoading = false;
+
+                  nextPage();
+                }else if(state is GoogleLoginWaitingState/* || state is GoogleLoginFineState && googleSignInButtonWidget.googleLoginBloc*/){
+                /*  Future.delayed(Duration.zero,() => setState(() {
+                    print("asd: is true");
+                    _isLoading = true;
+                  }));
+                  */
+
+                  _isLoading = true;
+
+
+
+                  // Future.delayed(Duration.zero,() => pg.show());
+
+                }else{
+                //  if(pg.isShowing())
+                //    Future.delayed(Duration.zero,() => pg.hide());
+                  _isLoading = false;
+
+                  /*
+                  WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
+                    print("asd: is true");
+                    _isLoading = false;
+                  }));
+                  */
+
+                }
+
+
+                return LoadingDialog(
+                  child: Column(
+                    children: <Widget>[
+                      RegistrationWidget(),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(locText(context, key: "or").toUpperCase()),
+                      ),
+                      Padding(
+                          padding: const EdgeInsets.only(bottom: 10.0),
+                          child: googleSignInButtonWidget
+                      ),
+                    ],
+                  ),
+                  show: _isLoading,
+                );
+              }
+            );
+          },
+        ),
+        withSingleChildScrollView: true
       ),
 
       pageGenerator(
@@ -253,7 +302,7 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
                       child: Text("Kréta integráció2")
                   ),
                   Positioned(
-                      bottom: 10,
+                      bottom: 4,
                       right: 4,
                       child:
                       Row(
@@ -267,7 +316,7 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
                           ),
                           FlatButton(child: Text(locText(context, key: "next").toUpperCase()),
                             onPressed: (){
-                              _tabController.animateTo(_tabController.index+1,duration: Duration(milliseconds: 4000));
+                              nextPage();
                             },
                           )
                         ],
@@ -284,10 +333,14 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
             height: height1,
             child: Stack(
               children: <Widget>[
-                KretaLoginWidget(),
+                KretaLoginWidget(
+                  onSuccess: (){
+                    Navigator.popAndPushNamed(context, "/");
+                  },
+                ),
 
                 Positioned(
-                  bottom: 10,
+                  bottom: 4,
                   right: 4,
                   child:
                   FlatButton(child: Text(locText(context, key:  "skip").toUpperCase()),
@@ -305,7 +358,6 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
       ),
     ];
 
-
     return WillPopScope(
       onWillPop: _onWillPop,
 
@@ -321,7 +373,6 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
       ),
     );
   }
-
 
   Future<bool> _onWillPop() async {
     return await false;
@@ -345,8 +396,6 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
     ) ?? false;
     */
   }
-
-
 
   @override
   // TODO: implement wantKeepAlive

@@ -13,8 +13,9 @@
 #import <firebase_dynamic_links/FirebaseDynamicLinksPlugin.h>
 #import <flutter_local_notifications/FlutterLocalNotificationsPlugin.h>
 #import <google_sign_in/GoogleSignInPlugin.h>
+#import <image_cropper/ImageCropperPlugin.h>
+#import <image_picker/ImagePickerPlugin.h>
 #import <intro_slider/IntroSliderPlugin.h>
-#import <sensors/SensorsPlugin.h>
 #import <share/SharePlugin.h>
 #import <shared_preferences/SharedPreferencesPlugin.h>
 #import <workmanager/WorkmanagerPlugin.h>
@@ -32,8 +33,9 @@
   [FLTFirebaseDynamicLinksPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseDynamicLinksPlugin"]];
   [FlutterLocalNotificationsPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterLocalNotificationsPlugin"]];
   [FLTGoogleSignInPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTGoogleSignInPlugin"]];
+  [FLTImageCropperPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTImageCropperPlugin"]];
+  [FLTImagePickerPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTImagePickerPlugin"]];
   [IntroSliderPlugin registerWithRegistrar:[registry registrarForPlugin:@"IntroSliderPlugin"]];
-  [FLTSensorsPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTSensorsPlugin"]];
   [FLTSharePlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTSharePlugin"]];
   [FLTSharedPreferencesPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTSharedPreferencesPlugin"]];
   [WorkmanagerPlugin registerWithRegistrar:[registry registrarForPlugin:@"WorkmanagerPlugin"]];

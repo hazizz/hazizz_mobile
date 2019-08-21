@@ -67,7 +67,7 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
                                     // color: PojoType.getColor(widget.pojoTask.type),
                                       decoration: BoxDecoration(
                                           borderRadius: BorderRadius.only(bottomRight: Radius.circular(12)),
-                                          color: PojoType.getColor(widget.pojoTask.type)
+                                          color: widget.pojoTask.type.getColor()
                                       ),
                                       child: Padding(
                                         padding: const EdgeInsets.only(left: 4, top: 4, right: 8, bottom: 6),
@@ -84,7 +84,7 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
                                             // color: PojoType.getColor(widget.pojoTask.type),
                                               decoration: BoxDecoration(
                                                   borderRadius: BorderRadius.only(bottomRight: Radius.circular(10), bottomLeft: Radius.circular(10)),
-                                                  color: PojoType.getColor(widget.pojoTask.type)
+                                                  color: widget.pojoTask.type.getColor()
                                               ),
                                               child: Padding(
                                                 padding: const EdgeInsets.only(left: 8, top: 4, right: 8, bottom: 6),

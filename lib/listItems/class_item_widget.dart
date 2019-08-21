@@ -31,6 +31,7 @@ class ClassItemWidget extends StatelessWidget{
     return Container(
       height: itemHeight,
       child: Card(
+        margin: EdgeInsets.only(left: 4, right: 4, bottom: 0, top: 5),
         color: bgColor,
         clipBehavior: Clip.antiAliasWithSaveLayer,
         elevation: 5,

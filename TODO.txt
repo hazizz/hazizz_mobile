@@ -1,14 +1,56 @@
-TODO:
+TO TALK ABOUT:
+- mi legyen a user invite-l
 
-- automata refresh token
-- órarend eventek
-- frissítés idejének kiírása
-- dedikált screen a main tabeknek
+
+FUTURE TODO:
+- cache - offline mode
 - taskoknál "remind me later"
-- fixelni az edit taskot
+- frissítés idejének kiírása
+- órarend eventek
 - add debug page (https://pub.dev/packages/alice)
-- app lokalizálása
-- offline mode
+- csoport rangok
+
+
+
+TODO:
+//- automata refresh token
+- dedikált screen a main tabeknek
+- app teljes lokalizálása
+- jegyek átlag - 80%
+- Taskek átnevezése Event-re (hiszen a felelés és a dolgozat nem feladat)
+//- Transaction id az errorok melé
+//- Bloc a bejelentkezés utáni felhasználói "adatgyüjtéshez"
+- kréta bejlentkezés
+- login-nál retry ha timeout
+- invite link teljes működése
+- téma kreálás
+- iskolák cachelése
+- globális session betöltés
+- az introba egy join/create group
+- saját feladat
+
+
+
+DONE:
+- displayName és profilePic editor - UI done
+
+
+bugs to fix:
+- fixelni az edit taskot
 - crashlytics nem reportol minden crasht. NÉZD MEG!!!
-- jegyek átlag
+- 3. sign in with google nem működik
+
+
+
+Future Features?:
+- csoprot rangok: segítségért, feladat létrehozásért
+- csoportokba jegy öszehasonlítás 
+- csoport chat
+- csoport "kérések" (segitség kérés csoporton belűl. pl.: "Valaki megadja a matek órai munkát?" válasz: "Nem lol" + tagelés)
+    -ezekből jövő rangok(jutalom a segítségért)
+- quiz(publkus és privát)
+- jegyzetek(kép vagy szöveg formájában subjecthez kötve)
+- Házizz, mint social app iskolákba:
+  - kérdések
+  - kérések
 

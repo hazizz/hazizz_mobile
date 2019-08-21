@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 
 ThemeData theme(BuildContext context){
+
   return Theme.of(context);
 }
 
@@ -15,6 +16,7 @@ class HazizzTheme{
   white = Color.fromRGBO(232, 240, 223, 1),
   lightblue = Color.fromRGBO(73, 216, 216, 1),
   blue = Color.fromRGBO(54, 177, 191, 1),
+  purple = Color.fromRGBO(126, 1, 255, 1),
 
 
 
@@ -29,9 +31,9 @@ class HazizzTheme{
 
   headerColor = Colors.red,
   homeworkColor = Colors.green,
-  testColor = Colors.red,
-  oralTestColor = Colors.purple,
-  assignmentColor = Colors.yellow
+  testColor = red,
+  oralTestColor = purple,
+  assignmentColor = yellow
   ;
 
   static final Color formColor = Colors.grey.withAlpha(120);

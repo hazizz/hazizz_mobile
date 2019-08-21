@@ -108,11 +108,16 @@ class KretaSessionBloc extends Bloc<HEvent, HState> {
   static Future<void> fetchRefreshTokens(@required String username, @required String refreshToken) async{
     HazizzResponse hazizzResponse = await RequestSender().getResponse(new CreateTokenWithRefresh(b_username: username, b_refreshToken: refreshToken));
     if(hazizzResponse.isSuccessful){
+      print("YEEEHAW22: suc");
+
       PojoTokens tokens = hazizzResponse.convertedData;
       InfoCache.setMyUsername(username);
       setToken(tokens.token);
       setRefreshToken(tokens.refresh);
     }else if(hazizzResponse.hasPojoError){
+
+      print("YEEEHAW22: error");
+
       int errorCode = hazizzResponse.pojoError.errorCode;
       if(ErrorCodes.INVALID_PASSWORD.equals(errorCode)){
         throw WrongPasswordException;

@@ -26,11 +26,13 @@ class KretaSessionManager {
 
   static const String _keySession = "key_session";
 
+  static PojoSession selectedSession;
+
 //  static bool tokenIsValid = true;
 
   SharedPreferences prefs;
 
-  static Future<bool> hasSession() async{
+  static Future<bool> hasSelectedSession() async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String session = prefs.getString(_keySession);
     return !(session == null || session == "");
@@ -64,17 +66,45 @@ class KretaSessionManager {
   }
   */
 
-  static Future<PojoSession> getSession() async{
+  static Future<void> loadSelectedSession() async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String encodedSession = prefs.getString(_keySession);
-    Map jsonSession = json.decode(encodedSession);
-    return PojoSession.fromJson(jsonSession);
+    if(encodedSession != null) {
+      Map jsonSession = json.decode(encodedSession);
+      if(jsonSession != null) {
+        selectedSession = PojoSession.fromJson(jsonSession);
+      }
+      return null;
+    }
+    return null;
   }
 
-  static Future<void> setSession(PojoSession session) async{
+
+  static Future<PojoSession> getSelectedSession() async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String encodedSession = prefs.getString(_keySession);
+    print("cached session1: ${encodedSession}");
+    if(encodedSession != null) {
+      Map jsonSession = json.decode(encodedSession);
+      print("cached session2: ${jsonSession}");
+
+      if(jsonSession != null) {
+        print("cached session3: ${PojoSession.fromJson(jsonSession)}");
+
+        return PojoSession.fromJson(jsonSession);
+      }
+      return null;
+    }
+    return null;
+  }
+
+  static Future<void> setSelectedSession(PojoSession session) async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     Map jsonSession = session.toJson();
 
-    prefs.setString(_keySession, jsonSession.toString());
+    bool success = await prefs.setString(_keySession, jsonEncode(jsonSession));
+    if(success){
+      selectedSession = session;
+    }
   }
 }

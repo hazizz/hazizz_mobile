@@ -4,7 +4,6 @@ import 'package:mobile/blocs/TextFormBloc.dart';
 import 'package:mobile/blocs/create_task_bloc.dart';
 import 'package:mobile/blocs/date_time_picker_bloc.dart';
 import 'package:mobile/blocs/edit_task_bloc.dart';
-//import 'package:mobile/blocs/edit_task_bloc2.dart';
 import 'package:mobile/blocs/item_list_picker_bloc/item_list_picker_bloc.dart';
 import 'package:mobile/blocs/item_list_picker_bloc/item_list_picker_group_bloc.dart';
 import 'package:mobile/blocs/task_maker_blocs.dart';
@@ -15,6 +14,7 @@ import 'package:mobile/communication/pojos/task/PojoTask.dart';
 
 import 'package:expandable/expandable.dart';
 import 'package:mobile/dialogs/dialogs.dart';
+import 'package:mobile/widgets/hazizz_back_button.dart';
 
 import '../hazizz_date.dart';
 import '../hazizz_localizations.dart';
@@ -84,6 +84,7 @@ class _TaskMakerPage extends State<TaskMakerPage> {
 
   AppBar getAppBar(BuildContext context){
     return AppBar(
+      leading: HazizzBackButton(),
         title: Text(widget.mode == TaskMakerMode.create ? locText(context, key: "createTask") : locText(context, key: "editTask") )
     );
   }
@@ -139,6 +140,26 @@ class _TaskMakerPage extends State<TaskMakerPage> {
     var taskTypePicker = BlocBuilder(
         bloc: blocs.taskTypePickerBloc,
         builder: (BuildContext context, TaskTypePickerState state) {
+
+          String typeName = "ERROR";
+          if(state is TaskTypePickedState) {
+            if (state.item.id == 1) {
+              headerColor = HazizzTheme.homeworkColor;
+            }
+            else if (state.item.id == 2) {
+              headerColor = HazizzTheme.assignmentColor;
+            }
+            else if (state.item.id == 3) {
+              headerColor = HazizzTheme.testColor;
+            }
+            else if (state.item.id == 4) {
+              headerColor = HazizzTheme.oralTestColor;
+            }
+            typeName = locText(context, key: "taskType_${state.item.id}");
+          }
+
+
+
           return GestureDetector(
             child: FormField(
               builder: (FormFieldState formState) {
@@ -149,41 +170,18 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                   //    labelText: 'Type',
                     ),
                     isEmpty: _color == '',
-                    child: Builder(
-                      builder: (BuildContext context){//, ItemListState state) {
-                        String typeName = "error lol123";
-                        if(state is TaskTypePickedState) {
-                          if (state.item.id == 1) {
-                            headerColor = HazizzTheme.homeworkColor;
-                            typeName = "Homework";
-                          }
-                          else if (state.item.id == 2) {
-                            headerColor = HazizzTheme.assignmentColor;
-                            typeName = "Assignment";
-                          }
-                          else if (state.item.id == 3) {
-                            headerColor = HazizzTheme.testColor;
-                            typeName = "Test";
-                          }
-                          else if (state.item.id == 4) {
-                            headerColor = HazizzTheme.oralTestColor;
-                            typeName = "Oral test";
-                          }
-                        }
-
-                        return Text('${typeName}',
+                    child: Text('${typeName}',
                             style: TextStyle(fontSize: 24.0),
-                          );
-                      },
                     )
                 );
               },
             ),
-            onTap: () {
-              showDialogTaskType(context, (PojoType type) {
-                blocs.taskTypePickerBloc.dispatch(TaskTypePickedEvent(type));
+            onTap: () async {
+              PojoType result = await showDialogTaskType(context);
+              if(result != null){
+                blocs.taskTypePickerBloc.dispatch(TaskTypePickedEvent(result));
+
               }
-              );
             },
           );
         }
@@ -192,6 +190,12 @@ class _TaskMakerPage extends State<TaskMakerPage> {
       bloc: blocs.groupItemPickerBloc,
       builder: (BuildContext context, ItemListState state) {
         print("log: widget update111");
+
+        String error;
+        if(state is ItemListNotPickedState){
+          error = locText(context, key: "error_noGroupSelected");
+        }
+
         return GestureDetector(
           child: FormField(
             builder: (FormFieldState formState) {
@@ -203,7 +207,7 @@ class _TaskMakerPage extends State<TaskMakerPage> {
 
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.only(left: 6, bottom: 8, top: 10),
-                    errorText: "not picked",
+                    errorText: error,
                    // error
                     filled: true,
                     fillColor: HazizzTheme.formColor,
@@ -229,17 +233,14 @@ class _TaskMakerPage extends State<TaskMakerPage> {
               );
             },
           ), //groupFormField,
-          onTap: () {
+          onTap: () async {
             List<PojoGroup> dataList = blocs.groupItemPickerBloc.dataList;
             if(dataList != null){
               if (state is ItemListLoaded || state is PickedGroupState) {
-                showDialogGroup(context, (PojoGroup group) {
-                 // chosenGroup = group;
-                  blocs.groupItemPickerBloc.dispatch(PickedGroupEvent(item: group));
-                  print("log: group: ${group.name}");
-                },
-                  data: dataList,
-                );
+                PojoGroup result = await showDialogGroup(context, data: dataList,);
+                if(result != null){
+                  blocs.groupItemPickerBloc.dispatch(PickedGroupEvent(item: result));
+                }
               }
             }
 
@@ -251,71 +252,83 @@ class _TaskMakerPage extends State<TaskMakerPage> {
         bloc: blocs.subjectItemPickerBloc,
         builder: (BuildContext context, ItemListState state) {
           print("log: subject picker state: $state");
-          return GestureDetector(
-            child: FormField(
 
-              builder: (FormFieldState formState) {
-                String hint;
-                String error;
-                if(state is ItemListNotPickedState){
-                  error = "Not picked";
-                }
-                if(!(state is PickedSubjectState)){
-                  hint = locText(context, key: "subject");
-                }
-
-                return InputDecorator(
-
-                    decoration: InputDecoration(
-                  //    filled: true,
-                   //   fillColor: HazizzTheme.formColor,
-                 //     icon: const Icon(Icons.group),
-                        contentPadding: EdgeInsets.only(left: 6, bottom: 8, top: 10),
-
-                        labelText: hint,
-                      errorText: error
-                    ),
-                    isEmpty: _color == '',
-                    child: Builder(
-                      builder: (BuildContext context){//, ItemListState state) {
-                        print("log: u $state");
-                        if (state is ItemListLoaded) {
-                          return Container();
-                        }
-                        if(state is PickedSubjectState) {
-                          print("log: ööö");
-                          return Text('${ state.item.name != null
-                              ? state.item.name
-                              : "no Subject"}',
-                            style: TextStyle(fontSize: 20),
-
-                          );
-                        }
-                        else if(state is NotPickedEvent){
-
-                        }
-                        return Container();
-                      },
-                    )
-                );
-              },
-            ), //groupFormField,
-            onTap: () {
-              List<PojoSubject> dataList = blocs.subjectItemPickerBloc.dataList;
-              if(dataList != null){
-                if (state is ItemListLoaded || state is PickedSubjectState || state is ItemListNotPickedState) {
-                  showDialogSubject(context, (PojoSubject subject) {
-                    // chosenGroup = group;
-                    blocs.subjectItemPickerBloc.dispatch(PickedSubjectEvent(item: subject));
-                    print("log: group: ${subject.name}");
-                  },
-                    data: dataList,
-                  );
-                }
+          return BlocBuilder(
+            bloc: blocs.groupItemPickerBloc,
+            builder: (context2, state2){
+              if(blocs.groupItemPickerBloc.pickedItem == null || blocs.groupItemPickerBloc.pickedItem.id == 0){
+                print("what????");
+                return Container();
               }
+
+              return GestureDetector(
+                child: FormField(
+
+                  builder: (FormFieldState formState) {
+                    String hint;
+                    String error;
+                    if(state is ItemListNotPickedState){
+                      error = "Not picked";
+                    }
+                    if(!(state is PickedSubjectState)){
+                      hint = locText(context, key: "subject");
+                    }
+
+                    return InputDecorator(
+
+                        decoration: InputDecoration(
+                          //    filled: true,
+                          //   fillColor: HazizzTheme.formColor,
+                          //     icon: const Icon(Icons.group),
+                            contentPadding: EdgeInsets.only(left: 6, bottom: 8, top: 10),
+
+                            labelText: hint,
+                            errorText: error
+                        ),
+                        isEmpty: _color == '',
+                        child: Builder(
+                          builder: (BuildContext context){//, ItemListState state) {
+                            print("log: u $state");
+                            if (state is ItemListLoaded) {
+                              return Container();
+                            }
+                            if(state is PickedSubjectState) {
+                              print("log: ööö");
+                              return Text('${ state.item.name != null
+                                  ? state.item.name
+                                  : "no Subject"}',
+                                style: TextStyle(fontSize: 20),
+
+                              );
+                            }
+                            else if(state is NotPickedEvent){
+
+                            }
+                            return Container();
+                          },
+                        )
+                    );
+                  },
+                ), //groupFormField,
+                onTap: () async {
+                  List<PojoSubject> dataList = blocs.subjectItemPickerBloc.dataList;
+                  if (state is! Waiting && state is! InitialState && state is! ItemListFail) {
+                    PojoSubject result = await showDialogSubject(context, data: dataList, group: blocs.groupItemPickerBloc.pickedItem);
+                    if(result != null){
+                      blocs.subjectItemPickerBloc.dispatch(PickedSubjectEvent(item: result));
+                    }
+                  }
+
+
+                },
+              );
 
             },
           );
+
+
+
+
         }
     );
     var deadlinePicker = BlocBuilder(
@@ -498,11 +511,13 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                                 }
 
                                 return Container(
+
                                   child: new Column(
                                       mainAxisAlignment: MainAxisAlignment.start,
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
-                                        Container(
+                                        AnimatedContainer(
+                                          duration: Duration(milliseconds: 500),
                                           color: headerColor,
                                           child:
                                           Padding(
@@ -591,7 +606,7 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                                         ),
                                         Spacer(flex: 2,),
                                       ]
-                                  ),
+                                  )
                                 );
                               }
                           ),

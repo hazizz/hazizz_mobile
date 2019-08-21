@@ -3,6 +3,7 @@ import 'package:mobile/communication/connection.dart';
 import 'package:mobile/communication/errors.dart';
 //import 'package:flutter/material.dart';
 import 'package:mobile/communication/pojos/PojoClass.dart';
+import 'package:mobile/communication/pojos/PojoGrade.dart';
 import 'package:mobile/communication/pojos/PojoGrades.dart';
 import 'package:mobile/communication/pojos/PojoSchedules.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
@@ -22,6 +23,13 @@ class MainTasksBloc extends Bloc<HEvent, HState> {
 
   @override
   HState get initialState => ResponseEmpty();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    print("log: DISPOSE222");
+    super.dispose();
+  }
 
   @override
   Stream<HState> mapEventToState(HEvent event) async* {
@@ -146,6 +154,30 @@ class MainGradesBloc extends Bloc<HEvent, HState> {
 
   @override
   HState get initialState => ResponseEmpty();
+
+
+  String calculateAvarage(List<PojoGrade> pojoGrades){
+    double gradeAmount = 0;
+    double gradeSum = 0;
+
+    for(PojoGrade pojoGrade in pojoGrades){
+      if(pojoGrade != null && pojoGrade.grade != null && pojoGrade.weight != null){
+        int grade = int.parse(pojoGrade.grade);
+        int weight = pojoGrade.weight;
+
+        if(grade != null){
+          double gradeWeightCurrent = weight/100;
+          gradeAmount += gradeWeightCurrent;
+          gradeSum += gradeWeightCurrent * grade;
+        }
+      }
+    }
+    if(gradeSum != 0 && gradeAmount != 0){
+      return (gradeSum/gradeAmount).toString();
+    }
+    return "";
+  }
+
 
   @override
   Stream<HState> mapEventToState(HEvent event) async* {

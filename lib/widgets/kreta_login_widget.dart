@@ -1,9 +1,11 @@
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/TextFormBloc.dart';
 import 'package:mobile/blocs/item_list_picker_bloc/item_list_picker_bloc.dart';
 import 'package:mobile/blocs/kreta_login_blocs.dart';
 import 'package:mobile/blocs/login_bloc.dart';
+import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 
 
@@ -11,7 +13,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class KretaLoginWidget extends StatefulWidget {
 
-  KretaLoginWidget({Key key}) : super(key: key);
+  Function onSuccess;
+  PojoSession sessionToAuth;
+
+  KretaLoginWidget({Key key, @required this.onSuccess}) : super(key: key);
+
+  KretaLoginWidget.auth({Key key, @required this.sessionToAuth,}) : super(key: key);
+
 
   @override
   _KretaLoginWidget createState() => _KretaLoginWidget();
@@ -41,6 +49,10 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
   @override
   Widget build(BuildContext context) {
 
+    widget.onSuccess ??= (){
+      Navigator.pop(context);
+    };
+
     var usernameWidget = BlocBuilder(
         bloc: kretaLoginBlocs.usernameBloc,
         builder: (BuildContext context, HFormState state) {
@@ -67,16 +79,12 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
         bloc: kretaLoginBlocs.usernameBloc,
         builder: (BuildContext context, HFormState state) {
 
-
-
           String errorText = null;
           if (state is KretaUserNotFoundState) {
             errorText = "No such user";
           } else if (state is TextFormErrorTooShort) {
             errorText = "too short mann...";
           }
-
-
           return Container(
             height: 60,
             child: TextField(
@@ -100,19 +108,17 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
                     // Based on passwordVisible state choose the icon
 
                     passwordVisible
-                        ? Icons.visibility_off
-                        : Icons.visibility,
-                    color: Theme.of(context).primaryColorDark,
+                        ? FontAwesomeIcons.solidEyeSlash
+                        : FontAwesomeIcons.solidEye,
                   ),
                   onPressed: () {
-                    // Update the state i.e. toogle the state of passwordVisible variable
+                    // Update the state i.e. Ftoogle the state of passwordVisible variable
                     setState(() {
                       passwordVisible = !passwordVisible;
                     });
                   },
                 ),
               ),
-
             ),
           );
         }
@@ -127,8 +133,6 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
               builder: (FormFieldState formState) {
                 return InputDecorator(
                     decoration: InputDecoration(
-                      //   filled: true,
-                      //    fillColor: HazizzTheme.formColor,
                       labelText: 'School',
                     ),
                     child: Builder(
@@ -151,6 +155,7 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
               },
             ), //groupFormField,
             onTap: () {
+
               if(kretaLoginBlocs.schoolBloc.currentState is ItemListLoaded
                   || kretaLoginBlocs.schoolBloc.currentState is ItemListPickedState
               ){
@@ -192,9 +197,12 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
               BlocListener(
                 bloc: kretaLoginBlocs.kretaLoginBloc,
                 listener: (context, state) {
-                  if (state is LoginSuccessState) {
+                  if (state is KretaLoginSuccessState) {
                     //  Navigator.of(context).pushNamed('/details');
-                    Navigator.popAndPushNamed(context, "/");
+
+
+                    widget.onSuccess();
+                  //  Navigator.popAndPushNamed(context, "/");
                   }
                 },
                 child: RaisedButton(
@@ -205,7 +213,7 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
                           KretaLoginButtonPressed(
                               password: _passwordTextEditingController.text,
                               username: _usernameTextEditingController.text,
-                              schoolUrl: kretaLoginBlocs.schoolBloc.pickedItem
+                              schoolUrl: kretaLoginBlocs.schoolBloc.pickedItem.url
                           )
                       );
                     }

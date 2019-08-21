@@ -1,17 +1,30 @@
+
+
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
-Image imageFromBase64String(String base64String) {
-    return ImageOpeations.fromBase64String(base64String);
+
+Uint8List fromBase64ToBytesImage(String base64) {
+    return ImageOpeations.fromBase64ToBytesImage(base64);
+}
+
+String fromBytesImageToBase64 (Uint8List bytes) {
+  return ImageOpeations.fromBytesImageToBase64(bytes);
 }
 
 class ImageOpeations{
 
 
-  static Image fromBase64String(String base64String) {
-    return Image.memory(base64Decode(base64String));
+  static Uint8List fromBase64ToBytesImage(String base64) {
+    return base64Decode(base64);
+  //  return Image.memory(a);
   }
 
+  static String fromBytesImageToBase64(Uint8List bytes) {
+    return base64Encode(bytes);
+  }
 
 }

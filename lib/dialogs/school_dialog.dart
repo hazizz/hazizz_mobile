@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../hazizz_localizations.dart';
 import 'dialogs.dart';
@@ -69,7 +70,7 @@ class _SchoolDialog extends State<SchoolDialog> {
               controller: searchController,
               decoration: InputDecoration(
                   hintText: "Search",
-                  prefixIcon: Icon(Icons.search),
+                  prefixIcon: Icon(FontAwesomeIcons.search),
                 //  border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(25.0)))
               )
           ),
@@ -113,13 +114,21 @@ class _SchoolDialog extends State<SchoolDialog> {
                 },
               );
             }else{
-              return Align(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 30.0),
-                  child: Text(locText(context, key: "no_school_with_that_name"), style: TextStyle(fontSize: 20),),
-                ),
-                alignment: Alignment.topCenter,
+              return Stack(
+                children: <Widget>[
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: Align(
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 30.0),
+                        child: Text(locText(context, key: "no_school_with_that_name"), style: TextStyle(fontSize: 20),),
+                      ),
+                      alignment: Alignment.topCenter,
 
+                    ),
+                  )
+                ],
               );
             }
           }

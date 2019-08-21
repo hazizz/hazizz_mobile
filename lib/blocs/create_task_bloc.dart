@@ -89,18 +89,37 @@ class TaskCreateBloc extends TaskMakerBloc {
 
         print("log: lul11");
 
+
+        ItemListState groupState =  groupItemPickerBloc.currentState;
+
+        if (groupState is PickedGroupState) {
+          groupId = groupItemPickerBloc.pickedItem.id;
+          print("log: lulu0");
+        } else {
+          print("log: lulu1");
+          groupItemPickerBloc.dispatch(NotPickedEvent());
+          print("log: lulu2");
+          missingInfo = true;
+        }
+
+
+
+
         HState subjectState = subjectItemPickerBloc.currentState;
         if(subjectState is PickedSubjectState) {
           subjectId = subjectState.item.id;
         }else{
-          print("log: subjectItemPickerBloc.dispatch(NotPickedEvent());");
+          if(groupId != 0){
+            print("log: subjectItemPickerBloc.dispatch(NotPickedEvent());");
 
-          subjectItemPickerBloc.dispatch(NotPickedEvent());
-          missingInfo = true;
+            subjectItemPickerBloc.dispatch(NotPickedEvent());
+            missingInfo = true;
+          }
         }
         print("log: lul12");
 
 
+        /*
         if(subjectId == null) {
           print("log: uff: ${groupItemPickerBloc.currentState}");
           print("log: lulu0000");
@@ -108,16 +127,18 @@ class TaskCreateBloc extends TaskMakerBloc {
           ItemListState groupState =  groupItemPickerBloc.currentState;
           print("log: lulu00");
           if (groupState is PickedGroupState) {
-            groupId = groupState.item.id;
+            groupId = groupItemPickerBloc.pickedItem.id;
             print("log: lulu0");
           } else {
             print("log: lulu1");
             groupItemPickerBloc.dispatch(NotPickedEvent());
             print("log: lulu2");
             missingInfo = true;
-
           }
         }
+        */
+
+
 
         print("log: lul2");
 
@@ -161,7 +182,17 @@ class TaskCreateBloc extends TaskMakerBloc {
         HazizzResponse hazizzResponse;
 
 
+        print("BEFORE POIOP: ${groupId}, ${subjectId},");
+        hazizzResponse = await RequestSender().getResponse(new CreateTask(
+            groupId: groupId,
+            subjectId: subjectId,
+            b_taskType: typeId,
+            b_title: title,
+            b_description: description,
+            b_deadline: deadline
+        ));
 
+        /*
         if(subjectId != null) {
           hazizzResponse = await RequestSender().getResponse(new CreateTask(
               subjectId: subjectId,
@@ -179,6 +210,7 @@ class TaskCreateBloc extends TaskMakerBloc {
               b_deadline: deadline
           ));
         }
+        */
 
         if(hazizzResponse.isSuccessful){
           print("log: task making was succcessful");

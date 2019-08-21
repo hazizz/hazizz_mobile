@@ -170,6 +170,11 @@ class HazizzAccount{
     return !(token == null || token == "");
   }
 
+  Future<String> get token async{
+    final SharedPreferences sp = await SharedPreferences.getInstance();
+    return sp.getString("$_keyToken$userId");
+  }
+
    Future<String> getToken() async{
     final SharedPreferences sp = await SharedPreferences.getInstance();
     return sp.getString("$_keyToken$userId");
@@ -217,6 +222,11 @@ class HazizzAccount{
     }
   }
 
+  Future<String> get refreshToken2 async{
+    final SharedPreferences sp = await SharedPreferences.getInstance();
+    return sp.getString("$_keyRefreshToken$userId");
+  }
+
    Future<String> getRefreshToken() async{
     final SharedPreferences sp = await SharedPreferences.getInstance();
     return sp.getString("$_keyRefreshToken$userId");
@@ -249,9 +259,9 @@ class HazizzAccount{
       if(lastTokenRefreshTime != null &&
           DateTime.now().difference(lastTokenRefreshTime).inSeconds.abs() >= 24*60*60)
       {
-        RequestSender().lock();
+       // RequestSender().lock();
         fetchRefreshTokens(username: await InfoCache.getMyUsername(), refreshToken: await getRefreshToken());
-        RequestSender().unlock();
+       // RequestSender().unlock();
       }
     }
   }
@@ -271,9 +281,7 @@ class HazizzAccount{
   }
 
    Future fetchToken() async {
-    RequestSender().lock();
     await fetchRefreshTokens(username: await InfoCache.getMyUsername(), refreshToken: await getRefreshToken());
-    RequestSender().unlock();
   }
 
    Future setTokenRefreshTime() async {
@@ -292,8 +300,6 @@ class HazizzAccount{
    bool tokenInvalidated() {
     return !tokenIsValid;
   }
-
-
 }
 
 
@@ -335,6 +341,13 @@ class TokenManager {
   static bool tokenIsValid = true;
 
   SharedPreferences prefs;
+
+
+
+
+
+
+
 
   static Future<bool> hasToken() async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -410,8 +423,8 @@ class TokenManager {
     return !(refreshToken == null || refreshToken == "");
   }
 
-  static final String _keyLastTokenRefreshTime = "key_LastTokenRefreshTime";
-  static final String _timeFormat = "dd/MM/yyyy HH:mm:ss";
+  static const String _keyLastTokenRefreshTime = "key_LastTokenRefreshTime";
+  static const String _timeFormat = "dd/MM/yyyy HH:mm:ss";
 
   static Future checkAndFetchTokenRefreshIfNeeded() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -421,9 +434,7 @@ class TokenManager {
       if(lastTokenRefreshTime != null &&
         DateTime.now().difference(lastTokenRefreshTime).inSeconds.abs() >= 24*60*60)
       {
-        RequestSender().lock();
         fetchRefreshTokens(username: await InfoCache.getMyUsername(), refreshToken: await getRefreshToken());
-        RequestSender().unlock();
       }
     }
   }
@@ -436,16 +447,14 @@ class TokenManager {
       if(lastTokenRefreshTime != null &&
           DateTime.now().difference(lastTokenRefreshTime).inSeconds.abs() >= 24*60*60)
       {
-        return true;
+        return false == false;
       }
     }
     return false;
   }
 
   static Future fetchToken() async {
-    RequestSender().lock();
     await fetchRefreshTokens(username: await InfoCache.getMyUsername(), refreshToken: await getRefreshToken());
-    RequestSender().unlock();
   }
 
   static Future setTokenRefreshTime() async {
