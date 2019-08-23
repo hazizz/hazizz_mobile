@@ -5,6 +5,7 @@ import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workmanager/workmanager.dart';
 
+import '../hazizz_time_of_day.dart';
 import '../request_sender.dart';
 import '../hazizz_localizations.dart';
 import '../hazizz_response.dart';
@@ -67,18 +68,6 @@ class HazizzNotification{
   );
   static var initializationSettings = new InitializationSettings(
   initializationSettingsAndroid, initializationSettingsIOS);
-
-  /*
-  static Future showHazizzNotification2() async {
-
-    while(true){
-      print("log: performing work in background.");
-    }
-  }
-  */
-
-
-
 
 
   static Future showHazizzNotification() async {
@@ -188,7 +177,7 @@ class HazizzNotification{
 
    static const String key_notificationTime = "key_notificationTime";
 
-   static Future<TimeOfDay> getNotificationTime() async {
+   static Future<HazizzTimeOfDay> getNotificationTime() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     String str_time = sp.getString(key_notificationTime);
     if(str_time != null) {
@@ -197,17 +186,36 @@ class HazizzNotification{
       for(String s in str_list_time) {
         int t = int.parse(s);
         if(t == null) {
-          return const TimeOfDay(hour: 17, minute: 0);
+          return  HazizzTimeOfDay(hour: 17, minute: 0);
         }
         time.add(t);
       }
-      return TimeOfDay(hour: time[0], minute: time[1]);
+      return HazizzTimeOfDay(hour: time[0], minute: time[1]);
     }else
-    return TimeOfDay(hour: 17, minute: 0);
+    return HazizzTimeOfDay(hour: 17, minute: 0);
   }
 
-   static Future<void> setNotificationTime(TimeOfDay time) async {
+  static void cancel(int notificationId){
+    Workmanager.cancelByUniqueName("1");
+  }
+
+  static Future<void> setNotificationTime(TimeOfDay time) async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     await sp.setString(key_notificationTime, "${time.hour}:${time.minute}");
   }
+
+
+  static const String key_receiveNotification = "key_receiveNotification";
+
+
+  static void setReceiveNotification(bool receive) async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    await sp.setBool(key_receiveNotification, receive);
+  }
+  static Future<bool> getReceiveNotification() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    bool receive = sp.getBool(key_receiveNotification);
+    return receive == null ? true : receive;
+  }
+
 }

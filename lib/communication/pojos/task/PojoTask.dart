@@ -5,18 +5,18 @@ import '../PojoAssignation.dart';
 import '../PojoCreator.dart';
 import '../PojoGroup.dart';
 import '../PojoSubject.dart';
-import '../PojoType.dart';
+import '../PojoTag.dart';
 
 part 'PojoTask.g.dart';
 
 @JsonSerializable()
 class PojoTask extends Pojo implements Comparable<PojoTask>{
-  PojoTask({this.id, this.assignation, this.type, this.title, this.description,
+  PojoTask({this.id, this.assignation, this.tags, this.title, this.description,
     this.dueDate, this.creator, this.group, this.subject});
 
   int id;
   PojoAssignation assignation;
-  PojoType type;
+  List<PojoTag> tags;
   String title;
   String description;
   DateTime dueDate;
@@ -39,12 +39,12 @@ class PojoTask extends Pojo implements Comparable<PojoTask>{
 
 @JsonSerializable()
 class PojoTaskDetailed extends PojoTask{// implements Comparable<PojoTaskDetailed>{
-  PojoTaskDetailed({this.id, this.assignation, this.type, this.title, this.description,
+  PojoTaskDetailed({this.id, this.assignation, this.tags, this.title, this.description,
   this.creationDate, this.lastUpdated, this.dueDate, this.creator, this.group, this.subject});
 
   int id;
   PojoAssignation assignation;
-  PojoType type;
+  List<PojoTag> tags;
   String title;
   String description;
   DateTime creationDate; //: "2019-05-21T09:23:49+0000",

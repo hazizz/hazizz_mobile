@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/google_login_bloc.dart';
 import 'package:mobile/dialogs/loading_dialog.dart';
 import 'package:mobile/widgets/google_sign_in_widget.dart';
@@ -199,15 +200,19 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
                   Image.asset(
                     'assets/images/Logo.png',
                   ),
-                  Center(
-                      child: Text("What is Hazizz?")
+                  Padding(
+                    padding: const EdgeInsets.only(left: 50.0, right: 50),
+                    child: Center(
+                        child: Text(locText(context, key: "hazizz_intro"), style: TextStyle(fontSize: 22), textAlign: TextAlign.center)
+                    ),
                   ),
                 ],
               ),
               Positioned(
-                right: 4,
-                bottom: 4,
-                child: FlatButton(child: Text(locText(context, key: "next").toUpperCase()),
+                right: 12,
+                bottom: 14,
+                child:
+                FloatingActionButton(child: Icon(FontAwesomeIcons.chevronRight),
                   onPressed: (){
                     nextPage();
                   },
@@ -299,27 +304,37 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
               child: Stack(
                 children: <Widget>[
                   Center(
-                      child: Text("Kréta integráció2")
+                    child:
+                    Padding(
+                      padding: const EdgeInsets.only(left: 50.0, right: 50),
+                      child: Center(
+                          child: Text(locText(context, key: "kreta_intro"), style: TextStyle(fontSize: 22, ), textAlign: TextAlign.center,)
+                      ),
+                    ),
                   ),
+
+
                   Positioned(
-                      bottom: 4,
-                      right: 4,
+                    left: 4,
+                    bottom: 8,
+                    child: FlatButton(child: Text(locText(context, key: "skip").toUpperCase()),
+                      onPressed: () async {
+                        if(await showIntroCancelDialog(context)){
+                          Navigator.pop(context);
+                        }
+                      },
+                    ),
+
+                  ),
+
+                  Positioned(
+                      bottom: 12,
+                      right: 14,
                       child:
-                      Row(
-                        children: <Widget>[
-                          FlatButton(child: Text(locText(context, key: "skip").toUpperCase()),
-                            onPressed: () async {
-                              if(await showIntroCancelDialog(context)){
-                                Navigator.pop(context);
-                              }
-                            },
-                          ),
-                          FlatButton(child: Text(locText(context, key: "next").toUpperCase()),
-                            onPressed: (){
-                              nextPage();
-                            },
-                          )
-                        ],
+                      FloatingActionButton(child: Icon(FontAwesomeIcons.chevronRight),
+                        onPressed: (){
+                          nextPage();
+                        },
                       )
                   )
                 ],
@@ -340,8 +355,8 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
                 ),
 
                 Positioned(
-                  bottom: 4,
-                  right: 4,
+                  bottom: 8,
+                  left: 4,
                   child:
                   FlatButton(child: Text(locText(context, key:  "skip").toUpperCase()),
                     onPressed: () async {

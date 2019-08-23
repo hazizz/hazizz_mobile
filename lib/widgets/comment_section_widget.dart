@@ -170,7 +170,7 @@ class _CommentSectionWidget extends State<CommentSectionWidget>{
                                 color: Theme
                                     .of(context)
                                     .accentColor,
-                                icon: Icon(FontAwesomeIcons.paperPlane, size: 30,),
+                                icon: Icon(FontAwesomeIcons.solidPaperPlane, size: 30,),
                                 onPressed: () async {
                                   ViewTaskBloc().commentBlocs.commentWriterBloc.dispatch(CommentWriterSendEvent());
                                   FocusScope.of(context).requestFocus(new FocusNode());

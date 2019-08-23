@@ -26,6 +26,7 @@ import 'package:mobile/converters/PojoConverter.dart';
 
 
 import '../../HttpMethod.dart';
+import '../../hazizz_app_info.dart';
 import '../../hazizz_date.dart';
 import '../ResponseHandler.dart';
 
@@ -58,11 +59,13 @@ class Request {
   }
 
   Future<Map<String, dynamic>> buildHeader() async{
+    header["User-Agent"] = "HM-${HazizzAppInfo().getInfo.version}";
     if(authTokenHeader){
       header[HttpHeaders.authorizationHeader] = "Bearer ${await TokenManager.getToken()}";
     }if(contentTypeHeader) {
       header[HttpHeaders.contentTypeHeader] = "application/json";
     }
+    print(header);
     return header;
   }
 
@@ -415,16 +418,19 @@ class GetMyGroups extends HazizzRequest {
 
 //region Subject requests
 class CreateSubject extends HazizzRequest {
-  CreateSubject({ResponseHandler rh, int groupId}) : super(rh) {
+  CreateSubject({ResponseHandler rh, @required int p_groupId, @required String b_subjectName}) : super(rh) {
     httpMethod = HttpMethod.POST;
-    PATH = "group/${groupId}";
+    PATH = "subjects/group/${p_groupId}";
     authTokenHeader = true;
     contentTypeHeader = true;
+    body["name"] = b_subjectName;
   }
 
   @override
   dynamic convertData(Response response) {
-    return response;
+
+    var asd = PojoSubject.fromJson(jsonDecode(response.data));
+    return asd;
   }
 }
 
@@ -456,7 +462,7 @@ class GetSubjects extends HazizzRequest {
 //region Task requests
 class CreateTask extends HazizzRequest {
   CreateTask({ResponseHandler rh,  int groupId, int subjectId,
-    @required  int b_taskType, @required String b_title,
+    @required  List<String> b_tags, @required String b_title,
     @required String b_description, @required DateTime b_deadline }) : super(rh) {
     httpMethod = HttpMethod.POST;
     if(groupId != null && groupId != 0) {
@@ -470,53 +476,57 @@ class CreateTask extends HazizzRequest {
     authTokenHeader = true;
     contentTypeHeader = true;
 
-    body["taskType"] = b_taskType.toString();
+    body["tags"] = b_tags;
     body["taskTitle"] = b_title;
     body["description"] = b_description == null ? "" : b_description;
     body["dueDate"] = hazizzRequestDateFormat(b_deadline);
   }
   @override
   dynamic convertData(Response response) {
-    return response;
+    var task = PojoTask.fromJson(jsonDecode(response.data));
+    return task;
   }
 }
 
 class EditTask extends HazizzRequest {
-  EditTask({ResponseHandler rh, int groupId, @required int taskId,
-    int subjectId, @required int b_taskType, @required String b_title,
+  EditTask({ResponseHandler rh, @required int taskId,
+    @required List<String> b_tags, @required String b_title,
     @required String b_description,@required  DateTime b_deadline }) : super(rh) {
     httpMethod = HttpMethod.PATCH;
-    if(groupId != null) {
-      PATH = "tasks/groups/${groupId}/${taskId}";
-    }else if(subjectId != null){
-      PATH = "tasks/subjects/${subjectId}/${taskId}";
-    } else{
-      PATH = "tasks/me/${taskId}";
-    }
+    PATH = "tasks/${taskId}";
+
     authTokenHeader = true;
     contentTypeHeader = true;
 
-    body["taskType"] = b_taskType;
+    body["tags"] = b_tags;
     body["taskTitle"] = b_title;
     body["description"] = b_description;
     body["dueDate"] = hazizzRequestDateFormat(b_deadline);
+
+    print(body);
+    print(PATH);
+
   }
   @override
   dynamic convertData(Response response) {
-    return response;
+    var task = PojoTask.fromJson(jsonDecode(response.data));
+    return task;
   }
 }
 
 class DeleteTask extends HazizzRequest {
   DeleteTask({ResponseHandler rh, int groupId, int subjectId, @required int taskId}) : super(rh) {
     httpMethod = HttpMethod.DELETE;
-    if(groupId != null) {
+    /*
+    if(groupId != null && groupId != 0) {
       PATH = "tasks/groups/${groupId}/${taskId}";
-    }else if(subjectId != null){
+    }else if(subjectId != null && subjectId != 0){
       PATH = "tasks/subjects/${subjectId}/${taskId}";
     } else{
       PATH = "tasks/me/${taskId}";
     }
+    */
+    PATH = "tasks/${taskId}";
     authTokenHeader = true;
     contentTypeHeader = true;
   }
@@ -543,7 +553,7 @@ class GetTaskByTaskId extends HazizzRequest {
 class GetTasksFromMe extends HazizzRequest {
   GetTasksFromMe({ResponseHandler rh}) : super(rh) {
     httpMethod = HttpMethod.GET;
-    PATH = "me/tasks";
+    PATH = "v2/me/tasks";
     authTokenHeader = true;
   }
 
@@ -562,6 +572,8 @@ class GetTasksFromMe extends HazizzRequest {
     Iterable iter = getIterable(response.data);
     List<PojoTask> myTasks = iter.map<PojoTask>((json) => PojoTask.fromJson(json)).toList();
     myTasks.sort();
+    print("log: in convertData2: ${myTasks}");
+
     return myTasks;
   }
 }
@@ -723,6 +735,8 @@ class KretaAuthenticateSession extends TheraRequest {
     contentTypeHeader = true;
 
     body["password"] = b_password;
+    print(body);
+
   }
 
   @override

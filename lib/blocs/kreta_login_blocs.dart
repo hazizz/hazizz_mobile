@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mobile/blocs/TextFormBloc.dart';
 import 'package:mobile/blocs/item_list_picker_bloc/item_list_picker_bloc.dart';
 import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
@@ -16,6 +17,7 @@ import '../hazizz_response.dart';
 import 'TextFormBloc.dart';
 
 import 'package:mobile/exceptions/exceptions.dart';
+
 
 //region KretaLoginEvents
 abstract class KretaLoginEvent extends HEvent {
@@ -36,6 +38,12 @@ class KretaLoginButtonPressed extends KretaLoginEvent {
   @override
   String toString() =>
       'KretaLoginButtonPressed { username: $username, password: $password }';
+}
+
+class KretaLoginDataChanged extends KretaLoginEvent {
+  @override
+  String toString() =>
+      'KretaLoginDataChanged';
 }
 
 //endregion
@@ -62,6 +70,12 @@ class KretaLoginFailure extends KretaLoginState {
 
   @override
   String toString() => 'KretaLoginFailure { error: $error }';
+}
+
+class KretaLoginSomethingWentWrong extends KretaLoginState {
+
+  @override
+  String toString() => 'KretaLoginSomethingWentWrong';
 }
 
 class KretaLoginFailPasswordWrong extends KretaLoginState {
@@ -146,7 +160,27 @@ class KretaLoginBloc extends Bloc<KretaLoginEvent, KretaLoginState> {
   final TextFormBloc passwordBloc;
   final SchoolItemPickerBloc schoolBloc;
 
-  KretaLoginBloc(this.usernameBloc, this.passwordBloc, this.schoolBloc);
+  PojoSession session;
+
+  bool isAuth = false;
+
+  KretaLoginBloc(this.usernameBloc, this.passwordBloc, this.schoolBloc){
+    usernameBloc.state.listen((currentState){
+      print("change");
+      dispatch(KretaLoginDataChanged());
+    });
+  }
+
+  KretaLoginBloc.auth(this.usernameBloc, this.passwordBloc, this.schoolBloc, this.session){
+    usernameBloc.state.listen((currentState){
+      print("change");
+      dispatch(KretaLoginDataChanged());
+    });
+
+    isAuth = true;
+
+  }
+
 
   KretaLoginState get initialState => KretaLoginInitial();
 
@@ -155,21 +189,60 @@ class KretaLoginBloc extends Bloc<KretaLoginEvent, KretaLoginState> {
   Stream<KretaLoginState> mapEventToState(KretaLoginEvent event) async* {
     print("sentaa state asd");
 
+
+      if(state is KretaLoginDataChanged){
+        if(currentState is KretaLoginFailure){
+          yield KretaLoginInitial();
+        }
+      }
+
+
     if (event is KretaLoginButtonPressed) {
       print("sentaa1");
 
+
+      if(isAuth){
+        passwordBloc.dispatch(TextFormValidate(text: event.password));
+        if(passwordBloc.currentState is TextFormFine){
+          yield KretaLoginWaiting();
+          HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaAuthenticateSession(
+              p_session: session.id.toString(), b_password: passwordBloc.lastText)
+          );
+          if(hazizzResponse.isSuccessful){
+            PojoSession newSession = hazizzResponse.convertedData;
+            SelectedSessionBloc().dispatch(SelectedSessionSetEvent(newSession));
+            yield KretaLoginSuccessState();
+          }else if(hazizzResponse.hasPojoError) {
+            print("assdad: ${ ErrorCodes.BAD_AUTHENTICATION_REQUEST.code}");
+            if(hazizzResponse.pojoError.errorCode ==
+                ErrorCodes.THERA_AUTHENTICATION_ERROR.code) {
+              yield KretaLoginFailure(error: hazizzResponse.pojoError);
+            }else {
+              yield KretaLoginSomethingWentWrong();
+            }
+          }
+        }
+      }
+
+
       usernameBloc.dispatch(TextFormValidate(text: event.username));
+      passwordBloc.lastText = "---";
+
       passwordBloc.dispatch(TextFormValidate(text: event.password));
       schoolBloc.dispatch(ItemListCheckPickedEvent());
 
       HFormState usernameState = usernameBloc.currentState;
       HFormState passwordState = passwordBloc.currentState;
       ItemListState schoolState = schoolBloc.currentState;
+     // passwordBloc.dispatch(TextFormValidate(text: e))
       print("log: usernameState: ${usernameState.toString()}");
-      print("log: usernameState: ${usernameState.toString()}");
+      print("log: passwordState: ${passwordState.toString()}");
+      print("log: schoolState: ${schoolState.toString()}");
 
 
-      if(usernameState is TextFormFine || usernameState is KretaUserNotFoundState) {
+   //   passwordBloc.validate
+
+      if(usernameState is TextFormFine ) {
         if(passwordState is TextFormFine && schoolState is ItemListPickedState) { //usernameState is TextFormFine && passwordState is TextFormFine) {
           try {
             print("sentaa22");
@@ -183,8 +256,11 @@ class KretaLoginBloc extends Bloc<KretaLoginEvent, KretaLoginState> {
               SelectedSessionBloc().dispatch(SelectedSessionSetEvent(newSession));
               yield KretaLoginSuccessState();
             }else if(hazizzResponse.hasPojoError){
-              if(hazizzResponse.pojoError.errorCode == ErrorCodes.BAD_AUTHENTICATION_REQUEST.code){
+              print("assdad: ${ ErrorCodes.BAD_AUTHENTICATION_REQUEST.code}");
+              if(hazizzResponse.pojoError.errorCode == ErrorCodes.THERA_AUTHENTICATION_ERROR.code){
                 yield KretaLoginFailure(error: hazizzResponse.pojoError);
+              }else{
+                yield KretaLoginSomethingWentWrong();
               }
             }
           }on HResponseError catch(e) {
@@ -236,16 +312,20 @@ class KretaLoginPageBlocs{
       return TextFormFine();
 
     },
+      /*
     handleErrorEvents: (HFormEvent event){
         if(event is UserNotFoundEvent){
           print("piritos444");
           return KretaUserNotFoundState();
         }
     }
+    */
   );
   TextFormBloc passwordBloc = new TextFormBloc(
       validate: (String text){
+        print("length: ${text.length}");
         if(text.length < 8) {
+          print("returnss::::");
           return TextFormErrorTooShort();
         }
         return TextFormFine();
@@ -264,6 +344,12 @@ class KretaLoginPageBlocs{
   KretaLoginPageBlocs(){
     schoolBloc.dispatch(ItemListLoadData());
     kretaLoginBloc = new KretaLoginBloc(usernameBloc, passwordBloc, schoolBloc);
+  }
+
+  KretaLoginPageBlocs.auth({@required PojoSession session}){
+    schoolBloc.dispatch(PickedEvent(item: SchoolItem(session.url, session.url) ));
+    usernameBloc.dispatch(TextFormSetEvent(text: session.username));
+    kretaLoginBloc = new KretaLoginBloc.auth(usernameBloc, passwordBloc, schoolBloc, session);
   }
 
   void dispose(){

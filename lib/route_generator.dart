@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/pages/kreta_session_selector_page.dart';
+import 'package:mobile/pages/notification_settings_page.dart';
 import 'package:mobile/widgets/kreta_session_selector_widget.dart';
 import 'package:mobile/pages/login_page.dart';
 import 'package:mobile/pages/group_pages/group_tab_hoster_page.dart';
@@ -47,6 +48,8 @@ class RouteGenerator{
         return MaterialPageRoute(builder: (_) => TasksTomorrowPage());
       case '/settings':
         return MaterialPageRoute(builder: (_) => SettingsPage());
+      case '/settings/notification':
+        return MaterialPageRoute(builder: (_) => NotificationSettingsPage());
       case '/settings/profile_editor':
         return MaterialPageRoute(builder: (_) => ProfileEditorPage());
       case '/groups':

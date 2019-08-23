@@ -49,6 +49,7 @@ class GroupSubjectsBloc extends Bloc<HEvent, HState> {
   HState get initialState => ResponseEmpty();
 
   int get groupId{
+    print("groupId:: ${GroupBlocs().group.id}");
     return GroupBlocs().group.id;
   }
 

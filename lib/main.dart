@@ -11,6 +11,7 @@ import 'blocs/main_tab_blocs/main_tab_blocs.dart';
 import 'communication/connection.dart';
 import 'communication/pojos/task/PojoTask.dart';
 //import 'hazizz_alarm_manager.dart';
+import 'hazizz_app_info.dart';
 import 'hazizz_theme.dart';
 import 'managers/token_manager.dart';
 import 'managers/app_state_manager.dart';
@@ -95,18 +96,8 @@ Future<bool> fromNotification() async {
 
 void main() async{
 
-  Connection.listener();
+  await AppState.appStartProcedure();
 
-  Crashlytics.instance.enableInDevMode = false;
-  FlutterError.onError = Crashlytics.instance.recordFlutterError;
-
-  /*
-  FlutterError.onError = (FlutterErrorDetails details) {
-    Crashlytics.instance.onError(details);
-  };
-  */
-
-  //await AndroidAlarmManager.initialize();
 
   themeData = await HazizzTheme.getCurrentTheme();
 

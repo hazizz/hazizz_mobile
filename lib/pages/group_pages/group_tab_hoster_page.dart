@@ -64,7 +64,10 @@ class _GroupTabHosterPage extends State<GroupTabHosterPage> with SingleTickerPro
      // backgroundColor: widget.color,
       appBar: AppBar(
         leading: HazizzBackButton(),
-        title: Text(title),
+        title: Padding(
+          padding: const EdgeInsets.only(top: 3.0, ),
+          child: Text(title, style: TextStyle(fontWeight: FontWeight.w700, fontFamily: "Nunito", /*fontSize: 20*/),),
+        ),
         bottom: TabBar(controller: _tabController, tabs: [
           Tab(text: tasksTabPage.getTabName(context), icon: Icon(FontAwesomeIcons.bookOpen),),
           Tab(text: subjectsTabPage.getTabName(context), icon: Icon(FontAwesomeIcons.solidCalendarAlt)),//, icon: Icon(Icons.scatter_plot)),

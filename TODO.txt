@@ -1,5 +1,7 @@
 TO TALK ABOUT:
 - mi legyen a user invite-l
+- ads
+- új ikon
 
 
 FUTURE TODO:
@@ -9,30 +11,35 @@ FUTURE TODO:
 - órarend eventek
 - add debug page (https://pub.dev/packages/alice)
 - csoport rangok
+- az auth. lekérdezések egy saját csatornán
 
 
 
 TODO:
+
+-displayNAme frissitése miután meg lett változtatva
 //- automata refresh token
 - dedikált screen a main tabeknek
 - app teljes lokalizálása
 - jegyek átlag - 80%
-- Taskek átnevezése Event-re (hiszen a felelés és a dolgozat nem feladat)
 //- Transaction id az errorok melé
-//- Bloc a bejelentkezés utáni felhasználói "adatgyüjtéshez"
 - kréta bejlentkezés
 - login-nál retry ha timeout
 - invite link teljes működése
-- téma kreálás
 - iskolák cachelése
 - globális session betöltés
 - az introba egy join/create group
 - saját feladat
-
-
+- task edit után, update
+- task item, row => column
+- kreta bejelentkezés. 2x kell nyomni
+- crashlytics
+- filter taskokra
 
 DONE:
 - displayName és profilePic editor - UI done
+- téma kreálás
+//- Bloc a bejelentkezés utáni felhasználói "adatgyüjtéshez"
 
 
 bugs to fix:

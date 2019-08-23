@@ -7,7 +7,13 @@
     "hazizz_motto" : "From pupils to pupils",
 
 
-    "header_item_in" : "In",
+    "hazizz_intro" : "Thank you for downloading Hazizz Mobile! With the application, you can store all you school tasks at one place.\nBe it homework, a test, or an assignment, you can easily note down everything and share them with your friends.\nTo begin, create a new account or log in!",
+
+    "kreta_intro" : "Thanks to Thera, you can access your grades and timetables in the application, so you can find everything in one app.\nTo do this, you only need to log in to your Kréta account, choose your school and you are all set!",
+
+
+
+  "header_item_in" : "In",
 
 
     "header_item_day"
@@ -193,6 +199,12 @@
 
     "title"
     : "Title",
+
+    "without_subject"
+    : "<Without subject>",
+
+    "without_group"
+    : "<Own>",
 
 
     "description"
@@ -776,6 +788,9 @@
     "error_noGroupSelected"
     : "No group selected!",
 
+    "try_again_later"
+    : "Something went wrong. Try again later!",
+
     "success_changed_password"
     : "The password was successfully changed",
 
@@ -851,6 +866,15 @@
     : "Flip vertically",
 
 
+    "tag"
+    : "Tag",
+
+    "new_tag"
+    : "New tag",
+
+    "add_new_tag"
+    : "Add new tag",
+
     "title_thera"
     : "Thera",
 
@@ -865,6 +889,9 @@
 
     "kreta"
     : "Kréta",
+
+    "ekreta"
+    : "e-Kréta",
 
     "kreta_accounts"
     : "Kréta accounts",

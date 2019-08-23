@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/communication/pojos/PojoType.dart';
+import 'package:mobile/communication/pojos/PojoTag.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/pages/view_task_page.dart';
 
@@ -41,6 +41,61 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
   @override
   Widget build(BuildContext context) {
 
+
+      List<PojoTag> tags = List();
+      tags.addAll(widget.pojoTask.tags);
+
+
+
+      Widget highlightTag = Container();
+
+      bool doBreak = false;
+      for(PojoTag t in widget.pojoTask.tags) {
+        if(!doBreak){
+          for(PojoTag defT in PojoTag.defaultTags) {
+            if(defT.name == t.name) {
+              tags.remove(t);
+
+              highlightTag = Container(
+                // color: PojoType.getColor(widget.pojoTask.type),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          bottomRight: Radius.circular(12)),
+                      color: t.getColor()
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 4, top: 4, right: 8, bottom: 6),
+                    child: Text(t.getDisplayName(context),
+                      style: TextStyle(fontSize: 18),),
+                  )
+              );
+              doBreak = true;
+              break;
+            }
+          }
+        }else{
+          break;
+        }
+      }
+
+      List<Widget> tagWidgets = List();
+      for(PojoTag t in tags){
+        tagWidgets.add(Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            color: Colors.grey,
+
+          ),
+          child: Padding(
+            padding: const EdgeInsets.only(top: 2.0, bottom: 2, left: 6, right: 6),
+            child: Text(t.getDisplayName(context)),
+          ),
+        ));
+      }
+
+
+
       return  Opacity(
           opacity: opacity,
             child:
@@ -63,17 +118,36 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
                             children: <Widget>[
                               Row(
                                 children: <Widget>[
-                                  Container(
-                                    // color: PojoType.getColor(widget.pojoTask.type),
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.only(bottomRight: Radius.circular(12)),
-                                          color: widget.pojoTask.type.getColor()
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(left: 4, top: 4, right: 8, bottom: 6),
-                                        child: Text(widget.pojoTask.type.name, style: TextStyle(fontSize: 18),),
-                                      )
-                                  ),
+                          highlightTag,
+                                  /*
+                                  Builder(builder: (context){
+
+
+                                    for(PojoTag t in widget.pojoTask.tags){
+                                      for(PojoTag defT in PojoTag.defaultTags){
+                                        if(defT.name == t.name){
+                                          tagWidgets.remove(t);
+
+                                          return Container(
+                                            // color: PojoType.getColor(widget.pojoTask.type),
+                                              decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.only(bottomRight: Radius.circular(12)),
+                                                  color: t.getColor()
+                                              ),
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(left: 4, top: 4, right: 8, bottom: 6),
+                                                child: Text(t.getDisplayName(context), style: TextStyle(fontSize: 18),),
+                                              )
+                                          );
+                                        }
+                                      }
+                                    }
+
+                                    return Container();
+
+
+                                  }),
+                                  */
 
                                   Builder(
                                     builder: (BuildContext context){
@@ -84,7 +158,7 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
                                             // color: PojoType.getColor(widget.pojoTask.type),
                                               decoration: BoxDecoration(
                                                   borderRadius: BorderRadius.only(bottomRight: Radius.circular(10), bottomLeft: Radius.circular(10)),
-                                                  color: widget.pojoTask.type.getColor()
+                                                  color: widget.pojoTask.tags[0].getColor()
                                               ),
                                               child: Padding(
                                                 padding: const EdgeInsets.only(left: 8, top: 4, right: 8, bottom: 6),
@@ -96,6 +170,11 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
                                         );
                                       }else{return Container();}
                                     },
+                                  ),
+
+                                  Wrap(
+                                    spacing: 2,
+                                    children:  tagWidgets
                                   ),
 
                                   Spacer(),

@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:mobile/blocs/task_maker_blocs.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
+import 'package:mobile/communication/pojos/PojoTag.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:meta/meta.dart';
+import 'package:mobile/defaults/pojo_subject_empty.dart';
 import '../request_sender.dart';
 import '../hazizz_response.dart';
 import 'TextFormBloc.dart';
@@ -55,7 +57,7 @@ class TaskEditBloc extends TaskMakerBloc {
 
   TaskEditBloc({@required this.taskToEdit}) : super(){
     group = taskToEdit.group;
-    subject = taskToEdit.subject;
+    subject = taskToEdit.subject ;//!= null ? taskToEdit.subject : getEmptyPojoSubject(c);
 
 
     descriptionController.text = taskToEdit.description;
@@ -70,8 +72,17 @@ class TaskEditBloc extends TaskMakerBloc {
 
 
     deadlineBloc.dispatch(DateTimePickedEvent(dateTime: taskToEdit.dueDate));
-    taskTypePickerBloc.dispatch(TaskTypePickedEvent(taskToEdit.type));
-    
+   // taskTagBloc.dispatch(TaskTypePickedEvent(taskToEdit.tags[0]));
+
+    for(PojoTag t in taskToEdit.tags){
+      taskTagBloc.dispatch(TaskTagAddEvent(t));
+    }
+
+      groupItemPickerBloc.dispatch(SetGroupEvent(item: taskToEdit.group != null ? taskToEdit.group : PojoGroup(0, "", "", "", 0) ));
+
+      subjectItemPickerBloc.dispatch(SetSubjectEvent(item: taskToEdit.subject != null ? taskToEdit.subject : PojoSubject(0, "")));
+
+
     titleBloc.dispatch(TextFormSetEvent(text: taskToEdit.title));
     descriptionBloc.dispatch(TextFormSetEvent(text: taskToEdit.description));
   }
@@ -89,16 +100,22 @@ class TaskEditBloc extends TaskMakerBloc {
         yield TaskMakerWaitingState();
 
         //region send
-        int groupId, subjectId, typeId;
+        int groupId, subjectId;
+        List<String> tags = List();
         DateTime deadline;
         String title, description;
 
         bool missingInfo = false;
 
+        /*
         TaskTypePickerState typeState = taskTypePickerBloc.currentState;
         if(typeState is TaskTypePickedState){
-          typeId = typeState.item.id;
+          tags[0] = typeState.tag.getName();
         }
+        */
+
+        taskTagBloc.pickedTags.forEach((f){tags.add(f.getName());});
+
 
         if(subject != null){
           subjectId = subject.id;
@@ -142,17 +159,17 @@ class TaskEditBloc extends TaskMakerBloc {
         HazizzResponse hazizzResponse;
 
         if(subjectId != null) {
-          hazizzResponse = await RequestSender().getResponse(new CreateTask(
-              subjectId: subjectId,
-              b_taskType: typeId,
+          hazizzResponse = await RequestSender().getResponse(new EditTask(
+              taskId: taskToEdit.id,
+              b_tags: tags,
               b_title: title,
               b_description: description,
               b_deadline: deadline
           ));
         }else {
-          hazizzResponse = await RequestSender().getResponse(new CreateTask(
-              groupId: groupId,
-              b_taskType: typeId,
+          hazizzResponse = await RequestSender().getResponse(new EditTask(
+              taskId: taskToEdit.id,
+              b_tags: tags,
               b_title: title,
               b_description: description,
               b_deadline: deadline
@@ -160,7 +177,7 @@ class TaskEditBloc extends TaskMakerBloc {
         }
 
         if(hazizzResponse.isSuccessful){
-          yield TaskMakerSentState();
+          yield TaskMakerSuccessfulState(hazizzResponse.convertedData);
         }else{
           yield TaskMakerFailedState();
         }

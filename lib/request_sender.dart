@@ -248,6 +248,9 @@ class RequestSender{
         }else if(request.httpMethod == HttpMethod.DELETE) {
           options.headers = await request.buildHeader();
           response = await dio.delete(request.url, queryParameters: request.query, data: request.body, options: options);
+        }else if(request.httpMethod == HttpMethod.PATCH) {
+          options.headers = await request.buildHeader();
+          response = await dio.patch(request.url, queryParameters: request.query, data: request.body, options: options);
         }
         hazizzResponse = HazizzResponse.onSuccess(response: response, request: request);
        // print("log: request sent: ${request.toString()}");

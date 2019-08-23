@@ -126,21 +126,13 @@ class _SettingsPage extends State<SettingsPage> with AutomaticKeepAliveClientMix
               Divider(),
               ListTile(
                 onTap: () async {
-                  print("huh2");
-                  TimeOfDay newTime = await showTimePicker(
-                    context: context,
-
-                    initialTime: await HazizzNotification.getNotificationTime(),
-
-                  );
-                  if(newTime != null) {
-                    HazizzNotification.scheduleNotificationAlarmManager(newTime);
-                  }
+                  Navigator.pushNamed(context, "/settings/notification");
                 },
                 leading: Icon(FontAwesomeIcons.solidBell),
-                title: Text(locText(context, key: "set_time_for_notification")),
-                trailing: Text("time")
+                title: Text(locText(context, key: "notification_settings")),
+               // trailing: Text("time")
               ),
+              Divider(),
 
               ListTile(
                 title: Text(locText(context, key: "startPage")),
@@ -168,6 +160,8 @@ class _SettingsPage extends State<SettingsPage> with AutomaticKeepAliveClientMix
                   value: currentLocale,
                 ),
               ),
+              Divider(),
+
               ListTile(
                 onTap: () async {
                   Navigator.pushNamed(context, "/settings/profile_editor");

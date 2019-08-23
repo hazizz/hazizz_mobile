@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/comment_section_bloc.dart';
 import 'package:mobile/blocs/view_task_bloc.dart';
 import 'package:mobile/communication/pojos/pojo_comment.dart';
@@ -112,6 +113,7 @@ class _CommentItemWidget extends State<CommentItemWidget>{
                     const String value_delete = "delete";
                     if(imTheAuthor) {
                       return PopupMenuButton(
+                        icon: Icon(FontAwesomeIcons.ellipsisV, size: 20,),
                         onSelected: (value) async {
                           print("log: value: $value");
                           if(value == value_delete){

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/communication/pojos/PojoGrade.dart';
-import 'package:mobile/communication/pojos/PojoType.dart';
+import 'package:mobile/communication/pojos/PojoTag.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 
 import '../hazizz_date.dart';

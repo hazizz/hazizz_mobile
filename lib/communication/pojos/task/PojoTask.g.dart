@@ -13,9 +13,10 @@ PojoTask _$PojoTaskFromJson(Map<String, dynamic> json) {
           ? null
           : PojoAssignation.fromJson(
               json['assignation'] as Map<String, dynamic>),
-      type: json['type'] == null
-          ? null
-          : PojoType.fromJson(json['type'] as Map<String, dynamic>),
+      tags: (json['tags'] as List)
+          ?.map((e) =>
+            e == null ? null : PojoTag(name: e))
+          ?.toList(),
       title: json['title'] as String,
       description: json['description'] as String,
       dueDate: json['dueDate'] == null
@@ -35,7 +36,7 @@ PojoTask _$PojoTaskFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$PojoTaskToJson(PojoTask instance) => <String, dynamic>{
       'id': instance.id,
       'assignation': instance.assignation,
-      'type': instance.type,
+      'tags': instance.tags,
       'title': instance.title,
       'description': instance.description,
       'dueDate': instance.dueDate?.toIso8601String(),
@@ -51,9 +52,10 @@ PojoTaskDetailed _$PojoTaskDetailedFromJson(Map<String, dynamic> json) {
           ? null
           : PojoAssignation.fromJson(
               json['assignation'] as Map<String, dynamic>),
-      type: json['type'] == null
-          ? null
-          : PojoType.fromJson(json['type'] as Map<String, dynamic>),
+      tags: (json['tags'] as List)
+          ?.map((e) =>
+              e == null ? null : PojoTag(name: e))
+          ?.toList(),
       title: json['title'] as String,
       description: json['description'] as String,
       creationDate: json['creationDate'] == null
@@ -80,7 +82,7 @@ Map<String, dynamic> _$PojoTaskDetailedToJson(PojoTaskDetailed instance) =>
     <String, dynamic>{
       'id': instance.id,
       'assignation': instance.assignation,
-      'type': instance.type,
+      'tags': instance.tags,
       'title': instance.title,
       'description': instance.description,
       'creationDate': instance.creationDate?.toIso8601String(),

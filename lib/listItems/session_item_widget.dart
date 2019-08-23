@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/selected_session_bloc.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
@@ -86,6 +87,7 @@ class _SessionItemWidget extends State<SessionItemWidget>{
                         Spacer(),
                         Text(widget.session.url),
                         PopupMenuButton(
+                          icon: Icon(FontAwesomeIcons.ellipsisV, size: 20,),
                           onSelected: (value) async {
                             print("log: value: $value");
                             if(value == value_remove){

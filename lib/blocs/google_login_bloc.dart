@@ -95,6 +95,9 @@ class GoogleLoginBloc extends Bloc<GoogleLoginEvent, GoogleLoginState> {
 
 
       final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+      if(googleUser == null){
+        yield GoogleLoginFineState();
+      }
       final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
 

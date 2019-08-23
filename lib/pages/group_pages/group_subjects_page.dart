@@ -47,8 +47,12 @@ class _GroupSubjectsPage extends State<GroupSubjectsPage> with AutomaticKeepAliv
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           heroTag: "hero_fab_subjects",
-          onPressed: (){
-            showAddSubjectDialog(context, groupId: 2);
+          onPressed: () async {
+            print("press");
+            PojoSubject success = await showAddSubjectDialog(context, groupId: groupSubjectsBloc.groupId);
+            if(success != null){
+              groupSubjectsBloc.dispatch(FetchData());
+            }
           },
           child: Icon(FontAwesomeIcons.plus),
         ),

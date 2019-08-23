@@ -10,6 +10,11 @@
     : "Nekünk és nektek mert mi is diákok vagyunk",
 
 
+    "hazizz_intro" : "Köszönjük, hogy letöltötted a Házizz Mobil-t! Az applikáció segítségével egy helyen tárolhatod az összes iskolai teendődet. \nLegyen szó házi feladatról, dolgozatról vagy beadandóról, az applikációban könnyen feljegyezhetsz mindent és megoszthatod társaiddal.\nKezdésképp hozz létre egy új fiókot vagy jelentkezz be!",
+
+    "kreta_intro" : "A Thérának köszönhetően a már a jegyeidet és órarendedet is egyből elérheted a Házizz Mobilban, így mindent megtalálsz egy alkalmazásban.\nEhhez nem kell mást tenned, mint bejelentkezned a Kréta fiókodba, kiválasztanod az iskolád és meg is vagy! \n",
+
+
     "header_item_in"
     : "",
 
@@ -205,8 +210,13 @@
 
 
     "title"
-    : "cím",
+    : "Cím",
 
+    "without_subject"
+    : "<Tantárgy nélkül>",
+
+    "without_group"
+    : "<Saját>",
 
     "description"
     : "Leírás",
@@ -753,6 +763,10 @@
     : "A téma 2-20 karakter hosszú lehet",
 
 
+    "try_again_later"
+    : "Valami hiba történt. Probáld újra késöbb!",
+
+
     "changePassword"
     : "Jelszó módosítás",
 
@@ -868,6 +882,16 @@
     "crop_image_menu_flip_vertically"
     : "Forgatás függőlegesen",
 
+    "tag"
+    : "Címke",
+
+    "new_tag"
+    : "Új címke",
+
+    "add_new_tag"
+    : "Új címke hozzáadás",
+
+
 
     "title_thera"
     : "Théra",
@@ -883,6 +907,9 @@
 
     "kreta"
     : "Kréta",
+
+    "ekreta"
+    : "e-Kréta",
 
     "kreta_accounts"
     : "Kréta fiókok",

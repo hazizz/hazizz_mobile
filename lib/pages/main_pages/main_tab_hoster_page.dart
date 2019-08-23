@@ -168,15 +168,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
 
 
               child: Column(
-               // padding: EdgeInsets.zero,
                 children: <Widget>[
-                  /*
-                  DrawerHeader(
-
-                      child:
-                  ),
-
-                  */
                   UserAccountsDrawerHeader(
 
                     decoration: BoxDecoration(
@@ -299,26 +291,14 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
                               padding: const EdgeInsets.only(right: 8.0, left: 10),
                               child: Builder(
                                 builder:(context){
-                                  IconData themeIcon;
-                                  Color themeIconColor;
-                                  if(isDark){
-                                    themeIcon = FontAwesomeIcons.solidSun;
-                                    themeIconColor = Colors.orangeAccent;
-                                  }else{
-                                    themeIcon = FontAwesomeIcons.solidMoon;
-                                    themeIconColor = Colors.black45;
-                                  }
+                                  Icon icon = isDark?
+                                    Icon(FontAwesomeIcons.solidSun, color: Colors.orangeAccent,):
+                                    Icon(FontAwesomeIcons.solidMoon, color: Colors.black45, size: 43);
 
                                   return IconButton(
                                     iconSize: 50,
-                                    icon: Icon(themeIcon,
-                                      color: themeIconColor,),
+                                    icon: icon,
                                     onPressed: () async {
-                                      /*
-                                    DynamicTheme.of(context).setBrightness(Theme.of(context).brightness == Brightness.dark? Brightness.light: Brightness.dark);
-                                    */
-
-                                      //  DynamicTheme.of(context).setThemeData(HazizzTheme.darkThemeData);
                                       if(await HazizzTheme.isDark()) {
                                         DynamicTheme.of(context).setThemeData(HazizzTheme.lightThemeData);
                                         await HazizzTheme.setLight();

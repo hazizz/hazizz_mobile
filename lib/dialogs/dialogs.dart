@@ -2,12 +2,15 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/communication/pojos/PojoClass.dart';
 import 'package:mobile/communication/pojos/PojoGrade.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
-import 'package:mobile/communication/pojos/PojoType.dart';
+import 'package:mobile/communication/pojos/PojoTag.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
+import 'package:mobile/defaults/pojo_group_empty.dart';
 import 'package:mobile/dialogs/school_dialog.dart';
 import 'package:share/share.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -18,7 +21,9 @@ import '../hazizz_date.dart';
 import '../hazizz_localizations.dart';
 import '../hazizz_response.dart';
 import '../hazizz_theme.dart';
+import 'choose_subject_dialog.dart';
 import 'create_group_dialog.dart';
+import 'create_subject_dialog.dart';
 import 'join_group_dialog.dart';
 
 
@@ -148,7 +153,7 @@ Future<PojoGroup> showDialogGroup(BuildContext context, {List<PojoGroup> data}) 
   }
 
 
-  groups_data.insert(0, PojoGroup(0, "<Saját>", "null", "null", 0));
+  groups_data.insert(0, getEmptyPojoGroup(context));
 
 
   double height = 200;
@@ -255,20 +260,11 @@ Future<PojoGroup> showDialogGroup(BuildContext context, {List<PojoGroup> data}) 
 
 
 Future<PojoSubject> showDialogSubject(BuildContext context, {@required PojoGroup group, List<PojoSubject> data}) async{
-  List<PojoSubject> subjects_data = List();
-  int groupId = group.id;
-
-
-  subjects_data.addAll(data);
-
-
-
-  subjects_data.insert(0, PojoSubject(0, "<Tantárgy nélkül>"));
-
 
   double height = 200;
   double width = 280;
 
+  /*
   HazizzDialog d = HazizzDialog(height: height, width: width,
     header: Container(
       width: width,
@@ -341,11 +337,14 @@ Future<PojoSubject> showDialogSubject(BuildContext context, {@required PojoGroup
       children: <Widget>[
         Builder(
           builder: (context){
-            if(subjects_data.isEmpty) {
+            if(subjects_data.length == 1 && subjects_data[0].id == 0) {
               return FlatButton(
                 child: new Text(locText(context, key: "add_subject")),
-                onPressed: () {
-                  showAddSubjectDialog(context, groupId: groupId);
+                onPressed: () async {
+                  PojoSubject result = await showAddSubjectDialog(context, groupId: groupId);
+                  if(result != null){
+                    subjects_data.add(result);
+                  }
                 },
               );
           }
@@ -361,6 +360,7 @@ Future<PojoSubject> showDialogSubject(BuildContext context, {@required PojoGroup
       ],
     ),
   );
+  */
 
   //return d;
 
@@ -368,15 +368,19 @@ Future<PojoSubject> showDialogSubject(BuildContext context, {@required PojoGroup
     context: context,
     builder: (BuildContext context) {
       // return object of type Dialog
-      return d;
+      return ChooseSubjectDialog(groupId: group.id, data: data,);
     },
   );
   return result;
 }
 
 
-Future<PojoType> showDialogTaskType(BuildContext context) async{
-  List<PojoType> data = PojoType.pojoTypes;
+Future<PojoTag> showDialogTaskTag(BuildContext context, {List<PojoTag> except}) async{
+  final List<PojoTag> defaultTags = PojoTag.defaultTags;
+
+  final List<PojoTag> tagsToShow = List();
+
+  final TextEditingController newTagController = TextEditingController();
 
   /*
   var d = JoinGroupDialog();
@@ -386,8 +390,23 @@ Future<PojoType> showDialogTaskType(BuildContext context) async{
   return result;
   */
 
-  double height = 200;
-  double width = 280;
+  for(PojoTag defaultTag in defaultTags){
+    bool foundDuplicate = false;
+    for(PojoTag exceptTag in except){
+      if(defaultTag.getName() == exceptTag.getName()){
+        foundDuplicate = true;
+        break;
+      }
+    }
+    if(!foundDuplicate){
+      print("asdes: ${defaultTag.getName()}");
+      tagsToShow.add(defaultTag);
+    }
+
+  }
+
+  double height = 280;
+  double width = 290;
 
   HazizzDialog d = HazizzDialog(height: height, width: width,
     header: Container(
@@ -409,37 +428,75 @@ Future<PojoType> showDialogTaskType(BuildContext context) async{
       ),
     ),
     content: Container(
-      height: 160,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 4.0),
-        child: ListView.builder(
-          itemCount: data.length,
-          itemBuilder: (BuildContext context, int index){
-            return GestureDetector(
-                onTap: (){
-                  Navigator.pop(context, data[index]);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 30.0, right: 30, top: 4,bottom: 4),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                        color: data[index].getColor()
-                    ),
-                    width: width,
-                    child: Center(
-                      child: Text( locText(context, key: "taskType_${data[index].id}" ),//   data[index].name,
-                        style: TextStyle(
-                            fontSize: 26
+      height: 240,
+      child: Column(
+        children: <Widget>[
+          Container(
+            height: 64,
+            child: TextField(
+
+              inputFormatters:[
+                LengthLimitingTextInputFormatter(20),
+              ],
+              style: TextStyle(fontSize: 20),
+              onChanged: (String searchText){
+                //   List<String> searchKeys = keys;
+                /*
+                List<String> nextSearchKeys = List();
+                for(String s in keys){
+                  if(s.toLowerCase().contains(searchText.toLowerCase())){
+                    nextSearchKeys.add(s);
+                  }
+                }
+                */
+              },
+              controller: newTagController,
+              decoration: InputDecoration(
+                suffix: IconButton(icon: Icon(FontAwesomeIcons.plus), onPressed: (){
+                  if(newTagController.text.length >= 2 && newTagController.text.length <= 20){
+                    Navigator.pop(context, PojoTag(name: newTagController.text));
+                  }
+                }),
+                hintText: locText(context, key: "add_new_tag"),
+                prefixIcon: Icon(FontAwesomeIcons.searchPlus),
+                //  border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(25.0)))
+              )
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 4.0),
+              child: ListView.builder(
+                itemCount: tagsToShow.length,
+                itemBuilder: (BuildContext context, int index){
+                  return GestureDetector(
+                      onTap: (){
+                        Navigator.pop(context, tagsToShow[index]);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 30.0, right: 30, top: 4,bottom: 4),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(20)),
+                              color: tagsToShow[index].getColor()
+                          ),
+                          width: width,
+                          child: Center(
+                            child: Text( tagsToShow[index].getDisplayName(context),//   data[index].name,
+                              style: TextStyle(
+                                  fontSize: 26
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-                )
-            );
-          },
-        ),
-      ),
+                      )
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
+      )
     ),
     actionButtons: Row(
       children: <Widget>[
@@ -647,9 +704,17 @@ Future<bool> showDeleteDialog(context, {@required int taskId}) async {
   */
 }
 
-Future<bool> showAddSubjectDialog(context, {@required int groupId}) {
+Future<PojoSubject> showAddSubjectDialog(context, {@required int groupId}) {
   TextEditingController _subjectTextEditingController = TextEditingController();
   String errorText = null;
+
+  bool isEnabled = true;
+
+
+  return showDialog(context: context, barrierDismissible: true, builder: (context){
+    return CreateSubjectDialog(groupId: groupId,);
+  });
+
   return showDialog(
       context: context,
       barrierDismissible: true,
@@ -680,6 +745,9 @@ Future<bool> showAddSubjectDialog(context, {@required int groupId}) {
                         Padding(
                           padding: EdgeInsets.all(10),
                           child: TextField(
+                            inputFormatters:[
+                              LengthLimitingTextInputFormatter(20),
+                            ],
                             autofocus: true,
                             onChanged: (dynamic text) {
                               print("change: $text");
@@ -709,31 +777,51 @@ Future<bool> showAddSubjectDialog(context, {@required int groupId}) {
                               ),
                             ),
                             onPressed: () {
-                              Navigator.of(context).pop();
+                              Navigator.of(context).pop(false);
                             },
                             color: Colors.transparent
                         ),
                         FlatButton(
+
                             child: Center(
                               child: Text(
                                 'ADD',
                                 style: TextStyle(
-                                    fontFamily: 'Montserrat',
+                                  //  fontFamily: 'Montserrat',
                                     fontSize: 14.0,
                                     color: HazizzTheme.warningColor
                                 ),
                               ),
                             ),
-                            onPressed: () async {
-                              /*
-                              Response response = await RequestSender().getResponse(DeleteTask(taskId: taskId));
-                              if(response.statusCode == 200){
-                                Navigator.of(context).pop();
-                              }
-                              */
 
-                              Navigator.of(context).pop();
+
+                            onPressed: isEnabled ? () async {
+
+                              if(_subjectTextEditingController.text.length >= 2 && _subjectTextEditingController.text.length <= 20){
+
+
+
+                                HazizzResponse response = await RequestSender().getResponse(CreateSubject(p_groupId: groupId, b_subjectName: _subjectTextEditingController.text));
+                                isEnabled = true;
+                                if(response.isSuccessful){
+                                  Navigator.pop(context, true);
+                                }
+                              }
+
+                            } : null,
+
+        /*
+                            onPressed: () async {
+
+                              if(_subjectTextEditingController.text.length >= 2 && _subjectTextEditingController.text.length <= 20){
+                                HazizzResponse response = await RequestSender().getResponse(CreateSubject(p_groupId: groupId, b_subjectName: _subjectTextEditingController.text));
+                                if(response.isSuccessful){
+                                  Navigator.pop(context, true);
+                                }
+                              }
+
                             },
+        */
                             color: Colors.transparent
                         ),
                       ],
@@ -931,7 +1019,7 @@ Future<bool> showInviteDialog(context, {@required PojoGroup group}) async {
           color: Colors.transparent
       ),
     ],
-  ) ,height: 170,width: 200);
+  ) ,height: 190,width: 200);
 
   return showDialog(context: context, barrierDismissible: true,
       builder: (BuildContext context) {
@@ -955,7 +1043,7 @@ void showSchoolsDialog(BuildContext context, {@required Function({String key, St
 Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
   Widget space = SizedBox(height: 5);
 
-  double height = 230;
+  double height = 260;
   double width = 300;
   int v = 20;
   if(pojoClass.topic == null){

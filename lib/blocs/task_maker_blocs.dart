@@ -10,7 +10,7 @@ import 'package:mobile/blocs/text_field_bloc.dart';
 import 'package:mobile/communication/pojos/PojoError.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
-import 'package:mobile/communication/pojos/PojoType.dart';
+import 'package:mobile/communication/pojos/PojoTag.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:meta/meta.dart';
@@ -29,7 +29,7 @@ abstract class TaskMakerBloc extends Bloc<TaskMakerEvent, TaskMakerState> {
   GroupItemPickerBloc groupItemPickerBloc;
   SubjectItemPickerBloc subjectItemPickerBloc;
   DateTimePickerBloc deadlineBloc;
-  TaskTypePickerBloc taskTypePickerBloc;
+  TaskTagBloc taskTagBloc;
   TextFormBloc titleBloc;
   TextFormBloc descriptionBloc;
 
@@ -47,7 +47,7 @@ abstract class TaskMakerBloc extends Bloc<TaskMakerEvent, TaskMakerState> {
     subjectItemPickerBloc = SubjectItemPickerBloc();
     groupItemPickerBloc = GroupItemPickerBloc(subjectItemPickerBloc);
     deadlineBloc = DateTimePickerBloc();
-    taskTypePickerBloc = TaskTypePickerBloc();
+    taskTagBloc = TaskTagBloc();
     titleBloc = TextFormBloc(
      validate: (String text){
        if(text.length < 2){
@@ -76,6 +76,10 @@ abstract class TaskMakerBloc extends Bloc<TaskMakerEvent, TaskMakerState> {
       print("change: $text");
       descriptionBloc.dispatch(TextFormValidate(text: text));
     });
+
+
+    groupItemPickerBloc.dispatch(ItemListLoadData());
+
   }
 
   @override
@@ -83,7 +87,7 @@ abstract class TaskMakerBloc extends Bloc<TaskMakerEvent, TaskMakerState> {
     groupItemPickerBloc.dispose();
     subjectItemPickerBloc.dispose();
     deadlineBloc.dispose();
-    taskTypePickerBloc.dispose();
+    taskTagBloc.dispose();
     titleBloc.dispose();
     descriptionBloc.dispose();
   
@@ -362,55 +366,83 @@ class SubjectItemPickerBloc2 extends ItemListPickerBloc {
 //endregion
 //endregion
 
-//region TaskTypePickerBlocParts
-//region TaskTypePickerStates
-abstract class TaskTypePickerState extends HState {
-  TaskTypePickerState([List props = const []]) : super(props);
+//region TaskTagBlocParts
+//region TaskTagStates
+abstract class TaskTagState extends HState {
+  TaskTagState([List props = const []]) : super(props);
 }
-class TaskTypePickedState extends TaskTypePickerState {
-  PojoType item;
+class TaskTagFineState extends TaskTagState {
+  final List<PojoTag> tags;
 
-  TaskTypePickedState(this.item) : assert(item!= null), super([item]);
+ // PojoTag tag;
+
+  TaskTagFineState(this.tags, DateTime time) : assert(tags!= null), super([tags, time]);
 
   @override
-  String toString() => 'PickedState';
+  String toString() => 'TaskTagFineState';
 }
 //endregion
 
-//region TaskTypePickerEvents
-abstract class TaskTypePickerEvent extends HEvent {
-  TaskTypePickerEvent([List props = const []]) : super(props);
+//region TaskTagEvents
+abstract class TaskTagEvent extends HEvent {
+  TaskTagEvent([List props = const []]) : super(props);
 // ItemListState(this.name) : super([name]);
 }
-class TaskTypePickedEvent extends TaskTypePickerEvent {
-  PojoType type;
+class TaskTagAddEvent extends TaskTagEvent {
+ // List<PojoTag> tags;
 
-  TaskTypePickedEvent(this.type) : assert(type != null), super([type]);
+  PojoTag tag;
+
+  TaskTagAddEvent(this.tag) : assert(tag != null), super([tag]);
 
   @override
-  String toString() => 'TaskTypePickEvent';
+  String toString() => 'TaskTagAddEvent';
+}
+
+class TaskTagRemoveEvent extends TaskTagEvent {
+  // List<PojoTag> tags;
+
+  PojoTag tag;
+  int index;
+
+  TaskTagRemoveEvent({this.tag, this.index}) : super([tag, index]);
+
+  @override
+  String toString() => 'TaskTagRemoveEvent';
 }
 //endregion
 
-//region TaskTypePickerBloc
-class TaskTypePickerBloc extends Bloc<TaskTypePickerEvent, TaskTypePickerState>{
+//region TaskTagBloc
+class TaskTagBloc extends Bloc<TaskTagEvent, TaskTagState>{
 
-  List<PojoType> types = PojoType.pojoTypes;
-  PojoType pickedType;
+  List<PojoTag> pickedTags = List();
 
-  TaskTypePickerBloc(){
-    pickedType = types[0];
+  TaskTagBloc(){
+
   }
 
   @override
-  TaskTypePickerState get initialState =>TaskTypePickedState(types[0]);
+  TaskTagState get initialState =>TaskTagFineState(pickedTags, DateTime.now());
 
   @override
-  Stream<TaskTypePickerState> mapEventToState(TaskTypePickerEvent event) async*{
-    if(event is TaskTypePickedEvent){
-      pickedType = event.type;
-      print("print, name: ${event.type.name}");
-      yield TaskTypePickedState(pickedType);
+  Stream<TaskTagState> mapEventToState(TaskTagEvent event) async*{
+    print("event: $event");
+    if(event is TaskTagAddEvent){
+      pickedTags.add(event.tag);
+      print("state: fine");
+
+      yield TaskTagFineState(pickedTags, DateTime.now());
+    }else if(event is TaskTagRemoveEvent){
+      print("oi");
+      bool asd = null;
+      if(event.tag != null){
+        asd = pickedTags.remove(event.tag);
+      }else{
+        pickedTags.removeAt(event.index);
+      }
+      print("asdőú: $asd");
+      print("asdőű: ${pickedTags}");
+      yield TaskTagFineState(pickedTags, DateTime.now());
     }
   }
 }
@@ -426,9 +458,12 @@ class TaskMakerWaitingState extends TaskMakerState {
   String toString() => 'TaskMakerWaitingState';
 }
 
-class TaskMakerSentState extends TaskMakerState {
+class TaskMakerSuccessfulState extends TaskMakerState {
+  final PojoTask task;
+
+  TaskMakerSuccessfulState(this.task) : assert(task!= null), super([task]);
   @override
-  String toString() => 'TaskMakerSentState';
+  String toString() => 'TaskMakerSuccessfulState';
 }
 
 class TaskMakerFailedState extends TaskMakerState {

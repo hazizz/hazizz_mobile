@@ -14,7 +14,7 @@ PojoMeInfoPrivate _$PojoMeInfoPrivateFromJson(Map<String, dynamic> json) {
       (json['permissions'] as List)?.map((e) => e as String)?.toList(),
       (json['groups'] as List)
           ?.map((e) =>
-      e == null ? null : PojoGroup.fromJson(e as Map<String, dynamic>))
+              e == null ? null : PojoGroup.fromJson(e as Map<String, dynamic>))
           ?.toList());
 }
 

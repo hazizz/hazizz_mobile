@@ -20,7 +20,12 @@ class HazizzTimeOfDay extends TimeOfDay{
   }
 
   String toHazizzFormat(){
-    return "$hour:$minute";
+
+    String str_h = hour >= 10 ? hour.toString() : "0$hour";
+    String str_m = minute >= 10 ? minute.toString() : "0$minute";
+
+
+    return "$str_h:$str_m";
   }
 
 

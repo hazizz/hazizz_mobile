@@ -3,6 +3,7 @@ import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
 import 'package:mobile/blocs/task_maker_blocs.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
+import 'package:mobile/communication/pojos/PojoTag.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import '../request_sender.dart';
 import '../hazizz_response.dart';
@@ -54,7 +55,9 @@ class TaskCreateBloc extends TaskMakerBloc {
   PojoGroup group;
 
 
-  TaskCreateBloc({this.group}) : super();
+  TaskCreateBloc({this.group}) : super(){
+    taskTagBloc.dispatch(TaskTagAddEvent(PojoTag.defaultTags[0]));
+  }
  
   @override
   Stream<TaskMakerState> mapEventToState(TaskMakerEvent event) async*{
@@ -76,16 +79,24 @@ class TaskCreateBloc extends TaskMakerBloc {
         print("log: lul1");
 
         //region send
-        int groupId, subjectId, typeId;
+        int groupId, subjectId;
+        List<String> tags = List();
         DateTime deadline;
         String title, description;
 
         bool missingInfo = false;
 
+
+        /*
         TaskTypePickerState typeState = taskTypePickerBloc.currentState;
         if(typeState is TaskTypePickedState){
-          typeId = typeState.item.id;
+          tags[0] = typeState.tag.getName();
         }
+        */
+
+
+        taskTagBloc.pickedTags.forEach((f){tags.add(f.getName());});
+
 
         print("log: lul11");
 
@@ -186,7 +197,7 @@ class TaskCreateBloc extends TaskMakerBloc {
         hazizzResponse = await RequestSender().getResponse(new CreateTask(
             groupId: groupId,
             subjectId: subjectId,
-            b_taskType: typeId,
+            b_tags: tags,
             b_title: title,
             b_description: description,
             b_deadline: deadline
@@ -214,7 +225,7 @@ class TaskCreateBloc extends TaskMakerBloc {
 
         if(hazizzResponse.isSuccessful){
           print("log: task making was succcessful");
-          yield TaskMakerSentState();
+          yield TaskMakerSuccessfulState(hazizzResponse.convertedData);
           MainTabBlocs().tasksBloc.dispatch(FetchData());
         }else{
           yield TaskMakerFailedState();

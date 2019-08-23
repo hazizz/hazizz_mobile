@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/TextFormBloc.dart';
 import 'package:mobile/blocs/create_task_bloc.dart';
 import 'package:mobile/blocs/date_time_picker_bloc.dart';
@@ -9,12 +10,15 @@ import 'package:mobile/blocs/item_list_picker_bloc/item_list_picker_group_bloc.d
 import 'package:mobile/blocs/task_maker_blocs.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
-import 'package:mobile/communication/pojos/PojoType.dart';
+import 'package:mobile/communication/pojos/PojoTag.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 
 import 'package:expandable/expandable.dart';
+import 'package:mobile/defaults/pojo_group_empty.dart';
+import 'package:mobile/defaults/pojo_subject_empty.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
+import 'package:mobile/widgets/tag_chip.dart';
 
 import '../hazizz_date.dart';
 import '../hazizz_localizations.dart';
@@ -105,14 +109,14 @@ class _TaskMakerPage extends State<TaskMakerPage> {
    //   blocs.subjectItemPickerBloc.isLocked = true;
  //     blocs.groupItemPickerBloc.isLocked = true;
 
-      blocs.groupItemPickerBloc.dispatch(SetGroupEvent(item: widget.taskToEdit.group));
-      blocs.subjectItemPickerBloc.dispatch(SetSubjectEvent(item: widget.taskToEdit.subject));
+    //  blocs.groupItemPickerBloc.dispatch(SetGroupEvent(item: widget.taskToEdit.group));
+    //  blocs.subjectItemPickerBloc.dispatch(SetSubjectEvent(item: widget.taskToEdit.subject));
 
     }else{
       print("log: Well ...");
     }
 
-    blocs.groupItemPickerBloc.dispatch(ItemListLoadData());
+  //  blocs.groupItemPickerBloc.dispatch(ItemListLoadData());
 
     super.initState();
   }
@@ -134,56 +138,62 @@ class _TaskMakerPage extends State<TaskMakerPage> {
   Widget build(BuildContext context) {
 
     AppBar appBar = AppBar(
+        leading: HazizzBackButton(),
+
         title: Text(widget.mode == TaskMakerMode.create ? locText(context, key: "createTask") : locText(context, key: "editTask") )
     );
 
     var taskTypePicker = BlocBuilder(
-        bloc: blocs.taskTypePickerBloc,
-        builder: (BuildContext context, TaskTypePickerState state) {
+        bloc: blocs.taskTagBloc,
+        builder: (BuildContext context, TaskTagState state) {
 
-          String typeName = "ERROR";
-          if(state is TaskTypePickedState) {
-            if (state.item.id == 1) {
-              headerColor = HazizzTheme.homeworkColor;
-            }
-            else if (state.item.id == 2) {
-              headerColor = HazizzTheme.assignmentColor;
-            }
-            else if (state.item.id == 3) {
-              headerColor = HazizzTheme.testColor;
-            }
-            else if (state.item.id == 4) {
-              headerColor = HazizzTheme.oralTestColor;
-            }
-            typeName = locText(context, key: "taskType_${state.item.id}");
+          List<PojoTag> pickedTags =  blocs.taskTagBloc.pickedTags;
+
+          List<Widget> tagWidgets = List();
+
+          for(PojoTag t in pickedTags){
+            tagWidgets.add(
+                TagChip(child: Text(t.getDisplayName(context), style: TextStyle(fontSize: 21, ),),
+                  // backgroundColor: t.getColor(),
+                  hasCloseButton: true,
+                  onCloseClick: (){
+                    // notify bloc
+                    print("locsing");
+                    blocs.taskTagBloc.dispatch(TaskTagRemoveEvent(tag: t));
+                  },
+               //   padding: EdgeInsets.only(left: 5, right: 5, top: 4, bottom: 4),
+
+                )
+            );
           }
 
+          if(pickedTags.length < 8){
+            tagWidgets.add(TagChip(
+              child: Row(children: <Widget>[
+                Icon(FontAwesomeIcons.plus, size: 18,),
+                Text("Add", style: TextStyle(fontSize: 20),)
+              ],),
 
+              //  padding: EdgeInsets.only(left: 5, right: 5, top: 4, bottom: 4),
+              hasCloseButton: false,
+              onClick: () async {
 
-          return GestureDetector(
-            child: FormField(
-              builder: (FormFieldState formState) {
-                return InputDecorator(
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: HazizzTheme.formColor,
-                  //    labelText: 'Type',
-                    ),
-                    isEmpty: _color == '',
-                    child: Text('${typeName}',
-                            style: TextStyle(fontSize: 24.0),
-                    )
-                );
+                PojoTag result = await showDialogTaskTag(context, except: blocs.taskTagBloc.pickedTags);
+                print("result: ${result?.getName()}");
+                if(result != null){
+                  blocs.taskTagBloc.dispatch(TaskTagAddEvent(result));
+                }
               },
-            ),
-            onTap: () async {
-              PojoType result = await showDialogTaskType(context);
-              if(result != null){
-                blocs.taskTypePickerBloc.dispatch(TaskTypePickedEvent(result));
-
-              }
-            },
+            ));
+          }
+          return Wrap(
+           // alignment: WrapAlignment.start,
+          //  runAlignment: WrapAlignment.start,
+            spacing: 8,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: tagWidgets,
           );
+
         }
     );
     var groupPicker = BlocBuilder(
@@ -197,49 +207,75 @@ class _TaskMakerPage extends State<TaskMakerPage> {
         }
 
         return GestureDetector(
-          child: FormField(
-            builder: (FormFieldState formState) {
-              String hint;
-              if(state is ItemListLoaded){
-                hint = locText(context, key: "group");
-              }
-              return InputDecorator(
+          child: Row(
+            children: <Widget>[
+              Icon(FontAwesomeIcons.users, color: blocs is TaskCreateBloc ? null : Colors.black26,),
+              Expanded(child:
+                Padding(
+                  padding: EdgeInsets.only(left: 12),
+                  child: FormField(
+                    builder: (FormFieldState formState) {
+                      String hint;
+                      if(state is ItemListLoaded){
+                        hint = locText(context, key: "group");
+                      }
+                      return InputDecorator(
 
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.only(left: 6, bottom: 8, top: 10),
-                    errorText: error,
-                   // error
-                    filled: true,
-                    fillColor: HazizzTheme.formColor,
-                  //  icon: const Icon(Icons.group),
-                    labelText: hint,
-                  ),
-                  isEmpty: _color == '',
-                  child: Builder(
-                  //  bloc: blocs.groupItemPickerBloc,
-                    builder: (BuildContext context){//, ItemListState state) {
-                      if (state is ItemListLoaded) {
-                        return Container();
-                      }
-                      if(state is PickedGroupState){
-                        print("log: asdasdGroup: $state.item.name");
-                        return Text('${state.item.name}',
-                            style: TextStyle(fontSize: 20.0),
-                        );
-                      }
-                      return Text("Loading");
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.only(left: 6, bottom: 8, top: 10),
+                            errorText: error,
+                            // error
+                          //  filled: true,
+                          //  fillColor: HazizzTheme.formColor,
+                            //  icon: const Icon(Icons.group),
+                            labelText: hint,
+                          ),
+                          isEmpty: _color == '',
+                          child: Builder(
+                            //  bloc: blocs.groupItemPickerBloc,
+                            builder: (BuildContext context){//, ItemListState state) {
+                              if (state is ItemListLoaded) {
+                                return Container();
+                              }
+                              if(state is PickedGroupState){
+                                print("log: asdasdGroup: $state.item.name");
+                                /*
+                                return Text('${state.item.name}',
+                                  style: TextStyle(fontSize: 20.0),
+                                );
+                                */
+
+                                return Text('${ state.item.id != 0
+                                    ? state.item.name
+                                    : getEmptyPojoGroup(context).name}',
+                                  style: TextStyle(fontSize: 20, color: blocs is TaskCreateBloc
+                                      ? null
+                                      : Colors.black45,)
+
+                                );
+
+
+                              }
+                              return Text("Loading");
+                            },
+                          )
+                      );
                     },
-                  )
-              );
-            },
+                  ),),
+              )
+            ],
           ), //groupFormField,
           onTap: () async {
-            List<PojoGroup> dataList = blocs.groupItemPickerBloc.dataList;
-            if(dataList != null){
-              if (state is ItemListLoaded || state is PickedGroupState) {
-                PojoGroup result = await showDialogGroup(context, data: dataList,);
-                if(result != null){
-                  blocs.groupItemPickerBloc.dispatch(PickedGroupEvent(item: result));
+            if(blocs is TaskCreateBloc) {
+              List<PojoGroup> dataList = blocs.groupItemPickerBloc.dataList;
+              if(dataList != null) {
+                if(state is ItemListLoaded || state is PickedGroupState) {
+                  PojoGroup result = await showDialogGroup(
+                    context, data: dataList,);
+                  if(result != null) {
+                    blocs.groupItemPickerBloc.dispatch(
+                        PickedGroupEvent(item: result));
+                  }
                 }
               }
             }
@@ -256,66 +292,86 @@ class _TaskMakerPage extends State<TaskMakerPage> {
           return BlocBuilder(
             bloc: blocs.groupItemPickerBloc,
             builder: (context2, state2){
+              print("state:::: ${state2}");
               if(blocs.groupItemPickerBloc.pickedItem == null || blocs.groupItemPickerBloc.pickedItem.id == 0){
-                print("what????");
+                print("what????: ${blocs.groupItemPickerBloc.pickedItem}");
                 return Container();
               }
 
               return GestureDetector(
-                child: FormField(
+                child: Row(children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(left: 4.0),
+                    child: Icon(FontAwesomeIcons.flask, color: blocs is TaskCreateBloc ? null : Colors.black26,),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: FormField(
+                        enabled: blocs is TaskCreateBloc,
 
-                  builder: (FormFieldState formState) {
-                    String hint;
-                    String error;
-                    if(state is ItemListNotPickedState){
-                      error = "Not picked";
-                    }
-                    if(!(state is PickedSubjectState)){
-                      hint = locText(context, key: "subject");
-                    }
+                        builder: (FormFieldState formState) {
+                          String hint;
+                          String error;
+                          if(state is ItemListNotPickedState){
+                            error = "Not picked";
+                          }
+                          if(!(state is PickedSubjectState)){
+                            hint = locText(context, key: "subject");
+                          }
 
-                    return InputDecorator(
+                          return InputDecorator(
 
-                        decoration: InputDecoration(
-                          //    filled: true,
-                          //   fillColor: HazizzTheme.formColor,
-                          //     icon: const Icon(Icons.group),
-                            contentPadding: EdgeInsets.only(left: 6, bottom: 8, top: 10),
+                              decoration: InputDecoration(
+                                //    filled: true,
+                                //   fillColor: HazizzTheme.formColor,
+                                //     icon: const Icon(Icons.group),
+                                  contentPadding: EdgeInsets.only(left: 6, bottom: 8, top: 10),
 
-                            labelText: hint,
-                            errorText: error
-                        ),
-                        isEmpty: _color == '',
-                        child: Builder(
-                          builder: (BuildContext context){//, ItemListState state) {
-                            print("log: u $state");
-                            if (state is ItemListLoaded) {
-                              return Container();
-                            }
-                            if(state is PickedSubjectState) {
-                              print("log: ööö");
-                              return Text('${ state.item.name != null
-                                  ? state.item.name
-                                  : "no Subject"}',
-                                style: TextStyle(fontSize: 20),
+                                  labelText: hint,
+                                  errorText: error
+                              ),
+                              isEmpty: _color == '',
+                              child: Builder(
+                                builder: (BuildContext context){//, ItemListState state) {
+                                  print("log: u $state");
+                                  if (state is ItemListLoaded) {
+                                    return Container();
+                                  }
+                                  if(state is PickedSubjectState) {
+                                    print("log: ööö");
 
-                              );
-                            }
-                            else if(state is NotPickedEvent){
+                                    return Text('${ state.item.id != 0
+                                        ? state.item.name
+                                        : getEmptyPojoSubject(context).name}',
+                                      style: TextStyle(fontSize: 20, color: blocs is TaskCreateBloc
+                                        ? null
+                                        : Colors.black45,),
 
-                            }
-                            return Container();
-                          },
-                        )
-                    );
-                  },
-                ), //groupFormField,
+                                    );
+                                  }
+                                  else if(state is NotPickedEvent){
+
+                                  }else if(state is SetGroupEvent){
+
+                                  }
+                                  return Container();
+                                },
+                              )
+                          );
+                        },
+                      ),
+                    ),
+                  )
+                ],), //groupFormField,
                 onTap: () async {
-                  List<PojoSubject> dataList = blocs.subjectItemPickerBloc.dataList;
-                  if (state is! Waiting && state is! InitialState && state is! ItemListFail) {
-                    PojoSubject result = await showDialogSubject(context, data: dataList, group: blocs.groupItemPickerBloc.pickedItem);
-                    if(result != null){
-                      blocs.subjectItemPickerBloc.dispatch(PickedSubjectEvent(item: result));
+                  if(blocs is TaskCreateBloc) {
+                    List<PojoSubject> dataList = blocs.subjectItemPickerBloc.dataList;
+                    if (state is! Waiting && state is! InitialState && state is! ItemListFail) {
+                      PojoSubject result = await showDialogSubject(context, data: dataList, group: blocs.groupItemPickerBloc.pickedItem);
+                      if(result != null){
+                        blocs.subjectItemPickerBloc.dispatch(PickedSubjectEvent(item: result));
+                      }
                     }
                   }
 
@@ -335,39 +391,51 @@ class _TaskMakerPage extends State<TaskMakerPage> {
       bloc: blocs.deadlineBloc,
       builder: (BuildContext context, DateTimePickerState state) {
         return GestureDetector(
-          child: FormField(
-            builder: (FormFieldState formState) {
-              String hint;
-              if(state is DateTimeNotPickedState){
-                hint = locText(context, key: "deadline");
-              }
-              return InputDecorator(
+          child: Row(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(left: 4.0),
+                child: Icon(FontAwesomeIcons.calendarAlt),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: FormField(
+                    builder: (FormFieldState formState) {
+                      String hint;
+                      if(state is DateTimeNotPickedState){
+                        hint = locText(context, key: "deadline");
+                      }
+                      return InputDecorator(
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.only(left: 6, bottom: 8, top: 10),
 
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.only(left: 6, bottom: 8, top: 10),
+                         // filled: true,
+                         // fillColor: HazizzTheme.formColor,
+                          //   icon: const Icon(Icons.date_range),
+                          labelText: hint,
+                        ),
+                        isEmpty: _color == '',
+                        child: Builder(
+                          builder: (BuildContext context){
+                            if (state is DateTimeNotPickedState) {
+                              return Container();
+                            }
+                            if(state is DateTimePickedState){
+                              return Text('${hazizzShowDateFormat(state.dateTime)}',
+                                style: TextStyle(fontSize: 20.0),
 
-                  filled: true,
-                  fillColor: HazizzTheme.formColor,
-               //   icon: const Icon(Icons.date_range),
-                  labelText: hint,
-                ),
-                isEmpty: _color == '',
-                child: Builder(
-                  builder: (BuildContext context){
-                    if (state is DateTimeNotPickedState) {
-                      return Container();
-                    }
-                    if(state is DateTimePickedState){
-                      return Text('${hazizzShowDateFormat(state.dateTime)}',
-                          style: TextStyle(fontSize: 20.0),
-
+                              );
+                            }
+                            return Text("Loading");
+                          },
+                        ),
                       );
-                    }
-                    return Text("Loading");
-                  },
+                    },
+                  ),
                 ),
-              );
-            },
+              ),
+            ],
           ),
           onTap: () async {
             final DateTime picked = await showDatePicker(
@@ -466,9 +534,9 @@ class _TaskMakerPage extends State<TaskMakerPage> {
     return BlocListener(
       bloc: blocs,
       listener: (context, state) {
-        if (state is TaskMakerSentState) {
+        if (state is TaskMakerSuccessfulState) {
           //  Navigator.of(context).pushNamed('/details');
-          Navigator.pop(context);
+          Navigator.pop(context, state.task);
         }
       },
       child: Hero(
@@ -476,43 +544,49 @@ class _TaskMakerPage extends State<TaskMakerPage> {
           child: Scaffold(
               appBar: appBar,
               body:SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Container(
+                child:
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minHeight: MediaQuery.of(context).size.height-appBar.preferredSize.height - padding*3,
+                        maxHeight: (MediaQuery.of(context).size.height-appBar.preferredSize.height - padding*3)*2,
+
+                        minWidth: MediaQuery.of(context).size.width,
+                        maxWidth: MediaQuery.of(context).size.width,
+
+                      ),
+                    /*
                     width: MediaQuery.of(context).size.width,
                     // valamiért 3* kell megszorozni a paddingot hogy jó legyen
                     height: MediaQuery.of(context).size.height-appBar.preferredSize.height - padding*3,
+                    */
                     child: Padding(
                       padding: EdgeInsets.all(padding),
                       child: Card(
                         clipBehavior: Clip.antiAliasWithSaveLayer,
                         elevation: 100,
                           child: BlocBuilder(
-                              bloc: blocs.taskTypePickerBloc,
-                              builder: (BuildContext context, TaskTypePickerState state) {
-                                String typeName = "Not picked";
-                                if(state is TaskTypePickedState){
-                                  if(state.item.id == 1) {
-                                    headerColor = HazizzTheme.homeworkColor;
-                                    typeName = "Homework";
+                              bloc: blocs.taskTagBloc,
+                              builder: (BuildContext context, TaskTagState state) {
+                               // String typeName = "Not picked";
+                                headerColor = HazizzTheme.blue;
+
+                                if(state is TaskTagFineState){
+                                 // typeName = state.tag.getDisplayName(context);
+
+
+
+                                  if(state.tags.length == 1 && state.tags[0] != null){
+                                    headerColor = state.tags[0].getColor();
                                   }
-                                  else if(state.item.id == 2) {
-                                    headerColor = HazizzTheme.assignmentColor;
-                                    typeName = "Assignment";
-                                  }
-                                  else if(state.item.id == 3) {
-                                    headerColor = HazizzTheme.testColor;
-                                    typeName = "Test";
-                                  }
-                                  else if(state.item.id == 4) {
-                                    headerColor = HazizzTheme.oralTestColor;
-                                    typeName = "Oral test";
-                                  }
+
                                 }
+
+
 
                                 return Container(
 
                                   child: new Column(
+                                      mainAxisSize: MainAxisSize.min,
                                       mainAxisAlignment: MainAxisAlignment.start,
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
@@ -523,8 +597,10 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                                           Padding(
                                             padding: EdgeInsets.only(left: 10, top: 10,
                                                 right: 10,
-                                                bottom: 10),
+                                                bottom: 16),
                                             child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: <Widget>[
                                                 Padding(
                                                     padding: EdgeInsets.only(
@@ -550,61 +626,67 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                                             ),
                                           ),
                                         ),
-                                        Spacer(),
-                                        Padding(
-                                          padding: const EdgeInsets.only(left: 12, top: 0, right: 12),
-                                          child: new Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              new Flexible(
-                                                  child: titleTextForm
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        Spacer(flex: 1,),
 
 
-                                        Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 12, right: 12, top: 0),
-                                            child: descriptionTextForm
-                                        ),
-                                        Spacer(flex: 1,),
+                                       // Flex(direction: Axis.vertical, ),
+                                        Column(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            Padding(
+                                              padding: const EdgeInsets.only(left: 12, top: 16, right: 12),
+                                              child: new Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  new Flexible(
+                                                      child: titleTextForm
+                                                  )
+                                                ],
+                                              ),
+                                            ),
 
-                                        Center(
-                                            child:
+                                            Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 12, right: 12, top: 0),
+                                                child: descriptionTextForm
+                                            ),
 
-                                            BlocBuilder(
-                                                bloc: blocs,
-                                                builder: (BuildContext context, TaskMakerState state) {
-                                                  if(state is TaskMakerWaitingState) {
-                                                    return RaisedButton(
-                                                      child: Transform.scale(
-                                                        scale: 0.8,
-                                                        child: FittedBox(
-                                                          child: CircularProgressIndicator(),
-                                                          fit: BoxFit.scaleDown,
-                                                        ),
-                                                      ),
-                                                    );
-                                                  }else{
-                                                    return RaisedButton(
-                                                        child: Text((widget.mode == TaskMakerMode.create ? locText(context, key: "create") : locText(context, key: "edit"))),
-                                                        onPressed: () async {
-                                                          if(!(state is TaskMakerWaitingState)) {
-                                                            blocs.dispatch(
-                                                                TaskMakerSendEvent());
-                                                          }
+                                            Center(
+                                                child:
+
+                                                Padding(
+                                                  padding: const EdgeInsets.only(bottom: 8.0),
+                                                  child: BlocBuilder(
+                                                      bloc: blocs,
+                                                      builder: (BuildContext context, TaskMakerState state) {
+                                                        if(state is TaskMakerWaitingState) {
+                                                          return RaisedButton(
+                                                            child: Transform.scale(
+                                                              scale: 0.8,
+                                                              child: FittedBox(
+                                                                child: CircularProgressIndicator(),
+                                                                fit: BoxFit.scaleDown,
+                                                              ),
+                                                            ),
+                                                          );
+                                                        }else{
+                                                          return RaisedButton(
+                                                              child: Text((widget.mode == TaskMakerMode.create ? locText(context, key: "create") : locText(context, key: "edit"))),
+                                                              onPressed: () async {
+                                                                if(!(state is TaskMakerWaitingState)) {
+                                                                  blocs.dispatch(
+                                                                      TaskMakerSendEvent());
+                                                                }
+                                                              }
+                                                          );
                                                         }
-                                                    );
-                                                  }
 
 
-                                                }
-                                            )
+                                                      }
+                                                  ),
+                                                )
+                                            ),
+                                          ],
                                         ),
-                                        Spacer(flex: 2,),
                                       ]
                                   )
                                 );
@@ -613,8 +695,7 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                           ),
                         )
                       ),
-                  ]
-                ),
+
                 ),
               ),
       ),

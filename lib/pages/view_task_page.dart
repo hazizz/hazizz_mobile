@@ -1,9 +1,10 @@
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/comment_section_bloc.dart';
 import 'package:mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
 import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/view_task_bloc.dart';
-import 'package:mobile/communication/pojos/PojoType.dart';
+import 'package:mobile/communication/pojos/PojoTag.dart';
 
 import 'package:flutter/material.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
@@ -11,6 +12,7 @@ import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/managers/cache_manager.dart';
 import 'package:mobile/widgets/comment_section_widget.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
+import 'package:mobile/widgets/tag_chip.dart';
 
 import '../hazizz_date.dart';
 import '../hazizz_fonts.dart';
@@ -52,52 +54,86 @@ class _ViewTaskPage extends State<ViewTaskPage> {
    String _subject = "";
    String _group = "";
    String _creator = "";
-   String _type = "";
+   //String _type = "";
+   List<PojoTag> _tags = List();
    String _deadline = "";
    String _description = "";
    String _title = "";
+   PojoTag mainTag = null;
 
   List<PojoTask> task_data = List();
 
   bool showComments = false;
 
-  void processData(PojoTask pojoTask){
+  PojoTask pojoTask;
+
+  void processData(BuildContext context, PojoTask pojoTask){
     widget.pojoTask = pojoTask;
     setState(() {
       _subject = pojoTask.subject != null ? pojoTask.subject.name : null;
-      _group = pojoTask.group.name;
+      _group = pojoTask.group?.name;
 
       _creator = pojoTask.creator.displayName;
 
-      _type = pojoTask.type.name;
+     // _type = pojoTask.tags[0].getDisplayName(context);
+
+      for(PojoTag t in pojoTask.tags){
+        if(mainTag == null){
+          for(PojoTag defT in PojoTag.defaultTags){
+            if(t.name ==  defT.name){
+              mainTag = t;
+            }
+          }
+        }
+      }
+      _tags = pojoTask.tags;
+
+
       DateTime date_deadline =  pojoTask.dueDate;
       _deadline = hazizzShowDateFormat(date_deadline);//"${date_deadline.day}.${date_deadline.month}.${date_deadline.year}";
       _description = pojoTask.description;
       _title = pojoTask.title;
+
+
+      tagWidgets = List();
+
+
+      for(PojoTag t in pojoTask.tags){
+        if(t.name != mainTag.name){
+          tagWidgets.add(
+              TagChip(child: Text(t.getDisplayName(context), style: TextStyle(fontSize: 21, ),),
+                hasCloseButton: false,
+              )
+          );
+        }
+      }
+
+
     });
   }
+
+  List<Widget> tagWidgets;
 
   bool imTheAuthor = false;
   @override
   void initState() {
    // getData();
 
+    pojoTask = widget.pojoTask;
 
     InfoCache.getMyId().then((int result){
-      if(widget.pojoTask.creator.id == result){
+      if(pojoTask.creator.id == result){
         setState(() {
           imTheAuthor = true;
         });
       }
     });
 
-    ViewTaskBloc().reCreate(pojoTask: widget.pojoTask);
+    ViewTaskBloc().reCreate(pojoTask: pojoTask);
 
 
 
-    if(widget.pojoTask != null) {
-      processData(widget.pojoTask);
-    }
+
 
 
 
@@ -107,8 +143,17 @@ class _ViewTaskPage extends State<ViewTaskPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    if(pojoTask != null) {
+      processData(context, pojoTask);
+    }
+
+
+
+
+
     return Hero(
-        tag: "hero_task${widget.pojoTask.id}",
+        tag: "hero_task${pojoTask.id}",
         child: Scaffold(
         appBar: AppBar(
           leading: HazizzBackButton(),
@@ -164,33 +209,57 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
-                                    color: widget.pojoTask.type.getColor(),
+                                    color: mainTag != null ? mainTag.getColor(): Theme.of(context).primaryColor,
                                   //  width: 400,
 
                                     child: Column(
                                       children: <Widget>[
-                                        Padding(
-                                          padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 2),
-                                          child: new Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              new Flexible(
-                                                child: Text(_type,
-                                                  style: TextStyle(
-                                                    fontSize: 36
-                                                  ),
-                                                )
-                                              ),
-                                            ],
-                                          ),
+                                        Builder(
+                                          builder: (context){
+                                            if(mainTag != null){
+                                              return Padding(
+                                                padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 2),
+                                                child: new Row(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    new Flexible(
+                                                        child: Text(mainTag.getDisplayName(context),
+                                                          style: TextStyle(
+                                                            fontSize: 36,
+                                                            fontWeight: FontWeight.w800
+                                                          ),
+                                                        )
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            }
+                                            return Container();
+                                          },
                                         ),
+
+
+                                        Wrap(
+                                           alignment: WrapAlignment.start,
+                                          //  runAlignment: WrapAlignment.start,
+
+                                          spacing: 8,
+                                          crossAxisAlignment: WrapCrossAlignment.center,
+                                          children: tagWidgets,
+                                        ),
+
+
                                         Padding(
-                                          padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 2),
+                                          padding: const EdgeInsets.only(left: 16.0, right: 20.0, bottom: 2),
                                           child: new Row(
                                             mainAxisAlignment: MainAxisAlignment.start,
                                             children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(right: 8.0, left: 3),
+                                                child: Icon(FontAwesomeIcons.userAlt),
+                                              ),
                                               new Flexible(
-                                                child: Text(widget.pojoTask.creator.displayName,
+                                                child: Text(pojoTask.creator.displayName,
                                                   style: TextStyle(
                                                       fontSize: 23
                                                   ),
@@ -199,33 +268,53 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                             ],
                                           ),
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 2),
-                                          child: new Row(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          children: [
-                                            new Flexible(
-                                                child: Text(widget.pojoTask.group.name,
-                                                  style: TextStyle(
-                                                      fontSize: 23
-                                                  ),
-                                                )
-                                            ),
-                                          ],
-                                        ),
+
+                                        Builder(
+                                          builder: (context){
+                                            if(pojoTask.group != null){
+                                              return Padding(
+                                                padding: const EdgeInsets.only(left: 16.0, right: 20.0, bottom: 2),
+                                                child: new Row(
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  children: [
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(right: 11.0),
+                                                      child: Icon(FontAwesomeIcons.users),
+                                                    ),
+                                                    new Flexible(
+                                                        child: Text(pojoTask.group.name,
+                                                          style: TextStyle(
+                                                              fontSize: 23
+                                                          ),
+                                                        )
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            }
+                                            return Container();
+                                          },
                                         ),
 
                                         Padding(
-                                          padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 4),
+                                          padding: const EdgeInsets.only(left: 16.0, right: 20.0, bottom: 4),
                                           child: new Row(
                                             mainAxisAlignment: MainAxisAlignment.start,
                                             children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(right: 8.0, left: 3),
+                                                child: Icon(FontAwesomeIcons.calendarAlt),
+                                              ),
+
                                               new Flexible(
-                                                child: Text(_deadline,
-                                                  style: TextStyle(
-                                                      fontSize: 23
+                                                child: Padding(
+                                                  padding: const EdgeInsets.only(top: 4.0),
+                                                  child: Text(_deadline,
+                                                    style: TextStyle(
+                                                        fontSize: 23
+                                                    ),
                                                   ),
-                                                )
+                                                ),
                                               ),
                                             ],
                                           ),
@@ -250,11 +339,11 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                                     // color: PojoType.getColor(pojoTask.type),
                                                       decoration: BoxDecoration(
                                                           borderRadius: BorderRadius.only(bottomRight: Radius.circular(20), bottomLeft: Radius.circular(20)),
-                                                          color: widget.pojoTask.type.getColor()
+                                                          color: mainTag != null ? mainTag.getColor(): Theme.of(context).primaryColor,
                                                       ),
                                                       child: Padding(
                                                         padding: const EdgeInsets.only(left: 12, top: 0, right: 12, bottom: 6),
-                                                        child: Text(widget.pojoTask.subject.name,
+                                                        child: Text(pojoTask.subject.name,
                                                           style: TextStyle(fontSize: 32),
                                                         ),
                                                       )
@@ -331,8 +420,15 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                                     // crossAxisAlignment: CrossAxisAlignment.end,
                                                     children: <Widget>[
                                                       FlatButton(
-                                                        onPressed: (){
-                                                          Navigator.pushNamed(context, "/editTask", arguments: widget.pojoTask);
+                                                        onPressed: () async {
+                                                          var editedTask = await Navigator.of(context).pushNamed( "/editTask", arguments: pojoTask);
+                                                          if(editedTask != null && editedTask is PojoTask){
+                                                            setState(() {
+                                                              pojoTask = editedTask;
+                                                              processData(context, pojoTask);
+                                                            });
+                                                            MainTabBlocs().tasksBloc.dispatch(FetchData());
+                                                          }
                                                         },
                                                         child: Text(locText(context, key: "edit").toUpperCase(), style: theme(context).textTheme.button,),
                                                       ),

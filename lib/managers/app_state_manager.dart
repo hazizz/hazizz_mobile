@@ -1,8 +1,10 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mobile/blocs/google_login_bloc.dart';
 import 'package:mobile/blocs/UserDataBloc.dart';
 import 'package:mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
 import 'package:mobile/blocs/selected_session_bloc.dart';
+import 'package:mobile/communication/connection.dart';
 import 'package:mobile/communication/pojos/PojoMeInfo.dart';
 import 'package:mobile/communication/pojos/PojoMeInfoPrivate.dart';
 import 'package:mobile/communication/pojos/PojoTokens.dart';
@@ -12,6 +14,7 @@ import 'package:mobile/navigation/business_navigator.dart';
 import 'package:mobile/notification/notification.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../hazizz_app_info.dart';
 import '../request_sender.dart';
 import 'kreta_session_manager.dart';
 import 'token_manager.dart';
@@ -75,9 +78,20 @@ class AppState{
     logInProcedureDone = true;
   }
 
+
+  static Future<void> appStartProcedure() async {
+    await HazizzAppInfo().initalize();
+    await Connection.listener();
+    Crashlytics.instance.enableInDevMode = false;
+    FlutterError.onError = Crashlytics.instance.recordFlutterError;
+    //await AndroidAlarmManager.initialize();
+
+
+  }
+
   static void mainAppPartStartProcedure() async {
 
-    await TokenManager.fetchRefreshTokens(username: (await InfoCache.getMyUserData()).username, refreshToken: await TokenManager.getRefreshToken());
+   // await TokenManager.fetchRefreshTokens(username: (await InfoCache.getMyUserData()).username, refreshToken: await TokenManager.getRefreshToken());
 
 
     await KretaSessionManager.loadSelectedSession();
@@ -85,6 +99,7 @@ class AppState{
     LoginBlocs().googleLoginBloc.dispatch(GoogleLoginResetEvent());
     MainTabBlocs().initialize();
     UserDataBlocs().initialize();
+
   }
 
   static Future logOutProcedure() async {

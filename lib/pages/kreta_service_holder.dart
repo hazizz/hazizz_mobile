@@ -36,7 +36,7 @@ class _KretaServiceHolder extends State<KretaServiceHolder> with TickerProviderS
       bloc: SelectedSessionBloc(),
       builder: (context, state){
 
-        if(state is SelectedSessionEmptyState || state is SelectedSessionInactiveState || true){
+        if(state is SelectedSessionEmptyState || state is SelectedSessionInactiveState ){
           return SessionSelectorWidget();
         }
 

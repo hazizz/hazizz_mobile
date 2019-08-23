@@ -18,6 +18,9 @@ environment:
 
 dependencies:
 
+
+  package_info: 0.4.0+6
+
   feature_discovery: 0.4.1
   font_awesome_flutter: 8.5.0
 
@@ -61,7 +64,7 @@ dependencies:
   flutter_bloc: ^0.20.0
   expandable: 2.1.1
   intl: 0.15.8
-  flutter_local_notifications: 0.8.0
+  flutter_local_notifications: 0.8.2
   sticky_headers: 0.1.8
 
   dio: 2.1.13
@@ -83,6 +86,12 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   json_serializable: 2.3.0
+  flutter_launcher_icons: ^0.7.2
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icons/Icon.png"
 
 
 # For information on the generic Dart part of this file, see the
@@ -98,16 +107,55 @@ flutter:
   assets:
     - assets/
     - assets/images/
-    - assets/images/asd.png
     - assets/images/Logo.png
-    - assets/images/Icon.png
-
+t
     - assets/langs/en.json
     - assets/langs/hu.json
   fonts:
     - family: ShortStack
       fonts:
         - asset: assets/fonts/ShortStack-Regular.ttf
+    - family: VarelaRound
+      fonts:
+        - asset: assets/fonts/VarelaRound-Regular.ttf
+
+    - family: Nunito
+      fonts:
+        - asset: assets/fonts/Nunito/Nunito-Black.ttf
+          weight: 200
+        - asset: assets/fonts/Nunito/Nunito-BlackItalic.ttf
+          weight: 200
+          style: italic
+        - asset: assets/fonts/Nunito/Nunito-Bold.ttf
+          weight: 300
+        - asset: assets/fonts/Nunito/Nunito-BoldItalic.ttf
+          weight: 300
+          style: italic
+        - asset: assets/fonts/Nunito/Nunito-ExtraBold.ttf
+          weight: 400
+        - asset: assets/fonts/Nunito/Nunito-ExtraBoldItalic.ttf
+          weight: 400
+          style: italic
+        - asset: assets/fonts/Nunito/Nunito-ExtraLight.ttf
+          weight: 600
+        - asset: assets/fonts/Nunito/Nunito-ExtraLightItalic.ttf
+          weight: 600
+          style: italic
+        - asset: assets/fonts/Nunito/Nunito-Light.ttf
+          weight: 700
+        - asset: assets/fonts/Nunito/Nunito-LightItalic.ttf
+          weight: 700
+          style: italic
+        - asset: assets/fonts/Nunito/Nunito-Regular.ttf
+          weight: 800
+        - asset: assets/fonts/Nunito/Nunito-RegularItalic.ttf
+          weight: 800
+          style: italic
+        - asset: assets/fonts/Nunito/Nunito-SemiBold.ttf
+          weight: 900
+        - asset: assets/fonts/Nunito/Nunito-SemiBoldItalic.ttf
+          weight: 900
+          style: italic
 
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -13,6 +13,7 @@ import 'package:sticky_header_list/sticky_header_list.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 
 import '../../hazizz_localizations.dart';
+import '../../hazizz_theme.dart';
 
 class TasksPage extends StatefulWidget {
 
@@ -20,7 +21,7 @@ class TasksPage extends StatefulWidget {
 
   TasksPage({Key key}) : super(key: key);
 
-  getTabName(BuildContext context){
+  String getTabName(BuildContext context){
     return locText(context, key: "tasks").toUpperCase();
   }
 
@@ -116,13 +117,7 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
                                       tasksList.add(
                                           TaskItemWidget(pojoTask: pojoTask,)
 
-
-                                        /*Stack(
-Slidable(),
-Container(color: Colors.transparent, width: MediaQuery.of(context).size.width * 0.027),
-)*/
-
-/*
+                                        /*
                                         Slidable(
 
                                           child: TaskItemWidget(pojoTask: pojoTask,),
@@ -141,11 +136,6 @@ Container(color: Colors.transparent, width: MediaQuery.of(context).size.width * 
                                           ],
                                         )
                                         */
-
-
-
-
-
                                       );
 
                                     }
@@ -243,11 +233,10 @@ Container(color: Colors.transparent, width: MediaQuery.of(context).size.width * 
           ),
           featureId: 'featureId1',
           icon: FontAwesomeIcons.plus,
-          color: Colors.purple,
+          color: HazizzTheme.purple,
           contentLocation: ContentOrientation.above, // look at note
           title: 'Just how you want it',
-          description:
-          'Tap the menu icon to switch account, change s'
+          description: 'Tap the menu icon to switch account, change s'
         ),
     );
   }
