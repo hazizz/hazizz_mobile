@@ -71,15 +71,17 @@ class HazizzDialog extends Dialog{
                   ),
                 ),
 
-                Builder(
-                    builder: (BuildContext context){
-                      if(content != null){
-                        return content;
+                Expanded(
+                  child: Builder(
+                      builder: (BuildContext context){
+                        if(content != null){
+                          return content;
+                        }
+                        return Container();
                       }
-                      return Container();
-                    }
+                  ),
                 ),
-                Spacer(),
+              //  Spacer(),
 
                 //  SizedBox(height: 20.0),
 
@@ -155,8 +157,18 @@ Future<PojoGroup> showDialogGroup(BuildContext context, {List<PojoGroup> data}) 
 
   groups_data.insert(0, getEmptyPojoGroup(context));
 
+  double groupsHeights;
 
-  double height = 200;
+  if(groups_data.length > 6){
+    groupsHeights = 6 * 38.0;
+
+  }else{
+    groupsHeights = groups_data.length * 38.0;
+
+  }
+
+
+  double height = 80  + groupsHeights;
   double width = 280;
 
   HazizzDialog d = HazizzDialog(height: height, width: width,
@@ -167,12 +179,11 @@ Future<PojoGroup> showDialogGroup(BuildContext context, {List<PojoGroup> data}) 
       child: Padding(
         padding: const EdgeInsets.all(5),
         child:
-        Text("Choose group",
-            style: TextStyle(
-              fontFamily: 'Quicksand',
-              fontSize: 20.0,
-              fontWeight: FontWeight.w300,
-            )
+        AutoSizeText(
+          locText(context, key: "select_group"),
+          style: TextStyle( fontWeight: FontWeight.w800, fontSize: 26),
+         // maxFontSize: 28,
+          maxLines: 1,
         ),
 
 
@@ -233,7 +244,7 @@ Future<PojoGroup> showDialogGroup(BuildContext context, {List<PojoGroup> data}) 
     actionButtons: Row(
       children: <Widget>[
         FlatButton(
-          child: new Text(locText(context, key: "close")),
+          child: new Text(locText(context, key: "close").toUpperCase()),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -405,7 +416,7 @@ Future<PojoTag> showDialogTaskTag(BuildContext context, {List<PojoTag> except}) 
 
   }
 
-  double height = 280;
+  double height = 130.0 +  tagsToShow.length * 38;
   double width = 290;
 
   HazizzDialog d = HazizzDialog(height: height, width: width,
@@ -416,11 +427,10 @@ Future<PojoTag> showDialogTaskTag(BuildContext context, {List<PojoTag> except}) 
       child: Padding(
         padding: const EdgeInsets.all(5),
         child:
-        Text("Choose task type",
+        Text(locText(context, key: "select_tag"),
             style: TextStyle(
-              fontFamily: 'Quicksand',
-              fontSize: 20.0,
-              fontWeight: FontWeight.w300,
+              fontSize: 28.0,
+              fontWeight: FontWeight.w800,
             )
         ),
 
@@ -501,7 +511,7 @@ Future<PojoTag> showDialogTaskTag(BuildContext context, {List<PojoTag> except}) 
     actionButtons: Row(
       children: <Widget>[
         FlatButton(
-          child: new Text(locText(context, key: "close")),
+          child: new Text(locText(context, key: "close").toUpperCase()),
           onPressed: () {
             Navigator.pop(context, null);
           },
@@ -833,7 +843,7 @@ Future<PojoSubject> showAddSubjectDialog(context, {@required int groupId}) {
 
 
 Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
-  Widget space = SizedBox(height: 5);
+ // Widget space = SizedBox(height: 5);
 
   return showDialog(
       context: context,
@@ -860,11 +870,12 @@ Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Text(
+                                AutoSizeText(
                                   grade.grade == null ? "5" : grade.grade,
+                                  maxLines: 1,
                                   style: TextStyle(
                                       fontSize: 50,
-                                      color: Colors.white
+                                      color: Colors.black
                                   ),
                                 ),
 
@@ -872,7 +883,7 @@ Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
                                   grade.weight == null ? "100%" : "${grade.weight}%",
                                   style: TextStyle(
                                       fontSize: 20,
-                                      color: Colors.white
+                                      color: Colors.black
                                   ),
                                 ),
 
@@ -892,39 +903,39 @@ Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
                   children:
                   [
 
-                    Center(child: Text(grade.subject == null ? "" : (grade.subject), style: TextStyle(fontSize: 20)) ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text("topic: ", style: TextStyle(fontSize: 20)),
-                        Text(grade.topic == null ? "" : (grade.topic), style: TextStyle(fontSize: 20)),
-                      ],
-                    ),
-                    space,
+                    Center(child: Text(grade.subject == null ? "" : (grade.subject), style: TextStyle(fontSize: 24)) ),
+                    Spacer(),
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
 
                       children: <Widget>[
-                        Text("grade type: ", style: TextStyle(fontSize: 20)),
-                        Text(grade.gradeType == null ? "" : grade.gradeType, style: TextStyle(fontSize: 20)),
+                        Text(locText(context, key: "topic") + ":", style: TextStyle(fontSize: 20)),
+                        Expanded(child: Text(grade.topic == null ? "" : (grade.topic), style: TextStyle(fontSize: 20), textAlign: TextAlign.end,)),
                       ],
                     ),
-                    space,
+                    Spacer(),
+
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text("date: ", style: TextStyle(fontSize: 20),),
-                        Text(grade.date == null ? "" : hazizzShowDateFormat(grade.date), style: TextStyle(fontSize: 20)),
-                      ],
-                    ),
-                    space,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
+                      crossAxisAlignment: CrossAxisAlignment.start,
 
+                      children: <Widget>[
+                        Text(locText(context, key: "grade_type") + ":", style: TextStyle(fontSize: 20)),
+                        Expanded(child: Text(grade.gradeType == null ? "" : grade.gradeType, style: TextStyle(fontSize: 20), textAlign: TextAlign.end,)),
                       ],
                     ),
+                    Spacer(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(locText(context, key: "date") + ":", style: TextStyle(fontSize: 20),),
+                        Expanded(child: Text(grade.date == null ? "" : hazizzShowDateFormat(grade.date), style: TextStyle(fontSize: 20), textAlign: TextAlign.end,)),
+                      ],
+                    ),
+
                   ]
               ),
             ),),
@@ -935,12 +946,7 @@ Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
                     padding: const EdgeInsets.only(right: 10),
                     child: FlatButton(
                         child: Center(
-                          child: Text('OK',
-                            style: TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontSize: 14.0,
-                                color: Colors.teal),
-                          ),
+                          child: Text(locText(context, key: "close").toUpperCase(),),
                         ),
                         onPressed: () {
                           Navigator.of(context).pop();
@@ -950,7 +956,7 @@ Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
                   ),
                 ]
             ),
-            height: 220,
+            height: 250,
             width: 200);
       });
 }
@@ -1043,8 +1049,20 @@ void showSchoolsDialog(BuildContext context, {@required Function({String key, St
 Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
   Widget space = SizedBox(height: 5);
 
-  double height = 260;
-  double width = 300;
+  pojoClass.subject = pojoClass.subject[0].toUpperCase() + pojoClass.subject.substring(1);
+
+  double headerHeight = 50;
+  double contentHeight = 220;
+  double buttonBarHeight = HazizzDialog.buttonBarHeight;
+
+  if(pojoClass.cancelled){
+    contentHeight += 20;
+  }
+
+
+
+  double height = headerHeight + contentHeight + buttonBarHeight;
+  double width = 340;
   int v = 20;
   if(pojoClass.topic == null){
     height -= v;
@@ -1059,6 +1077,7 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
   HazizzDialog hazizzDialog = HazizzDialog(
     header:
     Container(
+      height: headerHeight,
       color: Theme.of(context).primaryColor,
       child: Row(children: <Widget>[
         Container(
@@ -1071,7 +1090,7 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
         Expanded(
           child: Container(
 
-            child: AutoSizeText("${pojoClass.className}",
+            child: AutoSizeText("${pojoClass.subject}",
               style: TextStyle(fontSize: 40),
               maxLines: 1,
               maxFontSize: 40,
@@ -1083,18 +1102,21 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
     ),
     content:
     Container(
+    //  height: contentHeight,
       child: Padding(
-        padding: const EdgeInsets.only(left: 16, right: 16),
+        padding: const EdgeInsets.only(left: 12, right: 12),
         child: Builder(builder: (BuildContext context){
 
           List<Widget> rows = List();
 
           void addToColumn(Widget widget){
             if(rows.length != 0){
-             // rows.add(Spacer());
+              rows.add(Spacer());
             }
             rows.add(widget);
           }
+
+
 
           addToColumn(Container(
             decoration: BoxDecoration(
@@ -1115,72 +1137,79 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
               ),
             ),
           ));
+
+          if(pojoClass.cancelled != null && pojoClass.cancelled){
+            addToColumn(Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+
+              children: <Widget>[
+                Text("${locText(context, key: "thera_canceled").toUpperCase()}", style: TextStyle(fontSize: 24, color: HazizzTheme.red)),
+              ],
+            ));
+          }
+
           addToColumn(Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text("subject: ", style: TextStyle(fontSize: 20)),
+              Text(locText(context, key: "class_name"), style: TextStyle(fontSize: 20)),
               Expanded(
-                  child: Text(pojoClass.subject == null ? "" : (pojoClass.subject),
-                      style: TextStyle(fontSize: 20))),
+                child: Text(pojoClass.className == null ? "" : (pojoClass.className),
+                        style: TextStyle(fontSize: 20), textAlign: TextAlign.end,),
+              ),
             ],
           ));
-          addToColumn(Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
-            children: <Widget>[
-              Text("class: ", style: TextStyle(fontSize: 20)),
-              Expanded(child: Text(pojoClass.room == null ? "" : pojoClass.room, style: TextStyle(fontSize: 20))),
-            ],
-          ),);
-          addToColumn(Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-            children: <Widget>[
-              Text("teacher: ", style: TextStyle(fontSize: 20)),
-              Expanded(child: Text(pojoClass.teacher == null ? "" : pojoClass.teacher, style: TextStyle(fontSize: 20))),
-            ],
-          ),);
-          addToColumn(Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-            children: <Widget>[
-              Text("room: ", style: TextStyle(fontSize: 20)),
-              Expanded(child: Text(pojoClass.room == null ? "" : pojoClass.room, style: TextStyle(fontSize: 20))),
-            ],
-          ),);
-
-
-          if(pojoClass.topic != null){
+          if(pojoClass.standIn != null && pojoClass.standIn){
             addToColumn(Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-              children: <Widget>[
-                Text("topic: ", style: TextStyle(fontSize: 20)),
-                Expanded(child: Text(pojoClass.topic, style: TextStyle(fontSize: 20))),
-              ],
-            ));
-          }
-          if(pojoClass.cancelled != null){
-            addToColumn(Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-              children: <Widget>[
-                Text("${locText(context, key: "thera_canceled")}:", style: TextStyle(fontSize: 20)),
-              ],
-            ));
-          }
-          if(pojoClass.standIn != null){
-            addToColumn(Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
 
               children: <Widget>[
                 Text("${locText(context, key: "thera_standin")}:", style: TextStyle(fontSize: 20)),
+                Expanded(child: Text(pojoClass.teacher, style: TextStyle(fontSize: 20), textAlign: TextAlign.end,)),
+              ],
+            ));
+          }else{
+            addToColumn(Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(locText(context, key: "teacher") + ":", style: TextStyle(fontSize: 20)),
+                Expanded(child: Text(pojoClass.teacher == null ? "" : pojoClass.teacher, style: TextStyle(fontSize: 20), textAlign:TextAlign.end,),),
+              ],
+            ),);
+          }
+
+
+          addToColumn(Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+
+            children: <Widget>[
+              Text(locText(context, key: "room") + ":", style: TextStyle(fontSize: 20)),
+              Expanded(child: Text(pojoClass.room == null ? "" : pojoClass.room, style: TextStyle(fontSize: 20), textAlign: TextAlign.end,)),
+            ],
+          ),);
+
+
+          if(pojoClass.topic != null && pojoClass.topic != ""){
+            addToColumn(Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+
+              children: <Widget>[
+                Text(locText(context, key: "topic") + ":", style: TextStyle(fontSize: 20)),
+                Expanded(child: Text(pojoClass.topic, style: TextStyle(fontSize: 20), textAlign: TextAlign.end,)),
               ],
             ));
           }
 
-          return Column(children: rows,);
+
+
+          return Container(height: 220,child: Column(mainAxisAlignment: MainAxisAlignment.end,children: rows,));
 
 
         }
@@ -1191,7 +1220,7 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
       Row(
         children: <Widget>[
           FlatButton(
-            child: Text("CLOSE"),
+            child: Text(locText(context, key: "close").toUpperCase()),
             onPressed: (){
               Navigator.pop(context) ;
             },
@@ -1352,13 +1381,13 @@ Future<bool> showIntroCancelDialog(context) async {
       Row(
         children: <Widget>[
           FlatButton(
-            child: Text("MÉGSE"),
+            child: Text(locText(context, key: "close").toUpperCase()),
             onPressed: (){
               Navigator.pop(context) ;
             },
           ),
           FlatButton(
-            child: Text("OK"),
+            child: Text(locText(context, key: "ok").toUpperCase()),
             onPressed: (){
               success = true;
               Navigator.pop(context) ;

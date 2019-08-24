@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/communication/pojos/PojoGrade.dart';
 import 'package:mobile/communication/pojos/PojoTag.dart';
@@ -15,7 +16,7 @@ class GradeItemWidget extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
 
-    final double itemHeight = 76;
+    final double itemHeight = 87;
 
 
     return Card(
@@ -40,10 +41,13 @@ class GradeItemWidget extends StatelessWidget{
                       child: Center(
                         child: Column(
                           children: [
-                            Text(pojoGrade.grade == null ? "5" : pojoGrade.grade,
-                              style: TextStyle(fontSize: 50),
+                            AutoSizeText(pojoGrade.grade == null ? "5" : pojoGrade.grade,
+                              style: TextStyle(fontSize: 50, color: Colors.black),
+                              maxLines: 1,
+                              maxFontSize: 50,
+                              minFontSize: 10,
                             ),
-                            Text(pojoGrade.weight == null ? "100%" : "${pojoGrade.weight}%"),
+                            Text(pojoGrade.weight == null ? "100%" : "${pojoGrade.weight}%", style: TextStyle(color: Colors.black),),
                           ]
                         ),
                       ),
@@ -51,14 +55,31 @@ class GradeItemWidget extends StatelessWidget{
                   ),
                 ),
               ),
-                Column(
-                  children: <Widget>[
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
 
-                    Text(pojoGrade.topic == null ? "Algebra" : pojoGrade.topic),
-                    Text(pojoGrade.gradeType == null ? "Röpdolgozat" : pojoGrade.gradeType),
+                      Text(pojoGrade.topic == null ? "Algebra" : pojoGrade.topic),
+                      Text(pojoGrade.gradeType == null ? "Röpdolgozat" : pojoGrade.gradeType),
 
-                  ],
+
+                      Row(  mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                        Align(
+                            alignment: Alignment.topRight,
+                            child:
+                            Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Text(hazizzShowDateAndTimeFormat(pojoGrade.creationDate),style: Theme.of(context).textTheme.subtitle,),
+                            )
+                        )
+                      ],)
+                    ],
+                  ),
                 ),
+                /*
                 Spacer(),
                 Column(
                   children: <Widget>[
@@ -72,6 +93,7 @@ class GradeItemWidget extends StatelessWidget{
                     )
                   ],
                 )
+                */
 
               ],
             )

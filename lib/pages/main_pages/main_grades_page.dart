@@ -7,6 +7,7 @@ import 'package:mobile/communication/pojos/PojoGrade.dart';
 import 'package:mobile/listItems/grade_header_item_widget.dart';
 import 'package:mobile/listItems/grade_item_widget.dart';
 import 'package:sticky_header_list/sticky_header_list.dart';
+import 'package:sticky_headers/sticky_headers/widget.dart';
 
 import '../../hazizz_localizations.dart';
 import '../kreta_service_holder.dart';
@@ -71,71 +72,33 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
 
                       print("log: itme count: $itemCount");
 
-                      /*
-                  return new ListView.builder(
-                    itemCount: itemCount,
-                    itemBuilder: (BuildContext context, int index) {
 
-                      String key = grades.keys.elementAt(index);
-
-                      return new StickyHeader(
-                        header: GradeHeaderItemWidget(subjectName: key),
-                        content: Builder(
-                          builder: (context) {
-                            List<GradeItemWidget> gradeSubjects = new List();
-                            for(PojoGrade pojoGrade in grades[key]){
-                              gradeSubjects.add(GradeItemWidget(pojoGrade: pojoGrade));
-                            }
-                            return Column(
-                                children: gradeSubjects
-                            );
-                          }
-                        ),
-                      );
-
-
-                    }
-                  );
-                  */
-
-                      return new StickyList.builder(
+                       return new ListView.builder(
                           itemCount: itemCount,
-                          builder: (BuildContext context, int index) {
+                          itemBuilder: (BuildContext context, int index) {
 
                             String key = grades.keys.elementAt(index);
 
                             String gradesAvarage = MainTabBlocs().gradesBloc.calculateAvarage(grades[key]);
 
                             List<Widget> widgetList = List();
-                            widgetList.add(GradeHeaderItemWidget(subjectName: key, gradesAvarage: gradesAvarage));
-                            for(PojoGrade grade2 in grades[key]){
-                              widgetList.add(GradeItemWidget(pojoGrade: grade2,));
-                            }
 
-                            return new HeaderRow(
-                              child: Column(
-                                  children: widgetList
-                              )
+
+                            return StickyHeader(
+                              header: GradeHeaderItemWidget(subjectName: key, gradesAvarage: gradesAvarage),
+                              content: Builder(
+                                  builder: (context) {
+                                    for(PojoGrade grade2 in grades[key]){
+                                      widgetList.add(GradeItemWidget(pojoGrade: grade2,));
+                                    }
+                                    return Column(
+                                        children: widgetList
+                                    );
+                                  }
+                              ),
                             );
-                            /*
-                        if (index == 0 || tasks[index].dueDate
-                            .difference(tasks[index - 1].dueDate)
-                            .inDays > 0) {
-                          return new HeaderRow(
-                              child: Column(
-                                  children: [
-                                    TaskHeaderItemWidget(dateTime: tasks[index].dueDate),
-                                    TaskItemWidget(pojoTask: tasks[index])
-                                  ]
-                              ));
-                        } else {
-                          return RegularRow(child: TaskItemWidget(pojoTask: tasks[index]),
-                          );
-                        }
-                        */
                           }
                       );
-
 
 
                     } else if (state is ResponseEmpty) {

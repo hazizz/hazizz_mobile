@@ -95,13 +95,13 @@ class MainSchedulesBloc extends Bloc<HEvent, HState> {
     if (event is FetchData) {
       try {
         yield ResponseWaiting();
-        HazizzResponse hazizzResponse = await RequestSender().getResponse(new DummyKretaGetSchedules());
+        HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetSchedules(q_year: 2019, q_weekNumber: 2));
 
         if(hazizzResponse.isSuccessful || true ){
-       //   classes = hazizzResponse.convertedData;
+          classes = hazizzResponse.convertedData;
           print("log: opsie: 0");
 
-          classes = classesDummy;
+        //  classes = classesDummy;
 
 
           print("log: opsie: 0");
@@ -162,14 +162,19 @@ class MainGradesBloc extends Bloc<HEvent, HState> {
 
     for(PojoGrade pojoGrade in pojoGrades){
       if(pojoGrade != null && pojoGrade.grade != null && pojoGrade.weight != null){
-        int grade = int.parse(pojoGrade.grade);
-        int weight = pojoGrade.weight;
+        try {
+          int grade = int.parse(pojoGrade.grade);
+          int weight = pojoGrade.weight;
 
-        if(grade != null){
-          double gradeWeightCurrent = weight/100;
-          gradeAmount += gradeWeightCurrent;
-          gradeSum += gradeWeightCurrent * grade;
+          if(grade != null) {
+            double gradeWeightCurrent = weight / 100;
+            gradeAmount += gradeWeightCurrent;
+            gradeSum += gradeWeightCurrent * grade;
+          }
+        }catch(e){
+
         }
+
       }
     }
     if(gradeSum != 0 && gradeAmount != 0){
@@ -186,7 +191,7 @@ class MainGradesBloc extends Bloc<HEvent, HState> {
         yield ResponseWaiting();
             print("log: am0 i here?");
 
-        HazizzResponse hazizzResponse = await RequestSender().getResponse(new DummyKretaGetGrades());
+        HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetGrades());
 
         print("log: hazizzResponse: ${hazizzResponse.dioError}");
         

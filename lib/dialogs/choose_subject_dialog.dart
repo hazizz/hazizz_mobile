@@ -31,9 +31,6 @@ class _ChooseSubjectDialog extends State<ChooseSubjectDialog> {
 
     subjects_data.addAll(widget.data);
 
-
-
-
     super.initState();
   }
 
@@ -71,7 +68,17 @@ class _ChooseSubjectDialog extends State<ChooseSubjectDialog> {
     }
 
 
-    double height = 200;
+    double subjectHeights;
+
+    if(subjects_data.length > 6){
+      subjectHeights = 6 * 38.0;
+
+    }else{
+      subjectHeights = subjects_data.length * 38.0;
+
+    }
+
+    double height = 80 + subjectHeights;
     double width = 280;
 
 
@@ -88,11 +95,10 @@ class _ChooseSubjectDialog extends State<ChooseSubjectDialog> {
         child: Padding(
           padding: const EdgeInsets.all(5),
           child:
-          Text("Choose task type",
+          Text(locText(context, key: "select_subject"),
               style: TextStyle(
-                fontFamily: 'Quicksand',
-                fontSize: 20.0,
-                fontWeight: FontWeight.w300,
+                fontSize: 28.0,
+                fontWeight: FontWeight.w800,
               )
           ),
         ),

@@ -12,11 +12,13 @@ FUTURE TODO:
 - add debug page (https://pub.dev/packages/alice)
 - csoport rangok
 - az auth. lekérdezések egy saját csatornán
-
+- intro page rework
 
 
 TODO:
 
+-nyelv változtatás
+- timeoutnál újra küldeni (legalább a main taben)
 -displayNAme frissitése miután meg lett változtatva
 //- automata refresh token
 - dedikált screen a main tabeknek
@@ -30,13 +32,16 @@ TODO:
 - globális session betöltés
 - az introba egy join/create group
 - saját feladat
-- task edit után, update
-- task item, row => column
 - kreta bejelentkezés. 2x kell nyomni
 - crashlytics
 - filter taskokra
+- kréta test requestek vissza álitása
+- notification
 
 DONE:
+- task edit után, update
+
+- task item, row => column
 - displayName és profilePic editor - UI done
 - téma kreálás
 //- Bloc a bejelentkezés utáni felhasználói "adatgyüjtéshez"

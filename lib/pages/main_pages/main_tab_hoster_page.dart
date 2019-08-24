@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:feature_discovery/feature_discovery.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -44,6 +45,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
 
   String displayName = "name";
 
+  bool received = false;
 
   bool isDark = false;
 
@@ -53,10 +55,47 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
     });
   }
 
+  void onLinkReceived(Uri deepLink){
+
+    print("DEEP LINK RECEIVED: ${deepLink.toString()}");
+    if (deepLink != null) {
+      setState(() {
+        received = true;
+      });
+      String str_groupId = deepLink.queryParameters["group"];
+
+      int groupId = int.parse(str_groupId);
+      if(groupId != null){
+        Navigator.pushNamed(context, "/group/groupId", arguments:groupId);
+      }
+
+    }
+  }
+
+  void initDynamicLinks() async {
+    final PendingDynamicLinkData data = await FirebaseDynamicLinks.instance.getInitialLink();
+    final Uri deepLink = data?.link;
+
+    onLinkReceived(deepLink);
+
+    FirebaseDynamicLinks.instance.onLink(
+        onSuccess: (PendingDynamicLinkData dynamicLink) async {
+          final Uri deepLink = dynamicLink?.link;
+
+          onLinkReceived(deepLink);
+        },
+        onError: (OnLinkErrorException e) async {
+          print('onLinkError');
+          print(e.message);
+        }
+    );
+  }
+
 
   @override
   void initState() {
 
+    initDynamicLinks();
 
     InfoCache.getMyDisplayName().then(
       (value){
@@ -110,6 +149,9 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
 
   @override
   Widget build(BuildContext context) {
+    if(received){
+      return Container(child: Center(child: Text("RECEIVED")),color: Colors.red,);
+    }
     return FeatureDiscovery(
       child: WillPopScope(
         onWillPop: onWillPop,
@@ -182,7 +224,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
                             UserDataBlocs().userDataBloc.myUserData.displayName,
                             style: TextStyle(fontSize: 18),);
                         }
-                        return Text("loading", style: TextStyle(fontSize: 18),);
+                        return Text(locText(context, key: "loading"), style: TextStyle(fontSize: 18),);
 
 
                       },

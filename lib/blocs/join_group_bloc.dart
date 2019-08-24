@@ -1,0 +1,102 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/widgets.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:mobile/blocs/request_event.dart';
+import 'package:mobile/blocs/response_states.dart';
+import 'package:mobile/communication/errorcode_collection.dart';
+import 'package:mobile/communication/pojos/PojoTokens.dart';
+import 'package:mobile/communication/requests/request_collection.dart';
+import 'package:mobile/enums/groupTypesEnum.dart';
+import 'package:mobile/managers/app_state_manager.dart';
+import 'package:bloc/bloc.dart';
+
+import '../hazizz_response.dart';
+import '../logger.dart';
+import '../request_sender.dart';
+import 'auth_bloc.dart';
+
+abstract class JoinGroupEvent extends HEvent {
+  JoinGroupEvent([List props = const []]) : super(props);
+}
+
+abstract class JoinGroupState extends HState {
+  JoinGroupState([List props = const []]) : super(props);
+}
+
+class JoinGroupCreateEvent extends JoinGroupEvent {
+  final GroupType groupType;
+  final String groupName;
+  final String password;
+  JoinGroupCreateEvent({@required this.groupType, @required this.groupName, this.password})
+      : assert(groupType != null), assert(groupName != null), super([groupName, password]);
+
+  @override String toString() => 'JoinGroupCreateEvent';
+}
+
+
+
+class JoinGroupFineState extends JoinGroupState {
+  @override String toString() => 'JoinGroupFineState';
+}
+
+class JoinGroupWaitingState extends JoinGroupState {
+  @override String toString() => 'JoinGroupWaitingState';
+}
+class JoinGroupPasswordIncorrectState extends JoinGroupState {
+  @override String toString() => 'JoinGroupPasswordIncorrectState';
+}
+
+class JoinGroupGroupNameTakenState extends JoinGroupState {
+  @override String toString() => 'JoinGroupGroupNameTakenState';
+}
+
+class JoinGroupInvalidState extends JoinGroupState {
+  @override String toString() => 'JoinGroupInvalidState';
+}
+
+
+
+class JoinGroupSuccessfulState extends JoinGroupState {
+  @override String toString() => 'JoinGroupSuccessfulState';
+}
+
+
+class JoinGroupBloc extends Bloc<JoinGroupEvent, JoinGroupState> {
+
+  JoinGroupState get initialState => JoinGroupFineState();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+
+  @override
+  Stream<JoinGroupState> mapEventToState(JoinGroupEvent event) async* {
+    print("sentaa state asd");
+
+    if (event is JoinGroupCreateEvent) {
+      yield JoinGroupWaitingState();
+
+      HazizzResponse hazizzResponse = await RequestSender().getResponse(RetrieveGroup.details());
+
+      if(hazizzResponse.isSuccessful){
+
+        //    PojoTokens tokens = hazizzResponseLogin.convertedData;
+
+        yield JoinGroupSuccessfulState();
+        // proceed to the app
+      }else{
+        if(hazizzResponse.hasPojoError){
+          if(hazizzResponse.pojoError.errorCode == ErrorCodes.GROUP_NAME_CONFLICT.code){
+            yield JoinGroupGroupNameTakenState();
+          }else if(hazizzResponse.pojoError.errorCode == ErrorCodes.INVALID_DATA.code){
+            yield JoinGroupInvalidState();
+
+          }
+        }
+      }
+    }
+  }
+}

@@ -9,10 +9,10 @@ import '../PojoTag.dart';
 
 part 'PojoTask.g.dart';
 
-@JsonSerializable()
+//@JsonSerializable()
 class PojoTask extends Pojo implements Comparable<PojoTask>{
   PojoTask({this.id, this.assignation, this.tags, this.title, this.description,
-    this.dueDate, this.creator, this.group, this.subject});
+    this.dueDate, this.creator, this.group, this.subject, this.completed});
 
   int id;
   PojoAssignation assignation;
@@ -23,6 +23,7 @@ class PojoTask extends Pojo implements Comparable<PojoTask>{
   PojoCreator creator;
   PojoGroup group;
   PojoSubject subject;
+  bool completed;
 
   factory PojoTask.fromJson(Map<String, dynamic> json) =>
       _$PojoTaskFromJson(json);
@@ -40,7 +41,7 @@ class PojoTask extends Pojo implements Comparable<PojoTask>{
 @JsonSerializable()
 class PojoTaskDetailed extends PojoTask{// implements Comparable<PojoTaskDetailed>{
   PojoTaskDetailed({this.id, this.assignation, this.tags, this.title, this.description,
-  this.creationDate, this.lastUpdated, this.dueDate, this.creator, this.group, this.subject});
+  this.creationDate, this.lastUpdated, this.dueDate, this.creator, this.group, this.subject, this.completed});
 
   int id;
   PojoAssignation assignation;
@@ -53,6 +54,8 @@ class PojoTaskDetailed extends PojoTask{// implements Comparable<PojoTaskDetaile
   PojoCreator creator;
   PojoGroup group;
   PojoSubject subject;
+  bool completed;
+
 
   factory PojoTaskDetailed.fromJson(Map<String, dynamic> json) =>
       _$PojoTaskDetailedFromJson(json);

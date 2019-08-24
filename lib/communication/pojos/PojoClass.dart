@@ -29,7 +29,7 @@ class PojoClass extends Pojo{
 
   factory PojoClass.fromJson(Map<String, dynamic> json){
     PojoClass pojoClass = _$PojoClassFromJson(json);
-    pojoClass.className = "MatekMatekMatek";
+   // pojoClass.className = "MatekMatekMatek";
     return pojoClass;
   }
 

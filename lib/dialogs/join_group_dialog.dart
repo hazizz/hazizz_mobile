@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/enums/groupTypesEnum.dart';
+import '../hazizz_localizations.dart';
 import 'dialogs.dart';
 
 class JoinGroupDialog extends StatefulWidget {
@@ -28,7 +29,7 @@ class _JoinGroupDialog extends State<JoinGroupDialog> {
 
 
   final double width = 300;
-  final double height = 260;
+  final double height = 175;
 
   final double searchBarHeight = 50;
 
@@ -47,11 +48,10 @@ class _JoinGroupDialog extends State<JoinGroupDialog> {
         child: Padding(
           padding: const EdgeInsets.all(5),
           child:
-          Text("Join group",
+          Text(locText(context, key: "join_group"),
               style: TextStyle(
-                fontFamily: 'Quicksand',
-                fontSize: 20.0,
-                fontWeight: FontWeight.w300,
+                fontSize: 26.0,
+                fontWeight: FontWeight.w800,
               )
           ),
         ),
@@ -72,6 +72,7 @@ class _JoinGroupDialog extends State<JoinGroupDialog> {
                   )
               ),
             ),
+            /*
             Builder(
               builder: (context){
                 var color = null;
@@ -209,10 +210,11 @@ class _JoinGroupDialog extends State<JoinGroupDialog> {
                 ],
               ),
             ),
+            */
             Spacer(),
 
             MaterialButton(
-              child: Text("join"),
+              child: Text(locText(context, key: "join")),
               onPressed: (){
 
               })

@@ -9,7 +9,7 @@ class HazizzAppInfo{
   HazizzAppInfo._internal();
 
   PackageInfo _packageInfo;
-  
+
   
   PackageInfo get getInfo{
     if(_packageInfo != null){
@@ -18,8 +18,9 @@ class HazizzAppInfo{
     throw Exception("packageInfo was not initalized");
   }
   
-  Future<void> initalize() async {
+  Future<PackageInfo> initalize() async {
     _packageInfo = await PackageInfo.fromPlatform();
+    return _packageInfo;
   }
 
 }

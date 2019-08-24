@@ -64,20 +64,6 @@ Future<FirebaseUser> _handleSignIn() async {
   return user;
 }
 
-Future<void> fromDynamicLink(BuildContext context) async {
-  final PendingDynamicLinkData data = await FirebaseDynamicLinks.instance.retrieveDynamicLink();
-  final Uri deepLink = data?.link;
-
-  if (deepLink != null) {
-    String str_groupId =  deepLink.queryParameters["group"];
-    if(str_groupId != null && str_groupId != ""){
-      int groupId = int.parse(str_groupId);
-      if(groupId != null){
-        Navigator.pushNamed(context, "/group/groupId", arguments:groupId);
-      }
-    }
-  }
-}
 
 
 Future<bool> fromNotification() async {
@@ -135,7 +121,7 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
 
   DateTime currentBackPressTime;
 
-  final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
+ // final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
 
 
   @override
@@ -182,11 +168,7 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
       if(await fromNotification()) {
         Navigator.pushNamed(context, "/tasksTomorrow");
       }
-      try {
-        await fromDynamicLink(context);
-      }catch(Ex){
 
-      }
     }
 
     if(state == AppLifecycleState.suspending){
@@ -218,9 +200,9 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
                 navigatorKey: BusinessNavigator().navigatorKey,
                 title: 'Hazizz Mobile',
                 showPerformanceOverlay: false,
-                theme: theme,//HazizzTheme. darkThemeData,//lightThemeData,
-                // home: _startPage,//MyHomePage(title: 'Hazizz Demo Home Page') //_startPage, // MyHomePage(title: 'Hazizz Demo Home Page'),
-                initialRoute: startPage,
+                theme: theme,//HazizzTheme. darkThemeData,//lightThemeData,Demo Home Page'),
+              initialRoute: startPage,
+                // home: _startPage,//MyHomePage(title: 'Hazizz Demo Home Page') //_startPage, // MyHomePage(title: 'Hazizz
                 onGenerateRoute: RouteGenerator.generateRoute,
                 localizationsDelegates: [
                   HazizzLocalizations.delegate,

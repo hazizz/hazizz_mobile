@@ -9,7 +9,10 @@ import 'package:mobile/dialogs/dialogs.dart';
 
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/widgets/hazizz_back_button.dart';
 import 'package:mobile/widgets/kreta_login_widget.dart';
+
+import '../hazizz_localizations.dart';
 
 class KretaLoginPage extends StatefulWidget {
 
@@ -45,6 +48,10 @@ class _KretaLoginPage extends State<KretaLoginPage> with SingleTickerProviderSta
     }
 
     return Scaffold(
+        appBar: AppBar(
+          leading: HazizzBackButton(),
+          title: Text(locText(context, key: "kreta_login")),
+        ),
         body: kretaLoginWidget
     );
   }

@@ -1,7 +1,7 @@
 {
     "hazizz_appname" : "Hazizz Mobile",
 
-    "hazizz" : "HazizzEng",
+    "hazizz" : "Hazizz",
 
 
     "hazizz_motto" : "From pupils to pupils",
@@ -93,10 +93,13 @@
     "edit"
     : "Edit",
 
+    "group"
+    : "Group",
+
     "edit_profile_picture"
     : "Edit profile picture",
 
-    "button_join"
+    "join"
     : "Join",
 
 
@@ -121,9 +124,6 @@
 
     "uploadProfilePic_menu"
     : "Upload profile picture",
-
-    "profile_editor"
-    : "Profile editor",
 
 
     "fragment_title_new_mytask"
@@ -154,12 +154,36 @@
     : "Close",
 
 
+
+    "class_name"
+    : "Group",
+
+    "class"
+    : "Class",
+
+
+    "teacher"
+    : "Teacher",
+
+    "room"
+    : "Room",
+
     "thera"
     : "Théra",
 
 
     "settings"
     : "Settings",
+
+
+    "starting_page"
+    : "Starting page",
+
+    "language"
+    : "Language",
+
+    "profile_editor"
+    : "Profile editor",
 
 
     "feedback"
@@ -342,6 +366,12 @@
     "grades"
     : "Grades",
 
+    "topic"
+    : "Topic",
+
+    "grade_type"
+    : "Grade type",
+
 
     "copy"
     : "Copy",
@@ -441,7 +471,11 @@
     : "Group",
 
 
-    "creator_"
+  "search"
+  : "Search",
+
+
+  "creator_"
     : "Creator:",
 
 
@@ -520,6 +554,12 @@
     "error_passwordRequiredForGroup"
     : "Password is required to join group",
 
+
+    "error_groupName_length_error"
+    : "The group's name must be 3-20 characters",
+
+    "error_groupName_taken"
+    : "Group with this name is already taken",
 
     "toast_feedback_thanks"
     : "Thanks you for your feedback",
@@ -639,6 +679,21 @@
 
     "select_school"
     : "Choose school",
+
+  "select_group"
+  : "Choose group!",
+
+  "select_subject"
+  : "Choose subject!",
+
+  "select_tag"
+  : "Choose tag!",
+
+  "join_group"
+  : "Join group",
+
+  "create_group"
+  : "Create group",
 
     "no_school_with_that_name"
     : "There is no school with this name",
@@ -883,7 +938,7 @@
     : "Kreta users",
 
 
-    "title_kreta_login"
+    "kreta_login"
     : "Kreta login",
 
 
@@ -895,6 +950,9 @@
 
     "kreta_accounts"
     : "Kréta accounts",
+
+    "selected_kreta_account_inactive"
+    : "The selected Kréta account is inactive. Please log in again!",
 
     "add_account"
     : "Add account",
@@ -938,8 +996,8 @@
     : "group:",
 
 
-    "thera_date"
-    : "date:",
+    "date"
+    : "Date",
 
 
     "thera_grade_"

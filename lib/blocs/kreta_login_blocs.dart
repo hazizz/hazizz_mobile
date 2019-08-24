@@ -220,6 +220,8 @@ class KretaLoginBloc extends Bloc<KretaLoginEvent, KretaLoginState> {
             }else {
               yield KretaLoginSomethingWentWrong();
             }
+          }else {
+            yield KretaLoginSomethingWentWrong();
           }
         }
       }

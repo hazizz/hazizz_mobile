@@ -47,6 +47,18 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="hazizz.page.link"/>
+                <data android:scheme="https" android:host="hazizz.github.io"/>
+                <data android:scheme="https" android:host="hazizz.duckdns.org:9000" />
+
+            </intent-filter>
+
         </activity>
 
         <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
@@ -78,6 +90,9 @@
         <service
             android:name="com.mythichelm.localnotifications.services.LocalNotificationsService"
             android:exported="false" />
+
+
+
 
 
     </application>

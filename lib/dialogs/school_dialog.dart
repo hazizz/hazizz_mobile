@@ -69,7 +69,7 @@ class _SchoolDialog extends State<SchoolDialog> {
               },
               controller: searchController,
               decoration: InputDecoration(
-                  hintText: "Search",
+                  hintText: locText(context, key: "search"),
                   prefixIcon: Icon(FontAwesomeIcons.search),
                 //  border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(25.0)))
               )
@@ -134,7 +134,7 @@ class _SchoolDialog extends State<SchoolDialog> {
           }
       ),
     ),
-    actionButtons: Row(children:[ FlatButton(child: Text("CLOSE"), onPressed: (){Navigator.pop(context);},)]),
+    actionButtons: Row(children:[ FlatButton(child: Text(locText(context, key: "close").toUpperCase()), onPressed: (){Navigator.pop(context);},)]),
     );
     return dialog;
   }

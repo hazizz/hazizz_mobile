@@ -98,6 +98,7 @@ class GoogleLoginBloc extends Bloc<GoogleLoginEvent, GoogleLoginState> {
       if(googleUser == null){
         yield GoogleLoginFineState();
       }
+
       final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
 
@@ -106,8 +107,10 @@ class GoogleLoginBloc extends Bloc<GoogleLoginEvent, GoogleLoginState> {
         idToken: googleAuth.idToken,
       );
 
+
       final FirebaseUser user = (await _auth.signInWithCredential(credential));
       print("signed in " + user.displayName);
+
 
 
       final String openIdToken = googleAuth.idToken;
@@ -140,6 +143,7 @@ class GoogleLoginBloc extends Bloc<GoogleLoginEvent, GoogleLoginState> {
 
         }else{
           //registration with googleopenid failed
+          await _auth.signOut();
           yield GoogleLoginFailedState();
         }
       }

@@ -179,7 +179,7 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
 
                           );
                         }
-                        return Text("Loading");
+                        return Text(locText(context, key: "loading"));
                       },
                     )
                 );
@@ -229,7 +229,7 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
               ),
               */
                 Padding(
-                  padding: const EdgeInsets.only(top: 60.0, bottom: 0),
+                  padding: const EdgeInsets.only(top: 10.0, bottom: 0),
                   child: Text(locText(context, key: "ekreta"), style: TextStyle(fontSize: 80, fontWeight: FontWeight.w800, color: HazizzTheme.blue),),
                 ),
                 Padding(

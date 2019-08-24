@@ -236,8 +236,11 @@ class RequestSender{
     if(isLocked()) logger.i("DIO INTERCEPTOR LOCKED");
 
     bool isConnected = await Connection.isOnline();
+    print("GOT 'ERE: 1");
     try {
       if(isConnected) {
+        print("GOT 'ERE: 2");
+
         if(request.httpMethod == HttpMethod.GET) {
           options.headers = await request.buildHeader();
           response = await dio.get(request.url, queryParameters: request.query, options: options);
@@ -252,6 +255,7 @@ class RequestSender{
           options.headers = await request.buildHeader();
           response = await dio.patch(request.url, queryParameters: request.query, data: request.body, options: options);
         }
+        print("GOT 'ERE: 3");
         hazizzResponse = HazizzResponse.onSuccess(response: response, request: request);
        // print("log: request sent: ${request.toString()}");
         logger.i("request_sender.dart: request sent: ${request.toString()}");

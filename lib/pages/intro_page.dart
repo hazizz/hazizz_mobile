@@ -201,7 +201,7 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
                     'assets/images/Logo.png',
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 50.0, right: 50),
+                    padding: const EdgeInsets.only(left: 30.0, right: 30),
                     child: Center(
                         child: Text(locText(context, key: "hazizz_intro"), style: TextStyle(fontSize: 22), textAlign: TextAlign.center)
                     ),
@@ -306,7 +306,7 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
                   Center(
                     child:
                     Padding(
-                      padding: const EdgeInsets.only(left: 50.0, right: 50),
+                      padding: const EdgeInsets.only(left: 30.0, right: 30),
                       child: Center(
                           child: Text(locText(context, key: "kreta_intro"), style: TextStyle(fontSize: 22, ), textAlign: TextAlign.center,)
                       ),

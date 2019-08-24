@@ -116,26 +116,6 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
                                       index2++;
                                       tasksList.add(
                                           TaskItemWidget(pojoTask: pojoTask,)
-
-                                        /*
-                                        Slidable(
-
-                                          child: TaskItemWidget(pojoTask: pojoTask,),
-                                          actionPane: SlidableDrawerActionPane(),
-                                          actions: <Widget>[
-                                            IconSlideAction(
-                                              caption: 'Archive',
-                                              color: Colors.blue,
-                                              icon: Icons.archive,
-                                            ),
-                                            IconSlideAction(
-                                              caption: 'Share',
-                                              color: Colors.indigo,
-                                              icon: Icons.share,
-                                            ),
-                                          ],
-                                        )
-                                        */
                                       );
 
                                     }
@@ -147,47 +127,6 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
                             );
                           }
                       );
-
-
-                      return new ListView.builder(
-                          itemCount: tasks.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            if (index == 0 || tasks[index].dueDate
-                                .difference(tasks[index - 1].dueDate)
-                                .inDays > 0) {
-                              return new StickyHeader(
-                                header: TaskHeaderItemWidget(
-                                    dateTime: tasks[index].dueDate),
-                                content: TaskItemWidget(pojoTask: tasks[index],),
-                              );
-                            } else {
-                              return TaskItemWidget(pojoTask: tasks[index],
-                              );
-                            }
-                          }
-                      );
-
-
-                      return new StickyList.builder(
-                          itemCount: tasks.length,
-                          builder: (BuildContext context, int index) {
-                            if (index == 0 || tasks[index].dueDate
-                                .difference(tasks[index - 1].dueDate)
-                                .inDays > 0) {
-                              return new HeaderRow(
-                                  child: Column(
-                                      children: [
-                                        TaskHeaderItemWidget(dateTime: tasks[index].dueDate),
-                                        TaskItemWidget(pojoTask: tasks[index])
-                                      ]
-                                  ));
-                            } else {
-                              return RegularRow(child: TaskItemWidget(pojoTask: tasks[index]),
-                              );
-                            }
-                          }
-                      );
-
 
 
                     } else if (state is ResponseEmpty) {

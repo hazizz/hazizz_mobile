@@ -256,7 +256,7 @@ class _TaskMakerPage extends State<TaskMakerPage> {
 
 
                               }
-                              return Text("Loading");
+                              return Text(locText(context, key: "loading"));
                             },
                           )
                       );
@@ -427,7 +427,7 @@ class _TaskMakerPage extends State<TaskMakerPage> {
 
                               );
                             }
-                            return Text("Loading");
+                            return Text(locText(context, key: "loading"));
                           },
                         ),
                       );
@@ -580,12 +580,7 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                                   }
 
                                 }
-
-
-
-                                return Container(
-
-                                  child: new Column(
+                                return new Column(
                                       mainAxisSize: MainAxisSize.min,
                                       mainAxisAlignment: MainAxisAlignment.start,
                                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -688,8 +683,7 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                                           ],
                                         ),
                                       ]
-                                  )
-                                );
+                                  );
                               }
                           ),
                           ),

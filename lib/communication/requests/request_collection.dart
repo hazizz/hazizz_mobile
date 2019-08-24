@@ -7,6 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:mobile/communication/pojos/PojoError.dart';
 import 'package:mobile/communication/pojos/PojoGrades.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
+import 'package:mobile/communication/pojos/PojoGroupDetailed.dart';
 import 'package:mobile/communication/pojos/PojoMeInfoPrivate.dart';
 import 'package:mobile/communication/pojos/PojoMeInfo.dart';
 import 'package:mobile/communication/pojos/PojoSchedules.dart';
@@ -20,6 +21,7 @@ import 'package:mobile/enums/groupTypesEnum.dart';
 import 'package:mobile/managers/kreta_session_manager.dart';
 import 'package:mobile/managers/token_manager.dart';
 import 'package:meta/meta.dart';
+import 'package:package_info/package_info.dart';
 //import 'package:mobile/packages/hazizz-dio-2.1.3/lib/dio.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:mobile/converters/PojoConverter.dart';
@@ -59,13 +61,26 @@ class Request {
   }
 
   Future<Map<String, dynamic>> buildHeader() async{
-    header["User-Agent"] = "HM-${HazizzAppInfo().getInfo.version}";
+    print("im so done 1");
+    PackageInfo p = await PackageInfo.fromPlatform();
+    print("im so done 2");
+    header["User-Agent"] = "HM-${p.version}";
+  /*
+    if(HazizzAppInfo().getInfo == null){
+      PackageInfo p = await PackageInfo.fromPlatform();
+      header["User-Agent"] = "HM-${p.version}";
+    }else {
+      header["User-Agent"] = "HM-${HazizzAppInfo().getInfo.version}";
+    }
+    */
+    print("im so done 3");
     if(authTokenHeader){
       header[HttpHeaders.authorizationHeader] = "Bearer ${await TokenManager.getToken()}";
     }if(contentTypeHeader) {
       header[HttpHeaders.contentTypeHeader] = "application/json";
     }
     print(header);
+    print("im so done 4");
     return header;
   }
 
@@ -380,14 +395,27 @@ class CreateGroup extends HazizzRequest {
 // you can also join group with this
 class RetrieveGroup extends HazizzRequest {
 
+  bool isDetailed = false;
+
   RetrieveGroup({ResponseHandler rh, @required int p_groupId,}) : super(rh) {
     httpMethod = HttpMethod.GET;
     PATH = "groups/${p_groupId}";
     authTokenHeader = true;
   }
 
+  RetrieveGroup.details({ResponseHandler rh, @required int p_groupId,}) : super(rh) {
+    httpMethod = HttpMethod.GET;
+    PATH = "groups/${p_groupId}/details";
+    authTokenHeader = true;
+    isDetailed = true;
+  }
+
   @override
   convertData(Response response) {
+    if(isDetailed){
+      PojoGroupDetailed group = PojoGroupDetailed.fromJson(jsonDecode(response.data));
+      return group;
+    }
     PojoGroup group = PojoGroup.fromJson(jsonDecode(response.data));
     return group;
   }
@@ -465,10 +493,10 @@ class CreateTask extends HazizzRequest {
     @required  List<String> b_tags, @required String b_title,
     @required String b_description, @required DateTime b_deadline }) : super(rh) {
     httpMethod = HttpMethod.POST;
-    if(groupId != null && groupId != 0) {
-      PATH = "tasks/groups/${groupId}";
-    }else if(subjectId != null && subjectId != 0){
+    if(subjectId != null && subjectId != 0){
       PATH = "tasks/subjects/${subjectId}";
+    }else if(groupId != null && groupId != 0) {
+      PATH = "tasks/groups/${groupId}";
     } else{
       PATH = "tasks/me";
     }
@@ -559,17 +587,14 @@ class GetTasksFromMe extends HazizzRequest {
 
   @override
   void onSuccessful(Response response) {
-    // TODO: implement onSuccessful
-    Iterable iter = getIterable(response.data);
-    List<PojoTask> myTasks = iter.map<PojoTask>((json) => PojoTask.fromJson(json)).toList();
-    myTasks.sort();
-    rh?.onSuccessful(myTasks);
+
   }
 
   @override
   dynamic convertData(Response response) {
-    print("log: in convertData: ${response}");
+    print("log: in convertData2222: ${response}");
     Iterable iter = getIterable(response.data);
+    print("deebei");
     List<PojoTask> myTasks = iter.map<PojoTask>((json) => PojoTask.fromJson(json)).toList();
     myTasks.sort();
     print("log: in convertData2: ${myTasks}");
@@ -749,7 +774,7 @@ class KretaAuthenticateSession extends TheraRequest {
 class KretaGetGrades extends TheraRequest {
   KretaGetGrades({ResponseHandler rh,}) : super(rh) {
     httpMethod = HttpMethod.GET;
-    PATH = "kreta/sessions/${KretaSessionManager.selectedSession}/grades";
+    PATH = "kreta/sessions/${KretaSessionManager.selectedSession.id}/grades";
     authTokenHeader = true;
   }
 
@@ -767,12 +792,12 @@ class KretaGetGrades extends TheraRequest {
 class KretaGetSchedules extends TheraRequest {
   KretaGetSchedules({ResponseHandler rh, int q_weekNumber, int q_year}) : super(rh) {
     httpMethod = HttpMethod.GET;
-    PATH = "v2/kreta/sessions/${KretaSessionManager.selectedSession}/schedule";
+    PATH = "v2/kreta/sessions/${KretaSessionManager.selectedSession.id}/schedule";
     authTokenHeader = true;
 
     if(q_weekNumber != null && q_year != null) {
-      query["weekNumber"] = q_weekNumber;
-      query["year"] = q_year;
+      query["weekNumber"] = q_weekNumber.toString();
+      query["year"] = q_year.toString();
     }else{
       print("query is required");
     }

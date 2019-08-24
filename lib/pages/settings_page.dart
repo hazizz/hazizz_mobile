@@ -108,9 +108,8 @@ class _SettingsPage extends State<SettingsPage> with AutomaticKeepAliveClientMix
           child: Column(
             children: <Widget>[
               ListTile(
-                title: Text(locText(context, key: "startPage")),
+                title: Text(locText(context, key: "starting_page")),
                 leading: Icon(FontAwesomeIcons.doorOpen),
-                subtitle: Text("subbtitle"),
                 trailing: DropdownButton(
 
                   items: startPageItems,
@@ -135,8 +134,7 @@ class _SettingsPage extends State<SettingsPage> with AutomaticKeepAliveClientMix
               Divider(),
 
               ListTile(
-                title: Text(locText(context, key: "startPage")),
-                subtitle: Text("subbtitle"),
+                title: Text(locText(context, key: "language")),
                 leading: Icon(FontAwesomeIcons.language),
                 trailing: DropdownButton(
 

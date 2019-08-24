@@ -15,7 +15,7 @@ class ClassItemWidget extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
 
-    const double itemHeight = 66;
+    const double itemHeight = 68;
 
     DateTime currentDateTime = DateTime.now();
 
@@ -74,7 +74,7 @@ class ClassItemWidget extends StatelessWidget{
                             child: Row(
                                 children: [
                                 //  Text(pojoClass.subject == null ? "subject" : pojoClass.subject, style: TextStyle(fontSize: 20)),
-                                  Text(pojoClass.className == null ? "className" : pojoClass.className, style: TextStyle(fontSize: 22),),
+                                  Text(pojoClass.subject == null ? "className" : pojoClass.subject, style: TextStyle(fontSize: 22),),
                                 ]
                             ),
                           )

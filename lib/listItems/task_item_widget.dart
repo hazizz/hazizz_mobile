@@ -95,127 +95,163 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
       }
 
 
+      /*
+      if(widget.pojoTask.subject != null) {
+        return Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: Container(
+            // color: PojoType.getColor(widget.pojoTask.type),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(bottomRight: Radius.circular(10), bottomLeft: Radius.circular(10)),
+                  color: widget.pojoTask.tags[0].getColor()
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8, top: 4, right: 8, bottom: 6),
+                child: Text(widget.pojoTask.subject.name,
+                  style: TextStyle(fontSize: 18),
+                ),
+              )
+          ),
+        );
+      }
+      */
+
+      tagWidgets.insert(0, highlightTag);
+
+
 
       return  Opacity(
-          opacity: opacity,
-            child:
-              Card(
-                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                  elevation: 5,
-                  child: InkWell(
-                      onTap: () {
-                        print("tap tap");
+        opacity: opacity,
+          child:
+            Card(
+              clipBehavior: Clip.antiAliasWithSaveLayer,
+              elevation: 5,
+              child: InkWell(
+                  onTap: () {
+                    print("tap tap");
 
-                        setState(() {
-                          opacity = 1;
-                        });
+                    setState(() {
+                      opacity = 1;
+                    });
 
-                        Navigator.push(context,MaterialPageRoute(builder: (context) => ViewTaskPage.fromPojo(pojoTask: widget.pojoTask)));
-                      },
-                      child: Column(
-                        children: <Widget>[
-                          Column(
-                            children: <Widget>[
-                              Row(
-                                children: <Widget>[
-                          highlightTag,
-                                  /*
-                                  Builder(builder: (context){
-
-
-                                    for(PojoTag t in widget.pojoTask.tags){
-                                      for(PojoTag defT in PojoTag.defaultTags){
-                                        if(defT.name == t.name){
-                                          tagWidgets.remove(t);
-
-                                          return Container(
-                                            // color: PojoType.getColor(widget.pojoTask.type),
-                                              decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.only(bottomRight: Radius.circular(12)),
-                                                  color: t.getColor()
-                                              ),
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(left: 4, top: 4, right: 8, bottom: 6),
-                                                child: Text(t.getDisplayName(context), style: TextStyle(fontSize: 18),),
-                                              )
-                                          );
-                                        }
-                                      }
-                                    }
-
-                                    return Container();
+                    Navigator.push(context,MaterialPageRoute(builder: (context) => ViewTaskPage.fromPojo(pojoTask: widget.pojoTask)));
+                  },
+                  child:
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[ /*
+                        Row(
+                          children: <Widget>[
+                           // highlightTag,
+                            /*
+                            Builder(builder: (context){
 
 
-                                  }),
-                                  */
+                              for(PojoTag t in widget.pojoTask.tags){
+                                for(PojoTag defT in PojoTag.defaultTags){
+                                  if(defT.name == t.name){
+                                    tagWidgets.remove(t);
 
-                                  Builder(
-                                    builder: (BuildContext context){
-                                      if(widget.pojoTask.subject != null) {
-                                        return Padding(
-                                          padding: const EdgeInsets.only(left: 8.0),
-                                          child: Container(
-                                            // color: PojoType.getColor(widget.pojoTask.type),
-                                              decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.only(bottomRight: Radius.circular(10), bottomLeft: Radius.circular(10)),
-                                                  color: widget.pojoTask.tags[0].getColor()
-                                              ),
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(left: 8, top: 4, right: 8, bottom: 6),
-                                                child: Text(widget.pojoTask.subject.name,
-                                                  style: TextStyle(fontSize: 18),
-                                                ),
-                                              )
+                                    return Container(
+                                      // color: PojoType.getColor(widget.pojoTask.type),
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.only(bottomRight: Radius.circular(12)),
+                                            color: t.getColor()
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(left: 4, top: 4, right: 8, bottom: 6),
+                                          child: Text(t.getDisplayName(context), style: TextStyle(fontSize: 18),),
+                                        )
+                                    );
+                                  }
+                                }
+                              }
+
+                              return Container();
+
+
+                            }),
+                            */
+
+                            /*
+                            Builder(
+                              builder: (BuildContext context){
+                                if(widget.pojoTask.subject != null) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(left: 8.0),
+                                    child: Container(
+                                      // color: PojoType.getColor(widget.pojoTask.type),
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.only(bottomRight: Radius.circular(10), bottomLeft: Radius.circular(10)),
+                                            color: widget.pojoTask.tags[0].getColor()
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(left: 8, top: 4, right: 8, bottom: 6),
+                                          child: Text(widget.pojoTask.subject.name,
+                                            style: TextStyle(fontSize: 18),
                                           ),
-                                        );
-                                      }else{return Container();}
-                                    },
-                                  ),
+                                        )
+                                    ),
+                                  );
+                                }else{return Container();}
+                              },
+                            ),
+                            */
 
-                                  Wrap(
-                                    spacing: 2,
-                                    children:  tagWidgets
-                                  ),
-
-                                  Spacer(),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 4, right: 6),
-                                    child: Text(widget.pojoTask.creator.displayName, style: theme(context).textTheme.subtitle,),
-                                  ),
+                            Wrap(
+                              spacing: 2,
+                              children:  tagWidgets
+                            ),
 
 
-                                  // Text(widget.pojoTask.subject != null ? widget.pojoTask.subject.name : "", style: TextStyle(fontSize: 18),),
-                                  /*
-                          Padding(
-                            padding: const EdgeInsets.only(left: 6),
-                            child: Text(widget.pojoTask.title, style: TextStyle(fontSize: 18),),
+
+
+                            // Text(widget.pojoTask.subject != null ? widget.pojoTask.subject.name : "", style: TextStyle(fontSize: 18),),
+                            /*
+                    Padding(
+                      padding: const EdgeInsets.only(left: 6),
+                      child: Text(widget.pojoTask.title, style: TextStyle(fontSize: 18),),
+                    ),
+                    */
+                          ],
+                        ),
+                        */
+                        Wrap(
+                          alignment: WrapAlignment.start,
+                          runSpacing: 4,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                            spacing: 4,
+                            children:  tagWidgets
+                        ),
+
+                        Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 6),
+                              child: Text(widget.pojoTask.title, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),),
+                            ),
+                          ]
+                        ),
+
+                         Padding(
+                            padding: const EdgeInsets.only(left: 10, top: 0, bottom: 0),
+                            child: Text(widget.pojoTask.description, style: TextStyle(fontSize: 18),),
                           ),
-                          */
-                                ],
-                              ),
 
-                              Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 6),
-                                    child: Text(widget.pojoTask.title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),),
-                                  ),
-                                ]
-                              ),
 
-                              Align(
-                                alignment: Alignment.bottomLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 10, top: 2, bottom: 10),
-                                  child: Text(widget.pojoTask.description, style: TextStyle(fontSize: 16),),
-                                ),
-                              )
-                            ],
-                          ),
-                        ],
-                      )
-                  )
-              ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.only(top: 4, right: 6),
+                              child: Text(widget.pojoTask.creator.displayName, style: theme(context).textTheme.subtitle,),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+              )
+            ),
         );
 
   }

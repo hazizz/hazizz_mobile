@@ -3,7 +3,7 @@
 
 
     "hazizz"
-    : "HázizzHun",
+    : "Házizz",
 
 
     "hazizz_motto"
@@ -97,20 +97,19 @@
     "edit"
     : "Szerkesztés",
 
+    "group"
+    : "Csoport",
+
 
     "edit_profile_picture"
     : "Profilkép szerkesztés",
 
-    "button_join"
+    "join"
     : "Csatlakozás",
 
 
     "mainpage_menu"
     : "Főoldal",
-
-
-    "startPage"
-    : "Kezdő oldal",
 
 
     "createGroup_menu"
@@ -127,9 +126,6 @@
 
     "uploadProfilePic_menu"
     : "Profilkép felöltése",
-
-    "profile_editor"
-    : "Profil szerketés",
 
 
     "fragment_title_new_mytask"
@@ -165,6 +161,19 @@
     "close"
     : "Bezár",
 
+    "class_name"
+    : "Csoport",
+
+    "class"
+    : "Osztály",
+
+
+    "teacher"
+    : "Tanár",
+
+    "room"
+    : "Terem",
+
 
     "thera"
     : "Théra",
@@ -172,6 +181,15 @@
 
     "settings"
     : "Beállítások",
+
+    "starting_page"
+    : "Kezdő oldal",
+
+    "language"
+    : "Nyelv",
+
+    "profile_editor"
+    : "Profil szerkesztő",
 
 
     "feedback"
@@ -353,6 +371,11 @@
     "grades"
     : "Jegyek",
 
+    "topic"
+    : "Téma",
+
+    "grade_type"
+    : "Jegy típus",
 
     "copy"
     : "Másolás",
@@ -453,6 +476,9 @@
     "group"
     : "Csoport",
 
+    "search"
+    : "Keresés",
+
 
     "creator_"
     : "Létrehozó:",
@@ -532,6 +558,13 @@
 
     "error_passwordRequiredForGroup"
     : "Jelszó szükséges a csoportba való belépéshez",
+
+    "error_groupName_length_error"
+    : "A csoport neve 3-20 karakteres lehet",
+
+    "error_groupName_taken"
+    : "Ilyen nevű csoport már létezik",
+
 
 
     "toast_feedback_thanks"
@@ -651,7 +684,31 @@
 
 
     "select_school"
-    : "Iskola kiválasztás",
+    : "Válaszd ki az iskolát!",
+
+    "select_group"
+    : "Válaszd ki a csoportot!",
+
+    "select_subject"
+    : "Válaszd ki a témát!",
+
+    "select_tag"
+    : "Válaszd ki a címkét!",
+
+    "join_group"
+    : "Csoportba csatlakozás",
+
+    "create_group"
+    : "Csoport létrehozás",
+
+    "groupType_open"
+    : "Nyitott",
+
+    "groupType_invite"
+    : "Meghivó alapú",
+
+    "groupType_password"
+    : "Jelszavas",
 
     "no_school_with_that_name"
     : "Nincs iskola ilyen névvel",
@@ -827,17 +884,14 @@
     : "Házi feladatok holnapra",
 
 
-  "do_your_homework"
-  : "Ideje hogy megírd a házi felataidat",
+    "do_your_homework"
+    : "Ideje hogy megírd a házi felataidat",
 
-  "check_your_homework"
-  : "Nézd meg a holnapi házi feladataidat",
+    "check_your_homework"
+    : "Nézd meg a holnapi házi feladataidat",
 
-  "set_time_for_notification"
-  : "Értesítés időpont beállítás",
-
-  "set_time_for_notification"
-  : "Értesítés minden nap",
+    "set_time_for_notification"
+    : "Értesítés időpont beállítása",
 
     "notif_settings_notify_everyday"
     : "Értesítés minden nap",
@@ -901,7 +955,7 @@
     : "Kréta felhasználók",
 
 
-    "title_kreta_login"
+    "kreta_login"
     : "Kréta bejelentkezés",
 
 
@@ -913,6 +967,11 @@
 
     "kreta_accounts"
     : "Kréta fiókok",
+
+    "selected_kreta_account_inactive"
+    : "A kiválasztot Kréta fiók inaktív. Jelentkez be újra!",
+
+
 
     "add_account"
     : "fiók hozzáadás",
@@ -957,8 +1016,8 @@
     : "csoport:",
 
 
-    "thera_date"
-    : "dátum:",
+    "date"
+    : "Dátum",
 
 
     "thera_grade_"

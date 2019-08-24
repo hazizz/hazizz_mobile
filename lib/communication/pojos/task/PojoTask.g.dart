@@ -7,6 +7,10 @@ part of 'PojoTask.dart';
 // **************************************************************************
 
 PojoTask _$PojoTaskFromJson(Map<String, dynamic> json) {
+  print("json['completed'] as bool: ${json['completed'] as bool }");
+  print("json['completed'] as bool: ${json['completed'] as bool == false }");
+
+
   return PojoTask(
       id: json['id'] as int,
       assignation: json['assignation'] == null
@@ -14,9 +18,7 @@ PojoTask _$PojoTaskFromJson(Map<String, dynamic> json) {
           : PojoAssignation.fromJson(
               json['assignation'] as Map<String, dynamic>),
       tags: (json['tags'] as List)
-          ?.map((e) =>
-            e == null ? null : PojoTag(name: e))
-          ?.toList(),
+          ?.map((e) => e == null ? null : PojoTag(name: e))?.toList(),
       title: json['title'] as String,
       description: json['description'] as String,
       dueDate: json['dueDate'] == null
@@ -30,7 +32,8 @@ PojoTask _$PojoTaskFromJson(Map<String, dynamic> json) {
           : PojoGroup.fromJson(json['group'] as Map<String, dynamic>),
       subject: json['subject'] == null
           ? null
-          : PojoSubject.fromJson(json['subject'] as Map<String, dynamic>));
+          : PojoSubject.fromJson(json['subject'] as Map<String, dynamic>),
+      completed: json['completed'] as bool);
 }
 
 Map<String, dynamic> _$PojoTaskToJson(PojoTask instance) => <String, dynamic>{
@@ -42,7 +45,8 @@ Map<String, dynamic> _$PojoTaskToJson(PojoTask instance) => <String, dynamic>{
       'dueDate': instance.dueDate?.toIso8601String(),
       'creator': instance.creator,
       'group': instance.group,
-      'subject': instance.subject
+      'subject': instance.subject,
+      'completed': instance.completed
     };
 
 PojoTaskDetailed _$PojoTaskDetailedFromJson(Map<String, dynamic> json) {
@@ -53,9 +57,7 @@ PojoTaskDetailed _$PojoTaskDetailedFromJson(Map<String, dynamic> json) {
           : PojoAssignation.fromJson(
               json['assignation'] as Map<String, dynamic>),
       tags: (json['tags'] as List)
-          ?.map((e) =>
-              e == null ? null : PojoTag(name: e))
-          ?.toList(),
+          ?.map((e) => e == null ? null : PojoTag(name: e))?.toList(),
       title: json['title'] as String,
       description: json['description'] as String,
       creationDate: json['creationDate'] == null
@@ -75,11 +77,13 @@ PojoTaskDetailed _$PojoTaskDetailedFromJson(Map<String, dynamic> json) {
           : PojoGroup.fromJson(json['group'] as Map<String, dynamic>),
       subject: json['subject'] == null
           ? null
-          : PojoSubject.fromJson(json['subject'] as Map<String, dynamic>));
+          : PojoSubject.fromJson(json['subject'] as Map<String, dynamic>))
+    ..completed =json['completed'] as bool;
 }
 
 Map<String, dynamic> _$PojoTaskDetailedToJson(PojoTaskDetailed instance) =>
     <String, dynamic>{
+      'completed': instance.completed,
       'id': instance.id,
       'assignation': instance.assignation,
       'tags': instance.tags,

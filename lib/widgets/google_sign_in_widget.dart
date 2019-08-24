@@ -39,6 +39,7 @@ class _GoogleSignInButtonWidget extends State<GoogleSignInButtonWidget> {
       builder: (context, state){
         String errorText = "";
         if(state is GoogleLoginFailedState){
+
           errorText = locText(context, key: "error_signing_in_with_google");
         }
 

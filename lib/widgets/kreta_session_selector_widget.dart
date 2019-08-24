@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -11,7 +12,13 @@ import 'package:mobile/listItems/session_item_widget.dart';
 
 class SessionSelectorWidget extends StatefulWidget {
 
+  bool fromDedicatedPage = false;
+
   SessionSelectorWidget({Key key}) : super(key: key){
+  }
+
+  SessionSelectorWidget.fromDedicatedPage({Key key}) : super(key: key){
+    fromDedicatedPage = true;
   }
 
   @override
@@ -101,8 +108,25 @@ class _SessionSelectorWidget extends State<SessionSelectorWidget> with Automatic
 
                             return Column(
                               children: <Widget>[
-                                Text(info),
-                                Text("Selected session goes here"),
+                                Builder(
+                                  builder: (context){
+                                    if(SelectedSessionBloc().currentState is SelectedSessionInactiveState){
+                                      return Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: <Widget>[
+                                          AutoSizeText(
+
+                                            locText(context, key: "selected_kreta_account_inactive"),
+                                            maxLines: 1,
+
+                                            maxFontSize: 30,
+                                         //   minFontSize: 30,
+                                          ),
+                                        ],
+                                      );
+                                    }else return Container();
+                                  },
+                                ),
                                 DragTarget(
                                   builder: (context, c, r){
                                     return Container(width: 400, height: 100, color: Colors.grey, child: selectedSessionWidget,);
