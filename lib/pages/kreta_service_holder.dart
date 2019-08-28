@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/blocs/kreta_status_bloc.dart';
 import 'package:mobile/blocs/selected_session_bloc.dart';
 import 'package:mobile/widgets/kreta_session_selector_widget.dart';
 
+import '../hazizz_localizations.dart';
 import 'kreta_session_selector_page.dart';
 
 class KretaServiceHolder extends StatefulWidget {
@@ -18,7 +20,7 @@ class KretaServiceHolder extends StatefulWidget {
 
 class _KretaServiceHolder extends State<KretaServiceHolder> with TickerProviderStateMixin , AutomaticKeepAliveClientMixin {
 
-  static bool sessionInactive = false;
+  static bool sessionActived = false;
 
   @override
   void initState() {
@@ -36,11 +38,25 @@ class _KretaServiceHolder extends State<KretaServiceHolder> with TickerProviderS
       bloc: SelectedSessionBloc(),
       builder: (context, state){
 
-        if(state is SelectedSessionEmptyState || state is SelectedSessionInactiveState ){
-          return SessionSelectorWidget();
-        }
 
-        return widget.child;
+
+        return BlocBuilder(
+          bloc: KretaStatusBloc(),
+          builder: (context2, state2){
+            if(state is SelectedSessionEmptyState || state is SelectedSessionInactiveState ){
+              return SessionSelectorWidget();
+            }else {
+              sessionActived = true;
+            }
+            return widget.child;
+            if(state2 is KretaStatusUnavailableState){
+              return Center(child: Text(locText(context, key: "kreta_server_unavailable"), style: TextStyle(fontSize: 20),));
+            }else{
+              return widget.child;
+            }
+          },
+        );
+
       },
     );
   }

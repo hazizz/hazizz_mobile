@@ -26,7 +26,7 @@ class HazizzTheme{
   grade3Color = Colors.yellowAccent,
   grade2Color = Colors.orange,
   grade1Color = Colors.red,
-  gradeNeutralColor = Colors.black,
+  gradeNeutralColor = Colors.grey,
 
 
   headerColor = Colors.red,

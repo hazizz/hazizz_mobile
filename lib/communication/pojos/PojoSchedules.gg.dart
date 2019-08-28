@@ -18,5 +18,4 @@ PojoSchedules _$PojoSchedulesFromJson(Map<String, dynamic> json) {
   ));
 }
 
-Map<String, dynamic> _$PojoSchedulesToJson(PojoSchedules instance) =>
-    <String, dynamic>{'classes': instance.classes};
+Map<String, dynamic> _$PojoSchedulesToJson(PojoSchedules instance) => instance.classes;

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -12,6 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workmanager/workmanager.dart';
 
 import '../hazizz_app_info.dart';
+import '../hazizz_theme.dart';
 import '../hazizz_time_of_day.dart';
 import '../request_sender.dart';
 import '../hazizz_localizations.dart';
@@ -20,12 +22,10 @@ import '../hazizz_response.dart';
 
 
 
-void callbackDispatcher2() {
-  Workmanager.executeTask((backgroundTask) {
-    print("log: work manager: fired: keep");
-   // HazizzNotification.showHazizzNotification();
-    return Future.value(true);
-  });
+Future callbackDispatcher2() async {
+  print("ALARM MANAGER FIRED");
+  await HazizzNotification.showHazizzNotification();
+
 }
 
 void callbackDispatcher() {
@@ -39,10 +39,7 @@ void callbackDispatcher() {
 
 class HazizzNotification{
 
-  static const String
-  tasksTomorrowChannelName =  'Tasks for tomorrow',
-  tasksTomorrowChanneDescription ='Shows your tasks for tomorrow at a given time'
-  ;
+
 
   static final String tasksTomorrowChannelId = tasksTomorrowNotificationId.toString();
 
@@ -80,117 +77,74 @@ class HazizzNotification{
   static Future showHazizzNotification() async {
     print("log: no its works1");
 
-    // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
-    // displaying
-    // az id visszajön az appba
-    final androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      tasksTomorrowChannelId, tasksTomorrowChannelName, tasksTomorrowChanneDescription,
-      importance: Importance.Max,
-      priority: Priority.High,
-      // ticker: 'ticker'
-    );
-    final iOSPlatformChannelSpecifics = IOSNotificationDetails();
-    final platformChannelSpecifics = NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+    if(await getReceiveNotification()){
+      // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
+      // displaying
+      // az id visszajön az appba
 
-    HazizzResponse hazizzResponse = await RequestSender().getResponse(GetTasksFromMe());
+      String tasksTomorrowChannelName = await locTextContextless(key: "notification_tasksTomorrow_channel_name");
+      String tasksTomorrowChannelDescription = await locTextContextless(key: "notification_tasksTomorrow_channel_description");
 
-    /*
-    print("log: IM READY : 0");
-    var asd = await InfoCache.getMyUserData();
-    print(asd.username);
+      final androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        tasksTomorrowChannelId, tasksTomorrowChannelName, tasksTomorrowChannelDescription,
+        importance: Importance.Max,
+        priority: Priority.High,
+      //  color: HazizzTheme.blue,
+      //  ledColor: HazizzTheme.blue,
+      // icon: "ic_launcher_foreground",
+        // ticker: 'ticker'
+      );
+      final iOSPlatformChannelSpecifics = IOSNotificationDetails();
+      final platformChannelSpecifics = NotificationDetails(
+          androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
 
-    print("log: IM READY : 1");
+      HazizzResponse hazizzResponse = await RequestSender().getResponse(GetTasksFromMe());
 
-    GetTasksFromMe requestGetTasksFromMe = GetTasksFromMe();
+      print("IT IS SENT");
 
-    print("log: IM READY : 2");
+      if(hazizzResponse != null && hazizzResponse.isSuccessful){
+        List<PojoTask> tasks = hazizzResponse.convertedData;
+        if(tasks is List<PojoTask>){
+          List<PojoTask> tasksToShow = List();
 
-    Dio dio = Dio();
-
-
-    Map<String, String> header = Map();
-
-    PackageInfo packageInfo = await  PackageInfo.fromPlatform();
-
-    print("log: IM READY : 2.1");
-
-
-    header["User-Agent"] = "HM-${packageInfo.version}";
-
-    print("log: IM READY : 2.2");
-
-
-    header[HttpHeaders.authorizationHeader] = "Bearer ${await TokenManager.getToken()}";
-
-    print("log: IM READY : 2.3");
-
-
-    print("log: IM READY : 3");
-
-
-
-    HazizzResponse hazizzResponse;
-    try{
-      print("log: IM READY : 4");
-
-      Options opt = Options(headers: header);
-      print("log: IM READY : 5");
-
-      Response response = await dio.get(requestGetTasksFromMe.url, options: opt);
-      print("log: IM READY : 6");
-
-      hazizzResponse = HazizzResponse.onSuccess(response: response, request: requestGetTasksFromMe);
-      print("log: IM READY : 7");
-
-
-    }on DioError catch(error){
-      if(error.response != null) {
-        print("log: error response data: ${error.response.data}");
-      }
-      hazizzResponse = await HazizzResponse.onError(dioError: error, request: requestGetTasksFromMe);
-
-      print(hazizzResponse);
-    }
-    */
-
-
-    print("IT IS SENT");
-
-    if(hazizzResponse != null && hazizzResponse.isSuccessful){
-      List<PojoTask> tasks = hazizzResponse.convertedData;
-      if(tasks is List<PojoTask>){
-        List<PojoTask> tasksToShow = List();
-
-        for(PojoTask task in tasks) {
-          if(task.dueDate.day - DateTime
-              .now()
-              .day >= 1) {
-            tasksToShow.add(task);
+          for(PojoTask task in tasks) {
+            if(task.dueDate.day - DateTime.now().day == 1) {
+              tasksToShow.add(task);
+            }
           }
-        }
+          if(tasksToShow.length == 0){
+            await flutterLocalNotificationsPlugin.show(
+              0, await locTextContextless(key: "tasks_tomorrow"), "${await locTextContextless(key: "no_tasks_for_tomorrow", args: [tasksToShow.length.toString()])}",
+              platformChannelSpecifics,
+              payload: tasksToShow.map((e) => e.toJson()).toList().toString()
+            );
+          }else{
+            await flutterLocalNotificationsPlugin.show(
+              0, await locTextContextless(key: "tasks_tomorrow"), "${await locTextContextless(key: "notif_unfinished_tasks", args: [tasksToShow.length.toString()])}",
+              platformChannelSpecifics,
+              payload: tasksToShow.map((e) => e.toJson()).toList().toString()
+            );
+          }
 
-        await flutterLocalNotificationsPlugin.show(
-          0, 'tasks:', "${await locTextContextless(key: "notif_unfinished_tasks", args: [tasksToShow.length.toString()])}",
-          platformChannelSpecifics,
-          payload: tasksToShow.map((e) => e.toJson()).toList().toString()
-        );
 
-        print("log: no its works2");
-      }else{
-        await _flutterLocalNotificationsPlugin.show(
-            0, await locTextContextless(key: "tasks_tomorrow"), "${await locTextContextless(key: "check_your_homework")}",
+          print("log: no its works2");
+        }else{
+          await _flutterLocalNotificationsPlugin.show(
+            0, await locTextContextless(key: "tasks_tomorrow"), "${await locTextContextless(key: "check_your_tasks")}",
             platformChannelSpecifics,
             payload: 'none'
+          );
+        }
+      }
+      else{
+        await _flutterLocalNotificationsPlugin.show(
+          0, await locTextContextless(key: "tasks_tomorrow"), "${await locTextContextless(key: "check_your_tasks")}",
+          platformChannelSpecifics,
+          payload: 'none'
         );
       }
-    }
-    else{
-      await _flutterLocalNotificationsPlugin.show(
-        0, await locTextContextless(key: "tasks_tomorrow"), "${await locTextContextless(key: "check_your_homework")}",
-        platformChannelSpecifics,
-        payload: 'none'
-      );
+    }else{
+      print("the notification is disabled");
     }
   }
 
@@ -205,7 +159,6 @@ class HazizzNotification{
   }
   */
 
-
   static const int hazizzNotifId = 5587346431808710000;
 
 
@@ -218,6 +171,7 @@ class HazizzNotification{
     DateTime dateTime = DateTime(now.year, now.month, now.day, timeOfDay.hour, timeOfDay.minute);
 
 
+    /*
     Workmanager.initialize(
       callbackDispatcher, // The top level function, aka Flutter entry point
       isInDebugMode: false // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
@@ -234,6 +188,15 @@ class HazizzNotification{
       initialDelay: dateTime.difference(DateTime.now()),
 
     );
+    */
+
+
+    final int alarmID = 1;
+    await AndroidAlarmManager.initialize();
+    await AndroidAlarmManager.cancel(alarmID);
+    await AndroidAlarmManager.periodic(const Duration(hours: 24), alarmID, callbackDispatcher2, wakeup: true, exact: true, rescheduleOnReboot: true,  startAt: dateTime);
+
+
 
    // AndroidAlarmManager()
     /*

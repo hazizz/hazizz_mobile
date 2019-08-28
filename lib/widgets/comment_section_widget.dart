@@ -100,7 +100,7 @@ class _CommentSectionWidget extends State<CommentSectionWidget>{
                 else if(state is CommentSectionFailState){
                   return Center(child: Padding(
                     padding: const EdgeInsets.only(top: 8.0),
-                    child: Text("something went wro ng"),
+                    child: Text(locText(context, key: "something_went_wrong")),
                   ));
                 }
                 else{

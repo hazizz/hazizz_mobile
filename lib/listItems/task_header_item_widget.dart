@@ -26,7 +26,7 @@ class TaskHeaderItemWidget extends StatelessWidget{
         clipBehavior: Clip.antiAliasWithSaveLayer,
         color: Theme.of(context).primaryColorDark,
         child: Padding(
-          padding: const EdgeInsets.all(4.0),
+          padding: const EdgeInsets.only(top: 1.5, bottom: 1.5, left: 4),
           child: InkWell(
               child: Row(
                 children: <Widget>[

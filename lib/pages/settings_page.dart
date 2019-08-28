@@ -12,6 +12,8 @@ import 'package:preferences/preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
 
 class SettingsPage extends StatefulWidget {
 
@@ -107,19 +109,22 @@ class _SettingsPage extends State<SettingsPage> with AutomaticKeepAliveClientMix
         body: Container(
           child: Column(
             children: <Widget>[
-              ListTile(
-                title: Text(locText(context, key: "starting_page")),
-                leading: Icon(FontAwesomeIcons.doorOpen),
-                trailing: DropdownButton(
+              Padding(
+                padding: const EdgeInsets.only(top: 10.0),
+                child: ListTile(
+                  title: Text(locText(context, key: "starting_page")),
+                  leading: Icon(FontAwesomeIcons.doorOpen),
+                  trailing: DropdownButton(
 
-                  items: startPageItems,
-                  onChanged: (dynamic newStartPageIndex) async {
-                    StartPageService.setStartPageIndex(newStartPageIndex);
-                    setState(() {
-                      currentStartPageItemIndex = newStartPageIndex;
-                    });
-                  },
-                  value: currentStartPageItemIndex,
+                    items: startPageItems,
+                    onChanged: (dynamic newStartPageIndex) async {
+                      StartPageService.setStartPageIndex(newStartPageIndex);
+                      setState(() {
+                        currentStartPageItemIndex = newStartPageIndex;
+                      });
+                    },
+                    value: currentStartPageItemIndex,
+                  ),
                 ),
               ),
               Divider(),
@@ -133,6 +138,7 @@ class _SettingsPage extends State<SettingsPage> with AutomaticKeepAliveClientMix
               ),
               Divider(),
 
+              /*
               ListTile(
                 title: Text(locText(context, key: "language")),
                 leading: Icon(FontAwesomeIcons.language),
@@ -159,6 +165,7 @@ class _SettingsPage extends State<SettingsPage> with AutomaticKeepAliveClientMix
                 ),
               ),
               Divider(),
+              */
 
               ListTile(
                 onTap: () async {

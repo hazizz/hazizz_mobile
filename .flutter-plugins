@@ -1,4 +1,4 @@
-android_alarm_manager=C:\\src\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\android_alarm_manager-0.4.1+8\\
+android_alarm_manager=C:\\src\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\android_alarm_manager-0.4.4\\
 app_settings=C:\\src\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\app_settings-1.0.6\\
 connectivity=C:\\src\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\connectivity-0.4.3+6\\
 firebase_analytics=C:\\src\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\firebase_analytics-4.0.1\\
@@ -14,4 +14,6 @@ intro_slider=C:\\src\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\intro_slide
 package_info=C:\\src\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\package_info-0.4.0+6\\
 share=C:\\src\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\share-0.6.1\\
 shared_preferences=C:\\src\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\shared_preferences-0.5.3+4\\
+uni_links=C:\\src\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\uni_links-0.2.0\\
+url_launcher=C:\\src\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\url_launcher-5.1.2\\
 workmanager=C:\\src\\flutter\\.pub-cache\\hosted\\pub.dartlang.org\\workmanager-0.0.15\\

@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/create_group_bloc.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/enums/groupTypesEnum.dart';
+import '../hazizz_localizations.dart';
 import '../hazizz_response.dart';
 import '../hazizz_theme.dart';
 import '../request_sender.dart';
@@ -64,11 +65,10 @@ class _CreateSubjectDialog extends State<CreateSubjectDialog> {
         child: Padding(
           padding: const EdgeInsets.all(5),
           child:
-          Text("Create subject",
+          Text(locText(context, key: "create_subject"),
               style: TextStyle(
-                fontFamily: 'Quicksand',
                 fontSize: 20.0,
-                fontWeight: FontWeight.w300,
+                fontWeight: FontWeight.w800,
               )
           ),
         ),
@@ -89,7 +89,7 @@ class _CreateSubjectDialog extends State<CreateSubjectDialog> {
                 controller: _subjectTextEditingController,
                 textInputAction: TextInputAction.send,
                 decoration:
-                InputDecoration(hintText: "Subject", errorText: errorText),
+                InputDecoration(hintText: locText(context, key: "subject"), errorText: errorText),
               )
           ),
       ),
@@ -98,13 +98,7 @@ class _CreateSubjectDialog extends State<CreateSubjectDialog> {
         children: <Widget>[
           FlatButton(
               child: Center(
-                child: Text(
-                  'CANCEL',
-                  style: TextStyle(
-                      fontFamily: 'Montserrat',
-                      fontSize: 14.0,
-                      color: Colors.teal),
-                ),
+                child: Text(locText(context, key: "cancel").toUpperCase()),
               ),
               onPressed: () {
                 Navigator.of(context).pop(null);
@@ -114,11 +108,9 @@ class _CreateSubjectDialog extends State<CreateSubjectDialog> {
           FlatButton(
 
               child: Center(
-                child: Text(
-                  'ADD',
+                child: Text(locText(context, key: "add"),
                   style: TextStyle(
                     //  fontFamily: 'Montserrat',
-                      fontSize: 14.0,
                       color: HazizzTheme.warningColor
                   ),
                 ),

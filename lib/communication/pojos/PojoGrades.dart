@@ -17,4 +17,7 @@ class PojoGrades extends Pojo{
 
   factory PojoGrades.fromJson(Map<String, dynamic> json) =>
       _$PojoGradesFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PojoGradesToJson(this);
+
 }

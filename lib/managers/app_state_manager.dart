@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/widgets.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mobile/blocs/google_login_bloc.dart';
 import 'package:mobile/blocs/UserDataBloc.dart';
 import 'package:mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
@@ -102,7 +104,20 @@ class AppState{
 
   }
 
-  static Future logOutProcedure() async {
+  static Future logoutProcedure() async {
+    final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: [
+      "https://www.googleapis.com/auth/userinfo.email",
+      "https://www.googleapis.com/auth/userinfo.profile",
+      "openid"
+    ]);
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+
+    await _auth.signOut().then((_) {
+      //try the following
+      _googleSignIn.signOut();
+      //try the following
+    });
+
     TokenManager.invalidateTokens();
     var sh = await SharedPreferences.getInstance();
     sh.setBool(key_isLoggedIn, false);
@@ -111,7 +126,7 @@ class AppState{
   }
 
   static void logout(){
-    logOutProcedure();
+    logoutProcedure();
     BusinessNavigator().currentState().pushNamedAndRemoveUntil('login', (Route<dynamic> route) => false);
   //  Navigator.of(context).pushNamedAndRemoveUntil('login', (Route<dynamic> route) => false);
   }
@@ -121,14 +136,14 @@ class AppState{
   static Future<bool> isLoggedIn() async {
     bool hasToken = await TokenManager.hasToken();
     bool hasRefreshToken = await TokenManager.hasRefreshToken();
-    String username = await InfoCache.getMyUsername();
+   // String username = await InfoCache.getMyUsername();
     var sh = await SharedPreferences.getInstance();
     bool isLoggedIn = sh.getBool(key_isLoggedIn);
     isLoggedIn ??= false;
 
-    bool hasUsername = username != null && username != "";
-    print("log: is logged in: ${hasRefreshToken && hasUsername}");
-    return hasRefreshToken && hasUsername && isLoggedIn && hasToken;
+  //  bool hasUsername = username != null && username != "";
+ //   print("log: is logged in: ${hasRefreshToken}");
+    return hasRefreshToken && isLoggedIn && hasToken;
   }
 
 

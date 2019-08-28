@@ -171,7 +171,7 @@ class _TaskMakerPage extends State<TaskMakerPage> {
             tagWidgets.add(TagChip(
               child: Row(children: <Widget>[
                 Icon(FontAwesomeIcons.plus, size: 18,),
-                Text("Add", style: TextStyle(fontSize: 20),)
+                Text(locText(context, key: "add"), style: TextStyle(fontSize: 20),)
               ],),
 
               //  padding: EdgeInsets.only(left: 5, right: 5, top: 4, bottom: 4),
@@ -665,7 +665,7 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                                                           );
                                                         }else{
                                                           return RaisedButton(
-                                                              child: Text((widget.mode == TaskMakerMode.create ? locText(context, key: "create") : locText(context, key: "edit"))),
+                                                              child: Text((widget.mode == TaskMakerMode.create ? locText(context, key: "create") : locText(context, key: "edit")).toUpperCase()),
                                                               onPressed: () async {
                                                                 if(!(state is TaskMakerWaitingState)) {
                                                                   blocs.dispatch(

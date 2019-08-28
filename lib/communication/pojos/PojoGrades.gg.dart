@@ -18,5 +18,4 @@ PojoGrades _$PojoGradesFromJson(Map<String, dynamic> json) {
   ));
 }
 
-Map<String, dynamic> _$PojoGradesToJson(PojoGrades instance) =>
-    <String, dynamic>{'grades': instance.grades};
+Map<String, dynamic> _$PojoGradesToJson(PojoGrades instance) => instance.grades;

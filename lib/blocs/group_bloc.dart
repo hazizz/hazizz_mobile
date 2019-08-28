@@ -35,7 +35,7 @@ class GroupTasksBloc extends Bloc<HEvent, HState> {
           }
         }
         if(hazizzResponse.isError){
-          yield ResponseError(error: hazizzResponse.pojoError);
+          yield ResponseError(errorResponse: hazizzResponse);
         }
       } on Exception catch(e){
         print("log: Exception: ${e.toString()}");
@@ -69,7 +69,7 @@ class GroupSubjectsBloc extends Bloc<HEvent, HState> {
           }
         }
         if(hazizzResponse.isError){
-          yield ResponseError(error: hazizzResponse.pojoError);
+          yield ResponseError(errorResponse: hazizzResponse);
         }
       } on Exception catch(e){
         print("log: Exception: ${e.toString()}");
@@ -102,7 +102,7 @@ class GroupMembersBloc extends Bloc<HEvent, HState> {
           }
         }
         if(hazizzResponse.hasPojoError){
-          yield ResponseError(error: hazizzResponse.pojoError);
+          yield ResponseError(errorResponse: hazizzResponse);
         }
       } on Exception catch(e){
         print("log: Exception: ${e.toString()}");

@@ -5,6 +5,9 @@ TO TALK ABOUT:
 
 
 FUTURE TODO:
+
+- jegyek átlag csak jobban meg kéne írni
+- rate the app please dialog
 - cache - offline mode
 - taskoknál "remind me later"
 - frissítés idejének kiírása
@@ -13,33 +16,40 @@ FUTURE TODO:
 - csoport rangok
 - az auth. lekérdezések egy saját csatornán
 - intro page rework
-
+- nyelv változtatás
 
 TODO:
 
--nyelv változtatás
-- timeoutnál újra küldeni (legalább a main taben)
--displayNAme frissitése miután meg lett változtatva
+- MA, HOLNAP fixelése
+
+
+- displayNAme frissitése miután meg lett változtatva
 //- automata refresh token
 - dedikált screen a main tabeknek
-- app teljes lokalizálása
-- jegyek átlag - 80%
+
 //- Transaction id az errorok melé
 - kréta bejlentkezés
 - login-nál retry ha timeout
-- invite link teljes működése
 - iskolák cachelése
-- globális session betöltés
-- az introba egy join/create group
 - saját feladat
 - kreta bejelentkezés. 2x kell nyomni
-- crashlytics
 - filter taskokra
 - kréta test requestek vissza álitása
-- notification
 
 DONE:
+- cache a main tabeknek
+- locale cache firsitése app induláskor
+- globális session betöltés
+- az introba egy join/create group
+
+- app teljes lokalizálása
+- timeoutnál újra küldeni (legalább a main taben)
+
+- kreta session remove -> refresh sessions
 - task edit után, update
+- notification
+- crashlytics
+- invite link teljes működése
 
 - task item, row => column
 - displayName és profilePic editor - UI done

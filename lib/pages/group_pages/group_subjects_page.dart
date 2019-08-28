@@ -1,3 +1,4 @@
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -7,6 +8,7 @@ import 'package:mobile/blocs/response_states.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/listItems/subject_item_widget.dart';
+import 'package:mobile/managers/welcome_manager.dart';
 
 import '../../hazizz_localizations.dart';
 
@@ -39,6 +41,8 @@ class _GroupSubjectsPage extends State<GroupSubjectsPage> with AutomaticKeepAliv
     if(groupSubjectsBloc.currentState is ResponseError) {
       groupSubjectsBloc.dispatch(FetchData());
     }
+
+
     super.initState();
   }
 
@@ -87,7 +91,7 @@ class _GroupSubjectsPage extends State<GroupSubjectsPage> with AutomaticKeepAliv
                         return Center(child: CircularProgressIndicator(),);
                       }
                       return Center(
-                          child: Text("Uchecked State: ${state.toString()}"));
+                          child: Text(locText(context, key: "info_something_went_wrong")));
                     }
                 ),
               ],

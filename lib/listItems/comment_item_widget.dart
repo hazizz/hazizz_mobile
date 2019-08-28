@@ -8,6 +8,7 @@ import 'package:mobile/managers/cache_manager.dart';
 import 'package:mobile/widgets/comment_section_widget.dart';
 
 import '../hazizz_date.dart';
+import '../hazizz_localizations.dart';
 import '../hazizz_theme.dart';
 import '../request_sender.dart';
 
@@ -45,10 +46,6 @@ class _CommentItemWidget extends State<CommentItemWidget>{
 
   @override
   Widget build(BuildContext context) {
-
-
-
-
     return Card(
      // borderOnForeground: true,
       clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -76,13 +73,13 @@ class _CommentItemWidget extends State<CommentItemWidget>{
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             //  Text(pojoClass.subject == null ? "subject" : pojoClass.subject, style: TextStyle(fontSize: 20)),
-                            Text(widget.comment.creator.displayName == null ? "displayName" : widget.comment.creator.displayName , style: TextStyle(fontSize: 22),),
+                            Text(widget.comment.creator.displayName == null ? "displayName" : widget.comment.creator.displayName , style: TextStyle(fontSize: 20),),
                           ]
                       ),
                     )
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(4),
+                  padding: const EdgeInsets.all(3),
                   child: Text(hazizzShowDateAndTimeFormat(widget.comment.creationDate),
                     style: Theme.of(context).textTheme.subtitle,
                   ),
@@ -99,7 +96,7 @@ class _CommentItemWidget extends State<CommentItemWidget>{
                       Padding(
                         padding: const EdgeInsets.only(left: 8, right: 6, bottom: 4),
                           child: Text(widget.comment.content == null ? "Content" : widget.comment.content ,
-                            style: TextStyle(fontSize: 22),
+                            style: TextStyle(fontSize: 19),
                            // textAlign: TextAlign.justify,
                            // overflow: TextOverflow.ellipsis,
                            // softWrap: false,
@@ -126,7 +123,7 @@ class _CommentItemWidget extends State<CommentItemWidget>{
                             PopupMenuItem(
                               value: value_delete,
                               child: GestureDetector(
-                                child: Text("Delete",
+                                child: Text(locText(context, key: "delete"),
                                   style: TextStyle(color: HazizzTheme.red),
                                 ),
                               )

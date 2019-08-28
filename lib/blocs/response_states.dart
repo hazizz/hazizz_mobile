@@ -4,6 +4,8 @@ import 'package:mobile/communication/pojos/PojoError.dart';
 
 import 'package:meta/meta.dart';
 
+import '../hazizz_response.dart';
+
 abstract class HState extends Equatable {
   static int id = 0;
 
@@ -23,7 +25,6 @@ class ResponseEmpty extends HState {
 }
 
 class ResponseDataLoaded extends HState {
-  
 
   final dynamic data;
   ResponseDataLoaded({@required this.data})
@@ -33,10 +34,19 @@ class ResponseDataLoaded extends HState {
   String toString() => 'ResponseDataLoaded';
 }
 
+class ResponseDataLoadedFromCache extends HState {
+
+  final dynamic data;
+  ResponseDataLoadedFromCache({@required this.data})
+      : assert(data != null);
+
+  @override
+  String toString() => 'ResponseDataLoadedFromCache';
+}
+
 class ResponseError extends HState {
-  final PojoError error;
-  ResponseError({@required this.error})
-      : assert(error != null);
+  final HazizzResponse errorResponse;
+  ResponseError({this.errorResponse}) : assert(errorResponse != null);
 
   @override
   String toString() => 'ResponseError';

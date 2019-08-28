@@ -13,6 +13,13 @@ import '../request_sender.dart';
 import '../hazizz_response.dart';
 
 class SessionsBloc extends Bloc<HEvent, HState> {
+
+  static final SessionsBloc _singleton = new SessionsBloc._internal();
+  factory SessionsBloc() {
+    return _singleton;
+  }
+  SessionsBloc._internal();
+
   @override
   HState get initialState => ResponseEmpty();
 
@@ -29,7 +36,7 @@ class SessionsBloc extends Bloc<HEvent, HState> {
 
         }
         if(hazizzResponse.isError){
-          yield ResponseError(error: hazizzResponse.pojoError);
+          yield ResponseError(errorResponse: hazizzResponse);
         }
       } on Exception catch(e){
         print("log: Exception: ${e.toString()}");

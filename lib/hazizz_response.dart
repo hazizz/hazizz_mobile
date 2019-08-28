@@ -7,6 +7,7 @@ import 'package:meta/meta.dart';
 
 //import 'package:dio/dio.dart';
 
+import 'blocs/kreta_status_bloc.dart';
 import 'blocs/selected_session_bloc.dart';
 import 'logger.dart';
 import 'request_sender.dart';
@@ -50,6 +51,12 @@ class HazizzResponse{
     print("im alive 4");
     hazizzResponse.isSuccessful = true;
     print("im alive 5");
+
+
+    if(request is TheraRequest && KretaStatusBloc().currentState is KretaStatusUnavailableState){
+      KretaStatusBloc().dispatch(KretaStatusAvailableEvent());
+    }
+
     return hazizzResponse;
   }
 
@@ -73,7 +80,10 @@ class HazizzResponse{
 
       if(pojoError != null){
         hasPojoError = true;
-        if(pojoError.errorCode == 19) { // to many requests
+        if(pojoError.errorCode == 138){
+          KretaStatusBloc().dispatch(KretaStatusUnavailableEvent());
+        }
+        else if(pojoError.errorCode == 19) { // to many requests
           print("here iam");
           await RequestSender().waitCooldown();
         }

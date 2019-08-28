@@ -55,7 +55,11 @@ class RouteGenerator{
       case '/groups':
         return MaterialPageRoute(builder: (_) => MyGroupsPage());
       case '/group/groupId': //assert(args != null);
-        return MaterialPageRoute(builder: (_) => GroupTabHosterPage(group: args));
+        return MaterialPageRoute(builder: (_) => GroupTabHosterPage(group: args, visitorEnum: VisitorEnum.member));
+      case '/group/groupId/newComer': //assert(args != null);
+        return MaterialPageRoute(builder: (_) => GroupTabHosterPage(group: args,  visitorEnum: VisitorEnum.newComer));
+      case '/group/groupId/notNewComer': //assert(args != null);
+        return MaterialPageRoute(builder: (_) => GroupTabHosterPage(group: args,  visitorEnum: VisitorEnum.notNewComer));
       case '/createTask':
         return MaterialPageRoute(builder: (_) => TaskMakerPage.createMode(groupId: args));
       case '/editTask': assert(args != null);

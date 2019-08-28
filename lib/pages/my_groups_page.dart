@@ -1,3 +1,4 @@
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -9,6 +10,7 @@ import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/hazizz_localizations.dart';
 import 'package:mobile/listItems/group_item_widget.dart';
+import 'package:mobile/managers/welcome_manager.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 
 
@@ -20,7 +22,6 @@ class MyGroupsPage extends StatefulWidget {
      return locText(context, key: "my_groups");
    }
 
-  MyGroupsBloc myGroupsBloc = new MyGroupsBloc();
 
   MyGroupsPage({Key key}) : super(key: key);
 
@@ -30,12 +31,16 @@ class MyGroupsPage extends StatefulWidget {
 
 class _MyGroupsPage extends State<MyGroupsPage> with AutomaticKeepAliveClientMixin {
 
+  MyGroupsBloc myGroupsBloc = new MyGroupsBloc();
+
 
   _MyGroupsPage();
 
   @override
   void initState() {
-    widget.myGroupsBloc.dispatch(FetchData());
+    myGroupsBloc.dispatch(FetchData());
+
+
     super.initState();
   }
 
@@ -44,6 +49,7 @@ class _MyGroupsPage extends State<MyGroupsPage> with AutomaticKeepAliveClientMix
     return Container(//LogConsoleOnShake(
      // tag: "group",
       child: Scaffold(
+        /*
           floatingActionButton: FloatingActionButton(
               heroTag: "hero_fab_my_groups",
 
@@ -52,6 +58,7 @@ class _MyGroupsPage extends State<MyGroupsPage> with AutomaticKeepAliveClientMix
               await showJoinGroupDialog(context);
             }
           ),
+          */
           appBar: AppBar(
             leading: HazizzBackButton(),
             actions: <Widget>[
@@ -59,7 +66,7 @@ class _MyGroupsPage extends State<MyGroupsPage> with AutomaticKeepAliveClientMix
                 onPressed: () async {
                   bool result = await showCreateGroupDialog(context);
                   if(result != null && result == true){
-                    widget.myGroupsBloc.dispatch(FetchData());
+                    myGroupsBloc.dispatch(FetchData());
                   }
                 })
             ],
@@ -67,7 +74,7 @@ class _MyGroupsPage extends State<MyGroupsPage> with AutomaticKeepAliveClientMix
           ),
           body: new RefreshIndicator(
               child: BlocBuilder(
-                  bloc: widget.myGroupsBloc,
+                  bloc: myGroupsBloc,
                   builder: (_, HState state) {
                     if (state is ResponseDataLoaded) {
                       List<PojoGroup> groups = state.data;
@@ -92,10 +99,10 @@ class _MyGroupsPage extends State<MyGroupsPage> with AutomaticKeepAliveClientMix
                       return Center(child: CircularProgressIndicator(),);
                     }
                     return Center(
-                        child: Text("Uchecked State: ${state.toString()}"));
+                        child: Text(locText(context, key: "info_something_went_wrong")));
                   }
               ),
-              onRefresh: () async => widget.myGroupsBloc.dispatch(FetchData()) //await getData()
+              onRefresh: () async => myGroupsBloc.dispatch(FetchData()) //await getData()
           )
       ),
     );

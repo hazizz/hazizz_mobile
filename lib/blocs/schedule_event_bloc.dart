@@ -207,20 +207,21 @@ class ScheduleEventBloc extends Bloc<ScheduleEventEvent, ScheduleEventState> {
 
     void handleTimeout() {  // callback function
       // time to update the event widget
+      print("TIMER FIRED !!!");
       this.dispatch(ScheduleEventNextEvent());
     }
 
     startTimeout() {
       HazizzDateTime now = HazizzDateTime.now();
 
-      var duration = now.difference(nextEventChangeTime2);
+      var duration = (nextEventChangeTime2.difference(now));
+
+      print("DURATION: ${duration.inMinutes}, ${duration.inSeconds}");
 
       return new Timer(duration, handleTimeout);
     }
 
     startTimeout();
-
-
   }
 
   HazizzTimeOfDay nextEventChangeTime;
@@ -298,6 +299,7 @@ class ScheduleEventBloc extends Bloc<ScheduleEventEvent, ScheduleEventState> {
         }
         print("log: debugMode ACTIVATED: 4");
       }
+      /*
       // van holnap óra
       if( MainTabBlocs().schedulesBloc.classes.classes.containsKey((currentDayIndex+1).toString())) {
         events.add(AfterClassesEventItem.fromClass(lastClass: todayClasses[todayClasses.length - 1], upcomingClass: MainTabBlocs().schedulesBloc.classes.classes[(currentDayIndex+1).toString()][0], tomorrowClass:  MainTabBlocs().schedulesBloc.classes.classes[(currentDayIndex+1)][0]) );
@@ -306,6 +308,7 @@ class ScheduleEventBloc extends Bloc<ScheduleEventEvent, ScheduleEventState> {
         events.add(AfterClassesEventItem(start:HazizzDateTime.fromTimeOfDay(todayClasses[todayClasses.length - 1].endOfClass), end: HazizzDateTime.fromToday(23, 59) ));
 
       }
+      */
       print("log: class state: loop end");
     }
     else{
@@ -391,6 +394,30 @@ class ScheduleEventBloc extends Bloc<ScheduleEventEvent, ScheduleEventState> {
     print("log: class state: loop end");
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

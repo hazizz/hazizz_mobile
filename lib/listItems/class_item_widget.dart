@@ -73,8 +73,11 @@ class ClassItemWidget extends StatelessWidget{
                             padding: const EdgeInsets.only(left: 2, top: 2, right: 8, bottom: 4),
                             child: Row(
                                 children: [
-                                //  Text(pojoClass.subject == null ? "subject" : pojoClass.subject, style: TextStyle(fontSize: 20)),
-                                  Text(pojoClass.subject == null ? "className" : pojoClass.subject, style: TextStyle(fontSize: 22),),
+
+                            //  Text(pojoClass.subject == null ? "subject" : pojoClass.subject, style: TextStyle(fontSize: 20)),
+                                  Text(pojoClass.subject == null ? "className" : pojoClass.subject[0].toUpperCase() + pojoClass.subject.substring(1),
+                                    style: TextStyle(fontSize: 22),
+                                  ),
                                 ]
                             ),
                           )

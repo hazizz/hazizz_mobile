@@ -29,9 +29,6 @@ class _LoginPage extends State<LoginPage> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: new Text("Login"),
-        ),
         body: BlocBuilder(
           bloc: LoginBlocs().googleLoginBloc,
           builder: (context, state){

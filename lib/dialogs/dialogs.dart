@@ -12,6 +12,7 @@ import 'package:mobile/communication/pojos/PojoTag.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/defaults/pojo_group_empty.dart';
 import 'package:mobile/dialogs/school_dialog.dart';
+import 'package:mobile/widgets/hyper_link.dart';
 import 'package:share/share.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
@@ -24,6 +25,7 @@ import '../hazizz_theme.dart';
 import 'choose_subject_dialog.dart';
 import 'create_group_dialog.dart';
 import 'create_subject_dialog.dart';
+import 'invite_link_dialog.dart';
 import 'join_group_dialog.dart';
 
 
@@ -203,7 +205,7 @@ Future<PojoGroup> showDialogGroup(BuildContext context, {List<PojoGroup> data}) 
             Builder(
               builder: (context){
                 if(groups_data.length <= 1){
-                  return Text("You are not a member of a group");
+                  return Text(locText(context, key: "not_member_of_groups"));
                 }
                 return Container();
               },
@@ -263,10 +265,76 @@ Future<PojoGroup> showDialogGroup(BuildContext context, {List<PojoGroup> data}) 
     },
   );
   return result;
+}
 
+Future<bool> showInviteDialog(context, {@required PojoGroup group}) async {
+  InviteLinkDialog dialog = InviteLinkDialog(group: group);
+  return showDialog(context: context, barrierDismissible: true,
+      builder: (BuildContext context) {
+        return dialog;
+      }
+  );
+  /*
+  HazizzResponse hazizzResponse = await RequestSender().getResponse(GetGroupInviteLink(groupId: group.id));
+  String inviteLink = "Waiting...";
+  if(hazizzResponse.isSuccessful){
+    inviteLink = hazizzResponse.convertedData;
+  }else{
+    return false;
+  }
 
+  HazizzDialog h = HazizzDialog(
+      header:
+      Container(
+          color: Theme.of(context).primaryColor,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(locText(context, key: "invite_link_info", args: [group.name]), style: TextStyle(fontSize: 19),),
+          )
+      ),
+      content: Container(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(inviteLink, style: TextStyle(fontSize: 15),),
+          )
+      ),
+      actionButtons:
+      Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          FlatButton(
+              child: Center(
+                child: Text(
+                  locText(context, key: "cancel").toUpperCase(),
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              color: Colors.transparent
+          ),
+          FlatButton(
+              child: Center(
+                child: Text(locText(context, key: "share").toUpperCase(),),
+              ),
+              onPressed: () {
+                print("share");
 
+                Share.share(locText(context, key: "invite_to_group_text_title", args: [group.name, inviteLink]));
+                // Navigator.of(context).pop();
+                // Navigator.of(context).pop();
+              },
+              color: Colors.transparent
+          ),
+        ],
+      ) ,height: 190,width: 200);
 
+  return showDialog(context: context, barrierDismissible: true,
+      builder: (BuildContext context) {
+        return h;
+      }
+  );
+  */
 }
 
 
@@ -574,11 +642,7 @@ Future<bool> showDeleteDialog(context, {@required int taskId}) async {
           FlatButton(
               child: Center(
                 child: Text(
-                  'CANCEL',
-                  style: TextStyle(
-                      fontFamily: 'Montserrat',
-                      fontSize: 14.0,
-                      color: Colors.teal),
+                  locText(context, key: "cancel").toUpperCase()
                 ),
               ),
               onPressed: () {
@@ -589,10 +653,8 @@ Future<bool> showDeleteDialog(context, {@required int taskId}) async {
           FlatButton(
               child: Center(
                 child: Text(
-                  'DELETE',
+                  locText(context, key: "delete").toUpperCase(),
                   style: TextStyle(
-                      fontFamily: 'Montserrat',
-                      fontSize: 14.0,
                       color: HazizzTheme.warningColor),
                 ),
               ),
@@ -903,7 +965,7 @@ Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
                   children:
                   [
 
-                    Center(child: Text(grade.subject == null ? "" : (grade.subject), style: TextStyle(fontSize: 24)) ),
+                    Center(child: Text(grade.subject == null ? "" : (grade.subject), style: TextStyle(fontSize: 24), textAlign: TextAlign.center,) ),
                     Spacer(),
 
                     Row(
@@ -961,71 +1023,39 @@ Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
       });
 }
 
-Future<bool> showInviteDialog(context, {@required PojoGroup group}) async {
-  HazizzResponse hazizzResponse = await RequestSender().getResponse(GetGroupInviteLink(groupId: group.id));
-  String inviteLink = "Waiting...";
-  if(hazizzResponse.isSuccessful){
-    inviteLink = hazizzResponse.convertedData;
-  }else{
-    return false;
-  }
+Future<bool> showJoinedGroupDialog(context, {@required PojoGroup group}) async {
+
+  double width = 280;
+  double height = 82;
 
   HazizzDialog h = HazizzDialog(
-    header:
+      header:
       Container(
+        width: width,
         color: Theme.of(context).primaryColor,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(locText(context, key: "invite_link_info", args: [group.name]), style: TextStyle(fontSize: 18),),
-          )
-      ),
-      content: Container(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(inviteLink, style: TextStyle(fontSize: 15),),
+          child: Text(locText(context, key: "welcome_to_group", args: [group.name]), style: TextStyle(fontSize: 24),),
         )
       ),
+      content: Container(),
       actionButtons:
       Row(
-    mainAxisAlignment: MainAxisAlignment.end,
-    children: <Widget>[
-      FlatButton(
-          child: Center(
-            child: Text(
-              'CANCEL',
-              style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontSize: 14.0,
-                  color: Colors.teal),
-            ),
-          ),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          color: Colors.transparent
-      ),
-      FlatButton(
-          child: Center(
-            child: Text(
-              'SHARE',
-              style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontSize: 14.0,
-                  color: HazizzTheme.warningColor
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          FlatButton(
+              child: Center(
+                child: Text(
+                  locText(context, key: "ok").toUpperCase(),
+                ),
               ),
-            ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              color: Colors.transparent
           ),
-          onPressed: () {
-            print("share");
-
-            Share.share(locText(context, key: "invite_to_group_text_title", args: [group.name, inviteLink]));
-            // Navigator.of(context).pop();
-            // Navigator.of(context).pop();
-          },
-          color: Colors.transparent
-      ),
-    ],
-  ) ,height: 190,width: 200);
+        ],
+      ) ,height: height,width: width);
 
   return showDialog(context: context, barrierDismissible: true,
       builder: (BuildContext context) {
@@ -1154,7 +1184,7 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text(locText(context, key: "class_name"), style: TextStyle(fontSize: 20)),
+              Text(locText(context, key: "class_name") + ":", style: TextStyle(fontSize: 20)),
               Expanded(
                 child: Text(pojoClass.className == null ? "" : (pojoClass.className),
                         style: TextStyle(fontSize: 20), textAlign: TextAlign.end,),
@@ -1238,93 +1268,6 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
 }
 
 
-Future<bool> showClassDialo2g(context, {@required PojoClass pojoClass}) async {
-  return showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        return Dialog(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-            child: Container(
-                height: 130.0,
-                width: 200.0,
-                decoration:
-                BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
-                child: Column(
-                  children: <Widget>[
-                    Stack(
-                      children: <Widget>[
-                        // Container(height: 100.0),
-                        Container(
-                          height: 80.0,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10.0),
-                                topRight: Radius.circular(10.0),
-                              ),
-                              color: Theme.of(context).primaryColor
-                          ),
-                        ),
-                        Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Column(
-                              children: <Widget>[
-                                Text(pojoClass.periodNumber.toString()),
-                                Text(pojoClass.className)
-                              ],
-                            )
-                        ),
-
-                      ],
-                    ),
-                    //  SizedBox(height: 20.0),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        FlatButton(
-                            child: Center(
-                              child: Text(
-                                'CANCEL',
-                                style: TextStyle(
-                                    fontFamily: 'Montserrat',
-                                    fontSize: 14.0,
-                                    color: Colors.teal),
-                              ),
-                            ),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            color: Colors.transparent
-                        ),
-                        FlatButton(
-                            child: Center(
-                              child: Text(
-                                'SHARE',
-                                style: TextStyle(
-                                    fontFamily: 'Montserrat',
-                                    fontSize: 14.0,
-                                    color: HazizzTheme.warningColor
-                                ),
-                              ),
-                            ),
-                            onPressed: () {
-                              print("share");
-
-                              Share.share('check out my website inviteLink');
-                              // Navigator.of(context).pop();
-                              // Navigator.of(context).pop();
-                            },
-                            color: Colors.transparent
-                        ),
-                      ],
-                    )
-                  ],
-                )));
-      });
-}
-
-
 Future<bool> showIntroCancelDialog(context) async {
   Widget space = SizedBox(height: 5);
 
@@ -1332,6 +1275,7 @@ Future<bool> showIntroCancelDialog(context) async {
 
   double height = 80;
 
+  double width = 280;
 
 
   Container(
@@ -1360,16 +1304,18 @@ Future<bool> showIntroCancelDialog(context) async {
   HazizzDialog hazizzDialog = HazizzDialog(
       header:
       Container(
+        width: width,
         height: height,
         color: Theme.of(context).primaryColor,
         child: Padding(
           padding: const EdgeInsets.all(5),
           child:
-          Text("Krétába késöbbb is be tudsz jelentkezni a beállitások menűben",
+       //   Text(locText(context, key: "kreta_login_later")),
+          Text(locText(context, key: "kreta_login_later"),
               style: TextStyle(
-                fontFamily: 'Quicksand',
-                fontSize: 20.0,
-                fontWeight: FontWeight.w300,
+               // fontFamily: 'Quicksand',
+                fontSize: 23.0,
+               // fontWeight: FontWeight.w300,
               )
           ),
 
@@ -1395,7 +1341,7 @@ Future<bool> showIntroCancelDialog(context) async {
           )
         ],
       ),
-      height: height, width: 200);
+      height: height, width: width);
 
   await showDialog(
       context: context,
@@ -1424,16 +1370,13 @@ Future<bool> showDialogSessionReauth(BuildContext context) async{
   HazizzDialog d = HazizzDialog(height: height, width: width,
     header: Container(
       width: width,
-      height: 40,
       color: Theme.of(context).primaryColor,
       child: Padding(
         padding: const EdgeInsets.all(5),
         child:
-        Text("Csak aktív fiókot használhatsz",
+        Text(locText(context, key: "you_can_only_use_active_account"),
             style: TextStyle(
-              fontFamily: 'Quicksand',
               fontSize: 20.0,
-              fontWeight: FontWeight.w300,
             )
         ),
 
@@ -1442,7 +1385,7 @@ Future<bool> showDialogSessionReauth(BuildContext context) async{
     ),
     content: Container(
       height: 40,
-      child: Text("Bejelentkezel újra a fiókba?"),
+      child: Text(locText(context, key: "do_you_want_to_log_in_again")),
     ),
     actionButtons: Row(
       children: <Widget>[
@@ -1455,13 +1398,13 @@ Future<bool> showDialogSessionReauth(BuildContext context) async{
         ),
         */
         FlatButton(
-          child: new Text("NO"),
+          child: new Text(locText(context, key: "no").toUpperCase()),
           onPressed: () {
             Navigator.pop(context, false);
           },
         ),
         FlatButton(
-          child: new Text("YES"),
+          child: new Text(locText(context, key: "yes").toUpperCase()),
           onPressed: () {
             Navigator.pop(context, true);
           },
@@ -1483,7 +1426,87 @@ Future<bool> showDialogSessionReauth(BuildContext context) async{
 }
 
 
+Future<bool> showConditionsToAcceptDialog(context) async {
 
+  double height = 80;
+
+  double width = 280;
+
+  Locale getCurrentLocale(BuildContext context){
+    return Localizations.localeOf(context);
+  }
+
+  String getLinkPrivacy(){
+    String currentLang = getCurrentLocale(context).languageCode;
+    print("lang code: .$currentLang.");
+    if(currentLang != "en" && currentLang != "hu" ){
+      currentLang = "en";
+    }
+
+    String link = "https://hazizz.github.io/privacy-${currentLang}.txt";
+    print("nig: $link");
+    return link;
+  }
+  String getLinkTermsOfService(){
+    String currentLang = getCurrentLocale(context).languageCode;
+    if(currentLang != "en" && currentLang != "hu" ){
+      currentLang = "en";
+    }
+    String link = "https://hazizz.github.io/tos-${currentLang}.txt";
+    print("nig: $link");
+    return link;
+  }
+
+
+  HazizzDialog hazizzDialog = HazizzDialog(
+      header:
+      Container(
+        width: width,
+        color: Theme.of(context).primaryColor,
+        child: Padding(
+          padding: const EdgeInsets.all(5),
+          child:
+          //   Text(locText(context, textview_logout_drawer: "kreta_login_later")),
+          Wrap(
+            children: <Widget>[
+              Text(locText(context, key: "have_to_accept_privacy_tos1"), style: TextStyle(fontSize: 18),),
+              Hyperlink(getLinkPrivacy(), Text(locText(context, key: "have_to_accept_privacy"), style: TextStyle(fontSize: 18, color: HazizzTheme.red, decoration: TextDecoration.underline,), )),
+              Text(locText(context, key: "have_to_accept_privacy_tos2"), style: TextStyle(fontSize: 18)),
+              Hyperlink(getLinkTermsOfService(), Text(locText(context, key: "have_to_accept_tos"), style: TextStyle(fontSize: 18, color: HazizzTheme.red, decoration: TextDecoration.underline,), )),
+            ],
+          )
+
+
+        ),
+      ),
+      content: Container(),
+      actionButtons:
+      Row(
+        children: <Widget>[
+          FlatButton(
+            child: Text(locText(context, key: "reject").toUpperCase()),
+            onPressed: (){
+              Navigator.pop(context, false) ;
+            },
+          ),
+          FlatButton(
+            child: Text(locText(context, key: "accept").toUpperCase()),
+            onPressed: (){
+              Navigator.pop(context, true) ;
+            },
+          )
+        ],
+      ),
+      height: height, width: width);
+
+  bool result = await showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return hazizzDialog;
+      });
+  return result;
+}
 
 
 

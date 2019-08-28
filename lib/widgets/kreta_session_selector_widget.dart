@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -9,6 +10,9 @@ import 'package:mobile/blocs/sessions_bloc.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/hazizz_localizations.dart';
 import 'package:mobile/listItems/session_item_widget.dart';
+import 'package:mobile/managers/welcome_manager.dart';
+
+import '../hazizz_theme.dart';
 
 class SessionSelectorWidget extends StatefulWidget {
 
@@ -27,12 +31,24 @@ class SessionSelectorWidget extends StatefulWidget {
 
 class _SessionSelectorWidget extends State<SessionSelectorWidget> with AutomaticKeepAliveClientMixin {
 
-  SessionsBloc sessionsBloc = SessionsBloc();
+  //SessionsBloc sessionsBloc = SessionsBloc();
   
   @override
   void initState() {
     initalizeSelectedSession();
-    sessionsBloc.dispatch(FetchData());
+    SessionsBloc().dispatch(FetchData());
+
+
+    WelcomeManager.getKretaSessions().then((isNewComer){
+      if(isNewComer){
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          FeatureDiscovery.discoverFeatures(
+            context,
+            ['discover_kreta_session_creator'],
+          );
+        });
+      }
+    });
 
     super.initState();
   }
@@ -66,15 +82,17 @@ class _SessionSelectorWidget extends State<SessionSelectorWidget> with Automatic
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton:FloatingActionButton(
         heroTag: null,// "create_session_hero_tag",
-        child: Icon(FontAwesomeIcons.plus),
+        child: Icon(FontAwesomeIcons.userPlus),
         onPressed: (){
           Navigator.pushNamed(context, "/kreta/login", arguments: (){
             Navigator.pop(context);
           });
         },
       ),
+
+
       body: RefreshIndicator(
           child: Stack(
             children: <Widget>[
@@ -110,7 +128,15 @@ class _SessionSelectorWidget extends State<SessionSelectorWidget> with Automatic
                               children: <Widget>[
                                 Builder(
                                   builder: (context){
-                                    if(SelectedSessionBloc().currentState is SelectedSessionInactiveState){
+                                    if(state is SelectedSessionEmptyState){
+                                      return AutoSizeText(
+                                        locText(context, key: "no_selected_kreta_account"),
+                                        maxLines: 1,
+                                        minFontSize: 18,
+                                        maxFontSize: 30,
+                                      );
+                                    }
+                                    else if(SelectedSessionBloc().currentState is SelectedSessionInactiveState){
                                       return Column(
                                         mainAxisSize: MainAxisSize.max,
                                         children: <Widget>[
@@ -127,11 +153,32 @@ class _SessionSelectorWidget extends State<SessionSelectorWidget> with Automatic
                                     }else return Container();
                                   },
                                 ),
-                                DragTarget(
-                                  builder: (context, c, r){
-                                    return Container(width: 400, height: 100, color: Colors.grey, child: selectedSessionWidget,);
-                                  },
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 16.0),
+                                  child: Builder(
+                                    builder: (context){
+                                      if(selectedSessionWidget != null){
+                                        return Column(
+                                          children: <Widget>[
+                                            Text(locText(context, key: "selected_kreta_account"), style: TextStyle(fontSize: 20),),
+                                            Container(
+                                                width: MediaQuery.of(context).size.width,
+                                                height: 95,
+                                                child: Card( color: Colors.grey, child: Builder(builder: (context){
+                                                  if(selectedSessionWidget != null){
+                                                    return selectedSessionWidget;
+                                                  }
+                                                  return Container();//Text("");
+                                                },),)
+                                            )
+                                          ],
+                                        );
+                                      }
+                                      return Container();
+                                    },
+                                  ),
                                 )
+
                               ],
                             );
 
@@ -172,7 +219,7 @@ class _SessionSelectorWidget extends State<SessionSelectorWidget> with Automatic
 
                         Expanded(
                           child: BlocBuilder(
-                            bloc: sessionsBloc,
+                            bloc: SessionsBloc(),
                             builder: (_, HState state) {
                               if (state is ResponseDataLoaded) {
                                 List<PojoSession> sessions1 = state.data;
@@ -234,7 +281,7 @@ class _SessionSelectorWidget extends State<SessionSelectorWidget> with Automatic
                                           }
                                       );
                                     }
-                                    return Text("You better go create account");
+                                    return Text(locText(context, key: "should_add_kreta_account"));
 
 
                                   },
@@ -244,7 +291,7 @@ class _SessionSelectorWidget extends State<SessionSelectorWidget> with Automatic
                                 return Center(child: CircularProgressIndicator(),);
                               }
                               return Center(
-                                  child: Text("Uchecked State: ${state.toString()}"));
+                                  child: Text(locText(context, key: "info_something_went_wrong")));
                             }
                           ),
                         ),
@@ -256,7 +303,7 @@ class _SessionSelectorWidget extends State<SessionSelectorWidget> with Automatic
 
             ],
           ),
-          onRefresh: () async => sessionsBloc.dispatch(FetchData()) //await getData()
+          onRefresh: () async => SessionsBloc().dispatch(FetchData()) //await getData()
       ),
 
     );

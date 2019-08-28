@@ -72,12 +72,23 @@ class _GroupTasksPage extends State<GroupTasksPage> with AutomaticKeepAliveClien
                                 }
                             );
                           } else if (state is ResponseEmpty) {
-                            return Center(child: Text(locText(context, key: "no_tasks_in_group_yet")));
+
+
+                            return Column(
+                                children: [
+                                  Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top: 50.0),
+                                      child: Text(locText(context, key: "no_tasks_in_group_yet")),
+                                    ),
+                                  )
+                                ]
+                            );
                           } else if (state is ResponseWaiting) {
                             return Center(child: CircularProgressIndicator(),);
                           }
                           return Center(
-                              child: Text("Uchecked State: ${state.toString()}"));
+                              child: Text(locText(context, key: "info_something_went_wrong")));
                         }
                     ),
 

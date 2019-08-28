@@ -5,13 +5,10 @@ import 'package:easy_localization/easy_localization_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/hazizz_localizations.dart';
 import 'package:mobile/route_generator.dart';
-import 'package:toast/toast.dart';
 import 'blocs/google_login_bloc.dart';
 import 'blocs/main_tab_blocs/main_tab_blocs.dart';
-import 'communication/connection.dart';
 import 'communication/pojos/task/PojoTask.dart';
 //import 'hazizz_alarm_manager.dart';
-import 'hazizz_app_info.dart';
 import 'hazizz_theme.dart';
 import 'managers/token_manager.dart';
 import 'managers/app_state_manager.dart';
@@ -22,11 +19,9 @@ import 'package:dynamic_theme/dynamic_theme.dart';
 
 import 'navigation/business_navigator.dart';
 import 'notification/notification.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 
 String startPage;
 
@@ -128,11 +123,6 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
   initState() {
     super.initState();
 
-    getPreferredLocal().then((locale) {
-      setState(() {
-        this.preferredLocale = locale;
-      });
-    });
 
     WidgetsBinding.instance.addObserver(this);
   }
@@ -189,8 +179,14 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
         }else {
           startPage = "/tasksTomorrow";
         }
-      }else{
+      }else if(newComer){
+        startPage = "intro";
+      }
+      else{
         startPage = "login";
+
+       // startPage = "intro";
+
       }
 
       return new DynamicTheme(
@@ -214,12 +210,12 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
                 localeResolutionCallback: (locale, supportedLocales) {
                   // Check if the current device locale is supported
                   // Locale myLocale = Localizations.localeOf(context);
-                  if(preferredLocale != null) {
-                    return preferredLocale;
-                  }
+
+
                   for(var supportedLocale in supportedLocales) {
                     if(supportedLocale.languageCode == locale.languageCode &&
                         supportedLocale.countryCode == locale.countryCode) {
+                      setPreferredLocal(supportedLocale);
                       return supportedLocale;
                     }
                   }

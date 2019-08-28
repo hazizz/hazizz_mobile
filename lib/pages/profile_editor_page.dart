@@ -212,7 +212,7 @@ class _ProfileEditorPage extends State<ProfileEditorPage> with TickerProviderSta
                               style: TextStyle(fontSize: 22),
                               // maxLength: 20,
                               decoration: InputDecoration(
-                                  labelText: "Display Name"
+                                  labelText: locText(context, key: "displayName")
                               ),
                             ),
                           ),

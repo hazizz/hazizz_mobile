@@ -7,9 +7,9 @@
     "hazizz_motto" : "From pupils to pupils",
 
 
-    "hazizz_intro" : "Thank you for downloading Hazizz Mobile! With the application, you can store all you school tasks at one place.\nBe it homework, a test, or an assignment, you can easily note down everything and share them with your friends.\nTo begin, create a new account or log in!",
+    "hazizz_intro" : "Thank you for downloading Hazizz Mobile! With the application, you can store all your school tasks at one place.\nBe it homework, a test, or an assignment, you can easily note down everything and share them with your classmates.\nTo begin, sign in with your Google account!",
 
-    "kreta_intro" : "Thanks to Thera, you can access your grades and timetables in the application, so you can find everything in one app.\nTo do this, you only need to log in to your Kréta account, choose your school and you are all set!",
+    "kreta_intro" : "You can access your e-Kréta grades and timetables in the application.\nTo do this, just log in to your Kréta account and you are all set!",
 
 
 
@@ -92,6 +92,9 @@
 
     "edit"
     : "Edit",
+
+    "add"
+    : "Add",
 
     "group"
     : "Group",
@@ -248,7 +251,7 @@
 
 
     "displayName"
-    : "Display Name",
+    : "Display name",
 
 
     "registrationDate"
@@ -258,13 +261,17 @@
     "username"
     : "Username",
 
+    "kreta_username"
+    : "Kréta username",
+
+    "kreta_password"
+    : "Kréta password",
 
     "users"
     : "Users",
 
 
-    "password"
-    : "Password",
+
 
 
     "email"
@@ -291,6 +298,12 @@
     "delete"
     : "Delete",
 
+  "remove"
+  : "Remove",
+
+  "select"
+  : "Select",
+
 
     "leave_group"
     : "Leave group",
@@ -314,6 +327,12 @@
 
     "notifications"
     : "Notifications",
+
+    "notification_tasksTomorrow_channel_name"
+    : "Tasks for tomorrow",
+
+    "notification_tasksTomorrow_channel_description"
+    : "Shows your tasks for tomorrow at a given time",
 
 
     "go_back"
@@ -380,6 +399,15 @@
     "share"
     : "Share",
 
+    "reject"
+    : "Reject",
+
+    "agree"
+    : "Agree",
+
+    "accept"
+    : "Accept",
+
 
     "loading"
     : "Loading...",
@@ -413,8 +441,8 @@
     : "Message from devs",
 
 
-    "school_"
-    : "School:",
+    "school"
+    : "School",
 
 
     "add_user"
@@ -518,17 +546,18 @@
     : "Send this link to your classmates to join {} group!",
 
 
-    "invite_link_info_part2"
-    : "group",
-
-
     "already_in_group"
     : "You are already a member of this group",
 
+    "you_have_to_log_in_to_join"
+    : "You have to be logged in to join a group",
+
 
     "added_to_group"
-    : "You were successfully added to this group",
+    : "You were successfully added to {} group",
 
+    "welcome_to_group"
+    : "Welcome to {} group",
 
     "invite_to_group_text_title"
     : "Hazizz Mobile: Join to {} group to receive your homeworks: \n{}",
@@ -550,6 +579,9 @@
     "areyousure_leave_group"
     : "Are you sure you want to leave this group?",
 
+
+    "error_too_short"
+    : "Too short",
 
     "error_passwordRequiredForGroup"
     : "Password is required to join group",
@@ -629,8 +661,8 @@
     : "View Announcement",
 
 
-    "title_fragment_view_task"
-    : "View Task",
+    "view_task"
+    : "View task",
 
 
     "tasktype_fragment_taskeditor"
@@ -652,6 +684,21 @@
     "add_subject"
     : "Add subject",
 
+    "have_to_accept_privacy_tos1"
+    : "I accept the ",
+
+    "have_to_accept_privacy"
+    : "privacy policy ",
+
+    "have_to_accept_privacy_tos2"
+    : "and the",
+
+    "have_to_accept_tos"
+    : "terms of service",
+
+    "last_updated"
+    : "Last updated",
+
 
     "report_bug"
     : "Report bug",
@@ -667,6 +714,9 @@
 
     "info_something_went_wrong"
     : "Something went wrong",
+
+    "incorrect_data"
+    : "Incorrect data",
 
 
     "info_noInternetAccess"
@@ -695,6 +745,23 @@
   "create_group"
   : "Create group",
 
+  "create_subject"
+  : "Create subject",
+
+  "about_group_title"
+  : "About groups",
+
+  "about_group_description1"
+  : "If your class doesn't have a group, be the first to create one:",
+
+  "about_group_description2"
+  : "If your class does already have a group, ask them to send you an invite link. After you receive the link just click it and you are in",
+
+
+
+    "group_created"
+    : "The group was created successfully",
+
     "no_school_with_that_name"
     : "There is no school with this name",
 
@@ -705,8 +772,10 @@
     "error_signing_in_with_google"
     : "Google sign in was not successful, try again latter",
 
-    "error_termsAndConditionsNotAccepted"
-    : "Privacy policy not accepted",
+    "error_conditionsNotAccepted"
+    : "You have to accept our terms of service and privacy policy!",
+
+
 
 
     "error_accountLocked"
@@ -789,8 +858,11 @@
     : "Group does not exist",
 
 
-    "error_notMemberOfGroup"
-    : "You're not a member of any groups",
+    "group_name_suggestion"
+    : "The group's name can be your school's name and your class name. E.g.: NEU. 10.D",
+
+    "not_member_of_groups"
+    : "You are not a member of a group",
 
 
     "error_subjectNotSelected"
@@ -849,36 +921,34 @@
     "success_changed_password"
     : "The password was successfully changed",
 
-
-    "notif_unfinished_tasks1"
-    : "You have",
-
     "notif_unfinished_tasks"
-: "You have {} task for tomorrow",
+    : "You have {} tasks for tomorrow",
 
-  "set_time_for_notification"
-  : "Notification time",
+    "set_time_for_notification"
+    : "Notification time",
 
-  "tasks_tomorrow"
-  : "Homework for tomorrow",
+    "tasks_tomorrow"
+    : "Tasks for tomorrow",
 
     "title_tasks_tomorrow"
-    : "Homeworks for tomorrow",
+    : "Tasks for tomorrow",
 
-  "do_your_homework"
-  : "Time to do your homework",
+    "do_your_tasks"
+    : "Time to do your homework",
 
-  "check_your_homework"
-  : "You may have homework for tomorrow",
+    "check_your_tasks"
+    : "Check your tasks for tomorrow",
 
+    "no_tasks_for_tomorrow"
+    : "You have no tasks for tomorrow",
 
 
     "notif_unfinished_tasks2"
     : "task for tomorrow",
 
 
-    "notif_settings_notify_everyday"
-    : "Notify every day",
+    "notif_settings_notify_everyday_tasks"
+    : "Notify every day about tasks for tomorrow",
 
 
     "taskType_1"
@@ -930,6 +1000,19 @@
     "add_new_tag"
     : "Add new tag",
 
+
+    "discover_title_group_invite"
+    : "Invite your classmates",
+
+    "discover_description_group_invite"
+    : "Click to share the invite link with anybody!",
+
+    "discover_title_task_creator"
+    : "Create tasks easily!",
+
+    "discover_title_session_creator"
+    : "Click here to add a Kréta account",
+
     "title_thera"
     : "Thera",
 
@@ -941,6 +1024,8 @@
     "kreta_login"
     : "Kreta login",
 
+    "kreta_login_later"
+    : "You can log in to Kréta later",
 
     "kreta"
     : "Kréta",
@@ -948,14 +1033,34 @@
     "ekreta"
     : "e-Kréta",
 
+
+    "kreta_server_unavailable"
+    : "Kréta server unavailable",
+
     "kreta_accounts"
     : "Kréta accounts",
+
+  "should_add_kreta_account"
+  : "Add Kréta account",
+
+
+  "do_you_want_to_log_in_again"
+  : "Do you want to log in?",
+
+    "selected_kreta_account"
+    : "Selected Kréta account",
 
     "selected_kreta_account_inactive"
     : "The selected Kréta account is inactive. Please log in again!",
 
+    "no_selected_kreta_account"
+    : "No selected Kréta account.",
+
     "add_account"
     : "Add account",
+
+    "you_can_only_use_active_account"
+    : "Only active accounts can be selected",
 
     "no_kreta_account_added_yet"
     : "No Kreta account added yet",
@@ -1002,6 +1107,15 @@
 
     "thera_grade_"
     : "grade:",
+
+    "gradeType_midYear"
+    : "Mid year",
+
+    "gradeType_endYear"
+    : "End year",
+
+    "gradeType_halfYear"
+    : "Half year",
 
 
     "thera_weight_"

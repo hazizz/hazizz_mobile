@@ -38,7 +38,7 @@ class PojoTask extends Pojo implements Comparable<PojoTask>{
   }
 }
 
-@JsonSerializable()
+//@JsonSerializable()
 class PojoTaskDetailed extends PojoTask{// implements Comparable<PojoTaskDetailed>{
   PojoTaskDetailed({this.id, this.assignation, this.tags, this.title, this.description,
   this.creationDate, this.lastUpdated, this.dueDate, this.creator, this.group, this.subject, this.completed});

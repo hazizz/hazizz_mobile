@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'dart:math' as math;
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:feature_discovery/feature_discovery.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
@@ -8,14 +9,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/UserDataBloc.dart';
 import 'package:mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
+import 'package:mobile/communication/pojos/PojoGroup.dart';
+import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/managers/app_state_manager.dart';
 import 'package:mobile/managers/cache_manager.dart';
 import 'package:mobile/pages/main_pages/main_grades_page.dart';
 import 'package:mobile/pages/main_pages/main_tasks_page.dart';
 import 'package:toast/toast.dart';
+import 'package:uni_links/uni_links.dart';
 
 import '../../hazizz_localizations.dart';
+import '../../hazizz_response.dart';
 import '../../hazizz_theme.dart';
+import '../../request_sender.dart';
 import 'main_schedules_page.dart';
 
 
@@ -45,7 +51,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
 
   String displayName = "name";
 
-  bool received = false;
+  bool processingDeepLink = false;
 
   bool isDark = false;
 
@@ -55,22 +61,52 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
     });
   }
 
-  void onLinkReceived(Uri deepLink){
+  void onLinkReceived(Uri deepLink) async{
 
     print("DEEP LINK RECEIVED: ${deepLink.toString()}");
     if (deepLink != null) {
       setState(() {
-        received = true;
+        setState(() {
+          processingDeepLink = true;
+        });
       });
       String str_groupId = deepLink.queryParameters["group"];
 
       int groupId = int.parse(str_groupId);
       if(groupId != null){
-        Navigator.pushNamed(context, "/group/groupId", arguments:groupId);
-      }
+        HazizzResponse hazizzResponse = await RequestSender().getResponse(RetrieveGroup.withoutMe(p_groupId: groupId));
+        if(hazizzResponse.isSuccessful){
+          PojoGroupWithoutMe groupWithoutMe = hazizzResponse.convertedData;
+          if(groupWithoutMe != null){
+            print("GROUPCOUNT: ${ groupWithoutMe.userCount}, ${ groupWithoutMe.userCountWithoutMe}");
+            if(groupWithoutMe.userCount == groupWithoutMe.userCountWithoutMe){
+              Navigator.pushNamed(context, "/group/groupId/newComer", arguments: groupWithoutMe);
 
+            }else{
+              Navigator.pushNamed(context, "/group/groupId/notNewComer", arguments: groupWithoutMe);
+            }
+            setState(() {
+              processingDeepLink = false;
+            });
+          }else{
+            setState(() {
+              processingDeepLink = false;
+            });
+          }
+        }else{
+          setState(() {
+            processingDeepLink = false;
+          });
+        }
+        
+      }else{
+        setState(() {
+          processingDeepLink = false;
+        });
+      }
     }
   }
+
 
   void initDynamicLinks() async {
     final PendingDynamicLinkData data = await FirebaseDynamicLinks.instance.getInitialLink();
@@ -91,11 +127,29 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
     );
   }
 
+  StreamSubscription _sub;
+
+  Future<Null> initUniLinks() async {
+    Uri initialUri = await getInitialUri();
+
+
+    onLinkReceived(initialUri);
+    // Attach a listener to the stream
+    _sub = getUriLinksStream().listen((Uri uri) {
+      onLinkReceived(uri);
+    }, onError: (err) {
+      // Handle exception by warning the user their action did not succeed
+    });
+
+    // NOTE: Don't forget to call _sub.cancel() in dispose()
+  }
+
 
   @override
-  void initState() {
+  Future initState() {
 
-    initDynamicLinks();
+  //  initDynamicLinks();
+    initUniLinks();
 
     InfoCache.getMyDisplayName().then(
       (value){
@@ -123,12 +177,17 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
       });
     });
 
+
+
+
+
     super.initState();
   }
 
   @override
   void dispose() {
 
+    _sub.cancel();
     _tabController.dispose();
     super.dispose();
   }
@@ -149,9 +208,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
 
   @override
   Widget build(BuildContext context) {
-    if(received){
-      return Container(child: Center(child: Text("RECEIVED")),color: Colors.red,);
-    }
+
     return FeatureDiscovery(
       child: WillPopScope(
         onWillPop: onWillPop,
@@ -253,13 +310,14 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
 
 
                         return CircleAvatar(
-                          child: new Text("laoding"),
+                          child: new Text(locText(context, key: "loading")),
                         );
                       },
                     ),
                   ),
 
 
+                  /*
                   ListTile(
                     title: Text(locText(context, key: "my_tasks")),
                     onTap: () async {
@@ -274,6 +332,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
 
                     },
                   ),
+                  */
                   Hero(
                     tag: "group",
                     child: ListTile(
@@ -316,7 +375,10 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
                           children: [
                             Expanded(child:
                             ListTile(
-                              leading: Icon(FontAwesomeIcons.signOutAlt),
+                              leading:  Transform.rotate(
+                                  angle: -math.pi,
+                                  child:  Icon(FontAwesomeIcons.signOutAlt)
+                              ),
                               title: Text(locText(context, key: "textview_logout_drawer")),
                               onTap: () {
 

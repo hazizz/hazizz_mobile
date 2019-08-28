@@ -98,7 +98,7 @@ class _CreateGroupDialog extends State<CreateGroupDialog> {
                     return Container();
                   },
                 ),
-                Text("A csoport címe lehet az iskolád rövidítése és az osztályod. pl.: NEU. 10.D"),
+                Text(locText(context, key: "group_name_suggestion")),
                 /*
                 Builder(
                     builder: (context){
@@ -243,10 +243,16 @@ class _CreateGroupDialog extends State<CreateGroupDialog> {
                 Spacer(),
 
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
-                    MaterialButton(
-                      child: Text(locText(context, key: "create")),
+                    FlatButton(
+                      child: Text(locText(context, key: "close").toUpperCase()),
+                      onPressed: (){
+                        Navigator.pop(context);
+                      },
+                    ),
+                    FlatButton(
+                      child: Text(locText(context, key: "create").toUpperCase()),
                       onPressed: (){
                         print("groupPasswordController.text: ${groupPasswordController.text}");
                         createGroupBloc.dispatch(CreateGroupCreateEvent(groupType: groupValue, groupName: groupNameController.text, password: groupValue == GroupType.PASSWORD ? groupPasswordController.text : null));

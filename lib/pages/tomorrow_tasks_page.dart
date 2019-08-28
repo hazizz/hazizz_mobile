@@ -149,7 +149,7 @@ class _TasksTomorrowPage extends State<TasksTomorrowPage> with SingleTickerProvi
                   return Center(child: CircularProgressIndicator(),);
                 }
                 return Center(
-                    child: Text("Uchecked State: ${state.toString()}"));
+                    child: Text(locText(context, key: "info_something_went_wrong")));
               }
 
           ),

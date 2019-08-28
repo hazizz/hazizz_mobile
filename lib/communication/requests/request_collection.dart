@@ -396,6 +396,8 @@ class CreateGroup extends HazizzRequest {
 class RetrieveGroup extends HazizzRequest {
 
   bool isDetailed = false;
+  bool isWithoutMe = false;
+
 
   RetrieveGroup({ResponseHandler rh, @required int p_groupId,}) : super(rh) {
     httpMethod = HttpMethod.GET;
@@ -410,10 +412,21 @@ class RetrieveGroup extends HazizzRequest {
     isDetailed = true;
   }
 
+  RetrieveGroup.withoutMe({ResponseHandler rh, @required int p_groupId,}) : super(rh) {
+    httpMethod = HttpMethod.GET;
+    PATH = "groups/${p_groupId}/withoutme";
+    authTokenHeader = true;
+    isWithoutMe = true;
+  }
+
+
   @override
   convertData(Response response) {
     if(isDetailed){
       PojoGroupDetailed group = PojoGroupDetailed.fromJson(jsonDecode(response.data));
+      return group;
+    }else if(isWithoutMe){
+      PojoGroupWithoutMe group = PojoGroupWithoutMe.fromJson(jsonDecode(response.data));
       return group;
     }
     PojoGroup group = PojoGroup.fromJson(jsonDecode(response.data));
@@ -766,7 +779,10 @@ class KretaAuthenticateSession extends TheraRequest {
 
   @override
   dynamic convertData(Response response) {
-    return response;
+
+    PojoSession session = PojoSession.fromJson(jsonDecode(response.data));
+
+    return session;
   }
 }
 //endregion

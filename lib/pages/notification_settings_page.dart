@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:easy_localization/easy_localization.dart';
 
+import '../hazizz_theme.dart';
 import '../hazizz_time_of_day.dart';
 
 class NotificationSettingsPage extends StatefulWidget {
@@ -78,17 +79,10 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage> with Aut
   }
 
 
-
-
   @override
   Widget build(BuildContext context) {
-    print("log: redrawing");
-
-
 
     print("log: $supportedLocaleItems");
-
-
 
     return Hero(
       tag: "notification_settings",
@@ -100,31 +94,33 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage> with Aut
           body: Container(
             child: Column(
               children: <Widget>[
-                ListTile(
-                  title: Text(locText(context, key: "notif_settings_notify_everyday")),
-                  leading: Icon(iconBell),
-                  subtitle: Text("subbtitle"),
-                  trailing: Switch(
-                    value: receive,
-                    onChanged: (value){
-                      print(value);
-                      HazizzNotification.setReceiveNotification(value);
-                      if(value){
-                        setState(() {
-                          iconBell = FontAwesomeIcons.solidBell;
-                          receive = value;
-                        });
-                      }else{
-                        setState(() {
-                          iconBell = FontAwesomeIcons.solidBellSlash;
-                          receive = value;
+                Padding(
+                  padding: const EdgeInsets.only(top: 10.0),
+                  child: ListTile(
+                    title: Text(locText(context, key: "notif_settings_notify_everyday_tasks")),
+                    leading: Icon(iconBell),
+                    trailing: Switch(
+                      value: receive,
+                      onChanged: (value){
+                        print(value);
+                        HazizzNotification.setReceiveNotification(value);
+                        if(value){
+                          setState(() {
+                            iconBell = FontAwesomeIcons.solidBell;
+                            receive = value;
+                          });
+                        }else{
+                          setState(() {
+                            iconBell = FontAwesomeIcons.solidBellSlash;
+                            receive = value;
 
-                        });
+                          });
+                        }
+
                       }
+                    )
 
-                    }
-                  )
-
+                  ),
                 ),
                 Divider(),
                 ListTile(
@@ -146,7 +142,17 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage> with Aut
                     },
                     leading: Icon(FontAwesomeIcons.clock),
                     title: Text(locText(context, key: "set_time_for_notification")),
-                    trailing: Text(notificationTime, style: TextStyle(fontSize: 24),)
+                    trailing: Container(
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Text(notificationTime, style: TextStyle(fontSize: 24), ),
+                      ),
+                      decoration: BoxDecoration(
+                          color: HazizzTheme.red,
+                          borderRadius: BorderRadius.all(Radius.circular(30))
+                      ),
+                    )
+
                 ),
 
               ],

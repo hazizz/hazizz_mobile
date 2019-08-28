@@ -18,9 +18,16 @@ getPreferredLocal() async{
   String preferredLangCode = (await getPreferredLangCode());
   print("log: preferredLangCode:  ${preferredLangCode}");
   if(preferredLangCode != null) {
-    return Locale(preferredLangCode);
+    return Locale(preferredLangCode,);
   }
   return null;
+}
+
+setPreferredLocal(Locale preferredLocale) async{
+  String preferredLangCode = preferredLocale.languageCode;
+  if(preferredLangCode != null) {
+    setPreferredLangCode(preferredLangCode);
+  }
 }
 
 Future<String> getPreferredLangCode() async {

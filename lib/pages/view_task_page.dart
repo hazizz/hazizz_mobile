@@ -45,7 +45,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
   ScrollController _scrollController = ScrollController();
 
   static final AppBar appBar = AppBar(
-    title: Text("Edit Task"),
+    title: Text("what's my purpose?"),
   );
 
   static final double padding = 8;
@@ -157,7 +157,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
         child: Scaffold(
         appBar: AppBar(
           leading: HazizzBackButton(),
-          title: Text("View Task"),
+          title: Text(locText(context, key: "view_task")),
         ),
         body:RefreshIndicator(
           onRefresh: () async{
@@ -345,8 +345,8 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                               new Flexible(
                                                 child: new Text(_title,
                                                   style: TextStyle(
-                                                      fontFamily: "ShortStack",
-                                                      fontSize: 30
+                                                    //  fontFamily: "ShortStack",
+                                                      fontSize: 33
                                                   ),
                                                 ),
                                               )
@@ -362,7 +362,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                                   child: Text(_description,
 
                                                     style: TextStyle(
-                                                        fontFamily: shortStackFont,
+                                                      // fontFamily: shortStackFont,
                                                         fontWeight: FontWeight.w400,
                                                         fontSize: 26
                                                     ),

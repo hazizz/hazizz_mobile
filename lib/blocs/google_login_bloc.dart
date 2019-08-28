@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
+import 'package:mobile/communication/errorcode_collection.dart';
 import 'package:mobile/communication/pojos/PojoTokens.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/managers/app_state_manager.dart';
@@ -30,6 +31,19 @@ class GoogleLoginResetEvent extends GoogleLoginEvent {
   @override String toString() => 'GoogleLoginResetEvent';
 }
 
+class GoogleLoginHaveToAcceptConditionsEvent extends GoogleLoginEvent {
+  @override String toString() => 'GoogleLoginHaveToAcceptConditionsEvent';
+}
+
+class GoogleLoginAcceptedConditionsEvent extends GoogleLoginEvent {
+  @override String toString() => 'GoogleLoginAcceptedConditionsEvent';
+}
+
+class GoogleLoginRejectConditionsEvent extends GoogleLoginEvent {
+  @override String toString() => 'GoogleLoginRejectedConditionsState';
+}
+
+
 
 class GoogleLoginFineState extends GoogleLoginState {
   @override String toString() => 'GoogleLoginFineState';
@@ -50,6 +64,18 @@ class GoogleLoginFailedState extends GoogleLoginState {
   @override String toString() => 'GoogleLoginFailedState';
 }
 
+class GoogleLoginAcceptedConditionsState extends GoogleLoginState {
+  @override String toString() => 'GoogleLoginAcceptedConditionsState';
+}
+
+class GoogleLoginRejectedConditionsState extends GoogleLoginState {
+  @override String toString() => 'GoogleLoginRejectedConditionsState';
+}
+
+class GoogleLoginHaveToAcceptConditionsState extends GoogleLoginState {
+  @override String toString() => 'GoogleLoginHaveToAcceptConditionsState';
+}
+
 
 class GoogleLoginBloc extends Bloc<GoogleLoginEvent, GoogleLoginState> {
 
@@ -60,6 +86,20 @@ class GoogleLoginBloc extends Bloc<GoogleLoginEvent, GoogleLoginState> {
   }
   LoginBlocs().googleLoginBloc._internal();
   */
+  GoogleSignIn _googleSignIn;
+  FirebaseAuth _auth;
+
+  String _openIdToken;
+
+
+  GoogleLoginBloc(){
+    _googleSignIn = GoogleSignIn(scopes: [
+      "https://www.googleapis.com/auth/userinfo.email",
+      "https://www.googleapis.com/auth/userinfo.profile",
+      "openid"
+    ]);
+    _auth = FirebaseAuth.instance;
+  }
 
 
   final AuthBloc authenticationBloc = AuthBloc();
@@ -79,6 +119,14 @@ class GoogleLoginBloc extends Bloc<GoogleLoginEvent, GoogleLoginState> {
     this.dispatch(GoogleLoginResetEvent());
   }
 
+  Future<void> logout() async{
+    await _auth.signOut().then((_) {
+      //try the following
+      _googleSignIn.signOut();
+      //try the following
+    });
+  }
+
 
   @override
   Stream<GoogleLoginState> mapEventToState(GoogleLoginEvent event) async* {
@@ -86,12 +134,7 @@ class GoogleLoginBloc extends Bloc<GoogleLoginEvent, GoogleLoginState> {
 
     if (event is GoogleLoginButtonPressedEvent) {
       yield GoogleLoginWaitingState();
-      final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: [
-        "https://www.googleapis.com/auth/userinfo.email",
-        "https://www.googleapis.com/auth/userinfo.profile",
-        "openid"
-      ]);
-      final FirebaseAuth _auth = FirebaseAuth.instance;
+      
 
 
       final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
@@ -113,13 +156,13 @@ class GoogleLoginBloc extends Bloc<GoogleLoginEvent, GoogleLoginState> {
 
 
 
-      final String openIdToken = googleAuth.idToken;
+      _openIdToken = googleAuth.idToken;
 
-      logger.d("openIdToken: ${openIdToken}");
-      print(openIdToken);
+      logger.d("_openIdToken: ${_openIdToken}");
+      print(_openIdToken);
 
 
-      HazizzResponse hazizzResponseLogin = await RequestSender().getResponse(CreateTokenWithGoogleAccount(b_openIdToken: openIdToken));
+      HazizzResponse hazizzResponseLogin = await RequestSender().getResponse(CreateTokenWithGoogleAccount(b_openIdToken: _openIdToken));
 
       if(hazizzResponseLogin.isSuccessful) {
         PojoTokens tokens = hazizzResponseLogin.convertedData;
@@ -129,26 +172,37 @@ class GoogleLoginBloc extends Bloc<GoogleLoginEvent, GoogleLoginState> {
         yield GoogleLoginSuccessfulState();
         // proceed to the app
 
+      }else if(hazizzResponseLogin.hasPojoError && hazizzResponseLogin.pojoError.errorCode == ErrorCodes.AUTH_TOKEN_INVALID.code){
 
-
+        yield GoogleLoginHaveToAcceptConditionsState();
+        
       }else{
-        HazizzResponse hazizzResponseRegistration = await RequestSender().getResponse(RegisterWithGoogleAccount(b_openIdToken: openIdToken));
-        if(hazizzResponseRegistration.isSuccessful){
-          HazizzResponse hazizzResponseLogin2 = await RequestSender().getResponse(CreateTokenWithGoogleAccount(b_openIdToken: openIdToken));
-
-          // proceed to the app
-
-          await AppState.logInProcedure(tokens: hazizzResponseLogin2.convertedData);
-          yield GoogleLoginSuccessfulState();
-
-        }else{
-          //registration with googleopenid failed
-          await _auth.signOut();
-          yield GoogleLoginFailedState();
-        }
+        await logout();
+        yield GoogleLoginFailedState();
       }
 
-    }else if(event is GoogleLoginResetEvent){
+    }else if(event is GoogleLoginAcceptedConditionsEvent){
+      yield GoogleLoginWaitingState();
+      HazizzResponse hazizzResponseRegistration = await RequestSender().getResponse(RegisterWithGoogleAccount(b_openIdToken: _openIdToken));
+      if(hazizzResponseRegistration.isSuccessful){
+        HazizzResponse hazizzResponseLogin2 = await RequestSender().getResponse(CreateTokenWithGoogleAccount(b_openIdToken: _openIdToken));
+
+        // proceed to the app
+
+        await AppState.logInProcedure(tokens: hazizzResponseLogin2.convertedData);
+        yield GoogleLoginSuccessfulState();
+
+      }else{
+        await logout();
+        yield GoogleLoginFailedState();
+      }
+    }else if(event is GoogleLoginRejectConditionsEvent){
+      await logout();
+      yield GoogleLoginRejectedConditionsState();
+    }
+    
+    
+    else if(event is GoogleLoginResetEvent){
       print("");
       yield GoogleLoginFineState();
     }

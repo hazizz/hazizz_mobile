@@ -21,6 +21,19 @@ TimeOfDay convertToHazizzTimeOfDay(String str_time){
   }
 }
 
+String convertBack(HazizzTimeOfDay a){
+  int hour = a.hour;
+  int minute = a.minute;
+  String str_hour = a.hour.toString();
+  String str_minute = a.minute.toString();
+  if(hour < 10){
+    str_hour = "0$str_hour";
+  }
+  if(minute < 10){
+    str_minute = "0$str_minute";
+  }
+  return "${str_hour}:${str_minute}:00";
+}
 
 PojoClass _$PojoClassFromJson(Map<String, dynamic> json) {
   return PojoClass(
@@ -42,8 +55,8 @@ PojoClass _$PojoClassFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$PojoClassToJson(PojoClass instance) => <String, dynamic>{
   'date': instance.date?.toIso8601String(),
-  'startOfClass': instance.startOfClass,
-  'endOfClass': instance.endOfClass,
+  'startOfClass': convertBack(instance.startOfClass),
+  'endOfClass': convertBack(instance.endOfClass),
   'periodNumber': instance.periodNumber,
   'cancelled': instance.cancelled,
   'standIn': instance.standIn,

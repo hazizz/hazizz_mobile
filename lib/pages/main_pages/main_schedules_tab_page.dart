@@ -42,14 +42,18 @@ class _SchedulesTabPage extends State<SchedulesTabPage> with TickerProviderState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ListView.builder(
-            itemCount: widget.classes.length,
-            itemBuilder: (BuildContext context, int index) {
-              return ClassItemWidget(pojoClass: widget.classes[index]);
-            }
-          )
+    return RefreshIndicator(
+      onRefresh: () async{
+        MainTabBlocs().schedulesBloc.dispatch(FetchData());
+      },
+      child: ListView.builder(
+          itemCount: widget.classes.length,
+          itemBuilder: (BuildContext context, int index) {
+            return ClassItemWidget(pojoClass: widget.classes[index]);
+          }
+      ),
     );
+
   }
 }
 

@@ -37,8 +37,8 @@ class LoadingDialog extends StatelessWidget {
       widgetList.add(modal);
     }
     return Container(
-      width: MediaQuery.of(context).size.width,
-      height:  MediaQuery.of(context).size.height,
+    //  width: MediaQuery.of(context).size.width,
+   //   height:  MediaQuery.of(context).size.height,
       child: Stack(
         children: widgetList,
       ),

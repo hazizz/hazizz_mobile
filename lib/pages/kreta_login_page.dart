@@ -13,6 +13,7 @@ import 'package:mobile/widgets/hazizz_back_button.dart';
 import 'package:mobile/widgets/kreta_login_widget.dart';
 
 import '../hazizz_localizations.dart';
+import '../hazizz_theme.dart';
 
 class KretaLoginPage extends StatefulWidget {
 
@@ -52,7 +53,21 @@ class _KretaLoginPage extends State<KretaLoginPage> with SingleTickerProviderSta
           leading: HazizzBackButton(),
           title: Text(locText(context, key: "kreta_login")),
         ),
-        body: kretaLoginWidget
+        body: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 10.0, bottom: 0),
+                child: Text(locText(context, key: "ekreta"), style: TextStyle(fontSize: 80, fontWeight: FontWeight.w800, color: HazizzTheme.blue, ),),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 0.0, bottom: 30),
+                child: Text(locText(context, key: "login"), style: TextStyle(fontSize: 40, fontWeight: FontWeight.w800, color: HazizzTheme.blue),),
+              ),
+              kretaLoginWidget
+            ],
+          ),
+        )
     );
   }
 }

@@ -25,4 +25,7 @@ class PojoSchedules extends Pojo{
 
   factory PojoSchedules.fromJson(Map<String, dynamic> json) =>
       _$PojoSchedulesFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PojoSchedulesToJson(this);
+
 }

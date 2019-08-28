@@ -214,7 +214,7 @@ class _JoinGroupDialog extends State<JoinGroupDialog> {
             Spacer(),
 
             MaterialButton(
-              child: Text(locText(context, key: "join")),
+              child: Text(locText(context, key: "join").toUpperCase()),
               onPressed: (){
 
               })

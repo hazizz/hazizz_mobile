@@ -198,7 +198,7 @@ class KretaLoginBloc extends Bloc<KretaLoginEvent, KretaLoginState> {
 
 
     if (event is KretaLoginButtonPressed) {
-      print("sentaa1");
+      print("sentaa1: $isAuth");
 
 
       if(isAuth){
@@ -209,8 +209,13 @@ class KretaLoginBloc extends Bloc<KretaLoginEvent, KretaLoginState> {
               p_session: session.id.toString(), b_password: passwordBloc.lastText)
           );
           if(hazizzResponse.isSuccessful){
+            print("debuglol111");
+
             PojoSession newSession = hazizzResponse.convertedData;
+            print("debuglol222");
+
             SelectedSessionBloc().dispatch(SelectedSessionSetEvent(newSession));
+            print("debuglol1");
             yield KretaLoginSuccessState();
           }else if(hazizzResponse.hasPojoError) {
             print("assdad: ${ ErrorCodes.BAD_AUTHENTICATION_REQUEST.code}");
@@ -228,7 +233,7 @@ class KretaLoginBloc extends Bloc<KretaLoginEvent, KretaLoginState> {
 
 
       usernameBloc.dispatch(TextFormValidate(text: event.username));
-      passwordBloc.lastText = "---";
+     // passwordBloc.lastText = "---";
 
       passwordBloc.dispatch(TextFormValidate(text: event.password));
       schoolBloc.dispatch(ItemListCheckPickedEvent());
@@ -326,7 +331,7 @@ class KretaLoginPageBlocs{
   TextFormBloc passwordBloc = new TextFormBloc(
       validate: (String text){
         print("length: ${text.length}");
-        if(text.length < 8) {
+        if(text.length < 4) {
           print("returnss::::");
           return TextFormErrorTooShort();
         }

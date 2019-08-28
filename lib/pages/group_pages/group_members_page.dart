@@ -1,3 +1,4 @@
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -7,6 +8,7 @@ import 'package:mobile/blocs/response_states.dart';
 import 'package:mobile/communication/pojos/PojoUser.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/listItems/member_item_widget.dart';
+import 'package:mobile/managers/welcome_manager.dart';
 
 
 import '../../hazizz_localizations.dart';
@@ -38,14 +40,31 @@ class _GroupMembersPage extends State<GroupMembersPage> with AutomaticKeepAliveC
     if(groupMembersBloc.currentState is ResponseError) {
       groupMembersBloc.dispatch(FetchData());
     }
+
+    WelcomeManager.getMembers().then((isNewComer){
+      if(isNewComer){
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          FeatureDiscovery.discoverFeatures(
+            context,
+            ['featureId1'],
+          );
+        });
+      }
+    });
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: FloatingActionButton(          heroTag: "hero_fab_members",
-          onPressed: (){showInviteDialog(context, group: groupMembersBloc.group);}, child: Icon(FontAwesomeIcons.userPlus),),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(FontAwesomeIcons.userPlus),
+          heroTag: "hero_fab_members",
+          onPressed: (){
+            showInviteDialog(context, group: groupMembersBloc.group);
+          },
+        ),
         body: new RefreshIndicator(
             child: Stack(
               children: <Widget>[
@@ -68,7 +87,7 @@ class _GroupMembersPage extends State<GroupMembersPage> with AutomaticKeepAliveC
                         return Center(child: CircularProgressIndicator(),);
                       }
                       return Center(
-                          child: Text("Uchecked State: ${state.toString()}"));
+                          child: Text(locText(context, key: "info_something_went_wrong")));
                     }
                 ),
               ],

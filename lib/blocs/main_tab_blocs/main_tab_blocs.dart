@@ -1,4 +1,8 @@
+import 'dart:math';
+
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
+import 'package:mobile/caches/data_cache.dart';
 import 'package:mobile/communication/connection.dart';
 import 'package:mobile/communication/errors.dart';
 //import 'package:flutter/material.dart';
@@ -21,6 +25,8 @@ import '../schedule_event_bloc.dart';
 class MainTasksBloc extends Bloc<HEvent, HState> {
   List<PojoTask> tasks;
 
+  DateTime lastUpdated = DateTime(0, 0, 0, 0, 0);
+
   @override
   HState get initialState => ResponseEmpty();
 
@@ -36,14 +42,28 @@ class MainTasksBloc extends Bloc<HEvent, HState> {
     print("log: Event2: ${event.toString()}");
     if (event is FetchData) {
       try {
+
         yield ResponseWaiting();
+
+
+        DataCache dataCache = await loadTasksCache();
+        if(dataCache!= null){
+          lastUpdated = dataCache.lastUpdated;
+          tasks = dataCache.data;
+          yield ResponseDataLoadedFromCache(data: tasks);
+        }
+
+
+
         HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetTasksFromMe());
         print("log: responseData: ${hazizzResponse}");
         print("log: responseData type:  ${hazizzResponse.runtimeType.toString()}");
 
 
         if(hazizzResponse.isSuccessful){
+          lastUpdated = DateTime.now();
           tasks = hazizzResponse.convertedData;
+          saveTasksCache(tasks);
           if(tasks.isNotEmpty) {
             print("log: response is List");
             yield ResponseDataLoaded(data: tasks);
@@ -56,13 +76,23 @@ class MainTasksBloc extends Bloc<HEvent, HState> {
 
 
           if(hazizzResponse.dioError == noConnectionError){
+            yield ResponseError(errorResponse: hazizzResponse);
+
             Connection.addConnectionOnlineListener((){
               this.dispatch(FetchData());
             },
             "tasks_fetch"
             );
+          }else if(hazizzResponse.dioError.type == DioErrorType.CONNECT_TIMEOUT
+                || hazizzResponse.dioError.type == DioErrorType.RECEIVE_TIMEOUT ){
+            print("log: noConnectionError22");
+            this.dispatch(FetchData());
+
+          }else{
+            yield ResponseError(errorResponse: hazizzResponse);
+
           }
-          yield ResponseError(error: hazizzResponse.pojoError);
+
 
         }
       } on Exception catch(e){
@@ -82,6 +112,7 @@ class MainSchedulesBloc extends Bloc<HEvent, HState> {
     scheduleEventBloc = ScheduleEventBloc();
   }
 
+  DateTime lastUpdated = DateTime(0, 0, 0, 0, 0);
 
   PojoSchedules classes;
 
@@ -95,13 +126,28 @@ class MainSchedulesBloc extends Bloc<HEvent, HState> {
     if (event is FetchData) {
       try {
         yield ResponseWaiting();
+
+        print("WIATING222");
+
+
+        DataCache dataCache = await loadScheduleCache();
+        if(dataCache!= null){
+          lastUpdated = dataCache.lastUpdated;
+          classes = dataCache.data;
+          yield ResponseDataLoadedFromCache(data: classes);
+        }
+
+
         HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetSchedules(q_year: 2019, q_weekNumber: 2));
 
-        if(hazizzResponse.isSuccessful || true ){
+        if(hazizzResponse.isSuccessful){
           classes = hazizzResponse.convertedData;
+          lastUpdated = DateTime.now();
+          saveScheduleCache(classes);
+
           print("log: opsie: 0");
 
-        //  classes = classesDummy;
+         // classes = classesDummy;
 
 
           print("log: opsie: 0");
@@ -131,13 +177,22 @@ class MainSchedulesBloc extends Bloc<HEvent, HState> {
 
           if(hazizzResponse.dioError == noConnectionError){
             print("log: noConnectionError22");
+            yield ResponseError(errorResponse: hazizzResponse);
+
             Connection.addConnectionOnlineListener((){
               this.dispatch(FetchData());
             },
             "schedule_fetch"
             );
+
+          }else if(hazizzResponse.dioError.type == DioErrorType.CONNECT_TIMEOUT
+                || hazizzResponse.dioError.type == DioErrorType.RECEIVE_TIMEOUT) {
+            print("log: noConnectionError22");
+            this.dispatch(FetchData());
+          }else{
+            yield ResponseError(errorResponse: hazizzResponse);
+
           }
-          yield ResponseError(error: hazizzResponse.pojoError);
 
 
         }
@@ -151,6 +206,9 @@ class MainSchedulesBloc extends Bloc<HEvent, HState> {
 class MainGradesBloc extends Bloc<HEvent, HState> {
 
   PojoGrades grades;
+
+  DateTime lastUpdated = DateTime(0, 0, 0, 0, 0);
+
 
   @override
   HState get initialState => ResponseEmpty();
@@ -178,7 +236,15 @@ class MainGradesBloc extends Bloc<HEvent, HState> {
       }
     }
     if(gradeSum != 0 && gradeAmount != 0){
-      return (gradeSum/gradeAmount).toString();
+
+      int decimals = 2;
+      int fac = pow(10, decimals);
+      double d = gradeSum/gradeAmount;
+      d = (d * fac).round() / fac;
+    //  print("d: $d");
+
+
+      return d.toString();
     }
     return "";
   }
@@ -191,45 +257,73 @@ class MainGradesBloc extends Bloc<HEvent, HState> {
         yield ResponseWaiting();
             print("log: am0 i here?");
 
+        DataCache dataCache = await loadGradesCache();
+        if(dataCache!= null){
+          lastUpdated = dataCache.lastUpdated;
+          grades = dataCache.data;
+          yield ResponseDataLoadedFromCache(data: grades);
+        }
+
         HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetGrades());
 
         print("log: hazizzResponse: ${hazizzResponse.dioError}");
-        
-        /*
-        PojoGrades responseData = new PojoGrades(
-          {"asd1" : [
-                PojoGrade(creationDate: DateTime(2010), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: "600%"),
-                PojoGrade(creationDate: DateTime(2011), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: "600%"),
-                PojoGrade(creationDate: DateTime(2012), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: "600%"),
-                PojoGrade(creationDate: DateTime(2013), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: "600%")],
 
-            "asd2" : [
-              PojoGrade(creationDate: DateTime(2020), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: "600%"),
-              PojoGrade(creationDate: DateTime(2021), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: "600%"),
-              PojoGrade(creationDate: DateTime(2022), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: "600%"),
-              PojoGrade(creationDate: DateTime(2023), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: "600%")],
 
-          "asd3" : [
-            PojoGrade(creationDate: DateTime(2030), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: "600%"),
-            PojoGrade(creationDate: DateTime(2031), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: "600%"),
-            PojoGrade(creationDate: DateTime(2032), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: "600%"),
-            PojoGrade(creationDate: DateTime(2033), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: "600%")]
-          }
-        );
-        */
         if(hazizzResponse.isSuccessful){
           grades = hazizzResponse.convertedData;
+          lastUpdated = DateTime.now();
+          saveGradesCache(grades);
           yield ResponseDataLoaded(data: grades);
         }
         else if(hazizzResponse.isError){
           if(hazizzResponse.dioError == noConnectionError){
+            yield ResponseError(errorResponse: hazizzResponse);
             Connection.addConnectionOnlineListener((){
               this.dispatch(FetchData());
             },
             "grades_fetch"
             );
+          }else if(hazizzResponse.dioError.type == DioErrorType.CONNECT_TIMEOUT
+                || hazizzResponse.dioError.type == DioErrorType.RECEIVE_TIMEOUT) {
+            print("log: noConnectionError22");
+            this.dispatch(FetchData());
+          } else if(hazizzResponse.hasPojoError && hazizzResponse.pojoError.errorCode == 138) {
+            yield ResponseError(errorResponse: hazizzResponse);
+
           }
-        }
+
+
+          else{
+            yield ResponseError(errorResponse: hazizzResponse);
+
+          }
+
+          }
+
+        /*
+        grades = new PojoGrades(
+            {"asd1" : [
+              PojoGrade(creationDate: DateTime(2010), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: 600),
+              PojoGrade(creationDate: DateTime(2011), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: 600),
+              PojoGrade(creationDate: DateTime(2012), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: 600),
+              PojoGrade(creationDate: DateTime(2013), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: 600)],
+
+              "asd2" : [
+                PojoGrade(creationDate: DateTime(2020), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight:600),
+                PojoGrade(creationDate: DateTime(2021), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: 600),
+                PojoGrade(creationDate: DateTime(2022), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: 600),
+                PojoGrade(creationDate: DateTime(2023), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: 600)],
+
+              "asd3" : [
+                PojoGrade(creationDate: DateTime(2030), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: 600),
+                PojoGrade(creationDate: DateTime(2031), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: 600),
+                PojoGrade(creationDate: DateTime(2032), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: 600),
+                PojoGrade(creationDate: DateTime(2033), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: 600)]
+            }
+        );
+        */
+
+
       } on Exception catch(e){
         print("log: Exception: ${e.toString()}");
       }

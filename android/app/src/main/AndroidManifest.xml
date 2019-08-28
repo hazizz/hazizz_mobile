@@ -17,7 +17,7 @@
     <application
         android:name=".App"
         android:label="Hazizz Mobile"
-        android:icon="@mipmap/launcher_icon">
+        android:icon="@mipmap/ic_launcher"> <!-- launcher_icon  -->
 
         <activity
             android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
@@ -53,10 +53,8 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https" android:host="hazizz.page.link"/>
-                <data android:scheme="https" android:host="hazizz.github.io"/>
-                <data android:scheme="https" android:host="hazizz.duckdns.org:9000" />
 
+                <data android:scheme="https" android:host="hazizz.github.io" android:pathPrefix="/hazizz-webclient"/>
             </intent-filter>
 
         </activity>
@@ -69,6 +67,10 @@
 
         <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
 
+
+        <service
+            android:name="com.mythichelm.localnotifications.services.LocalNotificationsService"
+            android:exported="false" />
 
 
         <service
@@ -85,13 +87,6 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED"></action>
             </intent-filter>
         </receiver>
-
-
-        <service
-            android:name="com.mythichelm.localnotifications.services.LocalNotificationsService"
-            android:exported="false" />
-
-
 
 
 

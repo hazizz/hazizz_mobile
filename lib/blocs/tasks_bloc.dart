@@ -33,7 +33,7 @@ class TasksBloc extends Bloc<HEvent, HState> {
         }
         if(hazizzResponse.hasPojoError){
           print("log: response is List<PojoTask>");
-          yield ResponseError(error: hazizzResponse.pojoError);
+          yield ResponseError(errorResponse: hazizzResponse);
         }
       } on Exception catch(e){
         print("log: Exception: ${e.toString()}");

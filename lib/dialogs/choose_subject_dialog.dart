@@ -111,8 +111,8 @@ class _ChooseSubjectDialog extends State<ChooseSubjectDialog> {
             children: <Widget>[
               Builder(
                 builder: (context){
-                  if(subjects_data.length <= 1){
-                    return Text("No subject in this group");
+                  if(subjects_data.isEmpty){
+                    return Text(locText(context, key: "no_subjects_yet"));
                   }
                   return Container();
                 },
@@ -140,7 +140,7 @@ class _ChooseSubjectDialog extends State<ChooseSubjectDialog> {
                               child: Text(
                                 subjects_data[index].name, //   data[index].name,
                                 style: TextStyle(
-                                    fontSize: 26
+                                    fontSize: 25
                                 ),
                               ),
                             ),

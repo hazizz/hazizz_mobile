@@ -8,6 +8,8 @@ import 'package:mobile/communication/pojos/PojoSession.dart';
 
 import 'package:mobile/managers/kreta_session_manager.dart';
 
+import 'main_tab_blocs/main_tab_blocs.dart';
+
 //region EditTask bloc parts
 //region EditTask events
 abstract class SelectedSessionEvent extends HEvent {
@@ -74,10 +76,11 @@ class SelectedSessionBloc extends Bloc<SelectedSessionEvent, SelectedSessionStat
 
   static final SelectedSessionBloc _singleton = new SelectedSessionBloc._internal();
   factory SelectedSessionBloc() {
+
     return _singleton;
   }
   SelectedSessionBloc._internal();
-    
+
 
   @override
   Stream<SelectedSessionState> mapEventToState(SelectedSessionEvent event) async*{
@@ -95,7 +98,10 @@ class SelectedSessionBloc extends Bloc<SelectedSessionEvent, SelectedSessionStat
       }
     }else if(event is SelectedSessionSetEvent){
       selectedSession = event.session;
-      KretaSessionManager.setSelectedSession(selectedSession);
+      await KretaSessionManager.setSelectedSession(selectedSession);
+      MainTabBlocs().schedulesBloc.dispatch(FetchData());
+      MainTabBlocs().gradesBloc.dispatch(FetchData());
+
       yield SelectedSessionFineState(selectedSession);
     }
     else if (event is SelectedSessionInactiveEvent) {

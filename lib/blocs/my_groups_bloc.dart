@@ -32,8 +32,8 @@ class MyGroupsBloc extends Bloc<HEvent, HState> {
             yield ResponseEmpty();
           }
         }
-        if(hazizzResponse.hasPojoError){
-          yield ResponseError(error: hazizzResponse.pojoError);
+        if(hazizzResponse.isError){
+          yield ResponseError(errorResponse: hazizzResponse);
         }
       } on Exception catch(e){
         print("log: Exception: ${e.toString()}");
