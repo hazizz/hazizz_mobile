@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'dart:math' as math;
 import 'package:dynamic_theme/dynamic_theme.dart';
-import 'package:feature_discovery/feature_discovery.dart';
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -11,6 +9,7 @@ import 'package:mobile/blocs/UserDataBloc.dart';
 import 'package:mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
+import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/managers/app_state_manager.dart';
 import 'package:mobile/managers/cache_manager.dart';
 import 'package:mobile/pages/main_pages/main_grades_page.dart';
@@ -74,6 +73,8 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
 
       int groupId = int.parse(str_groupId);
       if(groupId != null){
+        await showSureToJoinGroupDialog(context, groupId: groupId);
+        /*
         HazizzResponse hazizzResponse = await RequestSender().getResponse(RetrieveGroup.withoutMe(p_groupId: groupId));
         if(hazizzResponse.isSuccessful){
           PojoGroupWithoutMe groupWithoutMe = hazizzResponse.convertedData;
@@ -98,6 +99,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
             processingDeepLink = false;
           });
         }
+        */
         
       }else{
         setState(() {
@@ -108,6 +110,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
   }
 
 
+  /*
   void initDynamicLinks() async {
     final PendingDynamicLinkData data = await FirebaseDynamicLinks.instance.getInitialLink();
     final Uri deepLink = data?.link;
@@ -126,6 +129,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
         }
     );
   }
+  */
 
   StreamSubscription _sub;
 
@@ -209,8 +213,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
   @override
   Widget build(BuildContext context) {
 
-    return FeatureDiscovery(
-      child: WillPopScope(
+    return WillPopScope(
         onWillPop: onWillPop,
         child: Scaffold(
           key: _scaffoldKey,
@@ -279,7 +282,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
                         if(UserDataBlocs().userDataBloc.myUserData != null) {
                           return Text(
                             UserDataBlocs().userDataBloc.myUserData.displayName,
-                            style: TextStyle(fontSize: 18),);
+                            style: TextStyle(fontSize: 18, fontFamily: "Nunito", fontWeight: FontWeight.w700),);
                         }
                         return Text(locText(context, key: "loading"), style: TextStyle(fontSize: 18),);
 
@@ -317,7 +320,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
                   ),
 
 
-                  /*
+
                   ListTile(
                     title: Text(locText(context, key: "my_tasks")),
                     onTap: () async {
@@ -332,7 +335,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
 
                     },
                   ),
-                  */
+
                   Hero(
                     tag: "group",
                     child: ListTile(
@@ -427,7 +430,6 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 }

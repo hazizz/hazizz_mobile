@@ -22,11 +22,11 @@ class MemberItemWidget extends StatelessWidget{
                 },
                 child:
                 Padding(
-                  padding: EdgeInsets.only(left: 6),
+                  padding: EdgeInsets.only(left: 6,top: 4, bottom: 4),
                   child:
                   Text(member.displayName,
                     style: TextStyle(
-                        fontSize: 30
+                        fontSize: 23, fontWeight: FontWeight.w700
                     ),
                   )
                 )

@@ -179,10 +179,15 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
                         builder: (_, HState state) {
 
                           if (state is ResponseDataLoaded) {
-                            return onLoaded(state.data);
+                            if(state.data != null && state.data.isNotEmpty()){
+                              return onLoaded(state.data);
+
+                            }
                           }else if (state is ResponseDataLoadedFromCache) {
-                            return onLoaded(state.data);
-                          }
+                            if(state.data != null && state.data.isNotEmpty()){
+                              return onLoaded(state.data);
+
+                            }                          }
                           else if (state is ResponseEmpty) {
                             return Column(
                                 children: [

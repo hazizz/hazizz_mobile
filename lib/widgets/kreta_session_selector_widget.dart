@@ -1,5 +1,4 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -38,17 +37,6 @@ class _SessionSelectorWidget extends State<SessionSelectorWidget> with Automatic
     initalizeSelectedSession();
     SessionsBloc().dispatch(FetchData());
 
-
-    WelcomeManager.getKretaSessions().then((isNewComer){
-      if(isNewComer){
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          FeatureDiscovery.discoverFeatures(
-            context,
-            ['discover_kreta_session_creator'],
-          );
-        });
-      }
-    });
 
     super.initState();
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/group_bloc.dart';
 import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
@@ -46,6 +47,15 @@ class _GroupTasksPage extends State<GroupTasksPage> with AutomaticKeepAliveClien
   Widget build(BuildContext context) {
     return Scaffold(
       //  floatingActionButton: FloatingActionButton(onPressed: null, child: Icon(Icons.add),),
+        floatingActionButton:FloatingActionButton(
+          // heroTag: "hero_fab_tasks_main",
+          onPressed: (){
+
+            Navigator.pushNamed(context, "/createTask");
+          },
+          tooltip: 'Increment',
+          child: Icon(FontAwesomeIcons.plus),
+        ),
         body: RefreshIndicator(
                 child: Stack(
                   children: <Widget>[

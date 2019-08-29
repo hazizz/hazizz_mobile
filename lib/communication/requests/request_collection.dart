@@ -435,6 +435,36 @@ class RetrieveGroup extends HazizzRequest {
 }
 
 
+// you can also join group with this
+class JoinGroup extends HazizzRequest {
+
+  bool isDetailed = false;
+  bool isWithoutMe = false;
+
+
+  JoinGroup({ResponseHandler rh, @required int p_groupId,}) : super(rh) {
+    httpMethod = HttpMethod.GET;
+    PATH = "me/joingroup/$p_groupId";
+    authTokenHeader = true;
+  }
+
+  JoinGroup.withPassword({ResponseHandler rh, @required int p_groupId, @required String p_password}) : super(rh) {
+    httpMethod = HttpMethod.GET;
+    PATH = "me/joingroup/$p_groupId/$p_password";
+    authTokenHeader = true;
+  }
+
+
+
+  @override
+  convertData(Response response) {
+    Iterable iter = getIterable(response.data);
+    List<PojoGroup> groups = iter.map<PojoGroup>((json) => PojoGroup.fromJson(json)).toList();
+
+    return groups;
+  }
+}
+
 class GetMyGroups extends HazizzRequest {
   GetMyGroups({ResponseHandler rh}) : super(rh) {
     httpMethod = HttpMethod.GET;
@@ -821,8 +851,13 @@ class KretaGetSchedules extends TheraRequest {
 
   @override
   dynamic convertData(Response response) {
-    PojoSchedules schedules = PojoSchedules.fromJson(jsonDecode(response.data));
-    return schedules;
+    try {
+      PojoSchedules schedules = PojoSchedules.fromJson(
+          jsonDecode(response.data));
+      return schedules;
+    }catch(e){
+      return null;
+    }
   }
 }
 

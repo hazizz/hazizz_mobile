@@ -13,7 +13,6 @@ import 'package:mobile/communication/pojos/PojoSubject.dart';
 import 'package:mobile/communication/pojos/PojoTag.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 
-import 'package:expandable/expandable.dart';
 import 'package:mobile/defaults/pojo_group_empty.dart';
 import 'package:mobile/defaults/pojo_subject_empty.dart';
 import 'package:mobile/dialogs/dialogs.dart';
@@ -75,7 +74,6 @@ class _TaskMakerPage extends State<TaskMakerPage> {
 
   FormField groupFormField;
 
-  ExpandableController expandableController = new ExpandableController(true);
 
 
   List<PojoTask> task_data = List();

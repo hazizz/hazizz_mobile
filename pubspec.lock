@@ -15,13 +15,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.4"
-  app_settings:
-    dependency: "direct main"
-    description:
-      name: app_settings
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.6"
   archive:
     dependency: transitive
     description:
@@ -183,13 +176,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.16.1"
-  cupertino_icons:
-    dependency: "direct main"
-    description:
-      name: cupertino_icons
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.2"
   dart_style:
     dependency: transitive
     description:
@@ -204,6 +190,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.13"
+  dropdown_menu:
+    dependency: "direct main"
+    description:
+      name: dropdown_menu
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.1"
   dynamic_theme:
     dependency: "direct main"
     description:
@@ -232,13 +225,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.1"
-  feature_discovery:
-    dependency: "direct main"
-    description:
-      name: feature_discovery
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.4.1"
   firebase_analytics:
     dependency: "direct main"
     description:
@@ -319,13 +305,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_slidable:
-    dependency: "direct main"
-    description:
-      name: flutter_slidable
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.5.3"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -431,13 +410,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.15.8"
-  intro_slider:
-    dependency: "direct main"
-    description:
-      name: intro_slider
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.2.5"
   io:
     dependency: transitive
     description:
@@ -585,13 +557,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.0"
-  progress_dialog:
-    dependency: "direct main"
-    description:
-      name: progress_dialog
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.0+1"
   provider:
     dependency: transitive
     description:

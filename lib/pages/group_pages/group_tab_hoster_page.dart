@@ -1,6 +1,4 @@
-import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/group_bloc.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
@@ -89,6 +87,7 @@ class _GroupTabHosterPage extends State<GroupTabHosterPage> with SingleTickerPro
       );
     }
 
+    /*
     WelcomeManager.getMembers().then((isNewComer){
       if(isNewComer){
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -99,6 +98,7 @@ class _GroupTabHosterPage extends State<GroupTabHosterPage> with SingleTickerPro
         });
       }
     });
+    */
 
 
 

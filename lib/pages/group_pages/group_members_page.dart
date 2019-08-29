@@ -1,4 +1,3 @@
-import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -41,6 +40,7 @@ class _GroupMembersPage extends State<GroupMembersPage> with AutomaticKeepAliveC
       groupMembersBloc.dispatch(FetchData());
     }
 
+    /*
     WelcomeManager.getMembers().then((isNewComer){
       if(isNewComer){
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -51,6 +51,7 @@ class _GroupMembersPage extends State<GroupMembersPage> with AutomaticKeepAliveC
         });
       }
     });
+    */
 
     super.initState();
   }

@@ -35,7 +35,7 @@ class TagChip extends StatefulWidget {
   bool hasCloseButton = true;
 
   TagChip({Key key, @required this.child, this.backgroundColor, this.hasCloseButton, this.padding, this.onClick, this.onCloseClick}) : super(key: key){
-    padding ??= EdgeInsets.only(left: 9, right: 9, top: 4, bottom: 4);
+    padding ??= EdgeInsets.only(left: 9, right: 9, top: 2, bottom: 2);
    // backgroundColor ??= Colors.grey;
   }
 

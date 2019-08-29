@@ -12,7 +12,29 @@ class TaskHeaderItemWidget extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+
+    final diffTask = dateTime.difference(new DateTime(dateTime.year, 1, 1, 0, 0));
+    final int daysTask = diffTask.inDays;
+
+    final diffNow = DateTime.now().difference(new DateTime(dateTime.year, 1, 1, 0, 0));
+    final int daysNow = diffNow.inDays;
+
+
+    /*
+    int daysMonth = dateTime.month;
+
+
     int days = dateTime.difference(DateTime.now()).inDays;
+
+    dateTime.difference(DateTime.now()).inMicroseconds
+
+    dateTime.microsecondsSinceEpoch;
+    */
+
+    int days = daysTask - daysNow+1;
+
+    print("DAYS: $days");
+
     String title;
     if(days == 0){
       title = locText(context, key: "today");
@@ -30,9 +52,9 @@ class TaskHeaderItemWidget extends StatelessWidget{
           child: InkWell(
               child: Row(
                 children: <Widget>[
-                  Text(title, style: TextStyle(fontSize: 24),),
+                  Text(title, style: TextStyle(fontSize: 23, fontWeight: FontWeight.w700),),
                   SizedBox(width: 20),
-                  Text("${hazizzShowDateFormat(dateTime)}", style: TextStyle(fontSize: 26)),
+                  Text("${hazizzShowDateFormat(dateTime)}", style: TextStyle(fontSize: 23, fontWeight: FontWeight.w700)),
                 ],
               )
           ),

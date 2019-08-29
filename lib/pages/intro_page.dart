@@ -17,7 +17,6 @@ import 'package:mobile/widgets/registration_widget.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/custom/hazizz_tab_bar_view.dart';
 import 'package:mobile/custom/hazizz_tab_controller.dart';
-import 'package:progress_dialog/progress_dialog.dart';
 import 'package:toast/toast.dart';
 import 'package:uni_links/uni_links.dart';
 import '../hazizz_localizations.dart';
@@ -173,43 +172,47 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
 
   Widget introPageBuilder(Widget title, Widget description, {int backgroundIndex}){
     return SingleChildScrollView(
-      child: Stack(
-        children: <Widget>[
-          Container(
-            height: MediaQuery.of(context).size.height -  MediaQuery.of(context).padding.top,
-            width: MediaQuery.of(context).size.width,
-            child: SvgPicture.asset(
-              "assets/images/hatter-$backgroundIndex.svg",
-              // semanticsLabel: 'Acme Logo'
-              fit: BoxFit.fitHeight,
+          child: Stack(
+            children: <Widget>[
+              Container(
+                height: MediaQuery.of(context).size.height, //-  MediaQuery.of(context).padding.top,
+              //  width: MediaQuery.of(context).size.width,
+                child: SvgPicture.asset(
+                  "assets/images/hatter-$backgroundIndex.svg",
+                  // semanticsLabel: 'Acme Logo'
+                  fit: BoxFit.fitHeight,
 
-              height: MediaQuery.of(context).size.height -  MediaQuery.of(context).padding.top,
-              width: MediaQuery.of(context).size.width,
-            ),
-          ),
-          Container(
-            height: MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top,
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              children: <Widget>[
-                Stack(
-                  children: <Widget>[
-                    SafeArea(
-                      child: Container(
-                        // height: 100,
-                          child: NotebookBackgroundWidget()
-                      ),
-                    ),
-                    Center(child: title)
-                  ],
+                  height: MediaQuery.of(context).size.height -  MediaQuery.of(context).padding.top,
+                  width: MediaQuery.of(context).size.width,
                 ),
-                Expanded(child: description)
-              ],
-            ),
+              ),
+              Container(
+                height: MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top,
+            //    width: MediaQuery.of(context).size.width,
+                child: Center(
+                  child: Column(
+                    children: <Widget>[
+                      Stack(
+                        children: <Widget>[
+                          SafeArea(
+                            child: Container(
+                              // height: 100,
+                                child: NotebookBackgroundWidget()
+                            ),
+                          ),
+                          Center(child: title)
+                        ],
+                      ),
+                   // description,
+                      Expanded(child: description)
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-    );
+
+      );
   }
 
   @override
@@ -219,64 +222,6 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
       _tabController.animateTo(_tabController.index+1,  duration: Duration(milliseconds:  2000));
     }
 
-    Widget decorBottomToTop(Color decorColor1, Color decorColor2 ){
-      return Transform.scale(
-        scale: 1.2,
-        child: Transform.rotate(
-          alignment: Alignment.topRight,
-          angle: -angle,
-          child: Transform.translate(
-            offset: Offset(-0, dy),
-            child: Container(
-
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: [decorColor1, decorColor2]),
-                  color: Colors.blue,
-                  boxShadow: [
-                    BoxShadow(
-                      spreadRadius: 6,
-                      color: Colors.grey,
-                      blurRadius: 50.0,
-                    ),
-                  ]
-              ),
-              height: MediaQuery.of(context).size.height/100*18/1.2,
-              width:  MediaQuery.of(context).size.width*10,
-            ),
-          ),
-        ),
-      );
-    }
-
-    Widget decorTopToBottom(Color decorColor1, Color decorColor2 ){
-      return Transform.scale(
-        scale: 1.2,
-        child: Transform.rotate(
-          alignment: Alignment.topLeft,
-          angle: angle,
-          child: Transform.translate(
-            offset: Offset(-0, dy),
-            child: Container(
-              decoration: BoxDecoration(
-                // shape: BoxShape.circle, // BoxShape.circle or BoxShape.retangle
-                  gradient: LinearGradient(colors: [decorColor1, decorColor2 ]),
-                  // introPageBuilderBlendMode: BlendMode.colorBurn,
-                 // color: Colors.blue,
-                  boxShadow: [
-                    BoxShadow(
-                      spreadRadius: 6,
-                      color: Colors.grey,
-                      blurRadius: 50.0,
-                    ),
-                  ]
-              ),
-              height: MediaQuery.of(context).size.height/100*18/1.2,
-              width:  MediaQuery.of(context).size.width*10,
-            ),
-          ),
-        ),
-      );
-    }
 
     EdgeInsets padding = MediaQuery.of(context).padding;
     double height = MediaQuery.of(context).size.height;
@@ -288,6 +233,7 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
 
     int _counter = 0;
 
+    /*
     Widget pageGenerator(Widget content, {bool withSingleChildScrollView} ){
 
       Widget decorWidget;
@@ -338,101 +284,96 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
           ]
       );
     }
+    */
 
     slides = [
-      pageGenerator(
+      Builder(
+        builder: (context){
+          GoogleSignInButtonWidget googleSignInButtonWidget = GoogleSignInButtonWidget();
 
-        Builder(
-          builder: (context){
-            GoogleSignInButtonWidget googleSignInButtonWidget = GoogleSignInButtonWidget();
+          return BlocBuilder(
+              bloc: LoginBlocs().googleLoginBloc,
+              builder: (context, state){
 
-            return BlocBuilder(
-                bloc: LoginBlocs().googleLoginBloc,
-                builder: (context, state){
+                bool _isLoading;
 
-                  bool _isLoading;
+                print("log: ggoogle: $state");
 
-                  print("log: ggoogle: $state");
-
-                  // ProgressDialog pg;
-                  //  pg = new ProgressDialog(context,ProgressDialogType.Normal);
+                // ProgressDialog pg;
+                //  pg = new ProgressDialog(context,ProgressDialogType.Normal);
 
 
-                  if(state is GoogleLoginSuccessfulState && !googleSignInButtonPressed){
-                    _isLoading = false;
+                if(state is GoogleLoginSuccessfulState && !googleSignInButtonPressed){
+                  _isLoading = false;
 
-                    if(joinLater){
-                      joinGroup();
+                  if(joinLater){
+                    joinGroup();
 
-                    }
-
-                    AppState.mainAppPartStartProcedure();
-                    nextPage();
-                  }else if(state is GoogleLoginWaitingState/* || state is GoogleLoginFineState && googleSignInButtonWidget.googleLoginBloc*/){
-                    _isLoading = true;
-
-                  }else{
-                    _isLoading = false;
                   }
 
-                  return LoadingDialog(
-                    child: introPageBuilder(Transform.translate(
-                      offset: const Offset(0.0, -30.0),
-                      child: Container(
-                        // padding: const EdgeInsets.all(8.0),
-                        //  color: const Color(0xFF7F7F7F),
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 0.0),
-                          child: Image.asset(
-                            'assets/images/Logo.png',
-                          ),
+                  AppState.mainAppPartStartProcedure();
+                  nextPage();
+                }else if(state is GoogleLoginWaitingState/* || state is GoogleLoginFineState && googleSignInButtonWidget.googleLoginBloc*/){
+                  _isLoading = true;
+
+                }else{
+                  _isLoading = false;
+                }
+
+                return LoadingDialog(
+                  child: introPageBuilder(Transform.translate(
+                    offset: const Offset(0.0, -30.0),
+                    child: Container(
+                      // padding: const EdgeInsets.all(8.0),
+                      //  color: const Color(0xFF7F7F7F),
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 0.0),
+                        child: Image.asset(
+                          'assets/images/Logo.png',
                         ),
                       ),
-                    ), Column(children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(left: 12.0, right: 12),
-                        child: Padding(
-                            padding: const EdgeInsets.only(left: 12.0, right: 12),
-                            child: Center(
-                                child: Text(locText(context, key: "hazizz_intro"), style: TextStyle(fontSize: 22), textAlign: TextAlign.center)
-                            ),
-                          ),
-
+                    ),
+                  ), Column(children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0, right: 8),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8.0, right: 8),
+                        child: Center(
+                            child: Text(locText(context, key: "hazizz_intro"), style: TextStyle(fontSize: 19), textAlign: TextAlign.center)
+                        ),
                       ),
 
-                      Padding(
-                        padding: const EdgeInsets.all(40.0),
-                        child: googleSignInButtonWidget,
-                      )
-                    ],),
-                    backgroundIndex: 1
                     ),
-                    show: _isLoading,
-                  );
-                }
-            );
-          },
-        ),
 
-
-
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 16.0),
+                        child: googleSignInButtonWidget,
+                      ),
+                    )
+                  ],),
+                    backgroundIndex: 1,
+                  ),
+                  show: _isLoading,
+                );
+              }
+          );
+        },
       ),
 
-      pageGenerator(
-
-          introPageBuilder(Padding(
+      introPageBuilder(Padding(
             padding: const EdgeInsets.only(top: 44.0),
             child: Text(locText(context, key: "about_group_title"), style: TextStyle(fontSize: 40, fontWeight: FontWeight.w800), textAlign: TextAlign.center,),
           ),
             Padding(
-                padding: const EdgeInsets.only(top: 60.0, left: 30, right: 30),
+                padding: const EdgeInsets.only(top: 60.0, left: 8, right:8),
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
 
                     // Text(locText(context, key: "login"), style: TextStyle(fontSize: 40, fontWeight: FontWeight.w800, color: HazizzTheme.blue, ),),
 
-                    Text(locText(context, key: "about_group_description1"), style: TextStyle(fontSize: 22), textAlign: TextAlign.center,),
+                    Text(locText(context, key: "about_group_description1"), style: TextStyle(fontSize: 20), textAlign: TextAlign.center,),
 
 
                     Padding(
@@ -446,11 +387,11 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
                       },),
                     ),
 
-                     Text(locText(context, key: "about_group_description2"), style: TextStyle(fontSize: 22), textAlign: TextAlign.center,),
+                     Text(locText(context, key: "about_group_description2"), style: TextStyle(fontSize: 20), textAlign: TextAlign.center,),
 
                     Spacer(),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
+                      padding: const EdgeInsets.only(bottom: 16.0, right: 8),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
@@ -470,82 +411,6 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
 
             backgroundIndex: 2
           ),
-          withSingleChildScrollView: true
-      ),
-
-    /*
-      pageGenerator(
-        Builder(
-          builder: (context){
-            GoogleSignInButtonWidget googleSignInButtonWidget = GoogleSignInButtonWidget();
-
-            return BlocBuilder(
-              bloc: LoginBlocs().googleLoginBloc,
-              builder: (context, state){
-
-                bool _isLoading;
-
-                print("log: ggoogle: $state");
-
-               // ProgressDialog pg;
-              //  pg = new ProgressDialog(context,ProgressDialogType.Normal);
-
-
-                if(state is GoogleLoginSuccessfulState && !googleSignInButtonPressed){
-                  _isLoading = false;
-
-                  nextPage();
-                }else if(state is GoogleLoginWaitingState/* || state is GoogleLoginFineState && googleSignInButtonWidget.googleLoginBloc*/){
-                /*  Future.delayed(Duration.zero,() => setState(() {
-                    print("asd: is true");
-                    _isLoading = true;
-                  }));
-                  */
-
-                  _isLoading = true;
-
-
-
-                  // Future.delayed(Duration.zero,() => pg.show());
-
-                }else{
-                //  if(pg.isShowing())
-                //    Future.delayed(Duration.zero,() => pg.hide());
-                  _isLoading = false;
-
-                  /*
-                  WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
-                    print("asd: is true");
-                    _isLoading = false;
-                  }));
-                  */
-
-                }
-
-
-                return LoadingDialog(
-                  child: Column(
-                    children: <Widget>[
-                      RegistrationWidget(),
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Text(locText(context, key: "or").toUpperCase()),
-                      ),
-                      Padding(
-                          padding: const EdgeInsets.only(bottom: 10.0),
-                          child: googleSignInButtonWidget
-                      ),
-                    ],
-                  ),
-                  show: _isLoading,
-                );
-              }
-            );
-          },
-        ),
-        withSingleChildScrollView: true
-      ),
-      */
 
       introPageBuilder(Padding(
         padding: const EdgeInsets.only(top: 20.0),
@@ -555,9 +420,9 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
             children: <Widget>[
 
               Padding(
-                padding: const EdgeInsets.only(top: 60, left: 24.0, right: 24),
+                padding: const EdgeInsets.only(top: 60, left: 8.0, right: 8),
                 child: Center(
-                    child: Text(locText(context, key: "kreta_intro"), style: TextStyle(fontSize: 22, ), textAlign: TextAlign.center,)
+                    child: Text(locText(context, key: "kreta_intro"), style: TextStyle(fontSize: 20, ), textAlign: TextAlign.center,)
                 ),
               ),
 

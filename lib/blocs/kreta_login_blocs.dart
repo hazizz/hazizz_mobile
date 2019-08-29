@@ -242,9 +242,11 @@ class KretaLoginBloc extends Bloc<KretaLoginEvent, KretaLoginState> {
       HFormState passwordState = passwordBloc.currentState;
       ItemListState schoolState = schoolBloc.currentState;
      // passwordBloc.dispatch(TextFormValidate(text: e))
+      /*
       print("log: usernameState: ${usernameState.toString()}");
       print("log: passwordState: ${passwordState.toString()}");
       print("log: schoolState: ${schoolState.toString()}");
+      */
 
 
    //   passwordBloc.validate
@@ -330,9 +332,9 @@ class KretaLoginPageBlocs{
   );
   TextFormBloc passwordBloc = new TextFormBloc(
       validate: (String text){
-        print("length: ${text.length}");
+       // print("length: ${text.length}");
         if(text.length < 4) {
-          print("returnss::::");
+      //    print("returnss::::");
           return TextFormErrorTooShort();
         }
         return TextFormFine();

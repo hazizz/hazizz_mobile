@@ -160,7 +160,7 @@ class _ChooseSubjectDialog extends State<ChooseSubjectDialog> {
             builder: (context){
               if(subjects_data.length == 1 && subjects_data[0].id == 0) {
                 return FlatButton(
-                  child: new Text(locText(context, key: "add_subject")),
+                  child: new Text(locText(context, key: "add_subject").toUpperCase()),
                   onPressed: () async {
                     PojoSubject result = await showAddSubjectDialog(context, groupId: widget.groupId);
                     if(result != null){
@@ -176,7 +176,7 @@ class _ChooseSubjectDialog extends State<ChooseSubjectDialog> {
             },
           ),
           FlatButton(
-            child: new Text(locText(context, key: "close")),
+            child: new Text(locText(context, key: "close").toUpperCase()),
             onPressed: () {
               Navigator.pop(context, null);
             },

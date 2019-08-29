@@ -15,7 +15,7 @@ class ClassItemWidget extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
 
-    const double itemHeight = 68;
+    const double itemHeight = 65;
 
     DateTime currentDateTime = DateTime.now();
 
@@ -70,7 +70,7 @@ class ClassItemWidget extends StatelessWidget{
                               color: Theme.of(context).primaryColor
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 2, top: 2, right: 8, bottom: 4),
+                            padding: const EdgeInsets.only(left: 2, top: 0, right: 8, bottom: 1),
                             child: Row(
                                 children: [
 

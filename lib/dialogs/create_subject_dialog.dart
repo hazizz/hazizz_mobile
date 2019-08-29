@@ -108,7 +108,7 @@ class _CreateSubjectDialog extends State<CreateSubjectDialog> {
           FlatButton(
 
               child: Center(
-                child: Text(locText(context, key: "add"),
+                child: Text(locText(context, key: "add").toUpperCase(),
                   style: TextStyle(
                     //  fontFamily: 'Montserrat',
                       color: HazizzTheme.warningColor

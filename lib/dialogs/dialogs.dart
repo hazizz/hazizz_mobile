@@ -12,6 +12,7 @@ import 'package:mobile/communication/pojos/PojoTag.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/defaults/pojo_group_empty.dart';
 import 'package:mobile/dialogs/school_dialog.dart';
+import 'package:mobile/dialogs/sure_to_join_group_dialog.dart';
 import 'package:mobile/widgets/hyper_link.dart';
 import 'package:share/share.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -34,9 +35,9 @@ class HazizzDialog extends Dialog{
 
   static const double buttonBarHeight = 48.0;
 
-  final Container header, content;
+  final Widget header, content;
 
-  final Row actionButtons;
+  final Widget actionButtons;
 
   final double height, width;
 
@@ -452,6 +453,22 @@ Future<PojoSubject> showDialogSubject(BuildContext context, {@required PojoGroup
   );
   return result;
 }
+
+
+
+
+Future<void> showSureToJoinGroupDialog(BuildContext context, {@required int groupId}) async{
+
+  var result = await showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      // return object of type Dialog
+      return SureToJoinGroupDialog(groupId: groupId,);
+    },
+  );
+  return result;
+}
+
 
 
 Future<PojoTag> showDialogTaskTag(BuildContext context, {List<PojoTag> except}) async{
@@ -929,23 +946,35 @@ Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
                     child: Padding(
                         padding: EdgeInsets.only(top: 6, bottom: 4),
                         child: CircleAvatar(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                          child: Stack(
                               children: [
-                                AutoSizeText(
-                                  grade.grade == null ? "5" : grade.grade,
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                      fontSize: 50,
-                                      color: Colors.black
+                                Align(
+                                  alignment: Alignment.topCenter,
+                                  child: AutoSizeText(
+                                    grade.grade == null ? "5" : grade.grade,
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                        fontSize: 50,
+                                        color: Colors.black,
+                                      fontFamily: "Nunito",
+                                      fontWeight: FontWeight.w700
+                                    ),
                                   ),
                                 ),
 
-                                Text(
-                                  grade.weight == null ? "100%" : "${grade.weight}%",
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      color: Colors.black
+                                Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(bottom: 8.0),
+                                    child: Text(
+                                      grade.weight == null ? "100%" : "${grade.weight}%",
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          color: Colors.black,
+                                          fontFamily: "Nunito",
+                                          fontWeight: FontWeight.w700
+                                      ),
+                                    ),
                                   ),
                                 ),
 

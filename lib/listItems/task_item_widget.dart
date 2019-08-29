@@ -243,7 +243,7 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: <Widget>[
                             Padding(
-                              padding: const EdgeInsets.only(top: 4, right: 6),
+                              padding: const EdgeInsets.only(top: 1, right: 6),
                               child: Text(widget.pojoTask.creator.displayName, style: theme(context).textTheme.subtitle,),
                             ),
                           ],

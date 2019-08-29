@@ -1,4 +1,3 @@
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/comment_section_bloc.dart';
 import 'package:mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
@@ -15,7 +14,6 @@ import 'package:mobile/widgets/hazizz_back_button.dart';
 import 'package:mobile/widgets/tag_chip.dart';
 
 import '../hazizz_date.dart';
-import '../hazizz_fonts.dart';
 import '../hazizz_localizations.dart';
 import '../hazizz_theme.dart';
 

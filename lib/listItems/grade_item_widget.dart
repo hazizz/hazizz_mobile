@@ -17,7 +17,7 @@ class GradeItemWidget extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
 
-    final double itemHeight = 87;
+    final double itemHeight = 82;
 
 
     return Container(
@@ -43,30 +43,41 @@ class GradeItemWidget extends StatelessWidget{
                             aspectRatio: 1/1,
                             child: Container(
                               color: pojoGrade.color,
-                              child: Center(
-                                child: Column(
+                              child: Stack(
                                     children: [
-                                      AutoSizeText(pojoGrade.grade == null ? "5" : pojoGrade.grade,
-                                        style: TextStyle(fontSize: 50, color: Colors.black, fontFamily: "Nunito"),
-                                        maxLines: 1,
-                                        maxFontSize: 50,
-                                        minFontSize: 10,
+                                      Align(
+                                        alignment: Alignment.topCenter,
+                                        child: AutoSizeText(pojoGrade.grade == null ? "5" : pojoGrade.grade,
+                                          style: TextStyle(fontSize: 50, color: Colors.black, fontFamily: "Nunito"),
+                                          maxLines: 1,
+                                          maxFontSize: 50,
+                                          minFontSize: 10,
+                                        ),
                                       ),
-                                      Builder(
-                                        builder: (context){
-                                          Color textColor = Colors.black;
-                                          if(pojoGrade.weight == 200){
-                                           // textColor = Colors.red;
 
-                                          }
 
-                                          return Text(pojoGrade.weight == null ? "100%" : "${pojoGrade.weight}%", style: TextStyle(color: textColor, fontFamily: "Nunito"),);
+                                      Align(
+                                        alignment: Alignment.bottomCenter,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(bottom: 8.0),
+                                          child: Builder(
+                                            builder: (context){
+                                              Color textColor = Colors.black;
+                                              if(pojoGrade.weight == 200){
+                                                // textColor = Colors.red;
 
-                                        },
-                                      )
+                                              }
+
+                                              return Text(pojoGrade.weight == null ? "100%" : "${pojoGrade.weight}%", style: TextStyle(color: textColor, fontFamily: "Nunito"),);
+
+                                            },
+                                          ),
+                                        )
+                                      ),
+
                                     ]
                                 ),
-                              ),
+
                             ),
                           ),
                         ),
@@ -82,7 +93,7 @@ class GradeItemWidget extends StatelessWidget{
                               Builder(
                                 builder: (context){
                                   if(pojoGrade.topic != null && pojoGrade.topic != ""){
-                                    return Text(pojoGrade.topic, style: TextStyle(fontSize: 20),);
+                                    return Text(pojoGrade.topic, style: TextStyle(fontSize: 19),);
                                   }
                                   return Container();
                                 },

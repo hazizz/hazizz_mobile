@@ -1,87 +1,56 @@
-# Project Title
+# Hazizz Mobile
 
-One Paragraph of project description goes here
-
+An open source school assistant mobile application, with e-Kréta integration.
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+### To to run the project yourself:
+##### To download:
+* `git clone https://github.com/hazizz/hazizz-mobile`
+##### To run it:
+* `cd hazizz-mobile`
+* `flutter run` or `flutter build apk`
 
-### Prerequisites
+See the API documentation here: https://documenter.getpostman.com/view/5139955/S11HueZd?version=latest
 
-What things you need to install the software and how to install them
+## Third party sources used:
+### Packages:
+* [dropdown_menu](https://github.com/best-flutter/flutter_dropdown_menu)
+* [url_launcher](https://github.com/flutter/plugins/tree/master/packages/url_launcher)
+* [flutter_svg](https://github.com/dnfield/flutter_svg)
+* [uni_links](https://github.com/avioli/uni_links)
+* [package_info](https://github.com/flutter/plugins/tree/master/packages/package_info)
+* [font_awesome_flutter](https://github.com/brianegan/font_awesome_flutter)
+* [toast](https://github.com/appdev/FlutterToast)
+* [image_picker](https://github.com/flutter/plugins/tree/master/packages/image_picker)
+* [flutter_image_cropper](https://github.com/hnvn/flutter_image_cropper)
+* [logger](https://github.com/leisim/logger)
+* [workmanager](https://github.com/vrtdev/flutter_workmanager)
+* [flutter_auth_buttons](https://github.com/dmjones/flutter_auth_buttons)
+* [firebase_analytics](https://github.com/FirebaseExtended/flutterfire/tree/master/packages/firebase_analytics)
+* [google_sign_in](https://github.com/flutter/plugins/tree/master/packages/google_sign_in)
+* [firebase_auth](https://github.com/FirebaseExtended/flutterfire/tree/master/packages/firebase_auth)
+* [firebase_crashlytics](https://github.com/FirebaseExtended/flutterfire/tree/master/packages/firebase_crashlytics)
+* [firebase_core](https://github.com/FirebaseExtended/flutterfire/tree/master/packages/firebase_core)
+* [android_alarm_manager](https://github.com/flutter/plugins/tree/master/packages/android_alarm_manager)
+* [dynamic_theme](https://github.com/Norbert515/dynamic_theme)
+* [auto_size_text](https://github.com/leisim/auto_size_text)
+* [share](https://github.com/flutter/plugins/tree/master/packages/share)
+* [easy_localization](https://github.com/aissat/easy_localization)
+* [equatable](https://github.com/felangel/equatable)
+* [flutter_bloc](https://github.com/felangel/bloc)
+* [intl](https://github.com/dart-lang/intl)
+* [flutter_local_notifications](https://github.com/MaikuB/flutter_local_notifications)
+* [sticky_headers](https://github.com/fluttercommunity/flutter_sticky_headers)
+* [dio](https://github.com/flutterchina/dio)
+* [cookie_jar](https://github.com/flutterchina/cookie_jar)
+* [connectivity](https://github.com/flutter/plugins/tree/master/packages/connectivity)
+* [shared_preferences](https://github.com/flutter/plugins/tree/master/packages/shared_preferences)
+* [json_annotation](https://github.com/dart-lang/json_serializable)
+* [http](https://github.com/dart-lang/http)
+* [json_serializable](https://github.com/dart-lang/json_serializable)
+* [flutter_launcher_icons](https://github.com/fluttercommunity/flutter_launcher_icons)
 
-```
-Give examples
-```
-
-### Installing
-
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
-## Built With
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
-
-## Authors
-
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
+### Font used: [Nunito](https://fonts.google.com/specimen/Nunito)
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc

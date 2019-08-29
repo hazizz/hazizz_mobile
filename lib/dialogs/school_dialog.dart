@@ -114,23 +114,9 @@ class _SchoolDialog extends State<SchoolDialog> {
                 },
               );
             }else{
-              return Stack(
-                children: <Widget>[
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: Align(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 30.0),
-                        child: Text(locText(context, key: "no_school_with_that_name"), style: TextStyle(fontSize: 20),),
-                      ),
-                      alignment: Alignment.topCenter,
+              return Center(child: Text(locText(context, key: "no_school_with_that_name"), style: TextStyle(fontSize: 20),));
 
-                    ),
-                  )
-                ],
-              );
-            }
+          }
           }
       ),
     ),

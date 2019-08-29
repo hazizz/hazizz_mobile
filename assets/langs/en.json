@@ -37,7 +37,7 @@
 
 
     "days_later"
-    : "{} days latter",
+    : "In {} days",
 
     "today"
     : "Today",
@@ -691,7 +691,7 @@
     : "privacy policy ",
 
     "have_to_accept_privacy_tos2"
-    : "and the",
+    : "and the ",
 
     "have_to_accept_tos"
     : "terms of service",
@@ -758,6 +758,12 @@
   : "If your class does already have a group, ask them to send you an invite link. After you receive the link just click it and you are in",
 
 
+  "sure_to_join_group"
+  : "Are you sure you want to join {} group?",
+
+  "already_a_member_of_group"
+  : "You are already a member of {} group",
+
 
     "group_created"
     : "The group was created successfully",
@@ -770,7 +776,7 @@
     : "Error",
 
     "error_signing_in_with_google"
-    : "Google sign in was not successful, try again latter",
+    : "Google sign in was not successful, try again later",
 
     "error_conditionsNotAccepted"
     : "You have to accept our terms of service and privacy policy!",

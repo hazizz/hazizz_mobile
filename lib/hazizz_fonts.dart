@@ -1,3 +1,0 @@
-
-
-const String shortStackFont = "ShortStack";

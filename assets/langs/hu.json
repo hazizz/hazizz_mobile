@@ -765,11 +765,20 @@
   "about_group_title"
   : "Csoportokról",
 
+
+
+
+  "sure_to_join_group"
+  : "Biztos hogy be akarsz lépni a(z) {} csoportba?",
+
+  "already_a_member_of_group"
+  : "Már tagja vagy a(z) {} csoportnak",
+
   "about_group_description1"
   : "Ha az osztályodnak még nincs csoportja, legyél te az első aki csinál egyet:",
 
   "about_group_description2"
-  : "Ha az osztályodnak már csoportja, akkor kérd meg őket hogy küldjenek egy meghívó linket. Miután elküldték, csak nyomja a linkre és már bent is vagy a csoportban.",
+  : "Ha az osztályodnak már van csoportja, akkor kérd meg őket hogy küldjenek egy meghívó linket. Miután elküldték, csak nyomja a linkre és már bent is vagy a csoportban.",
 
   "group_name_suggestion"
   : "A csoport címe lehet az iskolád rövidítése és az osztályod. pl.: NEU. 10.D",

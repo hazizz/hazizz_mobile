@@ -124,8 +124,16 @@ class HazizzTheme{
     brightness: Brightness.dark,
     accentColor: red,
     // primaryColorLight: lightblue,
+
+
     primaryColorDark: Color.fromRGBO(14, 105, 138, 1),
     primaryColor: Color.fromRGBO(70, 105, 140, 1),
+
+    /*
+    primaryColorDark: blue,
+    primaryColor: lightblue,
+    */
+
     errorColor: red,
  //   textSelectionHandleColor: Colors.black,
     //   textTheme: Colors.black,

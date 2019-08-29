@@ -7,7 +7,7 @@ class NotebookBackgroundWidget extends StatelessWidget{
 
       fit: BoxFit.fitWidth,
       child: Image.asset(
-        'assets/images/notebook_background1.png',
+        'assets/images/notebook_background.png',
         width: 3530,
         height: 1442,
 

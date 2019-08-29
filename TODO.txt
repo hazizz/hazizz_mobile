@@ -7,10 +7,8 @@ TO TALK ABOUT:
 FUTURE TODO:
 
 - jegyek átlag csak jobban meg kéne írni
-- rate the app please dialog
 - cache - offline mode
 - taskoknál "remind me later"
-- frissítés idejének kiírása
 - órarend eventek
 - add debug page (https://pub.dev/packages/alice)
 - csoport rangok
@@ -28,15 +26,18 @@ TODO:
 - dedikált screen a main tabeknek
 
 //- Transaction id az errorok melé
-- kréta bejlentkezés
+
 - login-nál retry ha timeout
 - iskolák cachelése
 - saját feladat
-- kreta bejelentkezés. 2x kell nyomni
+
 - filter taskokra
 - kréta test requestek vissza álitása
 
 DONE:
+- kréta bejlentkezés
+- frissítés idejének kiírása
+
 - cache a main tabeknek
 - locale cache firsitése app induláskor
 - globális session betöltés
@@ -55,12 +56,13 @@ DONE:
 - displayName és profilePic editor - UI done
 - téma kreálás
 //- Bloc a bejelentkezés utáni felhasználói "adatgyüjtéshez"
-
-
-bugs to fix:
 - fixelni az edit taskot
 - crashlytics nem reportol minden crasht. NÉZD MEG!!!
 - 3. sign in with google nem működik
+
+bugs to fix:
+- kreta bejelentkezés. 2x kell nyomni
+
 
 
 

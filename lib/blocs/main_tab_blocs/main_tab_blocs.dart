@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
+import 'package:intl/intl.dart';
 import 'package:mobile/caches/data_cache.dart';
 import 'package:mobile/communication/connection.dart';
 import 'package:mobile/communication/errors.dart';
@@ -137,39 +138,49 @@ class MainSchedulesBloc extends Bloc<HEvent, HState> {
           yield ResponseDataLoadedFromCache(data: classes);
         }
 
+        DateTime now = DateTime.now();
 
-        HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetSchedules(q_year: 2019, q_weekNumber: 2));
+        int dayOfYear = int.parse(DateFormat("D").format(now));
+        int weekOfYear = ((dayOfYear - now.weekday + 10) / 7).floor();
 
+        print("WEEK OF YEAR: $weekOfYear");
+        HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetSchedules(/*q_year: now.year, q_weekNumber: weekOfYear*/));
+
+      //  print("classes.: ${classes}");
         if(hazizzResponse.isSuccessful){
+          print("classes.classes: ${ hazizzResponse.convertedData}");
           classes = hazizzResponse.convertedData;
-          lastUpdated = DateTime.now();
-          saveScheduleCache(classes);
+          if(classes != null && classes.classes.isNotEmpty){
 
-          print("log: opsie: 0");
+            lastUpdated = DateTime.now();
+            saveScheduleCache(classes);
 
-         // classes = classesDummy;
+            print("log: opsie: 0");
 
-
-          print("log: opsie: 0");
-
-          scheduleEventBloc.dispatch(ScheduleEventUpdateClassesEvent());
+            // classes = classesDummy;
 
 
-          print("log: opsie: 1");
+            print("log: opsie: 0");
 
-          List<PojoClass> todayClasses = classes.classes[currentDayIndex.toString()];
-
-          print("log: opsie: 2");
-          HazizzTimeOfDay now = HazizzTimeOfDay.now();
-          print("log: opsie: 3");
+            scheduleEventBloc.dispatch(ScheduleEventUpdateClassesEvent());
 
 
-          HazizzTimeOfDay closestBefore;
-          HazizzTimeOfDay closestAfter;
+            print("log: opsie: 1");
 
-          yield ResponseDataLoaded(data: classes);
+            List<PojoClass> todayClasses = classes.classes[currentDayIndex.toString()];
 
-          print("log: oy133");
+            print("log: opsie: 2");
+            HazizzTimeOfDay now = HazizzTimeOfDay.now();
+            print("log: opsie: 3");
+
+
+            HazizzTimeOfDay closestBefore;
+            HazizzTimeOfDay closestAfter;
+
+            yield ResponseDataLoaded(data: classes);
+
+            print("log: oy133");
+          }
 
 
         }
@@ -275,7 +286,32 @@ class MainGradesBloc extends Bloc<HEvent, HState> {
           saveGradesCache(grades);
           yield ResponseDataLoaded(data: grades);
         }
-        else if(hazizzResponse.isError){
+
+        /*
+        grades = new PojoGrades(
+            {"Matek TESZT" : [
+              PojoGrade(creationDate: DateTime(2010), date: DateTime(2019), grade: "1", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 200),
+              PojoGrade(creationDate: DateTime(2011), date: DateTime(2019), grade: "2", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 100),
+              PojoGrade(creationDate: DateTime(2012), date: DateTime(2019), grade: "3", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 50),
+              PojoGrade(creationDate: DateTime(2013), date: DateTime(2019), grade: "1", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 200)],
+
+              "Történelem TESZT" : [
+                PojoGrade(creationDate: DateTime(2020), date: DateTime(2019), grade: "5", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 100),
+                PojoGrade(creationDate: DateTime(2021), date: DateTime(2019), grade: "3", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 200),
+                PojoGrade(creationDate: DateTime(2022), date: DateTime(2019), grade: "2", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 50),
+                PojoGrade(creationDate: DateTime(2023), date: DateTime(2019), grade: "4", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 100)],
+
+              "Komplex Természet Tudomány" : [
+                PojoGrade(creationDate: DateTime(2030), date: DateTime(2019), grade: "5", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 200),
+                PojoGrade(creationDate: DateTime(2031), date: DateTime(2019), grade: "5", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 200),
+                PojoGrade(creationDate: DateTime(2032), date: DateTime(2019), grade: "5", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 200),
+                PojoGrade(creationDate: DateTime(2033), date: DateTime(2019), grade: "5", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 600)]
+            }
+        );
+        */
+
+
+        if(hazizzResponse.isError){
           if(hazizzResponse.dioError == noConnectionError){
             yield ResponseError(errorResponse: hazizzResponse);
             Connection.addConnectionOnlineListener((){

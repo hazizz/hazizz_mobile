@@ -8,7 +8,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:mobile/blocs/settings_bloc.dart';
 import 'package:mobile/managers/preference_services.dart';
 import 'package:mobile/notification/notification.dart';
-import 'package:preferences/preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -30,8 +29,6 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPage extends State<SettingsPage> with AutomaticKeepAliveClientMixin {
-
-  PreferenceTitle title = PreferenceTitle("asd");
 
   List<DropdownMenuItem> startPageItems = List();
   static List<Locale> supportedLocales = getSupportedLocales();

@@ -154,10 +154,10 @@ class TextFormBloc extends Bloc<HFormEvent, HFormState> {
 
   @override
   Stream<HFormState> mapEventToState(HFormEvent event) async* {
-    print("state change: $event");
+ /*   print("state change: $event");
     print("isLocked: $isLocked");
     print("lastText: $lastText, ");
-
+*/
     if(event is TextFormLock){
       isLocked = true;
       yield TextFormLocked();
@@ -169,7 +169,7 @@ class TextFormBloc extends Bloc<HFormEvent, HFormState> {
 
     else if(event is TextFormSetEvent) {
       lastText = event.text;
-      print("title is set: $lastText");
+    //  print("title is set: $lastText");
       yield TextFormSetState(text: event.text);
     }
 
@@ -179,14 +179,14 @@ class TextFormBloc extends Bloc<HFormEvent, HFormState> {
         if(lastText != event.text || lastText == null){
          // print("VALIDITATION: ${event.text}: ${validate(event.text)}");
           yield validate(event.text);
-          print("ajksiofdcoji: ${currentState}");
+       //   print("ajksiofdcoji: ${currentState}");
           lastText = event.text;
         }
       }else if(event is TextFormIllegalCharacterEvent){
         yield TextFormIllegalCharacterState();
       }
       else {
-        print("piritos333");
+     //   print("piritos333");
         yield handleErrorEvents(event);
       }
     }

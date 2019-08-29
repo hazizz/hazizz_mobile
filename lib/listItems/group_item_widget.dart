@@ -22,10 +22,10 @@ class GroupItemWidget extends StatelessWidget{
                 alignment: Alignment.centerLeft,
                 child:
                 Padding(
-                  padding: const EdgeInsets.only(left: 8, top: 5, bottom: 5),
+                  padding: const EdgeInsets.only(left: 8, top: 4, bottom: 4),
                   child: Text(group.name,
                     style: TextStyle(
-                        fontSize: 30
+                        fontSize: 24, fontWeight: FontWeight.w700
                     ),),
                 )
             )
