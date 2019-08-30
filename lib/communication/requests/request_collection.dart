@@ -4,6 +4,7 @@ import 'dart:io';
 
 
 import 'package:dio/dio.dart';
+import 'package:intl/intl.dart';
 import 'package:mobile/communication/pojos/PojoError.dart';
 import 'package:mobile/communication/pojos/PojoGrades.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
@@ -845,6 +846,11 @@ class KretaGetSchedules extends TheraRequest {
       query["weekNumber"] = q_weekNumber.toString();
       query["year"] = q_year.toString();
     }else{
+      DateTime now = DateTime.now();
+      int dayOfYear = int.parse(DateFormat("D").format(now));
+      int weekOfYear = ((dayOfYear - now.weekday + 10) / 7).floor();
+      query["weekNumber"] = weekOfYear.toString();
+      query["year"] = dayOfYear.toString();
       print("query is required");
     }
   }

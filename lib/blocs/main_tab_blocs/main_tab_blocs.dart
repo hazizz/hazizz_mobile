@@ -138,12 +138,13 @@ class MainSchedulesBloc extends Bloc<HEvent, HState> {
           yield ResponseDataLoadedFromCache(data: classes);
         }
 
+        /*
         DateTime now = DateTime.now();
 
         int dayOfYear = int.parse(DateFormat("D").format(now));
         int weekOfYear = ((dayOfYear - now.weekday + 10) / 7).floor();
 
-        print("WEEK OF YEAR: $weekOfYear");
+        print("WEEK OF YEAR: $weekOfYear");*/
         HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetSchedules(/*q_year: now.year, q_weekNumber: weekOfYear*/));
 
       //  print("classes.: ${classes}");

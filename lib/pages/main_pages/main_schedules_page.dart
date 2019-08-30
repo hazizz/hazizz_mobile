@@ -122,6 +122,16 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
 
     return Column(
         children: [
+          /*
+          Container(
+            height: 100,
+            child: DropdownMenu(
+              menus: [
+                Text("asd")
+              ],
+            ),
+          ),
+          */
           Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().schedulesBloc.lastUpdated)),
           Expanded(
             child: TabBarView(
@@ -179,12 +189,12 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
                         builder: (_, HState state) {
 
                           if (state is ResponseDataLoaded) {
-                            if(state.data != null && state.data.isNotEmpty()){
+                            if(state.data != null /*&& state.data.isNotEmpty()*/){
                               return onLoaded(state.data);
 
                             }
                           }else if (state is ResponseDataLoadedFromCache) {
-                            if(state.data != null && state.data.isNotEmpty()){
+                            if(state.data != null /*&& state.data.isNotEmpty()*/){
                               return onLoaded(state.data);
 
                             }                          }
