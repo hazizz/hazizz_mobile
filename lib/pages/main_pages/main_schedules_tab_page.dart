@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
 import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
+import 'package:mobile/blocs/schedule_bloc.dart';
 import 'package:mobile/communication/pojos/PojoClass.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/listItems/task_header_item_widget.dart';
@@ -44,7 +45,7 @@ class _SchedulesTabPage extends State<SchedulesTabPage> with TickerProviderState
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async{
-        MainTabBlocs().schedulesBloc.dispatch(FetchData());
+        MainTabBlocs().schedulesBloc.dispatch(ScheduleFetchEvent());
       },
       child: ListView.builder(
           itemCount: widget.classes.length,

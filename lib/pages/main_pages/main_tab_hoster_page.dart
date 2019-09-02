@@ -12,6 +12,7 @@ import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/managers/app_state_manager.dart';
 import 'package:mobile/managers/cache_manager.dart';
+import 'package:mobile/managers/deep_link_receiver.dart';
 import 'package:mobile/pages/main_pages/main_grades_page.dart';
 import 'package:mobile/pages/main_pages/main_tasks_page.dart';
 import 'package:toast/toast.dart';
@@ -60,100 +61,14 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
     });
   }
 
-  void onLinkReceived(Uri deepLink) async{
 
-    print("DEEP LINK RECEIVED: ${deepLink.toString()}");
-    if (deepLink != null) {
-      setState(() {
-        setState(() {
-          processingDeepLink = true;
-        });
-      });
-      String str_groupId = deepLink.queryParameters["group"];
-
-      int groupId = int.parse(str_groupId);
-      if(groupId != null){
-        await showSureToJoinGroupDialog(context, groupId: groupId);
-        /*
-        HazizzResponse hazizzResponse = await RequestSender().getResponse(RetrieveGroup.withoutMe(p_groupId: groupId));
-        if(hazizzResponse.isSuccessful){
-          PojoGroupWithoutMe groupWithoutMe = hazizzResponse.convertedData;
-          if(groupWithoutMe != null){
-            print("GROUPCOUNT: ${ groupWithoutMe.userCount}, ${ groupWithoutMe.userCountWithoutMe}");
-            if(groupWithoutMe.userCount == groupWithoutMe.userCountWithoutMe){
-              Navigator.pushNamed(context, "/group/groupId/newComer", arguments: groupWithoutMe);
-
-            }else{
-              Navigator.pushNamed(context, "/group/groupId/notNewComer", arguments: groupWithoutMe);
-            }
-            setState(() {
-              processingDeepLink = false;
-            });
-          }else{
-            setState(() {
-              processingDeepLink = false;
-            });
-          }
-        }else{
-          setState(() {
-            processingDeepLink = false;
-          });
-        }
-        */
-        
-      }else{
-        setState(() {
-          processingDeepLink = false;
-        });
-      }
-    }
-  }
-
-
-  /*
-  void initDynamicLinks() async {
-    final PendingDynamicLinkData data = await FirebaseDynamicLinks.instance.getInitialLink();
-    final Uri deepLink = data?.link;
-
-    onLinkReceived(deepLink);
-
-    FirebaseDynamicLinks.instance.onLink(
-        onSuccess: (PendingDynamicLinkData dynamicLink) async {
-          final Uri deepLink = dynamicLink?.link;
-
-          onLinkReceived(deepLink);
-        },
-        onError: (OnLinkErrorException e) async {
-          print('onLinkError');
-          print(e.message);
-        }
-    );
-  }
-  */
-
-  StreamSubscription _sub;
-
-  Future<Null> initUniLinks() async {
-    Uri initialUri = await getInitialUri();
-
-
-    onLinkReceived(initialUri);
-    // Attach a listener to the stream
-    _sub = getUriLinksStream().listen((Uri uri) {
-      onLinkReceived(uri);
-    }, onError: (err) {
-      // Handle exception by warning the user their action did not succeed
-    });
-
-    // NOTE: Don't forget to call _sub.cancel() in dispose()
-  }
 
 
   @override
   Future initState() {
 
   //  initDynamicLinks();
-    initUniLinks();
+    DeepLink.initUniLinks(context);
 
     InfoCache.getMyDisplayName().then(
       (value){
@@ -191,7 +106,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
   @override
   void dispose() {
 
-    _sub.cancel();
+    DeepLink.dispose();
     _tabController.dispose();
     super.dispose();
   }

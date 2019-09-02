@@ -34,6 +34,9 @@
     "days_later"
     : "{} nap múlva",
 
+  "days_before"
+  : "Lejárt {} napja",
+
 
     "tomorrow"
     : "Holnap",
@@ -83,8 +86,29 @@
     : "Mentés",
 
 
-    "button_send"
+    "send"
     : "Küldés",
+
+  "report"
+  : "Jelentés",
+
+  "user"
+  : "Felhasználó",
+
+  "commment"
+  : "Megjegyzés",
+
+
+
+
+  "report_something"
+  : "{} jelentése",
+
+  "accept_hazizz_policy"
+  : "Elfogadom a házirendet",
+
+  "error_accept_hazizz_policy"
+  : "El kell fogadnod a házirendet!",
 
 
     "button_add"
@@ -99,9 +123,6 @@
 
     "add"
     : "Hozzáad",
-
-    "group"
-    : "Csoport",
 
 
     "edit_profile_picture"
@@ -139,6 +160,21 @@
 
     "createTask"
     : "Create task",
+
+  "completed"
+  : "Kész van",
+
+  "uncompleted"
+  : "Nincs kész",
+
+  "both"
+  : "Vegyes",
+
+  "expired"
+  : "Lejárt",
+
+  "active"
+  : "Aktív",
 
 
     "fragment_title_new_task"
@@ -415,6 +451,14 @@
     "accept"
     : "Elfogadom",
 
+    "apply"
+    : "Alkalmaz",
+
+  "invite_others"
+  : "Meghívás",
+
+
+
     "loading"
     : "Betöltés...",
 
@@ -471,6 +515,9 @@
     "no_schedule"
     : "Nincs órarend",
 
+    "no_schedule_for_week"
+    : "Nincs órarend a hétre",
+
     "no_grades_yet"
     : "Nincs még jegyed",
 
@@ -488,7 +535,10 @@
 
 
     "no_comment"
-    : "Nincs hozzászólás",
+    : "Nincs megjegyzés",
+
+  "somebodys_comment"
+  : "megjegyzésének",
 
 
     "groupMembers"
@@ -1067,7 +1117,7 @@
     : "Kréta bejelentkezés",
 
     "kreta_login_later"
-    : "Krétába késöbbb is be tudsz jelentkezni",
+    : "Krétába késöbb is be tudsz jelentkezni",
 
 
     "kreta"

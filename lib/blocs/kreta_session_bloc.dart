@@ -86,7 +86,7 @@ class KretaSessionBloc extends Bloc<HEvent, HState> {
 
   static Future<void> fetchTokens(@required String username, @required String password) async{
     print("asdsadsadsaASADA");
-    HazizzResponse hazizzResponse = await RequestSender().getResponse(new CreateTokenWithPassword(b_username: username, b_password: password));
+    HazizzResponse hazizzResponse = await RequestSender().getResponse(new CreateToken.withPassword(q_username: username, q_password: password));
     if(hazizzResponse.isSuccessful){
       print("log: token: tokens set");
       PojoTokens tokens = hazizzResponse.convertedData;
@@ -106,7 +106,7 @@ class KretaSessionBloc extends Bloc<HEvent, HState> {
   }
 
   static Future<void> fetchRefreshTokens(@required String username, @required String refreshToken) async{
-    HazizzResponse hazizzResponse = await RequestSender().getResponse(new CreateTokenWithRefresh(b_username: username, b_refreshToken: refreshToken));
+    HazizzResponse hazizzResponse = await RequestSender().getResponse(new CreateToken.withRefresh(q_username: username, q_refreshToken: refreshToken));
     if(hazizzResponse.isSuccessful){
       print("YEEEHAW22: suc");
 

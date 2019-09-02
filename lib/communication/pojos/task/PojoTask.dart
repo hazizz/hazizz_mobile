@@ -7,7 +7,7 @@ import '../PojoGroup.dart';
 import '../PojoSubject.dart';
 import '../PojoTag.dart';
 
-part 'PojoTask.g.dart';
+part 'PojoTask.gg.dart';
 
 //@JsonSerializable()
 class PojoTask extends Pojo implements Comparable<PojoTask>{

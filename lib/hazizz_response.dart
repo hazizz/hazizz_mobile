@@ -10,6 +10,7 @@ import 'package:meta/meta.dart';
 import 'blocs/kreta_status_bloc.dart';
 import 'blocs/selected_session_bloc.dart';
 import 'logger.dart';
+import 'managers/app_state_manager.dart';
 import 'request_sender.dart';
 import 'communication/ResponseHandler.dart';
 import 'communication/pojos/PojoError.dart';
@@ -95,9 +96,9 @@ class HazizzResponse{
             RequestSender().lock();
 
             HazizzResponse tokenResponse = await RequestSender().getTokenResponse(
-                new CreateTokenWithRefresh(
-                    b_username: await InfoCache.getMyUsername(),
-                    b_refreshToken: await TokenManager.getRefreshToken(),
+                new CreateToken.withRefresh(
+                    q_username: await InfoCache.getMyUsername(),
+                    q_refreshToken: await TokenManager.getRefreshToken(),
                 ));
 
             if(tokenResponse.isSuccessful) {
@@ -105,7 +106,13 @@ class HazizzResponse{
               TokenManager.setToken(tokens.token);
               TokenManager.setRefreshToken(tokens.refresh);
               RequestSender().unlock();
-            }else {
+            }else if(tokenResponse.isError){
+              if(tokenResponse.pojoError != null){
+                if(tokenResponse.pojoError.errorCode == 17){
+                  AppState.logout();
+                }
+
+              }
               print("log: obtaining token failed");
             }
 

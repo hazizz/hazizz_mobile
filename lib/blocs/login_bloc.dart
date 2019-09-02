@@ -151,7 +151,7 @@ class BasicLoginBloc extends Bloc<LoginEvent, LoginState> {
         if(passwordState is TextFormFine) { //usernameState is TextFormFine && passwordState is TextFormFine) {
           try {
 
-            HazizzResponse hazizzResponse = await RequestSender().getResponse(CreateTokenWithPassword(b_username: event.username, b_password: event.password));
+            HazizzResponse hazizzResponse = await RequestSender().getResponse(CreateToken.withPassword(q_username: event.username, q_password: event.password));
             if(hazizzResponse.isSuccessful){
 
               await AppState.logInProcedure(tokens: hazizzResponse.convertedData);

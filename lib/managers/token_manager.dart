@@ -181,7 +181,7 @@ class HazizzAccount{
   }
 
    Future<void> fetchTokens(@required String username, @required String password) async{
-    HazizzResponse hazizzResponse = await RequestSender().getResponse(new CreateTokenWithPassword(b_username: username, b_password: password));
+    HazizzResponse hazizzResponse = await RequestSender().getResponse(new CreateToken.withPassword(q_username: username, q_password: password));
     if(hazizzResponse.isSuccessful){
       print("log: token: tokens set");
 
@@ -205,7 +205,7 @@ class HazizzAccount{
   }
 
    Future<void> fetchRefreshTokens({@required String username, @required String refreshToken}) async{
-    HazizzResponse hazizzResponse = await RequestSender().getTokenResponse(new CreateTokenWithRefresh(b_username: username, b_refreshToken: refreshToken));
+    HazizzResponse hazizzResponse = await RequestSender().getTokenResponse(new CreateToken.withRefresh(q_username: username, q_refreshToken: refreshToken));
     if(hazizzResponse.isSuccessful){
       PojoTokens tokens = hazizzResponse.convertedData;
       InfoCache.setMyUsername(username);
@@ -361,7 +361,7 @@ class TokenManager {
   }
 
   static Future<void> fetchTokens(@required String username, @required String password) async{
-    HazizzResponse hazizzResponse = await RequestSender().getResponse(new CreateTokenWithPassword(b_username: username, b_password: password));
+    HazizzResponse hazizzResponse = await RequestSender().getResponse(new CreateToken.withPassword(q_username: username, q_password: password));
     if(hazizzResponse.isSuccessful){
       print("log: token: tokens set");
 
@@ -385,7 +385,7 @@ class TokenManager {
   }
 
   static Future<void> fetchRefreshTokens({@required String username, @required String refreshToken}) async{
-    HazizzResponse hazizzResponse = await RequestSender().getTokenResponse(new CreateTokenWithRefresh(b_username: username, b_refreshToken: refreshToken));
+    HazizzResponse hazizzResponse = await RequestSender().getTokenResponse(new CreateToken.withRefresh(q_username: username, q_refreshToken: refreshToken));
     if(hazizzResponse.isSuccessful){
       PojoTokens tokens = hazizzResponse.convertedData;
       InfoCache.setMyUsername(username);

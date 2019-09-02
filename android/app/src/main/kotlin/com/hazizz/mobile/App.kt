@@ -9,7 +9,7 @@ import io.flutter.plugins.androidalarmmanager.AlarmService
 class App : FlutterApplication(), PluginRegistry.PluginRegistrantCallback {
     override fun onCreate() {
         super.onCreate()
-        WorkmanagerPlugin.setPluginRegistrantCallback(this)
+       // WorkmanagerPlugin.setPluginRegistrantCallback(this)
         AlarmService.setPluginRegistrant(this)
     }
 

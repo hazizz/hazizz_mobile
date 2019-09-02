@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/create_group_bloc.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
+import 'package:mobile/communication/pojos/PojoInviteLink.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/enums/groupTypesEnum.dart';
 import 'package:share/share.dart';
@@ -36,7 +37,12 @@ class _InviteLinkDialog extends State<InviteLinkDialog> {
     RequestSender().getResponse(GetGroupInviteLink(groupId: widget.group.id)).then((hazizzResponse){
       setState(() {
         if(hazizzResponse.isSuccessful){
-          inviteLink = hazizzResponse.convertedData;
+          List<PojoInviteLink> links =  hazizzResponse.convertedData;
+          if(links.isNotEmpty && links[0] != null){
+            inviteLink = links[0].link;
+          }else{
+            inviteLink = errorText;
+          }
         }else{
           inviteLink = errorText;
         }

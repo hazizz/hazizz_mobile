@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../hazizz_date.dart';
 import '../hazizz_localizations.dart';
+import '../hazizz_theme.dart';
 
 class TaskHeaderItemWidget extends StatelessWidget{
  // String days;
@@ -21,9 +22,9 @@ class TaskHeaderItemWidget extends StatelessWidget{
 
 
     /*
+
+
     int daysMonth = dateTime.month;
-
-
     int days = dateTime.difference(DateTime.now()).inDays;
 
     dateTime.difference(DateTime.now()).inMicroseconds
@@ -35,18 +36,27 @@ class TaskHeaderItemWidget extends StatelessWidget{
 
     print("DAYS: $days");
 
+    Color backColor = Theme.of(context).primaryColorDark;
+
     String title;
     if(days == 0){
       title = locText(context, key: "today");
     }
     else if(days == 1){
       title = locText(context, key: "tomorrow");
-    }else{
+    }else if(days < 0){
+      title = locText(context, key: "days_before", args: [days.abs().toString()]);
+      backColor = HazizzTheme.red;
+    }
+
+    else{
       title = locText(context, key: "days_later", args: [days.toString()]);
     }
     return Card(
+      margin: EdgeInsets.only(left: 2, top: 2, bottom: 2, right: 2),
+        elevation: 7,
         clipBehavior: Clip.antiAliasWithSaveLayer,
-        color: Theme.of(context).primaryColorDark,
+        color: backColor,
         child: Padding(
           padding: const EdgeInsets.only(top: 1.5, bottom: 1.5, left: 4),
           child: InkWell(

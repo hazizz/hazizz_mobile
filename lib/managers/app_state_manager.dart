@@ -105,6 +105,8 @@ class AppState{
   }
 
   static Future logoutProcedure() async {
+    RequestSender().clearAllRequests();
+
     final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: [
       "https://www.googleapis.com/auth/userinfo.email",
       "https://www.googleapis.com/auth/userinfo.profile",
@@ -113,9 +115,7 @@ class AppState{
     final FirebaseAuth _auth = FirebaseAuth.instance;
 
     await _auth.signOut().then((_) {
-      //try the following
       _googleSignIn.signOut();
-      //try the following
     });
 
     TokenManager.invalidateTokens();

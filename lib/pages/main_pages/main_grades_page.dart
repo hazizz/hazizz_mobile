@@ -55,6 +55,15 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
     Map<String, List<PojoGrade>> grades = pojoGrades.grades;
     int itemCount = grades.keys.length;
 
+    if(grades.isEmpty){
+      return Stack(
+        children: <Widget>[
+          Align(alignment: Alignment.topCenter, child: Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().gradesBloc.lastUpdated))),
+          Center(child: Text(locText(context, key: "no_grades_yet")))
+        ],
+      );
+    }
+
     /*
                   grades.forEach((String key, List<PojoGrade> value){
                     itemCount += value.length;
@@ -69,7 +78,8 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
         itemBuilder: (BuildContext context, int index) {
 
           if(index == 0){
-            return Center(child: Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().gradesBloc.lastUpdated)));
+            return Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().gradesBloc.lastUpdated));
+
           }
 
           String key = grades.keys.elementAt(index-1);

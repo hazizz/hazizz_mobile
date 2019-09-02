@@ -2,20 +2,26 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/comment_section_bloc.dart';
 import 'package:mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
 import 'package:mobile/blocs/request_event.dart';
+import 'package:mobile/blocs/tasks_bloc.dart';
 import 'package:mobile/blocs/view_task_bloc.dart';
 import 'package:mobile/communication/pojos/PojoTag.dart';
 
 import 'package:flutter/material.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/dialogs/dialogs.dart';
+import 'package:mobile/dialogs/report_dialog.dart';
 import 'package:mobile/managers/cache_manager.dart';
 import 'package:mobile/widgets/comment_section_widget.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 import 'package:mobile/widgets/tag_chip.dart';
 
+import '../communication/requests/request_collection.dart';
 import '../hazizz_date.dart';
 import '../hazizz_localizations.dart';
+import '../hazizz_response.dart';
 import '../hazizz_theme.dart';
+import '../request_sender.dart';
+import 'main_pages/main_tasks_page.dart';
 
 class ViewTaskPage extends StatefulWidget {
 
@@ -49,15 +55,18 @@ class _ViewTaskPage extends State<ViewTaskPage> {
   static final double padding = 8;
 
 
-   String _subject = "";
-   String _group = "";
-   String _creator = "";
-   //String _type = "";
-   List<PojoTag> _tags = List();
-   String _deadline = "";
-   String _description = "";
-   String _title = "";
-   PojoTag mainTag = null;
+  bool completed = true;
+  bool isFirstTime = true;
+
+  String _subject = "";
+  String _group = "";
+  String _creator = "";
+  //String _type = "";
+  List<PojoTag> _tags = List();
+  String _deadline = "";
+  String _description = "";
+  String _title = "";
+  PojoTag mainTag = null;
 
   List<PojoTask> task_data = List();
 
@@ -97,13 +106,18 @@ class _ViewTaskPage extends State<ViewTaskPage> {
 
 
       for(PojoTag t in pojoTask.tags){
-        if(t.name != mainTag.name){
+        if(mainTag == null ||  t.name != mainTag.name){
           tagWidgets.add(
               TagChip(child: Text(t.getDisplayName(context), style: TextStyle(fontSize: 21, ),),
                 hasCloseButton: false,
               )
           );
         }
+      }
+
+      if(isFirstTime){
+        completed = pojoTask.completed;
+        isFirstTime = false;
       }
 
 
@@ -138,7 +152,15 @@ class _ViewTaskPage extends State<ViewTaskPage> {
     super.initState();
   }
 
+  /*
+  setComplete(bool c){
+    setState(() {
+      print("obungaööö: $c");
 
+      completed = c;
+    });
+  }
+  */
   @override
   Widget build(BuildContext context) {
 
@@ -156,6 +178,30 @@ class _ViewTaskPage extends State<ViewTaskPage> {
         appBar: AppBar(
           leading: HazizzBackButton(),
           title: Text(locText(context, key: "view_task")),
+          actions: <Widget>[
+            PopupMenuButton(
+              icon: Icon(FontAwesomeIcons.ellipsisV, size: 20,),
+              onSelected: (value) async {
+                if(value == "report"){
+                 /* bool success = await showReportDialog(context, reportType: ReportTypeEnum.GROUP, id: widget.pojoTask.id, name: widget.pojoTask.name);
+                  if(success != null && success){
+
+                  }
+                  */
+                }
+              },
+              itemBuilder: (BuildContext context) {
+                return [
+                  PopupMenuItem(
+                    value: "report",
+                    child: Text(locText(context, key: "report"),
+                      style: TextStyle(color: HazizzTheme.red),
+                    ),
+                  )
+                ];
+              },
+            )
+          ],
         ),
         body:RefreshIndicator(
           onRefresh: () async{
@@ -197,114 +243,185 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                   color: mainTag != null ? mainTag.getColor(): Theme.of(context).primaryColor,
                                   //  width: 400,
 
-                                  child: Column(
+                                  child: Stack(
                                     children: <Widget>[
-                                      Builder(
-                                        builder: (context){
-                                          if(mainTag != null){
-                                            return Padding(
-                                              padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 2),
-                                              child: new Row(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                children: [
-                                                  new Flexible(
-                                                      child: Text(mainTag.getDisplayName(context),
-                                                        style: TextStyle(
-                                                            fontSize: 36,
-                                                            fontWeight: FontWeight.w800
-                                                        ),
-                                                      )
-                                                  ),
-                                                ],
-                                              ),
+                                      Positioned(
+                                        right: 0,
+                                        bottom: 0,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(right: 8.0, bottom: 14),
+                                          child: Builder(builder: (context){
+
+
+                                            print("REEDRAW: $completed");
+                                            IconData iconData;
+                                            if(completed){
+
+
+                                              return IconButton(
+                                                  icon: Icon(FontAwesomeIcons.checkSquare, size: 46,),
+                                                  onPressed: () async {
+                                                    setState(() {
+                                                      completed = false;
+
+                                                    });
+                                                    HazizzResponse hazizzResponse = await RequestSender().getResponse(SetTaskCompleted(p_taskId: pojoTask.id, setCompleted: false));
+                                                    if(hazizzResponse.isError){
+                                                      setState(() {
+                                                        completed = true;
+                                                      });
+                                                    }
+                                                  }
+                                              );
+                                            }
+                                            return IconButton(
+                                                icon: Icon(FontAwesomeIcons.square, size: 46,),
+                                                onPressed: () async {
+                                                  setState(() {
+                                                    completed = true;
+
+                                                  });
+                                                  HazizzResponse hazizzResponse = await RequestSender().getResponse(SetTaskCompleted(p_taskId: pojoTask.id, setCompleted: true));
+                                                  if(hazizzResponse.isError){
+                                                    setState(() {
+                                                      completed = false;
+                                                    });
+                                                  }
+                                                }
                                             );
-                                          }
-                                          return Container();
-                                        },
-                                      ),
 
 
-                                      Wrap(
-                                        alignment: WrapAlignment.start,
-                                        //  runAlignment: WrapAlignment.start,
+                                            return IconButton(
+                                              icon: Icon(iconData),
+                                              onPressed: () async {
+                                                setState(() {
+                                                  print("nigus1  $completed");
+                                                  completed = !completed;
+                                                  print("nigus2  $completed");
 
-                                        spacing: 8,
-                                        crossAxisAlignment: WrapCrossAlignment.center,
-                                        children: tagWidgets,
-                                      ),
+                                                });
+                                                HazizzResponse hazizzResponse = await RequestSender().getResponse(SetTaskCompleted(p_taskId: pojoTask.id, setCompleted: completed));
+                                                if(hazizzResponse.isError){
+                                                setState(() {
+                                                completed = true;
+                                                });
+                                                }
+                                                }
+                                            );
 
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 16.0, right: 20.0, bottom: 2),
-                                        child: new Row(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(right: 8.0, left: 3),
-                                              child: Icon(FontAwesomeIcons.userAlt),
-                                            ),
-                                            new Flexible(
-                                                child: Text(pojoTask.creator.displayName,
-                                                  style: TextStyle(
-                                                      fontSize: 23
-                                                  ),
-                                                )
-                                            ),
-                                          ],
+                                          }),
                                         ),
                                       ),
-
-                                      Builder(
-                                        builder: (context){
-                                          if(pojoTask.group != null){
-                                            return Padding(
-                                              padding: const EdgeInsets.only(left: 16.0, right: 20.0, bottom: 2),
-                                              child: new Row(
-                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                children: [
-                                                  Padding(
-                                                    padding: const EdgeInsets.only(right: 11.0),
-                                                    child: Icon(FontAwesomeIcons.users),
+                                      Column(
+                                        children: <Widget>[
+                                          Builder(
+                                            builder: (context){
+                                              if(mainTag != null){
+                                                return Padding(
+                                                  padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 2),
+                                                  child: new Row(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [
+                                                      new Flexible(
+                                                          child: Text(mainTag.getDisplayName(context),
+                                                            style: TextStyle(
+                                                                fontSize: 36,
+                                                                fontWeight: FontWeight.w800
+                                                            ),
+                                                          )
+                                                      ),
+                                                    ],
                                                   ),
-                                                  new Flexible(
-                                                      child: Text(pojoTask.group.name,
-                                                        style: TextStyle(
-                                                            fontSize: 23
-                                                        ),
-                                                      )
-                                                  ),
-                                                ],
-                                              ),
-                                            );
-                                          }
-                                          return Container();
-                                        },
-                                      ),
+                                                );
+                                              }
+                                              return Container();
+                                            },
+                                          ),
 
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 16.0, right: 20.0, bottom: 4),
-                                        child: new Row(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(right: 8.0, left: 3),
-                                              child: Icon(FontAwesomeIcons.calendarAlt),
+
+                                          Wrap(
+                                            alignment: WrapAlignment.start,
+                                            //  runAlignment: WrapAlignment.start,
+
+                                            spacing: 8,
+                                            crossAxisAlignment: WrapCrossAlignment.center,
+                                            children: tagWidgets,
+                                          ),
+
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 16.0, right: 20.0, bottom: 2),
+                                            child: new Row(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.only(right: 8.0, left: 3),
+                                                  child: Icon(FontAwesomeIcons.userAlt),
+                                                ),
+                                                new Flexible(
+                                                    child: Text(pojoTask.creator.displayName,
+                                                      style: TextStyle(
+                                                          fontSize: 23
+                                                      ),
+                                                    )
+                                                ),
+                                              ],
                                             ),
+                                          ),
 
-                                            new Flexible(
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(top: 4.0),
-                                                child: Text(_deadline,
-                                                  style: TextStyle(
-                                                      fontSize: 23
+                                          Builder(
+                                            builder: (context){
+                                              if(pojoTask.group != null){
+                                                return Padding(
+                                                  padding: const EdgeInsets.only(left: 16.0, right: 20.0, bottom: 2),
+                                                  child: new Row(
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    children: [
+                                                      Padding(
+                                                        padding: const EdgeInsets.only(right: 11.0),
+                                                        child: Icon(FontAwesomeIcons.users),
+                                                      ),
+                                                      new Flexible(
+                                                          child: Text(pojoTask.group.name,
+                                                            style: TextStyle(
+                                                                fontSize: 23
+                                                            ),
+                                                          )
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              }
+                                              return Container();
+                                            },
+                                          ),
+
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 16.0, right: 20.0, bottom: 4),
+                                            child: new Row(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.only(right: 8.0, left: 3),
+                                                  child: Icon(FontAwesomeIcons.calendarAlt),
+                                                ),
+
+                                                new Flexible(
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.only(top: 4.0),
+                                                    child: Text(_deadline,
+                                                      style: TextStyle(
+                                                          fontSize: 23
+                                                      ),
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
+                                              ],
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
                                     ],
-                                  ),
+                                  )
                                 ),
                                 Stack(
                                   children: <Widget>[
@@ -473,7 +590,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                                       pojoTask = editedTask;
                                                       processData(context, pojoTask);
                                                     });
-                                                    MainTabBlocs().tasksBloc.dispatch(FetchData());
+                                                    MainTabBlocs().tasksBloc.dispatch(TasksFetchEvent());
                                                   }
                                                 },
                                                 child: Text(locText(context, key: "edit").toUpperCase(), style: theme(context).textTheme.button,),
@@ -483,7 +600,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                                 onPressed: () async {
                                                   if(await showDeleteDialog(context, taskId: widget.taskId)){
                                                     print("success");
-                                                    MainTabBlocs().tasksBloc.dispatch(FetchData());
+                                                    MainTabBlocs().tasksBloc.dispatch(TasksFetchEvent());
                                                     Navigator.of(context).pop();
 
                                                   }else{

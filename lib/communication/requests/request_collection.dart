@@ -9,6 +9,7 @@ import 'package:mobile/communication/pojos/PojoError.dart';
 import 'package:mobile/communication/pojos/PojoGrades.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/pojos/PojoGroupDetailed.dart';
+import 'package:mobile/communication/pojos/PojoInviteLink.dart';
 import 'package:mobile/communication/pojos/PojoMeInfoPrivate.dart';
 import 'package:mobile/communication/pojos/PojoMeInfo.dart';
 import 'package:mobile/communication/pojos/PojoSchedules.dart';
@@ -86,7 +87,7 @@ class Request {
   }
 
   Map<String, dynamic> header = {};
-  Map<String, dynamic> body = {};
+  dynamic body = {};
   Map<String, dynamic> query = {};
 
   void onSuccessful(Response response){
@@ -140,6 +141,7 @@ class AuthRequest extends Request{
 
 //region Auth server requests
 //region Token requests
+/*
 class CreateTokenWithPassword extends AuthRequest{
   CreateTokenWithPassword({String b_username, String b_password, ResponseHandler rh}) : super(rh){
     httpMethod = HttpMethod.POST;
@@ -213,15 +215,55 @@ class CreateTokenWithRefresh extends AuthRequest{
 
 }
 
-class CreateElevationToken extends AuthRequest{
-  CreateElevationToken({String b_password, ResponseHandler rh}) : super(rh){
-    httpMethod = HttpMethod.POST;
-    PATH = "auth/elevationtoken";
+*/
 
-    body["password"] = b_password;
-    contentTypeHeader = true;
+class CreateToken extends AuthRequest{
+  void hardCodeReducer(){
+    httpMethod = HttpMethod.POST;
+    PATH = "auth";
   }
+  CreateToken.withPassword({String q_username, String q_password, ResponseHandler rh}) : super(rh){
+
+    hardCodeReducer();
+    query["grant_type"] = "password";
+    query["username"] = q_username;
+    query["password"] = q_password;
+  }
+
+  CreateToken.withRefresh({@required String q_username, @required  String q_refreshToken, ResponseHandler rh}) : super(rh){
+    hardCodeReducer();
+
+    query["grant_type"] = "refresh_token";
+    query["username"] = q_username;
+    query["refresh_token"] = q_refreshToken;
+  }
+
+  CreateToken.withGoogleAccount({@required String q_openIdToken}) : super(null){
+    hardCodeReducer();
+
+    query["grant_type"] = "google_openid";
+    query["openid_token"] = q_openIdToken;
+  }
+
+  /*
+  @override
+  void onSuccessful(Response response) {
+    PojoTokens tokens = PojoTokens.fromJson(jsonDecode(response.data));
+    TokenManager.setToken(tokens.token);
+    TokenManager.setRefreshToken(tokens.refresh);
+
+  }
+  */
+
+  @override
+  convertData(Response response) {
+    PojoTokens tokens = PojoTokens.fromJson(jsonDecode(response.data));
+    return tokens;
+  }
+
 }
+
+
 //endregion
 
 class RegisterUser extends AuthRequest{
@@ -368,6 +410,49 @@ class UpdateMyDisplayName extends HazizzRequest {
     return meInfo;
   }
 }
+
+
+class Report extends HazizzRequest {
+  void hardCodeReducer( String description){
+    httpMethod = HttpMethod.POST;
+    authTokenHeader = true;
+
+    contentTypeHeader = true;
+   // body["title"] = title;
+    body = description;
+  }
+
+  Report.group({ResponseHandler rh, @required int p_groupId, @required String b_description}) : super(rh) {
+    PATH = "groups/$p_groupId/report";
+    hardCodeReducer( b_description);
+  }
+
+  Report.subject({ResponseHandler rh, @required int p_subjectId, @required String b_description}) : super(rh) {
+    PATH = "subjects/$p_subjectId/report";
+    hardCodeReducer( b_description);
+  }
+
+  Report.task({ResponseHandler rh, @required int p_taskId, @required String b_description}) : super(rh) {
+    PATH = "tasks/$p_taskId/report";
+    hardCodeReducer( b_description);
+  }
+
+  Report.comment({ResponseHandler rh, @required int p_commentId, @required int p_taskId, @required String b_description}) : super(rh) {
+    PATH = "tasks/$p_taskId/comments/$p_commentId/report";
+    hardCodeReducer(b_description);
+  }
+
+  Report.user({ResponseHandler rh, @required int p_userId, @required String b_description}) : super(rh) {
+    PATH = "users/$p_userId/report";
+    hardCodeReducer(b_description);
+  }
+
+  @override
+  convertData(Response response) {
+    return response;
+  }
+}
+
 
 
 
@@ -623,15 +708,17 @@ class GetTaskByTaskId extends HazizzRequest {
 }
 
 class GetTasksFromMe extends HazizzRequest {
-  GetTasksFromMe({ResponseHandler rh}) : super(rh) {
+  GetTasksFromMe({ResponseHandler rh, bool q_showThera = true, bool q_unfinishedOnly, bool q_finishedOnly, List<String> q_tags, String q_startingDate, String q_endDate}) : super(rh) {
     httpMethod = HttpMethod.GET;
     PATH = "v2/me/tasks";
     authTokenHeader = true;
-  }
 
-  @override
-  void onSuccessful(Response response) {
-
+    if(q_showThera != null )    query["showThera"] = q_showThera;
+    if(q_unfinishedOnly != null )query["unfinishedOnly"] = q_unfinishedOnly;
+    if(q_finishedOnly != null )query["finishedOnly"] = q_finishedOnly;
+    if(q_tags != null )query["tags"] = q_tags;
+    if(q_startingDate != null )query["startingDate"] = q_startingDate;
+    if(q_endDate != null )query["endDate"] = q_endDate;
   }
 
   @override
@@ -646,6 +733,30 @@ class GetTasksFromMe extends HazizzRequest {
     return myTasks;
   }
 }
+
+class SetTaskCompleted extends HazizzRequest {
+  SetTaskCompleted({ResponseHandler rh, @required int p_taskId, @required bool setCompleted}) : super(rh) {
+    authTokenHeader = true;
+    PATH = "tasks/$p_taskId/completed";
+
+    if(setCompleted){
+      httpMethod = HttpMethod.POST;
+    }else{
+      httpMethod = HttpMethod.DELETE;
+    }
+  }
+
+  @override
+  dynamic convertData(Response response) {
+    String isCompleted = response.data;
+    if(isCompleted == "true"){
+      return true;
+    }
+    return false;
+
+  }
+}
+
 
 class GetTasksFromGroup extends HazizzRequest {
   GetTasksFromGroup({ResponseHandler rh, int groupId}) : super(rh) {
@@ -725,14 +836,16 @@ class GetGroupMembers extends HazizzRequest {
 class GetGroupInviteLink extends HazizzRequest {
   GetGroupInviteLink({ResponseHandler rh, @required int groupId}) : super(rh) {
     httpMethod = HttpMethod.GET;
-    PATH = "groups/${groupId}/invitelink";
+    PATH = "groups/${groupId}/invitelinks";
     authTokenHeader = true;
   }
 
   @override
   dynamic convertData(Response response) {
-    String link = response.data;
-    return link;
+    Iterable iter = getIterable(response.data);
+    List<PojoInviteLink> links = iter.map<PojoInviteLink>((json) => PojoInviteLink.fromJson(json)).toList();
+
+    return links;
   }
 }
 

@@ -4,6 +4,8 @@ import 'package:mobile/blocs/comment_section_bloc.dart';
 import 'package:mobile/blocs/view_task_bloc.dart';
 import 'package:mobile/communication/pojos/pojo_comment.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
+import 'package:mobile/dialogs/dialogs.dart';
+import 'package:mobile/dialogs/report_dialog.dart';
 import 'package:mobile/managers/cache_manager.dart';
 import 'package:mobile/widgets/comment_section_widget.dart';
 
@@ -116,10 +118,24 @@ class _CommentItemWidget extends State<CommentItemWidget>{
                           if(value == value_delete){
                             await RequestSender().getResponse(DeleteTaskComment(p_taskId: widget.taskId, p_commentId: widget.comment.id));
                             ViewTaskBloc().commentBlocs.commentSectionBloc.dispatch(CommentSectionFetchEvent());
+                          }else if(value == "report"){
+                            bool success = await showReportDialog(context, reportType: ReportTypeEnum.COMMENT, id: widget.comment.id, secondId: widget.taskId, name: widget.comment.creator.displayName);
+                            if(success != null && success){
+
+                            }
                           }
                         },
                         itemBuilder: (BuildContext context) {
+
+
+
                           return [
+                            PopupMenuItem(
+                                value: "report",
+                                child: Text(locText(context, key: "report"),
+                                style: TextStyle(color: HazizzTheme.red),
+                              ),
+                            ),
                             PopupMenuItem(
                               value: value_delete,
                               child: GestureDetector(
@@ -128,6 +144,7 @@ class _CommentItemWidget extends State<CommentItemWidget>{
                                 ),
                               )
                             )
+
                           ];
                         },
 

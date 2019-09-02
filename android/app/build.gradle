@@ -29,6 +29,7 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 def propertiesFilename = "private_key.properties"
 
+
 if (!project.file(propertiesFilename).exists()) {
     propertiesFilename = "public_key.properties"
 }
@@ -93,9 +94,12 @@ android {
     }
     buildTypes {
         release {
+            /*
+
             ndk {
                 abiFilters "armeabi", "x86", "armeabi-v7a",'arm64-v8a', 'x86_64'
             }
+            */
             signingConfig signingConfigs.release
         }
     }

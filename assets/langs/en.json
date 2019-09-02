@@ -39,6 +39,9 @@
     "days_later"
     : "In {} days",
 
+  "days_before"
+  : "Expired {} before",
+
     "today"
     : "Today",
 
@@ -79,9 +82,29 @@
     : "Save",
 
 
-    "button_send"
+    "send"
     : "Send",
 
+
+  "report"
+  : "Report",
+
+
+  "user"
+  : "User",
+
+  "commment"
+  : "Comment",
+
+
+  "report_something"
+  : "Report {}",
+
+  "accept_hazizz_policy"
+  : "I accept the Hazizz policy",
+
+  "error_accept_hazizz_policy"
+  : "You must accept the Hazizz policy!",
 
     "button_add"
     : "Add",
@@ -408,6 +431,11 @@
     "accept"
     : "Accept",
 
+  "apply"
+  : "Apply",
+
+  "invite_others"
+  : "Invite",
 
     "loading"
     : "Loading...",
@@ -464,6 +492,9 @@
     "no_schedule"
     : "No schedule",
 
+    "no_schedule_for_week"
+    : "No schedule for this week",
+
     "no_grades_yet"
     : "You don't have grades yet",
 
@@ -483,6 +514,8 @@
     "no_comment"
     : "No comments",
 
+  "somebodys_comment"
+  : "'s comment",
 
     "groupMembers"
     : "Members",
@@ -639,6 +672,21 @@
 
     "createTask"
     : "Create task",
+
+  "completed"
+  : "Completed",
+
+  "uncompleted"
+  : "Uncompleted",
+
+  "both"
+  : "Both",
+
+  "expired"
+  : "Expired",
+
+  "active"
+  : "Active",
 
 
     "title_newannouncement"
@@ -1163,14 +1211,6 @@
     "days_m_5" : "Sa",
     "days_m_6" : "Su",
 
-
-    "filterType_map": {
-        "new": "New",
-        "subject" : "Subject",
-        "group": "Group",
-        "done": "Done",
-        "undone": "Undone"
-    },
 
     "homework_map": {
         "homework": "Homework",

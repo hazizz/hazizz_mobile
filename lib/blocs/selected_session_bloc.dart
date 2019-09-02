@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 
 import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
+import 'package:mobile/blocs/schedule_bloc.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
 
 import 'package:mobile/managers/kreta_session_manager.dart';
@@ -99,7 +100,7 @@ class SelectedSessionBloc extends Bloc<SelectedSessionEvent, SelectedSessionStat
     }else if(event is SelectedSessionSetEvent){
       selectedSession = event.session;
       await KretaSessionManager.setSelectedSession(selectedSession);
-      MainTabBlocs().schedulesBloc.dispatch(FetchData());
+      MainTabBlocs().schedulesBloc.dispatch(ScheduleFetchEvent());
       MainTabBlocs().gradesBloc.dispatch(FetchData());
 
       yield SelectedSessionFineState(selectedSession);

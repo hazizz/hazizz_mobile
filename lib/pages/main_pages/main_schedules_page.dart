@@ -1,9 +1,12 @@
+import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
 import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
+import 'package:mobile/blocs/schedule_bloc.dart';
 import 'package:mobile/communication/errors.dart';
 import 'package:mobile/communication/pojos/PojoClass.dart';
 import 'package:mobile/communication/pojos/PojoSchedules.dart';
@@ -71,52 +74,102 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
 
     Map<String, List<PojoClass>> schedule = pojoSchedule.classes;
 
+    Widget body;
 
+    DateTime now = DateTime.now();
 
-    if(_currentIndex > schedule.length-1){
-      _currentIndex = schedule.length-1;
-    }
+    DateTime weekStart = DateTime(now.year, now.month, now.day - now.weekday+1);
 
-    _tabList.clear();
-    bottomNavBarItems.clear();
-    int i = 0;
-    for(String dayIndex in schedule.keys){
-      i++;
-      if( schedule[dayIndex].isNotEmpty) {
-        Color currentDayColor = Colors.transparent;
-        if(i == currentDayIndex ){
-          currentDayColor = Colors.blue;
-        }
+    DateTime weekEnd = DateTime(now.year, now.month, now.day + 7 - now.weekday);
 
-        String dayName = locText(context, key: "days_$dayIndex");
-        String dayMName = locText(context, key: "days_m_$dayIndex");
-        _tabList.add(SchedulesTabPage(classes: schedule[dayIndex]));
-        bottomNavBarItems.add(BottomNavigationBarItem(
-
-          title: Container(),
-          icon: Padding(
-            padding: const EdgeInsets.only(bottom: 4.0),
-            child: Text(dayMName,
-              style: TextStyle(color: Colors.red, fontSize: 22, fontWeight: FontWeight.w500, fontFamily: "Montserrat", /*backgroundColor: currentDayColor*/),
-            ),
-          ),
-          activeIcon: Text(dayName,
-            style: TextStyle(color: Colors.red, fontSize: 28, fontWeight: FontWeight.bold, /*backgroundColor: currentDayColor*/),
-          ),
-        ));
+    if(schedule.isEmpty){
+      body = Center(child: Text(locText(context, key: "no_schedule_for_week")),);
+    }else{
+      if(_currentIndex > schedule.length-1){
+        _currentIndex = schedule.length-1;
       }
-    }
-    _tabController = TabController(vsync: this, length: _tabList.length);
 
-    if(canBuildBottomNavBar == false) {
-      SchedulerBinding.instance.addPostFrameCallback((_) =>
-          setState(() {
-            if(this.mounted){
-              canBuildBottomNavBar = true;
-            }
-          })
-      );
+      _tabList.clear();
+      bottomNavBarItems.clear();
+      int i = 0;
+      for(String dayIndex in schedule.keys){
+        i++;
+        if( schedule[dayIndex].isNotEmpty) {
+          Color currentDayColor = Colors.transparent;
+          if(i == currentDayIndex ){
+            currentDayColor = Colors.blue;
+          }
+
+          String dayName = locText(context, key: "days_$dayIndex");
+          String dayMName = locText(context, key: "days_m_$dayIndex");
+          _tabList.add(SchedulesTabPage(classes: schedule[dayIndex]));
+          bottomNavBarItems.add(BottomNavigationBarItem(
+
+            title: Container(),
+            icon: Padding(
+              padding: const EdgeInsets.only(bottom: 4.0),
+              child: Text(dayMName,
+                style: TextStyle(color: Colors.red, fontSize: 22, fontWeight: FontWeight.w500, /*backgroundColor: currentDayColor*/),
+              ),
+            ),
+            activeIcon: Text(dayName,
+              style: TextStyle(color: Colors.red, fontSize: 28, fontWeight: FontWeight.bold, /*backgroundColor: currentDayColor*/),
+            ),
+          ));
+        }
+      }
+      _tabController = TabController(vsync: this, length: _tabList.length);
+
+      if(canBuildBottomNavBar == false) {
+        SchedulerBinding.instance.addPostFrameCallback((_) =>
+            setState(() {
+              if(this.mounted){
+                canBuildBottomNavBar = true;
+              }
+            })
+        );
+      }
+
+      // now.weekday
+
+
+
+      body =
+          Column(
+            children: <Widget>[
+              Expanded(
+                child: TabBarView(
+                  physics: NeverScrollableScrollPhysics(),
+                  controller: _tabController,
+                  children: _tabList,
+                ),
+              ),
+
+              Builder(
+                builder: (context){
+                  if(canBuildBottomNavBar){
+                    return Container(
+                        color: Theme.of(context).primaryColorDark,
+                        child: BottomNavigationBar(
+                          currentIndex: _currentIndex,
+                          onTap: (int index){
+                            setState(() {
+                              _currentIndex = index;
+                            });
+                            _tabController.animateTo(index);
+                          },
+                          items: bottomNavBarItems
+                        )
+                    );
+                  }
+                  return Container();
+                },
+              )
+            ],
+          );
     }
+
+
 
 
 
@@ -132,36 +185,51 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
             ),
           ),
           */
-          Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().schedulesBloc.lastUpdated)),
-          Expanded(
-            child: TabBarView(
-              physics: NeverScrollableScrollPhysics(),
-              controller: _tabController,
-              children: _tabList,
+          Container(
+            width: MediaQuery.of(context).size.width,
+            child: Card(
+              child: ExpandablePanel(
+                tapHeaderToExpand: true,
+                collapsed: Container(
+                  width: MediaQuery.of(context).size.width,
+
+                  child: Card(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        IconButton(
+                          icon: Icon(FontAwesomeIcons.chevronLeft),
+                          onPressed: (){
+                            MainTabBlocs().schedulesBloc.dispatch(ScheduleFetchEvent(yearNumber: MainTabBlocs().schedulesBloc.currentYearNumber, weekNumber: MainTabBlocs().schedulesBloc.currentWeekNumber-1));
+                          },
+                        ),
+                        Text(MainTabBlocs().schedulesBloc.currentWeekNumber.toString()),
+
+                      //  Text("${weekStart.day}-${weekEnd.day}"),
+                        IconButton(
+                          icon: Icon(FontAwesomeIcons.chevronRight),
+                          onPressed: (){
+                            MainTabBlocs().schedulesBloc.dispatch(ScheduleFetchEvent(yearNumber: MainTabBlocs().schedulesBloc.currentYearNumber, weekNumber: MainTabBlocs().schedulesBloc.currentWeekNumber+1));
+                          },
+                        ),
+                      ],
+                    )
+                  ),
+                ),
+                expanded: Card(
+                  child: Column(
+                    children: <Widget>[
+                      Text("date"),
+                      Text("date"),
+                      Text("date"),
+                    ],
+                  )
+                ),
+              ),
             ),
           ),
-
-          Builder(
-            builder: (context){
-              if(canBuildBottomNavBar){
-                return Container(
-                    color: Theme.of(context).primaryColorDark,
-                    child: BottomNavigationBar(
-                        currentIndex: _currentIndex,
-                        onTap: (int index){
-                          setState(() {
-                            _currentIndex = index;
-                          });
-                          _tabController.animateTo(index);
-                        },
-                        items: bottomNavBarItems
-                    )
-                );
-              }
-              return Container();
-
-            },
-          )
+          Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().schedulesBloc.lastUpdated)),
+          body
 
           // Container( width: MediaQuery.of(context).size.width,child: ScheduleEventWidget()),
 
@@ -178,7 +246,7 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
           builder: (context, state){
             return RefreshIndicator(
               onRefresh: () async{
-                MainTabBlocs().schedulesBloc.dispatch(FetchData());
+                MainTabBlocs().schedulesBloc.dispatch(ScheduleFetchEvent());
 
               },
               child: Stack(
@@ -186,15 +254,17 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
                     ListView(),
                     BlocBuilder(
                         bloc:  MainTabBlocs().schedulesBloc,
-                        builder: (_, HState state) {
+                        builder: (_, ScheduleState state) {
 
-                          if (state is ResponseDataLoaded) {
-                            if(state.data != null /*&& state.data.isNotEmpty()*/){
-                              return onLoaded(state.data);
+                          if (state is ScheduleLoadedState) {
+                            if(state.schedules != null /*&& state.data.isNotEmpty()*/){
+                              print("hát persze hogy eljutok1");
+                              return onLoaded(state.schedules);
 
                             }
-                          }else if (state is ResponseDataLoadedFromCache) {
+                          }else if (state is ScheduleLoadedCacheState) {
                             if(state.data != null /*&& state.data.isNotEmpty()*/){
+                              print("hát persze hogy eljutok2");
                               return onLoaded(state.data);
 
                             }                          }
@@ -209,16 +279,16 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
                                   )
                                 ]
                             );
-                          } else if (state is ResponseWaiting) {
+                          } else if (state is ScheduleWaitingState) {
                             //return Center(child: Text("Loading Data"));
                             return Center(child: CircularProgressIndicator(),);
-                          }else if(state is ResponseError ){
-                            if(state.errorResponse.pojoError != null && state.errorResponse.pojoError.errorCode == 138){
+                          }else if(state is ScheduleErrorState ){
+                            if(state.hazizzResponse.pojoError != null && state.hazizzResponse.pojoError.errorCode == 138){
                               WidgetsBinding.instance.addPostFrameCallback((_) {
                                 Toast.show(locText(context, key: "kreta_server_unavailable"), context, duration: 4, gravity:  Toast.BOTTOM);
                               });
                             }
-                            else if(state.errorResponse.dioError == noConnectionError){
+                            else if(state.hazizzResponse.dioError == noConnectionError){
                               WidgetsBinding.instance.addPostFrameCallback((_) {
                                 Toast.show(locText(context, key: "info_noInternetAccess"), context, duration: 4, gravity:  Toast.BOTTOM);
                               });

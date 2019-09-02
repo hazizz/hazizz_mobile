@@ -1,5 +1,8 @@
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_localization/easy_localization_provider.dart';
+import 'package:easy_localization/easy_localization_provider.dart';
 import 'package:easy_localization/easy_localization_provider.dart';
 
 import 'package:flutter/material.dart';
@@ -77,6 +80,7 @@ Future<bool> fromNotification() async {
 
 void main() async{
 
+  WidgetsFlutterBinding.ensureInitialized();
   await AppState.appStartProcedure();
 
 

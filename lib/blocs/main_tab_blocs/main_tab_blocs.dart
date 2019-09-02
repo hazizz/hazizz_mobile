@@ -21,7 +21,9 @@ import '../../hazizz_response.dart';
 import '../../hazizz_time_of_day.dart';
 import '../request_event.dart';
 import '../response_states.dart';
+import '../schedule_bloc.dart';
 import '../schedule_event_bloc.dart';
+import '../tasks_bloc.dart';
 
 class MainTasksBloc extends Bloc<HEvent, HState> {
   List<PojoTask> tasks;
@@ -103,7 +105,7 @@ class MainTasksBloc extends Bloc<HEvent, HState> {
     }
   }
 }
-
+/*
 class MainSchedulesBloc extends Bloc<HEvent, HState> {
 
   ScheduleEventBloc scheduleEventBloc;
@@ -141,7 +143,7 @@ class MainSchedulesBloc extends Bloc<HEvent, HState> {
         /*
         DateTime now = DateTime.now();
 
-        int dayOfYear = int.parse(DateFormat("D").format(now));
+        int dayOfYear = int.parse(DateFormat("D").format(n ow));
         int weekOfYear = ((dayOfYear - now.weekday + 10) / 7).floor();
 
         print("WEEK OF YEAR: $weekOfYear");*/
@@ -151,6 +153,19 @@ class MainSchedulesBloc extends Bloc<HEvent, HState> {
         if(hazizzResponse.isSuccessful){
           print("classes.classes: ${ hazizzResponse.convertedData}");
           classes = hazizzResponse.convertedData;
+
+          classes = PojoSchedules({"1": [
+            PojoClass(date: DateTime(2000), periodNumber: 1, startOfClass: HazizzTimeOfDay(hour: 2, minute: 2), endOfClass: HazizzTimeOfDay(hour: 2, minute: 2), className: "TEST", topic: "TOPIC", subject: "SUBJECT", room: "", cancelled: true, standIn: true, teacher: "PEKÁR LOL"),
+
+          ],
+            "2": [
+              PojoClass(date: DateTime(2000), periodNumber: 1, startOfClass: HazizzTimeOfDay(hour: 2, minute: 2), endOfClass: HazizzTimeOfDay(hour: 2, minute: 2), className: "TEST", topic: "TOPIC", subject: "SUBJECT", room: "", cancelled: true, standIn: true, teacher: "PEKÁR LOL"),
+
+            ],
+
+          });
+
+
           if(classes != null && classes.classes.isNotEmpty){
 
             lastUpdated = DateTime.now();
@@ -163,7 +178,7 @@ class MainSchedulesBloc extends Bloc<HEvent, HState> {
 
             print("log: opsie: 0");
 
-            scheduleEventBloc.dispatch(ScheduleEventUpdateClassesEvent());
+           // scheduleEventBloc.dispatch(ScheduleEventUpdateClassesEvent());
 
 
             print("log: opsie: 1");
@@ -214,7 +229,7 @@ class MainSchedulesBloc extends Bloc<HEvent, HState> {
     }
   }
 }
-
+*/
 class MainGradesBloc extends Bloc<HEvent, HState> {
 
   PojoGrades grades;
@@ -282,10 +297,14 @@ class MainGradesBloc extends Bloc<HEvent, HState> {
 
 
         if(hazizzResponse.isSuccessful){
-          grades = hazizzResponse.convertedData;
-          lastUpdated = DateTime.now();
-          saveGradesCache(grades);
-          yield ResponseDataLoaded(data: grades);
+          if(hazizzResponse.convertedData != null){
+            grades = hazizzResponse.convertedData;
+            lastUpdated = DateTime.now();
+            saveGradesCache(grades);
+            yield ResponseDataLoaded(data: grades);
+          }else{
+            yield ResponseError(errorResponse: hazizzResponse);
+          }
         }
 
         /*
@@ -384,13 +403,15 @@ class MainTabBlocs{
 
   int initialIndex = StartPageService.tasksPage;
 
-  final MainTasksBloc tasksBloc = new MainTasksBloc();
-  final MainSchedulesBloc schedulesBloc = new MainSchedulesBloc();
-  final MainGradesBloc gradesBloc = new MainGradesBloc();
+  final TasksBloc tasksBloc = new TasksBloc();
+  //final MainSchedulesBloc schedulesBloc = new MainSchedulesBloc();
+   final ScheduleBloc schedulesBloc = new ScheduleBloc();
+
+   final MainGradesBloc gradesBloc = new MainGradesBloc();
 
   void fetchAll(){
-    tasksBloc.dispatch(FetchData());
-    schedulesBloc.dispatch(FetchData());
+    tasksBloc.dispatch(TasksFetchEvent());
+    schedulesBloc.dispatch(ScheduleFetchEvent());
     gradesBloc.dispatch(FetchData());
   }
 

@@ -162,7 +162,7 @@ class GoogleLoginBloc extends Bloc<GoogleLoginEvent, GoogleLoginState> {
       print(_openIdToken);
 
 
-      HazizzResponse hazizzResponseLogin = await RequestSender().getResponse(CreateTokenWithGoogleAccount(b_openIdToken: _openIdToken));
+      HazizzResponse hazizzResponseLogin = await RequestSender().getResponse(CreateToken.withGoogleAccount(q_openIdToken: _openIdToken));
 
       if(hazizzResponseLogin.isSuccessful) {
         PojoTokens tokens = hazizzResponseLogin.convertedData;
@@ -185,7 +185,7 @@ class GoogleLoginBloc extends Bloc<GoogleLoginEvent, GoogleLoginState> {
       yield GoogleLoginWaitingState();
       HazizzResponse hazizzResponseRegistration = await RequestSender().getResponse(RegisterWithGoogleAccount(b_openIdToken: _openIdToken));
       if(hazizzResponseRegistration.isSuccessful){
-        HazizzResponse hazizzResponseLogin2 = await RequestSender().getResponse(CreateTokenWithGoogleAccount(b_openIdToken: _openIdToken));
+        HazizzResponse hazizzResponseLogin2 = await RequestSender().getResponse(CreateToken.withGoogleAccount(q_openIdToken: _openIdToken));
 
         // proceed to the app
 

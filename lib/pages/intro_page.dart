@@ -9,6 +9,7 @@ import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/dialogs/loading_dialog.dart';
 import 'package:mobile/managers/app_state_manager.dart';
+import 'package:mobile/managers/deep_link_receiver.dart';
 import 'package:mobile/managers/welcome_manager.dart';
 import 'package:mobile/widgets/google_sign_in_widget.dart';
 import 'package:mobile/widgets/kreta_login_widget.dart';
@@ -91,54 +92,6 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
 
   int groupId;
 
-  void onLinkReceived(Uri deepLink) async{
-
-    print("DEEP LINK RECEIVED: ${deepLink.toString()}");
-    if (deepLink != null) {
-      setState(() {
-        setState(() {
-          processingDeepLink = true;
-        });
-      });
-      String str_groupId = deepLink.queryParameters["group"];
-
-      groupId = int.parse(str_groupId);
-      if(groupId != null){
-        if(await AppState.isLoggedIn()){
-          joinGroup();
-        }else{
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            joinLater= true;
-            Toast.show(locText(context, key: "you_have_to_log_in_to_join"), context, duration: Toast.LENGTH_LONG, gravity:  Toast.BOTTOM);
-          });
-        }
-
-
-      }else{
-        setState(() {
-          processingDeepLink = false;
-        });
-      }
-    }
-  }
-
-
-  StreamSubscription _sub;
-
-  Future<Null> initUniLinks() async {
-    Uri initialUri = await getInitialUri();
-
-
-    onLinkReceived(initialUri);
-    // Attach a listener to the stream
-    _sub = getUriLinksStream().listen((Uri uri) {
-      onLinkReceived(uri);
-    }, onError: (err) {
-      // Handle exception by warning the user their action did not succeed
-    });
-
-    // NOTE: Don't forget to call _sub.cancel() in dispose()
-  }
 
 
 
@@ -150,7 +103,7 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
   @override
   void initState() {
 
-    initUniLinks();
+    DeepLink.initUniLinks(context);
 
     _tabController = new HazizzTabController(length: 4, vsync: this);
   //  _tabController.addListener(_handleTabSelection);
@@ -162,7 +115,6 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
   @override
   void dispose() {
     // TODO: implement dispose
-    _sub.cancel();
 
     LoginBlocs().googleLoginBloc.reset();
 
@@ -523,10 +475,10 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
        child: Text(locText(context, key: "ekreta"), style: TextStyle(fontSize: 80, fontWeight: FontWeight.w800, color: HazizzTheme.blue, ),),
       ) ,
       Padding(
-        padding: const EdgeInsets.only(top: 20.0),
+        padding: const EdgeInsets.only(top: 10.0),
         child: Column(children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(top: 0.0, bottom: 30),
+            padding: const EdgeInsets.only(top: 0.0, bottom: 10),
             child: Text(locText(context, key: "login"), style: TextStyle(fontSize: 40, fontWeight: FontWeight.w800, color: HazizzTheme.blue),),
           ),
           Padding(

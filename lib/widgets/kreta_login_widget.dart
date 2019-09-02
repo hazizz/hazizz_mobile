@@ -163,7 +163,7 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
 
               builder: (FormFieldState formState) {
                 return InputDecorator(
-                    baseStyle: TextStyle(fontSize: 23, color: Colors.black),
+                    baseStyle: TextStyle(fontSize: 22, color: Colors.black),
                     decoration: InputDecoration(
 
                       labelText: locText(context, key: "school"),
@@ -177,7 +177,7 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
                         if(state is ItemListPickedState){
                           print("log: asdasdGroup: $state.item.name");
                           return Text('${state.item.name}',
-                            style: TextStyle(fontSize: 18),
+                            style: TextStyle(fontSize: 16),
 
                           );
                         }
@@ -233,17 +233,17 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
 
 
                 Padding(
-                  padding: EdgeInsets.only(left:16, right:16, bottom: 10),
+                  padding: EdgeInsets.only(left:16, right:16, bottom: 0),
                   child: usernameWidget,
                 ),
 
                 Padding(
-                  padding: EdgeInsets.only(left:16, right:16, bottom: 30),
+                  padding: EdgeInsets.only(left:16, right:16, bottom: 20),
                   child: passwordWidget,
                 ),
 
                 Padding(
-                  padding: EdgeInsets.only(left:16, right:16, bottom: 10),
+                  padding: EdgeInsets.only(left:16, right:16, bottom: 4),
                   child: schoolPickerWidget,
                 ),
 

@@ -2,6 +2,7 @@
 import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
 import 'package:mobile/blocs/task_maker_blocs.dart';
+import 'package:mobile/blocs/tasks_bloc.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/pojos/PojoTag.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
@@ -226,7 +227,7 @@ class TaskCreateBloc extends TaskMakerBloc {
         if(hazizzResponse.isSuccessful){
           print("log: task making was succcessful");
           yield TaskMakerSuccessfulState(hazizzResponse.convertedData);
-          MainTabBlocs().tasksBloc.dispatch(FetchData());
+          MainTabBlocs().tasksBloc.dispatch(TasksFetchEvent());
         }else{
           yield TaskMakerFailedState();
         }

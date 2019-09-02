@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/communication/pojos/PojoTag.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/pages/view_task_page.dart';
@@ -216,12 +217,36 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
                           ],
                         ),
                         */
-                        Wrap(
-                          alignment: WrapAlignment.start,
-                          runSpacing: 4,
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                            spacing: 4,
-                            children:  tagWidgets
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+
+                          children: <Widget>[
+                            Container(
+                              width: MediaQuery.of(context).size.width-60,
+                              child: Wrap(
+                                  alignment: WrapAlignment.start,
+                                  runSpacing: 4,
+                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                  spacing: 4,
+                                  children:  tagWidgets
+                              ),
+                            ),
+                            Spacer(),
+                            Builder(
+                              builder: (context){
+                                IconData iconData = FontAwesomeIcons.square;
+                                if(widget.pojoTask.completed){
+                                  iconData = FontAwesomeIcons.checkSquare;
+                                }
+                                return IconButton(
+                                    icon: Icon(iconData),
+                                    onPressed: () async {
+                                    }
+                                );
+                              },
+                            )
+                          ],
                         ),
 
                         Row(

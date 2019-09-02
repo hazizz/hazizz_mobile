@@ -84,6 +84,7 @@ class RequestSender{
       responseBody.
     },
     */
+
     connectTimeout: 5000,
     sendTimeout: 5000,
     receiveTimeout: 5000,
@@ -122,7 +123,7 @@ class RequestSender{
     try{
       options.headers = await authRequest.buildHeader();
       Dio authDio = Dio();
-      Response response = await authDio.post(authRequest.url, data: authRequest.body, options: options);
+      Response response = await authDio.post(authRequest.url, queryParameters: authRequest.query, data: authRequest.body, options: options);
       hazizzResponse = HazizzResponse.onSuccess(response: response, request: authRequest);
 
       print("hey: sent token request");
@@ -199,9 +200,9 @@ class RequestSender{
   Set<Request> noConnectionRequestsPrioritized = Set();
   List<Request> noConnectionRequests = List();
 
-  void addToNoConnectionRequestList(Request newRequest){
+  void addToPendingList(Request newRequest){
 
-    if(newRequest is CreateTokenWithRefresh){
+    if(newRequest is CreateToken){
       noConnectionRequestsPrioritized.add(newRequest);
     }
 
@@ -216,13 +217,30 @@ class RequestSender{
     }
   }
 
-  Future sendNoConnectionRequests() async {
+  Future sendPendingRequests() async {
     for(Request request in noConnectionRequestsPrioritized){
       await RequestSender().getResponse(request);
     }
-
-
+    for(Request request in noConnectionRequests){
+      await RequestSender().getResponse(request);
+    }
   }
+
+  Future clearPending() async {
+
+    noConnectionRequestsPrioritized.clear();
+    noConnectionRequests.clear();
+  }
+
+  Future clearQueue() async {
+    await dio.clear();
+  }
+
+  clearAllRequests() async {
+    await clearPending();
+    await clearQueue();
+  }
+
 
 
   Future<HazizzResponse> getResponse(Request request) async{
@@ -239,7 +257,7 @@ class RequestSender{
     print("GOT 'ERE: 1");
     try {
       if(isConnected) {
-        print("GOT 'ERE: 2");
+        print("GOT 'ERE: ${request.query}");
 
         if(request.httpMethod == HttpMethod.GET) {
           options.headers = await request.buildHeader();
@@ -255,6 +273,7 @@ class RequestSender{
           options.headers = await request.buildHeader();
           response = await dio.patch(request.url, queryParameters: request.query, data: request.body, options: options);
         }
+
         print("GOT 'ERE: 3");
         hazizzResponse = HazizzResponse.onSuccess(response: response, request: request);
        // print("log: request sent: ${request.toString()}");

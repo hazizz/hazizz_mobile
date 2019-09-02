@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/group_bloc.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/dialogs/dialogs.dart';
+import 'package:mobile/dialogs/report_dialog.dart';
 import 'package:mobile/managers/welcome_manager.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 import 'package:toast/toast.dart';
@@ -125,12 +126,38 @@ class _GroupTabHosterPage extends State<GroupTabHosterPage> with SingleTickerPro
         ),
         actions: <Widget>[
 
-          IconButton(
-            icon: Icon(FontAwesomeIcons.userPlus),
-            onPressed: (){
-              showInviteDialog(context, group: groupBlocs.group);
+
+
+          PopupMenuButton(
+            icon: Icon(FontAwesomeIcons.ellipsisV, size: 20,),
+            onSelected: (value) async {
+              if(value == "report"){
+                bool success = await showReportDialog(context, reportType: ReportTypeEnum.GROUP, id: widget.group.id, name: widget.group.name);
+                if(success != null && success){
+
+                }
+              }else if(value == "invite"){
+                showInviteDialog(context, group: groupBlocs.group);
+              }
+            },
+            itemBuilder: (BuildContext context) {
+              return [
+                PopupMenuItem(
+                  value: "invite",
+                  child: Text(locText(context, key: "invite_others"),
+                  ),
+                ),
+                PopupMenuItem(
+                  value: "report",
+                  child: Text(locText(context, key: "report"),
+                    style: TextStyle(color: HazizzTheme.red),
+                  ),
+                )
+              ];
             },
           ),
+
+
           /*
           DescribedFeatureOverlay(
               child: IconButton(

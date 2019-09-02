@@ -109,6 +109,10 @@ Future<DataCache> loadTasksCache() async {
   return dataCache;
 }
 
+
+
+
+
 void saveScheduleCache(PojoSchedules schedule){
  // List<String> asd = tasks[0].tags.map((e) => e == null ? null : e.name)?.toList();
   _save("scheduleCache", schedule.toJson());// tasks.map((e) => e == null ? null : e.toJson())?.toList());

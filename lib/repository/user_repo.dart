@@ -15,7 +15,7 @@ class UserRepository {
     @required String username,
     @required String password,
   }) async {
-    dynamic responseData = await RequestSender().getResponse(new CreateTokenWithPassword(b_username: username, b_password: password));
+    dynamic responseData = await RequestSender().getResponse(new CreateToken.withPassword(q_username: username, q_password: password));
     if(responseData is PojoTokens){
       TokenManager.setToken(responseData.token);
       TokenManager.setRefreshToken(responseData.refresh);

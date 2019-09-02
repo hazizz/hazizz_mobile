@@ -55,6 +55,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="https" android:host="hazizz.github.io" android:pathPrefix="/hazizz-webclient"/>
+                <data android:scheme="https" android:host="hazizz.duckdns.org"/>
+
             </intent-filter>
 
         </activity>

@@ -18,4 +18,4 @@ See [homepage](https://hazizz.github.io) for more information.
 ### Font used: [Nunito](https://fonts.google.com/specimen/Nunito)
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details

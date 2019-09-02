@@ -8,9 +8,9 @@ import 'package:json_annotation/json_annotation.dart';
 import '../../hazizz_theme.dart';
 import 'Pojo.dart';
 
-part 'PojoGrade.g.dart';
+part 'PojoGrade.gg.dart';
 
-@JsonSerializable()
+//@JsonSerializable()
 class PojoGrade extends Pojo {
 
   DateTime date;

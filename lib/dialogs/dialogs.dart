@@ -11,6 +11,7 @@ import 'package:mobile/communication/pojos/PojoSubject.dart';
 import 'package:mobile/communication/pojos/PojoTag.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/defaults/pojo_group_empty.dart';
+import 'package:mobile/dialogs/report_dialog.dart';
 import 'package:mobile/dialogs/school_dialog.dart';
 import 'package:mobile/dialogs/sure_to_join_group_dialog.dart';
 import 'package:mobile/widgets/hyper_link.dart';
@@ -455,6 +456,19 @@ Future<PojoSubject> showDialogSubject(BuildContext context, {@required PojoGroup
 }
 
 
+Future<bool> showReportDialog(BuildContext context, {@required ReportTypeEnum reportType, @required int id, @required int secondId, @required String name}) async{
+
+  var result = await showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      // return object of type Dialog
+      return ReportDialog(reportType: reportType, id: id, secondId: secondId, name: name,);
+    },
+  );
+  return result;
+}
+
+
 
 
 Future<void> showSureToJoinGroupDialog(BuildContext context, {@required int groupId}) async{
@@ -640,12 +654,10 @@ Future<bool> showDeleteDialog(context, {@required int taskId}) async {
         child: Padding(
           padding: EdgeInsets.all(10),
           child: Text(
-            "Are you sure you want to delete this task?",
+            locText(context, key: "areyousure_delete_task"),
             style: TextStyle(
-
-              fontFamily: 'Quicksand',
               fontSize: 20.0,
-              fontWeight: FontWeight.w300,
+              fontWeight: FontWeight.w700,
             ),
           ),
         ),
@@ -1473,7 +1485,7 @@ Future<bool> showConditionsToAcceptDialog(context) async {
     }
 
     String link = "https://hazizz.github.io/privacy-${currentLang}.txt";
-    print("nig: $link");
+    print("ng: $link");
     return link;
   }
   String getLinkTermsOfService(){
@@ -1482,7 +1494,7 @@ Future<bool> showConditionsToAcceptDialog(context) async {
       currentLang = "en";
     }
     String link = "https://hazizz.github.io/tos-${currentLang}.txt";
-    print("nig: $link");
+    print("ng: $link");
     return link;
   }
 
