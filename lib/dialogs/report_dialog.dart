@@ -56,7 +56,7 @@ class _ReportDialog extends State<ReportDialog> {
 
 
   final double width = 360;
-  final double height = 300;
+  final double height = 350;
 
 
   String acceptErrorText = "";

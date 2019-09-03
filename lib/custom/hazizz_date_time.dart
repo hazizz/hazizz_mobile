@@ -40,6 +40,10 @@ class HazizzDateTime extends DateTime{
     
   }
 
+  static HazizzDateTime parse(String formattedString){
+    HazizzDateTime d = DateTime.parse(formattedString);
+    return d;
+  }
 
   @override
   bool operator >=(dynamic other) {

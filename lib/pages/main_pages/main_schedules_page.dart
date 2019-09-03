@@ -185,6 +185,7 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
             ),
           ),
           */
+          /*
           Container(
             width: MediaQuery.of(context).size.width,
             child: Card(
@@ -228,6 +229,7 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
               ),
             ),
           ),
+          */
           Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().schedulesBloc.lastUpdated)),
           body
 
@@ -252,62 +254,107 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
               child: Stack(
                   children: <Widget>[
                     ListView(),
-                    BlocBuilder(
-                        bloc:  MainTabBlocs().schedulesBloc,
-                        builder: (_, ScheduleState state) {
+                    Column(
+                      children: <Widget>[
+                        Card(
+                          child: ExpandablePanel(
+                            tapHeaderToExpand: true,
+                            collapsed: Container(
+                              width: MediaQuery.of(context).size.width,
 
-                          if (state is ScheduleLoadedState) {
-                            if(state.schedules != null /*&& state.data.isNotEmpty()*/){
-                              print("hát persze hogy eljutok1");
-                              return onLoaded(state.schedules);
+                              child: Card(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      IconButton(
+                                        icon: Icon(FontAwesomeIcons.chevronLeft),
+                                        onPressed: (){
+                                          MainTabBlocs().schedulesBloc.dispatch(ScheduleFetchEvent(yearNumber: MainTabBlocs().schedulesBloc.currentYearNumber, weekNumber: MainTabBlocs().schedulesBloc.currentWeekNumber-1));
+                                        },
+                                      ),
+                                      Text(MainTabBlocs().schedulesBloc.currentWeekNumber.toString()),
 
-                            }
-                          }else if (state is ScheduleLoadedCacheState) {
-                            if(state.data != null /*&& state.data.isNotEmpty()*/){
-                              print("hát persze hogy eljutok2");
-                              return onLoaded(state.data);
-
-                            }                          }
-                          else if (state is ResponseEmpty) {
-                            return Column(
-                                children: [
-                                  Center(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(top: 50.0),
-                                      child: Text(locText(context, key: "no_schedule")),
-                                    ),
+                                      //  Text("${weekStart.day}-${weekEnd.day}"),
+                                      IconButton(
+                                        icon: Icon(FontAwesomeIcons.chevronRight),
+                                        onPressed: (){
+                                          MainTabBlocs().schedulesBloc.dispatch(ScheduleFetchEvent(yearNumber: MainTabBlocs().schedulesBloc.currentYearNumber, weekNumber: MainTabBlocs().schedulesBloc.currentWeekNumber+1));
+                                        },
+                                      ),
+                                    ],
                                   )
-                                ]
-                            );
-                          } else if (state is ScheduleWaitingState) {
-                            //return Center(child: Text("Loading Data"));
-                            return Center(child: CircularProgressIndicator(),);
-                          }else if(state is ScheduleErrorState ){
-                            if(state.hazizzResponse.pojoError != null && state.hazizzResponse.pojoError.errorCode == 138){
-                              WidgetsBinding.instance.addPostFrameCallback((_) {
-                                Toast.show(locText(context, key: "kreta_server_unavailable"), context, duration: 4, gravity:  Toast.BOTTOM);
-                              });
-                            }
-                            else if(state.hazizzResponse.dioError == noConnectionError){
-                              WidgetsBinding.instance.addPostFrameCallback((_) {
-                                Toast.show(locText(context, key: "info_noInternetAccess"), context, duration: 4, gravity:  Toast.BOTTOM);
-                              });
-                            }else{
-                              WidgetsBinding.instance.addPostFrameCallback((_) {
-                                Toast.show(locText(context, key: "info_something_went_wrong"), context, duration: 4, gravity:  Toast.BOTTOM);
-                              });
-                            }
+                              ),
+                            ),
+                            expanded: Card(
+                                child: Column(
+                                  children: <Widget>[
+                                    Text("date"),
+                                    Text("date"),
+                                    Text("date"),
+                                  ],
+                                )
+                            ),
+                          ),
+                        ),
+                        BlocBuilder(
+                            bloc:  MainTabBlocs().schedulesBloc,
+                            builder: (_, ScheduleState state) {
 
-                            if(MainTabBlocs().schedulesBloc.classes != null){
-                              return onLoaded(MainTabBlocs().schedulesBloc.classes);
-                            }
-                            return Center(
-                                child: Text(locText(context, key: "info_something_went_wrong")));
-                          }
-                          return Center(child: Text(locText(context, key: "info_something_went_wrong")),);
+                              if (state is ScheduleLoadedState) {
+                                if(state.schedules != null /*&& state.data.isNotEmpty()*/){
+                                  print("hát persze hogy eljutok1");
+                                  return onLoaded(state.schedules);
 
-                        }
+                                }
+                              }else if (state is ScheduleLoadedCacheState) {
+                                if(state.data != null /*&& state.data.isNotEmpty()*/){
+                                  print("hát persze hogy eljutok2");
+                                  return onLoaded(state.data);
+
+                                }                          }
+                              else if (state is ResponseEmpty) {
+                                return Column(
+                                    children: [
+                                      Center(
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(top: 50.0),
+                                          child: Text(locText(context, key: "no_schedule")),
+                                        ),
+                                      )
+                                    ]
+                                );
+                              } else if (state is ScheduleWaitingState) {
+                                //return Center(child: Text("Loading Data"));
+                                return Center(child: CircularProgressIndicator(),);
+                              }else if(state is ScheduleErrorState ){
+                                if(state.hazizzResponse.pojoError != null && state.hazizzResponse.pojoError.errorCode == 138){
+                                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                                    Toast.show(locText(context, key: "kreta_server_unavailable"), context, duration: 4, gravity:  Toast.BOTTOM);
+                                  });
+                                }
+                                else if(state.hazizzResponse.dioError == noConnectionError){
+                                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                                    Toast.show(locText(context, key: "info_noInternetAccess"), context, duration: 4, gravity:  Toast.BOTTOM);
+                                  });
+                                }else{
+                                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                                    Toast.show(locText(context, key: "info_something_went_wrong"), context, duration: 4, gravity:  Toast.BOTTOM);
+                                  });
+                                }
+
+                                if(MainTabBlocs().schedulesBloc.classes != null){
+                                  return onLoaded(MainTabBlocs().schedulesBloc.classes);
+                                }
+                                return Center(
+                                    child: Text(locText(context, key: "info_something_went_wrong")));
+                              }
+                              return Center(child: Text(locText(context, key: "info_something_went_wrong")),);
+
+                            }
+                        ),
+                      ],
                     ),
+
                   ],
                 ),
             );

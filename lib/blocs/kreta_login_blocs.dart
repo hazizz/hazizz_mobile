@@ -136,15 +136,22 @@ class SchoolItemPickerBloc extends ItemListPickerBloc {
     }
     else if (event is ItemListLoadData) {
         yield Waiting();
-        HazizzResponse hazizzResponse = await RequestSender().getResponse(
-            new KretaGetSchools()
-            );
+        HazizzResponse hazizzResponse = await RequestSender().getResponse(KretaGetSchools());
 
         if (hazizzResponse.isSuccessful) {
           data = hazizzResponse.convertedData;
          // listItemData = responseData;
             yield ItemListLoaded(data: data);
           
+        }else{
+          HazizzResponse hazizzResponse = await RequestSender().getResponse(KretaGetSchools());
+
+          if (hazizzResponse.isSuccessful) {
+            data = hazizzResponse.convertedData;
+            // listItemData = responseData;
+            yield ItemListLoaded(data: data);
+
+          }
         }
       
     }
@@ -271,6 +278,9 @@ class KretaLoginBloc extends Bloc<KretaLoginEvent, KretaLoginState> {
               }else{
                 yield KretaLoginSomethingWentWrong();
               }
+            }else{
+              yield KretaLoginSomethingWentWrong();
+
             }
           }on HResponseError catch(e) {
             print("piritos111");

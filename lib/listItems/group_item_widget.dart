@@ -28,13 +28,13 @@ class GroupItemWidget extends StatelessWidget{
                 alignment: Alignment.centerLeft,
                 child:
                 Padding(
-                  padding: const EdgeInsets.only(left: 8, top: 4, bottom: 4),
+                  padding: const EdgeInsets.only(left: 8, /*top: 4, bottom: 4*/),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(group.name,
                         style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.w700
+                            fontSize: 22, fontWeight: FontWeight.w700
                         ),
                       ),
                       PopupMenuButton(
@@ -45,6 +45,11 @@ class GroupItemWidget extends StatelessWidget{
                             if(success != null && success){
 
                             }
+                          }else if(value == "leave"){
+                            bool success = await showSureToLeaveGroupDialog(context, groupId: group.id);
+                            if(success != null && success){
+                              Navigator.pop(context);
+                            }
                           }
                         },
                         itemBuilder: (BuildContext context) {
@@ -52,6 +57,12 @@ class GroupItemWidget extends StatelessWidget{
                             PopupMenuItem(
                               value: "report",
                               child: Text(locText(context, key: "report"),
+                                style: TextStyle(color: HazizzTheme.red),
+                              ),
+                            ),
+                            PopupMenuItem(
+                              value: "leave",
+                              child: Text(locText(context, key: "leave"),
                                 style: TextStyle(color: HazizzTheme.red),
                               ),
                             )

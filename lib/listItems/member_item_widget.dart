@@ -22,19 +22,21 @@ class MemberItemWidget extends StatelessWidget{
             clipBehavior: Clip.antiAliasWithSaveLayer,
             elevation: 5,
             child: InkWell(
-                onTap: () {
+                onTap: () async {
+
+                  await showUserDialog(context, user: member);
                   print("tap tap");
                   //   Navigator.push(context,MaterialPageRoute(builder: (context) => ViewTaskPage.fromPojo(pojoTask: pojoTask)));
                 },
                 child:
                 Padding(
-                  padding: EdgeInsets.only(left: 6,top: 4, bottom: 4),
+                  padding: EdgeInsets.only(left: 6, /*top: 4, bottom: 4*/),
                   child:Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                     Text(member.displayName,
                       style: TextStyle(
-                          fontSize: 23, fontWeight: FontWeight.w700
+                          fontSize: 22, fontWeight: FontWeight.w700
                       ),
                     ) ,
                     PopupMenuButton(

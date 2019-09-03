@@ -36,9 +36,12 @@ class _CommentItemWidget extends State<CommentItemWidget>{
   void initState() {
     // TODO: implement initState
     InfoCache.getMyId().then((int result){
+      print("me author20: $result");
+
       if(widget.comment.creator.id == result){
         setState(() {
           imTheAuthor = true;
+          print("me author21");
         });
       }
     });
@@ -110,48 +113,51 @@ class _CommentItemWidget extends State<CommentItemWidget>{
                 Builder(
                   builder: (context) {
                     const String value_delete = "delete";
+
+                    List<PopupMenuEntry> menuItems = [
+                      PopupMenuItem(
+                        value: "report",
+                        child: Text(locText(context, key: "report"),
+                          style: TextStyle(color: HazizzTheme.red),
+                        ),
+                      ),
+
+
+
+                    ];
+
                     if(imTheAuthor) {
-                      return PopupMenuButton(
-                        icon: Icon(FontAwesomeIcons.ellipsisV, size: 20,),
-                        onSelected: (value) async {
-                          print("log: value: $value");
-                          if(value == value_delete){
-                            await RequestSender().getResponse(DeleteTaskComment(p_taskId: widget.taskId, p_commentId: widget.comment.id));
-                            ViewTaskBloc().commentBlocs.commentSectionBloc.dispatch(CommentSectionFetchEvent());
-                          }else if(value == "report"){
-                            bool success = await showReportDialog(context, reportType: ReportTypeEnum.COMMENT, id: widget.comment.id, secondId: widget.taskId, name: widget.comment.creator.displayName);
-                            if(success != null && success){
+                      menuItems.add(PopupMenuItem(
+                          value: value_delete,
+                          child: Text(locText(context, key: "delete"),
+                            style: TextStyle(color: HazizzTheme.red),
+                          ),
 
-                            }
-                          }
-                        },
-                        itemBuilder: (BuildContext context) {
-
-
-
-                          return [
-                            PopupMenuItem(
-                                value: "report",
-                                child: Text(locText(context, key: "report"),
-                                style: TextStyle(color: HazizzTheme.red),
-                              ),
-                            ),
-                            PopupMenuItem(
-                              value: value_delete,
-                              child: GestureDetector(
-                                child: Text(locText(context, key: "delete"),
-                                  style: TextStyle(color: HazizzTheme.red),
-                                ),
-                              )
-                            )
-
-                          ];
-                        },
-
-                      );
-                    }else{
-                      return Container();
+                      ));
                     }
+                    return PopupMenuButton(
+                      icon: Icon(FontAwesomeIcons.ellipsisV, size: 20,),
+                      onSelected: (value) async {
+                        print("log: value: $value");
+                        if(value == value_delete){
+                          await RequestSender().getResponse(DeleteTaskComment(p_taskId: widget.taskId, p_commentId: widget.comment.id));
+                          ViewTaskBloc().commentBlocs.commentSectionBloc.dispatch(CommentSectionFetchEvent());
+                        }else if(value == "report"){
+                          bool success = await showReportDialog(context, reportType: ReportTypeEnum.COMMENT, id: widget.comment.id, secondId: widget.taskId, name: widget.comment.creator.displayName);
+                          if(success != null && success){
+
+                          }
+                        }
+                      },
+                      itemBuilder: (BuildContext context) {
+
+
+
+                        return  menuItems;
+                      },
+
+                    );
+
                   }
                 )
               ]

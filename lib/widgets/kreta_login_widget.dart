@@ -12,6 +12,8 @@ import 'package:mobile/dialogs/dialogs.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/dialogs/loading_dialog.dart';
 import 'package:mobile/hazizz_theme.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+import 'package:xs_progress_hud/xs_progress_hud.dart';
 
 import '../hazizz_localizations.dart';
 
@@ -33,6 +35,9 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
   KretaLoginPageBlocs kretaLoginBlocs;
 
 
+  XsProgressHud hud = XsProgressHud();
+
+  ProgressDialog pr;
 
 
   bool passwordVisible = true;
@@ -43,6 +48,7 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
   @override
   void initState() {
 
+    pr = new ProgressDialog(context,ProgressDialogType.Normal);
     if(widget.sessionToAuth != null){
       kretaLoginBlocs = KretaLoginPageBlocs.auth(session: widget.sessionToAuth);
     }else{
@@ -63,13 +69,25 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
     super.dispose();
   }
 
+  Future<void> showCustomHud(BuildContext context) async {
+    pr.show();
+   // hud.progressColor = Colors.red;
+   // Navigator.push(context, hud);
+  }
+
+  Future<void> stopCustomHud() async {
+    pr.hide();
+   // hud.navigator.pop();
+  }
+
+
   @override
   Widget build(BuildContext context) {
+    pr.setMessage(locText(context, key: "loading"));
 
     if(widget.onSuccess == null){
       widget.onSuccess = () => Navigator.pop(context);
     }
-
     var usernameWidget = BlocBuilder(
         bloc: kretaLoginBlocs.usernameBloc,
         builder: (BuildContext context, HFormState state) {
@@ -206,7 +224,6 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
         }
     );
 
-
     return BlocBuilder(
       bloc: kretaLoginBlocs.kretaLoginBloc,
       builder: (context, state){
@@ -214,10 +231,22 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
         bool isLoading = false;
         if(state is KretaLoginFailure) {
           responseInfo = locText(context, key: "incorrect_data");
+
+          WidgetsBinding.instance.addPostFrameCallback((_) =>
+              stopCustomHud()
+          );
         }else if(state is KretaLoginSomethingWentWrong){
           responseInfo = locText(context, key: "try_again_later");
+          //stopCustomHud();
         }else if(state is KretaLoginWaiting){
         //  isLoading = true;
+
+
+          WidgetsBinding.instance.addPostFrameCallback((_) =>
+              showCustomHud(context)
+          );
+        }else{
+         // stopCustomHud();
         }
 
 

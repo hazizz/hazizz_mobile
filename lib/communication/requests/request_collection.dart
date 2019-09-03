@@ -353,6 +353,30 @@ class GetMyInfo extends HazizzRequest {
 }
 
 
+class GetUserProfilePicture extends HazizzRequest {
+  GetUserProfilePicture.mini({ResponseHandler rh, @required int userId}) : super(rh) {
+    PATH = "users/$userId/picture";
+    hardCodeReducer();
+  }
+
+  GetUserProfilePicture.full({ResponseHandler rh, @required int userId}) : super(rh) {
+    PATH = "users/$userId/picture/full";
+    hardCodeReducer();
+  }
+
+  void hardCodeReducer(){
+    httpMethod = HttpMethod.GET;
+    authTokenHeader = true;
+  }
+
+  @override
+  convertData(Response response) {
+    String encodedProfilePic = jsonDecode(response.data)["data"];
+    encodedProfilePic = encodedProfilePic.split(",")[1];
+    return encodedProfilePic;
+  }
+}
+
 class GetMyProfilePicture extends HazizzRequest {
   GetMyProfilePicture.mini({ResponseHandler rh}) : super(rh) {
     PATH = "me/picture";
@@ -520,8 +544,22 @@ class RetrieveGroup extends HazizzRequest {
   }
 }
 
+class LeaveGroup extends HazizzRequest {
 
-// you can also join group with this
+  LeaveGroup({ResponseHandler rh, @required int p_groupId,}) : super(rh) {
+    httpMethod = HttpMethod.GET;
+    PATH = "me/leavegroup/$p_groupId";
+    authTokenHeader = true;
+  }
+
+
+  @override
+  convertData(Response response) {
+    return response;
+  }
+}
+
+
 class JoinGroup extends HazizzRequest {
 
   bool isDetailed = false;

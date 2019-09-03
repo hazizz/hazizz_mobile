@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:mobile/custom/hazizz_date_time.dart';
 
 import 'Pojo.dart';
 
@@ -10,7 +11,7 @@ class PojoCreator implements Pojo {
   int id;
   String username;
   String displayName;
-  String registrationDate;
+  DateTime registrationDate;
 
   PojoCreator(this.id, this.username, this.displayName, this.registrationDate);
 

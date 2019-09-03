@@ -138,6 +138,11 @@ class _GroupTabHosterPage extends State<GroupTabHosterPage> with SingleTickerPro
                 }
               }else if(value == "invite"){
                 showInviteDialog(context, group: groupBlocs.group);
+              }else if(value == "leave"){
+                bool success = await showSureToLeaveGroupDialog(context, groupId: groupBlocs.group.id);
+                if(success != null && success){
+                  Navigator.pop(context);
+                }
               }
             },
             itemBuilder: (BuildContext context) {
@@ -150,6 +155,12 @@ class _GroupTabHosterPage extends State<GroupTabHosterPage> with SingleTickerPro
                 PopupMenuItem(
                   value: "report",
                   child: Text(locText(context, key: "report"),
+                    style: TextStyle(color: HazizzTheme.red),
+                  ),
+                ),
+                PopupMenuItem(
+                  value: "leave",
+                  child: Text(locText(context, key: "leave"),
                     style: TextStyle(color: HazizzTheme.red),
                   ),
                 )

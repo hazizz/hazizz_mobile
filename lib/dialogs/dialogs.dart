@@ -5,15 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/communication/pojos/PojoClass.dart';
+import 'package:mobile/communication/pojos/PojoCreator.dart';
 import 'package:mobile/communication/pojos/PojoGrade.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
 import 'package:mobile/communication/pojos/PojoTag.dart';
+import 'package:mobile/communication/pojos/PojoUser.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
+import 'package:mobile/custom/hazizz_date_time.dart';
 import 'package:mobile/defaults/pojo_group_empty.dart';
 import 'package:mobile/dialogs/report_dialog.dart';
 import 'package:mobile/dialogs/school_dialog.dart';
 import 'package:mobile/dialogs/sure_to_join_group_dialog.dart';
+import 'package:mobile/dialogs/sure_to_leave_group_dialog.dart';
+import 'package:mobile/dialogs/user_dialog.dart';
 import 'package:mobile/widgets/hyper_link.dart';
 import 'package:share/share.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -456,7 +461,7 @@ Future<PojoSubject> showDialogSubject(BuildContext context, {@required PojoGroup
 }
 
 
-Future<bool> showReportDialog(BuildContext context, {@required ReportTypeEnum reportType, @required int id, @required int secondId, @required String name}) async{
+Future<bool> showReportDialog(BuildContext context, {@required ReportTypeEnum reportType, @required int id, int secondId, @required String name}) async{
 
   var result = await showDialog(
     context: context,
@@ -478,6 +483,18 @@ Future<void> showSureToJoinGroupDialog(BuildContext context, {@required int grou
     builder: (BuildContext context) {
       // return object of type Dialog
       return SureToJoinGroupDialog(groupId: groupId,);
+    },
+  );
+  return result;
+}
+
+Future<bool> showSureToLeaveGroupDialog(BuildContext context, {@required int groupId}) async{
+
+  bool result = await showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      // return object of type Dialog
+      return SureToLeaveGroupDialog(groupId: groupId,);
     },
   );
   return result;
@@ -630,6 +647,22 @@ Future<PojoTag> showDialogTaskTag(BuildContext context, {List<PojoTag> except}) 
   );
   return result;
 }
+
+
+
+Future<void> showUserDialog(context, { PojoUser user, PojoCreator creator}) {
+
+  return showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+
+        return UserDialog(creator: creator, user: user,);
+      });
+}
+
+
+
 
 Future<bool> showDeleteDialog(context, {@required int taskId}) async {
 

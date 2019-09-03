@@ -4,6 +4,7 @@ import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/blocs/google_login_bloc.dart';
 import 'package:mobile/dialogs/dialogs.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 import '../hazizz_localizations.dart';
 
@@ -24,9 +25,10 @@ class GoogleSignInButtonWidget extends StatefulWidget {
 
 class _GoogleSignInButtonWidget extends State<GoogleSignInButtonWidget> {
 
+
+
   @override
   void initState() {
-
 
 
     super.initState();
@@ -49,28 +51,37 @@ class _GoogleSignInButtonWidget extends State<GoogleSignInButtonWidget> {
       bloc: LoginBlocs().googleLoginBloc,
       builder: (context, state){
         String errorText = "";
-        if(state is GoogleLoginFailedState){
+        if(state is GoogleLoginWaitingState) {
 
-          errorText = locText(context, key: "error_signing_in_with_google");
+        }else{
+
+
+          if(state is GoogleLoginFailedState){
+
+            errorText = locText(context, key: "error_signing_in_with_google");
+
+          }
+          else if(state is GoogleLoginHaveToAcceptConditionsState){
+            WidgetsBinding.instance.addPostFrameCallback((_) =>
+                showConditionsToAcceptDialog(context).then((accepted){
+                  print("ACPETED: $accepted");
+                  if(accepted != null && accepted){
+                    LoginBlocs().googleLoginBloc.dispatch(GoogleLoginAcceptedConditionsEvent());
+                  }else{
+                    LoginBlocs().googleLoginBloc.dispatch(GoogleLoginRejectConditionsEvent());
+                  }
+                })
+            );
+
+
+          }else if(state is GoogleLoginRejectedConditionsState){
+            print("rejected and signing out222");
+
+            errorText = locText(context, key: "error_conditionsNotAccepted");
+          }
+
         }
-        else if(state is GoogleLoginHaveToAcceptConditionsState){
-          WidgetsBinding.instance.addPostFrameCallback((_) =>
-              showConditionsToAcceptDialog(context).then((accepted){
-                print("ACPETED: $accepted");
-                if(accepted != null && accepted){
-                  LoginBlocs().googleLoginBloc.dispatch(GoogleLoginAcceptedConditionsEvent());
-                }else{
-                  LoginBlocs().googleLoginBloc.dispatch(GoogleLoginRejectConditionsEvent());
-                }
-              })
-          );
 
-
-        }else if(state is GoogleLoginRejectedConditionsState){
-          print("rejected and signing out222");
-
-          errorText = locText(context, key: "error_conditionsNotAccepted");
-        }
 
          return Column(
           children: <Widget>[

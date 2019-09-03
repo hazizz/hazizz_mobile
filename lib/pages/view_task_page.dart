@@ -183,11 +183,11 @@ class _ViewTaskPage extends State<ViewTaskPage> {
               icon: Icon(FontAwesomeIcons.ellipsisV, size: 20,),
               onSelected: (value) async {
                 if(value == "report"){
-                 /* bool success = await showReportDialog(context, reportType: ReportTypeEnum.GROUP, id: widget.pojoTask.id, name: widget.pojoTask.name);
+                  bool success = await showReportDialog(context, reportType: ReportTypeEnum.TASK, id: widget.pojoTask.id, name: "");
                   if(success != null && success){
 
                   }
-                  */
+
                 }
               },
               itemBuilder: (BuildContext context) {
@@ -249,7 +249,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                         right: 0,
                                         bottom: 0,
                                         child: Padding(
-                                          padding: const EdgeInsets.only(right: 8.0, bottom: 14),
+                                          padding: const EdgeInsets.only(right: 6, bottom: 6),
                                           child: Builder(builder: (context){
 
 
@@ -259,7 +259,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
 
 
                                               return IconButton(
-                                                  icon: Icon(FontAwesomeIcons.checkSquare, size: 46,),
+                                                  icon: Icon(FontAwesomeIcons.checkSquare, size: 32,),
                                                   onPressed: () async {
                                                     setState(() {
                                                       completed = false;
@@ -275,7 +275,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                               );
                                             }
                                             return IconButton(
-                                                icon: Icon(FontAwesomeIcons.square, size: 46,),
+                                                icon: Icon(FontAwesomeIcons.square, size: 32,),
                                                 onPressed: () async {
                                                   setState(() {
                                                     completed = true;
@@ -295,9 +295,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                               icon: Icon(iconData),
                                               onPressed: () async {
                                                 setState(() {
-                                                  print("nigus1  $completed");
                                                   completed = !completed;
-                                                  print("nigus2  $completed");
 
                                                 });
                                                 HazizzResponse hazizzResponse = await RequestSender().getResponse(SetTaskCompleted(p_taskId: pojoTask.id, setCompleted: completed));

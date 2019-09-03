@@ -89,6 +89,10 @@
     "send"
     : "Küldés",
 
+  "report_this"
+  : "Ez a",
+
+
   "report"
   : "Jelentés",
 
@@ -156,10 +160,10 @@
     : "Új feladatom",
 
     "editTask"
-    : "Edit task",
+    : "Feladat szerkesztése",
 
     "createTask"
-    : "Create task",
+    : "Feladat létrehozás",
 
   "completed"
   : "Kész van",
@@ -196,6 +200,8 @@
     "ok"
     : "OK",
 
+  "leave"
+  : "Kilépés",
 
     "close"
     : "Bezár",
@@ -296,7 +302,7 @@
 
 
     "registrationDate"
-    : "Regisztráció",
+    : "Regisztráció ideje",
 
 
     "kreta_username"

@@ -85,6 +85,8 @@
     "send"
     : "Send",
 
+  "report_this"
+  : "This",
 
   "report"
   : "Report",
@@ -175,6 +177,8 @@
     "ok"
     : "OK",
 
+  "leave"
+  : "Leave",
 
     "close"
     : "Close",

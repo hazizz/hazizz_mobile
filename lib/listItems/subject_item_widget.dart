@@ -29,14 +29,14 @@ class SubjectItemWidget extends StatelessWidget{
                 },
                 child:
                   Padding(
-                      padding: EdgeInsets.only(left: 6, top: 4, bottom: 4),
+                      padding: EdgeInsets.only(left: 6, /* top: 4, bottom: 4*/),
                       child:
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                         Text(subject.name,
                         style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.w700
+                            fontSize: 20, fontWeight: FontWeight.w700
                         ),),
 
                         PopupMenuButton(

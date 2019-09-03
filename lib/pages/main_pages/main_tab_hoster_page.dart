@@ -234,8 +234,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
                     ),
                   ),
 
-
-
+                  /*
                   ListTile(
                     title: Text(locText(context, key: "my_tasks")),
                     onTap: () async {
@@ -250,6 +249,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
 
                     },
                   ),
+                  */
 
                   Hero(
                     tag: "group",
@@ -314,8 +314,8 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
                               child: Builder(
                                 builder:(context){
                                   Icon icon = isDark?
-                                    Icon(FontAwesomeIcons.solidSun, color: Colors.orangeAccent,):
-                                    Icon(FontAwesomeIcons.solidMoon, color: Colors.black45, size: 43);
+                                    Icon(FontAwesomeIcons.solidSun, color: Colors.orangeAccent, size: 43):
+                                    Icon(FontAwesomeIcons.solidMoon, color: Colors.black45, size: 39);
 
                                   return IconButton(
                                     iconSize: 50,

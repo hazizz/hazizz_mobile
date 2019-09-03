@@ -67,6 +67,12 @@ class AppState{
     if(hazizzResponse.isSuccessful){
       PojoMeInfo meInfo = hazizzResponse.convertedData;
       setUserData(meInfo: meInfo);
+    }else{
+      hazizzResponse = await RequestSender().getResponse(GetMyInfo.private());
+      if(hazizzResponse.isSuccessful){
+        PojoMeInfo meInfo = hazizzResponse.convertedData;
+        setUserData(meInfo: meInfo);
+      }
     }
     print("log: oppoppo 4");
 
