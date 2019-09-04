@@ -137,10 +137,28 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
 
                     Navigator.push(context,MaterialPageRoute(builder: (context) => ViewTaskPage.fromPojo(pojoTask: widget.pojoTask)));
                   },
-                  child:
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[ /*
+                  child: Stack(
+                    children: <Widget>[
+                      Positioned(
+                        top: 0, right: 0,
+                        child: Builder(
+                          builder: (context){
+                            IconData iconData = FontAwesomeIcons.square;
+                            if(widget.pojoTask.completed){
+                              iconData = FontAwesomeIcons.checkSquare;
+                            }
+                            return IconButton(
+                                icon: Icon(iconData),
+                                onPressed: () async {
+                                }
+                            );
+                          },
+                        ),
+                      ),
+
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[ /*
                         Row(
                           children: <Widget>[
                            // highlightTag,
@@ -217,64 +235,54 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
                           ],
                         ),
                         */
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
 
-                          children: <Widget>[
-                            Container(
-                              width: MediaQuery.of(context).size.width-60,
-                              child: Wrap(
-                                  alignment: WrapAlignment.start,
-                                  runSpacing: 4,
-                                  crossAxisAlignment: WrapCrossAlignment.center,
-                                  spacing: 4,
-                                  children:  tagWidgets
+                            children: <Widget>[
+                              Container(
+                                width: MediaQuery.of(context).size.width-60,
+                                child: Wrap(
+                                    alignment: WrapAlignment.start,
+                                    runSpacing: 4,
+                                    crossAxisAlignment: WrapCrossAlignment.center,
+                                    spacing: 4,
+                                    children:  tagWidgets
+                                ),
                               ),
-                            ),
-                            Spacer(),
-                            Builder(
-                              builder: (context){
-                                IconData iconData = FontAwesomeIcons.square;
-                                if(widget.pojoTask.completed){
-                                  iconData = FontAwesomeIcons.checkSquare;
-                                }
-                                return IconButton(
-                                    icon: Icon(iconData),
-                                    onPressed: () async {
-                                    }
-                                );
-                              },
-                            )
-                          ],
-                        ),
 
-                        Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 6),
-                              child: Text(widget.pojoTask.title, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),),
-                            ),
-                          ]
-                        ),
+                            ],
+                          ),
 
-                         Padding(
+                          Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 6),
+                                  child: Text(widget.pojoTask.title, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),),
+                                ),
+                              ]
+                          ),
+
+                          Padding(
                             padding: const EdgeInsets.only(left: 10, top: 0, bottom: 0),
                             child: Text(widget.pojoTask.description, style: TextStyle(fontSize: 18),),
                           ),
 
 
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(top: 1, right: 6),
-                              child: Text(widget.pojoTask.creator.displayName, style: theme(context).textTheme.subtitle,),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(top: 1, right: 6),
+                                child: Text(widget.pojoTask.creator.displayName, style: theme(context).textTheme.subtitle,),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ],
+                  )
+
               )
             ),
         );

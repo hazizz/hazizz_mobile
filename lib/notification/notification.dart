@@ -108,7 +108,7 @@ class HazizzNotification{
           List<PojoTask> tasksToShow = List();
 
           for(PojoTask task in tasks) {
-            if(task.dueDate.day - DateTime.now().day == 1) {
+            if(task.dueDate.day - DateTime.now().day == 1 && !task.completed) {
               tasksToShow.add(task);
             }
           }

@@ -4,8 +4,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/group_bloc.dart';
 import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
+import 'package:mobile/communication/pojos/PojoGroupPermissions.dart';
 import 'package:mobile/communication/pojos/PojoUser.dart';
 import 'package:mobile/dialogs/dialogs.dart';
+import 'package:mobile/enums/group_permissions_enum.dart';
 import 'package:mobile/listItems/member_item_widget.dart';
 import 'package:mobile/managers/welcome_manager.dart';
 
@@ -74,12 +76,27 @@ class _GroupMembersPage extends State<GroupMembersPage> with AutomaticKeepAliveC
                     bloc: groupMembersBloc,
                     builder: (_, HState state) {
                       if (state is ResponseDataLoaded) {
-                        List<PojoUser> members = state.data;
-                        return new ListView.builder(
-                            itemCount: members.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return MemberItemWidget(member: members[index]);
 
+                        PojoGroupPermissions memberPermissions = state.data;
+                        List<MemberItemWidget> membersWidget = List();
+
+                        for(PojoUser member in memberPermissions.OWNER){
+                          membersWidget.add(MemberItemWidget(member: member, permission: GroupPermissionsEnum.OWNER,));
+                        }
+                        for(PojoUser member in memberPermissions.MODERATOR){
+                          membersWidget.add(MemberItemWidget(member: member, permission: GroupPermissionsEnum.MODERATOR,));
+                        }
+                        for(PojoUser member in memberPermissions.USER){
+                          membersWidget.add(MemberItemWidget(member: member, permission: GroupPermissionsEnum.USER,));
+                        }
+                        for(PojoUser member in memberPermissions.NULL){
+                          membersWidget.add(MemberItemWidget(member: member, permission: GroupPermissionsEnum.NULL,));
+                        }
+
+                        return new ListView.builder(
+                            itemCount: membersWidget.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return membersWidget[index];
                             }
                         );
                       } else if (state is ResponseEmpty) {

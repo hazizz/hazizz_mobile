@@ -10,6 +10,7 @@ import 'package:mobile/communication/errors.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/custom/formats.dart';
 import 'package:mobile/enums/task_complete_state_enum.dart';
+import 'package:mobile/enums/task_expired_state_enum.dart';
 import 'package:mobile/listItems/task_header_item_widget.dart';
 import 'package:mobile/listItems/task_item_widget.dart';
 import 'package:mobile/managers/welcome_manager.dart';
@@ -46,19 +47,18 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
 
 
 
-  TaskCompleteState currentCompletedTaskState = TaskCompleteState.UNCOMPLETED;
 
-  static const String value_expired_task_state_expired = "EXPIRED";
-  static const String value_expired_task_state_unexpired = "UNEXPIRED";
+  TaskCompleteState currentCompletedTaskState;
 
-  String current_expired_task_state = value_expired_task_state_unexpired;
-
-
-
+  TaskExpiredState currentExpiredTaskState;
 
 
   @override
   void initState() {
+
+    currentCompletedTaskState = MainTabBlocs().tasksBloc.currentTaskCompleteState;
+    currentExpiredTaskState = MainTabBlocs().tasksBloc.currentTaskExpiredState;
+
     // getData();
    // tasksBloc = widget.tasksBloc;
     print("created tasks PAge");
@@ -90,11 +90,7 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
 
   void applyFilters(){
     MainTabBlocs().tasksBloc.currentTaskCompleteState = currentCompletedTaskState;
-    if(current_expired_task_state == value_expired_task_state_expired){
-      MainTabBlocs().tasksBloc.onlyExpired = true;
-    }else{
-      MainTabBlocs().tasksBloc.onlyExpired = false;
-    }
+    MainTabBlocs().tasksBloc.currentTaskExpiredState = currentExpiredTaskState;
   }
 
   @override
@@ -226,15 +222,15 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
                   Padding(
                     padding: const EdgeInsets.only(left: 4.0),
                     child: DropdownButton(
-                      value: current_expired_task_state,
+                      value: currentExpiredTaskState,
                       onChanged: (value){
                         setState(() {
-                          current_expired_task_state = value;
+                          currentExpiredTaskState = value;
                         });
                       },
                       items: [
-                        DropdownMenuItem(child: Text(locText(context, key: "expired")), value: value_expired_task_state_expired,),
-                        DropdownMenuItem(child: Text(locText(context, key: "active")), value: value_expired_task_state_unexpired,)
+                        DropdownMenuItem(child: Text(locText(context, key: "expired")), value: TaskExpiredState.EXPIRED,),
+                        DropdownMenuItem(child: Text(locText(context, key: "active")), value: TaskExpiredState.UNEXPIRED,)
                       ],
                     ),
                   ),

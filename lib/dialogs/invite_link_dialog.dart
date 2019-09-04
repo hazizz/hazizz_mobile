@@ -37,12 +37,7 @@ class _InviteLinkDialog extends State<InviteLinkDialog> {
     RequestSender().getResponse(GetGroupInviteLink(groupId: widget.group.id)).then((hazizzResponse){
       setState(() {
         if(hazizzResponse.isSuccessful){
-          List<PojoInviteLink> links =  hazizzResponse.convertedData;
-          if(links.isNotEmpty && links[0] != null){
-            inviteLink = links[0].link;
-          }else{
-            inviteLink = errorText;
-          }
+          inviteLink = hazizzResponse.convertedData;
         }else{
           inviteLink = errorText;
         }

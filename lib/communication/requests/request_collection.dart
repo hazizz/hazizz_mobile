@@ -9,6 +9,7 @@ import 'package:mobile/communication/pojos/PojoError.dart';
 import 'package:mobile/communication/pojos/PojoGrades.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/pojos/PojoGroupDetailed.dart';
+import 'package:mobile/communication/pojos/PojoGroupPermissions.dart';
 import 'package:mobile/communication/pojos/PojoInviteLink.dart';
 import 'package:mobile/communication/pojos/PojoMeInfoPrivate.dart';
 import 'package:mobile/communication/pojos/PojoMeInfo.dart';
@@ -612,6 +613,22 @@ class GetMyGroups extends HazizzRequest {
 }
 
 //region Subject requests
+
+class DeleteSubject extends HazizzRequest {
+  DeleteSubject({ResponseHandler rh, @required int groupId, @required int subjectId}) : super(rh) {
+    httpMethod = HttpMethod.DELETE;
+    PATH = "subjects/group/$groupId/$subjectId";
+    authTokenHeader = true;
+  }
+
+  @override
+  dynamic convertData(Response response) {
+    return response;
+  }
+}
+
+
+
 class CreateSubject extends HazizzRequest {
   CreateSubject({ResponseHandler rh, @required int p_groupId, @required String b_subjectName}) : super(rh) {
     httpMethod = HttpMethod.POST;
@@ -871,8 +888,38 @@ class GetGroupMembers extends HazizzRequest {
   }
 }
 
-class GetGroupInviteLink extends HazizzRequest {
-  GetGroupInviteLink({ResponseHandler rh, @required int groupId}) : super(rh) {
+
+class GetGroupMemberPermisions extends HazizzRequest {
+  GetGroupMemberPermisions({ResponseHandler rh, int groupId}) : super(rh) {
+    httpMethod = HttpMethod.GET;
+    PATH = "groups/${groupId}/permissions";
+    authTokenHeader = true;
+  }
+
+  @override
+  dynamic convertData(Response response) {
+    PojoGroupPermissions p = PojoGroupPermissions.fromJson(jsonDecode(response.data));
+    return p;
+  }
+}
+
+class KickGroupMember extends HazizzRequest {
+  KickGroupMember({ResponseHandler rh, @required int groupId, @required int userId}) : super(rh) {
+    httpMethod = HttpMethod.DELETE;
+    PATH = "groups/$groupId/users/$userId";
+    authTokenHeader = true;
+  }
+
+  @override
+  dynamic convertData(Response response) {
+    return response;
+  }
+}
+
+
+
+class GetGroupInviteLinks extends HazizzRequest {
+  GetGroupInviteLinks({ResponseHandler rh, @required int groupId}) : super(rh) {
     httpMethod = HttpMethod.GET;
     PATH = "groups/${groupId}/invitelinks";
     authTokenHeader = true;
@@ -884,6 +931,20 @@ class GetGroupInviteLink extends HazizzRequest {
     List<PojoInviteLink> links = iter.map<PojoInviteLink>((json) => PojoInviteLink.fromJson(json)).toList();
 
     return links;
+  }
+}
+
+class GetGroupInviteLink extends HazizzRequest {
+  GetGroupInviteLink({ResponseHandler rh, @required int groupId}) : super(rh) {
+    httpMethod = HttpMethod.GET;
+    PATH = "groups/${groupId}/invitelink";
+    authTokenHeader = true;
+  }
+
+  @override
+  dynamic convertData(Response response) {
+    String link = response.data;
+    return link;
   }
 }
 

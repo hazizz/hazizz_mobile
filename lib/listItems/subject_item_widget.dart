@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mobile/blocs/group_bloc.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/dialogs/report_dialog.dart';
+import 'package:mobile/enums/group_permissions_enum.dart';
 
 import '../hazizz_localizations.dart';
 import '../hazizz_theme.dart';
@@ -14,8 +17,11 @@ class SubjectItemWidget extends StatelessWidget{
 
   SubjectItemWidget({this.subject});
 
+
   @override
   Widget build(BuildContext context) {
+
+
     return Hero(
         tag: "hero_subject${subject.id}",
         child:
@@ -39,27 +45,50 @@ class SubjectItemWidget extends StatelessWidget{
                             fontSize: 20, fontWeight: FontWeight.w700
                         ),),
 
-                        PopupMenuButton(
-                          icon: Icon(FontAwesomeIcons.ellipsisV, size: 20,),
-                          onSelected: (value) async {
-                            if(value == "report"){
-                              bool success = await showReportDialog(context, reportType: ReportTypeEnum.SUBJECT, id: subject.id, name: subject.name);
-                              if(success != null && success){
+                        BlocBuilder(
+                          bloc: GroupBlocs().myPermissionBloc,
+                          builder: (context, state){
 
-                              }
-                            }
-                          },
-                          itemBuilder: (BuildContext context) {
-                            return [
+
+                            List<PopupMenuEntry> entries = [
                               PopupMenuItem(
                                 value: "report",
                                 child: Text(locText(context, key: "report"),
                                   style: TextStyle(color: HazizzTheme.red),
                                 ),
-                              )
+                              ),
                             ];
+
+                            if(state is MyPermissionSetState){
+                              if(state.permission == GroupPermissionsEnum.MODERATOR || state.permission == GroupPermissionsEnum.OWNER){
+                                entries.add(PopupMenuItem(
+                                    value: "delete",
+                                    child: Text(locText(context, key: "delete"),
+                                      style: TextStyle(color: HazizzTheme.red),
+                                    ),
+                                  ),
+                                );
+                              }
+                            }
+
+                            return PopupMenuButton(
+                              icon: Icon(FontAwesomeIcons.ellipsisV, size: 20,),
+                              onSelected: (value) async {
+                                if(value == "report"){
+                                  bool success = await showReportDialog(context, reportType: ReportTypeEnum.SUBJECT, id: subject.id, name: subject.name);
+                                  if(success != null && success){
+
+                                  }
+                                }else if(value == "delete"){
+
+                                }
+                              },
+                              itemBuilder: (BuildContext context) {
+                                return entries;
+                              },
+                            );
                           },
-                        ),
+                        )
                       ],)
 
                   )

@@ -7,7 +7,6 @@ part of 'PojoUser.dart';
 // **************************************************************************
 
 PojoUser _$PojoUserFromJson(Map<String, dynamic> json) {
-
   return PojoUser(
       id: json['id'] as int,
       username: json['username'] as String,

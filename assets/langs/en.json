@@ -50,9 +50,15 @@
     : "More than 7 days",
 
 
-    "badge_owner"
-    : "OWNER",
+  "owner"
+  : "Owner",
 
+  "moderator"
+  : "Moderator",
+
+
+  "kick"
+  : "Kick",
 
     "group_type_open"
     : "Open",

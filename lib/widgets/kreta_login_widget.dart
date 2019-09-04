@@ -229,25 +229,32 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
       builder: (context, state){
         String responseInfo = "";
         bool isLoading = false;
-        if(state is KretaLoginFailure) {
-          responseInfo = locText(context, key: "incorrect_data");
 
-          WidgetsBinding.instance.addPostFrameCallback((_) =>
-              stopCustomHud()
-          );
-        }else if(state is KretaLoginSomethingWentWrong){
-          responseInfo = locText(context, key: "try_again_later");
-          //stopCustomHud();
-        }else if(state is KretaLoginWaiting){
-        //  isLoading = true;
+
+        if(state is KretaLoginWaiting){
+          //  isLoading = true;
 
 
           WidgetsBinding.instance.addPostFrameCallback((_) =>
               showCustomHud(context)
           );
         }else{
-         // stopCustomHud();
+          WidgetsBinding.instance.addPostFrameCallback((_) =>
+              stopCustomHud()
+          );
+          if(state is KretaLoginFailure) {
+            responseInfo = locText(context, key: "incorrect_data");
+
+
+          }else if(state is KretaLoginSomethingWentWrong){
+            responseInfo = locText(context, key: "try_again_later");
+            //stopCustomHud();
+          }else{
+            // stopCustomHud();
+          }
         }
+
+
 
 
         return LoadingDialog(
@@ -259,7 +266,6 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
                 'assets/images/Logo.png',
               ),
               */
-
 
                 Padding(
                   padding: EdgeInsets.only(left:16, right:16, bottom: 0),

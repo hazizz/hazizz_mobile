@@ -54,8 +54,14 @@
     : "Több mint 7 nap múlva",
 
 
-    "badge_owner"
-    : "TULAJDONOS",
+    "owner"
+    : "Tulajdonos",
+
+  "moderator"
+  : "Moderátor",
+
+  "kick"
+  : "Kirugás",
 
 
     "group_type_open"

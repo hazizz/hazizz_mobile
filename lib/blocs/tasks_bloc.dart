@@ -9,6 +9,7 @@ import 'package:mobile/blocs/response_states.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/enums/task_complete_state_enum.dart';
+import 'package:mobile/enums/task_expired_state_enum.dart';
 
 import 'package:mobile/managers/kreta_session_manager.dart';
 
@@ -98,7 +99,12 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
 
   TaskCompleteState currentTaskCompleteState = TaskCompleteState.UNCOMPLETED;
 
-  bool onlyExpired = false;
+  TaskExpiredState currentTaskExpiredState = TaskExpiredState.UNEXPIRED;
+
+
+ // bool onlyExpired = false;
+
+
  // bool onlyIncomplete = true;
 
   DateTime lastUpdated = DateTime(0, 0, 0, 0, 0);
@@ -114,7 +120,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
       try {
         yield TasksWaitingState();
 
-        if(!onlyExpired && currentTaskCompleteState == TaskCompleteState.UNCOMPLETED){
+        if(currentTaskExpiredState == TaskExpiredState.UNEXPIRED && currentTaskCompleteState == TaskCompleteState.UNCOMPLETED){
           DataCache dataCache = await loadTasksCache();
           if(dataCache!= null){
             lastUpdated = dataCache.lastUpdated;
@@ -135,7 +141,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
 
         String startDate = null;
         String endDate = null;
-        if(onlyExpired){
+        if(currentTaskExpiredState == TaskExpiredState.EXPIRED){
           DateTime now = DateTime.now();
           endDate = hazizzRequestDateFormat(now);
           startDate = hazizzRequestDateFormat(now.subtract(Duration(days: 365)));
@@ -165,7 +171,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
           print("off: $tasks");
           if(tasks != null ){
             lastUpdated = DateTime.now();
-            if(!onlyExpired && currentTaskCompleteState == TaskCompleteState.UNCOMPLETED) {
+            if(currentTaskExpiredState == TaskExpiredState.UNEXPIRED && currentTaskCompleteState == TaskCompleteState.UNCOMPLETED) {
               saveTasksCache(tasks);
             }
 

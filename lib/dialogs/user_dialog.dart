@@ -13,7 +13,9 @@ import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_date_time.dart';
 import 'package:mobile/dialogs/report_dialog.dart';
 import 'package:mobile/enums/groupTypesEnum.dart';
+import 'package:mobile/enums/group_permissions_enum.dart';
 import 'package:mobile/image_operations.dart';
+import 'package:mobile/widgets/permission_chip.dart';
 import '../hazizz_localizations.dart';
 import '../hazizz_response.dart';
 import '../hazizz_theme.dart';
@@ -22,7 +24,9 @@ import 'dialogs.dart';
 
 class UserDialog extends StatefulWidget {
 
-  UserDialog({PojoUser user, PojoCreator creator}){
+  GroupPermissionsEnum permission;
+
+  UserDialog({PojoUser user, PojoCreator creator, this.permission}){
     if(user != null){
       username = user.username;
       displayName = user.displayName;
@@ -60,10 +64,12 @@ class _UserDialog extends State<UserDialog> {
         encodedProfilePic = hazizzResponse.convertedData;
 
         Uint8List profilePictureBytes = ImageOpeations.fromBase64ToBytesImage(encodedProfilePic);
+       // WidgetsBinding.instance.addPostFrameCallback((_) =>
+          setState(() {
+            img = Image.memory(profilePictureBytes);
+          });
+       // );
 
-        setState(() {
-          img = Image.memory(profilePictureBytes);
-        });
 
       }
     });
@@ -143,12 +149,13 @@ class _UserDialog extends State<UserDialog> {
           ),
         ),
         content: Container(child:  Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20),
+          padding: const EdgeInsets.only(left: 8, right: 8),
           child: Column(
               children:
               [
+                Center(child:  PermissionChip(permission: widget.permission  ,)),
 
-                Center(child: Text(widget.username, style: TextStyle(fontSize: 20), textAlign: TextAlign.center,) ),
+                Center(child: Text(widget.displayName, style: TextStyle(fontSize: 20), textAlign: TextAlign.center,) ),
                 Spacer(),
 
                 Row(
@@ -156,8 +163,8 @@ class _UserDialog extends State<UserDialog> {
                   crossAxisAlignment: CrossAxisAlignment.start,
 
                   children: <Widget>[
-                    Text(locText(context, key: "displayName") + ":", style: TextStyle(fontSize: 20)),
-                    Expanded(child: Text(widget.displayName, style: TextStyle(fontSize: 18), textAlign: TextAlign.end,)),
+                  //  Text(locText(context, key: "username") + ":", style: TextStyle(fontSize: 16)),
+                    Expanded(child: Text(widget.username, style: TextStyle(fontSize: 16), textAlign: TextAlign.center,)),
                   ],
                 ),
                 Builder(
@@ -186,10 +193,10 @@ class _UserDialog extends State<UserDialog> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Padding(
-                padding: const EdgeInsets.only(right: 10),
+                padding: const EdgeInsets.only(right: 0),
                 child: FlatButton(
                   child: Center(
-                    child: Text(locText(context, key: "ok").toUpperCase(),),
+                    child: Text(locText(context, key: "close").toUpperCase(),),
                   ),
                   onPressed: () {
                     Navigator.of(context).pop();

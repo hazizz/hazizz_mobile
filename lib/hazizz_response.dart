@@ -96,10 +96,11 @@ class HazizzResponse{
             RequestSender().lock();
 
             HazizzResponse tokenResponse = await RequestSender().getTokenResponse(
-                new CreateToken.withRefresh(
-                    q_username: await InfoCache.getMyUsername(),
-                    q_refreshToken: await TokenManager.getRefreshToken(),
-                ));
+              CreateToken.withRefresh(
+                q_username: await InfoCache.getMyUsername(),
+                q_refreshToken: await TokenManager.getRefreshToken(),
+              )
+            );
 
             if(tokenResponse.isSuccessful) {
               PojoTokens tokens = tokenResponse.convertedData;
