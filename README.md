@@ -1,6 +1,8 @@
 # Hazizz Mobile
 
 An open source school assistant mobile application, with e-Kréta integration.
+
+See [homepage](https://hazizz.github.io) for more information.
 ## Getting Started
 
 ### To to run the project yourself:
@@ -10,7 +12,6 @@ An open source school assistant mobile application, with e-Kréta integration.
 * `cd hazizz-mobile`
 * `flutter run` or `flutter build apk`
 
-See [homepage](https://hazizz.github.io) for more information.
 
 ## Third party sources used:
 ### See the [pubspec.yaml](pubspec.yaml) for used packages
