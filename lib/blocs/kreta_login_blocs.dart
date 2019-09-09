@@ -140,6 +140,7 @@ class SchoolItemPickerBloc extends ItemListPickerBloc {
 
         if (hazizzResponse.isSuccessful) {
           data = hazizzResponse.convertedData;
+          print("kréta schools: ${data.length}");
          // listItemData = responseData;
             yield ItemListLoaded(data: data);
           
@@ -194,20 +195,14 @@ class KretaLoginBloc extends Bloc<KretaLoginEvent, KretaLoginState> {
 
   @override
   Stream<KretaLoginState> mapEventToState(KretaLoginEvent event) async* {
-    print("sentaa state asd");
-
-
-      if(state is KretaLoginDataChanged){
-        if(currentState is KretaLoginFailure){
-          yield KretaLoginInitial();
-        }
+    if(state is KretaLoginDataChanged){
+      if(currentState is KretaLoginFailure){
+        yield KretaLoginInitial();
       }
-
+    }
 
     if (event is KretaLoginButtonPressed) {
       print("sentaa1: $isAuth");
-
-
       if(isAuth){
         passwordBloc.dispatch(TextFormValidate(text: event.password));
         if(passwordBloc.currentState is TextFormFine){
@@ -224,12 +219,15 @@ class KretaLoginBloc extends Bloc<KretaLoginEvent, KretaLoginState> {
             SelectedSessionBloc().dispatch(SelectedSessionSetEvent(newSession));
             print("debuglol1");
             yield KretaLoginSuccessState();
-          }else if(hazizzResponse.hasPojoError) {
-            print("assdad: ${ ErrorCodes.BAD_AUTHENTICATION_REQUEST.code}");
+          }else if(hazizzResponse.pojoError != null) {
+            print("assdad: ${hazizzResponse.pojoError.errorCode}");
             if(hazizzResponse.pojoError.errorCode ==
                 ErrorCodes.THERA_AUTHENTICATION_ERROR.code) {
               yield KretaLoginFailure(error: hazizzResponse.pojoError);
-            }else {
+            } else if(hazizzResponse.pojoError.errorCode == ErrorCodes.GENERAL_THERA_ERROR.code) {
+              yield KretaLoginFailure(error: hazizzResponse.pojoError);
+            }
+            else {
               yield KretaLoginSomethingWentWrong();
             }
           }else {
@@ -258,8 +256,9 @@ class KretaLoginBloc extends Bloc<KretaLoginEvent, KretaLoginState> {
 
    //   passwordBloc.validate
 
-      if(usernameState is TextFormFine ) {
-        if(passwordState is TextFormFine && schoolState is ItemListPickedState) { //usernameState is TextFormFine && passwordState is TextFormFine) {
+      print("boi: ${usernameState}, ${passwordState}, ${schoolState}");
+      if(event.username != null && event.username != "") { //if(usernameState is TextFormFine ) {
+        if(event.password != null && event.password != "" && schoolState is ItemListPickedState) { //usernameState is TextFormFine && passwordState is TextFormFine) {
           try {
             print("sentaa22");
             yield KretaLoginWaiting();
@@ -271,12 +270,13 @@ class KretaLoginBloc extends Bloc<KretaLoginEvent, KretaLoginState> {
               PojoSession newSession = hazizzResponse.convertedData;
               SelectedSessionBloc().dispatch(SelectedSessionSetEvent(newSession));
               yield KretaLoginSuccessState();
-            }else if(hazizzResponse.hasPojoError){
-              print("assdad: ${ ErrorCodes.BAD_AUTHENTICATION_REQUEST.code}");
-              if(hazizzResponse.pojoError.errorCode == ErrorCodes.THERA_AUTHENTICATION_ERROR.code){
+            }else if(hazizzResponse.pojoError != null){
+              print("assdad: ${hazizzResponse.pojoError.errorCode}");
+              if(hazizzResponse.pojoError.errorCode ==
+                  ErrorCodes.THERA_AUTHENTICATION_ERROR.code) {
                 yield KretaLoginFailure(error: hazizzResponse.pojoError);
-              }else{
-                yield KretaLoginSomethingWentWrong();
+              } else if(hazizzResponse.pojoError.errorCode == ErrorCodes.GENERAL_THERA_ERROR.code) {
+                yield KretaLoginFailure(error: hazizzResponse.pojoError);
               }
             }else{
               yield KretaLoginSomethingWentWrong();
@@ -322,12 +322,14 @@ class PasswordIncorrectState extends HFormState {
 class KretaLoginPageBlocs{
   TextFormBloc usernameBloc = new TextFormBloc(
     validate: (String text){
+      /*
       if(text.length <= 2){
         print("TextFormErrorTooShort");
         return TextFormErrorTooShort();
       }if(text.length >= 20){
         return TextFormErrorTooLong();
       }
+      */
       return TextFormFine();
 
     },
@@ -343,17 +345,21 @@ class KretaLoginPageBlocs{
   TextFormBloc passwordBloc = new TextFormBloc(
       validate: (String text){
        // print("length: ${text.length}");
-        if(text.length < 4) {
+      /*  if(text.length < 4) {
       //    print("returnss::::");
           return TextFormErrorTooShort();
         }
+        */
         return TextFormFine();
       },
+      /*
       handleErrorEvents: (HFormEvent event){
-        if(event is PasswordIncorrectEvent){
+       /* if(event is PasswordIncorrectEvent){
           return PasswordIncorrectState();
         }
+        */
       }
+      */
   );
 
   SchoolItemPickerBloc schoolBloc = SchoolItemPickerBloc();

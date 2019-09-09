@@ -452,8 +452,8 @@ class Report extends HazizzRequest {
     hardCodeReducer( b_description);
   }
 
-  Report.subject({ResponseHandler rh, @required int p_subjectId, @required String b_description}) : super(rh) {
-    PATH = "subjects/$p_subjectId/report";
+  Report.subject({ResponseHandler rh,@required int p_groupId, @required int p_subjectId, @required String b_description}) : super(rh) {
+    PATH = "subjects/group/$p_groupId/$p_subjectId/report";
     hardCodeReducer( b_description);
   }
 
@@ -615,9 +615,9 @@ class GetMyGroups extends HazizzRequest {
 //region Subject requests
 
 class DeleteSubject extends HazizzRequest {
-  DeleteSubject({ResponseHandler rh, @required int groupId, @required int subjectId}) : super(rh) {
+  DeleteSubject({ResponseHandler rh, @required int p_groupId, @required int p_subjectId}) : super(rh) {
     httpMethod = HttpMethod.DELETE;
-    PATH = "subjects/group/$groupId/$subjectId";
+    PATH = "subjects/group/$p_groupId/$p_subjectId";
     authTokenHeader = true;
   }
 
@@ -799,6 +799,8 @@ class SetTaskCompleted extends HazizzRequest {
     }else{
       httpMethod = HttpMethod.DELETE;
     }
+
+    print("setTask completed: ${setCompleted}");
   }
 
   @override
@@ -904,9 +906,9 @@ class GetGroupMemberPermisions extends HazizzRequest {
 }
 
 class KickGroupMember extends HazizzRequest {
-  KickGroupMember({ResponseHandler rh, @required int groupId, @required int userId}) : super(rh) {
+  KickGroupMember({ResponseHandler rh, @required int p_groupId, @required int p_userId}) : super(rh) {
     httpMethod = HttpMethod.DELETE;
-    PATH = "groups/$groupId/users/$userId";
+    PATH = "groups/$p_groupId/users/$p_userId";
     authTokenHeader = true;
   }
 

@@ -88,6 +88,7 @@ class AppState{
 
 
   static Future<void> appStartProcedure() async {
+    RequestSender().initalize();
     await HazizzAppInfo().initalize();
     await Connection.listener();
     Crashlytics.instance.enableInDevMode = false;

@@ -72,11 +72,11 @@ class _GroupTasksPage extends State<GroupTasksPage> with AutomaticKeepAliveClien
                                       tasks[index].dueDate.difference(tasks[index - 1].dueDate).inDays > 0) {
                                     return new StickyHeader(
                                       header: TaskHeaderItemWidget(dateTime: tasks[index].dueDate),
-                                      content: TaskItemWidget(pojoTask: tasks[index],),
+                                      content: TaskItemWidget(originalPojoTask: tasks[index],),
                                     );
                                   } else {
                                     return
-                                      TaskItemWidget(pojoTask: tasks[index],
+                                      TaskItemWidget(originalPojoTask: tasks[index],
                                       );
                                   }
                                 }

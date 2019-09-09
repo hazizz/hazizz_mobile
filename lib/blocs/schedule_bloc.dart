@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
+import 'package:mobile/custom/hazizz_date_time.dart';
 
 import 'package:mobile/managers/kreta_session_manager.dart';
 
@@ -100,6 +101,10 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
   int currentWeekNumber = 0;
 
 
+  DateTime currentWeekMonday = HazizzDateTime(0, 0, 0, 0, 0);
+  DateTime currentWeekSunday = HazizzDateTime(0, 0, 0, 0, 0);
+
+
   MainSchedulesBloc(){
     scheduleEventBloc = ScheduleEventBloc();
   }
@@ -117,12 +122,27 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
   Stream<ScheduleState> mapEventToState(ScheduleEvent event) async* {
     if (event is ScheduleFetchEvent) {
       try {
+        currentWeekNumber = event.weekNumber;
+        print("currentWeekNumber: $currentWeekNumber");
+
+        currentWeekMonday = DateTime(event.yearNumber, 1, 1);
+        print("currentWeekMonday: $currentWeekMonday");
+
+        currentWeekMonday = currentWeekMonday.add(Duration(days: 7 * (currentWeekNumber-1)));
+
+        print("currentWeekMonday2: $currentWeekMonday, ${7 * (currentWeekNumber-1)}");
+
+        currentWeekSunday = currentWeekMonday.add(Duration(days: 6));
+
+        print("currentWeekSunday: $currentWeekSunday");
+
+
         yield ScheduleWaitingState();
 
         print("WIATING222 : ${event.yearNumber}, ${event.weekNumber}");
 
 
-        if(!event.isDefault){
+        if(event.yearNumber == currentYearNumber && event.weekNumber == currentWeekNumber){
           DataCache dataCache = await loadScheduleCache();
           if(dataCache!= null){
             lastUpdated = dataCache.lastUpdated;
@@ -133,13 +153,18 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
         }
 
 
-        /*
-        DateTime now = DateTime.now();
 
+       // DateTime now = DateTime.now();
+/*
         int dayOfYear = int.parse(DateFormat("D").format(n ow));
         int weekOfYear = ((dayOfYear - now.weekday + 10) / 7).floor();
 
         print("WEEK OF YEAR: $weekOfYear");*/
+
+          // now.month, 7 * (currentWeekNumber-1)
+
+
+
         HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetSchedules(q_year: event.yearNumber, q_weekNumber: event.weekNumber));
 
         //  print("classes.: ${classes}");

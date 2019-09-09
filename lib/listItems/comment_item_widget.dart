@@ -8,6 +8,7 @@ import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/dialogs/report_dialog.dart';
 import 'package:mobile/managers/cache_manager.dart';
 import 'package:mobile/widgets/comment_section_widget.dart';
+import 'package:mobile/widgets/flushbars.dart';
 
 import '../hazizz_date.dart';
 import '../hazizz_localizations.dart';
@@ -145,6 +146,7 @@ class _CommentItemWidget extends State<CommentItemWidget>{
                         }else if(value == "report"){
                           bool success = await showReportDialog(context, reportType: ReportTypeEnum.COMMENT, id: widget.comment.id, secondId: widget.taskId, name: widget.comment.creator.displayName);
                           if(success != null && success){
+                            showReportSuccess(context, what: locText(context, key: "comment"));
 
                           }
                         }

@@ -39,8 +39,8 @@
     "days_later"
     : "In {} days",
 
-  "days_before"
-  : "Expired {} before",
+  "days_ago"
+  : "Expired {} days ago",
 
     "today"
     : "Today",
@@ -108,11 +108,20 @@
   "report_something"
   : "Report {}",
 
-  "accept_hazizz_policy"
-  : "I accept the Hazizz policy",
 
-  "error_accept_hazizz_policy"
-  : "You must accept the Hazizz policy!",
+  "report_successful"
+  : "{} was successfully reported",
+
+  "accept_hazizz_guidelines1"
+  : "I accept the ",
+
+  "accept_hazizz_guidelines2"
+  : "guidelines",
+
+  "error_accept_hazizz_guidelines"
+  : "You must accept the Hazizz guidelines!",
+
+
 
     "button_add"
     : "Add",
@@ -546,6 +555,11 @@
   : "Search",
 
 
+  "sort_by"
+  : "Sort by",
+
+
+
   "creator_"
     : "Creator:",
 
@@ -611,8 +625,14 @@
     : "Confirm password",
 
 
+  "delete_successful"
+  : "{} successfully deleted",
+
     "areyousure_delete_task"
     : "Are you sure you want to delete this task?",
+
+  "areyousure_delete_subject"
+: "Are you sure you want to delete {} subject?",
 
 
     "areyousure_delete_announcement"
@@ -621,6 +641,9 @@
 
     "areyousure_leave_group"
     : "Are you sure you want to leave this group?",
+
+  "areyousure_to_kick_from_group"
+  : "Are you sure you want kick {} from group?",
 
 
     "error_too_short"
@@ -683,11 +706,11 @@
     "createTask"
     : "Create task",
 
-  "completed"
-  : "Completed",
+  "complete"
+  : "Complete",
 
-  "uncompleted"
-  : "Uncompleted",
+  "incomplete"
+  : "Incomplete",
 
   "both"
   : "Both",
@@ -749,10 +772,16 @@
     : "privacy policy ",
 
     "have_to_accept_privacy_tos2"
-    : "and the ",
+    : ", ",
 
     "have_to_accept_tos"
-    : "terms of service",
+    : "terms of service ",
+
+  "have_to_accept_privacy_tos3"
+  : "and the ",
+
+  "have_to_accept_guidelines"
+  : "guidelines!",
 
     "last_updated"
     : "Last updated",
@@ -837,7 +866,7 @@
     : "Google sign in was not successful, try again later",
 
     "error_conditionsNotAccepted"
-    : "You have to accept our terms of service and privacy policy!",
+    : "You have to accept our terms of service, privacy policy and the guidelines!",
 
 
 
@@ -1103,6 +1132,12 @@
 
     "kreta_accounts"
     : "Kréta accounts",
+
+  "kreta_account"
+  : "Kréta account",
+
+  "not_logged_in_to_kreta_account"
+  : "Not logged in to Kréta",
 
   "should_add_kreta_account"
   : "Add Kréta account",

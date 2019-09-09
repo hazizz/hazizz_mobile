@@ -45,7 +45,7 @@ class TaskHeaderItemWidget extends StatelessWidget{
     else if(days == 1){
       title = locText(context, key: "tomorrow");
     }else if(days < 0){
-      title = locText(context, key: "days_before", args: [days.abs().toString()]);
+      title = locText(context, key: "days_ago", args: [days.abs().toString()]);
       backColor = HazizzTheme.red;
     }
 
@@ -62,9 +62,9 @@ class TaskHeaderItemWidget extends StatelessWidget{
           child: InkWell(
               child: Row(
                 children: <Widget>[
-                  Text(title, style: TextStyle(fontSize: 23, fontWeight: FontWeight.w700),),
+                  Text(title, style: TextStyle(fontSize: 21, fontWeight: FontWeight.w700),),
                   SizedBox(width: 20),
-                  Text("${hazizzShowDateFormat(dateTime)}", style: TextStyle(fontSize: 23, fontWeight: FontWeight.w700)),
+                  Text("${hazizzShowDateFormat(dateTime)}", style: TextStyle(fontSize: 21, fontWeight: FontWeight.w700)),
                 ],
               )
           ),

@@ -111,10 +111,10 @@ class _TasksTomorrowPage extends State<TasksTomorrowPage> with SingleTickerProvi
                           return new StickyHeader(
                             header: TaskHeaderItemWidget(
                                 dateTime: tasks[index].dueDate),
-                            content: TaskItemWidget(pojoTask: tasks[index],),
+                            content: TaskItemWidget(originalPojoTask: tasks[index],),
                           );
                         } else {
-                          return TaskItemWidget(pojoTask: tasks[index],
+                          return TaskItemWidget(originalPojoTask: tasks[index],
                           );
                         }
                       }
@@ -131,11 +131,11 @@ class _TasksTomorrowPage extends State<TasksTomorrowPage> with SingleTickerProvi
                               child: Column(
                                   children: [
                                     TaskHeaderItemWidget(dateTime: tasks[index].dueDate),
-                                    TaskItemWidget(pojoTask: tasks[index])
+                                    TaskItemWidget(originalPojoTask: tasks[index])
                                   ]
                               ));
                         } else {
-                          return RegularRow(child: TaskItemWidget(pojoTask: tasks[index]),
+                          return RegularRow(child: TaskItemWidget(originalPojoTask: tasks[index]),
                           );
                         }
                       }

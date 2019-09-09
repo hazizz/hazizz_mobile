@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/dialogs/report_dialog.dart';
+import 'package:mobile/widgets/flushbars.dart';
 
 import '../hazizz_localizations.dart';
 import '../hazizz_theme.dart';
@@ -43,6 +44,7 @@ class GroupItemWidget extends StatelessWidget{
                           if(value == "report"){
                             bool success = await showReportDialog(context, reportType: ReportTypeEnum.GROUP, id: group.id, name: group.name);
                             if(success != null && success){
+                              showReportSuccess(context, what: locText(context, key: "group"));
 
                             }
                           }else if(value == "leave"){

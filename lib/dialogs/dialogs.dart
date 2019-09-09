@@ -16,6 +16,7 @@ import 'package:mobile/custom/hazizz_date_time.dart';
 import 'package:mobile/defaults/pojo_group_empty.dart';
 import 'package:mobile/dialogs/report_dialog.dart';
 import 'package:mobile/dialogs/school_dialog.dart';
+import 'package:mobile/dialogs/sure_to_delete_subject_dialog.dart';
 import 'package:mobile/dialogs/sure_to_join_group_dialog.dart';
 import 'package:mobile/dialogs/sure_to_leave_group_dialog.dart';
 import 'package:mobile/dialogs/user_dialog.dart';
@@ -35,6 +36,7 @@ import 'create_group_dialog.dart';
 import 'create_subject_dialog.dart';
 import 'invite_link_dialog.dart';
 import 'join_group_dialog.dart';
+import 'kick_group_member_dialog.dart';
 
 
 // 280 min width
@@ -501,6 +503,17 @@ Future<bool> showSureToLeaveGroupDialog(BuildContext context, {@required int gro
   return result;
 }
 
+Future<bool> showSureToKickFromGroupDialog(BuildContext context, {@required int groupId, @required PojoUser pojoUser}) async{
+
+  var result = await showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      // return object of type Dialog
+      return KickGroupMemberDialog(groupId: groupId, user: pojoUser,);
+    },
+  );
+  return result;
+}
 
 
 Future<PojoTag> showDialogTaskTag(BuildContext context, {List<PojoTag> except}) async{
@@ -665,7 +678,7 @@ Future<void> showUserDialog(context, { PojoUser user, PojoCreator creator, Group
 
 
 
-Future<bool> showDeleteDialog(context, {@required int taskId}) async {
+Future<bool> showDeleteTaskDialog(context, {@required int taskId}) async {
 
   double height = 80;
   double width = 200;
@@ -839,6 +852,12 @@ Future<bool> showDeleteDialog(context, {@required int taskId}) async {
   */
 }
 
+Future<bool> showDeleteSubjectDialog(context, {@required int groupId, @required PojoSubject subject}) {
+  return showDialog(context: context, barrierDismissible: true, builder: (context){
+    return SureToDeleteSubjectDialog(groupId: groupId, subject: subject,);
+  });
+}
+
 Future<PojoSubject> showAddSubjectDialog(context, {@required int groupId}) {
   TextEditingController _subjectTextEditingController = TextEditingController();
   String errorText = null;
@@ -849,121 +868,6 @@ Future<PojoSubject> showAddSubjectDialog(context, {@required int groupId}) {
   return showDialog(context: context, barrierDismissible: true, builder: (context){
     return CreateSubjectDialog(groupId: groupId,);
   });
-
-  return showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        return Dialog(
-
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-            child: Container(
-                height: 130.0,
-                width: 200.0,
-                decoration:
-                BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
-                child: Column(
-                  children: <Widget>[
-                    Stack(
-                      children: <Widget>[
-                        // Container(height: 100.0),
-                        Container(
-                          height: 80.0,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10.0),
-                                topRight: Radius.circular(10.0),
-                              ),
-                              color: Theme.of(context).primaryColor
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(10),
-                          child: TextField(
-                            inputFormatters:[
-                              LengthLimitingTextInputFormatter(20),
-                            ],
-                            autofocus: true,
-                            onChanged: (dynamic text) {
-                              print("change: $text");
-                            },
-                            controller: _subjectTextEditingController,
-                            textInputAction: TextInputAction.send,
-                            decoration:
-                            InputDecoration(labelText: "Subject", errorText: errorText),
-                          )
-                        ),
-
-                      ],
-                    ),
-                    //  SizedBox(height: 20.0),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        FlatButton(
-                            child: Center(
-                              child: Text(
-                                'CANCEL',
-                                style: TextStyle(
-                                    fontFamily: 'Montserrat',
-                                    fontSize: 14.0,
-                                    color: Colors.teal),
-                              ),
-                            ),
-                            onPressed: () {
-                              Navigator.of(context).pop(false);
-                            },
-                            color: Colors.transparent
-                        ),
-                        FlatButton(
-
-                            child: Center(
-                              child: Text(
-                                'ADD',
-                                style: TextStyle(
-                                  //  fontFamily: 'Montserrat',
-                                    fontSize: 14.0,
-                                    color: HazizzTheme.warningColor
-                                ),
-                              ),
-                            ),
-
-
-                            onPressed: isEnabled ? () async {
-
-                              if(_subjectTextEditingController.text.length >= 2 && _subjectTextEditingController.text.length <= 20){
-
-
-
-                                HazizzResponse response = await RequestSender().getResponse(CreateSubject(p_groupId: groupId, b_subjectName: _subjectTextEditingController.text));
-                                isEnabled = true;
-                                if(response.isSuccessful){
-                                  Navigator.pop(context, true);
-                                }
-                              }
-
-                            } : null,
-
-        /*
-                            onPressed: () async {
-
-                              if(_subjectTextEditingController.text.length >= 2 && _subjectTextEditingController.text.length <= 20){
-                                HazizzResponse response = await RequestSender().getResponse(CreateSubject(p_groupId: groupId, b_subjectName: _subjectTextEditingController.text));
-                                if(response.isSuccessful){
-                                  Navigator.pop(context, true);
-                                }
-                              }
-
-                            },
-        */
-                            color: Colors.transparent
-                        ),
-                      ],
-                    )
-                  ],
-                )));
-      });
 }
 
 
@@ -1035,12 +939,12 @@ Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
               ),
             ),
             content: Container(child:  Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20),
+              padding: const EdgeInsets.only(left: 10, right: 10),
               child: Column(
                   children:
                   [
 
-                    Center(child: Text(grade.subject == null ? "" : (grade.subject), style: TextStyle(fontSize: 24), textAlign: TextAlign.center,) ),
+                    Center(child: Text(grade.subject == null ? "" : (grade.subject), style: TextStyle(fontSize: 22), textAlign: TextAlign.center,) ),
                     Spacer(),
 
                     Row(
@@ -1048,8 +952,8 @@ Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
                       crossAxisAlignment: CrossAxisAlignment.start,
 
                       children: <Widget>[
-                        Text(locText(context, key: "topic") + ":", style: TextStyle(fontSize: 20)),
-                        Expanded(child: Text(grade.topic == null ? "" : (grade.topic), style: TextStyle(fontSize: 20), textAlign: TextAlign.end,)),
+                        Text(locText(context, key: "topic") + ":", style: TextStyle(fontSize: 18)),
+                        Expanded(child: Text(grade.topic == null ? "" : (grade.topic), style: TextStyle(fontSize: 18), textAlign: TextAlign.end,)),
                       ],
                     ),
                     Spacer(),
@@ -1059,8 +963,8 @@ Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
                       crossAxisAlignment: CrossAxisAlignment.start,
 
                       children: <Widget>[
-                        Text(locText(context, key: "grade_type") + ":", style: TextStyle(fontSize: 20)),
-                        Expanded(child: Text(grade.gradeType == null ? "" : grade.gradeType, style: TextStyle(fontSize: 20), textAlign: TextAlign.end,)),
+                        Text(locText(context, key: "grade_type") + ":", style: TextStyle(fontSize: 18)),
+                        Expanded(child: Text(grade.gradeType == null ? "" : grade.gradeType, style: TextStyle(fontSize: 18), textAlign: TextAlign.end,)),
                       ],
                     ),
                     Spacer(),
@@ -1068,8 +972,8 @@ Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(locText(context, key: "date") + ":", style: TextStyle(fontSize: 20),),
-                        Expanded(child: Text(grade.date == null ? "" : hazizzShowDateFormat(grade.date), style: TextStyle(fontSize: 20), textAlign: TextAlign.end,)),
+                        Text(locText(context, key: "date") + ":", style: TextStyle(fontSize: 18),),
+                        Expanded(child: Text(grade.date == null ? "" : hazizzShowDateFormat(grade.date), style: TextStyle(fontSize: 18), textAlign: TextAlign.end,)),
                       ],
                     ),
 
@@ -1080,7 +984,7 @@ Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(right: 10),
+                    padding: const EdgeInsets.only(right: 0),
                     child: FlatButton(
                         child: Center(
                           child: Text(locText(context, key: "close").toUpperCase(),),
@@ -1179,6 +1083,7 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
     height -= v;
   }
 
+
   HazizzDialog hazizzDialog = HazizzDialog(
     header:
     Container(
@@ -1273,8 +1178,8 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
               crossAxisAlignment: CrossAxisAlignment.start,
 
               children: <Widget>[
-                Text("${locText(context, key: "thera_standin")}:", style: TextStyle(fontSize: 20)),
-                Expanded(child: Text(pojoClass.teacher, style: TextStyle(fontSize: 20), textAlign: TextAlign.end,)),
+                Text("${locText(context, key: "thera_standin")}:", style: TextStyle(fontSize: 20, color: HazizzTheme.red)),
+                Expanded(child: Text(pojoClass.teacher, style: TextStyle(fontSize: 20,  color: HazizzTheme.red), textAlign: TextAlign.end,)),
               ],
             ));
           }else{
@@ -1503,7 +1408,7 @@ Future<bool> showDialogSessionReauth(BuildContext context) async{
 
 Future<bool> showConditionsToAcceptDialog(context) async {
 
-  double height = 80;
+  double height = 100;
 
   double width = 280;
 
@@ -1532,26 +1437,41 @@ Future<bool> showConditionsToAcceptDialog(context) async {
     return link;
   }
 
+  String getGuidelines(){
+    String currentLang = getCurrentLocale(context).languageCode;
+    if(currentLang != "en" && currentLang != "hu" ){
+      currentLang = "en";
+    }
+    String link = "https://hazizz.github.io/guideline-hu.txt";
+    print("ng: $link");
+    return link;
+  }
+
 
   HazizzDialog hazizzDialog = HazizzDialog(
       header:
-      Container(
-        width: width,
-        color: Theme.of(context).primaryColor,
-        child: Padding(
-          padding: const EdgeInsets.all(5),
-          child:
-          //   Text(locText(context, textview_logout_drawer: "kreta_login_later")),
-          Wrap(
-            children: <Widget>[
-              Text(locText(context, key: "have_to_accept_privacy_tos1"), style: TextStyle(fontSize: 18),),
-              Hyperlink(getLinkPrivacy(), Text(locText(context, key: "have_to_accept_privacy"), style: TextStyle(fontSize: 18, color: HazizzTheme.red, decoration: TextDecoration.underline,), )),
-              Text(locText(context, key: "have_to_accept_privacy_tos2"), style: TextStyle(fontSize: 18)),
-              Hyperlink(getLinkTermsOfService(), Text(locText(context, key: "have_to_accept_tos"), style: TextStyle(fontSize: 18, color: HazizzTheme.red, decoration: TextDecoration.underline,), )),
-            ],
-          )
+      Center(
+        child: Container(
+          width: width,
+          color: Theme.of(context).primaryColor,
+          child: Padding(
+            padding: const EdgeInsets.all(5),
+            child:
+            //   Text(locText(context, textview_logout_drawer: "kreta_login_later")),
+            Wrap(
+              children: <Widget>[
+                Text(locText(context, key: "have_to_accept_privacy_tos1"), style: TextStyle(fontSize: 18),),
+                Hyperlink(getLinkPrivacy(), Text(locText(context, key: "have_to_accept_privacy"), style: TextStyle(fontSize: 18, color: HazizzTheme.red, decoration: TextDecoration.underline,), )),
+                Text(locText(context, key: "have_to_accept_privacy_tos2"), style: TextStyle(fontSize: 18)),
+                Hyperlink(getLinkTermsOfService(), Text(locText(context, key: "have_to_accept_tos"), style: TextStyle(fontSize: 18, color: HazizzTheme.red, decoration: TextDecoration.underline,), )),
+                Text(locText(context, key: "have_to_accept_privacy_tos3"), style: TextStyle(fontSize: 18)),
+                Hyperlink(getGuidelines(), Text(locText(context, key: "have_to_accept_guidelines"), style: TextStyle(fontSize: 18, color: HazizzTheme.red, decoration: TextDecoration.underline,), )),
+
+              ],
+            )
 
 
+          ),
         ),
       ),
       content: Container(),

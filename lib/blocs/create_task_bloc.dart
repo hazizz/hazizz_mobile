@@ -174,12 +174,17 @@ class TaskCreateBloc extends TaskMakerBloc {
           missingInfo = true;
         }
         HFormState descriptionState = descriptionBloc.currentState;
+        /*
         if(descriptionState is TextFormFine){
           description = descriptionBloc.lastText;
 
         }else{
           missingInfo = true;
         }
+        */
+
+        description = descriptionBloc.lastText;
+
 
         print("log: lul3");
 

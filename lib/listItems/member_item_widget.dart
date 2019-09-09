@@ -6,6 +6,7 @@ import 'package:mobile/communication/pojos/PojoUser.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/dialogs/report_dialog.dart';
 import 'package:mobile/enums/group_permissions_enum.dart';
+import 'package:mobile/widgets/flushbars.dart';
 import 'package:mobile/widgets/permission_chip.dart';
 
 import '../hazizz_localizations.dart';
@@ -13,12 +14,14 @@ import '../hazizz_theme.dart';
 
 class MemberItemWidget extends StatelessWidget{
 
+  bool isMe = false;
   PojoUser member;
   GroupPermissionsEnum permission;
   Widget permissionChip = Container();
+  Function onKicked;
 
-  MemberItemWidget({@required this.member, @required this.permission}){
-
+  MemberItemWidget({@required this.member, @required this.permission,  @required this.onKicked, this.isMe}){
+    isMe ??= false;
   }
 
   @override
@@ -47,7 +50,7 @@ class MemberItemWidget extends StatelessWidget{
                     children: <Widget>[
                     Text(member.displayName,
                       style: TextStyle(
-                          fontSize: 22, fontWeight: FontWeight.w700
+                          fontSize: 18, fontWeight: FontWeight.w700
                       ),
                     ) ,
 
@@ -61,6 +64,9 @@ class MemberItemWidget extends StatelessWidget{
                       bloc: GroupBlocs().myPermissionBloc,
                       builder: (context, state){
 
+                        if(isMe){
+                          return Container();
+                        }
 
                         List<PopupMenuEntry> entries = [
                           PopupMenuItem(
@@ -72,7 +78,8 @@ class MemberItemWidget extends StatelessWidget{
                         ];
 
                         if(state is MyPermissionSetState){
-                          if(state.permission == GroupPermissionsEnum.MODERATOR || state.permission == GroupPermissionsEnum.OWNER){
+                          if((state.permission == GroupPermissionsEnum.MODERATOR || state.permission == GroupPermissionsEnum.OWNER)
+                              && permission != GroupPermissionsEnum.OWNER){
                             entries.add(PopupMenuItem(
                               value: "kick",
                               child: Text(locText(context, key: "kick"),
@@ -83,18 +90,21 @@ class MemberItemWidget extends StatelessWidget{
                           }
                         }
 
+
+
                         return PopupMenuButton(
                           icon: Icon(FontAwesomeIcons.ellipsisV, size: 20,),
                           onSelected: (value) async {
                             if(value == "report"){
                               bool success = await showReportDialog(context, reportType: ReportTypeEnum.USER, id: member.id, name: member.displayName);
                               if(success != null && success){
+                                showReportSuccess(context, what: locText(context, key: "user"));
 
                               }
                             }else if(value == "kick"){
-                              bool success = await showReportDialog(context, reportType: ReportTypeEnum.USER, id: member.id, name: member.displayName);
+                              bool success = await showSureToKickFromGroupDialog(context, groupId: GroupBlocs().group.id, pojoUser: member);
                               if(success != null && success){
-
+                                onKicked();
                               }
                             }
                           },

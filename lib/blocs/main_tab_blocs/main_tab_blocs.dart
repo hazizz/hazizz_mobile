@@ -19,6 +19,7 @@ import 'package:mobile/managers/preference_services.dart';
 import '../../request_sender.dart';
 import '../../hazizz_response.dart';
 import '../../hazizz_time_of_day.dart';
+import '../grades_bloc.dart';
 import '../request_event.dart';
 import '../response_states.dart';
 import '../schedule_bloc.dart';
@@ -281,6 +282,36 @@ class MainGradesBloc extends Bloc<HEvent, HState> {
   Stream<HState> mapEventToState(HEvent event) async* {
     if (event is FetchData) {
       try {
+
+
+        /*
+        if(true){
+          grades = new PojoGrades(
+              {"Matek TESZT" : [
+                PojoGrade(creationDate: DateTime(2010), date: DateTime(2019), grade: "1", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 200),
+                PojoGrade(creationDate: DateTime(2011), date: DateTime(2019), grade: "2", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 100),
+                PojoGrade(creationDate: DateTime(2012), date: DateTime(2019), grade: "3", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 50),
+                PojoGrade(creationDate: DateTime(2013), date: DateTime(2019), grade: "1", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 200)],
+
+                "Történelem TESZT" : [
+                  PojoGrade(creationDate: DateTime(2020), date: DateTime(2019), grade: "5", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 100),
+                  PojoGrade(creationDate: DateTime(2021), date: DateTime(2019), grade: "3", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 200),
+                  PojoGrade(creationDate: DateTime(2022), date: DateTime(2019), grade: "2", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 50),
+                  PojoGrade(creationDate: DateTime(2023), date: DateTime(2019), grade: "4", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 100)],
+
+                "Komplex Természet Tudomány" : [
+                  PojoGrade(creationDate: DateTime(2030), date: DateTime(2019), grade: "5", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 200),
+                  PojoGrade(creationDate: DateTime(2031), date: DateTime(2019), grade: "5", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 200),
+                  PojoGrade(creationDate: DateTime(2032), date: DateTime(2019), grade: "5", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 200),
+                  PojoGrade(creationDate: DateTime(2033), date: DateTime(2019), grade: "5", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 600)]
+              }
+          );
+          yield ResponseDataLoaded(data: grades);
+          return;
+        }
+        */
+
+
         yield ResponseWaiting();
             print("log: am0 i here?");
 
@@ -307,30 +338,6 @@ class MainGradesBloc extends Bloc<HEvent, HState> {
           }
         }
 
-        /*
-        grades = new PojoGrades(
-            {"Matek TESZT" : [
-              PojoGrade(creationDate: DateTime(2010), date: DateTime(2019), grade: "1", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 200),
-              PojoGrade(creationDate: DateTime(2011), date: DateTime(2019), grade: "2", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 100),
-              PojoGrade(creationDate: DateTime(2012), date: DateTime(2019), grade: "3", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 50),
-              PojoGrade(creationDate: DateTime(2013), date: DateTime(2019), grade: "1", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 200)],
-
-              "Történelem TESZT" : [
-                PojoGrade(creationDate: DateTime(2020), date: DateTime(2019), grade: "5", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 100),
-                PojoGrade(creationDate: DateTime(2021), date: DateTime(2019), grade: "3", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 200),
-                PojoGrade(creationDate: DateTime(2022), date: DateTime(2019), grade: "2", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 50),
-                PojoGrade(creationDate: DateTime(2023), date: DateTime(2019), grade: "4", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 100)],
-
-              "Komplex Természet Tudomány" : [
-                PojoGrade(creationDate: DateTime(2030), date: DateTime(2019), grade: "5", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 200),
-                PojoGrade(creationDate: DateTime(2031), date: DateTime(2019), grade: "5", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 200),
-                PojoGrade(creationDate: DateTime(2032), date: DateTime(2019), grade: "5", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 200),
-                PojoGrade(creationDate: DateTime(2033), date: DateTime(2019), grade: "5", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 600)]
-            }
-        );
-        */
-
-
         if(hazizzResponse.isError){
           if(hazizzResponse.dioError == noConnectionError){
             yield ResponseError(errorResponse: hazizzResponse);
@@ -355,8 +362,8 @@ class MainGradesBloc extends Bloc<HEvent, HState> {
           }
 
           }
+/*
 
-        /*
         grades = new PojoGrades(
             {"asd1" : [
               PojoGrade(creationDate: DateTime(2010), date: DateTime(2019), grade: "1", gradeType: "mindent eldöntő évvégi jegy", subject: "Nyelvtan", topic: "tz topic", weight: 600),
@@ -407,12 +414,12 @@ class MainTabBlocs{
   //final MainSchedulesBloc schedulesBloc = new MainSchedulesBloc();
    final ScheduleBloc schedulesBloc = new ScheduleBloc();
 
-   final MainGradesBloc gradesBloc = new MainGradesBloc();
+   final GradesBloc gradesBloc = new GradesBloc();
 
   void fetchAll(){
     tasksBloc.dispatch(TasksFetchEvent());
     schedulesBloc.dispatch(ScheduleFetchEvent());
-    gradesBloc.dispatch(FetchData());
+    gradesBloc.dispatch(GradesFetchEvent());
   }
 
   void initialize()async{

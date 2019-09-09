@@ -5,6 +5,7 @@ import 'package:mobile/blocs/TextFormBloc.dart';
 import 'package:mobile/blocs/item_list_picker_bloc/item_list_picker_bloc.dart';
 import 'package:mobile/blocs/kreta_login_blocs.dart';
 import 'package:mobile/blocs/login_bloc.dart';
+import 'package:mobile/communication/errorcode_collection.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 
@@ -26,7 +27,6 @@ class KretaLoginWidget extends StatefulWidget {
 
   KretaLoginWidget.auth({Key key, @required this.sessionToAuth,}) : super(key: key);
 
-
   @override
   _KretaLoginWidget createState() => _KretaLoginWidget();
 }
@@ -39,7 +39,6 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
 
   ProgressDialog pr;
 
-
   bool passwordVisible = true;
 
   final TextEditingController _usernameTextEditingController = TextEditingController();
@@ -47,7 +46,6 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
 
   @override
   void initState() {
-
     pr = new ProgressDialog(context,ProgressDialogType.Normal);
     if(widget.sessionToAuth != null){
       kretaLoginBlocs = KretaLoginPageBlocs.auth(session: widget.sessionToAuth);
@@ -55,9 +53,6 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
       kretaLoginBlocs = new KretaLoginPageBlocs();
 
     }
-
-
-
     super.initState();
   }
 
@@ -79,7 +74,6 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
     pr.hide();
    // hud.navigator.pop();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -135,9 +129,7 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
             child: TextField(
               style: TextStyle(fontSize: 18),
               maxLines: 1,
-              onChanged: (dynamic text) {
-                print("change: $text");
-              },
+
               controller: _passwordTextEditingController,
               textInputAction: TextInputAction.next,
               obscureText: passwordVisible,
@@ -171,57 +163,57 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
     );
 
     var schoolPickerWidget = BlocBuilder(
-        bloc: kretaLoginBlocs.schoolBloc,
-        builder: (BuildContext context, ItemListState state) {
-          print("log: schoolBloc: state: ${state.toString()}");
-          return GestureDetector(
-            child: FormField(
+      bloc: kretaLoginBlocs.schoolBloc,
+      builder: (BuildContext context, ItemListState state) {
+        print("log: schoolBloc: state: ${state.toString()}");
+        return GestureDetector(
+          child: FormField(
 
-              enabled: widget.sessionToAuth == null,
+            enabled: widget.sessionToAuth == null,
 
-              builder: (FormFieldState formState) {
-                return InputDecorator(
-                    baseStyle: TextStyle(fontSize: 22, color: Colors.black),
-                    decoration: InputDecoration(
+            builder: (FormFieldState formState) {
+              return InputDecorator(
+                  baseStyle: TextStyle(fontSize: 22, color: Colors.black),
+                  decoration: InputDecoration(
 
-                      labelText: locText(context, key: "school"),
-                    ),
-                    child: Builder(
-                      builder: (BuildContext context){//, ItemListState state) {
-                        print("log: widget update2");
-                        if (state is ItemListLoaded) {
-                          return Container();
-                        }
-                        if(state is ItemListPickedState){
-                          print("log: asdasdGroup: $state.item.name");
-                          return Text('${state.item.name}',
-                            style: TextStyle(fontSize: 16),
-
-                          );
-                        }
-                        return Text(locText(context, key: "loading"));
-                      },
-                    )
-                );
-              },
-            ), //groupFormField,
-            onTap: () {
-
-              if (widget.sessionToAuth == null) {
-                if(kretaLoginBlocs.schoolBloc.currentState is ItemListLoaded
-                    || kretaLoginBlocs.schoolBloc.currentState is ItemListPickedState
-                ){
-                  showSchoolsDialog(context, data: kretaLoginBlocs.schoolBloc.data,
-                      onPicked: ({String key, String value}){
-                        print("log: school: key: $key, value: $value");
-                        kretaLoginBlocs.schoolBloc.dispatch(PickedEvent(item: SchoolItem(key, value)));
+                    labelText: locText(context, key: "school"),
+                  ),
+                  child: Builder(
+                    builder: (BuildContext context){//, ItemListState state) {
+                      print("log: widget update2");
+                      if (state is ItemListLoaded) {
+                        return Container();
                       }
-                  );
-                }
-              }
+                      if(state is ItemListPickedState){
+                        print("log: asdasdGroup: $state.item.name");
+                        return Text('${state.item.name}',
+                          style: TextStyle(fontSize: 16),
+
+                        );
+                      }
+                      return Text(locText(context, key: "loading"));
+                    },
+                  )
+              );
             },
-          );
-        }
+          ), //groupFormField,
+          onTap: () {
+
+            if (widget.sessionToAuth == null) {
+              if(kretaLoginBlocs.schoolBloc.currentState is ItemListLoaded
+                  || kretaLoginBlocs.schoolBloc.currentState is ItemListPickedState
+              ){
+                showSchoolsDialog(context, data: kretaLoginBlocs.schoolBloc.data,
+                    onPicked: ({String key, String value}){
+                      print("log: school: key: $key, value: $value");
+                      kretaLoginBlocs.schoolBloc.dispatch(PickedEvent(item: SchoolItem(key, value)));
+                    }
+                );
+              }
+            }
+          },
+        );
+      }
     );
 
     return BlocBuilder(
@@ -243,7 +235,13 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
               stopCustomHud()
           );
           if(state is KretaLoginFailure) {
-            responseInfo = locText(context, key: "incorrect_data");
+            if(state.error.errorCode == ErrorCodes.THERA_AUTHENTICATION_ERROR.code){
+              responseInfo = locText(context, key: "incorrect_data");
+            }else if(state.error.errorCode == ErrorCodes.GENERAL_THERA_ERROR.code){
+              responseInfo = locText(context, key: "kreta_server_unavailable");
+            }else{
+              responseInfo = locText(context, key: "try_again_later");
+            }
 
 
           }else if(state is KretaLoginSomethingWentWrong){
@@ -321,8 +319,6 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
           ),
           show: isLoading,
         );
-
-
         return SingleChildScrollView(
           child: Column(
             children: <Widget>[

@@ -12,17 +12,28 @@ class GradeItemWidget extends StatelessWidget{
 
   PojoGrade pojoGrade;
 
-  GradeItemWidget({this.pojoGrade});
+  bool isBySubject = false;
+
+  GradeItemWidget.bySubject({this.pojoGrade}){
+    isBySubject = true;
+  }
+
+  GradeItemWidget.byDate({this.pojoGrade}){
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
 
-    final double itemHeight = 82;
+    final double itemHeight = 72;
 
 
     return Container(
-      height: itemHeight,
+     // height: itemHeight,
       child: Card(
+          margin: EdgeInsets.only(left: 3, top: 2.5, bottom: 2.5, right: 3),
+
           clipBehavior: Clip.antiAliasWithSaveLayer,
           elevation: 5,
           child: InkWell(
@@ -59,7 +70,7 @@ class GradeItemWidget extends StatelessWidget{
                                       Align(
                                         alignment: Alignment.bottomCenter,
                                         child: Padding(
-                                          padding: const EdgeInsets.only(bottom: 8.0),
+                                          padding: const EdgeInsets.only(bottom: 0.0),
                                           child: Builder(
                                             builder: (context){
                                               Color textColor = Colors.black;
@@ -83,38 +94,65 @@ class GradeItemWidget extends StatelessWidget{
                         ),
                       ),
                       Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 8.0),
-                          child: Column(
+                        child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
 
                               Builder(
                                 builder: (context){
-                                  if(pojoGrade.topic != null && pojoGrade.topic != ""){
-                                    return Text(pojoGrade.topic, style: TextStyle(fontSize: 19),);
+                                  if(!isBySubject){
+                                    return Container(
+                                      // color: PojoType.getColor(widget.pojoTask.type),
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.only(
+                                                bottomRight: Radius.circular(12)),
+                                            color: pojoGrade.color
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 4, top: 1, bottom: 1,  right: 8, ),
+                                          child: Text(pojoGrade.subject,
+                                            style: TextStyle(fontSize: 18, color: Colors.black),),
+                                        )
+                                    );
                                   }
                                   return Container();
                                 },
                               ),
-                              Builder(
-                                builder: (context){
-                                  String gradeType = pojoGrade.gradeType;
-                                  if(gradeType.toLowerCase() == "midyear"){
-                                    gradeType = locText(context, key: "gradeType_midYear");
-                                  }else if(gradeType.toLowerCase() == "halfyear"){
-                                    gradeType = locText(context, key: "gradeType_halfYear");
-                                  }else if(gradeType.toLowerCase() == "endyear"){
-                                    gradeType = locText(context, key: "gradeType_endYear");
-                                  }
-                                  return Text(gradeType);
-                                },
+
+
+                              Padding(
+                                padding: const EdgeInsets.only(left: 4.0),
+                                child: Builder(
+                                  builder: (context){
+                                    if(pojoGrade.topic != null && pojoGrade.topic != ""){
+                                      return Text(pojoGrade.topic, style: TextStyle(fontSize: 19),);
+                                    }
+                                    return Container();
+                                  },
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 6.0),
+                                child: Builder(
+                                  builder: (context){
+                                    String gradeType = pojoGrade.gradeType;
+                                    if(gradeType.toLowerCase() == "midyear"){
+                                      gradeType = locText(context, key: "gradeType_midYear");
+                                    }else if(gradeType.toLowerCase() == "halfyear"){
+                                      gradeType = locText(context, key: "gradeType_halfYear");
+                                    }else if(gradeType.toLowerCase() == "endyear"){
+                                      gradeType = locText(context, key: "gradeType_endYear");
+                                    }
+                                    return Text(gradeType);
+                                  },
+                                ),
                               ),
 
                             ],
                           ),
-                        ),
+
                       ),
                       /*
                   Spacer(),
@@ -134,9 +172,17 @@ class GradeItemWidget extends StatelessWidget{
 
                     ],
                   ),
-                  Positioned(bottom: 4, right: 4,
-                    child: Text(hazizzShowDateAndTimeFormat(pojoGrade.creationDate),style: Theme.of(context).textTheme.subtitle,) ,
+                  Builder(
+                    builder: (_){
+                      if(isBySubject){
+                        return Positioned(bottom: 4, right: 4,
+                          child: Text(hazizzShowDateAndTimeFormat(pojoGrade.creationDate),style: Theme.of(context).textTheme.subtitle,) ,
+                        );
+                      }
+                      return Container();
+                    },
                   )
+
                 ],
               )
           )

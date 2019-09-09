@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/UserDataBloc.dart';
 import 'package:mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
+import 'package:mobile/blocs/selected_session_bloc.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/dialogs/dialogs.dart';
@@ -118,7 +119,11 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
     if (currentBackPressTime == null ||
         now.difference(currentBackPressTime) > Duration(seconds: 2)) {
       currentBackPressTime = now;
-      Toast.show(locText(context, key: "press_again_to_exit"), context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
+        _scaffoldKey.currentState.showSnackBar(SnackBar(
+          content: Text(locText(context, key: "press_again_to_exit")),
+          duration: Duration(seconds: 3),
+        ));
+
       return Future.value(false);
     }
     return Future.value(true);
@@ -138,7 +143,10 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
               icon: Icon(FontAwesomeIcons.bars),
               onPressed: () => _scaffoldKey.currentState.openDrawer()
             ),
-            title: Text(locText(context, key: "hazizz")),
+            title: Padding(
+              padding: const EdgeInsets.only(top: 4, ),
+              child: Text(locText(context, key: "hazizz"), style: TextStyle(fontWeight: FontWeight.w700, fontFamily: "Nunito", fontSize: 21),),
+            ),
 
             bottom: TabBar(controller: _tabController, tabs: [
             Tab(text: tasksTabPage.getTabName(context), icon: Icon(FontAwesomeIcons.bookOpen),),
@@ -204,7 +212,19 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
 
                       },
                     ),
-                    accountEmail: new Text(""),
+                    accountEmail: BlocBuilder(
+                      bloc: SelectedSessionBloc(),
+                      builder: (_, state){
+                        Text hardCodeless(String text){
+                          return Text(text, style: TextStyle(fontSize: 16, fontFamily: "Nunito", fontWeight: FontWeight.w600), );
+                        }
+                        if(state is SelectedSessionFineState){
+                          return hardCodeless("${locText(context, key: "kreta_account")}: ${state.session.username}");
+
+                        }
+                        return hardCodeless(locText(context, key: "not_logged_in_to_kreta_account"));
+                      },
+                    ),
 
                     currentAccountPicture: BlocBuilder(
                       bloc: UserDataBlocs().pictureBloc,
@@ -232,7 +252,10 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
                         );
                       },
                     ),
+
                   ),
+
+
 
                   /*
                   ListTile(

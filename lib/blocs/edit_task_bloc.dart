@@ -142,12 +142,15 @@ class TaskEditBloc extends TaskMakerBloc {
           missingInfo = true;
         }
         HFormState descriptionState = descriptionBloc.currentState;
+        /*
         if(descriptionState is TextFormFine ||descriptionState is TextFormSetState){
           description = descriptionBloc.lastText;
         }else{
           print("log: missing: description");
           missingInfo = true;
         }
+        */
+        description = descriptionBloc.lastText;
 
         if(missingInfo){
           print("log: missing info");

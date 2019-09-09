@@ -64,7 +64,7 @@ class TasksWaitingState extends TasksState {
 
 
 class TasksLoadedState extends TasksState {
-  List<PojoTask> tasks;
+  Map<DateTime, List<PojoTask>> tasks;
 
   TasksLoadedState(this.tasks) : assert(tasks!= null), super([tasks]);
   @override
@@ -72,9 +72,9 @@ class TasksLoadedState extends TasksState {
 }
 
 class TasksLoadedCacheState extends TasksState {
-  List<PojoTask> data;
+  Map<DateTime, List<PojoTask>> tasks;
 
-  TasksLoadedCacheState(this.data) : assert(data!= null), super([data]);
+  TasksLoadedCacheState(this.tasks) : assert(tasks!= null), super([tasks]);
   @override
   String toString() => 'TasksLoadedCacheState';
 }
@@ -109,10 +109,39 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
 
   DateTime lastUpdated = DateTime(0, 0, 0, 0, 0);
 
-  List<PojoTask> tasks;
+  List<PojoTask> tasksRaw;
+
+  Map<DateTime, List<PojoTask>> tasks;
+
+  Map<DateTime, List<PojoTask>> onLoaded(List<PojoTask> t){
+    tasks = null;
+    if(tasks == null || tasks.isEmpty){
+      tasks = Map();
+      int i = 0;
+      for(PojoTask task in t){
+        if (i == 0 || t[i].dueDate
+            .difference(t[i - 1].dueDate)
+            .inDays >= 1) {
+          tasks[t[i].dueDate] = List();
+          tasks[t[i].dueDate].add(task);
+
+        }else{
+          tasks[t[i].dueDate].add(task);
+        }
+        i++;
+      }
+      return tasks;
+    }
+
+  }
+
+
 
   @override
   TasksState get initialState => TasksInitialState();
+
+
+
 
   @override
   Stream<TasksState> mapEventToState(TasksEvent event) async* {
@@ -124,8 +153,8 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
           DataCache dataCache = await loadTasksCache();
           if(dataCache!= null){
             lastUpdated = dataCache.lastUpdated;
-            tasks = dataCache.data;
-
+            tasksRaw = dataCache.data;
+            onLoaded(tasksRaw);
             yield TasksLoadedCacheState(tasks);
           }
         }
@@ -167,12 +196,14 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
         if(hazizzResponse.isSuccessful){
 
           print("tasks.tasks: ${ hazizzResponse.convertedData}");
-          tasks = hazizzResponse.convertedData;
-          print("off: $tasks");
-          if(tasks != null ){
+          tasksRaw = hazizzResponse.convertedData;
+          print("off: $tasksRaw");
+          if(tasksRaw != null ){
+            onLoaded(tasksRaw);
+
             lastUpdated = DateTime.now();
             if(currentTaskExpiredState == TaskExpiredState.UNEXPIRED && currentTaskCompleteState == TaskCompleteState.UNCOMPLETED) {
-              saveTasksCache(tasks);
+              saveTasksCache(tasksRaw);
             }
 
             print("log: opsie: 0");

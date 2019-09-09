@@ -146,7 +146,19 @@ class ProfilePictureEditorBloc extends Bloc<ProfilePictureEditorEvent, ProfilePi
     else if (event is ProfilePictureEditorChangedEvent) {
       profilePictureBytes = event.imageBytes;
       print("log: 89238sjdsad: $profilePictureBytes");
-      yield ProfilePictureEditorChangedState(imageBytes: profilePictureBytes);
+      yield ProfilePictureEditorWaitingState();
+      HazizzResponse hazizzResponse = await RequestSender().getResponse(new UpdateMyProfilePicture(encodedImage: fromBytesImageToBase64(profilePictureBytes)));
+
+      if (hazizzResponse.isSuccessful) {
+
+        UserDataBlocs().pictureBloc.dispatch(ProfilePictureSetEvent(imageBytes: profilePictureBytes));
+
+        yield ProfilePictureEditorFineState(imageBytes: profilePictureBytes);
+
+
+      }else{
+        yield ProfilePictureEditorChangedState(imageBytes: profilePictureBytes);
+      }
     }
     else if (event is ProfilePictureEditorSavedEvent) {
       yield ProfilePictureEditorWaitingState();

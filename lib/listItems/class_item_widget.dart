@@ -3,6 +3,7 @@ import 'package:mobile/communication/pojos/PojoClass.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 
 import '../hazizz_date.dart';
+import '../hazizz_localizations.dart';
 import '../hazizz_theme.dart';
 
 class ClassItemWidget extends StatelessWidget{
@@ -15,9 +16,11 @@ class ClassItemWidget extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
 
-    const double itemHeight = 65;
+    const double itemHeight = 60;
 
     DateTime currentDateTime = DateTime.now();
+
+    const int horizontalMargins = 4;
 
 
     Color bgColor = null;
@@ -29,9 +32,9 @@ class ClassItemWidget extends StatelessWidget{
     }
 
     return Container(
-      height: itemHeight,
+     // height: itemHeight,
       child: Card(
-        margin: EdgeInsets.only(left: 4, right: 4, bottom: 0, top: 5),
+        margin: EdgeInsets.only(left: 4, right: 4, bottom: 2.5, top: 2.5),
         color: bgColor,
         clipBehavior: Clip.antiAliasWithSaveLayer,
         elevation: 5,
@@ -48,17 +51,20 @@ class ClassItemWidget extends StatelessWidget{
 
                   Container(
                     width: itemHeight/100*80,
-                    height: double.infinity,
+                   // height: double.infinity,
                     color: Theme.of(context).primaryColor,
                     child: Center(
-                      child: Text(pojoClass.periodNumber == null ? "1." : "${pojoClass.periodNumber}.",
-                        style: TextStyle(fontSize: 44),
+                      child: Container(
+                        child: Text(pojoClass.periodNumber == null ? "1." : "${pojoClass.periodNumber}.",
+                          style: TextStyle(fontSize: 40, ),
+                        ),
                       ),
                     ),
                   ),
 
                 //  SizedBox(width: 4,),
                   Column(
+                    mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -70,13 +76,13 @@ class ClassItemWidget extends StatelessWidget{
                               color: Theme.of(context).primaryColor
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 2, top: 0, right: 8, bottom: 1),
+                            padding: const EdgeInsets.only(left: 2, top: 0, right: 8, bottom: 0),
                             child: Row(
                                 children: [
 
                             //  Text(pojoClass.subject == null ? "subject" : pojoClass.subject, style: TextStyle(fontSize: 20)),
                                   Text(pojoClass.subject == null ? "className" : pojoClass.subject[0].toUpperCase() + pojoClass.subject.substring(1),
-                                    style: TextStyle(fontSize: 22),
+                                    style: TextStyle(fontSize: 20),
                                   ),
                                 ]
                             ),
@@ -84,12 +90,28 @@ class ClassItemWidget extends StatelessWidget{
                       ),
 
                       Padding(
+                        padding: const EdgeInsets.only(left: 4.0),
+                        child: Builder(builder: (context){
+                          if(pojoClass.cancelled){
+                            return Text(locText(context, key: "thera_canceled").toUpperCase(), style: TextStyle(fontSize: 20, color: HazizzTheme.red));
+                          }else if(pojoClass.standIn){
+                            return Text("${locText(context, key: "thera_standin")}: ${pojoClass.teacher}", style: TextStyle(fontSize: 20, color: HazizzTheme.red));
+
+                          }
+                          return Container();
+                        }),
+                      ),
+
+
+                     // Spacer(),
+
+                      Padding(
                         padding: const EdgeInsets.only(left: 4),
                         child: Row(
                           children: <Widget>[
-                            Text(pojoClass.startOfClass.toHazizzFormat(), style: TextStyle(fontSize: 20),),
-                            Text("-", style: TextStyle(fontSize: 20),),
-                            Text(pojoClass.endOfClass.toHazizzFormat(), style: TextStyle(fontSize: 20),),
+                            Text(pojoClass.startOfClass.toHazizzFormat(), style: TextStyle(fontSize: 19),),
+                            Text("-", style: TextStyle(fontSize: 19),),
+                            Text(pojoClass.endOfClass.toHazizzFormat(), style: TextStyle(fontSize: 19),),
                            // Spacer(),
                           //  Text(pojoClass.room == null ? " " : pojoClass.room, style: TextStyle(fontSize: 20),)
                           ],
@@ -101,6 +123,7 @@ class ClassItemWidget extends StatelessWidget{
                   ),
                   Spacer(),
                   Column(
+                    mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
                       Text(pojoClass.room == null ? "U125" : pojoClass.room, style: TextStyle(fontSize: 20),)

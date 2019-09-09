@@ -34,7 +34,7 @@
     "days_later"
     : "{} nap múlva",
 
-  "days_before"
+  "days_ago"
   : "Lejárt {} napja",
 
 
@@ -114,10 +114,19 @@
   "report_something"
   : "{} jelentése",
 
-  "accept_hazizz_policy"
-  : "Elfogadom a házirendet",
 
-  "error_accept_hazizz_policy"
+  "report_successful"
+  : "{} sikeresen jelentve",
+
+
+
+  "accept_hazizz_guidelines1"
+  : "Elfogadom a ",
+
+  "accept_hazizz_guidelines2"
+  : "házirendet",
+
+  "error_accept_hazizz_guidelines"
   : "El kell fogadnod a házirendet!",
 
 
@@ -171,10 +180,10 @@
     "createTask"
     : "Feladat létrehozás",
 
-  "completed"
+  "complete"
   : "Kész van",
 
-  "uncompleted"
+  "incomplete"
   : "Nincs kész",
 
   "both"
@@ -571,8 +580,12 @@
     "search"
     : "Keresés",
 
+  "sort_by"
+  : "Rendezés",
 
-    "creator_"
+
+
+  "creator_"
     : "Létrehozó:",
 
 
@@ -642,8 +655,14 @@
     : "Jelszó mégegyszer",
 
 
+  "delete_successful"
+  : "{} sikeresen törölve",
+
     "areyousure_delete_task"
     : "Biztos hogy törlöd a feladatot?",
+
+  "areyousure_delete_subject"
+  : "Biztos hogy törlöd a {} témát?",
 
 
     "areyousure_delete_announcement"
@@ -652,6 +671,9 @@
 
     "areyousure_leave_group"
     : "Biztos hogy kilépsz ebből a csoportból?",
+
+  "areyousure_to_kick_from_group"
+  : "Biztos hogy kirúgod {} nevű felhasználót a csoportból?",
 
 
     "error_too_short"
@@ -767,10 +789,16 @@
     : "adatvédelmi szabályzatot ",
 
     "have_to_accept_privacy_tos2"
-    : "és a ",
+    : ", ",
 
     "have_to_accept_tos"
-    : "ÁSZF-t",
+    : "ÁSZF-t ",
+
+  "have_to_accept_privacy_tos3"
+  : "és a ",
+
+  "have_to_accept_guidelines"
+  : "házirendet!",
 
   "last_updated"
   : "Utoljára frissítve",
@@ -868,7 +896,7 @@
     : "Google bejelentkezés sikertelen, probáld újra késöbb",
 
     "error_conditionsNotAccepted"
-    : "El kell fogadnod az ÁSZF-t és az adatvédelmi szabályzatunkat!",
+    : "El kell fogadnod az ÁSZF-t, adatvédelmi szabályzatunkat és a házirendet!",
 
 
     "error_accountLocked"
@@ -1143,6 +1171,12 @@
 
     "kreta_accounts"
     : "Kréta fiókok",
+
+  "kreta_account"
+  : "Kréta fiók",
+
+  "not_logged_in_to_kreta_account"
+  : "Nem vagy bejelentkezve a Krétába",
 
     "do_you_want_to_log_in_again"
     : "Bejelentkezel újra a fiókba?",

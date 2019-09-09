@@ -393,7 +393,7 @@ class _TaskMakerPage extends State<TaskMakerPage> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(left: 4.0),
-                child: Icon(FontAwesomeIcons.calendarAlt),
+                child: Icon(FontAwesomeIcons.calendarTimes),
               ),
               Expanded(
                 child: Padding(

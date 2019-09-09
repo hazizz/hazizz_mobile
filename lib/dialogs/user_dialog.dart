@@ -15,6 +15,7 @@ import 'package:mobile/dialogs/report_dialog.dart';
 import 'package:mobile/enums/groupTypesEnum.dart';
 import 'package:mobile/enums/group_permissions_enum.dart';
 import 'package:mobile/image_operations.dart';
+import 'package:mobile/widgets/flushbars.dart';
 import 'package:mobile/widgets/permission_chip.dart';
 import '../hazizz_localizations.dart';
 import '../hazizz_response.dart';
@@ -104,7 +105,10 @@ class _UserDialog extends State<UserDialog> {
                     if(value == "report"){
                       bool success = await showReportDialog(context, reportType: ReportTypeEnum.USER, id: widget.id, name: widget.displayName);
                       if(success != null && success){
+                        showReportSuccess(context, what: locText(context, key: "user"));
+
                         Navigator.pop(context);
+
                       }
                     }
                   },

@@ -5,6 +5,7 @@ import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/dialogs/report_dialog.dart';
 import 'package:mobile/managers/welcome_manager.dart';
+import 'package:mobile/widgets/flushbars.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 import 'package:toast/toast.dart';
 
@@ -58,6 +59,9 @@ class _GroupTabHosterPage extends State<GroupTabHosterPage> with SingleTickerPro
     });
   }
 
+  GlobalKey<ScaffoldState> scaffoldState = new GlobalKey();
+
+
   @override
   void initState() {
     groupBlocs = new GroupBlocs();
@@ -75,17 +79,13 @@ class _GroupTabHosterPage extends State<GroupTabHosterPage> with SingleTickerPro
           showJoinedGroupDialog(context, group: widget.group)
       );
     }else if(widget.visitorEnum == VisitorEnum.notNewComer){
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Toast.show(locText(context, key: "already_in_group"), context, duration: Toast.LENGTH_LONG, gravity:  Toast.BOTTOM);
-       // showJoinedGroupDialog(context, group: widget.group);
 
-   //     Toast(, context);
-        /*
-        var snackBar = SnackBar(content: Text(locText(context, key: "already_in_group")), duration: Duration(seconds: 3),);
-        Scaffold.of(context).showSnackBar(snackBar);
-        */
-        }
-      );
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        scaffoldState.currentState.showSnackBar(SnackBar(
+          content: Text(locText(context, key: "already_in_group")),
+          duration: Duration(seconds: 3),
+        ));
+      });
     }
 
     /*
@@ -110,6 +110,7 @@ class _GroupTabHosterPage extends State<GroupTabHosterPage> with SingleTickerPro
   Widget build(BuildContext context) {
     title = "${locText(context, key: "group")}: ${widget.group.name}";
     return Scaffold(
+      key: scaffoldState,
      // backgroundColor: widget.color,
       appBar: AppBar(
         leading: HazizzBackButton(),
@@ -134,6 +135,7 @@ class _GroupTabHosterPage extends State<GroupTabHosterPage> with SingleTickerPro
               if(value == "report"){
                 bool success = await showReportDialog(context, reportType: ReportTypeEnum.GROUP, id: widget.group.id, name: widget.group.name);
                 if(success != null && success){
+                  showReportSuccess(context, what: locText(context, key: "group"));
 
                 }
               }else if(value == "invite"){

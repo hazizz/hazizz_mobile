@@ -9,6 +9,7 @@ import 'package:mobile/communication/pojos/PojoSession.dart';
 
 import 'package:mobile/managers/kreta_session_manager.dart';
 
+import 'grades_bloc.dart';
 import 'main_tab_blocs/main_tab_blocs.dart';
 
 //region EditTask bloc parts
@@ -101,7 +102,7 @@ class SelectedSessionBloc extends Bloc<SelectedSessionEvent, SelectedSessionStat
       selectedSession = event.session;
       await KretaSessionManager.setSelectedSession(selectedSession);
       MainTabBlocs().schedulesBloc.dispatch(ScheduleFetchEvent());
-      MainTabBlocs().gradesBloc.dispatch(FetchData());
+      MainTabBlocs().gradesBloc.dispatch(GradesFetchEvent());
 
       yield SelectedSessionFineState(selectedSession);
     }

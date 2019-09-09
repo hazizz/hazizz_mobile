@@ -9,6 +9,7 @@ import 'package:mobile/communication/pojos/PojoUser.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/enums/group_permissions_enum.dart';
 import 'package:mobile/listItems/member_item_widget.dart';
+import 'package:mobile/managers/cache_manager.dart';
 import 'package:mobile/managers/welcome_manager.dart';
 
 
@@ -80,17 +81,23 @@ class _GroupMembersPage extends State<GroupMembersPage> with AutomaticKeepAliveC
                         PojoGroupPermissions memberPermissions = state.data;
                         List<MemberItemWidget> membersWidget = List();
 
+                        Function onKicked = (){
+                          groupMembersBloc.dispatch(FetchData());
+                        };
+
+
+
                         for(PojoUser member in memberPermissions.OWNER){
-                          membersWidget.add(MemberItemWidget(member: member, permission: GroupPermissionsEnum.OWNER,));
+                          membersWidget.add(MemberItemWidget(member: member, permission: GroupPermissionsEnum.OWNER, onKicked: onKicked,));
                         }
                         for(PojoUser member in memberPermissions.MODERATOR){
-                          membersWidget.add(MemberItemWidget(member: member, permission: GroupPermissionsEnum.MODERATOR,));
+                          membersWidget.add(MemberItemWidget(member: member, permission: GroupPermissionsEnum.MODERATOR, onKicked: onKicked));
                         }
                         for(PojoUser member in memberPermissions.USER){
-                          membersWidget.add(MemberItemWidget(member: member, permission: GroupPermissionsEnum.USER,));
+                          membersWidget.add(MemberItemWidget(member: member, permission: GroupPermissionsEnum.USER, onKicked: onKicked));
                         }
                         for(PojoUser member in memberPermissions.NULL){
-                          membersWidget.add(MemberItemWidget(member: member, permission: GroupPermissionsEnum.NULL,));
+                          membersWidget.add(MemberItemWidget(member: member, permission: GroupPermissionsEnum.NULL, onKicked: onKicked));
                         }
 
                         return new ListView.builder(

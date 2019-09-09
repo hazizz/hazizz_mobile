@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:dio/dio.dart';
+import 'package:dio_flutter_transformer/dio_flutter_transformer.dart';
 import 'package:flutter/cupertino.dart';
 //import 'package:mobile/packages/hazizz-dio-2.1.3/lib/dio.dart';
 import 'HttpMethod.dart';
@@ -85,9 +86,9 @@ class RequestSender{
     },
     */
 
-    connectTimeout: 5000,
-    sendTimeout: 5000,
-    receiveTimeout: 5000,
+    connectTimeout: 6000,
+    sendTimeout: 6000,
+    receiveTimeout: 6000,
   //  headers: request.header,
     responseType: ResponseType.plain,
     receiveDataWhenStatusError: true,
@@ -96,7 +97,12 @@ class RequestSender{
 
   );
 
-  static final Dio dio = new Dio();
+  Dio dio = new Dio();
+
+  void initalize(){
+    dio = new Dio();
+    dio.transformer = new FlutterTransformer();
+  }
 
   Future<void> waitCooldown() async{
     dio.interceptors.requestLock.lock();

@@ -11,7 +11,7 @@ import 'Pojo.dart';
 part 'PojoGrade.gg.dart';
 
 //@JsonSerializable()
-class PojoGrade extends Pojo {
+class PojoGrade extends Pojo implements Comparable {
 
   DateTime date;
   DateTime creationDate;
@@ -59,4 +59,13 @@ class PojoGrade extends Pojo {
 
 
   Map<String, dynamic> toJson() => _$PojoGradeToJson(this);
+
+  @override
+  int compareTo(other) {
+    if(other is PojoGrade){
+      int a = this.date.compareTo(other.date);
+      return a;
+    }
+    return null;
+  }
 }

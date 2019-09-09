@@ -14,6 +14,7 @@ import 'package:mobile/enums/task_expired_state_enum.dart';
 import 'package:mobile/listItems/task_header_item_widget.dart';
 import 'package:mobile/listItems/task_item_widget.dart';
 import 'package:mobile/managers/welcome_manager.dart';
+import 'package:mobile/widgets/flushbars.dart';
 import 'package:sticky_header_list/sticky_header_list.dart';
 
 import 'package:sticky_headers/sticky_headers.dart';
@@ -24,7 +25,7 @@ import '../../hazizz_theme.dart';
 
 class TasksPage extends StatefulWidget {
 
- // MainTasksBloc tasksBloc;
+  // MainTasksBloc tasksBloc;
 
 
 
@@ -42,7 +43,7 @@ class TasksPage extends StatefulWidget {
 
 class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , AutomaticKeepAliveClientMixin {
 
- // MainTasksBloc tasksBloc;
+  // MainTasksBloc tasksBloc;
 
 
 
@@ -60,7 +61,7 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
     currentExpiredTaskState = MainTabBlocs().tasksBloc.currentTaskExpiredState;
 
     // getData();
-   // tasksBloc = widget.tasksBloc;
+    // tasksBloc = widget.tasksBloc;
     print("created tasks PAge");
 
     /*
@@ -95,106 +96,22 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
 
   @override
   void dispose() {
-   // tasksBloc.dispose();
+    // tasksBloc.dispose();
     super.dispose();
   }
 
-  Widget onLoaded(List<PojoTask> tasks){
-    Map<DateTime, List<PojoTask>> map = Map();
+  Map<DateTime, List<PojoTask>> map = null;
 
 
-    int i = 0;
-    for(PojoTask task in tasks){
-      if (i == 0 || tasks[i].dueDate
-          .difference(tasks[i - 1].dueDate)
-          .inDays >= 1) {
-        map[tasks[i].dueDate] = List();
-        map[tasks[i].dueDate].add(task);
+  Widget onLoaded(Map<DateTime, List<PojoTask>> m){
 
-      }else{
-        map[tasks[i].dueDate].add(task);
-      }
+    map = m;
 
-      i++;
-    }
+
+
 
     return new Column(
       children: <Widget>[
-
-
-        /*
-        ExpandablePanel(
-          tapHeaderToExpand: true,
-          tapBodyToCollapse: true,
-
-          collapsed: Container(
-            width: MediaQuery.of(context).size.width,
-
-            child: Card(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                  //  Text("Feladatok:"),
-
-                    DropdownButton(
-                      value: current_completed_task_state,
-                      onChanged: (value){
-                        setState(() {
-                          current_completed_task_state = value;
-                        });
-                      },
-                      items: [
-                        DropdownMenuItem(child: Text("Kész van"), value: value_completed_task_state_completed,),
-                        DropdownMenuItem(child: Text("Nincs kész"), value: value_completed_task_state_incompleted,)
-                      ],
-                    ),
-                   // Text("Feladatok:"),
-
-                    DropdownButton(
-                      value: current_expired_task_state,
-                      onChanged: (value){
-                        setState(() {
-                          current_expired_task_state = value;
-                        });
-                      },
-                      items: [
-                        DropdownMenuItem(child: Text("Lejárt"), value: value_expired_task_state_expired,),
-                        DropdownMenuItem(child: Text("Nem lejárt"), value: value_expired_task_state_unexpired,)
-                      ],
-                    ),
-
-                    FlatButton(child: Text(locText(context, key: "apply").toUpperCase()),
-                      onPressed: (){
-
-                        if(current_completed_task_state == value_completed_task_state_incompleted){
-                          MainTabBlocs().tasksBloc.onlyIncomplete = true;
-                        }else{
-                          MainTabBlocs().tasksBloc.onlyIncomplete = false;
-                        }
-                        if(current_expired_task_state == value_expired_task_state_expired){
-                          MainTabBlocs().tasksBloc.onlyExpired = true;
-                        }else{
-                          MainTabBlocs().tasksBloc.onlyExpired = false;
-                        }
-
-                        MainTabBlocs().tasksBloc.dispatch(TasksFetchEvent());
-                      },
-                    )
-                  ],
-                )
-            ),
-          ),
-          expanded: Card(
-              child: Column(
-                children: <Widget>[
-                  Text("date"),
-                  Text("date"),
-                  Text("date"),
-                ],
-              )
-          ),
-        ),
-        */
 
         Card(
             child: Padding(
@@ -212,9 +129,10 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
                       });
                     },
                     items: [
+                      DropdownMenuItem(child: Text(locText(context, key: "complete")), value: TaskCompleteState.COMPLETED, ),
+                      DropdownMenuItem(child: Text(locText(context, key: "incomplete")), value: TaskCompleteState.UNCOMPLETED,),
                       DropdownMenuItem(child: Text(locText(context, key: "both")), value: TaskCompleteState.BOTH, ),
-                      DropdownMenuItem(child: Text(locText(context, key: "completed")), value: TaskCompleteState.COMPLETED, ),
-                      DropdownMenuItem(child: Text(locText(context, key: "uncompleted")), value: TaskCompleteState.UNCOMPLETED,)
+
                     ],
                   ),
                   // Text("Feladatok:"),
@@ -261,22 +179,103 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
                 DateTime key = map.keys.elementAt(index-1);
 
 
+
                 return StickyHeader(
                   header: TaskHeaderItemWidget(dateTime: key),
                   content: Builder(
                       builder: (context) {
+                      //  List<Widget> tasksList = new List();
+
                         List<Widget> tasksList = new List();
-                        int index2 = 0;
+
                         for(PojoTask pojoTask in map[key]){
-                          index2++;
-                          tasksList.add(
-                              TaskItemWidget(pojoTask: pojoTask,)
+                         // tasksList.add( pojoTask
+                          //  buildItem(context, index, animation, pojoTask)
+                              tasksList.add(TaskItemWidget(originalPojoTask: pojoTask, key: Key(pojoTask.toJson().toString())),
                           );
 
                         }
-                        return Column(
-                            children: tasksList
+
+                       // return Column(children: tasksList,);
+
+
+                      //  Function onCompletedChanged;
+
+
+
+                        return ListView.builder(
+
+                         // itemExtent: ,
+                         // addRepaintBoundaries: false,
+                       //   cacheExtent: 2,
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: map[key].length,
+                          itemBuilder: (context, index){
+                            return TaskItemWidget(originalPojoTask: map[key][index], onCompletedChanged: (){
+                              PojoTask a = map[key].removeAt(index);
+                              print("oh jaj: ${a}");
+                              //MainTabBlocs().tasksBloc.dispatch(TasksFetchEvent());
+                            },key: Key(map[key][index].toJson().toString()),);
+                          },
                         );
+
+
+                        return AnimatedList(
+
+                          shrinkWrap: true,
+                          initialItemCount: map[key].length,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index2, animation) => buildItem(context, index2, animation, map[key][index2], (){
+
+                            print("bro: me: ${currentCompletedTaskState}");
+
+                            if(currentCompletedTaskState != TaskCompleteState.BOTH){
+                              print("bro: im trigered");
+
+                              var removedItem = map[key].removeAt(index2);
+                              MainTabBlocs().tasksBloc.tasks.remove(removedItem);
+                              MainTabBlocs().tasksBloc.tasksRaw.remove(removedItem);
+
+                              AnimatedList.of(context).removeItem(index2, (context2, animation2){
+                                animation2.addStatusListener((AnimationStatus animationStatus){
+                                  if(animationStatus == AnimationStatus.completed){
+                                    print("oof: ${map[key]}");
+                                    if(map[key].isEmpty){
+
+                                      setState(() {
+                                        print("oof22: ${map}");
+                                        map.remove(key);
+                                        print("oof32: ${map}");
+                                      });
+                                    }
+                                  }
+                                });
+                                return buildItem(context2, index2, animation2, removedItem, (){});
+                              },
+                                  duration:  Duration(milliseconds: 500)
+                              );
+
+
+                              /*
+                                print("oof: ${map[key]}");
+                                if(map[key].isEmpty){
+
+                                  setState(() {
+                                    print("oof22: ${map}");
+                                    map.remove(key);
+                                    print("oof32: ${map}");
+                                  });
+                                }
+                                */
+
+                            }
+
+
+                          }),
+
+                        );
+
                       }
                   ),
                 );
@@ -287,9 +286,39 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
     );
   }
 
+
+  Widget buildItem(BuildContext context, int index, Animation animation, PojoTask pojoTask, Function onCompletedChanged){
+    Animation<Offset> a = Tween<Offset>(begin: Offset(-1, 0.0), end: Offset(0, 0)).animate(
+        CurvedAnimation(
+          parent: animation,
+
+
+          curve: //Curves.easeOutSine
+
+          Interval(
+            0.1,
+            1.0,
+            curve: Curves.easeOutSine,
+
+           ),
+
+        )
+    );
+    return SlideTransition(
+
+      position: a,
+    //  axis: Axis.vertical,
+      child: TaskItemWidget(originalPojoTask: pojoTask, onCompletedChanged: onCompletedChanged, key: Key(pojoTask.toJson().toString()),)
+    );
+  }
+
+  GlobalKey<ScaffoldState> scaffoldState = new GlobalKey();
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldState,
       body: new RefreshIndicator(
 
           child: Stack(
@@ -300,12 +329,28 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
                   //  stream: tasksBloc.subject.stream,
                   builder: (_, TasksState state) {
                     if (state is TasksLoadedState) {
-                      List<PojoTask> tasks = state.tasks;
+                     /* WidgetsBinding.instance.addPostFrameCallback((_) {
+                        Scaffold.of(context).showSnackBar(SnackBar(
+                          content: Text('Baaaaaaaa'),
+                          duration: Duration(seconds: 3),
+                        ));
+                        // Toast.show("FIXIN", context, duration: 4, gravity:  Toast.BOTTOM);
+                        scaffoldState.currentState.showSnackBar(SnackBar(
+                          content: Text('Button moved to separate widget'),
+                          duration: Duration(seconds: 3),
+                        ));
+                        Toast.show("FIXIN", context, duration: 4, gravity:  Toast.BOTTOM);
+
+                        // Toast.show(locText(context, key: "info_something_went_wrong"), context, duration: 4, gravity:  Toast.BOTTOM);
+                      });
+                      */
+
+                      Map<DateTime, List<PojoTask>> tasks = state.tasks;
 
                       return onLoaded(tasks);
 
                     }if (state is TasksLoadedCacheState) {
-                      List<PojoTask> tasks = state.data;
+                      Map<DateTime, List<PojoTask>> tasks = state.tasks;
 
                       return onLoaded(tasks);
 
@@ -327,11 +372,14 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
                       //return Center(child: Text("Loading Data"));
                       if(state.hazizzResponse.dioError == noConnectionError){
                         WidgetsBinding.instance.addPostFrameCallback((_) {
-                          Toast.show(locText(context, key: "info_noInternetAccess"), context, duration: 4, gravity:  Toast.BOTTOM);
+                          showNoConnectionSnackBar(context, scaffoldState: scaffoldState);
                         });
                       }else{
                         WidgetsBinding.instance.addPostFrameCallback((_) {
-                          Toast.show(locText(context, key: "info_something_went_wrong"), context, duration: 4, gravity:  Toast.BOTTOM);
+                          scaffoldState.currentState.showSnackBar(SnackBar(
+                            content: Text("${locText(context, key: "tasks")}: ${locText(context, key: "info_something_went_wrong")}"),
+                            duration: Duration(seconds: 3),
+                          ));
                         });
                       }
 
@@ -373,5 +421,3 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 }
-
-

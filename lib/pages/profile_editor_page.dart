@@ -210,7 +210,7 @@ class _ProfileEditorPage extends State<ProfileEditorPage> with TickerProviderSta
                             child: TextField(
                               controller: profileEditorBlocs.displayNameEditorBloc.displayNameController,
                               style: TextStyle(fontSize: 22),
-                              // maxLength: 20,
+                               maxLength: 20,
                               decoration: InputDecoration(
                                   labelText: locText(context, key: "displayName")
                               ),
