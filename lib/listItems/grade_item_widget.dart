@@ -32,7 +32,7 @@ class GradeItemWidget extends StatelessWidget{
     return Container(
      // height: itemHeight,
       child: Card(
-          margin: EdgeInsets.only(left: 3, top: 2.5, bottom: 2.5, right: 3),
+          margin: EdgeInsets.only(left: 7, top: 2.5, bottom: 2.5, right: 7),
 
           clipBehavior: Clip.antiAliasWithSaveLayer,
           elevation: 5,

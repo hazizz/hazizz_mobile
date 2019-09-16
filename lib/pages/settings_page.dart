@@ -127,6 +127,15 @@ class _SettingsPage extends State<SettingsPage> with AutomaticKeepAliveClientMix
               Divider(),
               ListTile(
                 onTap: () async {
+                  Navigator.pushNamed(context, "/settings/kreta");
+                },
+                leading: Icon(FontAwesomeIcons.landmark),
+                title: Text(locText(context, key: "kreta_settings")),
+                // trailing: Text("time")
+              ),
+              Divider(),
+              ListTile(
+                onTap: () async {
                   Navigator.pushNamed(context, "/settings/notification");
                 },
                 leading: Icon(FontAwesomeIcons.solidBell),

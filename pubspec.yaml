@@ -9,15 +9,18 @@ description: Hazizz Mobile application.
 # In Android, build-name is used as versionName while build-number used as versionCode.
 # Read more about Android versioning at https://developer.android.com/studio/publish/versioning
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
-# Read more about iOS versioning at
+# Read more about iOS versioning atm
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.1+9
+version: 1.0.5+14
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
 
+
+  snappable: 1.0.1
+  table_calendar: 2.0.1
   flushbar: 1.9.0
   dio_flutter_transformer: 2.0.10
 
@@ -51,7 +54,7 @@ dependencies:
   firebase_auth: 0.11.1+11
   firebase_crashlytics: 0.1.0+2
   firebase_core: ^0.4.0+6
-  android_alarm_manager: 0.4.4
+  android_alarm_manager: 0.4.3
   dynamic_theme: 1.0.1
   sticky_header_list: 1.0.6
   auto_size_text: 2.0.1

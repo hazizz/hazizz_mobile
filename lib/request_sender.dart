@@ -14,6 +14,7 @@ import 'communication/requests/request_collection.dart';
 import 'hazizz_response.dart';
 import 'logger.dart';
 import 'managers/app_state_manager.dart';
+import 'managers/token_manager.dart';
 
 Future<HazizzResponse> getResponse(Request request)async{
   return await RequestSender().getResponse(request);
@@ -99,6 +100,7 @@ class RequestSender{
 
   Dio dio = new Dio();
 
+
   void initalize(){
     dio = new Dio();
     dio.transformer = new FlutterTransformer();
@@ -124,7 +126,7 @@ class RequestSender{
   bool isLocked(){
     return _isLocked;
   }
-  Future<HazizzResponse> getTokenResponse(AuthRequest authRequest) async{
+  Future<HazizzResponse> getAuthResponse(AuthRequest authRequest) async{
     HazizzResponse hazizzResponse;
     try{
       options.headers = await authRequest.buildHeader();
@@ -250,6 +252,12 @@ class RequestSender{
 
 
   Future<HazizzResponse> getResponse(Request request) async{
+
+
+    if((await TokenManager.getLastTokenUpdateTime()).difference(DateTime.now()).inHours >= 23){
+      await TokenManager.createTokenWithRefresh();
+    }
+
 
     HazizzResponse hazizzResponse;
 

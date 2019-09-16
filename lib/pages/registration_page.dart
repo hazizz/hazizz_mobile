@@ -1,38 +1,20 @@
-import 'dart:convert';
-import 'dart:math';
-
 
 import 'package:flutter/material.dart';
-import 'package:crypto/crypto.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:mobile/blocs/TextFormBloc.dart';
-import 'package:mobile/blocs/login_bloc.dart';
-import 'package:mobile/blocs/registration_bloc.dart';
-import 'package:mobile/controller/hashed_text_controller.dart';
-import 'package:mobile/widgets/registration_widget.dart';
-
-import '../request_sender.dart';
-import '../hazizz_localizations.dart';
-import '../main.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_auth_buttons/src/button.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/blocs/google_login_bloc.dart';
+import 'package:mobile/blocs/login_bloc.dart';
+import 'package:mobile/dialogs/loading_dialog.dart';
+import 'package:mobile/widgets/login_widget.dart';
 
+class LoginPage2 extends StatefulWidget {
 
-import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
-
-
-
-class RegistrationPage extends StatefulWidget {
-
-  RegistrationPage({Key key}) : super(key: key);
+  LoginPage2({Key key}) : super(key: key);
 
   @override
-  _RegistrationPage createState() => _RegistrationPage();
+  _LoginPage2 createState() => _LoginPage2();
 }
 
-class _RegistrationPage extends State<RegistrationPage> with SingleTickerProviderStateMixin {
+class _LoginPage2 extends State<LoginPage2> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
@@ -47,11 +29,25 @@ class _RegistrationPage extends State<RegistrationPage> with SingleTickerProvide
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: new Text("Registration"),
-        ),
-        body:
-        RegistrationWidget()
+        body: BlocBuilder(
+          bloc: LoginBlocs().googleLoginBloc,
+          builder: (context, state){
+            return BlocBuilder(
+              bloc: LoginBlocs().googleLoginBloc,
+              builder: (context2, state2){
+                bool _isLoading = false;
+                if(state is GoogleLoginWaitingState || state2 is LoginWaiting){
+                  _isLoading = true;
+                }
+                return LoadingDialog(
+                  child: LoginWidget(),
+                  show: _isLoading,
+                );
+
+              },
+            );
+          },
+        )
     );
   }
 }

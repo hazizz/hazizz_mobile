@@ -8,23 +8,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../request_sender.dart';
 import 'cache_manager.dart';
 
-class LoginError implements Exception{
-
-}
-
-class WrongUsernameException implements LoginError{
-  @override
-  String toString() => "WrongUsernameException";
-}
-
-class WrongPasswordException implements LoginError{
-  @override
-  String toString() => "WrongUsernameException";
-}
-
 class KretaSessionManager {
 
   static const String _keySession = "key_session";
+
+  static const String _key_rememberPassword= "key_remember_session_password";
 
   static PojoSession selectedSession;
 
@@ -32,10 +20,22 @@ class KretaSessionManager {
 
   SharedPreferences prefs;
 
+
   static Future<bool> hasSelectedSession() async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String session = prefs.getString(_keySession);
     return !(session == null || session == "");
+  }
+
+  static Future<bool> isRememberPassword() async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool a = prefs.getBool(_key_rememberPassword);
+    return a == null ?  true : a;
+  }
+
+  static Future<void> setRememberPassword(bool a) async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool(_key_rememberPassword, a);
   }
 
   /*

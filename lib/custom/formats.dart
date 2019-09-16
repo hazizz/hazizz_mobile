@@ -31,6 +31,10 @@ String dateTimeToLastUpdatedFormat(BuildContext context, DateTime dateTime){
   return locText(context, key: "last_updated") + ": " + "${dateTime.year.toString()}.$str_month.$str_day $str_hour:$str_minute";
 }
 
+String hazizzRequestDateFormat(DateTime dateTime){
+  return DateFormat("yyyy-MM-dd").format(dateTime);
+}
+
 String dateTimeToMonthDay(DateTime d){
   return DateFormat("MM.dd").format(d);
 }

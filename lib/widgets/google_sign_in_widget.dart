@@ -63,7 +63,7 @@ class _GoogleSignInButtonWidget extends State<GoogleSignInButtonWidget> {
           }
           else if(state is GoogleLoginHaveToAcceptConditionsState){
             WidgetsBinding.instance.addPostFrameCallback((_) =>
-                showConditionsToAcceptDialog(context).then((accepted){
+                showRegistrationDialog(context).then((accepted){
                   print("ACPETED: $accepted");
                   if(accepted != null && accepted){
                     LoginBlocs().googleLoginBloc.dispatch(GoogleLoginAcceptedConditionsEvent());

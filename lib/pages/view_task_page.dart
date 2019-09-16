@@ -1,3 +1,4 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/comment_section_bloc.dart';
 import 'package:mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
@@ -15,6 +16,7 @@ import 'package:mobile/widgets/comment_section_widget.dart';
 import 'package:mobile/widgets/flushbars.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 import 'package:mobile/widgets/tag_chip.dart';
+import 'package:snappable/snappable.dart';
 
 import '../communication/requests/request_collection.dart';
 import '../hazizz_date.dart';
@@ -128,9 +130,14 @@ class _ViewTaskPage extends State<ViewTaskPage> {
   List<Widget> tagWidgets;
 
   bool imTheAuthor = false;
+
+
+  final snapKey = GlobalKey<SnappableState>();
+
   @override
   void initState() {
    // getData();
+
 
     pojoTask = widget.pojoTask;
 
@@ -162,6 +169,10 @@ class _ViewTaskPage extends State<ViewTaskPage> {
     });
   }
   */
+
+
+
+
   @override
   Widget build(BuildContext context) {
 
@@ -171,7 +182,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
 
 
 
-
+    print("odsofoidas: ${DateTime.now().weekday}");
 
     return Hero(
         tag: "hero_task${pojoTask.id}",
@@ -193,9 +204,14 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                   if(value == "report"){
                     bool success = await showReportDialog(context, reportType: ReportTypeEnum.TASK, id: widget.pojoTask.id, name: "");
                     if(success != null && success){
-                      showReportSuccess(context, what: locText(context, key: "task"));
+                      showReportSuccessFlushBar(context, what: locText(context, key: "task"));
 
                     }
+
+                  }
+
+                  if(value == "snap"){
+                    snapKey.currentState.snap();
 
                   }
                 },
@@ -212,453 +228,417 @@ class _ViewTaskPage extends State<ViewTaskPage> {
               )
             ],
           ),
-          body:RefreshIndicator(
-            onRefresh: () async{
-             // widget.commentSectionWidget.commentBlocs.commentSectionBloc.dispatch(CommentSectionFetchEvent());
-              ViewTaskBloc().commentBlocs.commentSectionBloc.dispatch(CommentSectionFetchEvent());
+          body:Snappable(
+            key: snapKey,
+            child: RefreshIndicator(
+              onRefresh: () async{
+               // widget.commentSectionWidget.commentBlocs.commentSectionBloc.dispatch(CommentSectionFetchEvent());
+                ViewTaskBloc().commentBlocs.commentSectionBloc.dispatch(CommentSectionFetchEvent());
 
-            },
-            child: Stack(
-              children: [ListView(
-                controller: _scrollController,
-                children: [ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minHeight: MediaQuery.of(context).size.height-appBar.preferredSize.height - padding*3,
-                    maxHeight: (MediaQuery.of(context).size.height-appBar.preferredSize.height - padding*3)*2,
+              },
+              child: Stack(
+                children: [ListView(
+                  controller: _scrollController,
+                  children: [ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: MediaQuery.of(context).size.height-appBar.preferredSize.height - padding*3,
+                      maxHeight: (MediaQuery.of(context).size.height-appBar.preferredSize.height - padding*3)*2,
 
-                    minWidth: MediaQuery.of(context).size.width,
-                    maxWidth: MediaQuery.of(context).size.width,
+                      minWidth: MediaQuery.of(context).size.width,
+                      maxWidth: MediaQuery.of(context).size.width,
 
-                  ),
-                  /*
-                  width: MediaQuery.of(context).size.width,
-                  // valamiért 3* kell megszorozni a paddingot hogy jó legyen
-                  height: MediaQuery.of(context).size.height-appBar.preferredSize.height - padding*3,
-                  */
+                    ),
+                    /*
+                    width: MediaQuery.of(context).size.width,
+                    // valamiért 3* kell megszorozni a paddingot hogy jó legyen
+                    height: MediaQuery.of(context).size.height-appBar.preferredSize.height - padding*3,
+                    */
 
-                  child: Padding(
-                    padding: EdgeInsets.all(padding),
-                    child: Card(
-                            clipBehavior: Clip.antiAliasWithSaveLayer,
-                            elevation: 100,
-                            child:new Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                              Column(
-                                children: <Widget>[
-                                  Container(
-                                    color: mainTag != null ? mainTag.getColor(): Theme.of(context).primaryColor,
-                                    //  width: 400,
+                    child: Padding(
+                      padding: EdgeInsets.all(padding),
+                      child: Card(
+                              clipBehavior: Clip.antiAliasWithSaveLayer,
+                              elevation: 100,
+                              child:new Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                Column(
+                                  children: <Widget>[
+                                    Container(
+                                      color: mainTag != null ? mainTag.getColor(): Theme.of(context).primaryColor,
+                                      //  width: 400,
 
-                                    child: Stack(
-                                      children: <Widget>[
-                                        Positioned(
-                                          right: 0,
-                                          bottom: 0,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(right: 6, bottom: 6),
-                                            child: Builder(builder: (context){
-
-
-                                              print("REEDRAW: $completed");
-                                              IconData iconData;
-                                              if(completed){
+                                      child: Stack(
+                                        children: <Widget>[
+                                          Positioned(
+                                            right: 0,
+                                            bottom: 0,
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(right: 6, bottom: 6),
+                                              child: Builder(builder: (context){
 
 
+                                                print("REEDRAW: $completed");
+                                                IconData iconData;
+                                                if(completed){
+
+
+                                                  return IconButton(
+                                                      icon: Icon(FontAwesomeIcons.checkSquare, size: 32,),
+                                                      onPressed: () async {
+                                                        setState(() {
+                                                          completed = false;
+                                                          pojoTask.completed = false;
+
+                                                        });
+                                                        HazizzResponse hazizzResponse = await RequestSender().getResponse(SetTaskCompleted(p_taskId: pojoTask.id, setCompleted: false));
+                                                        if(hazizzResponse.isError){
+                                                          setState(() {
+                                                            completed = true;
+                                                            pojoTask.completed = true;
+
+                                                          });
+                                                        }
+                                                      }
+                                                  );
+                                                }
                                                 return IconButton(
-                                                    icon: Icon(FontAwesomeIcons.checkSquare, size: 32,),
+                                                    icon: Icon(FontAwesomeIcons.square, size: 32,),
                                                     onPressed: () async {
                                                       setState(() {
-                                                        completed = false;
-                                                        pojoTask.completed = false;
+                                                        completed = true;
+                                                        pojoTask.completed = true;
 
                                                       });
-                                                      HazizzResponse hazizzResponse = await RequestSender().getResponse(SetTaskCompleted(p_taskId: pojoTask.id, setCompleted: false));
+                                                      HazizzResponse hazizzResponse = await RequestSender().getResponse(SetTaskCompleted(p_taskId: pojoTask.id, setCompleted: true));
                                                       if(hazizzResponse.isError){
                                                         setState(() {
-                                                          completed = true;
-                                                          pojoTask.completed = true;
+                                                          completed = false;
+                                                          pojoTask.completed = false;
 
                                                         });
                                                       }
                                                     }
                                                 );
-                                              }
-                                              return IconButton(
-                                                  icon: Icon(FontAwesomeIcons.square, size: 32,),
-                                                  onPressed: () async {
-                                                    setState(() {
-                                                      completed = true;
-                                                      pojoTask.completed = true;
-
-                                                    });
-                                                    HazizzResponse hazizzResponse = await RequestSender().getResponse(SetTaskCompleted(p_taskId: pojoTask.id, setCompleted: true));
-                                                    if(hazizzResponse.isError){
-                                                      setState(() {
-                                                        completed = false;
-                                                        pojoTask.completed = false;
-
-                                                      });
-                                                    }
-                                                  }
-                                              );
-
-
-                                              return IconButton(
-                                                icon: Icon(iconData),
-                                                onPressed: () async {
-                                                  setState(() {
-                                                    completed = !completed;
-
-                                                  });
-                                                  HazizzResponse hazizzResponse = await RequestSender().getResponse(SetTaskCompleted(p_taskId: pojoTask.id, setCompleted: completed));
-                                                  if(hazizzResponse.isError){
-                                                  setState(() {
-                                                  completed = true;
-                                                  });
-                                                  }
-                                                  }
-                                              );
-
-                                            }),
+                                              }),
+                                            ),
                                           ),
-                                        ),
-                                        Column(
-                                          children: <Widget>[
-                                            Builder(
-                                              builder: (context){
-                                                if(mainTag != null){
-                                                  return Padding(
-                                                    padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 2),
-                                                    child: new Row(
-                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                      children: [
-                                                        new Flexible(
-                                                            child: Text(mainTag.getDisplayName(context),
-                                                              style: TextStyle(
-                                                                  fontSize: 36,
-                                                                  fontWeight: FontWeight.w800
-                                                              ),
-                                                            )
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  );
-                                                }
-                                                return Container();
-                                              },
-                                            ),
-
-
-                                            Wrap(
-                                              alignment: WrapAlignment.start,
-                                              //  runAlignment: WrapAlignment.start,
-
-                                              spacing: 8,
-                                              crossAxisAlignment: WrapCrossAlignment.center,
-                                              children: tagWidgets,
-                                            ),
-
-                                            Padding(
-                                              padding: const EdgeInsets.only(left: 16.0, right: 20.0, bottom: 2),
-                                              child: new Row(
-                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                children: [
-                                                  Padding(
-                                                    padding: const EdgeInsets.only(right: 8.0, left: 3),
-                                                    child: Icon(FontAwesomeIcons.userAlt),
-                                                  ),
-                                                  new Flexible(
-                                                      child: Text(pojoTask.creator.displayName,
-                                                        style: TextStyle(
-                                                            fontSize: 20
-                                                        ),
-                                                      )
-                                                  ),
-                                                ],
+                                          Column(
+                                            children: <Widget>[
+                                              Builder(
+                                                builder: (context){
+                                                  if(mainTag != null){
+                                                    return Padding(
+                                                      padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 2),
+                                                      child: new Row(
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        children: [
+                                                          new Flexible(
+                                                              child: Text(mainTag.getDisplayName(context),
+                                                                style: TextStyle(
+                                                                    fontSize: 36,
+                                                                    fontWeight: FontWeight.w800
+                                                                ),
+                                                              )
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  }
+                                                  return Container();
+                                                },
                                               ),
-                                            ),
 
-                                            Builder(
-                                              builder: (context){
-                                                if(pojoTask.group != null){
-                                                  return Padding(
-                                                    padding: const EdgeInsets.only(left: 16.0, right: 20.0, bottom: 2),
-                                                    child: new Row(
-                                                      mainAxisAlignment: MainAxisAlignment.start,
-                                                      children: [
-                                                        Padding(
-                                                          padding: const EdgeInsets.only(right: 11.0),
-                                                          child: Icon(FontAwesomeIcons.users),
-                                                        ),
-                                                        new Flexible(
-                                                            child: Text(pojoTask.group.name,
-                                                              style: TextStyle(
-                                                                  fontSize: 21
-                                                              ),
-                                                            )
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  );
-                                                }
-                                                return Container();
-                                              },
-                                            ),
 
-                                            Padding(
-                                              padding: const EdgeInsets.only(left: 16.0, right: 20.0, bottom: 4),
-                                              child: new Row(
-                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                children: [
-                                                  Padding(
-                                                    padding: const EdgeInsets.only(right: 8.0, left: 3),
-                                                    child: Icon(FontAwesomeIcons.calendarTimes),
+                                              Wrap(
+                                                alignment: WrapAlignment.start,
+                                                //  runAlignment: WrapAlignment.start,
+
+                                                spacing: 8,
+                                                crossAxisAlignment: WrapCrossAlignment.center,
+                                                children: tagWidgets,
+                                              ),
+
+                                              GestureDetector(
+                                                onTap: (){
+                                                  showUserDialog(context, creator: pojoTask.creator);
+                                                },
+                                                child: Padding(
+                                                  padding: const EdgeInsets.only(left: 16.0, right: 20.0, bottom: 2),
+                                                  child: new Row(
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    children: [
+                                                      Padding(
+                                                        padding: const EdgeInsets.only(right: 8.0, left: 3),
+                                                        child: Icon(FontAwesomeIcons.userAlt),
+                                                      ),
+                                                      new Flexible(
+                                                          child: Text(pojoTask.creator.displayName,
+                                                            style: TextStyle(
+                                                                fontSize: 20
+                                                            ),
+                                                          )
+                                                      ),
+                                                    ],
                                                   ),
+                                                ),
+                                              ),
 
-                                                  new Flexible(
-                                                    child: Padding(
-                                                      padding: const EdgeInsets.only(top: 4.0),
-                                                      child: Text(_deadline,
-                                                        style: TextStyle(
-                                                            fontSize: 20
+                                              Builder(
+                                                builder: (context){
+                                                  if(pojoTask.group != null){
+                                                    return GestureDetector(
+                                                      onTap: (){
+                                                        Navigator.pushNamed(context, "/group/groupId", arguments: widget.pojoTask.group);
+                                                      },
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.only(left: 16.0, right: 20.0, bottom: 2),
+                                                        child: new Row(
+                                                          mainAxisAlignment: MainAxisAlignment.start,
+                                                          children: [
+                                                            Padding(
+                                                              padding: const EdgeInsets.only(right: 11.0),
+                                                              child: Icon(FontAwesomeIcons.users),
+                                                            ),
+                                                            new Flexible(
+                                                                child: Text(pojoTask.group.name,
+                                                                  style: TextStyle(
+                                                                      fontSize: 21
+                                                                  ),
+                                                                )
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    );
+                                                  }
+                                                  return Container();
+                                                },
+                                              ),
+
+                                              Padding(
+                                                padding: const EdgeInsets.only(left: 16.0, right: 20.0, bottom: 4),
+                                                child: new Row(
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  children: [
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(right: 8.0, left: 3),
+                                                      child: Icon(FontAwesomeIcons.calendarTimes),
+                                                    ),
+
+                                                    new Flexible(
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.only(top: 4.0),
+                                                        child: Text(_deadline,
+                                                          style: TextStyle(
+                                                              fontSize: 20
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
-                                                  ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      )
+                                    ),
+                                    Stack(
+                                      children: <Widget>[
+
+                                        Column(
+                                          children: <Widget>[
+                                            _subject != null ? Padding(
+                                              padding: const EdgeInsets.only( left: 0,top: 0),
+                                              child: new Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  new Flexible(
+                                                    child:
+                                                    new Container(
+                                                      // color: PojoType.getColor(pojoTask.type),
+                                                        decoration: BoxDecoration(
+                                                          borderRadius: BorderRadius.only(bottomRight: Radius.circular(20), bottomLeft: Radius.circular(20)),
+                                                          color: mainTag != null ? mainTag.getColor(): Theme.of(context).primaryColor,
+                                                        ),
+                                                        child: Padding(
+                                                          padding: const EdgeInsets.only(left: 12, top: 0, right: 12, bottom: 0),
+                                                          child: Text(pojoTask.subject.name,
+                                                            style: TextStyle(fontSize: 32),
+                                                          ),
+                                                        )
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ) : Container(),
+                                            Padding(
+                                              padding: const EdgeInsets.only( left: 10,top: 5),
+                                              child: new Row(
+                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                children: [
+                                                  new Flexible(
+                                                    child: new Text(_title,
+                                                      style: TextStyle(
+                                                        //  fontFamily: "ShortStack",
+                                                          fontSize: 33
+                                                      ),
+                                                    ),
+                                                  )
                                                 ],
                                               ),
                                             ),
+                                            Padding(
+                                              padding: const EdgeInsets.only( left: 20, right: 20, top: 4),
+                                              child: new Row(
+                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                children: [
+                                                  new Flexible(
+                                                      child: Text(_description,
+
+                                                        style: TextStyle(
+                                                          // fontFamily: shortStackFont,
+                                                            fontWeight: FontWeight.w400,
+                                                            fontSize: 26
+                                                        ),
+                                                      )
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+
+
                                           ],
                                         ),
                                       ],
-                                    )
-                                  ),
-                                  Stack(
-                                    children: <Widget>[
-
-                                      Column(
-                                        children: <Widget>[
-                                          _subject != null ? Padding(
-                                            padding: const EdgeInsets.only( left: 0,top: 0),
-                                            child: new Row(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                                new Flexible(
-                                                  child:
-                                                  new Container(
-                                                    // color: PojoType.getColor(pojoTask.type),
-                                                      decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.only(bottomRight: Radius.circular(20), bottomLeft: Radius.circular(20)),
-                                                        color: mainTag != null ? mainTag.getColor(): Theme.of(context).primaryColor,
-                                                      ),
-                                                      child: Padding(
-                                                        padding: const EdgeInsets.only(left: 12, top: 0, right: 12, bottom: 6),
-                                                        child: Text(pojoTask.subject.name,
-                                                          style: TextStyle(fontSize: 32),
-                                                        ),
-                                                      )
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ) : Container(),
-                                          Padding(
-                                            padding: const EdgeInsets.only( left: 10,top: 5),
-                                            child: new Row(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              children: [
-                                                new Flexible(
-                                                  child: new Text(_title,
-                                                    style: TextStyle(
-                                                      //  fontFamily: "ShortStack",
-                                                        fontSize: 33
-                                                    ),
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only( left: 20, right: 20, top: 4),
-                                            child: new Row(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              children: [
-                                                new Flexible(
-                                                    child: Text(_description,
-
-                                                      style: TextStyle(
-                                                        // fontFamily: shortStackFont,
-                                                          fontWeight: FontWeight.w400,
-                                                          fontSize: 26
-                                                      ),
-                                                    )
-                                                )
-                                              ],
-                                            ),
-                                          ),
-
-
-                                        ],
-                                      ),
-                                      /*
-                                  Positioned(
-                                    left: 0,
-                                    bottom: 0,
-                                    child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment: CrossAxisAlignment.end,
-                                        children: <Widget>[
-                                          FlatButton(
-                                            onPressed: () async {
-                                              setState(() {
-                                                showComments = true;
-                                              });
-                                              await Future.delayed(const Duration(milliseconds: 50));
-                                              _scrollController.animateTo(_scrollController.position.maxScrollExtent, curve: Curves.ease, duration: Duration(milliseconds: 340));
-                                            },
-                                            child: Text(locText(context, key: "comments").toUpperCase(), style: theme(context).textTheme.button),
-                                          ),
-
-                                          Builder(
-                                              builder: (context){
-                                                if(imTheAuthor){
-                                                  return Column(
-                                                    mainAxisAlignment: MainAxisAlignment.end,
-                                                    // crossAxisAlignment: CrossAxisAlignment.end,
-                                                    children: <Widget>[
-                                                      FlatButton(
-                                                        onPressed: () async {
-                                                          var editedTask = await Navigator.of(context).pushNamed( "/editTask", arguments: pojoTask);
-                                                          if(editedTask != null && editedTask is PojoTask){
-                                                            setState(() {
-                                                              pojoTask = editedTask;
-                                                              processData(context, pojoTask);
-                                                            });
-                                                            MainTabBlocs().tasksBloc.dispatch(FetchData());
-                                                          }
-                                                        },
-                                                        child: Text(locText(context, key: "edit").toUpperCase(), style: theme(context).textTheme.button,),
-                                                      ),
-                                                      FlatButton(
-                                                        child: Text(locText(context, key: "delete").toUpperCase(), style: theme(context).textTheme.button),
-                                                        onPressed: () async {
-                                                          if(await showDeleteDialog(context, taskId: widget.taskId)){
-                                                            print("success");
-                                                            MainTabBlocs().tasksBloc.dispatch(FetchData());
-                                                            Navigator.of(context).pop();
-
-                                                          }else{
-                                                            print("no success");
-
-                                                          }
-
-                                                        },
-
-                                                      ),
-                                                    ],
-                                                  );
-                                                }
-                                                else return Container();
-                                              }
-                                          )
-                                        ],
-                                      ),
-
-                                  )
-                                  */
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: <Widget>[
-                                    FlatButton(
-                                      onPressed: () async {
-                                        setState(() {
-                                          showComments = true;
-                                        });
-                                        await Future.delayed(const Duration(milliseconds: 50));
-                                        _scrollController.animateTo(_scrollController.position.maxScrollExtent, curve: Curves.ease, duration: Duration(milliseconds: 340));
-                                      },
-                                      child: Text(locText(context, key: "comments").toUpperCase(), style: theme(context).textTheme.button),
                                     ),
-
-                                    Builder(
-                                        builder: (context){
-                                          if(imTheAuthor){
-                                            return Column(
-                                              mainAxisAlignment: MainAxisAlignment.end,
-                                              // crossAxisAlignment: CrossAxisAlignment.end,
-                                              children: <Widget>[
-                                                FlatButton(
-                                                  onPressed: () async {
-                                                    var editedTask = await Navigator.of(context).pushNamed( "/editTask", arguments: pojoTask);
-                                                    if(editedTask != null && editedTask is PojoTask){
-                                                      setState(() {
-                                                        pojoTask = editedTask;
-                                                        processData(context, pojoTask);
-                                                      });
-                                                      MainTabBlocs().tasksBloc.dispatch(TasksFetchEvent());
-                                                    }
-                                                  },
-                                                  child: Text(locText(context, key: "edit").toUpperCase(), style: theme(context).textTheme.button,),
-                                                ),
-                                                FlatButton(
-                                                  child: Text(locText(context, key: "delete").toUpperCase(), style: theme(context).textTheme.button),
-                                                  onPressed: () async {
-                                                    if(await showDeleteTaskDialog(context, taskId: widget.taskId)){
-                                                      print("success");
-                                                      MainTabBlocs().tasksBloc.dispatch(TasksFetchEvent());
-                                                      Navigator.of(context).pop();
-
-                                                    }else{
-                                                      print("no success");
-
-                                                    }
-
-                                                  },
-
-                                                ),
-                                              ],
-                                            );
-                                          }
-                                          else return Container();
-                                        }
-                                    )
                                   ],
                                 ),
-                            ]
-                          ),
-                      ),
+                                Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: <Widget>[
+                                      BlocBuilder(
+                                          bloc: ViewTaskBloc().commentBlocs.commentSectionBloc,
+                                          builder: (context, state){
 
+                                            Widget chip = Container();
 
-                  ),
-                ),
-                Builder(
-                  builder: (BuildContext context){
-                    if(showComments) {
-                      return Container(
-                        width: MediaQuery.of(context).size.width,
-                        // valamiért 3* kell megszorozni a paddingot hogy jó legyen
-                        //  height: MediaQuery.of(context).size.height-appBar.preferredSize.height - padding*3,
-                        child: Padding(
-                            padding: EdgeInsets.all(padding),
-                            child:
-                            widget.commentSectionWidget
+                                            if(state is CommentSectionLoadedState){
+                                              chip = Card(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(50.0),
+
+                                                ),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.only(left: 5.0, right: 5),
+                                                  child: Text(state.items.length.toString()),
+                                                ), color: Colors.red,
+                                              );
+                                            }
+
+                                            return Stack(
+                                              children: <Widget>[
+                                                Padding(
+                                                  padding: const EdgeInsets.only(top: 3.0, right: 3),
+                                                  child: FlatButton(
+                                                    onPressed: () async {
+                                                      setState(() {
+                                                        showComments = true;
+                                                      });
+                                                      await Future.delayed(const Duration(milliseconds: 50));
+                                                      _scrollController.animateTo(_scrollController.position.maxScrollExtent, curve: Curves.ease, duration: Duration(milliseconds: 340));
+                                                    },
+
+                                                     child: Text(locText(context, key: "comments").toUpperCase(), style: theme(context).textTheme.button)
+
+                                                  ),
+                                                ),
+                                                Positioned(top: 0, right: 0,
+                                                  child: chip,
+                                                )
+
+                                              ],
+                                            );
+
+                                        }
+                                      ),
+                                      Builder(
+                                          builder: (context){
+                                            if(imTheAuthor){
+
+                                              return Column(
+                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                // crossAxisAlignment: CrossAxisAlignment.end,
+                                                children: <Widget>[
+                                                  FlatButton(
+                                                    onPressed: () async {
+                                                      var editedTask = await Navigator.of(context).pushNamed( "/editTask", arguments: pojoTask);
+                                                      if(editedTask != null && editedTask is PojoTask){
+                                                        setState(() {
+                                                          pojoTask = editedTask;
+                                                          processData(context, pojoTask);
+                                                        });
+                                                        MainTabBlocs().tasksBloc.dispatch(TasksFetchEvent());
+                                                      }
+                                                    },
+                                                    child: Text(locText(context, key: "edit").toUpperCase(), style: theme(context).textTheme.button,),
+                                                  ),
+                                                  FlatButton(
+                                                    child: Text(locText(context, key: "delete").toUpperCase(), style: theme(context).textTheme.button),
+                                                    onPressed: () async {
+                                                      if(await showDeleteTaskDialog(context, taskId: widget.taskId)){
+                                                        print("success");
+                                                        MainTabBlocs().tasksBloc.dispatch(TasksFetchEvent());
+                                                        Navigator.of(context).pop();
+
+                                                      }else{
+                                                        print("no success");
+
+                                                      }
+
+                                                    },
+
+                                                  ),
+                                                ],
+                                              );
+                                            }
+                                            else return Container();
+                                          }
+                                      )
+                                    ],
+                                  ),
+                              ]
+                            ),
                         ),
-                      );
-                    }
-                    return Container();
-                  },
-                )
-                ],
+
+
+                    ),
+                  ),
+                  Builder(
+                    builder: (BuildContext context){
+                      if(showComments) {
+                        return Container(
+                          width: MediaQuery.of(context).size.width,
+                          // valamiért 3* kell megszorozni a paddingot hogy jó legyen
+                          //  height: MediaQuery.of(context).size.height-appBar.preferredSize.height - padding*3,
+                          child: Padding(
+                              padding: EdgeInsets.all(padding),
+                              child:
+                              widget.commentSectionWidget
+                          ),
+                        );
+                      }
+                      return Container();
+                    },
+                  )
+                  ],
+                ),
+              ]
               ),
-            ]
             ),
           )
       ),

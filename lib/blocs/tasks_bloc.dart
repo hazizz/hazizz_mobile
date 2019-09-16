@@ -6,22 +6,18 @@ import 'package:intl/intl.dart';
 
 import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
-import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/enums/task_complete_state_enum.dart';
 import 'package:mobile/enums/task_expired_state_enum.dart';
 
-import 'package:mobile/managers/kreta_session_manager.dart';
 
 import '../caches/data_cache.dart';
 import '../communication/connection.dart';
 import '../communication/errors.dart';
-import '../communication/pojos/PojoClass.dart';
 import '../communication/requests/request_collection.dart';
 import '../hazizz_date.dart';
 import '../hazizz_response.dart';
 import '../request_sender.dart';
-import 'main_tab_blocs/main_tab_blocs.dart';
 
 //region EditTask bloc parts
 //region EditTask events
@@ -30,13 +26,6 @@ abstract class TasksEvent extends HEvent {
 }
 
 class TasksFetchEvent extends TasksEvent {
-  /*
-  bool finishedOnly = true;
-  bool unfinishedOnly = false;
-
-  bool expired = false;
-  */
-
 
   TasksFetchEvent(/*{this.unfinishedOnly, this.expired}*/) :  super([/*unfinishedOnly*/]){
 
@@ -159,15 +148,6 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
           }
         }
 
-
-        /*
-        DateTime now = DateTime.now();
-
-        int dayOfYear = int.parse(DateFormat("D").format(n ow));
-        int weekOfYear = ((dayOfYear - now.weekday + 10) / 7).floor();
-
-        print("WEEK OF YEAR: $weekOfYear");*/
-
         String startDate = null;
         String endDate = null;
         if(currentTaskExpiredState == TaskExpiredState.EXPIRED){
@@ -189,6 +169,9 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
           unfinishedOnly = false;
           finishedOnly = false;
         }
+
+       // HazizzResponse hazizzResponse2 = await RequestSender().getResponse(new GetRecentEvents());
+
 
         HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetTasksFromMe(q_unfinishedOnly: unfinishedOnly, q_finishedOnly: finishedOnly, q_showThera: true, q_startingDate: startDate, q_endDate: endDate));
 
@@ -212,8 +195,6 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
 
 
             print("log: opsie: 0");
-
-            // TasksEventBloc.dispatch(TasksEventUpdateClassesEvent());
 
             yield TasksLoadedState(tasks);
 

@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/grades_bloc.dart';
 import 'package:mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
 import 'package:mobile/blocs/request_event.dart';
@@ -239,20 +241,22 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
                         }else if(state is GradesErrorState ){
                           if(state.hazizzResponse.pojoError != null && state.hazizzResponse.pojoError.errorCode == 138){
                             WidgetsBinding.instance.addPostFrameCallback((_) {
-                              showKretaUnavailableSnackBar(context, scaffoldState: scaffoldState);
+                              showKretaUnavailableFlushBar(context, scaffoldState: scaffoldState);
                             });
                           }
 
                           else if(state.hazizzResponse.dioError == noConnectionError){
                             WidgetsBinding.instance.addPostFrameCallback((_) {
-                              showNoConnectionSnackBar(context, scaffoldState: scaffoldState);
+                              showNoConnectionFlushBar(context, scaffoldState: scaffoldState);
                             });
                           }else{
                             WidgetsBinding.instance.addPostFrameCallback((_) {
-                              scaffoldState.currentState.showSnackBar(SnackBar(
-                                content: Text("${locText(context, key: "grades")}: ${locText(context, key: "info_something_went_wrong")}"),
+                              Flushbar(
+                                icon: Icon(FontAwesomeIcons.exclamation, color: Colors.red,),
+
+                                message: "${locText(context, key: "grades")}: ${locText(context, key: "info_something_went_wrong")}",
                                 duration: Duration(seconds: 3),
-                              ));
+                              );
                             });
                           }
 

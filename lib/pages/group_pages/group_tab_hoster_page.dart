@@ -135,7 +135,7 @@ class _GroupTabHosterPage extends State<GroupTabHosterPage> with SingleTickerPro
               if(value == "report"){
                 bool success = await showReportDialog(context, reportType: ReportTypeEnum.GROUP, id: widget.group.id, name: widget.group.name);
                 if(success != null && success){
-                  showReportSuccess(context, what: locText(context, key: "group"));
+                  showReportSuccessFlushBar(context, what: locText(context, key: "group"));
 
                 }
               }else if(value == "invite"){

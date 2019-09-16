@@ -14,6 +14,7 @@ import 'package:mobile/communication/pojos/PojoUser.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_date_time.dart';
 import 'package:mobile/defaults/pojo_group_empty.dart';
+import 'package:mobile/dialogs/registration_dialog.dart';
 import 'package:mobile/dialogs/report_dialog.dart';
 import 'package:mobile/dialogs/school_dialog.dart';
 import 'package:mobile/dialogs/sure_to_delete_subject_dialog.dart';
@@ -241,6 +242,7 @@ Future<PojoGroup> showDialogGroup(BuildContext context, {List<PojoGroup> data}) 
                               style: TextStyle(
                                   fontSize: 26
                               ),
+                              textAlign: TextAlign.center  ,
                             ),
                           ),
                         ),
@@ -664,11 +666,12 @@ Future<PojoTag> showDialogTaskTag(BuildContext context, {List<PojoTag> except}) 
 
 
 
-Future<void> showUserDialog(context, { PojoUser user, PojoCreator creator, GroupPermissionsEnum permission}) {
+Future<dynamic> showUserDialog(context, { PojoUser user, PojoCreator creator, GroupPermissionsEnum permission}) {
 
   return showDialog(
       context: context,
       barrierDismissible: true,
+
       builder: (BuildContext context) {
 
         return UserDialog(creator: creator, user: user, permission: permission,);
@@ -1005,7 +1008,7 @@ Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
 Future<bool> showJoinedGroupDialog(context, {@required PojoGroup group}) async {
 
   double width = 280;
-  double height = 82;
+  double height = 90;
 
   HazizzDialog h = HazizzDialog(
       header:
@@ -1013,8 +1016,8 @@ Future<bool> showJoinedGroupDialog(context, {@required PojoGroup group}) async {
         width: width,
         color: Theme.of(context).primaryColor,
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(locText(context, key: "welcome_to_group", args: [group.name]), style: TextStyle(fontSize: 24),),
+          padding: const EdgeInsets.all(4.0),
+          child: Text(locText(context, key: "welcome_to_group", args: [group.name]), style: TextStyle(fontSize: 22),),
         )
       ),
       content: Container(),
@@ -1114,16 +1117,18 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
     Container(
     //  height: contentHeight,
       child: Padding(
-        padding: const EdgeInsets.only(left: 12, right: 12),
+        padding: const EdgeInsets.only(left: 8, right: 8),
         child: Builder(builder: (BuildContext context){
 
           List<Widget> rows = List();
 
           void addToColumn(Widget widget){
+            rows.add(widget);
             if(rows.length != 0){
               rows.add(Spacer());
+            //  rows.add(Divider());
             }
-            rows.add(widget);
+
           }
 
 
@@ -1406,9 +1411,20 @@ Future<bool> showDialogSessionReauth(BuildContext context) async{
 }
 
 
+Future<bool> showRegistrationDialog(context) async {
+  return showDialog(context: context,
+    barrierDismissible: true,
+    builder: (context){
+      return RegistrationDialog();
+    }
+  );
+}
+
+
+/*
 Future<bool> showConditionsToAcceptDialog(context) async {
 
-  double height = 100;
+  double height = 180;
 
   double width = 280;
 
@@ -1449,32 +1465,39 @@ Future<bool> showConditionsToAcceptDialog(context) async {
 
 
   HazizzDialog hazizzDialog = HazizzDialog(
-      header:
-      Center(
-        child: Container(
-          width: width,
-          color: Theme.of(context).primaryColor,
-          child: Padding(
+      header: Container(
+        width: width,
+
+        color: Theme.of(context).primaryColor,
+
+        child: Center(child: Padding(
+          padding: const EdgeInsets.only(top: 4.0, bottom:4),
+          child: Text(locText(context, key: "registration"), style: TextStyle(fontSize: 22),),
+        )),
+      ),
+
+      content: Center(
+          child: Container(
+        width: width,
+      //  color: Theme.of(context).primaryColor,
+        child: Padding(
             padding: const EdgeInsets.all(5),
             child:
             //   Text(locText(context, textview_logout_drawer: "kreta_login_later")),
             Wrap(
               children: <Widget>[
-                Text(locText(context, key: "have_to_accept_privacy_tos1"), style: TextStyle(fontSize: 18),),
-                Hyperlink(getLinkPrivacy(), Text(locText(context, key: "have_to_accept_privacy"), style: TextStyle(fontSize: 18, color: HazizzTheme.red, decoration: TextDecoration.underline,), )),
-                Text(locText(context, key: "have_to_accept_privacy_tos2"), style: TextStyle(fontSize: 18)),
-                Hyperlink(getLinkTermsOfService(), Text(locText(context, key: "have_to_accept_tos"), style: TextStyle(fontSize: 18, color: HazizzTheme.red, decoration: TextDecoration.underline,), )),
-                Text(locText(context, key: "have_to_accept_privacy_tos3"), style: TextStyle(fontSize: 18)),
-                Hyperlink(getGuidelines(), Text(locText(context, key: "have_to_accept_guidelines"), style: TextStyle(fontSize: 18, color: HazizzTheme.red, decoration: TextDecoration.underline,), )),
+                Text(locText(context, key: "have_to_accept_privacy_tos1"), style: TextStyle(fontSize: 19),),
+                Hyperlink(getLinkPrivacy(), Text(locText(context, key: "have_to_accept_privacy"), style: TextStyle(fontSize: 19, color: HazizzTheme.red, decoration: TextDecoration.underline,), )),
+                Text(locText(context, key: "have_to_accept_privacy_tos2"), style: TextStyle(fontSize: 19)),
+                Hyperlink(getLinkTermsOfService(), Text(locText(context, key: "have_to_accept_tos"), style: TextStyle(fontSize: 19, color: HazizzTheme.red, decoration: TextDecoration.underline,), )),
+                Text(locText(context, key: "have_to_accept_privacy_tos3"), style: TextStyle(fontSize: 19)),
+                Hyperlink(getGuidelines(), Text(locText(context, key: "have_to_accept_guidelines"), style: TextStyle(fontSize: 19, color: HazizzTheme.red, decoration: TextDecoration.underline,), )),
 
               ],
             )
-
-
           ),
         ),
       ),
-      content: Container(),
       actionButtons:
       Row(
         children: <Widget>[
@@ -1502,7 +1525,7 @@ Future<bool> showConditionsToAcceptDialog(context) async {
       });
   return result;
 }
-
+*/
 
 
 

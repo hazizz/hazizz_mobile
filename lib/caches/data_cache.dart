@@ -36,8 +36,9 @@ class DataCache{
 
 Future _save(String key, dynamic data) async {
   var sh = await SharedPreferences.getInstance();
-  sh.setString(key, jsonEncode(data));
-  sh.setString(key + "_time", DateTime.now().toString());
+  bool a = await sh.setString(key, jsonEncode(data));
+  bool s = await sh.setString(key + "_time", DateTime.now().toString());
+  print("cache save was successful: ${a && s}");
 }
 
 Future<DataCache> _load(String key) async {

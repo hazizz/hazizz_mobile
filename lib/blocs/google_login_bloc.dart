@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
 import 'package:mobile/communication/errorcode_collection.dart';
@@ -8,6 +9,7 @@ import 'package:mobile/communication/pojos/PojoTokens.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/managers/app_state_manager.dart';
 import 'package:bloc/bloc.dart';
+import 'package:mobile/managers/token_manager.dart';
 
 import '../hazizz_response.dart';
 import '../logger.dart';
@@ -120,11 +122,8 @@ class GoogleLoginBloc extends Bloc<GoogleLoginEvent, GoogleLoginState> {
   }
 
   Future<void> logout() async{
-    await _auth.signOut().then((_) {
-      //try the following
-      _googleSignIn.signOut();
-      //try the following
-    });
+    await _auth.signOut();
+    await _googleSignIn.signOut();
   }
 
 
@@ -137,20 +136,27 @@ class GoogleLoginBloc extends Bloc<GoogleLoginEvent, GoogleLoginState> {
       
 
 
+      print("boi1");
       final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+      print("boi2");
       if(googleUser == null){
         yield GoogleLoginFineState();
       }
+      print("boi3");
 
       final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
+      print("boi4");
 
       final AuthCredential credential = GoogleAuthProvider.getCredential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
+      print("boi5");
 
 
+     // final AuthResult authResult = (await _auth.signInWithCredential(credential));
+     // FirebaseUser user = authResult.user;
       final FirebaseUser user = (await _auth.signInWithCredential(credential));
       print("signed in " + user.displayName);
 
@@ -162,12 +168,12 @@ class GoogleLoginBloc extends Bloc<GoogleLoginEvent, GoogleLoginState> {
       print(_openIdToken);
 
 
-      HazizzResponse hazizzResponseLogin = await RequestSender().getResponse(CreateToken.withGoogleAccount(q_openIdToken: _openIdToken));
+      HazizzResponse hazizzResponseLogin = await TokenManager.createTokenWithGoolgeOpenId(_openIdToken);//RequestSender().getResponse(CreateToken.withGoogleAccount(q_openIdToken: _openIdToken));
 
       if(hazizzResponseLogin.isSuccessful) {
-        PojoTokens tokens = hazizzResponseLogin.convertedData;
+       // PojoTokens tokens = hazizzResponseLogin.convertedData;
 
-        await AppState.logInProcedure(tokens: tokens);
+       // await AppState.logInProcedure(tokens: tokens);
 
         yield GoogleLoginSuccessfulState();
         // proceed to the app
@@ -183,13 +189,13 @@ class GoogleLoginBloc extends Bloc<GoogleLoginEvent, GoogleLoginState> {
 
     }else if(event is GoogleLoginAcceptedConditionsEvent){
       yield GoogleLoginWaitingState();
-      HazizzResponse hazizzResponseRegistration = await RequestSender().getResponse(RegisterWithGoogleAccount(b_openIdToken: _openIdToken));
+      HazizzResponse hazizzResponseRegistration = await TokenManager.createTokenWithGoolgeOpenId(_openIdToken);
       if(hazizzResponseRegistration.isSuccessful){
-        HazizzResponse hazizzResponseLogin2 = await RequestSender().getResponse(CreateToken.withGoogleAccount(q_openIdToken: _openIdToken));
+        HazizzResponse hazizzResponseLogin2 = await TokenManager.createTokenWithGoolgeOpenId(_openIdToken);
 
         // proceed to the app
 
-        await AppState.logInProcedure(tokens: hazizzResponseLogin2.convertedData);
+     //   await AppState.logInProcedure(tokens: hazizzResponseLogin2.convertedData);
         yield GoogleLoginSuccessfulState();
 
       }else{

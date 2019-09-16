@@ -1,24 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mobile/blocs/TextFormBloc.dart';
-import 'package:mobile/blocs/create_task_bloc.dart';
-import 'package:mobile/blocs/date_time_picker_bloc.dart';
-import 'package:mobile/blocs/edit_task_bloc.dart';
-import 'package:mobile/blocs/item_list_picker_bloc/item_list_picker_bloc.dart';
-import 'package:mobile/blocs/item_list_picker_bloc/item_list_picker_group_bloc.dart';
-import 'package:mobile/blocs/task_maker_blocs.dart';
-import 'package:mobile/communication/pojos/PojoGroup.dart';
-import 'package:mobile/communication/pojos/PojoSubject.dart';
-import 'package:mobile/communication/pojos/PojoTag.dart';
-import 'package:mobile/communication/pojos/task/PojoTask.dart';
-
-import 'package:expandable/expandable.dart';
-import 'package:mobile/dialogs/dialogs.dart';
-import 'package:mobile/widgets/hazizz_back_button.dart';
-
-import '../hazizz_date.dart';
-import '../hazizz_localizations.dart';
 import '../hazizz_theme.dart';
 
 
@@ -36,14 +17,9 @@ class TagChip extends StatefulWidget {
 
   TagChip({Key key, @required this.child, this.backgroundColor, this.hasCloseButton, this.padding, this.onClick, this.onCloseClick}) : super(key: key){
     padding ??= EdgeInsets.only(left: 9, right: 9, top: 2, bottom: 2);
-   // backgroundColor ??= Colors.grey;
+    onClick ??= (){};
+    onCloseClick ??= (){};
   }
-
-  /*
-  TagChip.createMode({Key key, this.groupId}) : super(key: key){
-    mode = TaskMakerMode.create;
-  }
-  */
 
   @override
   _TagChip createState() => _TagChip();
@@ -69,7 +45,7 @@ class _TagChip extends State<TagChip> {
 
 
     return GestureDetector(
-      onTap: () {widget.onClick();},
+      onTap: ()=> widget.onClick(),
       child:  Card(
 
             margin: EdgeInsets.only(top: 5, bottom: 5),

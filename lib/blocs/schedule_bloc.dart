@@ -100,20 +100,44 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
   int currentYearNumber = DateTime.now().year;
   int currentWeekNumber = 0;
 
+  int currentCurrentWeekNumber;
+  int currentCurrentYearNumber;
 
   DateTime currentWeekMonday = HazizzDateTime(0, 0, 0, 0, 0);
   DateTime currentWeekSunday = HazizzDateTime(0, 0, 0, 0, 0);
 
 
-  MainSchedulesBloc(){
+  ScheduleBloc(){
+    currentDayIndex = todayIndex;
     scheduleEventBloc = ScheduleEventBloc();
+
+    DateTime now = DateTime.now();
+    int dayOfYear = int.parse(DateFormat("D").format(now));
+    currentCurrentWeekNumber = ((dayOfYear - now.weekday + 10) / 7).floor();
+
+    currentCurrentYearNumber = now.year;
   }
 
   DateTime lastUpdated = DateTime(0, 0, 0, 0, 0);
 
   PojoSchedules classes;
 
-  int currentDayIndex = DateTime.now().weekday-1;
+  int todayIndex = DateTime.now().weekday-1;
+
+  int currentDayIndex;
+
+
+
+  void nextWeek(){
+    MainTabBlocs().schedulesBloc.dispatch(ScheduleFetchEvent(yearNumber: MainTabBlocs().schedulesBloc.currentYearNumber, weekNumber: MainTabBlocs().schedulesBloc.currentWeekNumber+1));
+    currentDayIndex = 0;
+  }
+
+  void previousWeek(){
+    MainTabBlocs().schedulesBloc.dispatch(ScheduleFetchEvent(yearNumber: MainTabBlocs().schedulesBloc.currentYearNumber, weekNumber: MainTabBlocs().schedulesBloc.currentWeekNumber-1));
+    currentDayIndex= 0;
+  }
+
 
   @override
   ScheduleState get initialState => ScheduleInitialState();
@@ -142,7 +166,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
         print("WIATING222 : ${event.yearNumber}, ${event.weekNumber}");
 
 
-        if(event.yearNumber == currentYearNumber && event.weekNumber == currentWeekNumber){
+        if(event.yearNumber == currentCurrentYearNumber && event.weekNumber == currentCurrentWeekNumber){
           DataCache dataCache = await loadScheduleCache();
           if(dataCache!= null){
             lastUpdated = dataCache.lastUpdated;
@@ -197,7 +221,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
             currentWeekNumber = event.weekNumber;
             currentYearNumber = event.yearNumber;
             lastUpdated = DateTime.now();
-            if(!event.isDefault) {
+            if(event.yearNumber == currentCurrentYearNumber && event.weekNumber == currentCurrentWeekNumber) {
               saveScheduleCache(classes);
             }
 

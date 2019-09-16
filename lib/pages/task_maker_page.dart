@@ -151,7 +151,7 @@ class _TaskMakerPage extends State<TaskMakerPage> {
 
           for(PojoTag t in pickedTags){
             tagWidgets.add(
-                TagChip(child: Text(t.getDisplayName(context), style: TextStyle(fontSize: 21, ),),
+                TagChip(child: Text(t.getDisplayName(context), style: TextStyle(fontSize: 21, ), textAlign: TextAlign.center,),
                   // backgroundColor: t.getColor(),
                   hasCloseButton: true,
                   onCloseClick: (){
@@ -656,7 +656,10 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                                                             child: Transform.scale(
                                                               scale: 0.8,
                                                               child: FittedBox(
-                                                                child: CircularProgressIndicator(),
+                                                                child: Padding(
+                                                                  padding: const EdgeInsets.all(1),
+                                                                  child: CircularProgressIndicator(),
+                                                                ),
                                                                 fit: BoxFit.scaleDown,
                                                               ),
                                                             ),

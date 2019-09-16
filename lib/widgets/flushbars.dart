@@ -8,7 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../hazizz_localizations.dart';
 
 
-dynamic showNoConnectionSnackBar(BuildContext context, {@required GlobalKey<ScaffoldState> scaffoldState}){
+dynamic showNoConnectionFlushBar(BuildContext context, {@required GlobalKey<ScaffoldState> scaffoldState}){
 
   return Flushbar(
     icon: Padding(
@@ -36,7 +36,7 @@ dynamic showNoConnectionSnackBar(BuildContext context, {@required GlobalKey<Scaf
   ));
 }
 
-dynamic showKretaUnavailableSnackBar(BuildContext context, {@required GlobalKey<ScaffoldState> scaffoldState}){
+dynamic showKretaUnavailableFlushBar(BuildContext context, {@required GlobalKey<ScaffoldState> scaffoldState}){
  /* return scaffoldState.currentState.showSnackBar(SnackBar(
     content: Text(locText(context, key: "kreta_server_unavailable")),
     duration: Duration(seconds: 3),
@@ -66,7 +66,7 @@ dynamic showKretaUnavailableSnackBar(BuildContext context, {@required GlobalKey<
 }
 
 
-void showReportSuccess(BuildContext context, {String what}){
+void showReportSuccessFlushBar(BuildContext context, {String what}){
   Flushbar(
     icon: Icon(FontAwesomeIcons.solidFlag, color: Colors.green,),
     message:  locText(context, key: "report_successful", args: [what]),
@@ -75,7 +75,7 @@ void showReportSuccess(BuildContext context, {String what}){
   )..show(context);
 }
 
-void showDeleteWasSuccessful(BuildContext context, {String what}){
+void showDeleteWasSuccessfulFlushBar(BuildContext context, {String what}){
   Flushbar(
     icon: Icon(FontAwesomeIcons.times, color: Colors.green,),
     message:  locText(context, key: "delete_successful", args: [what]),

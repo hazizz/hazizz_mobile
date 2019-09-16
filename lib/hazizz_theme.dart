@@ -126,8 +126,8 @@ class HazizzTheme{
     // primaryColorLight: lightblue,
 
 
-    primaryColorDark: Color.fromRGBO(14, 105, 138, 1),
-    primaryColor: Color.fromRGBO(70, 105, 140, 1),
+    primaryColorDark: Color.fromRGBO(70, 105, 140, 1),
+    primaryColor: Color.fromRGBO(14, 105, 138, 1),
 
     /*
     primaryColorDark: blue,

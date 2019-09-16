@@ -12,7 +12,8 @@ import 'package:mobile/widgets/permission_chip.dart';
 import '../hazizz_localizations.dart';
 import '../hazizz_theme.dart';
 
-class MemberItemWidget extends StatelessWidget{
+
+class MemberItemWidget extends StatefulWidget{
 
   bool isMe = false;
   PojoUser member;
@@ -25,12 +26,28 @@ class MemberItemWidget extends StatelessWidget{
   }
 
   @override
+  _MemberItemWidget createState() => new _MemberItemWidget();
+}
+
+class _MemberItemWidget extends State<MemberItemWidget>{
+
+  GroupPermissionsEnum permission;
+
+
+  @override
+  void initState() {
+    permission = widget.permission;
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
 
 
 
     return Hero(
-        tag: "hero_user${member.id}",
+        tag: "hero_user${widget.member.id}",
         child:
         Card(
             clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -38,7 +55,16 @@ class MemberItemWidget extends StatelessWidget{
             child: InkWell(
                 onTap: () async {
 
-                  await showUserDialog(context, user: member, permission: permission);
+                  dynamic result = await showUserDialog(context, user: widget.member, permission: permission);
+
+                  print("resilt: ${result}");
+
+                  if(result is GroupPermissionsEnum){
+                    print("resilt2: ${result.toString()}");
+                    setState(() {
+                      permission = result;
+                    });
+                  }
                   print("tap tap");
                   //   Navigator.push(context,MaterialPageRoute(builder: (context) => ViewTaskPage.fromPojo(pojoTask: pojoTask)));
                 },
@@ -48,7 +74,7 @@ class MemberItemWidget extends StatelessWidget{
                   child:Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                    Text(member.displayName,
+                    Text(widget.member.displayName,
                       style: TextStyle(
                           fontSize: 18, fontWeight: FontWeight.w700
                       ),
@@ -64,7 +90,7 @@ class MemberItemWidget extends StatelessWidget{
                       bloc: GroupBlocs().myPermissionBloc,
                       builder: (context, state){
 
-                        if(isMe){
+                        if(widget.isMe){
                           return Container();
                         }
 
@@ -96,15 +122,15 @@ class MemberItemWidget extends StatelessWidget{
                           icon: Icon(FontAwesomeIcons.ellipsisV, size: 20,),
                           onSelected: (value) async {
                             if(value == "report"){
-                              bool success = await showReportDialog(context, reportType: ReportTypeEnum.USER, id: member.id, name: member.displayName);
+                              bool success = await showReportDialog(context, reportType: ReportTypeEnum.USER, id: widget.member.id, name: widget.member.displayName);
                               if(success != null && success){
-                                showReportSuccess(context, what: locText(context, key: "user"));
+                                showReportSuccessFlushBar(context, what: locText(context, key: "user"));
 
                               }
                             }else if(value == "kick"){
-                              bool success = await showSureToKickFromGroupDialog(context, groupId: GroupBlocs().group.id, pojoUser: member);
+                              bool success = await showSureToKickFromGroupDialog(context, groupId: GroupBlocs().group.id, pojoUser: widget.member);
                               if(success != null && success){
-                                onKicked();
+                                widget.onKicked();
                               }
                             }
                           },

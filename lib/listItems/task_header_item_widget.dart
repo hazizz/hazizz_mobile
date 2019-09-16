@@ -40,6 +40,7 @@ class TaskHeaderItemWidget extends StatelessWidget{
 
     String title;
     if(days == 0){
+      backColor = HazizzTheme.yellow;
       title = locText(context, key: "today");
     }
     else if(days == 1){
@@ -54,7 +55,7 @@ class TaskHeaderItemWidget extends StatelessWidget{
     }
     return Card(
       margin: EdgeInsets.only(left: 2, top: 2, bottom: 2, right: 2),
-        elevation: 7,
+        elevation: 5,
         clipBehavior: Clip.antiAliasWithSaveLayer,
         color: backColor,
         child: Padding(

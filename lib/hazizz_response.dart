@@ -95,31 +95,26 @@ class HazizzResponse{
           if(!RequestSender().isLocked()) {
             RequestSender().lock();
 
-            HazizzResponse tokenResponse = await RequestSender().getTokenResponse(
-              CreateToken.withRefresh(
-                q_username: await InfoCache.getMyUsername(),
-                q_refreshToken: await TokenManager.getRefreshToken(),
-              )
-            );
+            HazizzResponse tokenResponse = await TokenManager.createTokenWithRefresh();
 
             if(tokenResponse.isSuccessful) {
-              PojoTokens tokens = tokenResponse.convertedData;
-              TokenManager.setToken(tokens.token);
-              TokenManager.setRefreshToken(tokens.refresh);
               RequestSender().unlock();
             }else if(tokenResponse.isError){
-              if(tokenResponse.pojoError != null){
+             /* if(tokenResponse.pojoError != null){
                 if(tokenResponse.pojoError.errorCode == 17){
                   AppState.logout();
                 }
 
               }
+              */
               print("log: obtaining token failed");
+
             }
 
 
             // elküldi újra ezt a requestet ami errort dobott
-            RequestSender().getResponse(request);
+            HazizzResponse hazizzResponse = await RequestSender().getResponse(request);
+            RequestSender().unlock();
             print("hey2: username: ${await InfoCache.getMyUsername()}");
             print("hey2: token: ${await TokenManager.getRefreshToken()}");
           }else {
@@ -128,7 +123,7 @@ class HazizzResponse{
         }else if(pojoError.errorCode == 13 || pojoError.errorCode == 14 ||
             pojoError.errorCode == 15) {
           // navigate to login/register page
-        }else if(pojoError.errorCode == 136){
+        }else if(pojoError.errorCode == 136 || pojoError.errorCode == 132 || pojoError.errorCode == 130){
           SelectedSessionBloc().dispatch(SelectedSessionInactiveEvent());
         }
         print("log: response error: ${pojoError.toString()}");

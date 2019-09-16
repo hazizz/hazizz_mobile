@@ -12,6 +12,8 @@ import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
+import 'package:mobile/managers/kreta_session_manager.dart';
+import 'package:mobile/managers/token_manager.dart';
 import '../request_sender.dart';
 import '../hazizz_response.dart';
 import 'TextFormBloc.dart';
@@ -162,6 +164,14 @@ class SchoolItemPickerBloc extends ItemListPickerBloc {
 
 
 
+Future setSession(PojoSession newSession, {String password}) async {
+  if(await KretaSessionManager.isRememberPassword()){
+    newSession.password = password;
+  }
+  SelectedSessionBloc().dispatch(SelectedSessionSetEvent(newSession));
+
+}
+
 
 class KretaLoginBloc extends Bloc<KretaLoginEvent, KretaLoginState> {
   final TextFormBloc usernameBloc;
@@ -216,7 +226,7 @@ class KretaLoginBloc extends Bloc<KretaLoginEvent, KretaLoginState> {
             PojoSession newSession = hazizzResponse.convertedData;
             print("debuglol222");
 
-            SelectedSessionBloc().dispatch(SelectedSessionSetEvent(newSession));
+            setSession(newSession, password: passwordBloc.lastText);
             print("debuglol1");
             yield KretaLoginSuccessState();
           }else if(hazizzResponse.pojoError != null) {
@@ -268,7 +278,7 @@ class KretaLoginBloc extends Bloc<KretaLoginEvent, KretaLoginState> {
             );
             if(hazizzResponse.isSuccessful){
               PojoSession newSession = hazizzResponse.convertedData;
-              SelectedSessionBloc().dispatch(SelectedSessionSetEvent(newSession));
+              setSession(newSession, password: passwordBloc.lastText);
               yield KretaLoginSuccessState();
             }else if(hazizzResponse.pojoError != null){
               print("assdad: ${hazizzResponse.pojoError.errorCode}");

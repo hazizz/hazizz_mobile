@@ -56,6 +56,7 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
   @override
   Widget build(BuildContext context) {
 
+    Color mainColor = Colors.grey;
 
     List<PojoTag> tags = List();
     tags.addAll(pojoTask.tags);
@@ -71,16 +72,18 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
           if(defT.name == t.name) {
             tags.remove(t);
 
+            mainColor = t.getColor();
+
             highlightTag = Container(
               // color: PojoType.getColor(widget.pojoTask.type),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
                         bottomRight: Radius.circular(12)),
-                    color: t.getColor()
+                    color: mainColor
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(
-                      left: 4, top: 4, right: 8, bottom: 6),
+                      left: 4, top: 2, right: 8, bottom: 4),
                   child: Text(t.getDisplayName(context),
                     style: TextStyle(fontSize: 18),),
                 )
@@ -139,6 +142,7 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
       opacity: opacity,
       child:
       Card(
+        margin: EdgeInsets.only(left: 7, right: 7, top: 3, bottom: 3),
           clipBehavior: Clip.antiAliasWithSaveLayer,
           elevation: 5,
           child: InkWell(
@@ -149,7 +153,7 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
                   opacity = 1;
                 });
 
-                PojoTask editedTask = await Navigator.push(context,MaterialPageRoute(builder: (context) => ViewTaskPage.fromPojo(pojoTask: pojoTask)));
+                dynamic editedTask = await Navigator.pushNamed(context, "/viewTask", arguments: pojoTask);
                 print("edited task: ${editedTask.toJson()}");
                 print("hihih: ${pojoTask.toJson() != editedTask.toJson()}, ${pojoTask.completed != editedTask.completed}");
                 if(pojoTask.toJson() != editedTask.toJson()){
@@ -219,7 +223,7 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
                                     return Container(
                                       // color: PojoType.getColor(widget.pojoTask.type),
                                         decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.only(bottomRight: Radius.circular(12)),
+                                            borderRadius: BorderRadius.only(Right: Radius.circular(12)),
                                             color: t.getColor()
                                         ),
                                         child: Padding(
@@ -294,6 +298,29 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
                           ),
 
                         ],
+                      ),
+
+
+                      Builder(
+                        builder: (context){
+                          if(pojoTask.subject == null){
+                            return Container();
+                          }
+                          return Container(
+                            // color: PojoType.getColor(widget.pojoTask.type),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                      bottomRight: Radius.circular(12)),
+                                  color: mainColor,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 4, top: 0, right: 8, bottom: 4),
+                                child: Text(pojoTask.subject.name,
+                                  style: TextStyle(fontSize: 18),),
+                              )
+                          );
+                        },
                       ),
 
                       Row(

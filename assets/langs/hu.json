@@ -227,6 +227,9 @@
     "class"
     : "Osztály",
 
+    "no_classes_today"
+    : "Nincs órád mára",
+
 
     "teacher"
     : "Tanár",
@@ -270,6 +273,9 @@
     "tasks"
     : "Feladatok",
 
+  "task_calendar"
+  : "Feladat naptár",
+
 
     "announcement"
     : "Bejegyzés",
@@ -308,7 +314,7 @@
     : "Belépés",
 
 
-    "register"
+    "registration"
     : "Regisztráció",
 
 
@@ -382,8 +388,16 @@
     : "Saját feladatom megtekintése",
 
 
+  "kreta_settings"
+  : "Kréta beállítások",
+
+  "remember_kreta_password"
+  : "Kréta jelszó megjegyzése",
+
+
     "notification_settings"
     : "Értesítés beállítások",
+
 
 
     "notification"
@@ -404,10 +418,14 @@
     : "Vissza",
 
     "cancel"
-    : "Mégsem",
+    : "Mégse",
 
     "next"
     : "Következő",
+
+  "forward"
+  : "Tovább",
+
 
     "skip"
     : "Kihagyás",
@@ -520,6 +538,8 @@
     : "Új felhasználó",
 
 
+  "no_tasks_for_this_day"
+  : "Nincs feladatod erre a napra",
 
     "no_tasks_yet"
     : "Nincs feladatod",
@@ -538,6 +558,9 @@
 
     "no_schedule_for_week"
     : "Nincs órarend a hétre",
+
+  "next_week"
+  : "Következő hét",
 
     "no_grades_yet"
     : "Nincs még jegyed",
@@ -565,6 +588,12 @@
     "groupMembers"
     : "Tagok",
 
+  "promote_to_moderator"
+  : "Előléptetés moderátorrá",
+
+
+  "promote_to_user"
+  : "Előléptetés taggá",
 
     "title_"
     : "Cím:",

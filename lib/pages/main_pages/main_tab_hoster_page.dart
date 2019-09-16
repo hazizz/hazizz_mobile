@@ -274,6 +274,18 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
                   ),
                   */
 
+                  /*
+                  Row(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(left: 4, right: 8.0),
+                        child: Text(locText(context, key: "tasks")),
+                      ),
+                      Expanded(child: Divider())
+                    ],
+                  ),
+                  */
+
                   Hero(
                     tag: "group",
                     child: ListTile(
@@ -289,12 +301,33 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
                   ),
 
                   ListTile(
+                    leading: Icon(FontAwesomeIcons.tasks),
+                    title: Text(locText(context, key: "task_calendar")),
+                    onTap: () {
+                      Navigator.popAndPushNamed(context, "/calendarTasks");
+                    },
+                  ),
+
+                  Row(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(left: 4, right: 8.0),
+                        child: Text(locText(context, key: "kreta")),
+                      ),
+                      Expanded(child: Divider())
+                    ],
+                  ),
+
+                  ListTile(
                     leading: Icon(FontAwesomeIcons.landmark),
                     title: Text(locText(context, key: "kreta_accounts")),
                     onTap: () {
                       Navigator.popAndPushNamed(context, "/kreta/accountSelector");
                     },
                   ),
+
+
+
 
 
                   Expanded(

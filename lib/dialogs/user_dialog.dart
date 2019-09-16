@@ -51,14 +51,35 @@ class UserDialog extends StatefulWidget {
   _UserDialog createState() => new _UserDialog();
 }
 
+enum PromotableTo{
+  MODERATOR,
+  USER,
+  NONE
+}
+
 class _UserDialog extends State<UserDialog> {
 
   String encodedProfilePic;
 
-  Image img;
-  @override
+  GroupPermissionsEnum permission;
 
+  GroupPermissionsEnum myPermission;
+
+  PromotableTo promotableTo = PromotableTo.NONE;
+
+  Image img;
+
+  @override
   Future initState() {
+    permission = widget.permission;
+    if(permission == GroupPermissionsEnum.MODERATOR){
+      promotableTo = PromotableTo.USER;
+    }else if(permission == GroupPermissionsEnum.USER){
+      promotableTo = PromotableTo.MODERATOR;
+    }
+
+    myPermission = GroupBlocs().myPermissionBloc.myPermission;
+
 
     RequestSender().getResponse(GetUserProfilePicture.full(userId: widget.id)).then((HazizzResponse hazizzResponse){
       if(hazizzResponse.isSuccessful){
@@ -83,6 +104,56 @@ class _UserDialog extends State<UserDialog> {
   @override
   Widget build(BuildContext context) {
 
+    List<PopupMenuEntry> popupMenuItems = [
+
+    ];
+
+    GroupPermissionsEnum myPermission = GroupBlocs().myPermissionBloc.myPermission;
+   // GroupPermissionsEnum myId = ;
+
+
+    if((myPermission == GroupPermissionsEnum.OWNER || myPermission == GroupPermissionsEnum.MODERATOR)) {
+      if(permission == GroupPermissionsEnum.USER) {
+        popupMenuItems.add(PopupMenuItem(
+          value: "promote_to_moderator",
+          child: Text(locText(context, key: "promote_to_moderator"),),
+        ));
+      }else if(permission == GroupPermissionsEnum.MODERATOR) {
+        popupMenuItems.add(PopupMenuItem(
+          value: "promote_to_user",
+          child: Text(locText(context, key: "promote_to_user"),),
+        ));
+      }
+    }
+    popupMenuItems.add(
+      PopupMenuItem(
+        value: "report",
+        child: Text(locText(context, key: "report"),
+          style: TextStyle(color: HazizzTheme.red),
+        ),
+      )
+    );
+
+
+    /*
+    if(promotableTo != PromotableTo.NONE){
+
+      if(promotableTo == PromotableTo.MODERATOR){
+        popupMenuItems.add(PopupMenuItem(
+          value: "promote_to_moderator",
+          child: Text(locText(context, key: "promote_to_moderator"),),
+        ));
+      }else if(promotableTo == PromotableTo.USER){
+        popupMenuItems.add(PopupMenuItem(
+          value: "promote_to_USER",
+          child: Text(locText(context, key: "promote_to_user"),),
+        ));
+      }
+    }
+    */
+
+
+
     return HazizzDialog(
         header: Container(
           color: Theme.of(context).dialogBackgroundColor,
@@ -102,25 +173,43 @@ class _UserDialog extends State<UserDialog> {
                 child: PopupMenuButton(
                   icon: Icon(FontAwesomeIcons.ellipsisV, size: 20,),
                   onSelected: (value) async {
-                    if(value == "report"){
+                    if(value == "promote_to_moderator"){
+                      HazizzResponse hazizzResponse = await RequestSender().getResponse(PromoteMember.toModerator(p_groupId: GroupBlocs().group.id, p_userId: widget.id));
+                      setState(() {
+                        permission = GroupPermissionsEnum.MODERATOR;
+                      });
+                      if(hazizzResponse.isSuccessful){
+
+                      }else{
+                        setState(() {
+                          permission = GroupPermissionsEnum.USER;
+                        });
+                      }
+                    }else if(value == "promote_to_user"){
+                      HazizzResponse hazizzResponse = await RequestSender().getResponse(PromoteMember.toUser(p_groupId: GroupBlocs().group.id, p_userId: widget.id));
+                      setState(() {
+                        permission = GroupPermissionsEnum.USER;
+                      });
+                      if(hazizzResponse.isSuccessful){
+
+                      }else{
+                        setState(() {
+                          permission = GroupPermissionsEnum.MODERATOR;
+                        });
+                      }
+                    }
+                    else if(value == "report"){
                       bool success = await showReportDialog(context, reportType: ReportTypeEnum.USER, id: widget.id, name: widget.displayName);
                       if(success != null && success){
-                        showReportSuccess(context, what: locText(context, key: "user"));
+                        showReportSuccessFlushBar(context, what: locText(context, key: "user"));
 
-                        Navigator.pop(context);
+                        Navigator.pop(context, permission);
 
                       }
                     }
                   },
                   itemBuilder: (BuildContext context) {
-                    return [
-                      PopupMenuItem(
-                        value: "report",
-                        child: Text(locText(context, key: "report"),
-                          style: TextStyle(color: HazizzTheme.red),
-                        ),
-                      )
-                    ];
+                    return popupMenuItems;
                   },
                 ),
               ),
@@ -157,8 +246,6 @@ class _UserDialog extends State<UserDialog> {
           child: Column(
               children:
               [
-                Center(child:  PermissionChip(permission: widget.permission  ,)),
-
                 Center(child: Text(widget.displayName, style: TextStyle(fontSize: 20), textAlign: TextAlign.center,) ),
                 Spacer(),
 
@@ -188,7 +275,9 @@ class _UserDialog extends State<UserDialog> {
 
 
                   },
-                )
+                ),
+                Center(child:  PermissionChip(permission: permission  ,)),
+
 
               ]
           ),
@@ -203,7 +292,7 @@ class _UserDialog extends State<UserDialog> {
                     child: Text(locText(context, key: "close").toUpperCase(),),
                   ),
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    Navigator.pop(context, permission);
                   },
                 ),
               ),

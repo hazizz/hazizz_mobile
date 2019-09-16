@@ -47,7 +47,7 @@ final GoogleSignIn _googleSignIn = GoogleSignIn();
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
 
-
+/*
 Future<FirebaseUser> _handleSignIn() async {
   final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
   final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
@@ -61,7 +61,7 @@ Future<FirebaseUser> _handleSignIn() async {
   print("signed in " + user.displayName);
   return user;
 }
-
+*/
 
 
 Future<bool> fromNotification() async {
@@ -91,7 +91,7 @@ void main() async{
       isLoggedIn = false;
     }else {
       if(await TokenManager.checkIfTokenRefreshIsNeeded()) {
-        await TokenManager.fetchToken();
+        await TokenManager.createTokenWithRefresh();
       }
 
       fromNotification();
@@ -120,6 +120,8 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
 
   DateTime currentBackPressTime;
 
+  DateTime lastActive;
+
  // final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
 
 
@@ -133,18 +135,26 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
 
   @override
   void dispose() {
-    // TODO: implement dispose
-    super.dispose();
+
     WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
   
   @override
   Future didChangeAppLifecycleState(AppLifecycleState state) async {
     print('log: state = $state');
 
+    if(state == AppLifecycleState.paused){
+      lastActive = DateTime.now();
+    }
 
     if(state == AppLifecycleState.resumed){
 
+      if(lastActive != null){
+        if(DateTime.now().difference(lastActive).inSeconds >= 60){
+          MainTabBlocs().fetchAll();
+        }
+      }
 
       var notificationAppLaunchDetails = await HazizzNotification.flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
         String payload = notificationAppLaunchDetails.payload;

@@ -44,7 +44,21 @@ class _KretaServiceHolder extends State<KretaServiceHolder> with TickerProviderS
           bloc: KretaStatusBloc(),
           builder: (context2, state2){
             if(state is SelectedSessionEmptyState || state is SelectedSessionInactiveState ){
-              return SessionSelectorWidget();
+              return Column(
+                children: <Widget>[
+                  //SessionSelectorWidget(),
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.pushNamed(context, "/kreta/accountSelector");
+                    },
+                    child: Text(locText(context, key: "not_logged_in_to_kreta_account"), style: TextStyle(color: Colors.red),)
+
+                  ),
+                  Expanded(
+                    child: widget.child,
+                  )
+                ],
+              );
             }else {
               sessionActived = true;
             }

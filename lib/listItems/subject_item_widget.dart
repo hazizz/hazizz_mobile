@@ -81,12 +81,12 @@ class SubjectItemWidget extends StatelessWidget{
                                 if(value == "report"){
                                   bool success = await showReportDialog(context, reportType: ReportTypeEnum.SUBJECT, id: subject.id, secondId: GroupBlocs().group.id, name: subject.name);
                                   if(success != null && success){
-                                    showReportSuccess(context, what: locText(context, key: "subject"));
+                                    showReportSuccessFlushBar(context, what: locText(context, key: "subject"));
                                   }
                                 }else if(value == "delete"){
                                   bool success = await showDeleteSubjectDialog(context, groupId: GroupBlocs().group.id, subject: subject);
                                   if(success != null && success){
-                                    showDeleteWasSuccessful(context, what: "${subject.name} ${locText(context, key: "subject")}");
+                                    showDeleteWasSuccessfulFlushBar(context, what: "${subject.name} ${locText(context, key: "subject")}");
                                     GroupBlocs().groupSubjectsBloc.dispatch(FetchData());
                                   }
                                 }

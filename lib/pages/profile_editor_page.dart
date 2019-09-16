@@ -45,6 +45,8 @@ class _ProfileEditorPage extends State<ProfileEditorPage> with TickerProviderSta
 
     File image = await ImagePicker.pickImage(source: ImageSource.gallery);
 
+
+
     if(image == null){
       print("image is null 1");
       return false;
@@ -133,6 +135,8 @@ class _ProfileEditorPage extends State<ProfileEditorPage> with TickerProviderSta
                                       var sad3 = ImageOpeations.fromBase64ToBytesImage(sad2);
 
                                       profilePicProvider = Image.memory(sad3).image;
+
+
 
                                       return Container(
                                         decoration: new BoxDecoration(

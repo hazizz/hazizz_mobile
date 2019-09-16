@@ -61,7 +61,7 @@ class _KretaLoginPage extends State<KretaLoginPage> with SingleTickerProviderSta
                 child: Text(locText(context, key: "ekreta"), style: TextStyle(fontSize: 80, fontWeight: FontWeight.w800, color: HazizzTheme.blue, ),),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 0.0, bottom: 30),
+                padding: const EdgeInsets.only(top: 0.0, bottom: 16),
                 child: Text(locText(context, key: "login"), style: TextStyle(fontSize: 40, fontWeight: FontWeight.w800, color: HazizzTheme.blue),),
               ),
               kretaLoginWidget

@@ -590,6 +590,31 @@ class JoinGroup extends HazizzRequest {
   }
 }
 
+
+class PromoteMember extends HazizzRequest {
+
+  void hardCodeReducer(int g, int u){
+    httpMethod = HttpMethod.POST;
+    PATH = "groups/$g/permission/$u";
+    authTokenHeader = true;
+  }
+
+  PromoteMember.toModerator({ResponseHandler rh, @required int p_groupId, @required int p_userId,}) : super(rh) {
+    hardCodeReducer(p_groupId, p_userId);
+    body["permission"] = "MODERATOR";
+  }
+
+  PromoteMember.toUser({ResponseHandler rh, @required int p_groupId, @required int p_userId}) : super(rh) {
+    hardCodeReducer(p_groupId, p_userId);
+    body["permission"] = "USER";
+  }
+
+  @override
+  convertData(Response response) {
+    return response;
+  }
+}
+
 class GetMyGroups extends HazizzRequest {
   GetMyGroups({ResponseHandler rh}) : super(rh) {
     httpMethod = HttpMethod.GET;
@@ -762,18 +787,45 @@ class GetTaskByTaskId extends HazizzRequest {
   }
 }
 
+class GetRecentEvents extends HazizzRequest {
+  GetRecentEvents({ResponseHandler rh}) : super(rh) {
+    httpMethod = HttpMethod.GET;
+    PATH = "me/notifications";
+    authTokenHeader = true;
+
+  }
+
+  @override
+  dynamic convertData(Response response) {
+    print(" Recent Events: ${response.data}");
+
+    return response;
+  }
+}
+
+//ha groupId != 0 és subject = 0
+//akkor csak a csoporthoz rendeltet küldi vissza
 class GetTasksFromMe extends HazizzRequest {
-  GetTasksFromMe({ResponseHandler rh, bool q_showThera = true, bool q_unfinishedOnly, bool q_finishedOnly, List<String> q_tags, String q_startingDate, String q_endDate}) : super(rh) {
+  GetTasksFromMe({ResponseHandler rh, bool q_showThera = true,
+                  bool q_unfinishedOnly, bool q_finishedOnly,
+                  List<String> q_tags, String q_startingDate,
+                  String q_endDate, int q_groupId,
+                  int q_subjectId, q_wholeGroup = false
+  }) : super(rh) {
     httpMethod = HttpMethod.GET;
     PATH = "v2/me/tasks";
     authTokenHeader = true;
 
-    if(q_showThera != null )    query["showThera"] = q_showThera;
+    if(q_showThera != null)    query["showThera"] = q_showThera;
     if(q_unfinishedOnly != null )query["unfinishedOnly"] = q_unfinishedOnly;
     if(q_finishedOnly != null )query["finishedOnly"] = q_finishedOnly;
     if(q_tags != null )query["tags"] = q_tags;
     if(q_startingDate != null )query["startingDate"] = q_startingDate;
     if(q_endDate != null )query["endDate"] = q_endDate;
+    if(q_groupId != null )query["groupId"] = q_groupId;
+    if(q_subjectId != null )query["subjectId"] = q_subjectId;
+    if(q_wholeGroup != null )query["wholeGroup"] = q_wholeGroup;
+
   }
 
   @override

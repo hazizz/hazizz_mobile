@@ -22,9 +22,6 @@ class CommentSectionWidget extends StatefulWidget {
    // commentBlocs.commentSectionBloc.dispatch(CommentSectionFetchEvent());
   }
 
-  getTabName(BuildContext context){
-    return locText(context, key: "schedule");
-  }
 
   @override
   _CommentSectionWidget createState() => _CommentSectionWidget();

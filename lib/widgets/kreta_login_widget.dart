@@ -269,14 +269,32 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
                   padding: EdgeInsets.only(left:16, right:16, bottom: 0),
                   child: usernameWidget,
                 ),
+                Padding(
+                  padding: EdgeInsets.only(left:16, right:16, top: 4),
+                  child: Row(
+                    children: <Widget>[
+                      Flexible(child: Text("Oktatási azonositód, 11 karakteres", style: TextStyle(color: Colors.grey)))
+                    ],
+                  ),
+                ),
+
 
                 Padding(
-                  padding: EdgeInsets.only(left:16, right:16, bottom: 20),
+                  padding: EdgeInsets.only(left:16, right:16, bottom: 0),
                   child: passwordWidget,
                 ),
 
                 Padding(
-                  padding: EdgeInsets.only(left:16, right:16, bottom: 4),
+                  padding: EdgeInsets.only(left:16, right:16, top: 4),
+                  child: Row(
+                    children: <Widget>[
+                      Flexible(child: Text("Legtöbb esetben a születési dátumod. pl: 2002-01-17", style: TextStyle(color: Colors.grey),))
+                    ],
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.only(left:16, right:16, top:4, bottom: 4),
                   child: schoolPickerWidget,
                 ),
 

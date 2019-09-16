@@ -1,28 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
-import 'package:mobile/blocs/request_event.dart';
-import 'package:mobile/blocs/response_states.dart';
 import 'package:mobile/blocs/schedule_bloc.dart';
 import 'package:mobile/communication/pojos/PojoClass.dart';
-import 'package:mobile/communication/pojos/task/PojoTask.dart';
-import 'package:mobile/listItems/task_header_item_widget.dart';
-import 'package:mobile/listItems/task_item_widget.dart';
 import 'package:mobile/listItems/class_item_widget.dart';
 
+import '../../hazizz_localizations.dart';
 
-import 'package:sticky_headers/sticky_headers.dart';
 
 class SchedulesTabPage extends StatefulWidget {
 
   List<PojoClass> classes;
 
-//  List<ClassItemWidget> classWidgets;
+  bool noClasses = false;
 
   SchedulesTabPage({Key key, @required this.classes}) : super(key: key){
 
   }
 
+  SchedulesTabPage.noClasses({Key key,}) : super(key: key){
+    noClasses = true;
+  }
 
   @override
   _SchedulesTabPage createState() => _SchedulesTabPage();
@@ -43,18 +41,47 @@ class _SchedulesTabPage extends State<SchedulesTabPage> with TickerProviderState
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () async{
-        MainTabBlocs().schedulesBloc.dispatch(ScheduleFetchEvent());
-      },
-      child: ListView.builder(
-          itemCount: widget.classes.length,
-          itemBuilder: (BuildContext context, int index) {
-            return ClassItemWidget(pojoClass: widget.classes[index]);
-          }
-      ),
-    );
+    if(widget.noClasses){
+      return Stack(
+        children: <Widget>[
+          Center(child: Text(locText(context, key: "no_classes_today"))),
+          Builder(
+            builder: (context){
+              if(MainTabBlocs().schedulesBloc.currentDayIndex >= 5) {
+                return Positioned(
+                    right: 0, bottom: 10,
+                    child: FlatButton(
+                      child: Row(
+                        children: <Widget>[
+                          Text(
+                              locText(context, key: "next_week").toLowerCase()),
+                          Icon(FontAwesomeIcons.chevronRight)
+                        ],
+                      ),
+                      onPressed: () {
+                        MainTabBlocs().schedulesBloc.dispatch(
+                            ScheduleFetchEvent(
+                                yearNumber: MainTabBlocs().schedulesBloc
+                                    .currentYearNumber,
+                                weekNumber: MainTabBlocs().schedulesBloc
+                                    .currentWeekNumber + 1));
+                      },
+                    )
+                );
+              }
+              return Container();
+            },
+          )
+        ],
+      );
+    }
 
+    return ListView.builder(
+      itemCount: widget.classes.length,
+      itemBuilder: (BuildContext context, int index) {
+        return ClassItemWidget(pojoClass: widget.classes[index]);
+      }
+    );
   }
 }
 

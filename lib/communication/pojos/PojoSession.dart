@@ -11,8 +11,10 @@ class PojoSession extends Pojo{
   String status;
   String username;
   String url;
+  String schoolName;
+  String password;
 
-  PojoSession(this.id, this.status, this.username, this.url);
+  PojoSession(this.id, this.status, this.username, this.url, this.schoolName, this.password);
 
   factory PojoSession.fromJson(Map<String, dynamic> json) =>
       _$PojoSessionFromJson(json);

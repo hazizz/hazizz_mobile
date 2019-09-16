@@ -77,6 +77,11 @@ class HazizzNotification{
   static Future showHazizzNotification() async {
     print("log: no its works1");
 
+    // szombat
+    if(DateTime.now().weekday == 6){
+      return;
+    }
+
     if(await getReceiveNotification()){
       // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
       // displaying
@@ -170,7 +175,6 @@ class HazizzNotification{
     DateTime now = DateTime.now();
     DateTime dateTime = DateTime(now.year, now.month, now.day, timeOfDay.hour, timeOfDay.minute);
 
-
     /*
     Workmanager.initialize(
       callbackDispatcher, // The top level function, aka Flutter entry point
@@ -192,7 +196,6 @@ class HazizzNotification{
 
 
     final int alarmID = 1;
-    await AndroidAlarmManager.initialize();
     await AndroidAlarmManager.cancel(alarmID);
     await AndroidAlarmManager.periodic(const Duration(hours: 24), alarmID, callbackDispatcher2, wakeup: true, exact: true, rescheduleOnReboot: true,  startAt: dateTime);
 

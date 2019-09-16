@@ -28,30 +28,9 @@ class UserDataBlocs{
   }
   UserDataBlocs._internal();
 
-
-
-  /*
-  UserDataBlocs(){
-    pictureBloc = new ProfilePictureBloc();
-
-    InfoCache.getMyProfilePicture().then((String profilePicCached){
-      pictureBloc.dispatch(ProfilePictureChangedEvent(imageBytes: ImageOpeations.fromBase64ToBytesImage(profilePicCached)));
-    });
-
-    displayNameBloc = new DisplayNameBloc();
-
-    InfoCache.getMyDisplayName().then((String displayNameCached){
-      displayNameBloc.dispatch(DisplayNameLoadFromCacheEvent(displayName: displayNameCached));
-    });
-  }
-  */
-
-
   void initialize(){
-
     userDataBloc.dispatch(MyUserDataGetEvent());
     pictureBloc.dispatch(ProfilePictureGetEvent());
-
 
   }
 
@@ -509,6 +488,16 @@ class MyUserDataRefreshEvent extends MyUserDataEvent {
   String toString() => 'MyUserDataRefreshEvent';
 }
 
+class MyUserDataChangeDisplaynameEvent extends MyUserDataEvent {
+  String displayName;
+  MyUserDataChangeDisplaynameEvent({this.displayName}) : super([displayName]){
+
+  }
+  @override
+  String toString() => 'MyUserDataChangeDisplaynameEvent';
+}
+
+
 //endregion
 
 //region GroupItemListStates
@@ -518,9 +507,14 @@ class MyUserDataInitialState extends MyUserDataState {
 }
 
 class MyUserDataLoadedState extends MyUserDataState {
+  PojoMeInfo meInfo;
+  MyUserDataLoadedState({@required this.meInfo}) : super([meInfo]){
+
+  }
   @override
   String toString() => 'MyUserDataLoadedState';
 }
+
 
 class MyUserDataWaitingState extends MyUserDataState {
   @override
@@ -559,10 +553,11 @@ class MyUserDataBloc extends Bloc<MyUserDataEvent, MyUserDataState> {
         myUserData = meInfoCached;
       }
 
-      yield MyUserDataLoadedState();
+      yield MyUserDataLoadedState(meInfo: meInfoCached);
 
 
     }
+    /*
     else if(event is ProfilePictureRefreshEvent) {
       yield MyUserDataWaitingState();
 
@@ -571,11 +566,19 @@ class MyUserDataBloc extends Bloc<MyUserDataEvent, MyUserDataState> {
       if(hazizzResponse.isSuccessful){
         PojoMeInfoPrivate meInfoRefreshed = hazizzResponse.convertedData;
         myUserData = meInfoRefreshed;
-
       }
 
       yield MyUserDataLoadedState();
-
+    }
+    */
+    else if(event is MyUserDataChangeDisplaynameEvent){
+      PojoMeInfo meInfo = await InfoCache.getMyUserData();
+      print("debuglol: 3 ${meInfo.displayName}");
+      meInfo.displayName = event.displayName;
+      print("debuglol: 4 ${meInfo.displayName}");
+      InfoCache.setMyUserData(meInfo);
+      myUserData = meInfo;
+      yield MyUserDataLoadedState(meInfo: meInfo);
     }
   }
 }

@@ -1,3 +1,4 @@
+import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/widgets.dart';
@@ -43,6 +44,10 @@ class AppState{
 
   }
 
+
+  static Future logInProcedure2({@required PojoTokens tokens}) async {
+
+  }
 
   static Future logInProcedure({@required PojoTokens tokens}) async {
     // set islogged in to true
@@ -93,7 +98,7 @@ class AppState{
     await Connection.listener();
     Crashlytics.instance.enableInDevMode = false;
     FlutterError.onError = Crashlytics.instance.recordFlutterError;
-    //await AndroidAlarmManager.initialize();
+    await AndroidAlarmManager.initialize();
 
 
   }
@@ -103,6 +108,7 @@ class AppState{
    // await TokenManager.fetchRefreshTokens(username: (await InfoCache.getMyUserData()).username, refreshToken: await TokenManager.getRefreshToken());
 
 
+    print("mainAppPartStartProceduresdad");
     await KretaSessionManager.loadSelectedSession();
     SelectedSessionBloc().dispatch(SelectedSessionInitalizeEvent());
     LoginBlocs().googleLoginBloc.dispatch(GoogleLoginResetEvent());
@@ -114,6 +120,7 @@ class AppState{
   static Future logoutProcedure() async {
     RequestSender().clearAllRequests();
 
+    /*
     final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: [
       "https://www.googleapis.com/auth/userinfo.email",
       "https://www.googleapis.com/auth/userinfo.profile",
@@ -124,6 +131,9 @@ class AppState{
     await _auth.signOut().then((_) {
       _googleSignIn.signOut();
     });
+    */
+
+    await GoogleLoginBloc().logout();
 
     TokenManager.invalidateTokens();
     var sh = await SharedPreferences.getInstance();

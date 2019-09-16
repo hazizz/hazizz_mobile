@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/pages/kreta_session_selector_page.dart';
-import 'package:mobile/pages/notification_settings_page.dart';
-import 'package:mobile/widgets/kreta_session_selector_widget.dart';
+import 'package:mobile/pages/kreta_settings_page.dart';
 import 'package:mobile/pages/login_page.dart';
+import 'package:mobile/pages/notification_settings_page.dart';
+import 'package:mobile/pages/task_calendar_page.dart';
+import 'package:mobile/pages/view_task_page.dart';
 import 'package:mobile/pages/group_pages/group_tab_hoster_page.dart';
 import 'package:mobile/pages/intro_page.dart';
 import 'package:mobile/pages/kreta_login_page.dart';
@@ -39,7 +41,7 @@ class RouteGenerator{
       case 'login':
         return MaterialPageRoute(builder: (_) => LoginPage());
       case 'registration':
-        return MaterialPageRoute(builder: (_) => RegistrationPage());
+    //    return MaterialPageRoute(builder: (_) => RegistrationPage());
       case 'intro':
         return MaterialPageRoute(builder: (_) => IntroPage());
       case '/':
@@ -48,6 +50,8 @@ class RouteGenerator{
         return MaterialPageRoute(builder: (_) => TasksTomorrowPage());
       case '/settings':
         return MaterialPageRoute(builder: (_) => SettingsPage());
+      case '/settings/kreta':
+        return MaterialPageRoute(builder: (_) => KretaSettingsPage());
       case '/settings/notification':
         return MaterialPageRoute(builder: (_) => NotificationSettingsPage());
       case '/settings/profile_editor':
@@ -64,6 +68,12 @@ class RouteGenerator{
         return MaterialPageRoute(builder: (_) => TaskMakerPage.createMode(groupId: args));
       case '/editTask': assert(args != null);
         return MaterialPageRoute(builder: (_) => TaskMakerPage.editMode(taskToEdit: args,));
+      case '/viewTask': assert(args != null);
+        return MaterialPageRoute(builder: (_) => ViewTaskPage.fromPojo(pojoTask: args,));
+      case '/calendarTasks':
+        return MaterialPageRoute(builder: (_) => TaskCalendarPage());
+
+
       case '/kreta/login': assert(args != null);
         return MaterialPageRoute(builder: (_) => KretaLoginPage(onSuccess: args));
       case '/kreta/login/auth': assert(args != null);

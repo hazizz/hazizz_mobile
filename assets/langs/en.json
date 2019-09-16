@@ -206,6 +206,9 @@
     "class"
     : "Class",
 
+  "no_classes_today"
+  : "No classes today",
+
 
     "teacher"
     : "Teacher",
@@ -249,6 +252,9 @@
     "tasks"
     : "Tasks",
 
+  "task_calendar"
+  : "Task calendar ",
+
 
     "announcement"
     : "Announcement",
@@ -288,8 +294,8 @@
     : "Enter",
 
 
-    "register"
-    : "Register",
+    "registration"
+    : "Registration",
 
 
     "displayName"
@@ -305,6 +311,9 @@
 
     "kreta_username"
     : "Kréta username",
+
+  "kreta_username_tip"
+  : "",
 
     "kreta_password"
     : "Kréta password",
@@ -358,9 +367,15 @@
     "view_mytask"
     : "View my task",
 
+  "kreta_settings"
+  : "Kréta settings",
+
+  "remember_kreta_password"
+  : "Remember Kréta password",
 
     "notification_settings"
     : "Notification settings",
+
 
 
     "notification"
@@ -385,6 +400,9 @@
 
     "next"
     : "Next",
+
+  "forward"
+  : "Forward",
 
     "skip"
     : "Skip",
@@ -496,6 +514,9 @@
     : "Add user",
 
 
+  "no_tasks_for_this_day"
+  : "No tasks for this day",
+
     "no_tasks_yet"
     : "No tasks yet",
 
@@ -513,6 +534,9 @@
 
     "no_schedule_for_week"
     : "No schedule for this week",
+
+  "next_week"
+  : "Next week",
 
     "no_grades_yet"
     : "You don't have grades yet",
@@ -539,6 +563,13 @@
     "groupMembers"
     : "Members",
 
+
+  "promote_to_moderator"
+  : "Promote to moderator",
+
+
+  "promote_to_user"
+  : "Promote to user",
 
     "title_"
     : "Title:",

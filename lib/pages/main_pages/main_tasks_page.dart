@@ -1,4 +1,5 @@
 import 'package:expandable/expandable.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -372,14 +373,16 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
                       //return Center(child: Text("Loading Data"));
                       if(state.hazizzResponse.dioError == noConnectionError){
                         WidgetsBinding.instance.addPostFrameCallback((_) {
-                          showNoConnectionSnackBar(context, scaffoldState: scaffoldState);
+                          showNoConnectionFlushBar(context, scaffoldState: scaffoldState);
                         });
                       }else{
                         WidgetsBinding.instance.addPostFrameCallback((_) {
-                          scaffoldState.currentState.showSnackBar(SnackBar(
-                            content: Text("${locText(context, key: "tasks")}: ${locText(context, key: "info_something_went_wrong")}"),
+                          Flushbar(
+                            icon: Icon(FontAwesomeIcons.exclamation, color: Colors.red,),
+
+                            message: "${locText(context, key: "tasks")}: ${locText(context, key: "info_something_went_wrong")}",
                             duration: Duration(seconds: 3),
-                          ));
+                          );
                         });
                       }
 

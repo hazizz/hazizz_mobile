@@ -6,9 +6,12 @@ import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
 import 'package:mobile/blocs/schedule_bloc.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
+import 'package:mobile/communication/requests/request_collection.dart';
 
 import 'package:mobile/managers/kreta_session_manager.dart';
 
+import '../hazizz_response.dart';
+import '../request_sender.dart';
 import 'grades_bloc.dart';
 import 'main_tab_blocs/main_tab_blocs.dart';
 
@@ -83,11 +86,9 @@ class SelectedSessionBloc extends Bloc<SelectedSessionEvent, SelectedSessionStat
   }
   SelectedSessionBloc._internal();
 
-
   @override
   Stream<SelectedSessionState> mapEventToState(SelectedSessionEvent event) async*{
     if(event is SelectedSessionInitalizeEvent){
-      print("asd debug22");
 
       PojoSession selectedSessionCached = await KretaSessionManager.getSelectedSession();
       print("asd debug33: $selectedSessionCached");
@@ -107,7 +108,21 @@ class SelectedSessionBloc extends Bloc<SelectedSessionEvent, SelectedSessionStat
       yield SelectedSessionFineState(selectedSession);
     }
     else if (event is SelectedSessionInactiveEvent) {
-      yield SelectedSessionInactiveState();
+      if(await KretaSessionManager.isRememberPassword()){
+        HazizzResponse hazizzResponse = await RequestSender().getResponse(KretaCreateSession(b_username: selectedSession.username, b_password: selectedSession.password, b_url: selectedSession.url));
+        if(hazizzResponse.isSuccessful){
+          PojoSession newSession = hazizzResponse.convertedData;
+          newSession.password = selectedSession.password;
+          selectedSession = newSession;
+          yield SelectedSessionFineState(selectedSession);
+        }else{
+          yield SelectedSessionInactiveState();
+        }
+
+
+      }else{
+        yield SelectedSessionInactiveState();
+      }
     }
   }
 

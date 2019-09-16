@@ -145,6 +145,7 @@ class ProfilePictureEditorBloc extends Bloc<ProfilePictureEditorEvent, ProfilePi
     
     else if (event is ProfilePictureEditorChangedEvent) {
       profilePictureBytes = event.imageBytes;
+
       print("log: 89238sjdsad: $profilePictureBytes");
       yield ProfilePictureEditorWaitingState();
       HazizzResponse hazizzResponse = await RequestSender().getResponse(new UpdateMyProfilePicture(encodedImage: fromBytesImageToBase64(profilePictureBytes)));
@@ -309,6 +310,10 @@ class DisplayNameEditorBloc extends Bloc<DisplayNameEvent, DisplayNameState> {
           PojoMeInfo meInfo = hazizzResponse.convertedData;
 
           displayNameController.text = meInfo.displayName;
+
+          print("debuglol: 1");
+          UserDataBlocs().userDataBloc.dispatch(MyUserDataChangeDisplaynameEvent(displayName: displayNameController.text));
+          print("debuglol: 2");
           yield DisplayNameSavedState();
         }
       }

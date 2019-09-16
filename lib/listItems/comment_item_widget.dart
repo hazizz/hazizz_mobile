@@ -116,6 +116,12 @@ class _CommentItemWidget extends State<CommentItemWidget>{
                     const String value_delete = "delete";
 
                     List<PopupMenuEntry> menuItems = [
+
+                      PopupMenuItem(
+                        value: "profile",
+                        child: Text(locText(context, key: "viewProfile"),),
+                      ),
+
                       PopupMenuItem(
                         value: "report",
                         child: Text(locText(context, key: "report"),
@@ -146,9 +152,10 @@ class _CommentItemWidget extends State<CommentItemWidget>{
                         }else if(value == "report"){
                           bool success = await showReportDialog(context, reportType: ReportTypeEnum.COMMENT, id: widget.comment.id, secondId: widget.taskId, name: widget.comment.creator.displayName);
                           if(success != null && success){
-                            showReportSuccess(context, what: locText(context, key: "comment"));
-
+                            showReportSuccessFlushBar(context, what: locText(context, key: "comment"));
                           }
+                        }else if(value == "profile"){
+                          showUserDialog(context, creator: widget.comment.creator);
                         }
                       },
                       itemBuilder: (BuildContext context) {
