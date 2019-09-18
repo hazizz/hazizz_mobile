@@ -16,8 +16,6 @@ import 'package:mobile/managers/cache_manager.dart';
 import 'package:mobile/managers/deep_link_receiver.dart';
 import 'package:mobile/pages/main_pages/main_grades_page.dart';
 import 'package:mobile/pages/main_pages/main_tasks_page.dart';
-import 'package:toast/toast.dart';
-import 'package:uni_links/uni_links.dart';
 
 import '../../hazizz_localizations.dart';
 import '../../hazizz_response.dart';

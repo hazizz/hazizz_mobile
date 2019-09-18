@@ -11,6 +11,7 @@ import 'package:mobile/dialogs/loading_dialog.dart';
 import 'package:mobile/managers/app_state_manager.dart';
 import 'package:mobile/managers/deep_link_receiver.dart';
 import 'package:mobile/managers/welcome_manager.dart';
+import 'package:mobile/navigation/business_navigator.dart';
 import 'package:mobile/widgets/google_sign_in_widget.dart';
 import 'package:mobile/widgets/kreta_login_widget.dart';
 import 'package:mobile/widgets/notebook_background_widget.dart';
@@ -485,7 +486,11 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
             padding: const EdgeInsets.only(top: 0.0),
             child: KretaLoginWidget(
               onSuccess: (){
-                Navigator.popAndPushNamed(context, "/");
+                print("pop&push");
+              //  Navigator.pushReplacementNamed(context, "/");
+                BusinessNavigator().currentState().pushReplacementNamed('/',);
+
+                print("pop&push2");
               },
             ),
           ),

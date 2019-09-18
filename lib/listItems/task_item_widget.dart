@@ -142,7 +142,7 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
       opacity: opacity,
       child:
       Card(
-        margin: EdgeInsets.only(left: 7, right: 7, top: 3, bottom: 3),
+        margin: EdgeInsets.only(left: 7, right: 7, top: 0, bottom: 6),
           clipBehavior: Clip.antiAliasWithSaveLayer,
           elevation: 5,
           child: InkWell(

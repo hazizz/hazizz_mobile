@@ -82,84 +82,55 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
     if(widget.onSuccess == null){
       widget.onSuccess = () => Navigator.pop(context);
     }
-    var usernameWidget = BlocBuilder(
-        bloc: kretaLoginBlocs.usernameBloc,
-        builder: (BuildContext context, HFormState state) {
-          String errorText = null;
-          if (state is KretaUserNotFoundState) {
-            errorText = "No such user";
-          } else if (state is TextFormErrorTooShort) {
-           // errorText = "Túl rövid";
-          }
+    var usernameWidget = TextField(
 
-          if(state is TextFormSetState){
-            _usernameTextEditingController.text = state.text;
-          }
-
-          return TextField(
-
-            enabled: widget.sessionToAuth == null,
-            style: TextStyle(fontSize: 18),
-            onChanged: (dynamic text) {
-              print("change: $text");
-              kretaLoginBlocs.usernameBloc.dispatch(TextFormValidate(text: text));
-            },
-            controller: _usernameTextEditingController,
-            textInputAction: TextInputAction.next,
-            decoration:
-            InputDecoration(labelText: locText(context, key: "kreta_username"), errorText: errorText, errorStyle: TextStyle(color: Colors.black)               // helperText: "Oktatási azonositó",
-            ),
-          );
-        }
+      enabled: widget.sessionToAuth == null,
+      style: TextStyle(fontSize: 18),
+      onChanged: (dynamic text) {
+        print("change: $text");
+        // kretaLoginBlocs.usernameBloc.dispatch(TextFormValidate(text: text));
+      },
+      controller: kretaLoginBlocs.kretaLoginBloc.usernameController,
+      textInputAction: TextInputAction.next,
+      decoration:
+      InputDecoration(labelText: locText(context, key: "kreta_username"), errorStyle: TextStyle(color: Colors.black)               // helperText: "Oktatási azonositó",
+      ),
     );
 
-    var passwordWidget = BlocBuilder(
-        bloc: kretaLoginBlocs.passwordBloc,
-        builder: (BuildContext context, HFormState state) {
+    var passwordWidget =  Container(
+      height: 75,
+      child: TextField(
+        style: TextStyle(fontSize: 18),
+        maxLines: 1,
 
-          String errorText = null;
-          if (state is KretaUserNotFoundState) {
-            errorText = "No such user";
-          } else if (state is TextFormErrorTooShort) {
-            print("TTO SHOOT");
-          //  errorText = "too short mann...";
-          }
-          return Container(
-            height: 75,
-            child: TextField(
-              style: TextStyle(fontSize: 18),
-              maxLines: 1,
+        controller: kretaLoginBlocs.kretaLoginBloc.passwordController,
+        textInputAction: TextInputAction.next,
+        obscureText: passwordVisible,
+        decoration:
+        InputDecoration(labelText: locText(context, key: "kreta_password"),// helperText: "Oktatási azonositó",
+          alignLabelWithHint: true,
+          labelStyle: TextStyle(
 
-              controller: _passwordTextEditingController,
-              textInputAction: TextInputAction.next,
-              obscureText: passwordVisible,
-              decoration:
-              InputDecoration(labelText: locText(context, key: "kreta_password"), errorText: errorText,// helperText: "Oktatási azonositó",
-                alignLabelWithHint: true,
-                labelStyle: TextStyle(
+          ),
 
-                ),
+          suffix: IconButton(
+            padding: const EdgeInsets.only(top:  20),
+            icon: Icon(
+              // Based on passwordVisible state choose the icon
 
-                suffix: IconButton(
-                  padding: const EdgeInsets.only(top:  20),
-                  icon: Icon(
-                    // Based on passwordVisible state choose the icon
-
-                    passwordVisible
-                        ? FontAwesomeIcons.solidEyeSlash
-                        : FontAwesomeIcons.solidEye,
-                  ),
-                  onPressed: () {
-                    // Update the state i.e. Ftoogle the state of passwordVisible variable
-                    setState(() {
-                      passwordVisible = !passwordVisible;
-                    });
-                  },
-                ),
-              ),
+              passwordVisible
+                  ? FontAwesomeIcons.solidEyeSlash
+                  : FontAwesomeIcons.solidEye,
             ),
-          );
-        }
+            onPressed: () {
+              // Update the state i.e. Ftoogle the state of passwordVisible variable
+              setState(() {
+                passwordVisible = !passwordVisible;
+              });
+            },
+          ),
+        ),
+      ),
     );
 
     var schoolPickerWidget = BlocBuilder(
@@ -223,13 +194,20 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
         bool isLoading = false;
 
 
-        if(state is KretaLoginWaiting){
+        if(state is KretaLoginWaiting) {
           //  isLoading = true;
 
 
           WidgetsBinding.instance.addPostFrameCallback((_) =>
               showCustomHud(context)
           );
+        }else if(state is KretaLoginSuccessState){
+          WidgetsBinding.instance.addPostFrameCallback((_){
+              stopCustomHud();
+              widget.onSuccess();
+            }
+          );
+
         }else{
           WidgetsBinding.instance.addPostFrameCallback((_) =>
               stopCustomHud()
@@ -288,7 +266,7 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
                   padding: EdgeInsets.only(left:16, right:16, top: 4),
                   child: Row(
                     children: <Widget>[
-                      Flexible(child: Text("Legtöbb esetben a születési dátumod. pl: 2002-01-17", style: TextStyle(color: Colors.grey),))
+                      Flexible(child: Text("Ha nem állítotad át akkor a születési dátumod. pl: 2002-01-17", style: TextStyle(color: Colors.grey),))
                     ],
                   ),
                 ),
@@ -307,7 +285,7 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
                       //  Navigator.of(context).pushNamed('/details');
                       print("debuglol2");
 
-                      widget.onSuccess();
+
                       //  Navigator.popAndPushNamed(context, "/");
                     }
                   },

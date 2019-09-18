@@ -1211,6 +1211,15 @@
     : "canceled",
 
 
+  "classes_not_started"
+  : "The classes have not started yet",
+
+  "classes_over"
+  : "The classes are over",
+
+  "classes_break"
+  : "Break",
+
     "thera_classStart"
     : "start:",
 

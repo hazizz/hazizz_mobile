@@ -150,7 +150,8 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
 
             String dayName = locText(context, key: "days_$dayIndex");
             String dayMName = locText(context, key: "days_m_$dayIndex");
-            _tabList.add(SchedulesTabPage(classes: schedule[dayIndex]));
+            _tabList.add(SchedulesTabPage(classes: schedule[dayIndex], isToday:  MainTabBlocs().schedulesBloc.todayIndex == int.parse(dayIndex)
+                      && MainTabBlocs().schedulesBloc.currentCurrentWeekNumber ==  MainTabBlocs().schedulesBloc.currentWeekNumber,));
             bottomNavBarItems.add(BottomNavigationBarItem(
               title: Container(),
               icon: Padding(

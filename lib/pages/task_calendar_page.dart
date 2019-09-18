@@ -73,7 +73,6 @@ class _TaskCalendarPage extends State<TaskCalendarPage> with AutomaticKeepAliveC
       _selectedDay.add(Duration(days: 26)): ['Event A14', 'Event B14', 'Event C14'],
     };
 
-
     _selectedEvents = _events[_selectedDay] ?? [];
 
     super.initState();
@@ -87,7 +86,6 @@ class _TaskCalendarPage extends State<TaskCalendarPage> with AutomaticKeepAliveC
 
   Widget _buildEventsMarker(DateTime date, List events) {
 
-
     List<Widget> eventTasks = [];
 
     var diff = now.difference(new DateTime(date.year, 1, 1, 0, 0));
@@ -96,13 +94,9 @@ class _TaskCalendarPage extends State<TaskCalendarPage> with AutomaticKeepAliveC
     diff = date.difference(new DateTime(date.year, 1, 1, 0, 0));
     final currentDayDayOfYear = diff.inDays;
 
-
-
     for(PojoTask t in events){
       Color innerColor;
       Color externalColor;
-
-
 
       if(t.completed){
         innerColor = Colors.green;
@@ -110,13 +104,11 @@ class _TaskCalendarPage extends State<TaskCalendarPage> with AutomaticKeepAliveC
         innerColor = Colors.red;
       }
 
-      if(nowDayOfYear >= currentDayDayOfYear){
+      if(nowDayOfYear >= currentDayDayOfYear+1){
         externalColor = Colors.grey;
       }else{
         externalColor = innerColor ;
       }
-
-
 
       eventTasks.add(
           Padding(

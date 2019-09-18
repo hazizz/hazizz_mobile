@@ -1255,6 +1255,15 @@
     : "elmarad",
 
 
+  "classes_not_started"
+  : "A tanítás még nem kezdődött el",
+
+  "classes_over"
+  : "Vége a tanításnak",
+
+  "classes_break"
+  : "Szünet",
+
     "thera_classStart"
     : "kezdet:",
 

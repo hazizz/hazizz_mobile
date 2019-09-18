@@ -1031,9 +1031,9 @@ class KretaCreateSession extends TheraRequest {
 
     print("well boys we didit");
 
-    print(b_username);
-    print(b_password);
-    print(b_url);
+    print("őp_username: $b_username");
+    print("őp_passord: $b_password");
+    print("őp_url: $b_url");
 
     body["username"] = b_username;
     body["password"] = b_password;

@@ -43,9 +43,6 @@ class _SureToJoinGroupDialog extends State<SureToJoinGroupDialog> {
         group = hazizzResponse.convertedData;
         if(group.userCount == group.userCountWithoutMe){
           // még nincs bent
-
-
-
         }else{
           setState(() {
             isMember = true;
@@ -54,11 +51,9 @@ class _SureToJoinGroupDialog extends State<SureToJoinGroupDialog> {
 
         setState(() {
           groupName = group.name;
-        });
-
-        setState(() {
           isLoading = false;
         });
+
       }else{
         setState(() {
           someThingWentWrong = true;

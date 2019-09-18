@@ -1,11 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
 import 'package:mobile/blocs/schedule_bloc.dart';
 import 'package:mobile/communication/pojos/PojoClass.dart';
 import 'package:mobile/listItems/class_item_widget.dart';
+import 'package:mobile/widgets/schedule_event_widget.dart';
 
 import '../../hazizz_localizations.dart';
+import '../../hazizz_time_of_day.dart';
 
 
 class SchedulesTabPage extends StatefulWidget {
@@ -14,11 +18,12 @@ class SchedulesTabPage extends StatefulWidget {
 
   bool noClasses = false;
 
-  SchedulesTabPage({Key key, @required this.classes}) : super(key: key){
+  bool isToday = false;
 
+  SchedulesTabPage({Key key, @required this.classes, this.isToday = false}) : super(key: key){
   }
 
-  SchedulesTabPage.noClasses({Key key,}) : super(key: key){
+  SchedulesTabPage.noClasses({Key key,this.isToday = false}) : super(key: key){
     noClasses = true;
   }
 
@@ -27,10 +32,40 @@ class SchedulesTabPage extends StatefulWidget {
 }
 
 class _SchedulesTabPage extends State<SchedulesTabPage> with TickerProviderStateMixin {
+
+
+
   _SchedulesPage(){}
+
+  HazizzTimeOfDay now = HazizzTimeOfDay.now();
+
+  void updateTime(){
+    setState(() {
+      now = HazizzTimeOfDay.now();
+    });
+  }
+
+  void updateEveryMinute(){
+    Timer(Duration(minutes: 1), () {
+      updateTime();
+      updateEveryMinute();
+    });
+  }
 
   @override
   void initState() {
+
+
+
+
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      setState(() {
+        updateEveryMinute();
+      });
+    }
+    );
+
+
     super.initState();
   }
 
@@ -41,6 +76,7 @@ class _SchedulesTabPage extends State<SchedulesTabPage> with TickerProviderState
 
   @override
   Widget build(BuildContext context) {
+    print("rebuildlol");
     if(widget.noClasses){
       return Stack(
         children: <Widget>[
@@ -76,11 +112,64 @@ class _SchedulesTabPage extends State<SchedulesTabPage> with TickerProviderState
       );
     }
 
-    return ListView.builder(
-      itemCount: widget.classes.length,
-      itemBuilder: (BuildContext context, int index) {
-        return ClassItemWidget(pojoClass: widget.classes[index]);
+    print("istoday: ${widget.isToday}");
+
+    List<Widget> listItems = [];
+
+    for(PojoClass c in widget.classes){
+      listItems.add(ClassItemWidget(pojoClass: c));
+    }
+
+    int i = 0;
+    if(widget.isToday){
+      // megnézi az időt
+
+
+      for(; i < widget.classes.length; i++){
+
+        PojoClass previousClass = i-1 >= 0 ? widget.classes[i-1]:  null;
+        PojoClass currentClass = widget.classes[i];
+        PojoClass nextClass = i+1 <= widget.classes.length-1 ? widget.classes[i+1]: null;
+
+        if(currentClass.startOfClass <= now && currentClass.endOfClass > now){
+          // megy az óra
+          listItems[i] = ClassItemWidget.isCurrentEvent(pojoClass: widget.classes[i],);
+        }
+        else if(currentClass.startOfClass > now && previousClass == null){
+          // óra elött, nem kezdödött el a suli
+
+          listItems.insert(i-1, ScheduleEventWidget.beforeClasses(context));
+          i = i-1;
+          break;
+        }
+
+        else if(currentClass.startOfClass > now && previousClass.endOfClass < now){
+          // óra elött
+          listItems.insert(i-1, ScheduleEventWidget.breakTime(context));
+          i = i-1;
+          break;
+
+        }
+        else if(currentClass.endOfClass < now && nextClass == null){
+          // óra után, sulinak vége
+          listItems.insert(i+1,ScheduleEventWidget.afterClasses(context));
+          i = i+1;
+          break;
+
+        }
+        else if(currentClass.endOfClass < now && nextClass.startOfClass > now){
+          // óra után
+          listItems.insert(i+1, ScheduleEventWidget.breakTime(context));
+          i = i+1;
+          break;
+
+        }
       }
+    }
+
+    return ListView(
+    //  controller: scrollController,
+      children: listItems,
     );
   }
 }
