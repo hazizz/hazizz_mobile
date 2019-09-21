@@ -125,6 +125,8 @@ class _SchedulesTabPage extends State<SchedulesTabPage> with TickerProviderState
       // megnézi az időt
 
 
+     // now = HazizzTimeOfDay(hour: 8, minute: 20);
+
       for(; i < widget.classes.length; i++){
 
         PojoClass previousClass = i-1 >= 0 ? widget.classes[i-1]:  null;
@@ -138,13 +140,14 @@ class _SchedulesTabPage extends State<SchedulesTabPage> with TickerProviderState
         else if(currentClass.startOfClass > now && previousClass == null){
           // óra elött, nem kezdödött el a suli
 
-          listItems.insert(i-1, ScheduleEventWidget.beforeClasses(context));
-          i = i-1;
+          listItems.insert(0, ScheduleEventWidget.beforeClasses(context));
+          i = 0;//i-1;
           break;
         }
 
         else if(currentClass.startOfClass > now && previousClass.endOfClass < now){
           // óra elött
+          // i < 0 ? i = 0: i-1
           listItems.insert(i-1, ScheduleEventWidget.breakTime(context));
           i = i-1;
           break;

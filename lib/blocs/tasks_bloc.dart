@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:mobile/blocs/request_event.dart';
@@ -33,6 +34,18 @@ class TasksFetchEvent extends TasksEvent {
   @override
   String toString() => 'TasksFetchEvent';
 }
+
+class TasksRemoveItemEvent extends TasksEvent {
+
+  DateTime mapKey;
+  int index;
+
+  TasksRemoveItemEvent({this.mapKey, this.index}) :  super([DateTime.now().microsecondsSinceEpoch]){
+
+  }
+  @override
+  String toString() => 'TasksRemoveItemEvent';
+}
 //endregion
 
 //region SubjectItemListStates
@@ -55,7 +68,7 @@ class TasksWaitingState extends TasksState {
 class TasksLoadedState extends TasksState {
   Map<DateTime, List<PojoTask>> tasks;
 
-  TasksLoadedState(this.tasks) : assert(tasks!= null), super([tasks]);
+  TasksLoadedState(this.tasks) : assert(tasks!= null), super([tasks, DateTime.now()]);
   @override
   String toString() => 'TasksLoadedState';
 }
@@ -134,6 +147,24 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
 
   @override
   Stream<TasksState> mapEventToState(TasksEvent event) async* {
+    if(event is TasksRemoveItemEvent){
+
+      debugPrint("yolo: ${tasks}");
+      tasks[event.mapKey].removeAt(event.index);
+
+
+      if(tasks[event.mapKey].isEmpty){
+        print("is realy empty");
+        tasks.remove(event.mapKey);
+      }
+      debugPrint("yolo2: ${tasks}");
+
+
+
+
+
+      yield TasksLoadedState(tasks);
+    }
     if (event is TasksFetchEvent) {
       try {
         yield TasksWaitingState();
@@ -235,3 +266,56 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
 }
 //endregion
 //endregion
+
+
+
+
+
+
+
+
+
+/*
+    return ListView.builder(
+     // itemExtent: ,
+     // addRepaintBoundaries: false,
+   //   cacheExtent: 2,
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      itemCount: map[key].length,
+      itemBuilder: (context, index){
+        return TaskItemWidget(originalPojoTask: map[key][index], onCompletedChanged: (){
+          var removedItem = map[key][index];
+
+
+          setState(() {
+            map[key].remove(removedItem);
+            MainTabBlocs().tasksBloc.tasks[key].remove(removedItem);
+            MainTabBlocs().tasksBloc.tasksRaw.remove(removedItem);
+
+            if(map[key].isEmpty){
+
+              setState(() {
+                print("oof22: ${map}");
+                map.remove(key);
+                MainTabBlocs().tasksBloc.tasks.remove(key);
+                print("oof32: ${map}");
+              });
+            }
+          });
+
+          //MainTabBlocs().tasksBloc.dispatch(TasksFetchEvent());
+        },key: Key(map[key][index].toJson().toString()),);
+      },
+    );
+    */
+
+
+
+
+
+
+
+
+
+

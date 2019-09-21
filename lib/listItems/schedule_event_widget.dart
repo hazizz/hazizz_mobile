@@ -56,6 +56,7 @@ class _ScheduleEventWidget extends State<ScheduleEventWidget> with SingleTickerP
 
           logger.d("ScheduleEventFineState: currentEvent: ${state.currentEvent}, nextEvent: ${state.nextEvent}");
 
+
           var currentEvent = state.currentEvent;
           var nextEvent = state.nextEvent;
 

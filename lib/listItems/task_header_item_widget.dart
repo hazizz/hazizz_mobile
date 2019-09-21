@@ -9,7 +9,7 @@ class TaskHeaderItemWidget extends StatelessWidget{
  // String date;
   DateTime dateTime;
 
-  TaskHeaderItemWidget({this.dateTime});
+  TaskHeaderItemWidget({Key key, this.dateTime}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

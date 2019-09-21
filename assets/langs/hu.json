@@ -544,6 +544,9 @@
     "no_tasks_yet"
     : "Nincs feladatod",
 
+    "no_tasks"
+    : "Nincs feladatod",
+
     "no_my_groups_yet"
     : "Még nem vagy tagja még egy csoportnak sem",
 
@@ -561,6 +564,12 @@
 
   "next_week"
   : "Következő hét",
+
+  "current_week"
+  : "Jelenlegi hét",
+
+  "previous_week"
+  : "Elöző hét",
 
     "no_grades_yet"
     : "Nincs még jegyed",

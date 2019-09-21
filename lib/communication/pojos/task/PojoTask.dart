@@ -36,6 +36,13 @@ class PojoTask extends Pojo implements Comparable<PojoTask>{
     int order = dueDate.compareTo(other.dueDate);
     return order;
   }
+
+  PojoTask copy(){
+    return PojoTask(id: this.id, assignation: this.assignation, tags: this.tags, title: this.title, description: this.description,
+       dueDate: this.dueDate, creator: this.creator, group: this.group, subject: this.subject, completed: this.completed);
+  }
+
+
 }
 
 //@JsonSerializable()

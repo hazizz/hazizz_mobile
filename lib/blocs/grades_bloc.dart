@@ -160,7 +160,7 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
   Stream<GradesState> mapEventToState(GradesEvent event) async* {
     if (event is GradesFetchEvent) {
       try {
-        /*
+
         if(true){
           grades = new PojoGrades(
               {"Matek TESZT" : [
@@ -185,7 +185,7 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
           yield GradesLoadedState(grades);
           return;
         }
-        */
+
 
 
 

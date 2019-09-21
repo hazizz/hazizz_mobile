@@ -123,7 +123,7 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
 
         print("weekday: ${now.weekday}");
 
-        print("nig: ${schedule.keys.toList()}, ");
+        print("876nig: ${schedule.keys.toList()}, ");
         if(!schedule.keys.toList().contains(day.toString())) {
           print("illegal");
           if(day <= 4){
@@ -143,7 +143,11 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
           }
         }
         else{
-          String dayIndex = schedule.keys.toList()[day];
+          print("876DAY: $day");
+         // String dayIndex = schedule.keys.toList()[day];
+          String dayIndex = day.toString();
+
+          print("876DAYINDEX: $dayIndex");
 
           if( schedule[dayIndex].isNotEmpty) {
             Color currentDayColor = Colors.transparent;
@@ -169,7 +173,7 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
               ),
             ));
           }else{
-
+            addNoClassDay((day).toString());
           }
         }
       }
@@ -370,7 +374,27 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
                                         MainTabBlocs().schedulesBloc.previousWeek();
                                       },
                                     ),
-                                    Text("${dateTimeToMonthDay(MainTabBlocs().schedulesBloc.currentWeekMonday)} - ${dateTimeToMonthDay(MainTabBlocs().schedulesBloc.currentWeekSunday)}", style: TextStyle(fontSize: 18),),
+
+                                    Column(
+                                      children: <Widget>[
+                                        Builder(
+                                          builder: (context){
+                                            if(MainTabBlocs().schedulesBloc.currentCurrentWeekNumber == MainTabBlocs().schedulesBloc.currentWeekNumber){
+                                              return Text(locText(context, key: "current_week"), style: TextStyle(fontSize: 16),);
+                                            }else if(MainTabBlocs().schedulesBloc.currentCurrentWeekNumber-1 == MainTabBlocs().schedulesBloc.currentWeekNumber){
+                                              return Text(locText(context, key: "previous_week"), style: TextStyle(fontSize: 16));
+                                            }
+
+                                            else if(MainTabBlocs().schedulesBloc.currentCurrentWeekNumber+1 == MainTabBlocs().schedulesBloc.currentWeekNumber){
+                                              return Text(locText(context, key: "next_week"), style: TextStyle(fontSize: 16));
+                                            }
+                                            return Container();
+
+                                          },
+                                        ),
+                                        Text("${dateTimeToMonthDay(MainTabBlocs().schedulesBloc.currentWeekMonday)} - ${dateTimeToMonthDay(MainTabBlocs().schedulesBloc.currentWeekSunday)}", style: TextStyle(fontSize: 18),),
+                                      ],
+                                    ),
 
                                     //  Text("${weekStart.day}-${weekEnd.day}"),
                                     IconButton(

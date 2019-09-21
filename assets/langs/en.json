@@ -518,9 +518,13 @@
   : "No tasks for this day",
 
     "no_tasks_yet"
-    : "No tasks yet",
+  : "No tasks yet",
 
-    "no_my_groups_yet"
+  "no_tasks"
+  : "No tasks",
+
+
+  "no_my_groups_yet"
     : "You aren't a member of any groups yet",
 
     "no_subjects_yet"
@@ -537,6 +541,12 @@
 
   "next_week"
   : "Next week",
+
+  "current_week"
+  : "Current week",
+
+  "previous_week"
+  : "Previous week",
 
     "no_grades_yet"
     : "You don't have grades yet",

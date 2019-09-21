@@ -309,7 +309,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
                   Row(
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.only(left: 4, right: 8.0),
+                        padding: const EdgeInsets.only(left: 6, right: 8.0),
                         child: Text(locText(context, key: "kreta")),
                       ),
                       Expanded(child: Divider())

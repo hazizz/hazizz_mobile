@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:expandable/expandable.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
@@ -48,6 +50,7 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
 
 
 
+  final GlobalKey<AnimatedListState> _listKey = GlobalKey();
 
 
   TaskCompleteState currentCompletedTaskState;
@@ -108,8 +111,7 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
 
     map = m;
 
-
-
+    print("REBUILD, BIIP BOOp");
 
     return new Column(
       children: <Widget>[
@@ -169,24 +171,42 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
         ),
 
         Expanded(
-          child: ListView.builder(
-              itemCount: map.keys.length+1,
-              itemBuilder: (BuildContext context, int index) {
-
-                if(index == 0){
-                  return Center(child: Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().tasksBloc.lastUpdated)));
-                }
-
-                DateTime key = map.keys.elementAt(index-1);
+          child: Builder(builder: (context){
+            if(map.keys == null || map.keys.isEmpty){
+              return Center(child: Text(locText(context, key: "no_tasks")),);
 
 
+            }else{
 
-                return StickyHeader(
-                  header: TaskHeaderItemWidget(dateTime: key),
-                  content: Builder(
-                      builder: (context) {
-                      //  List<Widget> tasksList = new List();
+              return ListView.builder(
+                  itemCount: map.keys.length+1,
+                  itemBuilder: (BuildContext context, int index) {
 
+
+
+                    if(index == 0){
+                      return Center(child: Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().tasksBloc.lastUpdated)));
+                    }
+
+                    List<GlobalKey<AnimatedListState>> listKeyList = new List(map.keys.length);
+                    for(int i = 0; i < listKeyList.length; i++){
+                      listKeyList[i] =  GlobalKey();
+                    }
+
+
+                    DateTime key = map.keys.elementAt(index-1);
+                    print("new key: ${key.toString()}");
+
+                    return StickyHeader(
+
+                      //  key: Key(DateTime.now().microsecondsSinceEpoch.toString()),
+                      //key: Key(Random().nextInt(2000000).toString()),
+                      header: TaskHeaderItemWidget(key: Key(Random().nextInt(2000000).toString()), dateTime: key),
+                      content: Builder(
+                          builder: (context) {
+                            //  List<Widget> tasksList = new List();
+
+                            /*
                         List<Widget> tasksList = new List();
 
                         for(PojoTask pojoTask in map[key]){
@@ -194,18 +214,16 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
                           //  buildItem(context, index, animation, pojoTask)
                               tasksList.add(TaskItemWidget(originalPojoTask: pojoTask, key: Key(pojoTask.toJson().toString())),
                           );
-
                         }
+                        */
 
-                       // return Column(children: tasksList,);
-
-
-                      //  Function onCompletedChanged;
+                            // return Column(children: tasksList,);
 
 
+                            //  Function onCompletedChanged;
 
+                            /*
                         return ListView.builder(
-
                          // itemExtent: ,
                          // addRepaintBoundaries: false,
                        //   cacheExtent: 2,
@@ -214,51 +232,82 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
                           itemCount: map[key].length,
                           itemBuilder: (context, index){
                             return TaskItemWidget(originalPojoTask: map[key][index], onCompletedChanged: (){
-                              PojoTask a = map[key].removeAt(index);
-                              print("oh jaj: ${a}");
+                              var removedItem = map[key][index];
+
+
+                              setState(() {
+                                map[key].remove(removedItem);
+                                MainTabBlocs().tasksBloc.tasks[key].remove(removedItem);
+                                MainTabBlocs().tasksBloc.tasksRaw.remove(removedItem);
+
+                                if(map[key].isEmpty){
+
+                                  setState(() {
+                                    print("oof22: ${map}");
+                                    map.remove(key);
+                                    MainTabBlocs().tasksBloc.tasks.remove(key);
+                                    print("oof32: ${map}");
+                                  });
+                                }
+                              });
+
                               //MainTabBlocs().tasksBloc.dispatch(TasksFetchEvent());
                             },key: Key(map[key][index].toJson().toString()),);
                           },
                         );
+                        */
 
+                            return AnimatedList(
+                              key: listKeyList[index-1],
+                              //   key: Key(Random().nextInt(2000000).toString()),
+                              shrinkWrap: true,
+                              initialItemCount: map[key].length,
 
-                        return AnimatedList(
+                              physics: NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index2, animation) => buildItem(context, index2, animation, map[key][index2], (){
 
-                          shrinkWrap: true,
-                          initialItemCount: map[key].length,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index2, animation) => buildItem(context, index2, animation, map[key][index2], (){
+                                print("bro: me: ${currentCompletedTaskState}");
 
-                            print("bro: me: ${currentCompletedTaskState}");
+                                if(currentCompletedTaskState != TaskCompleteState.BOTH){
+                                  print("bro: im trigered");
 
-                            if(currentCompletedTaskState != TaskCompleteState.BOTH){
-                              print("bro: im trigered");
+                                  // var removedItem = map[key].removeAt(index2);
+                                  var removedItem = map[key][index2];
 
-                              var removedItem = map[key].removeAt(index2);
-                              MainTabBlocs().tasksBloc.tasks.remove(removedItem);
-                              MainTabBlocs().tasksBloc.tasksRaw.remove(removedItem);
+                                  listKeyList[index-1].currentState.removeItem(index2, (context2, animation2){
+                                    animation2.addStatusListener((AnimationStatus animationStatus){
+                                      print("oof22: anim: ${animationStatus.toString()}");
+                                      if(animationStatus == AnimationStatus.dismissed){
+                                        print("oof: ${map[key]}");
+                                        MainTabBlocs().tasksBloc.dispatch(TasksRemoveItemEvent( mapKey: key, index: index2));
 
-                              AnimatedList.of(context).removeItem(index2, (context2, animation2){
-                                animation2.addStatusListener((AnimationStatus animationStatus){
-                                  if(animationStatus == AnimationStatus.completed){
-                                    print("oof: ${map[key]}");
+                                        /*
+                                    setState(() {
+                                      map[key].remove(removedItem);
+                                      MainTabBlocs().tasksBloc.tasks[key].remove(removedItem);
+                                      MainTabBlocs().tasksBloc.tasksRaw.remove(removedItem);
+                                      MainTabBlocs().tasksBloc.dispatch(TasksRemoveItemEvent());
+                                    });
+                                    */
+
+                                        /*
                                     if(map[key].isEmpty){
 
                                       setState(() {
                                         print("oof22: ${map}");
                                         map.remove(key);
+                                        MainTabBlocs().tasksBloc.tasks.remove(key);
                                         print("oof32: ${map}");
                                       });
                                     }
-                                  }
-                                });
-                                return buildItem(context2, index2, animation2, removedItem, (){});
-                              },
-                                  duration:  Duration(milliseconds: 500)
-                              );
-
-
-                              /*
+                                    */
+                                      }
+                                    });
+                                    return buildItem(context2, index2, animation2, removedItem, (){});
+                                  },
+                                      duration:  Duration(milliseconds: 500)
+                                  );
+                                  /*
                                 print("oof: ${map[key]}");
                                 if(map[key].isEmpty){
 
@@ -269,19 +318,16 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
                                   });
                                 }
                                 */
-
-                            }
-
-
-                          }),
-
-                        );
-
-                      }
-                  ),
-                );
-              }
-          ),
+                                }
+                              }),
+                            );
+                          }
+                      ),
+                    );
+                  }
+              );
+            }
+          }),
         )
       ],
     );
@@ -348,6 +394,7 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
 
                       Map<DateTime, List<PojoTask>> tasks = state.tasks;
 
+                      print("onLoaded asdasd");
                       return onLoaded(tasks);
 
                     }if (state is TasksLoadedCacheState) {

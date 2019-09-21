@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,6 +18,7 @@ import 'package:mobile/enums/grades_sort_enum.dart';
 import 'package:mobile/listItems/grade_header_item_widget.dart';
 import 'package:mobile/listItems/grade_item_widget.dart';
 import 'package:mobile/widgets/flushbars.dart';
+import 'package:mobile/widgets/grade_chart.dart';
 import 'package:sticky_header_list/sticky_header_list.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 import 'package:toast/toast.dart';
@@ -36,6 +40,9 @@ class GradesPage extends StatefulWidget  {
 
 class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin , AutomaticKeepAliveClientMixin {
 
+  StreamController<LineTouchResponse> controller;
+
+
   @override
   void initState() {
     // getData();
@@ -47,6 +54,9 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
       gradesBloc.dispatch(FetchData());
     }
     */
+
+
+
     super.initState();
   }
 
@@ -94,7 +104,20 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
 
 
             return StickyHeader(
-              header: GradeHeaderItemWidget.bySubject(subjectName: key, gradesAvarage: gradesAvarage),
+              header: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+
+                children: <Widget>[
+                  GradeHeaderItemWidget.bySubject(subjectName: key, gradesAvarage: gradesAvarage),
+                  Container(
+                    color: Theme.of(context).backgroundColor,
+                    height: 200,
+                    width: MediaQuery.of(context).size.width,
+                    child: GradesChart(subjectName: key, grades: grades[key] ),
+                  ),
+
+                ],
+              ),
               content: Builder(
                   builder: (context) {
                     List<Widget> widgetList = List();

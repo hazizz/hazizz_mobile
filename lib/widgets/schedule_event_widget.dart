@@ -25,7 +25,7 @@ class ScheduleEventWidget extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Card(
-        margin: EdgeInsets.only(left: 2, top: 2, bottom: 2, right: 2),
+       // margin: EdgeInsets.only(left: 2, top: 2, bottom: 2, right: 2),
         elevation: 5,
         clipBehavior: Clip.antiAliasWithSaveLayer,
         color: HazizzTheme.red,

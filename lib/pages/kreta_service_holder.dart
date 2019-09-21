@@ -47,11 +47,11 @@ class _KretaServiceHolder extends State<KretaServiceHolder> with TickerProviderS
               return Column(
                 children: <Widget>[
                   //SessionSelectorWidget(),
-                  GestureDetector(
-                    onTap: (){
+                  RaisedButton(
+                    onPressed: (){
                       Navigator.pushNamed(context, "/kreta/accountSelector");
                     },
-                    child: Text(locText(context, key: "not_logged_in_to_kreta_account"), style: TextStyle(color: Colors.red),)
+                    child: Text(locText(context, key: "not_logged_in_to_kreta_account").toUpperCase(), style: TextStyle(color: Colors.red, fontSize: 13),)
 
                   ),
                   Expanded(

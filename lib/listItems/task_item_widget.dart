@@ -142,7 +142,7 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
       opacity: opacity,
       child:
       Card(
-        margin: EdgeInsets.only(left: 7, right: 7, top: 0, bottom: 6),
+        margin: EdgeInsets.only(left: 7, right: 7, top: 3, bottom: 3),
           clipBehavior: Clip.antiAliasWithSaveLayer,
           elevation: 5,
           child: InkWell(
@@ -153,10 +153,10 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
                   opacity = 1;
                 });
 
-                dynamic editedTask = await Navigator.pushNamed(context, "/viewTask", arguments: pojoTask);
+                dynamic editedTask = await Navigator.pushNamed(context, "/viewTask", arguments: pojoTask.copy());
                 print("edited task: ${editedTask.toJson()}");
-                print("hihih: ${pojoTask.toJson() != editedTask.toJson()}, ${pojoTask.completed != editedTask.completed}");
-                if(pojoTask.toJson() != editedTask.toJson()){
+                print("hihih: ${pojoTask.toJson() != editedTask.toJson()}, ${pojoTask.completed != (editedTask as PojoTask).completed}");
+                print("edited task: ${(editedTask as PojoTask).completed}, ${pojoTask.completed}");
                   if(pojoTask.completed != editedTask.completed){
                     widget.onCompletedChanged();
                   }
@@ -164,7 +164,7 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
                   setState(() {
                     pojoTask = editedTask;
                   });
-                }
+
               },
               child: Stack(
                 children: <Widget>[
@@ -185,14 +185,12 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
 
                         return IconButton(
                             icon: Icon(iconData),
-                            onPressed: null
-                            /*
-                            () async {
+                            onPressed: () async {
                               print("IM PRESSED HELLP!!!");
                               setState(() {
                                 isCompleted = !isCompleted;
                               });
-                              HazizzResponse hazizzResponse = await RequestSender().getResponse(SetTaskCompleted(p_taskId: widget.pojoTask.id, setCompleted: isCompleted));
+                              HazizzResponse hazizzResponse = await RequestSender().getResponse(SetTaskCompleted(p_taskId: widget.originalPojoTask.id, setCompleted: isCompleted));
                               if(hazizzResponse.isSuccessful){
                                 widget.onCompletedChanged();
                               }else{
@@ -202,7 +200,7 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
                               }
 
                             }
-                            */
+
                         );
                       },
                     ),
