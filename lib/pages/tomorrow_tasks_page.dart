@@ -5,6 +5,7 @@ import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
 import 'package:mobile/blocs/tasks_tomorrow_bloc.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/listItems/task_header_item_widget.dart';
 import 'package:mobile/listItems/task_item_widget.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
@@ -51,7 +52,7 @@ class _TasksTomorrowPage extends State<TasksTomorrowPage> with SingleTickerProvi
   @override
   void initState() {
     // getData();
-    print("created tasks PAge");
+    HazizzLogger.printLog("HazizzLog: in tomorrow task page");
 
     if(widget.tasksBloc.currentState is ResponseError) {
     //  widget.tasksBloc.dispatch(FetchData());

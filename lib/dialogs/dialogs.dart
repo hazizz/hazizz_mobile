@@ -330,7 +330,7 @@ Future<bool> showInviteDialog(context, {@required PojoGroup group}) async {
                 child: Text(locText(context, key: "share").toUpperCase(),),
               ),
               onPressed: () {
-                print("share");
+                HazizzLogger.printLog("share");
 
                 Share.share(locText(context, key: "invite_to_group_text_title", args: [group.name, inviteLink]));
                 // Navigator.of(context).pop();
@@ -542,7 +542,6 @@ Future<PojoTag> showDialogTaskTag(BuildContext context, {List<PojoTag> except}) 
       }
     }
     if(!foundDuplicate){
-      print("asdes: ${defaultTag.getName()}");
       tagsToShow.add(defaultTag);
     }
 
@@ -881,8 +880,6 @@ Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
-        print("grade: ${grade.grade}");
-
          return HazizzDialog(
             header: Container(
               color: Theme.of(context).dialogBackgroundColor,
@@ -1434,13 +1431,13 @@ Future<bool> showConditionsToAcceptDialog(context) async {
 
   String getLinkPrivacy(){
     String currentLang = getCurrentLocale(context).languageCode;
-    print("lang code: .$currentLang.");
+    HazizzLogger.printLog("lang code: .$currentLang.");
     if(currentLang != "en" && currentLang != "hu" ){
       currentLang = "en";
     }
 
     String link = "https://hazizz.github.io/privacy-${currentLang}.txt";
-    print("ng: $link");
+    HazizzLogger.printLog("ng: $link");
     return link;
   }
   String getLinkTermsOfService(){
@@ -1449,7 +1446,7 @@ Future<bool> showConditionsToAcceptDialog(context) async {
       currentLang = "en";
     }
     String link = "https://hazizz.github.io/tos-${currentLang}.txt";
-    print("ng: $link");
+    HazizzLogger.printLog("ng: $link");
     return link;
   }
 
@@ -1459,7 +1456,7 @@ Future<bool> showConditionsToAcceptDialog(context) async {
       currentLang = "en";
     }
     String link = "https://hazizz.github.io/guideline-hu.txt";
-    print("ng: $link");
+    HazizzLogger.printLog("ng: $link");
     return link;
   }
 

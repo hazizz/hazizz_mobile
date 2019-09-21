@@ -12,6 +12,7 @@ import 'package:mobile/blocs/tasks_bloc.dart';
 import 'package:mobile/communication/errors.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/custom/formats.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/enums/task_complete_state_enum.dart';
 import 'package:mobile/enums/task_expired_state_enum.dart';
 import 'package:mobile/listItems/task_header_item_widget.dart';
@@ -66,7 +67,7 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
 
     // getData();
     // tasksBloc = widget.tasksBloc;
-    print("created tasks PAge");
+    HazizzLogger.printLog("created tasks PAge");
 
     /*
     if(tasksBloc.currentState is ResponseError) {
@@ -111,7 +112,7 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
 
     map = m;
 
-    print("REBUILD, BIIP BOOp");
+    HazizzLogger.printLog("REBUILD, BIIP BOOp");
 
     return new Column(
       children: <Widget>[
@@ -195,7 +196,7 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
 
 
                     DateTime key = map.keys.elementAt(index-1);
-                    print("new key: ${key.toString()}");
+                    HazizzLogger.printLog("new key: ${key.toString()}");
 
                     return StickyHeader(
 
@@ -243,10 +244,10 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
                                 if(map[key].isEmpty){
 
                                   setState(() {
-                                    print("oof22: ${map}");
+                                    HazizzLogger.printLog("oof22: ${map}");
                                     map.remove(key);
                                     MainTabBlocs().tasksBloc.tasks.remove(key);
-                                    print("oof32: ${map}");
+                                    HazizzLogger.printLog("oof32: ${map}");
                                   });
                                 }
                               });
@@ -266,19 +267,19 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
                               physics: NeverScrollableScrollPhysics(),
                               itemBuilder: (context, index2, animation) => buildItem(context, index2, animation, map[key][index2], (){
 
-                                print("bro: me: ${currentCompletedTaskState}");
+                                HazizzLogger.printLog("bro: me: ${currentCompletedTaskState}");
 
                                 if(currentCompletedTaskState != TaskCompleteState.BOTH){
-                                  print("bro: im trigered");
+                                  HazizzLogger.printLog("bro: im trigered");
 
                                   // var removedItem = map[key].removeAt(index2);
                                   var removedItem = map[key][index2];
 
                                   listKeyList[index-1].currentState.removeItem(index2, (context2, animation2){
                                     animation2.addStatusListener((AnimationStatus animationStatus){
-                                      print("oof22: anim: ${animationStatus.toString()}");
+                                      HazizzLogger.printLog("oof22: anim: ${animationStatus.toString()}");
                                       if(animationStatus == AnimationStatus.dismissed){
-                                        print("oof: ${map[key]}");
+                                        HazizzLogger.printLog("oof: ${map[key]}");
                                         MainTabBlocs().tasksBloc.dispatch(TasksRemoveItemEvent( mapKey: key, index: index2));
 
                                         /*
@@ -294,10 +295,10 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
                                     if(map[key].isEmpty){
 
                                       setState(() {
-                                        print("oof22: ${map}");
+                                        HazizzLogger.printLog("oof22: ${map}");
                                         map.remove(key);
                                         MainTabBlocs().tasksBloc.tasks.remove(key);
-                                        print("oof32: ${map}");
+                                        HazizzLogger.printLog("oof32: ${map}");
                                       });
                                     }
                                     */
@@ -308,13 +309,13 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
                                       duration:  Duration(milliseconds: 500)
                                   );
                                   /*
-                                print("oof: ${map[key]}");
+                                HazizzLogger.printLog("oof: ${map[key]}");
                                 if(map[key].isEmpty){
 
                                   setState(() {
-                                    print("oof22: ${map}");
+                                    HazizzLogger.printLog("oof22: ${map}");
                                     map.remove(key);
-                                    print("oof32: ${map}");
+                                    HazizzLogger.printLog("oof32: ${map}");
                                   });
                                 }
                                 */
@@ -394,7 +395,7 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
 
                       Map<DateTime, List<PojoTask>> tasks = state.tasks;
 
-                      print("onLoaded asdasd");
+                      HazizzLogger.printLog("onLoaded asdasd");
                       return onLoaded(tasks);
 
                     }if (state is TasksLoadedCacheState) {
@@ -450,7 +451,7 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
           onRefresh: () async{
             applyFilters();
             MainTabBlocs().tasksBloc.dispatch(TasksFetchEvent()); //await getData()
-            print("log: refreshing tasks");
+            HazizzLogger.printLog("log: refreshing tasks");
             return;
           }
       ),

@@ -7,6 +7,7 @@ import 'package:mobile/blocs/kreta_login_blocs.dart';
 import 'package:mobile/blocs/login_bloc.dart';
 import 'package:mobile/communication/errorcode_collection.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 
 
@@ -86,10 +87,7 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
 
       enabled: widget.sessionToAuth == null,
       style: TextStyle(fontSize: 18),
-      onChanged: (dynamic text) {
-        print("change: $text");
-        // kretaLoginBlocs.usernameBloc.dispatch(TextFormValidate(text: text));
-      },
+
       controller: kretaLoginBlocs.kretaLoginBloc.usernameController,
       textInputAction: TextInputAction.next,
       decoration:
@@ -136,7 +134,6 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
     var schoolPickerWidget = BlocBuilder(
       bloc: kretaLoginBlocs.schoolBloc,
       builder: (BuildContext context, ItemListState state) {
-        print("log: schoolBloc: state: ${state.toString()}");
         return GestureDetector(
           child: FormField(
 
@@ -151,12 +148,10 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
                   ),
                   child: Builder(
                     builder: (BuildContext context){//, ItemListState state) {
-                      print("log: widget update2");
                       if (state is ItemListLoaded) {
                         return Container();
                       }
                       if(state is ItemListPickedState){
-                        print("log: asdasdGroup: $state.item.name");
                         return Text('${state.item.name}',
                           style: TextStyle(fontSize: 16),
 
@@ -176,7 +171,7 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
               ){
                 showSchoolsDialog(context, data: kretaLoginBlocs.schoolBloc.data,
                     onPicked: ({String key, String value}){
-                      print("log: school: key: $key, value: $value");
+                      HazizzLogger.printLog("HazizzLog: school picked: key: $key, value: $value");
                       kretaLoginBlocs.schoolBloc.dispatch(PickedEvent(item: SchoolItem(key, value)));
                     }
                 );
@@ -283,8 +278,6 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
                   listener: (context, state) {
                     if (state is KretaLoginSuccessState) {
                       //  Navigator.of(context).pushNamed('/details');
-                      print("debuglol2");
-
 
                       //  Navigator.popAndPushNamed(context, "/");
                     }
@@ -294,7 +287,6 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
                     child: RaisedButton(
                         child: Text(locText(context, key: "login").toUpperCase()),
                         onPressed: () async {
-                          print("log: as1");
                           if(kretaLoginBlocs.schoolBloc.currentState is ItemListPickedState || true) {
                             FocusScope.of(context).requestFocus(new FocusNode());
 
@@ -314,70 +306,6 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
             ),
           ),
           show: isLoading,
-        );
-        return SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              /*
-              Image.asset(
-                'assets/images/Logo.png',
-              ),
-              */
-              Padding(
-                padding: const EdgeInsets.only(top: 60.0, bottom: 0),
-                child: Text(locText(context, key: "ekreta"), style: TextStyle(fontSize: 80, fontWeight: FontWeight.w800, color: HazizzTheme.blue),),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 0.0, bottom: 30),
-                child: Text(locText(context, key: "login"), style: TextStyle(fontSize: 40, fontWeight: FontWeight.w800, color: HazizzTheme.blue),),
-              ),
-
-              Padding(
-                padding: EdgeInsets.only(left:10, right:10, bottom: 10),
-                child: usernameWidget,
-              ),
-
-              Padding(
-                padding: EdgeInsets.only(left:10, right:10, bottom: 30),
-                child: passwordWidget,
-              ),
-
-              Padding(
-                padding: EdgeInsets.only(left:10, right:10, bottom: 10),
-                child: schoolPickerWidget,
-              ),
-
-              Text(responseInfo, style: TextStyle(color: HazizzTheme.red),),
-
-              BlocListener(
-                bloc: kretaLoginBlocs.kretaLoginBloc,
-                listener: (context, state) {
-                  if (state is KretaLoginSuccessState) {
-                    //  Navigator.of(context).pushNamed('/details');
-
-
-                    widget.onSuccess();
-                    //  Navigator.popAndPushNamed(context, "/");
-                  }
-                },
-                child: RaisedButton(
-                    child: Text("Küldés"),
-                    onPressed: () async {
-                      print("log: as1");
-                      if(kretaLoginBlocs.schoolBloc.currentState is ItemListPickedState || true) {
-                        kretaLoginBlocs.kretaLoginBloc.dispatch(
-                            KretaLoginButtonPressed(
-                                password: _passwordTextEditingController.text,
-                                username: _usernameTextEditingController.text,
-                                schoolUrl: kretaLoginBlocs.schoolBloc.pickedItem?.url
-                            )
-                        );
-                      }
-                    }
-                ),
-              )
-            ],
-          ),
         );
       },
     );

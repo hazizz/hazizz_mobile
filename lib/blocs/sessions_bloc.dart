@@ -7,6 +7,7 @@ import 'package:mobile/communication/pojos/PojoSubject.dart';
 import 'package:mobile/communication/pojos/PojoUser.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 
 
 import '../request_sender.dart';
@@ -39,7 +40,7 @@ class SessionsBloc extends Bloc<HEvent, HState> {
           yield ResponseError(errorResponse: hazizzResponse);
         }
       } on Exception catch(e){
-        print("log: Exception: ${e.toString()}");
+        HazizzLogger.printLog("log: Exception: ${e.toString()}");
       }
     }
   }

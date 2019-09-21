@@ -48,7 +48,6 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
     // getData();
   //  gradesBloc.dispatch(FetchData());
     //   gradesBloc.fetchMyTasks();
-    print("created Grades PAge");
     /*
     if(gradesBloc.currentState is ResponseError) {
       gradesBloc.dispatch(FetchData());
@@ -301,7 +300,6 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
           ),
           onRefresh: () async{
             MainTabBlocs().gradesBloc.dispatch(GradesFetchEvent()); //await getData()
-            print("log: refreshing grades");
             return;
           }
         ),

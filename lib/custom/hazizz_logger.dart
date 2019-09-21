@@ -1,4 +1,5 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/material.dart';
 
 import 'crashlytics_reporter.dart';
 
@@ -13,9 +14,9 @@ class HazizzLogger{
     hprint(msg);
   }
 
-  // only prints
+  // only HazizzLogger.printLogs
   static void hprint(String msg){
-    print(msg);
+    debugPrint(msg);
   }
 
   // only logs

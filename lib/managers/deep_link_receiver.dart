@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/widgets.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:uni_links/uni_links.dart';
 
@@ -9,7 +10,7 @@ class DeepLink{
 
   static void onLinkReceived(BuildContext context, Uri deepLink) async{
 
-    print("DEEP LINK RECEIVED: ${deepLink.toString()}");
+    HazizzLogger.printLog("HazizzLog: DEEP LINK RECEIVED: ${deepLink.toString()}");
     if (deepLink != null) {
       String str_groupId = deepLink.queryParameters["group"];
 
@@ -20,7 +21,7 @@ class DeepLink{
       int groupId = int.parse(str_groupId);
       if(groupId != null){
         await showSureToJoinGroupDialog(context, groupId: groupId);
-
+        HazizzLogger.printLog("HazizzLog: showed showSureToJoinGroupDialog");
       }
 
     }

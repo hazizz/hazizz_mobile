@@ -183,7 +183,7 @@ class _GroupTabHosterPage extends State<GroupTabHosterPage> with SingleTickerPro
               /*
               doAction: (func){
                 func();
-                print("CLICKED564: ${func}");
+                HazizzLogger.printLog("CLICKED564: ${func}");
               },
               */
               featureId: 'discover_group_invite',
@@ -211,16 +211,16 @@ class _GroupTabHosterPage extends State<GroupTabHosterPage> with SingleTickerPro
             /*
             Builder(
               builder: (context){
-                print("GOT HEREEEE0: ");
+                HazizzLogger.printLog("GOT HEREEEE0: ");
 
                 if(!shownVisitorState){
                   if(widget.visitorEnum == VisitorEnum.newComer){
-                    print("GOT HEREEEE1");
+                    HazizzLogger.printLog("GOT HEREEEE1");
                   //  Toast.show("Welcome to new group", context, duration: 1);
                     showJoinedGroupDialog(context, group: widget.group);
 
                   }else if(widget.visitorEnum == VisitorEnum.notNewComer){
-                    print("GOT HEREEEE2");
+                    HazizzLogger.printLog("GOT HEREEEE2");
                   //  showJoinedGroupDialog(context, group: widget.group);
                     SchedulerBinding.instance.addPostFrameCallback((_) =>
                         showJoinedGroupDialog(context, group: widget.group)

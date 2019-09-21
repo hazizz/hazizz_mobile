@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
 import 'package:mobile/blocs/schedule_bloc.dart';
 import 'package:mobile/communication/pojos/PojoClass.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/listItems/class_item_widget.dart';
 import 'package:mobile/widgets/schedule_event_widget.dart';
 
@@ -76,7 +77,6 @@ class _SchedulesTabPage extends State<SchedulesTabPage> with TickerProviderState
 
   @override
   Widget build(BuildContext context) {
-    print("rebuildlol");
     if(widget.noClasses){
       return Stack(
         children: <Widget>[
@@ -112,7 +112,7 @@ class _SchedulesTabPage extends State<SchedulesTabPage> with TickerProviderState
       );
     }
 
-    print("istoday: ${widget.isToday}");
+    HazizzLogger.printLog("HazizzLog: it is today: ${widget.isToday}");
 
     List<Widget> listItems = [];
 

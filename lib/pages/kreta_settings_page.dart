@@ -1,5 +1,6 @@
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/managers/kreta_session_manager.dart';
 import 'package:mobile/managers/token_manager.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
@@ -82,7 +83,6 @@ class _KretaSettingsPage extends State<KretaSettingsPage> with AutomaticKeepAliv
   @override
   Widget build(BuildContext context) {
 
-    print("log: $supportedLocaleItems");
 
     return Hero(
       tag: "kreta_settings",
@@ -102,7 +102,7 @@ class _KretaSettingsPage extends State<KretaSettingsPage> with AutomaticKeepAliv
                       trailing: Switch(
                           value: isRemember,
                           onChanged: (value){
-                            print(value);
+                            HazizzLogger.printLog("HazizzLog: remember kreta password is enabled: ${value}");
                             KretaSessionManager.setRememberPassword(value);
                             if(value){
                               setState(() {

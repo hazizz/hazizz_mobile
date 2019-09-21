@@ -176,9 +176,6 @@ class _TaskCalendarPage extends State<TaskCalendarPage> with AutomaticKeepAliveC
   }
 
   Widget _buildTableCalendar(Map<DateTime, List<PojoTask>> ev) {
-
-
-    print("oopaa22: ${ev}");
     return TableCalendar(
 
 
@@ -195,7 +192,6 @@ class _TaskCalendarPage extends State<TaskCalendarPage> with AutomaticKeepAliveC
             fabIsInactive = false;
           });
         }
-        print("trigering: ${fabIsInactive}");
         List<Widget> a = [];
         for(PojoTask t in tasks){
           a.add(TaskItemWidget(originalPojoTask: t, key: Key(t.toJson().toString()),));
@@ -208,8 +204,6 @@ class _TaskCalendarPage extends State<TaskCalendarPage> with AutomaticKeepAliveC
 
         markersBuilder: (context, date, events, holidays) {
           final children = <Widget>[];
-
-          print("oopaa2: ${events}");
 
           if (events.isNotEmpty) {
             children.add(

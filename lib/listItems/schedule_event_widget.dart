@@ -105,7 +105,7 @@ class _ScheduleEventWidget extends State<ScheduleEventWidget> with SingleTickerP
           elevation: 5,
           child: InkWell(
               onTap: () {
-                print("tap tap");
+
               },
               child:
               Align(

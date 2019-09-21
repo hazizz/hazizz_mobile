@@ -83,9 +83,7 @@ class _CreateSubjectDialog extends State<CreateSubjectDialog> {
                   LengthLimitingTextInputFormatter(20),
                 ],
                 autofocus: true,
-                onChanged: (dynamic text) {
-                  print("change: $text");
-                },
+
                 controller: _subjectTextEditingController,
                 textInputAction: TextInputAction.send,
                 decoration:

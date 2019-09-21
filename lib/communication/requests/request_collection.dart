@@ -20,18 +20,16 @@ import 'package:mobile/communication/pojos/PojoTokens.dart';
 import 'package:mobile/communication/pojos/PojoUser.dart';
 import 'package:mobile/communication/pojos/pojo_comment.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/enums/groupTypesEnum.dart';
 import 'package:mobile/managers/kreta_session_manager.dart';
 import 'package:mobile/managers/token_manager.dart';
 import 'package:meta/meta.dart';
 import 'package:package_info/package_info.dart';
-//import 'package:mobile/packages/hazizz-dio-2.1.3/lib/dio.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:mobile/converters/PojoConverter.dart';
 
-
 import '../../HttpMethod.dart';
-import '../../hazizz_app_info.dart';
 import '../../hazizz_date.dart';
 import '../ResponseHandler.dart';
 
@@ -64,9 +62,9 @@ class Request {
   }
 
   Future<Map<String, dynamic>> buildHeader() async{
-    print("im so done 1");
+    HazizzLogger.printLog("HazizzLog: Building header: 1");
     PackageInfo p = await PackageInfo.fromPlatform();
-    print("im so done 2");
+    HazizzLogger.printLog("HazizzLog: Building header: 2");
     header["User-Agent"] = "HM-${p.version}";
   /*
     if(HazizzAppInfo().getInfo == null){
@@ -76,14 +74,13 @@ class Request {
       header["User-Agent"] = "HM-${HazizzAppInfo().getInfo.version}";
     }
     */
-    print("im so done 3");
+    HazizzLogger.printLog("HazizzLog: Building header: 3");
     if(authTokenHeader){
       header[HttpHeaders.authorizationHeader] = "Bearer ${await TokenManager.getToken()}";
     }if(contentTypeHeader) {
       header[HttpHeaders.contentTypeHeader] = "application/json";
     }
-    print(header);
-    print("im so done 4");
+    HazizzLogger.printLog("HazizzLog: Built header: $header");
     return header;
   }
 
@@ -108,7 +105,7 @@ class Request {
   }
 
   dynamic convertData(Response response){
-    print("log: WARNING: convertData function not implemented");
+    HazizzLogger.printLog("log: WARNING: convertData function not implemented");
    // throw new ConverterNotImplementedException();
     return null;
   }
@@ -492,7 +489,6 @@ class CreateGroup extends HazizzRequest {
     body["type"] = valueOfGroupType(type);
     if(type == GroupType.PASSWORD){
       assert(b_password != null);
-      print("password222: ${b_password}");
       body["password"] = b_password;
     }
   }
@@ -655,19 +651,63 @@ class DeleteSubject extends HazizzRequest {
 
 
 class CreateSubject extends HazizzRequest {
-  CreateSubject({ResponseHandler rh, @required int p_groupId, @required String b_subjectName}) : super(rh) {
+  CreateSubject({ResponseHandler rh, @required int p_groupId, @required String b_subjectName, @required bool b_subscriberOnly = false}) : super(rh) {
     httpMethod = HttpMethod.POST;
     PATH = "subjects/group/${p_groupId}";
     authTokenHeader = true;
     contentTypeHeader = true;
     body["name"] = b_subjectName;
+    body["subscriberOnly"] = b_subscriberOnly;
+
   }
 
   @override
   dynamic convertData(Response response) {
+    var newSubject = PojoSubject.fromJson(jsonDecode(response.data));
+    return newSubject;
+  }
+}
 
-    var asd = PojoSubject.fromJson(jsonDecode(response.data));
-    return asd;
+class UpdateSubject extends HazizzRequest {
+  UpdateSubject({ResponseHandler rh, @required int p_subjectId, @required String b_subjectName, @required bool b_subscriberOnly = false}) : super(rh) {
+    httpMethod = HttpMethod.POST;
+    PATH = "subjects/${p_subjectId}";
+    authTokenHeader = true;
+    contentTypeHeader = true;
+    body["name"] = b_subjectName;
+    body["subscriberOnly"] = b_subscriberOnly;
+  }
+
+  @override
+  dynamic convertData(Response response) {
+    var editedSubject = PojoSubject.fromJson(jsonDecode(response.data));
+    return editedSubject;
+  }
+}
+
+class SubscribeToSubject extends HazizzRequest {
+  SubscribeToSubject({ResponseHandler rh, @required int p_subjectId,}) : super(rh) {
+    httpMethod = HttpMethod.POST;
+    PATH = "subjects/$p_subjectId/subscribed";
+    authTokenHeader = true;
+  }
+
+  @override
+  dynamic convertData(Response response) {
+    return response;
+  }
+}
+
+class UnsubscribeFromSubject extends HazizzRequest {
+  UnsubscribeFromSubject({ResponseHandler rh, @required int p_subjectId,}) : super(rh) {
+    httpMethod = HttpMethod.DELETE;
+    PATH = "subjects/$p_subjectId/subscribed";
+    authTokenHeader = true;
+  }
+
+  @override
+  dynamic convertData(Response response) {
+    return response;
   }
 }
 
@@ -709,7 +749,6 @@ class CreateTask extends HazizzRequest {
     } else{
       PATH = "tasks/me";
     }
-    print("mamma oouuooo: ${PATH}");
     authTokenHeader = true;
     contentTypeHeader = true;
 
@@ -739,9 +778,6 @@ class EditTask extends HazizzRequest {
     body["taskTitle"] = b_title;
     body["description"] = b_description;
     body["dueDate"] = hazizzRequestDateFormat(b_deadline);
-
-    print(body);
-    print(PATH);
 
   }
   @override
@@ -797,7 +833,6 @@ class GetRecentEvents extends HazizzRequest {
 
   @override
   dynamic convertData(Response response) {
-    print(" Recent Events: ${response.data}");
 
     return response;
   }
@@ -830,13 +865,9 @@ class GetTasksFromMe extends HazizzRequest {
 
   @override
   dynamic convertData(Response response) {
-    print("log: in convertData2222: ${response}");
     Iterable iter = getIterable(response.data);
-    print("deebei");
     List<PojoTask> myTasks = iter.map<PojoTask>((json) => PojoTask.fromJson(json)).toList();
     myTasks.sort();
-    print("log: in convertData2: ${myTasks}");
-
     return myTasks;
   }
 }
@@ -852,7 +883,6 @@ class SetTaskCompleted extends HazizzRequest {
       httpMethod = HttpMethod.DELETE;
     }
 
-    print("setTask completed: ${setCompleted}");
   }
 
   @override
@@ -1029,12 +1059,6 @@ class KretaCreateSession extends TheraRequest {
     authTokenHeader = true;
     contentTypeHeader = true;
 
-    print("well boys we didit");
-
-    print("őp_username: $b_username");
-    print("őp_passord: $b_password");
-    print("őp_url: $b_url");
-
     body["username"] = b_username;
     body["password"] = b_password;
     body["url"] = b_url;
@@ -1070,7 +1094,6 @@ class KretaAuthenticateSession extends TheraRequest {
     contentTypeHeader = true;
 
     body["password"] = b_password;
-    print(body);
 
   }
 
@@ -1117,7 +1140,6 @@ class KretaGetSchedules extends TheraRequest {
       int weekOfYear = ((dayOfYear - now.weekday + 10) / 7).floor();
       query["weekNumber"] = weekOfYear.toString();
       query["year"] = dayOfYear.toString();
-      print("query is required");
     }
   }
 
@@ -1142,11 +1164,7 @@ class DummyKretaGetGrades extends TheraRequest {
 
   @override
   dynamic convertData(Response response) {
-    print("log: in convertData: ${response}");
     PojoGrades pojoGrades = PojoGrades.fromJson(jsonDecode(response.data));
-
-    print("log: in convertData: pojoGrades: ${pojoGrades.grades}");
-
     return pojoGrades;
   }
 }
@@ -1161,7 +1179,6 @@ class DummyKretaGetSchedules extends TheraRequest {
 
   @override
   dynamic convertData(Response response) {
-    print("schedule response: ${response.data}");
     PojoSchedules schedules = PojoSchedules.fromJson(jsonDecode(response.data));
     return schedules;
   }

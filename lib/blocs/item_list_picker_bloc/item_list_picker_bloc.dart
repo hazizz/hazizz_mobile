@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:mobile/communication/pojos/PojoError.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 
 import '../request_event.dart';
 import '../response_states.dart';
@@ -116,7 +117,7 @@ class ItemListPickerBloc extends Bloc<ItemListEvent, ItemListState> {
 
   @override
   Stream<ItemListState> mapEventToState(ItemListEvent event) async* {
-    print("log: Event2: ${event.toString()}");
+    HazizzLogger.printLog("log: Event2: ${event.toString()}");
 
     if(event is PickedEvent){
       pickedItem = event.item;

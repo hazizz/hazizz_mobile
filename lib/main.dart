@@ -12,6 +12,7 @@ import 'blocs/google_login_bloc.dart';
 import 'blocs/main_tab_blocs/main_tab_blocs.dart';
 import 'communication/pojos/task/PojoTask.dart';
 //import 'hazizz_alarm_manager.dart';
+import 'custom/hazizz_logger.dart';
 import 'hazizz_theme.dart';
 import 'managers/token_manager.dart';
 import 'managers/app_state_manager.dart';
@@ -58,7 +59,7 @@ Future<FirebaseUser> _handleSignIn() async {
   );
 
   final FirebaseUser user = await _auth.signInWithCredential(credential);
-  print("signed in " + user.displayName);
+  HazizzLogger.printLog("signed in " + user.displayName);
   return user;
 }
 */
@@ -142,7 +143,7 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
   
   @override
   Future didChangeAppLifecycleState(AppLifecycleState state) async {
-    print('log: state = $state');
+    HazizzLogger.printLog('HazizzLog: App lifecycle state is $state');
 
     if(state == AppLifecycleState.paused){
       lastActive = DateTime.now();
@@ -159,12 +160,12 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
       var notificationAppLaunchDetails = await HazizzNotification.flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
         String payload = notificationAppLaunchDetails.payload;
         if(payload != null) {
-          print("log: payload: $payload");
+          HazizzLogger.printLog("HazizzLog: payload: $payload");
           Navigator.pushNamed(context, "/tasksTomorrow");
 
           tasksTomorrowSerialzed = payload;
           //  tasksForTomorrow = getIterable(payload).map<PojoTask>((json) => PojoTask.fromJson(json)).toList();
-        }else  print("log: no payload");
+        }else  HazizzLogger.printLog("HazizzLog: no payload");
 
 
 

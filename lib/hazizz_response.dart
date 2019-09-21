@@ -9,6 +9,7 @@ import 'package:meta/meta.dart';
 
 import 'blocs/kreta_status_bloc.dart';
 import 'blocs/selected_session_bloc.dart';
+import 'custom/hazizz_logger.dart';
 import 'logger.dart';
 import 'managers/app_state_manager.dart';
 import 'request_sender.dart';
@@ -40,18 +41,14 @@ class HazizzResponse{
   HazizzResponse._();
 
   static HazizzResponse onSuccess({@required Response response, @required Request request}){
-    print("log: header2: ${response.headers.toString()}");
     HazizzResponse hazizzResponse = new HazizzResponse._();
-    print("im alive 1");
     hazizzResponse.response = response;
-    print("im alive 2");
     hazizzResponse.request = request;
-    print("im alive 3");
-    print("im alive ${request}");
     hazizzResponse.convertedData = request.convertData(response);
-    print("im alive 4");
+    HazizzLogger.printLog("HazizzLog: response conversion was successful");
     hazizzResponse.isSuccessful = true;
-    print("im alive 5");
+
+    HazizzLogger.printLog("HazizzLog: successful response raw body: ${response.data}");
 
 
     if(request is TheraRequest && KretaStatusBloc().currentState is KretaStatusUnavailableState){
@@ -69,14 +66,17 @@ class HazizzResponse{
     hazizzResponse.request = request;
     hazizzResponse.isError = true;
     await hazizzResponse.onErrorResponse();
+    HazizzLogger.printLog("HazizzLog: error response raw body: ${hazizzResponse.response.data}");
+    HazizzLogger.printLog("HazizzLog: error response dio error: ${hazizzResponse.dioError.type.toString()}");
+
+
     return hazizzResponse;
   }
 
   onErrorResponse()async {
-    print("log: dioError: ${dioError.type}");
     if(response != null) {
-      logger.i("RESPONSE: $response");
-      print("log: error response data: ${response.data}");
+      HazizzLogger.printLog("log: error response: $response");
+
       pojoError = PojoError.fromJson(json.decode(response?.data));
 
       if(pojoError != null){
@@ -85,13 +85,13 @@ class HazizzResponse{
           KretaStatusBloc().dispatch(KretaStatusUnavailableEvent());
         }
         else if(pojoError.errorCode == 19) { // to many requests
-          print("here iam");
+          HazizzLogger.printLog("HazizzLog: To many requests");
           await RequestSender().waitCooldown();
         }
         else if(pojoError.errorCode == 18 ||
             pojoError.errorCode == 17) { // wrong token
           // a requestet elmenteni hogy újra küldje
-          print("hey: Locked: ${RequestSender().isLocked()}");
+          HazizzLogger.printLog("HazizzLog: token is wrong or expired, the failed request is saved and a refrest token request is being sent. dio interceptro: ${RequestSender().isLocked()}");
           if(!RequestSender().isLocked()) {
             RequestSender().lock();
 
@@ -99,24 +99,22 @@ class HazizzResponse{
 
             if(tokenResponse.isSuccessful) {
               RequestSender().unlock();
-            }else if(tokenResponse.isError){
-             /* if(tokenResponse.pojoError != null){
-                if(tokenResponse.pojoError.errorCode == 17){
-                  AppState.logout();
-                }
-
+            }else if(tokenResponse.pojoError != null){
+              if(tokenResponse.pojoError.errorCode == 17){
+                AppState.logout();
               }
-              */
-              print("log: obtaining token failed");
+
+              HazizzLogger.printLog("HazizzLog: obtaining token failed. The user is redirected to the login screen");
 
             }
 
 
             // elküldi újra ezt a requestet ami errort dobott
             HazizzResponse hazizzResponse = await RequestSender().getResponse(request);
+            HazizzLogger.printLog("HazizzLog: resent failed request)");
+
             RequestSender().unlock();
-            print("hey2: username: ${await InfoCache.getMyUsername()}");
-            print("hey2: token: ${await TokenManager.getRefreshToken()}");
+
           }else {
             RequestSender().getResponse(request);
           }
@@ -126,7 +124,7 @@ class HazizzResponse{
         }else if(pojoError.errorCode == 136 || pojoError.errorCode == 132 || pojoError.errorCode == 130){
           SelectedSessionBloc().dispatch(SelectedSessionInactiveEvent());
         }
-        print("log: response error: ${pojoError.toString()}");
+        HazizzLogger.printLog("log: response error: ${pojoError.toString()}");
         // throw new HResponseError(pojoError);
         //  return pojoError;
         //request.onError(pojoError);

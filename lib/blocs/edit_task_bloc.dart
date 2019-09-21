@@ -7,6 +7,7 @@ import 'package:mobile/communication/pojos/PojoTag.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:meta/meta.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/defaults/pojo_subject_empty.dart';
 import '../request_sender.dart';
 import '../hazizz_response.dart';
@@ -67,8 +68,8 @@ class TaskEditBloc extends TaskMakerBloc {
     titleController.selection = TextSelection.fromPosition(TextPosition(offset: titleController.text.length));
 
 
-    print("log: descr: ${descriptionController.text}");
-    print("log: title: ${titleController.text}");
+    HazizzLogger.printLog("log: descr: ${descriptionController.text}");
+    HazizzLogger.printLog("log: title: ${titleController.text}");
 
 
     deadlineBloc.dispatch(DateTimePickedEvent(dateTime: taskToEdit.dueDate));
@@ -80,7 +81,7 @@ class TaskEditBloc extends TaskMakerBloc {
 
       groupItemPickerBloc.dispatch(SetGroupEvent(item: taskToEdit.group != null ? taskToEdit.group : PojoGroup(0, "", "", "", 0) ));
 
-      subjectItemPickerBloc.dispatch(SetSubjectEvent(item: taskToEdit.subject != null ? taskToEdit.subject : PojoSubject(0, "")));
+      subjectItemPickerBloc.dispatch(SetSubjectEvent(item: taskToEdit.subject != null ? taskToEdit.subject : PojoSubject(0, "", false, null)));
 
 
     titleBloc.dispatch(TextFormSetEvent(text: taskToEdit.title));
@@ -129,7 +130,7 @@ class TaskEditBloc extends TaskMakerBloc {
         if(deadlineState is DateTimePickedState) {
           deadline = deadlineState.dateTime;
         }else{
-          print("log: missing: deadline");
+          HazizzLogger.printLog("log: missing: deadline");
           deadlineBloc.dispatch(DateTimeNotPickedEvent());
           missingInfo = true;
         }
@@ -138,7 +139,7 @@ class TaskEditBloc extends TaskMakerBloc {
         if(titleState is TextFormFine || titleState is TextFormSetState){
           title = titleBloc.lastText;
         }else{
-          print("log: missing: title");
+          HazizzLogger.printLog("log: missing: title");
           missingInfo = true;
         }
         HFormState descriptionState = descriptionBloc.currentState;
@@ -146,18 +147,18 @@ class TaskEditBloc extends TaskMakerBloc {
         if(descriptionState is TextFormFine ||descriptionState is TextFormSetState){
           description = descriptionBloc.lastText;
         }else{
-          print("log: missing: description");
+          HazizzLogger.printLog("log: missing: description");
           missingInfo = true;
         }
         */
         description = descriptionBloc.lastText;
 
         if(missingInfo){
-          print("log: missing info");
+          HazizzLogger.printLog("log: missing info");
           this.dispatch(TaskMakerFailedEvent());
           return;
         }
-        print("log: not missing info");
+        HazizzLogger.printLog("log: not missing info");
 
         HazizzResponse hazizzResponse;
 
@@ -187,7 +188,7 @@ class TaskEditBloc extends TaskMakerBloc {
         //endregion
 
       } on Exception catch(e){
-        print("log: Exception: ${e.toString()}");
+        HazizzLogger.printLog("log: Exception: ${e.toString()}");
       }
     }
   }

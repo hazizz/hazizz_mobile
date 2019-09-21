@@ -8,6 +8,7 @@ import 'package:mobile/communication/pojos/PojoSubject.dart';
 import 'package:mobile/communication/pojos/PojoUser.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/enums/group_permissions_enum.dart';
 import 'package:mobile/managers/cache_manager.dart';
 
@@ -42,7 +43,7 @@ class GroupTasksBloc extends Bloc<HEvent, HState> {
           yield ResponseError(errorResponse: hazizzResponse);
         }
       } on Exception catch(e){
-        print("log: Exception: ${e.toString()}");
+        HazizzLogger.printLog("log: Exception: ${e.toString()}");
       }
     }
   }
@@ -53,7 +54,7 @@ class GroupSubjectsBloc extends Bloc<HEvent, HState> {
   HState get initialState => ResponseEmpty();
 
   int get groupId{
-    print("groupId:: ${GroupBlocs().group.id}");
+    HazizzLogger.printLog("groupId:: ${GroupBlocs().group.id}");
     return GroupBlocs().group.id;
   }
 
@@ -76,7 +77,7 @@ class GroupSubjectsBloc extends Bloc<HEvent, HState> {
           yield ResponseError(errorResponse: hazizzResponse);
         }
       } on Exception catch(e){
-        print("log: Exception: ${e.toString()}");
+        HazizzLogger.printLog("log: Exception: ${e.toString()}");
       }
     }
   }
@@ -144,7 +145,7 @@ class GroupMembersBloc extends Bloc<HEvent, HState> {
           yield ResponseError(errorResponse: hazizzResponse);
         }
       } on Exception catch(e){
-        print("log: Exception: ${e.toString()}");
+        HazizzLogger.printLog("log: Exception: ${e.toString()}");
       }
     }
   }

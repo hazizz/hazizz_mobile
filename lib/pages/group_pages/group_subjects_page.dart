@@ -51,7 +51,6 @@ class _GroupSubjectsPage extends State<GroupSubjectsPage> with AutomaticKeepAliv
         floatingActionButton: FloatingActionButton(
           heroTag: "hero_fab_subjects",
           onPressed: () async {
-            print("press");
             PojoSubject success = await showAddSubjectDialog(context, groupId: groupSubjectsBloc.groupId);
             if(success != null){
               groupSubjectsBloc.dispatch(FetchData());

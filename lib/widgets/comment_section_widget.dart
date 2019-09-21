@@ -68,9 +68,7 @@ class _CommentSectionWidget extends State<CommentSectionWidget>{
               },
               bloc: ViewTaskBloc().commentBlocs.commentSectionBloc,
               builder: (_, CommentSectionState state){
-                print("log CommentSectionState change? $state");
                 if(state is CommentSectionLoadedState){
-                  print("state is CommentSectionLoadedState: ${state.items}");
                   comments = state.items;
                   if(comments.isNotEmpty) {
                     return ListView.builder(
@@ -101,7 +99,6 @@ class _CommentSectionWidget extends State<CommentSectionWidget>{
                   ));
                 }
                 else{
-                  print("log: state: $state");
                   return Center(child: Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: RefreshProgressIndicator(),

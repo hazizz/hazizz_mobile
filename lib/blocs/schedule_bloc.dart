@@ -8,6 +8,7 @@ import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/custom/hazizz_date_time.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 
 import 'package:mobile/managers/kreta_session_manager.dart';
 
@@ -147,25 +148,25 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     if (event is ScheduleFetchEvent) {
       try {
         currentWeekNumber = event.weekNumber;
-        print("currentWeekNumber: $currentWeekNumber");
+        HazizzLogger.printLog("currentWeekNumber: $currentWeekNumber");
 
         currentWeekMonday = DateTime(event.yearNumber, 1, 1);
-        print("currentWeekMonday: $currentWeekMonday");
+        HazizzLogger.printLog("currentWeekMonday: $currentWeekMonday");
 
         currentWeekMonday = currentWeekMonday.add(Duration(days: 7 * (currentWeekNumber-1)));
 
-        print("currentWeekMonday2: $currentWeekMonday, ${7 * (currentWeekNumber-1)}");
+        HazizzLogger.printLog("currentWeekMonday2: $currentWeekMonday, ${7 * (currentWeekNumber-1)}");
 
         currentWeekMonday = currentWeekMonday.subtract(Duration(days: 1));
 
         currentWeekSunday = currentWeekMonday.add(Duration(days: 6));
 
-        print("currentWeekSunday: $currentWeekSunday");
+        HazizzLogger.printLog("currentWeekSunday: $currentWeekSunday");
 
 
         yield ScheduleWaitingState();
 
-        print("WIATING222 : ${event.yearNumber}, ${event.weekNumber}");
+        HazizzLogger.printLog("WIATING222 : ${event.yearNumber}, ${event.weekNumber}");
 
 
         if(event.yearNumber == currentCurrentYearNumber && event.weekNumber == currentCurrentWeekNumber){
@@ -185,7 +186,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
         int dayOfYear = int.parse(DateFormat("D").format(n ow));
         int weekOfYear = ((dayOfYear - now.weekday + 10) / 7).floor();
 
-        print("WEEK OF YEAR: $weekOfYear");*/
+        HazizzLogger.printLog("WEEK OF YEAR: $weekOfYear");*/
 
           // now.month, 7 * (currentWeekNumber-1)
 
@@ -193,10 +194,10 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
         HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetSchedules(q_year: event.yearNumber, q_weekNumber: event.weekNumber));
 
-        //  print("classes.: ${classes}");
+        //  HazizzLogger.printLog("classes.: ${classes}");
         if(hazizzResponse.isSuccessful){
 
-          print("classes.classes: ${ hazizzResponse.convertedData}");
+          HazizzLogger.printLog("classes.classes: ${ hazizzResponse.convertedData}");
           classes = hazizzResponse.convertedData;
 
 
@@ -238,18 +239,18 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
               saveScheduleCache(classes);
             }
 
-            print("log: opsie: 0");
+            HazizzLogger.printLog("log: opsie: 0");
 
             // classes = classesDummy;
 
 
-            print("log: opsie: 0");
+            HazizzLogger.printLog("log: opsie: 0");
 
            // scheduleEventBloc.dispatch(ScheduleEventUpdateClassesEvent());
 
             yield ScheduleLoadedState(classes);
 
-            print("log: oy133");
+            HazizzLogger.printLog("log: oy133");
           }
 
 
@@ -257,7 +258,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
         else if(hazizzResponse.isError){
 
           if(hazizzResponse.dioError == noConnectionError){
-            print("log: noConnectionError22");
+            HazizzLogger.printLog("log: noConnectionError22");
             yield ScheduleErrorState(hazizzResponse);
 
             Connection.addConnectionOnlineListener((){
@@ -268,7 +269,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
           }else if(hazizzResponse.dioError.type == DioErrorType.CONNECT_TIMEOUT
               || hazizzResponse.dioError.type == DioErrorType.RECEIVE_TIMEOUT) {
-            print("log: noConnectionError22");
+            HazizzLogger.printLog("log: noConnectionError22");
             this.dispatch(ScheduleFetchEvent());
           }else{
             yield ScheduleErrorState(hazizzResponse);
@@ -278,7 +279,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
         }
       } on Exception catch(e){
-        print("log: Exception: ${e.toString()}");
+        HazizzLogger.printLog("log: Exception: ${e.toString()}");
       }
     }
   }

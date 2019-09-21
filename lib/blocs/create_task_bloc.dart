@@ -6,6 +6,7 @@ import 'package:mobile/blocs/tasks_bloc.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/pojos/PojoTag.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import '../request_sender.dart';
 import '../hazizz_response.dart';
 import 'TextFormBloc.dart';
@@ -73,11 +74,11 @@ class TaskCreateBloc extends TaskMakerBloc {
       }
     }
     if (event is TaskMakerSendEvent) {
-      print("log: event: TaskMakerSendEvent");
+      HazizzLogger.printLog("log: event: TaskMakerSendEvent");
       try {
         yield TaskMakerWaitingState();
 
-        print("log: lul1");
+        HazizzLogger.printLog("log: lul1");
 
         //region send
         int groupId, subjectId;
@@ -99,18 +100,18 @@ class TaskCreateBloc extends TaskMakerBloc {
         taskTagBloc.pickedTags.forEach((f){tags.add(f.getName());});
 
 
-        print("log: lul11");
+        HazizzLogger.printLog("log: lul11");
 
 
         ItemListState groupState =  groupItemPickerBloc.currentState;
 
         if (groupState is PickedGroupState) {
           groupId = groupItemPickerBloc.pickedItem.id;
-          print("log: lulu0");
+          HazizzLogger.printLog("log: lulu0");
         } else {
-          print("log: lulu1");
+          HazizzLogger.printLog("log: lulu1");
           groupItemPickerBloc.dispatch(NotPickedEvent());
-          print("log: lulu2");
+          HazizzLogger.printLog("log: lulu2");
           missingInfo = true;
         }
 
@@ -122,29 +123,29 @@ class TaskCreateBloc extends TaskMakerBloc {
           subjectId = subjectState.item.id;
         }else{
           if(groupId != 0){
-            print("log: subjectItemPickerBloc.dispatch(NotPickedEvent());");
+            HazizzLogger.printLog("log: subjectItemPickerBloc.dispatch(NotPickedEvent());");
 
             subjectItemPickerBloc.dispatch(NotPickedEvent());
             missingInfo = true;
           }
         }
-        print("log: lul12");
+        HazizzLogger.printLog("log: lul12");
 
 
         /*
         if(subjectId == null) {
-          print("log: uff: ${groupItemPickerBloc.currentState}");
-          print("log: lulu0000");
+          HazizzLogger.printLog("log: uff: ${groupItemPickerBloc.currentState}");
+          HazizzLogger.printLog("log: lulu0000");
 
           ItemListState groupState =  groupItemPickerBloc.currentState;
-          print("log: lulu00");
+          HazizzLogger.printLog("log: lulu00");
           if (groupState is PickedGroupState) {
             groupId = groupItemPickerBloc.pickedItem.id;
-            print("log: lulu0");
+            HazizzLogger.printLog("log: lulu0");
           } else {
-            print("log: lulu1");
+            HazizzLogger.printLog("log: lulu1");
             groupItemPickerBloc.dispatch(NotPickedEvent());
-            print("log: lulu2");
+            HazizzLogger.printLog("log: lulu2");
             missingInfo = true;
           }
         }
@@ -152,7 +153,7 @@ class TaskCreateBloc extends TaskMakerBloc {
 
 
 
-        print("log: lul2");
+        HazizzLogger.printLog("log: lul2");
 
 
         DateTimePickerState deadlineState = deadlineBloc.currentState;
@@ -166,7 +167,7 @@ class TaskCreateBloc extends TaskMakerBloc {
         HFormState titleState = titleBloc.currentState;
         if(titleState is TextFormFine){
           title = titleBloc.lastText;
-          print("log: title: $title");
+          HazizzLogger.printLog("log: title: $title");
           if(title == null || title == ""){
             missingInfo = true;
           }
@@ -186,20 +187,20 @@ class TaskCreateBloc extends TaskMakerBloc {
         description = descriptionBloc.lastText;
 
 
-        print("log: lul3");
+        HazizzLogger.printLog("log: lul3");
 
 
         if(missingInfo){
-          print("log: missing info");
+          HazizzLogger.printLog("log: missing info");
           this.dispatch(TaskMakerFailedEvent());
           return;
         }
-        print("log: not missing info");
+        HazizzLogger.printLog("log: not missing info");
 
         HazizzResponse hazizzResponse;
 
 
-        print("BEFORE POIOP: ${groupId}, ${subjectId},");
+        HazizzLogger.printLog("BEFORE POIOP: ${groupId}, ${subjectId},");
         hazizzResponse = await RequestSender().getResponse(new CreateTask(
             groupId: groupId,
             subjectId: subjectId,
@@ -230,7 +231,7 @@ class TaskCreateBloc extends TaskMakerBloc {
         */
 
         if(hazizzResponse.isSuccessful){
-          print("log: task making was succcessful");
+          HazizzLogger.printLog("log: task making was succcessful");
           yield TaskMakerSuccessfulState(hazizzResponse.convertedData);
           MainTabBlocs().tasksBloc.dispatch(TasksFetchEvent());
         }else{
@@ -240,7 +241,7 @@ class TaskCreateBloc extends TaskMakerBloc {
         //endregion
 
       } on Exception catch(e){
-        print("log: Exception: ${e.toString()}");
+        HazizzLogger.printLog("log: Exception: ${e.toString()}");
       }
     }
   }

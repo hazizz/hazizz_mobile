@@ -1,5 +1,6 @@
 
 import 'package:mobile/communication/requests/request_collection.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 
 import '../../request_sender.dart';
 import '../../hazizz_response.dart';
@@ -20,7 +21,7 @@ class ItemListPickerGroupBloc extends ItemListPickerBloc{
       }
     }
     if(hazizzResponse.hasPojoError){
-      print("log: response is List<PojoTask>");
+      HazizzLogger.printLog("log: response is List<PojoTask>");
       return ItemListFail(error: hazizzResponse.pojoError);
     }
   }

@@ -12,6 +12,7 @@ import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
 import 'package:mobile/communication/pojos/PojoTag.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 
 import 'package:mobile/defaults/pojo_group_empty.dart';
 import 'package:mobile/defaults/pojo_subject_empty.dart';
@@ -111,7 +112,7 @@ class _TaskMakerPage extends State<TaskMakerPage> {
     //  blocs.subjectItemPickerBloc.dispatch(SetSubjectEvent(item: widget.taskToEdit.subject));
 
     }else{
-      print("log: Well ...");
+      HazizzLogger.printLog("HazizzLog: this should not be visible: 542311z8");
     }
 
   //  blocs.groupItemPickerBloc.dispatch(ItemListLoadData());
@@ -156,7 +157,7 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                   hasCloseButton: true,
                   onCloseClick: (){
                     // notify bloc
-                    print("locsing");
+                    HazizzLogger.printLog("locsing");
                     blocs.taskTagBloc.dispatch(TaskTagRemoveEvent(tag: t));
                   },
                //   padding: EdgeInsets.only(left: 5, right: 5, top: 4, bottom: 4),
@@ -177,7 +178,7 @@ class _TaskMakerPage extends State<TaskMakerPage> {
               onClick: () async {
 
                 PojoTag result = await showDialogTaskTag(context, except: blocs.taskTagBloc.pickedTags);
-                print("result: ${result?.getName()}");
+                HazizzLogger.printLog("HazizzLog: showDialogTaskTag dialog result: ${result?.getName()}");
                 if(result != null){
                   blocs.taskTagBloc.dispatch(TaskTagAddEvent(result));
                 }
@@ -197,8 +198,6 @@ class _TaskMakerPage extends State<TaskMakerPage> {
     var groupPicker = BlocBuilder(
       bloc: blocs.groupItemPickerBloc,
       builder: (BuildContext context, ItemListState state) {
-        print("log: widget update111");
-
         String error;
         if(state is ItemListNotPickedState){
           error = locText(context, key: "error_noGroupSelected");
@@ -236,7 +235,6 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                                 return Container();
                               }
                               if(state is PickedGroupState){
-                                print("log: asdasdGroup: $state.item.name");
                                 /*
                                 return Text('${state.item.name}',
                                   style: TextStyle(fontSize: 20.0),
@@ -285,14 +283,10 @@ class _TaskMakerPage extends State<TaskMakerPage> {
     var subjectPicker = BlocBuilder(
         bloc: blocs.subjectItemPickerBloc,
         builder: (BuildContext context, ItemListState state) {
-          print("log: subject picker state: $state");
-
           return BlocBuilder(
             bloc: blocs.groupItemPickerBloc,
             builder: (context2, state2){
-              print("state:::: ${state2}");
               if(blocs.groupItemPickerBloc.pickedItem == null || blocs.groupItemPickerBloc.pickedItem.id == 0){
-                print("what????: ${blocs.groupItemPickerBloc.pickedItem}");
                 return Container();
               }
 
@@ -332,12 +326,10 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                               isEmpty: _color == '',
                               child: Builder(
                                 builder: (BuildContext context){//, ItemListState state) {
-                                  print("log: u $state");
                                   if (state is ItemListLoaded) {
                                     return Container();
                                   }
                                   if(state is PickedSubjectState) {
-                                    print("log: ööö");
 
                                     return Text('${ state.item.id != 0
                                         ? state.item.name
@@ -456,7 +448,6 @@ class _TaskMakerPage extends State<TaskMakerPage> {
           String errorText = null;
           if(state is TextFormSetState){
             blocs.titleController.text = state.text;
-            print("title is set2: ${blocs.titleController.text}");
           }
           else if(state is TextFormErrorTooShort){
             errorText = "Title is too short";
@@ -472,7 +463,6 @@ class _TaskMakerPage extends State<TaskMakerPage> {
             controller: blocs.titleController,
             textInputAction: TextInputAction.next,
             onFieldSubmitted: (String value){
-              print("onFieldSubmitted: $value");
               _fieldFocusChange(context, _titleFocusNode, _descriptionFocusNode);
             },
             decoration:
@@ -498,16 +488,15 @@ class _TaskMakerPage extends State<TaskMakerPage> {
           return TextFormField(
             /*
             onChanged: (dynamic text) {
-              print("change: $text");
+              HazizzLogger.printLog("change: $text");
               blocs.descriptionBloc.dispatch(TextFormValidate(text: text));
             },
             */
 
             focusNode: _descriptionFocusNode,
             controller: blocs.descriptionController,
-            textInputAction: TextInputAction.done,
+            textInputAction: TextInputAction.newline,
             onFieldSubmitted: (String value){
-              print("onFieldSubmitted: $value");
               FocusScope.of(context).requestFocus(new FocusNode());
             },
             decoration:

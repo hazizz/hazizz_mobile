@@ -245,7 +245,18 @@
     "settings"
     : "Beállítások",
 
-    "starting_page"
+  "developer_settings"
+  : "Fejlesztői beállítások",
+
+
+  "send_log_via_email"
+  : "Log elküldése emailben",
+
+  "logs"
+  : "Logok",
+
+
+  "starting_page"
     : "Kezdő oldal",
 
     "language"

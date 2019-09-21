@@ -34,8 +34,6 @@ class TaskHeaderItemWidget extends StatelessWidget{
 
     int days = daysTask - daysNow+1;
 
-    print("DAYS: $days");
-
     Color backColor = Theme.of(context).primaryColorDark;
 
     String title;

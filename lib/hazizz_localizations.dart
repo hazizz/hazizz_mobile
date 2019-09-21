@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'custom/hazizz_logger.dart';
+
 const _keyLangCode = "key_langCode";
 
 String locText(BuildContext context, {@required String key, List<String> args}){
@@ -16,7 +18,7 @@ Future<String> locTextContextless({@required String key, List<String> args}) asy
 
 getPreferredLocal() async{
   String preferredLangCode = (await getPreferredLangCode());
-  print("log: preferredLangCode:  ${preferredLangCode}");
+  HazizzLogger.printLog("HazizzLog: preferredLangCode:  ${preferredLangCode}");
   if(preferredLangCode != null) {
     return Locale(preferredLangCode,);
   }
@@ -60,10 +62,8 @@ class HazizzLocalizationsNoContext{
   static Future<bool> load() async {
     // Load the language JSON file from the "lang" folder
     String preferredLangCode = await getPreferredLangCode();
-    print("log: preferredlang: $preferredLangCode");
     String jsonString =
     await rootBundle.loadString('assets/langs/${preferredLangCode}.json');
-    print("log: jsonString: $jsonString");
 
     Map<String, dynamic> jsonMap = json.decode(jsonString);
 
@@ -88,17 +88,17 @@ class HazizzLocalizationsNoContext{
       await load();
     }
 
-    print("log: args: $args");
+    HazizzLogger.printLog("HazizzLog: locale: translate args: $args");
 
     String text = localizedStrings[key];
     if(args == null) {
       return nullCheckAndReturn(text);
     }
 
-    print("log: args length: ${args.length}");
+    HazizzLogger.printLog("HazizzLog: locale: translate  args length: ${args.length}");
 
     for(int i = 0; i < args.length; i++) {
-      print("log: iteration: $i");
+      HazizzLogger.printLog("HazizzLog: locale: translate iteration: $i");
       text = text.replaceFirst(RegExp('{}'), args[i]);
     }
     return nullCheckAndReturn(text);
@@ -147,10 +147,10 @@ class HazizzLocalizations {
       return nullCheckAndReturn(text);
     }
 
-    print("log: args length: ${args.length}");
+    HazizzLogger.printLog("HazizzLog: locale: translate  args length: ${args.length}");
 
     for(int i = 0; i < args.length; i++) {
-      print("log: iter: $i");
+      HazizzLogger.printLog("HazizzLog: locale: translate  iter: $i");
       text = text.replaceFirst(RegExp('{}'), args[i]);
     }
     return nullCheckAndReturn(text);

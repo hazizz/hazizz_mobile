@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/managers/cache_manager.dart';
 import 'package:mobile/managers/token_manager.dart';
 import 'package:package_info/package_info.dart';
@@ -23,16 +24,16 @@ import '../hazizz_response.dart';
 
 
 Future callbackDispatcher2() async {
-  print("ALARM MANAGER FIRED");
+  HazizzLogger.printLog("HazizzLog: ALARM MANAGER FIRED");
   await HazizzNotification.showHazizzNotification();
 
 }
 
 void callbackDispatcher() {
   Workmanager.executeTask((backgroundTask)  async {
-    print("log: work manager: fired");
+    HazizzLogger.printLog("HazizzLog: work manager: fired");
     await HazizzNotification.showHazizzNotification();
-    print("log: work manager: fired2");
+    HazizzLogger.printLog("HazizzLog: work manager: fired2");
     return Future.value(true);
   });
 }
@@ -62,7 +63,7 @@ class HazizzNotification{
     if (payload != null) {
       debugPrint('notification payload: ' + payload);
     }
-    print("log: notification onSelectNotification()");
+    HazizzLogger.printLog("log: notification onSelectNotification()");
   }
 
   static var initializationSettingsAndroid = new AndroidInitializationSettings(
@@ -75,7 +76,7 @@ class HazizzNotification{
 
 
   static Future showHazizzNotification() async {
-    print("log: no its works1");
+    HazizzLogger.printLog("log: no its works1");
 
     // szombat
     if(DateTime.now().weekday == 6){
@@ -105,7 +106,7 @@ class HazizzNotification{
 
       HazizzResponse hazizzResponse = await RequestSender().getResponse(GetTasksFromMe());
 
-      print("IT IS SENT");
+      HazizzLogger.printLog("HazizzLog: request for notification is sent");
 
       if(hazizzResponse != null && hazizzResponse.isSuccessful){
         List<PojoTask> tasks = hazizzResponse.convertedData;
@@ -132,7 +133,7 @@ class HazizzNotification{
           }
 
 
-          print("log: no its works2");
+          HazizzLogger.printLog("HazizzLog: request for notif was successful");
         }else{
           await _flutterLocalNotificationsPlugin.show(
             0, await locTextContextless(key: "tasks_tomorrow"), "${await locTextContextless(key: "check_your_tasks")}",
@@ -149,16 +150,16 @@ class HazizzNotification{
         );
       }
     }else{
-      print("the notification is disabled");
+      HazizzLogger.printLog("HazizzLog: Alarm fired, but the notification is disabled");
     }
   }
 
   /*
   static void callbackDispatcher() {
     Workmanager.executeTask((backgroundTask)  {
-      print("log: work manager: fired");
+      HazizzLogger.printLog("log: work manager: fired");
       showHazizzNotification();
-      print("log: work manager: fired2");
+      HazizzLogger.printLog("log: work manager: fired2");
       return Future.value(true);
     });
   }
@@ -207,9 +208,8 @@ class HazizzNotification{
         const Duration(hours: 24, minutes: 0, ), tasksTomorrowNotificationId, showHazizzNotification,
         startAt: dateTime, rescheduleOnReboot: true, exact: true, wakeup: true);
     */
-    print("AndroidAlarmManager.periodic has been set successfully: ");
     setNotificationTime(timeOfDay);
-    print("log: alarm manager is set : ${timeOfDay.hour}.${timeOfDay.minute}");
+    HazizzLogger.printLog("HazizzLog: log: alarm manager is set : ${timeOfDay.hour}.${timeOfDay.minute}");
   }
 
    static const String key_notificationTime = "key_notificationTime";

@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/communication/pojos/PojoTag.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/pages/view_task_page.dart';
 
 import '../hazizz_localizations.dart';
@@ -147,20 +148,17 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
           elevation: 5,
           child: InkWell(
               onTap: () async {
-                print("tap tap");
-
                 setState(() {
                   opacity = 1;
                 });
 
                 dynamic editedTask = await Navigator.pushNamed(context, "/viewTask", arguments: pojoTask.copy());
-                print("edited task: ${editedTask.toJson()}");
-                print("hihih: ${pojoTask.toJson() != editedTask.toJson()}, ${pojoTask.completed != (editedTask as PojoTask).completed}");
-                print("edited task: ${(editedTask as PojoTask).completed}, ${pojoTask.completed}");
-                  if(pojoTask.completed != editedTask.completed){
+                HazizzLogger.printLog("HazizzLog: edited task: ${editedTask.toJson()}");
+                HazizzLogger.printLog("HazizzLog: old task: ${pojoTask.toJson()}");
+                if(pojoTask.completed != editedTask.completed){
                     widget.onCompletedChanged();
                   }
-                  print("not equelst");
+
                   setState(() {
                     pojoTask = editedTask;
                   });
@@ -186,7 +184,7 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
                         return IconButton(
                             icon: Icon(iconData),
                             onPressed: () async {
-                              print("IM PRESSED HELLP!!!");
+                              HazizzLogger.printLog("IM PRESSED HELLP!!!");
                               setState(() {
                                 isCompleted = !isCompleted;
                               });

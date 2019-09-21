@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/pages/developer_settings_page.dart';
 import 'package:mobile/pages/kreta_session_selector_page.dart';
 import 'package:mobile/pages/kreta_settings_page.dart';
 import 'package:mobile/pages/login_page.dart';
+import 'package:mobile/pages/logs_page.dart';
 import 'package:mobile/pages/notification_settings_page.dart';
 import 'package:mobile/pages/task_calendar_page.dart';
 import 'package:mobile/pages/view_task_page.dart';
@@ -16,11 +18,12 @@ import 'package:mobile/pages/settings_page.dart';
 import 'package:mobile/pages/task_maker_page.dart';
 import 'package:mobile/pages/tomorrow_tasks_page.dart';
 
+import 'custom/hazizz_logger.dart';
 import 'main.dart';
 
 class RouteGenerator{
   static Route<dynamic> _errorRoute(String errorLog) {
-    print(errorLog);
+    HazizzLogger.printLog("HazizzLog: navigation error: $errorLog");
     return MaterialPageRoute(builder: (_) {
       return Scaffold(
         appBar: AppBar(
@@ -36,6 +39,9 @@ class RouteGenerator{
   static Route generateRoute(RouteSettings settings) {
     // Getting arguments passed in while calling Navigator.pushNamed
     final args = settings.arguments;
+
+    HazizzLogger.printLog("HazizzLog: navigating to ${settings.name} with arguments: ${settings.arguments}");
+
 
     switch (settings.name) {
       case 'login':
@@ -56,6 +62,10 @@ class RouteGenerator{
         return MaterialPageRoute(builder: (_) => NotificationSettingsPage());
       case '/settings/profile_editor':
         return MaterialPageRoute(builder: (_) => ProfileEditorPage());
+      case '/settings/developer':
+        return MaterialPageRoute(builder: (_) => DeveloperSettingsPage());
+      case '/settings/developer/logs':
+        return MaterialPageRoute(builder: (_) => LogsPage());
       case '/groups':
         return MaterialPageRoute(builder: (_) => MyGroupsPage());
       case '/group/groupId': //assert(args != null);

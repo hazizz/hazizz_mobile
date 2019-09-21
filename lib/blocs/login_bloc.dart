@@ -5,6 +5,7 @@ import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
 import 'package:mobile/communication/errorcode_collection.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/managers/app_state_manager.dart';
 import 'package:mobile/managers/cache_manager.dart';
 import 'package:mobile/managers/token_manager.dart';
@@ -134,18 +135,18 @@ class BasicLoginBloc extends Bloc<LoginEvent, LoginState> {
 
   @override
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
-    print("sentaa state asd");
+    HazizzLogger.printLog("sentaa state asd");
 
     if (event is LoginButtonPressedTEST) {
-      print("sentaa1");
+      HazizzLogger.printLog("sentaa1");
 
       usernameBloc.dispatch(TextFormValidate(text: event.username));
       passwordBloc.dispatch(TextFormValidate(text: event.password));
 
       HFormState usernameState = usernameBloc.currentState;
       HFormState passwordState = passwordBloc.currentState;
-      print("log: usernameState: ${usernameState.toString()}");
-      print("log: usernameState: ${usernameState.toString()}");
+      HazizzLogger.printLog("log: usernameState: ${usernameState.toString()}");
+      HazizzLogger.printLog("log: usernameState: ${usernameState.toString()}");
 
       if(usernameState is TextFormFine || usernameState is UserNotFoundState) {
         if(passwordState is TextFormFine) { //usernameState is TextFormFine && passwordState is TextFormFine) {
@@ -163,10 +164,10 @@ class BasicLoginBloc extends Bloc<LoginEvent, LoginState> {
             }
 
           }on HResponseError catch(e) {
-            print("piritos111");
+            HazizzLogger.printLog("piritos111");
             int errorCode = e.error.errorCode;
             if(ErrorCodes.USER_NOT_FOUND.equals(errorCode)) {
-              print("piritos222");
+              HazizzLogger.printLog("piritos222");
               usernameBloc.dispatch(UserNotFoundEvent());
             }else if(ErrorCodes.INVALID_PASSWORD.equals(errorCode)) {
               passwordBloc.dispatch(PasswordIncorrectEvent());
@@ -219,7 +220,7 @@ class LoginWidgetBlocs{
   TextFormBloc usernameBloc = new TextFormBloc(
     validate: (String text){
       if(text.length <= 2){
-        print("TextFormErrorTooShort");
+        HazizzLogger.printLog("TextFormErrorTooShort");
         return TextFormErrorTooShort();
       }if(text.length >= 20){
         return TextFormErrorTooLong();
@@ -229,7 +230,7 @@ class LoginWidgetBlocs{
     },
     handleErrorEvents: (HFormEvent event){
         if(event is UserNotFoundEvent){
-          print("piritos444");
+          HazizzLogger.printLog("piritos444");
           return UserNotFoundState();
         }
     }

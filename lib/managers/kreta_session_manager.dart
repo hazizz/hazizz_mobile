@@ -3,6 +3,7 @@ import 'dart:convert';
 
 
 import 'package:mobile/communication/pojos/PojoSession.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../request_sender.dart';
@@ -45,7 +46,7 @@ class KretaSessionManager {
       return responseData;
     }else if(responseData is PojoError){
       int errorCode = responseData.errorCode;
-      print("log: errorCode: $errorCode");
+      HazizzLogger.printLog("log: errorCode: $errorCode");
       return null;
     //  return responseData;
     }
@@ -58,7 +59,7 @@ class KretaSessionManager {
       return responseData;
     }else if(responseData is PojoError){
       int errorCode = responseData.errorCode;
-      print("log: errorCode: $errorCode");
+      HazizzLogger.printLog("log: errorCode: $errorCode");
       return null;
       //  return responseData;
     }
@@ -83,13 +84,13 @@ class KretaSessionManager {
   static Future<PojoSession> getSelectedSession() async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String encodedSession = prefs.getString(_keySession);
-    print("cached session1: ${encodedSession}");
+    HazizzLogger.printLog("HazizzLog: cached session1: ${encodedSession}");
     if(encodedSession != null) {
       Map jsonSession = json.decode(encodedSession);
-      print("cached session2: ${jsonSession}");
+      HazizzLogger.printLog("HazizzLog: cached session2: ${jsonSession}");
 
       if(jsonSession != null) {
-        print("cached session3: ${PojoSession.fromJson(jsonSession)}");
+        HazizzLogger.printLog("HazizzLog: cached session3: ${PojoSession.fromJson(jsonSession)}");
 
         return PojoSession.fromJson(jsonSession);
       }

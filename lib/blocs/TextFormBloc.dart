@@ -154,9 +154,9 @@ class TextFormBloc extends Bloc<HFormEvent, HFormState> {
 
   @override
   Stream<HFormState> mapEventToState(HFormEvent event) async* {
- /*   print("state change: $event");
-    print("isLocked: $isLocked");
-    print("lastText: $lastText, ");
+ /*   HazizzLogger.printLog("state change: $event");
+    HazizzLogger.printLog("isLocked: $isLocked");
+    HazizzLogger.printLog("lastText: $lastText, ");
 */
     if(event is TextFormLock){
       isLocked = true;
@@ -169,7 +169,7 @@ class TextFormBloc extends Bloc<HFormEvent, HFormState> {
 
     else if(event is TextFormSetEvent) {
       lastText = event.text;
-    //  print("title is set: $lastText");
+    //  HazizzLogger.printLog("title is set: $lastText");
       yield TextFormSetState(text: event.text);
     }
 
@@ -177,16 +177,16 @@ class TextFormBloc extends Bloc<HFormEvent, HFormState> {
     else if(!isLocked){
       if (event is TextFormValidate) {
         if(lastText != event.text || lastText == null){
-         // print("VALIDITATION: ${event.text}: ${validate(event.text)}");
+         // HazizzLogger.printLog("VALIDITATION: ${event.text}: ${validate(event.text)}");
           yield validate(event.text);
-       //   print("ajksiofdcoji: ${currentState}");
+       //   HazizzLogger.printLog("ajksiofdcoji: ${currentState}");
           lastText = event.text;
         }
       }else if(event is TextFormIllegalCharacterEvent){
         yield TextFormIllegalCharacterState();
       }
       else {
-     //   print("piritos333");
+     //   HazizzLogger.printLog("piritos333");
         yield handleErrorEvents(event);
       }
     }

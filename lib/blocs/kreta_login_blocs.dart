@@ -12,6 +12,7 @@ import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/managers/kreta_session_manager.dart';
 import 'package:mobile/managers/token_manager.dart';
 import '../request_sender.dart';
@@ -142,7 +143,7 @@ class SchoolItemPickerBloc extends ItemListPickerBloc {
 
         if (hazizzResponse.isSuccessful) {
           data = hazizzResponse.convertedData;
-          print("kréta schools: ${data.length}");
+          HazizzLogger.printLog("kréta schools: ${data.length}");
          // listItemData = responseData;
             yield ItemListLoaded(data: data);
           
@@ -188,22 +189,22 @@ class KretaLoginBloc extends Bloc<KretaLoginEvent, KretaLoginState> {
     usernameController = TextEditingController();
     passwordController = TextEditingController();
     usernameController.addListener((){
-      print("change");
+      HazizzLogger.printLog("change");
       dispatch(KretaLoginDataChanged());
     });
     passwordController.addListener((){
-      print("change");
+      HazizzLogger.printLog("change");
       dispatch(KretaLoginDataChanged());
     });
   }
 
   KretaLoginBloc.auth(this.usernameController, this.passwordController, this.schoolBloc, this.session){
     usernameController.addListener((){
-      print("change");
+      HazizzLogger.printLog("change");
       dispatch(KretaLoginDataChanged());
     });
     passwordController.addListener((){
-      print("change");
+      HazizzLogger.printLog("change");
       dispatch(KretaLoginDataChanged());
     });
     isAuth = true;
@@ -231,7 +232,7 @@ class KretaLoginBloc extends Bloc<KretaLoginEvent, KretaLoginState> {
     }
 
     if (event is KretaLoginButtonPressed) {
-      print("sentaa1: $isAuth");
+      HazizzLogger.printLog("sentaa1: $isAuth");
       if(isAuth){
        // passwordBloc.dispatch(TextFormValidate(text: event.password));
         if(true){
@@ -240,16 +241,16 @@ class KretaLoginBloc extends Bloc<KretaLoginEvent, KretaLoginState> {
               p_session: session.id.toString(), b_password: passwordController.text)
           );
           if(hazizzResponse.isSuccessful){
-            print("debuglol111");
+            HazizzLogger.printLog("debuglol111");
 
             PojoSession newSession = hazizzResponse.convertedData;
-            print("debuglol222");
+            HazizzLogger.printLog("debuglol222");
 
             setSession(newSession, password: passwordController.text);
-            print("debuglol1");
+            HazizzLogger.printLog("debuglol1");
             yield KretaLoginSuccessState();
           }else if(hazizzResponse.pojoError != null) {
-            print("assdad: ${hazizzResponse.pojoError.errorCode}");
+            HazizzLogger.printLog("assdad: ${hazizzResponse.pojoError.errorCode}");
             if(hazizzResponse.pojoError.errorCode ==
                 ErrorCodes.THERA_AUTHENTICATION_ERROR.code) {
               yield KretaLoginFailure(error: hazizzResponse.pojoError);
@@ -277,16 +278,16 @@ class KretaLoginBloc extends Bloc<KretaLoginEvent, KretaLoginState> {
       ItemListState schoolState = schoolBloc.currentState;
      // passwordBloc.dispatch(TextFormValidate(text: e))
       /*
-      print("log: usernameState: ${usernameState.toString()}");
-      print("log: passwordState: ${passwordState.toString()}");
-      print("log: schoolState: ${schoolState.toString()}");
+      HazizzLogger.printLog("log: usernameState: ${usernameState.toString()}");
+      HazizzLogger.printLog("log: passwordState: ${passwordState.toString()}");
+      HazizzLogger.printLog("log: schoolState: ${schoolState.toString()}");
       */
 
 
    //   passwordBloc.validate
 
-   //   print("boi: ${usernameState}, ${passwordState}, ${schoolState}");
-      print("sentaa22");
+   //   HazizzLogger.printLog("boi: ${usernameState}, ${passwordState}, ${schoolState}");
+      HazizzLogger.printLog("sentaa22");
       yield KretaLoginWaiting();
       HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaCreateSession(
           b_username: usernameController.text, b_password: passwordController.text,
@@ -297,7 +298,7 @@ class KretaLoginBloc extends Bloc<KretaLoginEvent, KretaLoginState> {
         setSession(newSession, password: passwordController.text);
         yield KretaLoginSuccessState();
       }else if(hazizzResponse.pojoError != null){
-        print("assdad: ${hazizzResponse.pojoError.errorCode}");
+        HazizzLogger.printLog("assdad: ${hazizzResponse.pojoError.errorCode}");
         if(hazizzResponse.pojoError.errorCode ==
             ErrorCodes.THERA_AUTHENTICATION_ERROR.code) {
           yield KretaLoginFailure(error: hazizzResponse.pojoError);
@@ -339,7 +340,7 @@ class KretaLoginPageBlocs{
     validate: (String text){
       /*
       if(text.length <= 2){
-        print("TextFormErrorTooShort");
+        HazizzLogger.printLog("TextFormErrorTooShort");
         return TextFormErrorTooShort();
       }if(text.length >= 20){
         return TextFormErrorTooLong();
@@ -351,7 +352,7 @@ class KretaLoginPageBlocs{
       /*
     handleErrorEvents: (HFormEvent event){
         if(event is UserNotFoundEvent){
-          print("piritos444");
+          HazizzLogger.printLog("piritos444");
           return KretaUserNotFoundState();
         }
     }
@@ -359,9 +360,9 @@ class KretaLoginPageBlocs{
   );
   TextFormBloc passwordBloc = new TextFormBloc(
       validate: (String text){
-       // print("length: ${text.length}");
+       // HazizzLogger.printLog("length: ${text.length}");
       /*  if(text.length < 4) {
-      //    print("returnss::::");
+      //    HazizzLogger.printLog("returnss::::");
           return TextFormErrorTooShort();
         }
         */

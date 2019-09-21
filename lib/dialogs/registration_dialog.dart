@@ -37,13 +37,10 @@ class _RegistrationDialog extends State<RegistrationDialog> {
 
     String getLinkPrivacy(){
       String currentLang = getCurrentLocale(context).languageCode;
-      print("lang code: .$currentLang.");
       if(currentLang != "en" && currentLang != "hu" ){
         currentLang = "en";
       }
-
       String link = "https://hazizz.github.io/privacy-${currentLang}.txt";
-      print("ng: $link");
       return link;
     }
     String getLinkTermsOfService(){
@@ -52,7 +49,6 @@ class _RegistrationDialog extends State<RegistrationDialog> {
         currentLang = "en";
       }
       String link = "https://hazizz.github.io/tos-${currentLang}.txt";
-      print("ng: $link");
       return link;
     }
 
@@ -62,7 +58,6 @@ class _RegistrationDialog extends State<RegistrationDialog> {
         currentLang = "en";
       }
       String link = "https://hazizz.github.io/guideline-hu.txt";
-      print("ng: $link");
       return link;
     }
 

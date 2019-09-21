@@ -4,6 +4,7 @@ import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 
 import '../request_sender.dart';
 import '../hazizz_response.dart';
@@ -72,25 +73,25 @@ class TomorrowTasksBloc extends Bloc<TasksTomorrowEvent, TasksTomorrowState> {
 
   @override
   Stream<TasksTomorrowState> mapEventToState(TasksTomorrowEvent event) async* {
-    print("log: Event2: ${event.toString()}");
+    HazizzLogger.printLog("log: Event2: ${event.toString()}");
     if (event is TasksTomorrowFetchEvent) {
       try {
         yield TasksTomorrowWaitingState();
         HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetTasksFromMe());
-        print("log: responseData: ${hazizzResponse}");
-        print("log: responseData type:  ${hazizzResponse.runtimeType.toString()}");
+        HazizzLogger.printLog("log: responseData: ${hazizzResponse}");
+        HazizzLogger.printLog("log: responseData type:  ${hazizzResponse.runtimeType.toString()}");
 
         if(hazizzResponse.isSuccessful){
           tasksTomorrow = hazizzResponse.convertedData;
-          print("log: response is List");
+          HazizzLogger.printLog("log: response is List");
           yield TasksTomorrowLoadedState(items: tasksTomorrow);
         }
         else if(hazizzResponse.isError){
-          print("log: response is List<PojoTask>");
+          HazizzLogger.printLog("log: response is List<PojoTask>");
           yield TasksTomorrowFailState(error: hazizzResponse.pojoError);
         }
       } on Exception catch(e){
-        print("log: Exception: ${e.toString()}");
+        HazizzLogger.printLog("log: Exception: ${e.toString()}");
         // yield TasksError();
       }
     }else if(event is TasksTomorrowLoadedEvent){

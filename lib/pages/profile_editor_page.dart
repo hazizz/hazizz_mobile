@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile/blocs/profile_editor_blocs.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 import '../hazizz_localizations.dart';
 import '../image_operations.dart';
@@ -48,7 +49,7 @@ class _ProfileEditorPage extends State<ProfileEditorPage> with TickerProviderSta
 
 
     if(image == null){
-      print("image is null 1");
+      HazizzLogger.printLog("HazizzLog: picked image is null ");
       return false;
     }
 
@@ -163,7 +164,6 @@ class _ProfileEditorPage extends State<ProfileEditorPage> with TickerProviderSta
                               if(state is ProfilePictureEditorChangedState){
                                 _currentProfilePicIconData = _checkIconData;
                                 onPress = (){
-                                  print("log: press wqw");
                                   profileEditorBlocs.pictureEditorBloc.dispatch(ProfilePictureEditorSavedEvent());
                                 };
                               }else if(state is ProfilePictureEditorFineState){

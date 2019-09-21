@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/create_group_bloc.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/enums/groupTypesEnum.dart';
 import 'package:mobile/widgets/hyper_link.dart';
 import '../hazizz_localizations.dart';
@@ -87,7 +88,7 @@ class _ReportDialog extends State<ReportDialog> {
         something = locText(context, key: "user");
         break;
     }
-    print("con: $something");
+    HazizzLogger.printLog("HazizzLog: about to report a $something");
 
     String title = locText(context, key: "report_something", args: ["${widget.name} $something"]);
 
@@ -187,7 +188,7 @@ class _ReportDialog extends State<ReportDialog> {
           FlatButton(
               child: Text(locText(context, key: "send").toUpperCase()),
               onPressed: () async {
-                print("descp: ${descriptionController.text}");
+                HazizzLogger.printLog("HazizzLog: report descp: ${descriptionController.text}");
                 if(descriptionController.text != "" && descriptionController.text != null){
                   if(!acceptedHazizzPolicy){
                     setState(() {

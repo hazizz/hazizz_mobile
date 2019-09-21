@@ -12,6 +12,7 @@ import 'package:mobile/communication/pojos/PojoMeInfo.dart';
 import 'package:mobile/communication/pojos/PojoMeInfoPrivate.dart';
 import 'package:mobile/communication/pojos/PojoTokens.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/hazizz_response.dart';
 import 'package:mobile/navigation/business_navigator.dart';
 import 'package:mobile/notification/notification.dart';
@@ -53,18 +54,18 @@ class AppState{
     // set islogged in to true
     logInProcedureDone = false;
 
-    print("log: oppoppo 1");
+    HazizzLogger.printLog("HazizzLog: logInProcedure: 0");
     TokenManager.setToken(tokens.token);
-    print("log: oppoppo 1.2");
+    HazizzLogger.printLog("HazizzLog: logInProcedure: 1");
 
     TokenManager.setRefreshToken(tokens.refresh);
-    print("log: oppoppo 2");
+    HazizzLogger.printLog("HazizzLog: logInProcedure: 2");
 
 
     var sh = await SharedPreferences.getInstance();
     sh.setBool(key_isLoggedIn, true);
 
-    print("log: oppoppo 3");
+    HazizzLogger.printLog("HazizzLog: logInProcedure: 3");
 
     HazizzNotification.scheduleNotificationAlarmManager(await HazizzNotification.getNotificationTime());
 
@@ -79,7 +80,7 @@ class AppState{
         setUserData(meInfo: meInfo);
       }
     }
-    print("log: oppoppo 4");
+    HazizzLogger.printLog("HazizzLog: logInProcedure: 4");
 
 
     hazizzResponse = await RequestSender().getResponse(GetMyProfilePicture.full());
@@ -108,12 +109,17 @@ class AppState{
    // await TokenManager.fetchRefreshTokens(username: (await InfoCache.getMyUserData()).username, refreshToken: await TokenManager.getRefreshToken());
 
 
-    print("mainAppPartStartProceduresdad");
+    HazizzLogger.printLog("HazizzLog: mainAppPartStartProcedure 1");
     await KretaSessionManager.loadSelectedSession();
+    HazizzLogger.printLog("HazizzLog: mainAppPartStartProcedure 2");
     SelectedSessionBloc().dispatch(SelectedSessionInitalizeEvent());
+    HazizzLogger.printLog("HazizzLog: mainAppPartStartProcedure 3");
     LoginBlocs().googleLoginBloc.dispatch(GoogleLoginResetEvent());
+    HazizzLogger.printLog("HazizzLog: mainAppPartStartProcedure 4");
     MainTabBlocs().initialize();
+    HazizzLogger.printLog("HazizzLog: mainAppPartStartProcedure 5");
     UserDataBlocs().initialize();
+    HazizzLogger.printLog("HazizzLog: mainAppPartStartProcedure 6");
 
   }
 
@@ -159,7 +165,7 @@ class AppState{
     isLoggedIn ??= false;
 
   //  bool hasUsername = username != null && username != "";
- //   print("log: is logged in: ${hasRefreshToken}");
+ //   HazizzLogger.printLog("log: is logged in: ${hasRefreshToken}");
     return hasRefreshToken && isLoggedIn && hasToken;
   }
 

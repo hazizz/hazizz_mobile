@@ -33,7 +33,7 @@ class SubjectItemWidget extends StatelessWidget{
             elevation: 5,
             child: InkWell(
                 onTap: () {
-                  print("tap tap");
+
                //   Navigator.push(context,MaterialPageRoute(builder: (context) => ViewTaskPage.fromPojo(pojoTask: pojoTask)));
                 },
                 child:

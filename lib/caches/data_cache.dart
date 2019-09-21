@@ -6,6 +6,7 @@ import 'package:mobile/communication/pojos/PojoGrades.dart';
 import 'package:mobile/communication/pojos/PojoSchedules.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/converters/PojoConverter.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DataCache{
@@ -38,26 +39,26 @@ Future _save(String key, dynamic data) async {
   var sh = await SharedPreferences.getInstance();
   bool a = await sh.setString(key, jsonEncode(data));
   bool s = await sh.setString(key + "_time", DateTime.now().toString());
-  print("cache save was successful: ${a && s}");
+  HazizzLogger.printLog("cache save was successful: ${a && s}");
 }
 
 Future<DataCache> _load(String key) async {
   var sh = await SharedPreferences.getInstance();
   String str_data = sh.getString(key);
   String str_date = sh.getString(key + "_time");
-  print("piskota11: $str_data");
-  print("piskota12: $str_date");
+  HazizzLogger.printLog("piskota11: $str_data");
+  HazizzLogger.printLog("piskota12: $str_date");
   if(str_data != null && str_date != null){
 
     var json = jsonDecode(str_data);
-    print("piskota20: $json");
+    HazizzLogger.printLog("piskota20: $json");
     DateTime date = DateTime.parse(str_date);
-    print("piskota21: $json");
-    print("piskota22: $date");
+    HazizzLogger.printLog("piskota21: $json");
+    HazizzLogger.printLog("piskota22: $date");
     if(json != null && date != null){
       DataCache dataCache = DataCache(lastUpdated: date, json: json);
-      print("piskota31: ${dataCache.data}");
-      print("piskota32: ${dataCache.lastUpdated}");
+      HazizzLogger.printLog("piskota31: ${dataCache.data}");
+      HazizzLogger.printLog("piskota32: ${dataCache.lastUpdated}");
       return dataCache;
     }
   }
@@ -69,25 +70,25 @@ Future<DataCache> _loadList(String key) async {
   var sh = await SharedPreferences.getInstance();
   String str_data = sh.getString(key);
   String str_date = sh.getString(key + "_time");
-  print("piskota11: $str_data");
-  print("piskota12: $str_date");
+  HazizzLogger.printLog("piskota11: $str_data");
+  HazizzLogger.printLog("piskota12: $str_date");
   if(str_data != null && str_date != null){
 
   //  var json = jsonDecode(str_data);
-    print("piskota20: $json");
+    HazizzLogger.printLog("piskota20: $json");
     DateTime date = DateTime.parse(str_date);
 
     Iterable iter = json.decode(json.encode(json.decode(str_data)));
-    print("didit");
+    HazizzLogger.printLog("didit");
     List<PojoTask> myTasks = iter.map<PojoTask>((json) => PojoTask.fromJson(json)).toList();
-    print(myTasks);
+    HazizzLogger.printLog(myTasks.toString());
 
-    print("piskota21: $iter");
-    print("piskota22: $date");
+    HazizzLogger.printLog("piskota21: $iter");
+    HazizzLogger.printLog("piskota22: $date");
     if(iter != null && date != null){
       DataCache dataCache = DataCache.fromList(lastUpdated: date, iter: iter);
-      print("piskota31: ${dataCache.data}");
-      print("piskota32: ${dataCache.lastUpdated}");
+      HazizzLogger.printLog("piskota31: ${dataCache.data}");
+      HazizzLogger.printLog("piskota32: ${dataCache.lastUpdated}");
       return dataCache;
     }
   }

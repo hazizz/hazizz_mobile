@@ -11,6 +11,7 @@ import 'package:mobile/communication/pojos/PojoGrade.dart';
 import 'package:mobile/communication/pojos/PojoGrades.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/enums/grades_sort_enum.dart';
 import 'package:mobile/enums/task_complete_state_enum.dart';
 import 'package:mobile/enums/task_expired_state_enum.dart';
@@ -145,7 +146,7 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
       int fac = pow(10, decimals);
       double d = gradeSum/gradeAmount;
       d = (d * fac).round() / fac;
-      //  print("d: $d");
+      //  HazizzLogger.printLog("d: $d");
 
 
       return d.toString();
@@ -190,7 +191,7 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
 
 
         yield GradesWaitingState();
-        print("log: am0 i here?");
+        HazizzLogger.printLog("log: am0 i here?");
 
         DataCache dataCache = await loadGradesCache();
         if(dataCache!= null){
@@ -201,7 +202,7 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
 
         HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetGrades());
 
-        print("log: hazizzResponse: ${hazizzResponse.dioError}");
+        HazizzLogger.printLog("log: hazizzResponse: ${hazizzResponse.dioError}");
 
 
         if(hazizzResponse.isSuccessful){
@@ -225,7 +226,7 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
             );
           }else if(hazizzResponse.dioError.type == DioErrorType.CONNECT_TIMEOUT
               || hazizzResponse.dioError.type == DioErrorType.RECEIVE_TIMEOUT) {
-            print("log: noConnectionError22");
+            HazizzLogger.printLog("log: noConnectionError22");
             this.dispatch(GradesFetchEvent());
           } else if(hazizzResponse.hasPojoError && hazizzResponse.pojoError.errorCode == 138) {
             yield GradesErrorState(hazizzResponse);
@@ -239,7 +240,7 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
         }
 
       } on Exception catch(e){
-        print("log: Exception: ${e.toString()}");
+        HazizzLogger.printLog("log: Exception: ${e.toString()}");
       }
     }
   }

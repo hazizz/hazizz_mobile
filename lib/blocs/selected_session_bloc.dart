@@ -7,6 +7,7 @@ import 'package:mobile/blocs/response_states.dart';
 import 'package:mobile/blocs/schedule_bloc.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 
 import 'package:mobile/managers/kreta_session_manager.dart';
 
@@ -91,7 +92,7 @@ class SelectedSessionBloc extends Bloc<SelectedSessionEvent, SelectedSessionStat
     if(event is SelectedSessionInitalizeEvent){
 
       PojoSession selectedSessionCached = await KretaSessionManager.getSelectedSession();
-      print("asd debug33: $selectedSessionCached");
+      HazizzLogger.printLog("asd debug33: $selectedSessionCached");
 
       if(selectedSessionCached != null){
         selectedSession = selectedSessionCached;

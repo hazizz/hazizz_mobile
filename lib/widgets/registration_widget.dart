@@ -131,7 +131,6 @@ class _RegistrationWidget extends State<RegistrationWidget> with SingleTickerPro
                     child: RaisedButton(
                         child: Text("Register"),
                         onPressed: () async {
-                          print("log: as1");
                           registrationBlocs.registrationBloc.dispatch(
                               RegisterButtonPressed(
                                   username: _usernameTextEditingController.text,

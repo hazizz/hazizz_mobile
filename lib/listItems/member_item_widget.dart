@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/group_bloc.dart';
 import 'package:mobile/communication/pojos/PojoUser.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/dialogs/report_dialog.dart';
 import 'package:mobile/enums/group_permissions_enum.dart';
@@ -57,15 +58,13 @@ class _MemberItemWidget extends State<MemberItemWidget>{
 
                   dynamic result = await showUserDialog(context, user: widget.member, permission: permission);
 
-                  print("resilt: ${result}");
+                  HazizzLogger.printLog("HazizzLog: result from user view dialog: ${result.toString()}");
 
                   if(result is GroupPermissionsEnum){
-                    print("resilt2: ${result.toString()}");
                     setState(() {
                       permission = result;
                     });
                   }
-                  print("tap tap");
                   //   Navigator.push(context,MaterialPageRoute(builder: (context) => ViewTaskPage.fromPojo(pojoTask: pojoTask)));
                 },
                 child:

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/blocs/google_login_bloc.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
@@ -38,7 +39,7 @@ class _GoogleSignInButtonWidget extends State<GoogleSignInButtonWidget> {
 
   @override
   void dispose() {
-    print("dispose");
+    HazizzLogger.printLog("HazizzLog: google bloc disposed");
     LoginBlocs().googleLoginBloc.reset();
    // LoginBlocs().googleLoginBloc().dispose();
 
@@ -64,7 +65,7 @@ class _GoogleSignInButtonWidget extends State<GoogleSignInButtonWidget> {
           else if(state is GoogleLoginHaveToAcceptConditionsState){
             WidgetsBinding.instance.addPostFrameCallback((_) =>
                 showRegistrationDialog(context).then((accepted){
-                  print("ACPETED: $accepted");
+                  HazizzLogger.printLog("HazizzLog: showRegistrationDialog has accepted: $accepted");
                   if(accepted != null && accepted){
                     LoginBlocs().googleLoginBloc.dispatch(GoogleLoginAcceptedConditionsEvent());
                   }else{
@@ -75,7 +76,7 @@ class _GoogleSignInButtonWidget extends State<GoogleSignInButtonWidget> {
 
 
           }else if(state is GoogleLoginRejectedConditionsState){
-            print("rejected and signing out222");
+            HazizzLogger.printLog("HazizzLog: google signin: rejected and signing out");
 
             errorText = locText(context, key: "error_conditionsNotAccepted");
           }

@@ -16,7 +16,7 @@ TimeOfDay convertToHazizzTimeOfDay(String str_time){
     hazizzTimeOfDay = HazizzTimeOfDay(hour: hour, minute: minute);
     return hazizzTimeOfDay;
   }catch(ex){
-    print(ex);
+    HazizzLogger.printLog(ex);
     return null;
   }
 }

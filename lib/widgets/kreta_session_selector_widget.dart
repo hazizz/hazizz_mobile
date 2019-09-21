@@ -7,6 +7,7 @@ import 'package:mobile/blocs/response_states.dart';
 import 'package:mobile/blocs/selected_session_bloc.dart';
 import 'package:mobile/blocs/sessions_bloc.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/hazizz_localizations.dart';
 import 'package:mobile/listItems/session_item_widget.dart';
 import 'package:mobile/managers/welcome_manager.dart';
@@ -52,13 +53,14 @@ class _SessionSelectorWidget extends State<SessionSelectorWidget> with Automatic
 
   void initalizeSelectedSession(){
     SelectedSessionState currentState = SelectedSessionBloc().currentState;
+
+    HazizzLogger.printLog("HazizzLog: initalize SelectedSessionState: ${currentState.toString()}");
+
     if(currentState is SelectedSessionEmptyState){
-      print("log: qwe: SelectedSessionEmptyState");
+
     }else if(currentState is SelectedSessionInactiveState){
-      print("log: qwe: SelectedSessionInactiveState");
 
     }else if(currentState is SelectedSessionFineState){
-      print("log: qwe: SelectedSessionFineState");
 
       PojoSession selectedSession = currentState.session;
       sessions.remove(selectedSession);
@@ -96,14 +98,11 @@ class _SessionSelectorWidget extends State<SessionSelectorWidget> with Automatic
                           builder: (context, state){
                             String info = "";
                             if(state is SelectedSessionEmptyState){
-                              print("log: qwe: SelectedSessionEmptyState");
                               info = "no selected account";
                             }else if(state is SelectedSessionInactiveState){
-                              print("log: qwe: SelectedSessionInactiveState");
                               info = "selected account is inactive";
 
                             }else if(state is SelectedSessionFineState){
-                              print("log: qwe: SelectedSessionFineState");
 
                               PojoSession selectedSession = state.session;
                               //   sessions.remove(selectedSession);
@@ -184,12 +183,12 @@ class _SessionSelectorWidget extends State<SessionSelectorWidget> with Automatic
                                   builder: (context, state){
 
                                     if(state is SelectedSessionEmptyState){
-                                      print("log: qwe: SelectedSessionEmptyState");
+                                      HazizzLogger.printLog("log: qwe: SelectedSessionEmptyState");
                                     }else if(state is SelectedSessionInactiveState){
-                                      print("log: qwe: SelectedSessionInactiveState");
+                                      HazizzLogger.printLog("log: qwe: SelectedSessionInactiveState");
 
                                     }else if(state is SelectedSessionFineState){
-                                      print("log: qwe: SelectedSessionFineState");
+                                      HazizzLogger.printLog("log: qwe: SelectedSessionFineState");
 
                                       PojoSession selectedSession = state.session;
                                    //   sessions.remove(selectedSession);
@@ -251,7 +250,7 @@ class _SessionSelectorWidget extends State<SessionSelectorWidget> with Automatic
                                     sessions.addAll(sessions1);
 
 
-                                    print("session change: $state2: ${sessions1}");
+                                    HazizzLogger.printLog("HazizzLog: session change: $state2: ${sessions1}");
                                     if( SelectedSessionBloc().selectedSession != null){
                                       // sessions.remove(SSessielectedonBloc().selectedSession);
                                       for(PojoSession s in sessions){

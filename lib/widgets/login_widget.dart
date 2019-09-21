@@ -141,7 +141,7 @@ class _LoginWidget extends State<LoginWidget> with SingleTickerProviderStateMixi
                           }
                           return TextField(
                             onChanged: (dynamic text) {
-                              print("change: $text");
+                              HazizzLogger.printLog("change: $text");
                               loginWidgetBlocs.usernameBloc.dispatch(TextFormValidate(text: text));
                             },
                             controller: _usernameTextEditingController,
@@ -162,7 +162,7 @@ class _LoginWidget extends State<LoginWidget> with SingleTickerProviderStateMixi
                     RaisedButton(
                         child: Text("Küldés"),
                         onPressed: () async {
-                          print("log: pressed login button");
+                          HazizzLogger.printLog("log: pressed login button");
                           loginWidgetBlocs.basicLoginBloc.dispatch(
                               LoginButtonPressedTEST(
                                   password: _passwordTextEditingController.text,

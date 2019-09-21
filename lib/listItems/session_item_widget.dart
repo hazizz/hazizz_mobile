@@ -5,6 +5,7 @@ import 'package:mobile/blocs/selected_session_bloc.dart';
 import 'package:mobile/blocs/sessions_bloc.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 
 import '../hazizz_localizations.dart';
@@ -93,7 +94,8 @@ class _SessionItemWidget extends State<SessionItemWidget>{
                         PopupMenuButton(
                           icon: Icon(FontAwesomeIcons.ellipsisV, size: 20,),
                           onSelected: (value) async {
-                            print("log: value: $value");
+                            HazizzLogger.printLog("HazizzLog: session popupmenuitem value: $value");
+
                             if(value == value_remove){
                               HazizzResponse hazizzResponse = await RequestSender().getResponse(KretaRemoveSessions(p_session: widget.session.id));
                               if(hazizzResponse.isSuccessful){

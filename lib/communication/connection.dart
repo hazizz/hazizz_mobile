@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:connectivity/connectivity.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 
 class Connection{
 
@@ -10,10 +11,10 @@ class Connection{
   static Future<Null> listener() async {
     streamConnectionStatus = new Connectivity()
         .onConnectivityChanged.listen((ConnectivityResult result) {
-      print(result.toString());
+      HazizzLogger.printLog(result.toString());
       if (result == ConnectivityResult.mobile || result == ConnectivityResult.wifi) {
         // hasConnection = true;
-        print("log: connection: available");
+        HazizzLogger.printLog("Connection: available");
         listeners.forEach((k,v) => v());
 
 
@@ -22,7 +23,7 @@ class Connection{
 
       } else {
         // hasConnection = false;
-        print("log: connection: not available");
+        HazizzLogger.printLog("Connection: not available");
 
         //  lock();
       }
@@ -32,13 +33,8 @@ class Connection{
   static Map<String, Function> listeners = Map();
 
   static void addConnectionOnlineListener(Function listener, String identifier){
-    print("log: about to add listener: ${identifier}");
-
-  //  listeners.
     listeners[identifier] = listener;
-  //  listeners.add(listener);
-    print("log: added listener: ${listeners}");
-
+    HazizzLogger.printLog("Added Connection listener: ${identifier}");
   }
 
 

@@ -6,6 +6,7 @@ import 'package:mobile/blocs/response_states.dart';
 import 'package:mobile/communication/errorcode_collection.dart';
 import 'package:mobile/communication/pojos/PojoTokens.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/enums/groupTypesEnum.dart';
 import 'package:mobile/managers/app_state_manager.dart';
 import 'package:bloc/bloc.dart';
@@ -74,7 +75,7 @@ class CreateGroupBloc extends Bloc<CreateGroupEvent, CreateGroupState> {
 
   @override
   Stream<CreateGroupState> mapEventToState(CreateGroupEvent event) async* {
-    print("sentaa state asd");
+    HazizzLogger.printLog("sentaa state asd");
 
     if (event is CreateGroupCreateEvent) {
       yield CreateGroupWaitingState();

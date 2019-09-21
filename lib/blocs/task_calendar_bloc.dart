@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import '../communication/connection.dart';
 import '../communication/errors.dart';
 import '../communication/requests/request_collection.dart';
@@ -129,12 +130,12 @@ class TasksCalendarBloc extends Bloc<TasksCalendarEvent, TasksCalendarState> {
 
         if(hazizzResponse.isSuccessful){
 
-          print("tasks.tasks: ${ hazizzResponse.convertedData}");
+          HazizzLogger.printLog("tasks.tasks: ${ hazizzResponse.convertedData}");
           tasksRaw = hazizzResponse.convertedData;
-          print("off: $tasksRaw");
+          HazizzLogger.printLog("off: $tasksRaw");
           if(tasksRaw != null ){
             onLoaded(tasksRaw);
-            print("oopaa1: ${tasks}");
+            HazizzLogger.printLog("oopaa1: ${tasks}");
 
             yield TasksCalendarLoadedState(tasks);
           }
@@ -142,7 +143,7 @@ class TasksCalendarBloc extends Bloc<TasksCalendarEvent, TasksCalendarState> {
         else if(hazizzResponse.isError){
 
           if(hazizzResponse.dioError == noConnectionError){
-            print("log: noConnectionError22");
+            HazizzLogger.printLog("log: noConnectionError22");
             yield TasksCalendarErrorState(hazizzResponse);
 
             Connection.addConnectionOnlineListener((){
@@ -153,7 +154,7 @@ class TasksCalendarBloc extends Bloc<TasksCalendarEvent, TasksCalendarState> {
 
           }else if(hazizzResponse.dioError.type == DioErrorType.CONNECT_TIMEOUT
               || hazizzResponse.dioError.type == DioErrorType.RECEIVE_TIMEOUT) {
-            print("log: noConnectionError22");
+            HazizzLogger.printLog("log: noConnectionError22");
             this.dispatch(TasksCalendarFetchEvent());
           }else{
             yield TasksCalendarErrorState(hazizzResponse);
@@ -161,7 +162,7 @@ class TasksCalendarBloc extends Bloc<TasksCalendarEvent, TasksCalendarState> {
           }
         }
       } on Exception catch(e){
-        print("log: Exception: ${e.toString()}");
+        HazizzLogger.printLog("log: Exception: ${e.toString()}");
       }
     }
   }

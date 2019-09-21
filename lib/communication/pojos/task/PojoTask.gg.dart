@@ -8,8 +8,6 @@ part of 'PojoTask.dart';
 // **************************************************************************
 
 PojoTask _$PojoTaskFromJson(Map<String, dynamic> json) {
-
-  print("piskota00000: ${json["group"] }");
   return PojoTask(
       id: json['id'] as int,
       assignation: json['assignation'] == null

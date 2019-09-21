@@ -1,0 +1,21 @@
+name: logcat
+description: Flutter plugin to get the system messages, stack traces etc using logcat command-line tool.
+version: 1.0.2
+author: Harsh <pharsh.dev@gmail.com>
+homepage: https://github.com/pharshdev/logcat
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  plugin:
+    androidPackage: dev.pharsh.logcat
+    pluginClass: LogcatPlugin

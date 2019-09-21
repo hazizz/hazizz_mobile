@@ -5,6 +5,7 @@ import 'package:mobile/communication/pojos/PojoError.dart';
 import 'package:mobile/communication/pojos/PojoTokens.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:meta/meta.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/navigation/business_navigator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -195,7 +196,7 @@ class HazizzAccount{
    Future<void> fetchTokens(@required String username, @required String password) async{
     HazizzResponse hazizzResponse = await RequestSender().getResponse(new CreateToken.withPassword(q_username: username, q_password: password));
     if(hazizzResponse.isSuccessful){
-      print("log: token: tokens set");
+      HazizzLogger.printLog("log: token: tokens set");
 
       PojoTokens tokens = hazizzResponse.convertedData;
 
@@ -206,14 +207,14 @@ class HazizzAccount{
     }else if(hazizzResponse.isError){
 
       int errorCode = hazizzResponse.pojoError.errorCode;
-      print("log: errorCode: $errorCode");
+      HazizzLogger.printLog("log: errorCode: $errorCode");
       if(ErrorCodes.INVALID_PASSWORD.equals(errorCode)){
         throw new WrongPasswordException();
       }else if(ErrorCodes.USER_NOT_FOUND.equals(errorCode)){
         throw new WrongUsernameException();
       }
     }
-    print("log: fetch token: done");
+    HazizzLogger.printLog("log: fetch token: done");
   }
 
    Future<void> fetchRefreshTokens({@required String username, @required String refreshToken}) async{
@@ -359,12 +360,11 @@ class TokenManager {
   static Future<HazizzResponse> createTokenWithPassword(@required String username, @required String password) async{
     HazizzResponse hazizzResponse = await RequestSender().getResponse(new CreateToken.withPassword(q_username: username, q_password: password));
     if(hazizzResponse.isSuccessful){
-      print("log: token: tokens set");
-
       PojoTokens tokens = hazizzResponse.convertedData;
 
       InfoCache.setMyUsername(username);
       setTokens(tokens.token, tokens.refresh);
+
     }else if(hazizzResponse.isError){
     }
 
@@ -414,7 +414,7 @@ class TokenManager {
   static Future<void> fetchTokens(@required String username, @required String password) async{
     HazizzResponse hazizzResponse = await RequestSender().getResponse(new CreateToken.withPassword(q_username: username, q_password: password));
     if(hazizzResponse.isSuccessful){
-      print("log: token: tokens set");
+      HazizzLogger.printLog("log: token: tokens set");
 
       PojoTokens tokens = hazizzResponse.convertedData;
 
@@ -425,14 +425,14 @@ class TokenManager {
     }else if(hazizzResponse.isError){
 
       int errorCode = hazizzResponse.pojoError.errorCode;
-      print("log: errorCode: $errorCode");
+      HazizzLogger.printLog("log: errorCode: $errorCode");
       if(ErrorCodes.INVALID_PASSWORD.equals(errorCode)){
         throw new WrongPasswordException();
       }else if(ErrorCodes.USER_NOT_FOUND.equals(errorCode)){
         throw new WrongUsernameException();
       }
     }
-    print("log: fetch token: done");
+    HazizzLogger.printLog("log: fetch token: done");
   }
 
   static Future<void> fetchRefreshTokens() async{
@@ -476,7 +476,9 @@ class TokenManager {
     setLastTokenUpdateTime(DateTime.now());
     setToken(newToken);
     setRefreshToken(newRefreshToken);
-
+    HazizzLogger.printLog("HazizzLog: tokens updated and saved");
+    HazizzLogger.addKeys("token", newToken);
+    HazizzLogger.addKeys("refreshToken", newRefreshToken);
   }
 
 

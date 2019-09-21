@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:mobile/communication/pojos/PojoMeInfoPrivate.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/managers/token_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -72,14 +73,9 @@ class InfoCache{
   static Future<PojoMeInfoPrivate> getMyUserData() async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String str_myUserData = prefs.getString(_keyMe + _userData);
-    print("log: oof2: str_myUserData: $str_myUserData");
+    HazizzLogger.printLog("HazizzLog: str_myUserData: $str_myUserData");
     if(str_myUserData != null) {
-      PojoMeInfoPrivate meInfo = PojoMeInfoPrivate.fromJson(
-          jsonDecode(str_myUserData));
-
-
-      print("log: oof2: meInfo: $meInfo");
-
+      PojoMeInfoPrivate meInfo = PojoMeInfoPrivate.fromJson(jsonDecode(str_myUserData));
       return meInfo;
     }else{
       return null;

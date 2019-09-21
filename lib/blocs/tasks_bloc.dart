@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/enums/task_complete_state_enum.dart';
 import 'package:mobile/enums/task_expired_state_enum.dart';
 
@@ -154,7 +155,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
 
 
       if(tasks[event.mapKey].isEmpty){
-        print("is realy empty");
+        HazizzLogger.printLog("is realy empty");
         tasks.remove(event.mapKey);
       }
       debugPrint("yolo2: ${tasks}");
@@ -206,12 +207,12 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
 
         HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetTasksFromMe(q_unfinishedOnly: unfinishedOnly, q_finishedOnly: finishedOnly, q_showThera: true, q_startingDate: startDate, q_endDate: endDate));
 
-        //  print("tasks.: ${tasks}");
+        //  HazizzLogger.printLog("tasks.: ${tasks}");
         if(hazizzResponse.isSuccessful){
 
-          print("tasks.tasks: ${ hazizzResponse.convertedData}");
+          HazizzLogger.printLog("tasks.tasks: ${ hazizzResponse.convertedData}");
           tasksRaw = hazizzResponse.convertedData;
-          print("off: $tasksRaw");
+          HazizzLogger.printLog("off: $tasksRaw");
           if(tasksRaw != null ){
             onLoaded(tasksRaw);
 
@@ -220,16 +221,16 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
               saveTasksCache(tasksRaw);
             }
 
-            print("log: opsie: 0");
+            HazizzLogger.printLog("log: opsie: 0");
 
             // tasks = tasksDummy;
 
 
-            print("log: opsie: 0");
+            HazizzLogger.printLog("log: opsie: 0");
 
             yield TasksLoadedState(tasks);
 
-            print("log: oy133");
+            HazizzLogger.printLog("log: oy133");
           }
 
 
@@ -237,7 +238,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
         else if(hazizzResponse.isError){
 
           if(hazizzResponse.dioError == noConnectionError){
-            print("log: noConnectionError22");
+            HazizzLogger.printLog("log: noConnectionError22");
             yield TasksErrorState(hazizzResponse);
 
             Connection.addConnectionOnlineListener((){
@@ -248,7 +249,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
 
           }else if(hazizzResponse.dioError.type == DioErrorType.CONNECT_TIMEOUT
               || hazizzResponse.dioError.type == DioErrorType.RECEIVE_TIMEOUT) {
-            print("log: noConnectionError22");
+            HazizzLogger.printLog("log: noConnectionError22");
             this.dispatch(TasksFetchEvent());
           }else{
             yield TasksErrorState(hazizzResponse);
@@ -258,7 +259,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
 
         }
       } on Exception catch(e){
-        print("log: Exception: ${e.toString()}");
+        HazizzLogger.printLog("log: Exception: ${e.toString()}");
       }
     }
   }
@@ -296,10 +297,10 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
             if(map[key].isEmpty){
 
               setState(() {
-                print("oof22: ${map}");
+                HazizzLogger.printLog("oof22: ${map}");
                 map.remove(key);
                 MainTabBlocs().tasksBloc.tasks.remove(key);
-                print("oof32: ${map}");
+                HazizzLogger.printLog("oof32: ${map}");
               });
             }
           });

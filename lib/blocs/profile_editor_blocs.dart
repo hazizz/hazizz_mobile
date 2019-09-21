@@ -6,6 +6,7 @@ import 'package:mobile/blocs/response_states.dart';
 import 'package:bloc/bloc.dart';
 import 'package:mobile/communication/pojos/PojoMeInfo.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/managers/cache_manager.dart';
 
 import '../hazizz_response.dart';
@@ -125,7 +126,7 @@ class ProfilePictureEditorBloc extends Bloc<ProfilePictureEditorEvent, ProfilePi
 
   ProfilePictureEditorBloc() {
     counter++;
-    print("log: ProfilePictureEditorBloc instances: $counter");
+    HazizzLogger.printLog("log: ProfilePictureEditorBloc instances: $counter");
   }
 
   @override
@@ -136,7 +137,7 @@ class ProfilePictureEditorBloc extends Bloc<ProfilePictureEditorEvent, ProfilePi
   Stream<ProfilePictureEditorState> mapEventToState(ProfilePictureEditorEvent event) async* {
     if(event is ProfilePictureEditorLoadFromCacheEvent){
 
-      print("log: userdata UserDataBlocs().pictureBloc.profilePictureBytes : ${UserDataBlocs().pictureBloc.profilePictureBytes}");
+      HazizzLogger.printLog("log: userdata UserDataBlocs().pictureBloc.profilePictureBytes : ${UserDataBlocs().pictureBloc.profilePictureBytes}");
 
       profilePictureBytes =  UserDataBlocs().pictureBloc.profilePictureBytes;
 
@@ -146,7 +147,7 @@ class ProfilePictureEditorBloc extends Bloc<ProfilePictureEditorEvent, ProfilePi
     else if (event is ProfilePictureEditorChangedEvent) {
       profilePictureBytes = event.imageBytes;
 
-      print("log: 89238sjdsad: $profilePictureBytes");
+      HazizzLogger.printLog("log: 89238sjdsad: $profilePictureBytes");
       yield ProfilePictureEditorWaitingState();
       HazizzResponse hazizzResponse = await RequestSender().getResponse(new UpdateMyProfilePicture(encodedImage: fromBytesImageToBase64(profilePictureBytes)));
 
@@ -289,12 +290,12 @@ class DisplayNameEditorBloc extends Bloc<DisplayNameEvent, DisplayNameState> {
   @override
   Stream<DisplayNameState> mapEventToState(DisplayNameEvent event) async* {
 
-    print("log: displayNameEvnet:  $event");
+    HazizzLogger.printLog("log: displayNameEvnet:  $event");
 
     if(event is DisplayNameLoadFromCacheEvent){
       String displayNameFromCache = UserDataBlocs().userDataBloc.myUserData.displayName;
 
-      print("log: userdata dname: $displayNameFromCache");
+      HazizzLogger.printLog("log: userdata dname: $displayNameFromCache");
 
       displayNameController.text = displayNameFromCache;
 
@@ -311,9 +312,9 @@ class DisplayNameEditorBloc extends Bloc<DisplayNameEvent, DisplayNameState> {
 
           displayNameController.text = meInfo.displayName;
 
-          print("debuglol: 1");
+          HazizzLogger.printLog("debuglol: 1");
           UserDataBlocs().userDataBloc.dispatch(MyUserDataChangeDisplaynameEvent(displayName: displayNameController.text));
-          print("debuglol: 2");
+          HazizzLogger.printLog("debuglol: 2");
           yield DisplayNameSavedState();
         }
       }

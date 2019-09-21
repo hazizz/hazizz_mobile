@@ -80,7 +80,6 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage> with Aut
   @override
   Widget build(BuildContext context) {
 
-    print("log: $supportedLocaleItems");
 
     return Hero(
       tag: "notification_settings",
@@ -100,7 +99,6 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage> with Aut
                     trailing: Switch(
                       value: receive,
                       onChanged: (value){
-                        print(value);
                         HazizzNotification.setReceiveNotification(value);
                         if(value){
                           setState(() {
@@ -123,7 +121,6 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage> with Aut
                 Divider(),
                 ListTile(
                     onTap: () async {
-                      print("huh2");
                       TimeOfDay newTime = await showTimePicker(
                         context: context,
 

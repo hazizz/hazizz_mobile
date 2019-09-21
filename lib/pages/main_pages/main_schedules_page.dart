@@ -12,6 +12,7 @@ import 'package:mobile/communication/errors.dart';
 import 'package:mobile/communication/pojos/PojoClass.dart';
 import 'package:mobile/communication/pojos/PojoSchedules.dart';
 import 'package:mobile/custom/formats.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/listItems/schedule_event_widget.dart';
 import 'package:mobile/widgets/flushbars.dart';
 import 'package:toast/toast.dart';
@@ -58,7 +59,7 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
 
     /*
     if(schedulesBloc.currentState is ResponseError) {
-      print("log: here233");
+      HazizzLogger.printLog("log: here233");
       schedulesBloc.dispatch(FetchData());
     }
     */
@@ -121,11 +122,10 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
       bottomNavBarItems.clear();
       for(int day = 0; day <= 6; day++){ // String dayIndex in schedule.keys
 
-        print("weekday: ${now.weekday}");
+        HazizzLogger.printLog("HazizzLog: current weekday: ${now.weekday}");
 
-        print("876nig: ${schedule.keys.toList()}, ");
+        HazizzLogger.printLog("HazizzLog: schedule.keys.toList(): ${schedule.keys.toList()}, ");
         if(!schedule.keys.toList().contains(day.toString())) {
-          print("illegal");
           if(day <= 4){
             addNoClassDay(day.toString());
           }else{
@@ -143,11 +143,9 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
           }
         }
         else{
-          print("876DAY: $day");
+          HazizzLogger.printLog("HazizzLog: day index in iteration: $day");
          // String dayIndex = schedule.keys.toList()[day];
           String dayIndex = day.toString();
-
-          print("876DAYINDEX: $dayIndex");
 
           if( schedule[dayIndex].isNotEmpty) {
             Color currentDayColor = Colors.transparent;
@@ -178,7 +176,7 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
         }
       }
 
-      print("yeehasw: ${ _tabList.length}, ${MainTabBlocs().schedulesBloc.todayIndex}");
+      HazizzLogger.printLog("HazizzLog: _tabList.length, MainTabBlocs().schedulesBloc.todayIndex:  ${ _tabList.length}, ${MainTabBlocs().schedulesBloc.todayIndex}");
 
       _tabController = TabController(vsync: this, length: _tabList.length, initialIndex: MainTabBlocs().schedulesBloc.todayIndex
       );
@@ -193,33 +191,9 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
         );
       }
 
-
-      /*
-
-      WidgetsBinding.instance.addPostFrameCallback((_) =>
-          setState(() {
-            _tabController.animateTo(_tabController.index);
-          })
-      );
-      */
-
-      // now.weekday
-
-
-
-
-
       body =
           Column(
             children: <Widget>[
-             /* Expanded(
-                child: TabBarView(
-                  physics: NeverScrollableScrollPhysics(),
-                  controller: _tabController,
-                  children: _tabList,
-                ),
-              ),
-              */
 
               Expanded(child: _tabList[MainTabBlocs().schedulesBloc.currentDayIndex]),
 
@@ -234,11 +208,10 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
                           currentIndex: MainTabBlocs().schedulesBloc.currentDayIndex,
                           onTap: (int index){
                             setState(() {
-                              print("indexing1: ${MainTabBlocs().schedulesBloc.currentDayIndex}");
                               MainTabBlocs().schedulesBloc.currentDayIndex = index;
-                              print("indexing2: ${MainTabBlocs().schedulesBloc.currentDayIndex}");
+                              HazizzLogger.printLog("HazizzLog: currentDayIndex: ${MainTabBlocs().schedulesBloc.currentDayIndex}");
                               _tabController.animateTo(index);
-                              print("indexing3: ${_tabController.index}");
+                              HazizzLogger.printLog("HazizzLog: _tabController.index: ${_tabController.index}");
 
                             });
 
@@ -411,9 +384,8 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
                             child: BlocBuilder(
                                 bloc:  MainTabBlocs().schedulesBloc,
                                 condition: (ScheduleState beforeState, ScheduleState currentState){
-                                  print("current state test");
-                                //  print("current state is: ${currentState}");
-                                //  print("last state is: ${beforeState}");
+                                //  HazizzLogger.printLog("current state is: ${currentState}");
+                                //  HazizzLogger.printLog("last state is: ${beforeState}");
 
 
                                   if(beforeState is ScheduleLoadedState && currentState is ScheduleLoadedState){
@@ -426,7 +398,7 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
                                 },
                                 builder: (_, ScheduleState state) {
 
-                                  print("state is izé: ${state}");
+                                  HazizzLogger.printLog("HazizzLog: ScheduleState: ${state}");
                                   if (state is ScheduleWaitingState || (state is ScheduleLoadedCacheState && lastState is ScheduleWaitingState)) {
                                     //return Center(child: Text("Loading Data"));
                                     return Center(child: CircularProgressIndicator(),);
@@ -435,13 +407,11 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
 
                                   if (state is ScheduleLoadedState) {
                                     if(state.schedules != null /*&& state.data.isNotEmpty()*/){
-                                      print("hát persze hogy eljutok1");
                                       return onLoaded(state.schedules);
 
                                     }
                                   }else if (state is ScheduleLoadedCacheState) {
                                     if(state.data != null /*&& state.data.isNotEmpty()*/){
-                                      print("hát persze hogy eljutok2");
                                       return onLoaded(state.data);
 
                                     }                          }

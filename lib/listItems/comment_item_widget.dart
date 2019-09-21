@@ -4,6 +4,7 @@ import 'package:mobile/blocs/comment_section_bloc.dart';
 import 'package:mobile/blocs/view_task_bloc.dart';
 import 'package:mobile/communication/pojos/pojo_comment.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/dialogs/report_dialog.dart';
 import 'package:mobile/managers/cache_manager.dart';
@@ -37,12 +38,11 @@ class _CommentItemWidget extends State<CommentItemWidget>{
   void initState() {
     // TODO: implement initState
     InfoCache.getMyId().then((int result){
-      print("me author20: $result");
+      HazizzLogger.printLog("HazizzLog: user is the author: $result");
 
       if(widget.comment.creator.id == result){
         setState(() {
           imTheAuthor = true;
-          print("me author21");
         });
       }
     });
@@ -145,7 +145,6 @@ class _CommentItemWidget extends State<CommentItemWidget>{
                     return PopupMenuButton(
                       icon: Icon(FontAwesomeIcons.ellipsisV, size: 20,),
                       onSelected: (value) async {
-                        print("log: value: $value");
                         if(value == value_delete){
                           await RequestSender().getResponse(DeleteTaskComment(p_taskId: widget.taskId, p_commentId: widget.comment.id));
                           ViewTaskBloc().commentBlocs.commentSectionBloc.dispatch(CommentSectionFetchEvent());

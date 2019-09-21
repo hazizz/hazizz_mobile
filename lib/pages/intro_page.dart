@@ -7,6 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/google_login_bloc.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/dialogs/loading_dialog.dart';
 import 'package:mobile/managers/app_state_manager.dart';
 import 'package:mobile/managers/deep_link_receiver.dart';
@@ -64,7 +65,7 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
     if(hazizzResponse.isSuccessful){
       PojoGroupWithoutMe groupWithoutMe = hazizzResponse.convertedData;
       if(groupWithoutMe != null){
-        print("GROUPCOUNT: ${ groupWithoutMe.userCount}, ${ groupWithoutMe.userCountWithoutMe}");
+        HazizzLogger.printLog("GROUPCOUNT: ${ groupWithoutMe.userCount}, ${ groupWithoutMe.userCountWithoutMe}");
         if(groupWithoutMe.userCount == groupWithoutMe.userCountWithoutMe){
 
           WidgetsBinding.instance.addPostFrameCallback((_) =>
@@ -250,7 +251,7 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
 
                 bool _isLoading;
 
-                print("log: ggoogle: $state");
+                HazizzLogger.printLog("log: ggoogle: $state");
 
                 // ProgressDialog pg;
                 //  pg = new ProgressDialog(context,ProgressDialogType.Normal);
@@ -486,11 +487,11 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
             padding: const EdgeInsets.only(top: 0.0),
             child: KretaLoginWidget(
               onSuccess: (){
-                print("pop&push");
               //  Navigator.pushReplacementNamed(context, "/");
+                HazizzLogger.printLog("HazizzLog: Navigation with businessNavigator -> to main app");
                 BusinessNavigator().currentState().pushReplacementNamed('/',);
 
-                print("pop&push2");
+
               },
             ),
           ),

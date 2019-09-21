@@ -13,6 +13,7 @@ import 'package:mobile/communication/pojos/PojoGrades.dart';
 import 'package:mobile/communication/pojos/PojoSchedules.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/dummy/schedule_dummy.dart';
 import 'package:mobile/managers/preference_services.dart';
 
@@ -37,13 +38,13 @@ class MainTasksBloc extends Bloc<HEvent, HState> {
   @override
   void dispose() {
     // TODO: implement dispose
-    print("log: DISPOSE222");
+    HazizzLogger.printLog("log: DISPOSE222");
     super.dispose();
   }
 
   @override
   Stream<HState> mapEventToState(HEvent event) async* {
-    print("log: Event2: ${event.toString()}");
+    HazizzLogger.printLog("log: Event2: ${event.toString()}");
     if (event is FetchData) {
       try {
 
@@ -60,8 +61,8 @@ class MainTasksBloc extends Bloc<HEvent, HState> {
 
 
         HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetTasksFromMe());
-        print("log: responseData: ${hazizzResponse}");
-        print("log: responseData type:  ${hazizzResponse.runtimeType.toString()}");
+        HazizzLogger.printLog("log: responseData: ${hazizzResponse}");
+        HazizzLogger.printLog("log: responseData type:  ${hazizzResponse.runtimeType.toString()}");
 
 
         if(hazizzResponse.isSuccessful){
@@ -69,14 +70,14 @@ class MainTasksBloc extends Bloc<HEvent, HState> {
           tasks = hazizzResponse.convertedData;
           saveTasksCache(tasks);
           if(tasks.isNotEmpty) {
-            print("log: response is List");
+            HazizzLogger.printLog("log: response is List");
             yield ResponseDataLoaded(data: tasks);
           }else{
             yield ResponseEmpty();
           }
         }
         else if(hazizzResponse.isError){
-          print("log: response is List<PojoTask>");
+          HazizzLogger.printLog("log: response is List<PojoTask>");
 
 
           if(hazizzResponse.dioError == noConnectionError){
@@ -89,7 +90,7 @@ class MainTasksBloc extends Bloc<HEvent, HState> {
             );
           }else if(hazizzResponse.dioError.type == DioErrorType.CONNECT_TIMEOUT
                 || hazizzResponse.dioError.type == DioErrorType.RECEIVE_TIMEOUT ){
-            print("log: noConnectionError22");
+            HazizzLogger.printLog("log: noConnectionError22");
             this.dispatch(FetchData());
 
           }else{
@@ -100,7 +101,7 @@ class MainTasksBloc extends Bloc<HEvent, HState> {
 
         }
       } on Exception catch(e){
-        print("log: Exception: ${e.toString()}");
+        HazizzLogger.printLog("log: Exception: ${e.toString()}");
         // yield TasksError();
       }
     }
@@ -131,7 +132,7 @@ class MainSchedulesBloc extends Bloc<HEvent, HState> {
       try {
         yield ResponseWaiting();
 
-        print("WIATING222");
+        HazizzLogger.printLog("WIATING222");
 
 
         DataCache dataCache = await loadScheduleCache();
@@ -147,12 +148,12 @@ class MainSchedulesBloc extends Bloc<HEvent, HState> {
         int dayOfYear = int.parse(DateFormat("D").format(n ow));
         int weekOfYear = ((dayOfYear - now.weekday + 10) / 7).floor();
 
-        print("WEEK OF YEAR: $weekOfYear");*/
+        HazizzLogger.printLog("WEEK OF YEAR: $weekOfYear");*/
         HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetSchedules(/*q_year: now.year, q_weekNumber: weekOfYear*/));
 
-      //  print("classes.: ${classes}");
+      //  HazizzLogger.printLog("classes.: ${classes}");
         if(hazizzResponse.isSuccessful){
-          print("classes.classes: ${ hazizzResponse.convertedData}");
+          HazizzLogger.printLog("classes.classes: ${ hazizzResponse.convertedData}");
           classes = hazizzResponse.convertedData;
 
           classes = PojoSchedules({"1": [
@@ -172,23 +173,23 @@ class MainSchedulesBloc extends Bloc<HEvent, HState> {
             lastUpdated = DateTime.now();
             saveScheduleCache(classes);
 
-            print("log: opsie: 0");
+            HazizzLogger.printLog("log: opsie: 0");
 
             // classes = classesDummy;
 
 
-            print("log: opsie: 0");
+            HazizzLogger.printLog("log: opsie: 0");
 
            // scheduleEventBloc.dispatch(ScheduleEventUpdateClassesEvent());
 
 
-            print("log: opsie: 1");
+            HazizzLogger.printLog("log: opsie: 1");
 
             List<PojoClass> todayClasses = classes.classes[currentDayIndex.toString()];
 
-            print("log: opsie: 2");
+            HazizzLogger.printLog("log: opsie: 2");
             HazizzTimeOfDay now = HazizzTimeOfDay.now();
-            print("log: opsie: 3");
+            HazizzLogger.printLog("log: opsie: 3");
 
 
             HazizzTimeOfDay closestBefore;
@@ -196,7 +197,7 @@ class MainSchedulesBloc extends Bloc<HEvent, HState> {
 
             yield ResponseDataLoaded(data: classes);
 
-            print("log: oy133");
+            HazizzLogger.printLog("log: oy133");
           }
 
 
@@ -204,7 +205,7 @@ class MainSchedulesBloc extends Bloc<HEvent, HState> {
         else if(hazizzResponse.isError){
 
           if(hazizzResponse.dioError == noConnectionError){
-            print("log: noConnectionError22");
+            HazizzLogger.printLog("log: noConnectionError22");
             yield ResponseError(errorResponse: hazizzResponse);
 
             Connection.addConnectionOnlineListener((){
@@ -215,7 +216,7 @@ class MainSchedulesBloc extends Bloc<HEvent, HState> {
 
           }else if(hazizzResponse.dioError.type == DioErrorType.CONNECT_TIMEOUT
                 || hazizzResponse.dioError.type == DioErrorType.RECEIVE_TIMEOUT) {
-            print("log: noConnectionError22");
+            HazizzLogger.printLog("log: noConnectionError22");
             this.dispatch(FetchData());
           }else{
             yield ResponseError(errorResponse: hazizzResponse);
@@ -225,7 +226,7 @@ class MainSchedulesBloc extends Bloc<HEvent, HState> {
 
         }
       } on Exception catch(e){
-        print("log: Exception: ${e.toString()}");
+        HazizzLogger.printLog("log: Exception: ${e.toString()}");
       }
     }
   }
@@ -269,7 +270,7 @@ class MainGradesBloc extends Bloc<HEvent, HState> {
       int fac = pow(10, decimals);
       double d = gradeSum/gradeAmount;
       d = (d * fac).round() / fac;
-    //  print("d: $d");
+    //  HazizzLogger.printLog("d: $d");
 
 
       return d.toString();
@@ -313,7 +314,7 @@ class MainGradesBloc extends Bloc<HEvent, HState> {
 
 
         yield ResponseWaiting();
-            print("log: am0 i here?");
+            HazizzLogger.printLog("log: am0 i here?");
 
         DataCache dataCache = await loadGradesCache();
         if(dataCache!= null){
@@ -324,7 +325,7 @@ class MainGradesBloc extends Bloc<HEvent, HState> {
 
         HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetGrades());
 
-        print("log: hazizzResponse: ${hazizzResponse.dioError}");
+        HazizzLogger.printLog("log: hazizzResponse: ${hazizzResponse.dioError}");
 
 
         if(hazizzResponse.isSuccessful){
@@ -348,7 +349,7 @@ class MainGradesBloc extends Bloc<HEvent, HState> {
             );
           }else if(hazizzResponse.dioError.type == DioErrorType.CONNECT_TIMEOUT
                 || hazizzResponse.dioError.type == DioErrorType.RECEIVE_TIMEOUT) {
-            print("log: noConnectionError22");
+            HazizzLogger.printLog("log: noConnectionError22");
             this.dispatch(FetchData());
           } else if(hazizzResponse.hasPojoError && hazizzResponse.pojoError.errorCode == 138) {
             yield ResponseError(errorResponse: hazizzResponse);
@@ -388,7 +389,7 @@ class MainGradesBloc extends Bloc<HEvent, HState> {
 
 
       } on Exception catch(e){
-        print("log: Exception: ${e.toString()}");
+        HazizzLogger.printLog("log: Exception: ${e.toString()}");
       }
     }
   }

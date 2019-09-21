@@ -60,7 +60,7 @@ dynamic showKretaUnavailableFlushBar(BuildContext context, {@required GlobalKey<
       ),
     ),
     message:  locText(context, key: "kreta_server_unavailable"),
-    //  message:  "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
+    //  message:  "Lorem Ipsum is simply dummy text of the HazizzLogger.printLoging and typesetting industry",
     duration:  Duration(seconds: 3),
   )..show(context);
 }
@@ -70,7 +70,7 @@ void showReportSuccessFlushBar(BuildContext context, {String what}){
   Flushbar(
     icon: Icon(FontAwesomeIcons.solidFlag, color: Colors.green,),
     message:  locText(context, key: "report_successful", args: [what]),
-  //  message:  "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
+  //  message:  "Lorem Ipsum is simply dummy text of the HazizzLogger.printLoging and typesetting industry",
     duration:  Duration(seconds: 4),
   )..show(context);
 }
@@ -79,7 +79,7 @@ void showDeleteWasSuccessfulFlushBar(BuildContext context, {String what}){
   Flushbar(
     icon: Icon(FontAwesomeIcons.times, color: Colors.green,),
     message:  locText(context, key: "delete_successful", args: [what]),
-    //  message:  "Lorem Ipsum is simply dummy text of the printing and typesetting industry",
+    //  message:  "Lorem Ipsum is simply dummy text of the HazizzLogger.printLoging and typesetting industry",
     duration:  Duration(seconds: 4),
   )..show(context);
 }

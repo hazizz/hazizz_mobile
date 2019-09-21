@@ -8,6 +8,7 @@ import 'package:mobile/communication/errorcode_collection.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import '../request_sender.dart';
 import '../hazizz_response.dart';
 import 'TextFormBloc.dart';
@@ -72,20 +73,20 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
   @override
   Stream<RegistrationState> mapEventToState(RegistrationEvent event) async* {
     if (event is RegisterButtonPressed) {
-      print("sentaa1");
+      HazizzLogger.printLog("sentaa1");
 
       usernameBloc.dispatch(TextFormValidate(text: event.username));
       passwordBloc.dispatch(TextFormValidate(text: event.password));
 
       HFormState usernameState = usernameBloc.currentState;
       HFormState passwordState = passwordBloc.currentState;
-      print("log: usernameState: ${usernameState.toString()}");
-      print("log: usernameState: ${usernameState.toString()}");
+      HazizzLogger.printLog("log: usernameState: ${usernameState.toString()}");
+      HazizzLogger.printLog("log: usernameState: ${usernameState.toString()}");
 
       if(usernameState is TextFormFine) {
         if(passwordState is TextFormFine) { //usernameState is TextFormFine && passwordState is TextFormFine) {
           try {
-            print("sentaa22");
+            HazizzLogger.printLog("sentaa22");
             HazizzResponse hazizzResponse = await RequestSender().getResponse(
                 new RegisterUser(
                     b_username: event.username,
@@ -95,13 +96,13 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
             if(hazizzResponse.isSuccessful){
               yield RegisterSuccessState();
             }else{
-              print("log: not successful registration!");
+              HazizzLogger.printLog("log: not successful registration!");
             }
           }on HResponseError catch(e) {
-            print("piritos111");
+            HazizzLogger.printLog("piritos111");
             int errorCode = e.error.errorCode;
             if(ErrorCodes.USERNAME_CONFLICT.equals(errorCode)) {
-              print("piritos222");
+              HazizzLogger.printLog("piritos222");
               usernameBloc.dispatch(TextFormUsernameTakenEvent());
             }
           }
@@ -133,7 +134,7 @@ class RegistrationPageBlocs{
   TextFormBloc usernameBloc = new TextFormBloc(
       validate: (String text){
         if(text.length < 4){
-          print("TextFormErrorTooShort");
+          HazizzLogger.printLog("TextFormErrorTooShort");
           return TextFormErrorTooShort();
         }if(text.length >= 20){
           return TextFormErrorTooLong();

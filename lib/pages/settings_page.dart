@@ -1,5 +1,6 @@
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 
 import '../hazizz_localizations.dart';
@@ -65,7 +66,6 @@ class _SettingsPage extends State<SettingsPage> with AutomaticKeepAliveClientMix
 
   @override
   Widget build(BuildContext context) {
-    print("log: redrawing");
     if(startPageItems.isEmpty) {
 
       List<StartPageItem> startPages = StartPageService.getStartPages(context);
@@ -80,8 +80,11 @@ class _SettingsPage extends State<SettingsPage> with AutomaticKeepAliveClientMix
     }
     if(supportedLocaleItems.isEmpty){
       supportedLocales = getSupportedLocales();
+
+      HazizzLogger.printLog("HazizzLog: supported locales: ${supportedLocales.toString()}");
+
       for(Locale locale in supportedLocales) {
-        print("log: locale: ${locale.countryCode}");
+
         supportedLocaleItems.add(DropdownMenuItem(
           value: locale.languageCode,
           child: Text(locale.countryCode,
@@ -92,7 +95,7 @@ class _SettingsPage extends State<SettingsPage> with AutomaticKeepAliveClientMix
 
     }
 
-    print("log: $supportedLocaleItems");
+    HazizzLogger.printLog("log: $supportedLocaleItems");
     
     
 
@@ -153,7 +156,7 @@ class _SettingsPage extends State<SettingsPage> with AutomaticKeepAliveClientMix
                   items: supportedLocaleItems,
                   onChanged: (dynamic selectedLocale) async {
                   //  StartPageService.setStartPageIndex(newStartPageIndex);
-                    print(selectedLocale);
+                    HazizzLogger.printLog(selectedLocale);
                     setState(() {
                       currentLocale = selectedLocale;
 
@@ -161,7 +164,7 @@ class _SettingsPage extends State<SettingsPage> with AutomaticKeepAliveClientMix
                       this.setState(() {
                         var data = EasyLocalizationProvider.of(context).data;
                         data.changeLocale(Locale(selectedLocale.toLowerCase()));
-                        print(Localizations.localeOf(context).languageCode);
+                        HazizzLogger.printLog(Localizations.localeOf(context).languageCode);
                       });
 
 
@@ -179,6 +182,15 @@ class _SettingsPage extends State<SettingsPage> with AutomaticKeepAliveClientMix
                 },
                 leading: Icon(FontAwesomeIcons.solidUser),
                 title: Text(locText(context, key: "profile_editor")),
+              ),
+
+              Divider(),
+              ListTile(
+                onTap: () async {
+                  Navigator.pushNamed(context, "/settings/developer");
+                },
+                leading: Icon(FontAwesomeIcons.wrench),
+                title: Text(locText(context, key: "developer_settings")),
               ),
             ],
           ),

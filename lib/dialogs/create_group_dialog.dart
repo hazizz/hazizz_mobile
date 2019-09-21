@@ -6,6 +6,7 @@ import 'package:mobile/blocs/create_group_bloc.dart';
 import 'package:mobile/enums/groupTypesEnum.dart';
 import '../hazizz_localizations.dart';
 import 'dialogs.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 
 class CreateGroupDialog extends StatefulWidget {
 
@@ -254,7 +255,6 @@ class _CreateGroupDialog extends State<CreateGroupDialog> {
                     FlatButton(
                       child: Text(locText(context, key: "create").toUpperCase()),
                       onPressed: (){
-                        print("groupPasswordController.text: ${groupPasswordController.text}");
                         createGroupBloc.dispatch(CreateGroupCreateEvent(groupType: groupValue, groupName: groupNameController.text, password: groupValue == GroupType.PASSWORD ? groupPasswordController.text : null));
                       }
                   )],

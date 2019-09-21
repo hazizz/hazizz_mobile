@@ -10,6 +10,7 @@ import 'package:mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
 import 'package:mobile/blocs/selected_session_bloc.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/managers/app_state_manager.dart';
 import 'package:mobile/managers/cache_manager.dart';
@@ -71,7 +72,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
 
     InfoCache.getMyDisplayName().then(
       (value){
-        print("log: getMyDisplayName: $value");
+        HazizzLogger.printLog("HazizzLog: getMyDisplayName: $value");
 
         setState(() {
           displayName = value;
@@ -154,19 +155,19 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
             /*
             GestureDetector(
                 onLongPress: (){
-                  print("log: long press");
+                  HazizzLogger.printLog("log: long press");
                 },
                 child: Tab(text: tasksTabPage.getTabName(context), icon: Icon(FontAwesomeIcons.bookOpen),)
               ),
               GestureDetector(
                 onLongPress: (){
-                  print("log: long press");
+                  HazizzLogger.printLog("log: long press");
                 },
                 child: Tab(text: schedulesTabPage.getTabName(context), icon: Icon(FontAwesomeIcons.calendarAlt)),
               ),
               GestureDetector(
                 onLongPress: (){
-                  print("log: long press");
+                  HazizzLogger.printLog("log: long press");
                 },
                 child: Tab(text: gradesTabPage.getTabName(context), icon: Icon(FontAwesomeIcons.listOl)),
               ),

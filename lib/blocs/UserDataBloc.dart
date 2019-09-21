@@ -8,6 +8,7 @@ import 'package:bloc/bloc.dart';
 import 'package:mobile/communication/pojos/PojoMeInfo.dart';
 import 'package:mobile/communication/pojos/PojoMeInfoPrivate.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/managers/cache_manager.dart';
 
 import '../hazizz_response.dart';
@@ -109,7 +110,7 @@ class ProfilePictureBloc extends Bloc<ProfilePictureEvent, ProfilePictureState> 
 
   @override
   Stream<ProfilePictureState> mapEventToState(event) async*{
-    print("log: profilepic event: $event");
+    HazizzLogger.printLog("log: profilepic event: $event");
 
     if(event is ProfilePictureGetEvent) {
       yield ProfilePictureWaitingState();
@@ -288,7 +289,7 @@ class DisplayNameBloc extends Bloc<DisplayNameEvent, DisplayNameState> {
   @override
   Stream<DisplayNameState> mapEventToState(DisplayNameEvent event) async* {
 
-    print("log: displayNameEvnet:  $event");
+    HazizzLogger.printLog("log: displayNameEvnet:  $event");
 
     if(event is DisplayNameLoadFromCacheEvent){
       displayNameController.text = event.displayName;
@@ -533,7 +534,7 @@ class MyUserDataBloc extends Bloc<MyUserDataEvent, MyUserDataState> {
 
   @override
   Stream<MyUserDataState> mapEventToState(MyUserDataEvent event) async* {
-    print("log: myuserdata event: $event");
+    HazizzLogger.printLog("log: myuserdata event: $event");
     if(event is MyUserDataGetEvent) {
       yield MyUserDataWaitingState();
 
@@ -573,9 +574,9 @@ class MyUserDataBloc extends Bloc<MyUserDataEvent, MyUserDataState> {
     */
     else if(event is MyUserDataChangeDisplaynameEvent){
       PojoMeInfo meInfo = await InfoCache.getMyUserData();
-      print("debuglol: 3 ${meInfo.displayName}");
+      HazizzLogger.printLog("debuglol: 3 ${meInfo.displayName}");
       meInfo.displayName = event.displayName;
-      print("debuglol: 4 ${meInfo.displayName}");
+      HazizzLogger.printLog("debuglol: 4 ${meInfo.displayName}");
       InfoCache.setMyUserData(meInfo);
       myUserData = meInfo;
       yield MyUserDataLoadedState(meInfo: meInfo);

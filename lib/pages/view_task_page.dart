@@ -9,6 +9,7 @@ import 'package:mobile/communication/pojos/PojoTag.dart';
 
 import 'package:flutter/material.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/dialogs/report_dialog.dart';
 import 'package:mobile/managers/cache_manager.dart';
@@ -40,7 +41,7 @@ class ViewTaskPage extends StatefulWidget {
 
   ViewTaskPage.fromPojo({Key key, this.pojoTask}) : super(key: key){
     taskId = pojoTask.id;
-    print("log: recreated blocs");
+    HazizzLogger.printLog("HazizzLog: created ViewTaskPage.fromPojo");
   }
 
   @override
@@ -163,7 +164,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
   /*
   setComplete(bool c){
     setState(() {
-      print("obungaööö: $c");
+      HazizzLogger.printLog("obungaööö: $c");
 
       completed = c;
     });
@@ -182,7 +183,6 @@ class _ViewTaskPage extends State<ViewTaskPage> {
 
 
 
-    print("odsofoidas: ${DateTime.now().weekday}");
 
     return Hero(
         tag: "hero_task${pojoTask.id}",
@@ -280,7 +280,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                               child: Builder(builder: (context){
 
 
-                                                print("REEDRAW: $completed");
+                                                HazizzLogger.printLog("HazizzLog: redrawing coz completed: $completed");
                                                 IconData iconData;
                                                 if(completed){
 
@@ -308,7 +308,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                                     icon: Icon(FontAwesomeIcons.square, size: 32,),
                                                     onPressed: () async {
                                                       setState(() {
-                                                        completed = true;
+                                                       completed = true;
                                                         pojoTask.completed = true;
 
                                                       });
@@ -321,7 +321,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                                         });
                                                       }
                                                     }
-                                                );
+                                                 );
                                               }),
                                             ),
                                           ),
@@ -591,12 +591,12 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                                     child: Text(locText(context, key: "delete").toUpperCase(), style: theme(context).textTheme.button),
                                                     onPressed: () async {
                                                       if(await showDeleteTaskDialog(context, taskId: widget.taskId)){
-                                                        print("success");
+                                                        HazizzLogger.printLog("HazizzLog: showDeleteTaskDialog : success");
                                                         MainTabBlocs().tasksBloc.dispatch(TasksFetchEvent());
                                                         Navigator.of(context).pop();
 
                                                       }else{
-                                                        print("no success");
+                                                        HazizzLogger.printLog("HazizzLog: showDeleteTaskDialog: no success");
 
                                                       }
 

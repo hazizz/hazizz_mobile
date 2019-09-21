@@ -21,7 +21,6 @@ class GroupItemWidget extends StatelessWidget{
         elevation: 5,
         child: InkWell(
             onTap: () {
-              print("tap tap");
               Navigator.popAndPushNamed(context, "/group/groupId", arguments: group);
             },
             child:

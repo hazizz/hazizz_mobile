@@ -7,8 +7,19 @@ part of 'PojoSubject.dart';
 // **************************************************************************
 
 PojoSubject _$PojoSubjectFromJson(Map<String, dynamic> json) {
-  return PojoSubject(json['id'] as int, json['name'] as String);
+  return PojoSubject(
+      json['id'] as int,
+      json['name'] as String,
+      json['subscriberOnly'] as bool,
+      json['manager'] == null
+          ? null
+          : PojoComplient.fromJson(json['manager'] as Map<String, dynamic>));
 }
 
 Map<String, dynamic> _$PojoSubjectToJson(PojoSubject instance) =>
-    <String, dynamic>{'id': instance.id, 'name': instance.name};
+    <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'subscriberOnly': instance.subscriberOnly,
+      'manager': instance.manager
+    };

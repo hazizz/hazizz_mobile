@@ -223,6 +223,16 @@
     "settings"
     : "Settings",
 
+  "developer_settings"
+  : "Fejlesztői beállítások",
+
+
+
+  "logs"
+  : "Logs",
+
+  "send_log_via_email"
+  : "Send log via email",
 
     "starting_page"
     : "Starting page",

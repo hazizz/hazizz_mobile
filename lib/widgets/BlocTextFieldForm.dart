@@ -9,7 +9,7 @@ class BlocTextFieldForm extends TextField{
 /*
   FormBuilderTextField(
   onChanged: (dynamic text) {
-  print("change: $text");
+  HazizzLogger.printLog("change: $text");
   loginPageBlocs.usernameBloc.dispatch(TextFormValidate(text: text));
   },
   controller: _usernameTextEditingController,

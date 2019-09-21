@@ -5,6 +5,7 @@ import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
 import 'package:mobile/communication/pojos/pojo_comment.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 
 import '../request_sender.dart';
 import '../hazizz_response.dart';
@@ -85,18 +86,18 @@ class CommentSectionBloc extends Bloc<CommentSectionEvent, CommentSectionState> 
 
   @override
   Stream<CommentSectionState> mapEventToState(CommentSectionEvent event) async* {
-    print("log: Event2: ${event.toString()}");
+    HazizzLogger.printLog("log: Event2: ${event.toString()}");
     if (event is CommentSectionFetchEvent) {
       try {
         yield CommentSectionWaitingState();
         HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetTaskComments(taskId: taskId));
-        print("log: responseData: ${hazizzResponse}");
-        print("log: responseData type:  ${hazizzResponse.runtimeType.toString()}");
+        HazizzLogger.printLog("log: responseData: ${hazizzResponse}");
+        HazizzLogger.printLog("log: responseData type:  ${hazizzResponse.runtimeType.toString()}");
 
         if(hazizzResponse.isSuccessful){
           comments = hazizzResponse.convertedData;
-          print("log: comments: $comments");
-          print("log: response is List2134");
+          HazizzLogger.printLog("log: comments: $comments");
+          HazizzLogger.printLog("log: response is List2134");
           if(comments.isEmpty) {
             yield CommentSectionLoadedState(items: comments);
           }else {
@@ -104,11 +105,11 @@ class CommentSectionBloc extends Bloc<CommentSectionEvent, CommentSectionState> 
           }
         }
         else if(hazizzResponse.isError){
-          print("log: response is List<PojoComment>");
+          HazizzLogger.printLog("log: response is List<PojoComment>");
           yield CommentSectionFailState(error: hazizzResponse.pojoError);
         }
       } on Exception catch(e){
-        print("log: Exception: ${e.toString()}");
+        HazizzLogger.printLog("log: Exception: ${e.toString()}");
         // yield TasksError();
       }
     }else if(event is CommentSectionLoadedEvent){
@@ -219,7 +220,7 @@ class CommentWriterBloc extends Bloc<CommentWriterEvent,  CommentWriterState> {
 
   @override
   Stream<CommentWriterState> mapEventToState(CommentWriterEvent event) async* {
-    print("log: Event2: ${event.toString()}");
+    HazizzLogger.printLog("log: Event2: ${event.toString()}");
     if(event is CommentWriterFineEvent){
       yield CommentWriterFineState();
     }

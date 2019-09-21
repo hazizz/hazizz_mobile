@@ -1,4 +1,5 @@
 
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/managers/preference_services.dart';
 
 import 'item_list_picker_bloc/item_list_picker_bloc.dart';
@@ -37,7 +38,7 @@ class StartPageItemPickerBloc extends ItemListPickerBloc {
   @override
   Stream<ItemListState> mapEventToState(ItemListEvent event) async*{
     if(event is PickedStartPageEvent){
-      print("log: PickedState is played");
+      HazizzLogger.printLog("log: PickedState is played");
       yield PickedStartPageState();
     }
     if (event is StartPageLoadDataEvent) {
@@ -45,14 +46,14 @@ class StartPageItemPickerBloc extends ItemListPickerBloc {
         yield Waiting();
         /*
         List<StartPageItem> responseData = StartPageService.getStartPages(context);
-        print("log: responseData: ${responseData}");
-        print("log: responseData type:  ${responseData.runtimeType.toString()}");
+        HazizzLogger.printLog("log: responseData: ${responseData}");
+        HazizzLogger.printLog("log: responseData type:  ${responseData.runtimeType.toString()}");
         */
         /*
         if(responseData is List<PojoSubject>){
           dataList = responseData;
           if(dataList.isNotEmpty) {
-            print("log: response is List");
+            HazizzLogger.printLog("log: response is List");
             yield ItemListLoaded(data: responseData);
           }else{
             yield Empty();
@@ -60,7 +61,7 @@ class StartPageItemPickerBloc extends ItemListPickerBloc {
         }
         */
       } on Exception catch(e){
-        print("log: Exception: ${e.toString()}");
+        HazizzLogger.printLog("log: Exception: ${e.toString()}");
       }
     }
     super.mapEventToState(event);

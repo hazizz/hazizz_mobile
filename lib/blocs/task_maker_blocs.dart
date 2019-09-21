@@ -14,6 +14,7 @@ import 'package:mobile/communication/pojos/PojoTag.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:meta/meta.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 
 import '../request_sender.dart';
 import '../hazizz_response.dart';
@@ -64,7 +65,7 @@ abstract class TaskMakerBloc extends Bloc<TaskMakerEvent, TaskMakerState> {
 
       String text = titleController.text;
 
-      print("change: $text");
+      HazizzLogger.printLog("change: $text");
       titleBloc.dispatch(TextFormValidate(text: text));
 
     });
@@ -73,7 +74,7 @@ abstract class TaskMakerBloc extends Bloc<TaskMakerEvent, TaskMakerState> {
 
       String text = descriptionController.text;
 
-      print("change: $text");
+      HazizzLogger.printLog("change: $text");
       descriptionBloc.dispatch(TextFormValidate(text: text));
     });
 
@@ -160,7 +161,7 @@ class GroupItemPickerBloc extends ItemListPickerBloc {
   GroupItemPickerBloc(this.subjectItemPickerBloc) {
     subjectItemPickerBlocSubscription = this.state.listen((state) {
       if (state is PickedGroupState) {
-        print("log: picked Group listen");
+        HazizzLogger.printLog("log: picked Group listen");
         if(state.item.id != 0) {
           subjectItemPickerBloc.dispatch(SubjectLoadData(state.item.id));
         }
@@ -171,7 +172,7 @@ class GroupItemPickerBloc extends ItemListPickerBloc {
   @override
   Stream<ItemListState> mapEventToState(ItemListEvent event) async* {
 
-    print("GroupBloc: $state");
+    HazizzLogger.printLog("GroupBloc: $state");
 
     if(event is SetGroupEvent){
       isLocked = true;
@@ -180,7 +181,7 @@ class GroupItemPickerBloc extends ItemListPickerBloc {
     }
     if(!isLocked) {
       if(event is PickedGroupEvent) {
-        print("log: PickedState is played");
+        HazizzLogger.printLog("log: PickedState is played");
         pickedItem = event.item;
 
         yield PickedGroupState(item: event.item);
@@ -190,20 +191,20 @@ class GroupItemPickerBloc extends ItemListPickerBloc {
           yield Waiting();
           HazizzResponse hazizzResponse = await RequestSender().getResponse(
               new GetMyGroups());
-          print("log: responseData: ${hazizzResponse.convertedData}");
-          print(
+          HazizzLogger.printLog("log: responseData: ${hazizzResponse.convertedData}");
+          HazizzLogger.printLog(
               "log: responseData type:  ${hazizzResponse.convertedData
                   .runtimeType.toString()}");
 
           if(hazizzResponse.isSuccessful) {
             dataList = hazizzResponse.convertedData;
             if(dataList.isNotEmpty) {
-              print("log: response is List");
+              HazizzLogger.printLog("log: response is List");
               yield ItemListLoaded(data: dataList);
             }
           }
         }on Exception catch(e) {
-          print("log: Exception: ${e.toString()}");
+          HazizzLogger.printLog("log: Exception: ${e.toString()}");
         }
       }
     }
@@ -266,7 +267,7 @@ class SubjectItemPickerBloc extends ItemListPickerBloc {
 
   @override
   Stream<ItemListState> mapEventToState(ItemListEvent event) async*{
-    print("ohhohh : ${event.toString()} isLocked: $isLocked");
+    HazizzLogger.printLog("ohhohh : ${event.toString()} isLocked: $isLocked");
     if(event is SetSubjectEvent){
       isLocked = true;
       yield PickedSubjectState(item: event.item);
@@ -276,18 +277,18 @@ class SubjectItemPickerBloc extends ItemListPickerBloc {
     }
     if(!isLocked) {
       if(event is PickedSubjectEvent){
-        print("log: PickedState is played");
+        HazizzLogger.printLog("log: PickedState is played");
         yield PickedSubjectState(item: event.item);
       }
 
       if(event is SubjectLoadData) {
-        print("imp log");
+        HazizzLogger.printLog("imp log");
         try {
           yield Waiting();
           HazizzResponse hazizzResponse = await RequestSender().getResponse(
               new GetSubjects(groupId: event.groupId));
-          // print("log: responseData: ${hazizzResponse.convertedData}");
-          //   print("log: responseData type:  ${hazizzResponse.runtimeType.toString()}");
+          // HazizzLogger.printLog("log: responseData: ${hazizzResponse.convertedData}");
+          //   HazizzLogger.printLog("log: responseData type:  ${hazizzResponse.runtimeType.toString()}");
 
           if(hazizzResponse.isSuccessful) {
             dataList = hazizzResponse.convertedData;
@@ -296,7 +297,7 @@ class SubjectItemPickerBloc extends ItemListPickerBloc {
             yield ItemListFail();
           }
         }on Exception catch(e) {
-          print("log: Exception: ${e.toString()}");
+          HazizzLogger.printLog("log: Exception: ${e.toString()}");
         }
       }
       super.mapEventToState(event);
@@ -327,7 +328,7 @@ class SubjectItemPickerBloc2 extends ItemListPickerBloc {
     }
     if(!isLocked) {
       if(event is PickedGroupEvent) {
-        print("log: PickedState is played");
+        HazizzLogger.printLog("log: PickedState is played");
         yield PickedGroupState(item: event.item);
       }
       if(event is ItemListLoadData) {
@@ -335,22 +336,22 @@ class SubjectItemPickerBloc2 extends ItemListPickerBloc {
           yield Waiting();
           HazizzResponse hazizzResponse = await RequestSender().getResponse(
               new GetMyGroups());
-          print("log: responseData: ${hazizzResponse.convertedData}");
-          print(
+          HazizzLogger.printLog("log: responseData: ${hazizzResponse.convertedData}");
+          HazizzLogger.printLog(
               "log: responseData type:  ${hazizzResponse.convertedData
                   .runtimeType.toString()}");
 
           if(hazizzResponse.isSuccessful) {
             dataList = hazizzResponse.convertedData;
             if(dataList.isNotEmpty) {
-              print("log: response is List");
+              HazizzLogger.printLog("log: response is List");
               yield ItemListLoaded(data: dataList);
             }else {
               yield Empty();
             }
           }
         }on Exception catch(e) {
-          print("log: Exception: ${e.toString()}");
+          HazizzLogger.printLog("log: Exception: ${e.toString()}");
         }
       }
     }
@@ -426,22 +427,22 @@ class TaskTagBloc extends Bloc<TaskTagEvent, TaskTagState>{
 
   @override
   Stream<TaskTagState> mapEventToState(TaskTagEvent event) async*{
-    print("event: $event");
+    HazizzLogger.printLog("event: $event");
     if(event is TaskTagAddEvent){
       pickedTags.add(event.tag);
-      print("state: fine");
+      HazizzLogger.printLog("state: fine");
 
       yield TaskTagFineState(pickedTags, DateTime.now());
     }else if(event is TaskTagRemoveEvent){
-      print("oi");
+      HazizzLogger.printLog("oi");
       bool asd = null;
       if(event.tag != null){
         asd = pickedTags.remove(event.tag);
       }else{
         pickedTags.removeAt(event.index);
       }
-      print("asdőú: $asd");
-      print("asdőű: ${pickedTags}");
+      HazizzLogger.printLog("asdőú: $asd");
+      HazizzLogger.printLog("asdőű: ${pickedTags}");
       yield TaskTagFineState(pickedTags, DateTime.now());
     }
   }
