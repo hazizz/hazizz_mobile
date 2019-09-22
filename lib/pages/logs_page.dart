@@ -67,7 +67,7 @@ class _LogsPage extends State<LogsPage> with AutomaticKeepAliveClientMixin {
           ),
           body: Column(
             children: <Widget>[
-              Text("length: ${logs.length.toString()}"),
+              Text("length: ${logs.length.toString()} characters"),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -76,29 +76,32 @@ class _LogsPage extends State<LogsPage> with AutomaticKeepAliveClientMixin {
                   ),
                 ),
               ),
-              Center(
-                child: RaisedButton(
-                  child: Text(locText(context, key: "send_log_via_email")),
-                  onPressed: () async {
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: RaisedButton(
+                    child: Text(locText(context, key: "send_log_via_email")),
+                    onPressed: () async {
 
-                    if(logFile != null){
-                     // final ByteData bytes = await rootBundle.load(logFile.path);
-                     // await Share.file('Hazizz Mobile logs', 'hazizz_mobile_logs.txt', bytes.buffer.asUint8List(), 'text/txt', text: 'Hazizz Mobile logs');
-                      final MailOptions mailOptions = MailOptions(
+                      if(logFile != null){
+                        // final ByteData bytes = await rootBundle.load(logFile.path);
+                        // await Share.file('Hazizz Mobile logs', 'hazizz_mobile_logs.txt', bytes.buffer.asUint8List(), 'text/txt', text: 'Hazizz Mobile logs');
+                        final MailOptions mailOptions = MailOptions(
 
-                        body: 'version: ${HazizzAppInfo().getInfo.version}\n buildNumber: ${HazizzAppInfo().getInfo.buildNumber}',
-                        subject: 'Hazizz Mobile log',
-                        recipients: ['hazizzvelunk@gmail.com'],
-                        //  isHTML: true,
-                        //  bccRecipients: ['other@example.com'],
-                        // ccRecipients: ['third@example.com'],
-                        attachments: [ filePath, ],
-                      );
+                          body: 'version: ${HazizzAppInfo().getInfo.version}\n buildNumber: ${HazizzAppInfo().getInfo.buildNumber}',
+                          subject: 'Hazizz Mobile log',
+                          recipients: ['hazizzvelunk@gmail.com'],
+                          //  isHTML: true,
+                          //  bccRecipients: ['other@example.com'],
+                          // ccRecipients: ['third@example.com'],
+                          attachments: [ filePath, ],
+                        );
 
-                      await FlutterMailer.send(mailOptions);
+                        await FlutterMailer.send(mailOptions);
 
-                    }
-                  },
+                      }
+                    },
+                  ),
                 ),
               )
             ],

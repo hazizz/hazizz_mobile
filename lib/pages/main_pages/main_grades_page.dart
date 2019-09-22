@@ -108,12 +108,14 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
 
                 children: <Widget>[
                   GradeHeaderItemWidget.bySubject(subjectName: key, gradesAvarage: gradesAvarage),
+                  /*
                   Container(
                     color: Theme.of(context).backgroundColor,
                     height: 200,
                     width: MediaQuery.of(context).size.width,
                     child: GradesChart(subjectName: key, grades: grades[key] ),
                   ),
+                  */
 
                 ],
               ),

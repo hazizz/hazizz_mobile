@@ -162,6 +162,7 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
     if (event is GradesFetchEvent) {
       try {
 
+        /*
         if(true){
           grades = new PojoGrades(
               {"Matek TESZT" : [
@@ -186,9 +187,7 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
           yield GradesLoadedState(grades);
           return;
         }
-
-
-
+        */
 
         yield GradesWaitingState();
         HazizzLogger.printLog("log: am0 i here?");

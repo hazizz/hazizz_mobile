@@ -304,6 +304,19 @@
     : "Témák",
 
 
+  "subscribe"
+  : "Felíratkozás",
+
+  "unsubscribe"
+  : "Leíratkozás",
+
+  "subscribed"
+  : "Felíratkozva",
+
+  "unsubscribed"
+  : "Leíratkozva",
+
+
     "title"
     : "Cím",
 

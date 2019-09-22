@@ -29,7 +29,8 @@ class GroupTasksBloc extends Bloc<HEvent, HState> {
     if (event is FetchData) {
       try {
         yield ResponseWaiting();
-        HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetTasksFromGroup(groupId: GroupBlocs().group.id));
+       // HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetTasksFromGroup(groupId: GroupBlocs().group.id));
+        HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetTasksFromMe(q_groupId: GroupBlocs().group.id));
 
         if(hazizzResponse.isSuccessful){
           List<PojoTask> tasks = hazizzResponse.convertedData;

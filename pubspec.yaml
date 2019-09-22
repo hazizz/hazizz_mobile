@@ -11,7 +11,7 @@ description: Hazizz Mobile application.
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning atm
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.6+15
+version: 1.0.7+16
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -62,7 +62,7 @@ dependencies:
   android_alarm_manager: 0.4.3
   dynamic_theme: 1.0.1
   sticky_header_list: 1.0.6
-  auto_size_text: 2.0.1
+  auto_size_text: 2.1.0
   preferences: 4.0.0
   share: 0.6.1
   easy_localization: 1.0.3+1

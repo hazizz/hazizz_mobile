@@ -17,6 +17,7 @@ import 'package:mobile/defaults/pojo_group_empty.dart';
 import 'package:mobile/dialogs/registration_dialog.dart';
 import 'package:mobile/dialogs/report_dialog.dart';
 import 'package:mobile/dialogs/school_dialog.dart';
+import 'package:mobile/dialogs/subject_dialog.dart';
 import 'package:mobile/dialogs/sure_to_delete_subject_dialog.dart';
 import 'package:mobile/dialogs/sure_to_join_group_dialog.dart';
 import 'package:mobile/dialogs/sure_to_leave_group_dialog.dart';
@@ -677,6 +678,21 @@ Future<dynamic> showUserDialog(context, { PojoUser user, PojoCreator creator, Gr
       });
 }
 
+
+
+
+Future<dynamic> showSubjectDialog(context, { @required PojoSubject subject}) {
+
+  return showDialog(
+    context: context,
+    barrierDismissible: true,
+
+    builder: (BuildContext context) {
+
+      return SubjectDialog(subject: subject,);
+    }
+  );
+}
 
 
 

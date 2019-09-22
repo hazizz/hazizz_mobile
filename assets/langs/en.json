@@ -282,6 +282,18 @@
     : "Subjects",
 
 
+  "subscribe"
+  : "Subscribe",
+
+  "unsubscribe"
+  : "Unsubscribe",
+
+  "subscribed"
+  : "Subscribed",
+
+  "unsubscribed"
+  : "Unsubscribed",
+
     "title"
     : "Title",
 
