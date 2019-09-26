@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
+import 'package:mobile/enums/group_permissions_enum.dart';
 
 import '../Pojo.dart';
 import '../PojoAssignation.dart';
@@ -13,7 +14,7 @@ part 'PojoTask.gg.dart';
 //@JsonSerializable()
 class PojoTask extends Pojo implements Comparable<PojoTask>{
   PojoTask({this.id, this.assignation, this.tags, this.title, this.description,
-    this.dueDate, this.creator, this.group, this.subject, this.completed});
+    this.dueDate, this.creator, this.group, this.subject, this.completed, this.permission});
 
   int id;
   PojoAssignation assignation;
@@ -25,6 +26,7 @@ class PojoTask extends Pojo implements Comparable<PojoTask>{
   PojoGroup group;
   PojoSubject subject;
   bool completed;
+  GroupPermissionsEnum permission;
 
   factory PojoTask.fromJson(Map<String, dynamic> json) =>
       _$PojoTaskFromJson(json);
@@ -40,7 +42,7 @@ class PojoTask extends Pojo implements Comparable<PojoTask>{
 
   PojoTask copy(){
     return PojoTask(id: this.id, assignation: this.assignation, tags: this.tags, title: this.title, description: this.description,
-       dueDate: this.dueDate, creator: this.creator, group: this.group, subject: this.subject, completed: this.completed);
+       dueDate: this.dueDate, creator: this.creator, group: this.group, subject: this.subject, completed: this.completed, permission: this.permission);
   }
 
 
@@ -49,7 +51,7 @@ class PojoTask extends Pojo implements Comparable<PojoTask>{
 //@JsonSerializable()
 class PojoTaskDetailed extends PojoTask{// implements Comparable<PojoTaskDetailed>{
   PojoTaskDetailed({this.id, this.assignation, this.tags, this.title, this.description,
-  this.creationDate, this.lastUpdated, this.dueDate, this.creator, this.group, this.subject, this.completed});
+  this.creationDate, this.lastUpdated, this.dueDate, this.creator, this.group, this.subject, this.completed, this.permission});
 
   int id;
   PojoAssignation assignation;
@@ -63,7 +65,7 @@ class PojoTaskDetailed extends PojoTask{// implements Comparable<PojoTaskDetaile
   PojoGroup group;
   PojoSubject subject;
   bool completed;
-
+  GroupPermissionsEnum permission;
 
   factory PojoTaskDetailed.fromJson(Map<String, dynamic> json) =>
       _$PojoTaskDetailedFromJson(json);

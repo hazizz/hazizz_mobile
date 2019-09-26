@@ -13,7 +13,8 @@ PojoSubject _$PojoSubjectFromJson(Map<String, dynamic> json) {
       json['subscriberOnly'] as bool,
       json['manager'] == null
           ? null
-          : PojoComplient.fromJson(json['manager'] as Map<String, dynamic>));
+          : PojoComplient.fromJson(json['manager'] as Map<String, dynamic>),
+      json['subscribed'] as bool);
 }
 
 Map<String, dynamic> _$PojoSubjectToJson(PojoSubject instance) =>
@@ -21,5 +22,6 @@ Map<String, dynamic> _$PojoSubjectToJson(PojoSubject instance) =>
       'id': instance.id,
       'name': instance.name,
       'subscriberOnly': instance.subscriberOnly,
-      'manager': instance.manager
+      'manager': instance.manager,
+      'subscribed': instance.subscribed
     };

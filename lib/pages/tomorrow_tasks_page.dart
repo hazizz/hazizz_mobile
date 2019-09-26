@@ -52,7 +52,7 @@ class _TasksTomorrowPage extends State<TasksTomorrowPage> with SingleTickerProvi
   @override
   void initState() {
     // getData();
-    HazizzLogger.printLog("HazizzLog: in tomorrow task page");
+    HazizzLogger.printLog("in tomorrow task page");
 
     if(widget.tasksBloc.currentState is ResponseError) {
     //  widget.tasksBloc.dispatch(FetchData());

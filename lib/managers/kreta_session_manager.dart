@@ -84,13 +84,13 @@ class KretaSessionManager {
   static Future<PojoSession> getSelectedSession() async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String encodedSession = prefs.getString(_keySession);
-    HazizzLogger.printLog("HazizzLog: cached session1: ${encodedSession}");
+    HazizzLogger.printLog("cached session1: ${encodedSession}");
     if(encodedSession != null) {
       Map jsonSession = json.decode(encodedSession);
-      HazizzLogger.printLog("HazizzLog: cached session2: ${jsonSession}");
+      HazizzLogger.printLog("cached session2: ${jsonSession}");
 
       if(jsonSession != null) {
-        HazizzLogger.printLog("HazizzLog: cached session3: ${PojoSession.fromJson(jsonSession)}");
+        HazizzLogger.printLog("cached session3: ${PojoSession.fromJson(jsonSession)}");
 
         return PojoSession.fromJson(jsonSession);
       }

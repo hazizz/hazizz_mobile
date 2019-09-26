@@ -18,7 +18,7 @@ Future<String> locTextContextless({@required String key, List<String> args}) asy
 
 getPreferredLocal() async{
   String preferredLangCode = (await getPreferredLangCode());
-  HazizzLogger.printLog("HazizzLog: preferredLangCode:  ${preferredLangCode}");
+  HazizzLogger.printLog("preferredLangCode:  ${preferredLangCode}");
   if(preferredLangCode != null) {
     return Locale(preferredLangCode,);
   }
@@ -88,17 +88,17 @@ class HazizzLocalizationsNoContext{
       await load();
     }
 
-    HazizzLogger.printLog("HazizzLog: locale: translate args: $args");
+    HazizzLogger.printLog("locale: translate args: $args");
 
     String text = localizedStrings[key];
     if(args == null) {
       return nullCheckAndReturn(text);
     }
 
-    HazizzLogger.printLog("HazizzLog: locale: translate  args length: ${args.length}");
+    HazizzLogger.printLog("locale: translate  args length: ${args.length}");
 
     for(int i = 0; i < args.length; i++) {
-      HazizzLogger.printLog("HazizzLog: locale: translate iteration: $i");
+      HazizzLogger.printLog("locale: translate iteration: $i");
       text = text.replaceFirst(RegExp('{}'), args[i]);
     }
     return nullCheckAndReturn(text);
@@ -147,10 +147,10 @@ class HazizzLocalizations {
       return nullCheckAndReturn(text);
     }
 
-    HazizzLogger.printLog("HazizzLog: locale: translate  args length: ${args.length}");
+    HazizzLogger.printLog("locale: translate  args length: ${args.length}");
 
     for(int i = 0; i < args.length; i++) {
-      HazizzLogger.printLog("HazizzLog: locale: translate  iter: $i");
+      HazizzLogger.printLog("locale: translate  iter: $i");
       text = text.replaceFirst(RegExp('{}'), args[i]);
     }
     return nullCheckAndReturn(text);

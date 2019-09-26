@@ -94,7 +94,7 @@ class _SessionItemWidget extends State<SessionItemWidget>{
                         PopupMenuButton(
                           icon: Icon(FontAwesomeIcons.ellipsisV, size: 20,),
                           onSelected: (value) async {
-                            HazizzLogger.printLog("HazizzLog: session popupmenuitem value: $value");
+                            HazizzLogger.printLog("session popupmenuitem value: $value");
 
                             if(value == value_remove){
                               HazizzResponse hazizzResponse = await RequestSender().getResponse(KretaRemoveSessions(p_session: widget.session.id));

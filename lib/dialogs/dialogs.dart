@@ -18,6 +18,7 @@ import 'package:mobile/dialogs/registration_dialog.dart';
 import 'package:mobile/dialogs/report_dialog.dart';
 import 'package:mobile/dialogs/school_dialog.dart';
 import 'package:mobile/dialogs/subject_dialog.dart';
+import 'package:mobile/dialogs/subscribe_to_subjects_dialog.dart';
 import 'package:mobile/dialogs/sure_to_delete_subject_dialog.dart';
 import 'package:mobile/dialogs/sure_to_join_group_dialog.dart';
 import 'package:mobile/dialogs/sure_to_leave_group_dialog.dart';
@@ -35,7 +36,7 @@ import '../hazizz_response.dart';
 import '../hazizz_theme.dart';
 import 'choose_subject_dialog.dart';
 import 'create_group_dialog.dart';
-import 'create_subject_dialog.dart';
+import 'subject_editor_dialog.dart';
 import 'invite_link_dialog.dart';
 import 'join_group_dialog.dart';
 import 'kick_group_member_dialog.dart';
@@ -877,14 +878,14 @@ Future<bool> showDeleteSubjectDialog(context, {@required int groupId, @required 
 }
 
 Future<PojoSubject> showAddSubjectDialog(context, {@required int groupId}) {
-  TextEditingController _subjectTextEditingController = TextEditingController();
-  String errorText = null;
-
-  bool isEnabled = true;
-
-
   return showDialog(context: context, barrierDismissible: true, builder: (context){
-    return CreateSubjectDialog(groupId: groupId,);
+    return SubjectEditorDialog.create(groupId: groupId,);
+  });
+}
+
+Future<PojoSubject> showEditSubjectDialog(context, {@required PojoSubject subject}) {
+  return showDialog(context: context, barrierDismissible: true, builder: (context){
+    return SubjectEditorDialog.edit(subject: subject);
   });
 }
 
@@ -960,7 +961,7 @@ Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
                   children:
                   [
 
-                    Center(child: Text(grade.subject == null ? "" : (grade.subject), style: TextStyle(fontSize: 22), textAlign: TextAlign.center,) ),
+                    Center(child: Text(grade.subject[0].toUpperCase() + grade.subject.substring(1), style: TextStyle(fontSize: 22), textAlign: TextAlign.center,) ),
                     Spacer(),
 
                     Row(
@@ -980,7 +981,19 @@ Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
 
                       children: <Widget>[
                         Text(locText(context, key: "grade_type") + ":", style: TextStyle(fontSize: 18)),
-                        Expanded(child: Text(grade.gradeType == null ? "" : grade.gradeType, style: TextStyle(fontSize: 18), textAlign: TextAlign.end,)),
+                        Builder(
+                          builder: (context){
+                            String gradeType = grade.gradeType;
+                            if(gradeType.toLowerCase() == "midyear"){
+                              gradeType = locText(context, key: "gradeType_midYear");
+                            }else if(gradeType.toLowerCase() == "halfyear"){
+                              gradeType = locText(context, key: "gradeType_halfYear");
+                            }else if(gradeType.toLowerCase() == "endyear"){
+                              gradeType = locText(context, key: "gradeType_endYear");
+                            }
+                            return Expanded(child: Text(gradeType, style: TextStyle(fontSize: 18), textAlign: TextAlign.end,));
+                          },
+                        ),
                       ],
                     ),
                     Spacer(),
@@ -1059,6 +1072,15 @@ Future<bool> showJoinedGroupDialog(context, {@required PojoGroup group}) async {
   );
 }
 
+
+Future showSubscribeToSubjectDialog(context){
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return SubscribeToSubjectDialog();
+    },
+  );
+}
 
 
 void showSchoolsDialog(BuildContext context, {@required Function({String key, String value}) onPicked, @required Map data}) async{

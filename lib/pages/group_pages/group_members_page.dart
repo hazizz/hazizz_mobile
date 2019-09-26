@@ -11,6 +11,7 @@ import 'package:mobile/enums/group_permissions_enum.dart';
 import 'package:mobile/listItems/member_item_widget.dart';
 import 'package:mobile/managers/cache_manager.dart';
 import 'package:mobile/managers/welcome_manager.dart';
+import 'package:mobile/widgets/scroll_space_widget.dart';
 
 
 import '../../hazizz_localizations.dart';
@@ -103,6 +104,9 @@ class _GroupMembersPage extends State<GroupMembersPage> with AutomaticKeepAliveC
                         return new ListView.builder(
                             itemCount: membersWidget.length,
                             itemBuilder: (BuildContext context, int index) {
+                              if(index >= membersWidget.length-1){
+                                return addScrollSpace(membersWidget[index]);
+                              }
                               return membersWidget[index];
                             }
                         );

@@ -118,7 +118,7 @@ class _UserDialog extends State<UserDialog> {
           value: "promote_to_moderator",
           child: Text(locText(context, key: "promote_to_moderator"),),
         ));
-      }else if(permission == GroupPermissionsEnum.MODERATOR) {
+      }else if(permission == GroupPermissionsEnum.MODERATOR && myPermission == GroupPermissionsEnum.OWNER) {
         popupMenuItems.add(PopupMenuItem(
           value: "promote_to_user",
           child: Text(locText(context, key: "promote_to_user"),),

@@ -19,6 +19,7 @@ import 'package:mobile/listItems/task_header_item_widget.dart';
 import 'package:mobile/listItems/task_item_widget.dart';
 import 'package:mobile/managers/welcome_manager.dart';
 import 'package:mobile/widgets/flushbars.dart';
+import 'package:mobile/widgets/scroll_space_widget.dart';
 import 'package:sticky_header_list/sticky_header_list.dart';
 
 import 'package:sticky_headers/sticky_headers.dart';
@@ -28,10 +29,6 @@ import '../../hazizz_localizations.dart';
 import '../../hazizz_theme.dart';
 
 class TasksPage extends StatefulWidget {
-
-  // MainTasksBloc tasksBloc;
-
-
 
   TasksPage({Key key}) : super(key: key);
 
@@ -47,12 +44,7 @@ class TasksPage extends StatefulWidget {
 
 class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , AutomaticKeepAliveClientMixin {
 
-  // MainTasksBloc tasksBloc;
-
-
-
   final GlobalKey<AnimatedListState> _listKey = GlobalKey();
-
 
   TaskCompleteState currentCompletedTaskState;
 
@@ -64,31 +56,6 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
 
     currentCompletedTaskState = MainTabBlocs().tasksBloc.currentTaskCompleteState;
     currentExpiredTaskState = MainTabBlocs().tasksBloc.currentTaskExpiredState;
-
-    // getData();
-    // tasksBloc = widget.tasksBloc;
-    HazizzLogger.printLog("created tasks PAge");
-
-    /*
-    if(tasksBloc.currentState is ResponseError) {
-      tasksBloc.dispatch(FetchData());
-    }
-    */
-    //   tasksBloc.fetchMyTasks();
-
-    /*
-    WelcomeManager.getMainTasks().then((isNewComer){
-      if(isNewComer){
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          FeatureDiscovery.discoverFeatures(
-            context,
-            ['discover_task_create'],
-          );
-        });
-      }
-    });
-    */
-
 
     super.initState();
   }
@@ -198,7 +165,8 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
                     DateTime key = map.keys.elementAt(index-1);
                     HazizzLogger.printLog("new key: ${key.toString()}");
 
-                    return StickyHeader(
+
+                    Widget s = StickyHeader(
 
                       //  key: Key(DateTime.now().microsecondsSinceEpoch.toString()),
                       //key: Key(Random().nextInt(2000000).toString()),
@@ -325,6 +293,12 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
                           }
                       ),
                     );
+
+                    if(index >= (map.keys.length) /*|| true*/){
+                      return addScrollSpace(s);
+                    }
+
+                    return s;
                   }
               );
             }
@@ -339,8 +313,6 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
     Animation<Offset> a = Tween<Offset>(begin: Offset(-1, 0.0), end: Offset(0, 0)).animate(
         CurvedAnimation(
           parent: animation,
-
-
           curve: //Curves.easeOutSine
 
           Interval(
@@ -377,22 +349,6 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
                   //  stream: tasksBloc.subject.stream,
                   builder: (_, TasksState state) {
                     if (state is TasksLoadedState) {
-                     /* WidgetsBinding.instance.addPostFrameCallback((_) {
-                        Scaffold.of(context).showSnackBar(SnackBar(
-                          content: Text('Baaaaaaaa'),
-                          duration: Duration(seconds: 3),
-                        ));
-                        // Toast.show("FIXIN", context, duration: 4, gravity:  Toast.BOTTOM);
-                        scaffoldState.currentState.showSnackBar(SnackBar(
-                          content: Text('Button moved to separate widget'),
-                          duration: Duration(seconds: 3),
-                        ));
-                        Toast.show("FIXIN", context, duration: 4, gravity:  Toast.BOTTOM);
-
-                        // Toast.show(locText(context, key: "info_something_went_wrong"), context, duration: 4, gravity:  Toast.BOTTOM);
-                      });
-                      */
-
                       Map<DateTime, List<PojoTask>> tasks = state.tasks;
 
                       HazizzLogger.printLog("onLoaded asdasd");
@@ -421,7 +377,7 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
                       //return Center(child: Text("Loading Data"));
                       if(state.hazizzResponse.dioError == noConnectionError){
                         WidgetsBinding.instance.addPostFrameCallback((_) {
-                          showNoConnectionFlushBar(context, scaffoldState: scaffoldState);
+                          showNoConnectionFlushBar(context);
                         });
                       }else{
                         WidgetsBinding.instance.addPostFrameCallback((_) {

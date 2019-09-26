@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/request_event.dart';
 import 'package:mobile/blocs/response_states.dart';
+import 'package:mobile/blocs/tasks_bloc.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/pojos/PojoGroupPermissions.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
@@ -30,7 +31,7 @@ class GroupTasksBloc extends Bloc<HEvent, HState> {
       try {
         yield ResponseWaiting();
        // HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetTasksFromGroup(groupId: GroupBlocs().group.id));
-        HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetTasksFromMe(q_groupId: GroupBlocs().group.id));
+        HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetTasksFromMe(q_groupId: GroupBlocs().group.id, q_wholeGroup: true));
 
         if(hazizzResponse.isSuccessful){
           List<PojoTask> tasks = hazizzResponse.convertedData;
@@ -99,7 +100,7 @@ class GroupMembersBloc extends Bloc<HEvent, HState> {
     if (event is FetchData) {
       try {
         yield ResponseWaiting();
-        HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetGroupMemberPermisions(groupId: GroupBlocs().group.id));
+        HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetGroupMemberPermissions(groupId: GroupBlocs().group.id));
 
         if(hazizzResponse.isSuccessful){
           membersPermissions = hazizzResponse.convertedData;
@@ -236,7 +237,7 @@ class GroupBlocs{
   MyPermissionBloc myPermissionBloc = MyPermissionBloc();
 
   PojoGroup group;
-  GroupTasksBloc groupTasksBloc = new GroupTasksBloc();
+  TasksBloc groupTasksBloc;
   GroupSubjectsBloc groupSubjectsBloc = new GroupSubjectsBloc();
   GroupMembersBloc groupMembersBloc = new GroupMembersBloc();
 
@@ -248,13 +249,14 @@ class GroupBlocs{
 
   void newGroup(PojoGroup group){
     this.group = group;
-    groupTasksBloc.dispatch(FetchData());
+    groupTasksBloc = new TasksBloc.group(group.id);
+    groupTasksBloc.dispatch(TasksFetchEvent());
     groupSubjectsBloc.dispatch(FetchData());
     groupMembersBloc.dispatch(FetchData());
   }
 
   void reset(){
-    this.group = group;
+    group = null;
     myPermissionBloc.dispatch(MyPermissionResetEvent());
   }
 

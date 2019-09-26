@@ -58,7 +58,7 @@ class _MemberItemWidget extends State<MemberItemWidget>{
 
                   dynamic result = await showUserDialog(context, user: widget.member, permission: permission);
 
-                  HazizzLogger.printLog("HazizzLog: result from user view dialog: ${result.toString()}");
+                  HazizzLogger.printLog("result from user view dialog: ${result.toString()}");
 
                   if(result is GroupPermissionsEnum){
                     setState(() {

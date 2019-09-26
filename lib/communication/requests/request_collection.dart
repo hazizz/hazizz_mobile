@@ -62,9 +62,9 @@ class Request {
   }
 
   Future<Map<String, dynamic>> buildHeader() async{
-    HazizzLogger.printLog("HazizzLog: Building header: 1");
+    HazizzLogger.printLog("Building header: 1");
     PackageInfo p = await PackageInfo.fromPlatform();
-    HazizzLogger.printLog("HazizzLog: Building header: 2");
+    HazizzLogger.printLog("Building header: 2");
     header["User-Agent"] = "HM-${p.version}";
   /*
     if(HazizzAppInfo().getInfo == null){
@@ -74,13 +74,14 @@ class Request {
       header["User-Agent"] = "HM-${HazizzAppInfo().getInfo.version}";
     }
     */
-    HazizzLogger.printLog("HazizzLog: Building header: 3");
+    HazizzLogger.printLog("Building header: 3");
     if(authTokenHeader){
       header[HttpHeaders.authorizationHeader] = "Bearer ${await TokenManager.getToken()}";
     }if(contentTypeHeader) {
       header[HttpHeaders.contentTypeHeader] = "application/json";
     }
-    HazizzLogger.printLog("HazizzLog: Built header: $header");
+
+    HazizzLogger.printLog("Built header");
     return header;
   }
 
@@ -139,81 +140,42 @@ class AuthRequest extends Request{
 
 //region Auth server requests
 //region Token requests
-/*
-class CreateTokenWithPassword extends AuthRequest{
-  CreateTokenWithPassword({String b_username, String b_password, ResponseHandler rh}) : super(rh){
-    httpMethod = HttpMethod.POST;
-    PATH = "auth/accesstoken";
 
-    body["username"] = b_username;
-    body["password"] = b_password;
-    contentTypeHeader = true;
+
+class PingAuthServer extends AuthRequest{
+  PingAuthServer({ResponseHandler rh}) : super(rh){
+    httpMethod = HttpMethod.GET;
+    PATH = "/actuator/health";
   }
 
   @override
   dynamic convertData(Response response) {
-    PojoTokens tokens = PojoTokens.fromJson(jsonDecode(response.data));
-    return tokens;
-  }
-
-  @override
-  void processData(data) {
-    TokenManager.setToken(data.token);
-    TokenManager.setRefreshToken(data.refresh);
-  }
-
-  @override
-  void onSuccessful(Response response) {
-    PojoTokens tokens = PojoTokens.fromJson(jsonDecode(response.data));
-    TokenManager.setToken(tokens.token);
-    TokenManager.setRefreshToken(tokens.refresh);
-    rh.onSuccessful(tokens);
-    rh.callBloc(tokens);
+    return response.data;
   }
 }
-
-class CreateTokenWithGoogleAccount extends AuthRequest{
-  CreateTokenWithGoogleAccount({@required String b_openIdToken}) : super(null){
-    httpMethod = HttpMethod.POST;
-    PATH = "auth/googleauth";
-    body["openIdToken"] = b_openIdToken;
-    contentTypeHeader = true;
+class PingHazizzServer extends HazizzRequest{
+  PingHazizzServer({ResponseHandler rh}) : super(rh){
+    httpMethod = HttpMethod.GET;
+    PATH = "/actuator/health";
   }
 
   @override
   dynamic convertData(Response response) {
-    PojoTokens tokens = PojoTokens.fromJson(jsonDecode(response.data));
-    return tokens;
+    return response.data;
   }
 }
-
-class CreateTokenWithRefresh extends AuthRequest{
-  CreateTokenWithRefresh({@required String b_username,@required  String b_refreshToken, ResponseHandler rh}) : super(rh){
-    httpMethod = HttpMethod.POST;
-    PATH = "auth/accesstoken";
-
-    body["username"] = b_username;
-    body["refreshToken"] = b_refreshToken;
-    contentTypeHeader = true;
+class PingTheraServer extends TheraRequest{
+  PingTheraServer({ResponseHandler rh}) : super(rh){
+    httpMethod = HttpMethod.GET;
+    PATH = "/actuator/health";
   }
 
   @override
-  void onSuccessful(Response response) {
-    PojoTokens tokens = PojoTokens.fromJson(jsonDecode(response.data));
-    TokenManager.setToken(tokens.token);
-    TokenManager.setRefreshToken(tokens.refresh);
-    rh.onSuccessful(tokens);
+  dynamic convertData(Response response) {
+    return response.data;
   }
-
-  @override
-  convertData(Response response) {
-    PojoTokens tokens = PojoTokens.fromJson(jsonDecode(response.data));
-    return tokens;
-  }
-
 }
 
-*/
 
 class CreateToken extends AuthRequest{
   void hardCodeReducer(){
@@ -916,9 +878,9 @@ class GetTasksFromGroup extends HazizzRequest {
 
 
 class GetTaskComments extends HazizzRequest {
-  GetTaskComments({ResponseHandler rh, int taskId}) : super(rh) {
+  GetTaskComments({ResponseHandler rh, int p_taskId}) : super(rh) {
     httpMethod = HttpMethod.GET;
-    PATH = "tasks/${taskId}/comments";
+    PATH = "comments/tasks/$p_taskId/chat";
     authTokenHeader = true;
   }
 
@@ -933,7 +895,7 @@ class GetTaskComments extends HazizzRequest {
 class CreateTaskComment extends HazizzRequest {
   CreateTaskComment({ResponseHandler rh, @required int p_taskId, @required String b_content}) : super(rh) {
     httpMethod = HttpMethod.POST;
-    PATH = "tasks/${p_taskId}/comments";
+    PATH = "comments/tasks/$p_taskId/chat";
     authTokenHeader = true;
     body["content"] = b_content;
   }
@@ -944,10 +906,10 @@ class CreateTaskComment extends HazizzRequest {
   }
 }
 
-class DeleteTaskComment extends HazizzRequest {
-  DeleteTaskComment({ResponseHandler rh, @required int p_taskId, @required int p_commentId}) : super(rh) {
+class DeleteComment extends HazizzRequest {
+  DeleteComment({ResponseHandler rh, @required int p_commentId}) : super(rh) {
     httpMethod = HttpMethod.DELETE;
-    PATH = "tasks/${p_taskId}/comments/$p_commentId";
+    PATH = "comments/$p_commentId";
     authTokenHeader = true;
   }
 
@@ -973,8 +935,8 @@ class GetGroupMembers extends HazizzRequest {
 }
 
 
-class GetGroupMemberPermisions extends HazizzRequest {
-  GetGroupMemberPermisions({ResponseHandler rh, int groupId}) : super(rh) {
+class GetGroupMemberPermissions extends HazizzRequest {
+  GetGroupMemberPermissions({ResponseHandler rh, int groupId}) : super(rh) {
     httpMethod = HttpMethod.GET;
     PATH = "groups/${groupId}/permissions";
     authTokenHeader = true;

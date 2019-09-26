@@ -10,7 +10,7 @@ class DeepLink{
 
   static void onLinkReceived(BuildContext context, Uri deepLink) async{
 
-    HazizzLogger.printLog("HazizzLog: DEEP LINK RECEIVED: ${deepLink.toString()}");
+    HazizzLogger.printLog("DEEP LINK RECEIVED: ${deepLink.toString()}");
     if (deepLink != null) {
       String str_groupId = deepLink.queryParameters["group"];
 
@@ -21,7 +21,7 @@ class DeepLink{
       int groupId = int.parse(str_groupId);
       if(groupId != null){
         await showSureToJoinGroupDialog(context, groupId: groupId);
-        HazizzLogger.printLog("HazizzLog: showed showSureToJoinGroupDialog");
+        HazizzLogger.printLog("showed showSureToJoinGroupDialog");
       }
 
     }

@@ -54,7 +54,7 @@ class _SessionSelectorWidget extends State<SessionSelectorWidget> with Automatic
   void initalizeSelectedSession(){
     SelectedSessionState currentState = SelectedSessionBloc().currentState;
 
-    HazizzLogger.printLog("HazizzLog: initalize SelectedSessionState: ${currentState.toString()}");
+    HazizzLogger.printLog("initalize SelectedSessionState: ${currentState.toString()}");
 
     if(currentState is SelectedSessionEmptyState){
 
@@ -250,7 +250,7 @@ class _SessionSelectorWidget extends State<SessionSelectorWidget> with Automatic
                                     sessions.addAll(sessions1);
 
 
-                                    HazizzLogger.printLog("HazizzLog: session change: $state2: ${sessions1}");
+                                    HazizzLogger.printLog("session change: $state2: ${sessions1}");
                                     if( SelectedSessionBloc().selectedSession != null){
                                       // sessions.remove(SSessielectedonBloc().selectedSession);
                                       for(PojoSession s in sessions){

@@ -29,9 +29,7 @@ class SubjectDialog extends StatefulWidget {
 
   PojoSubject subject;
 
-  SubjectDialog({Key key, this.subject}) : super(key: key){
-    print("this1: ${subject.name}");
-  }
+  SubjectDialog({Key key, this.subject}) : super(key: key);
 
   @override
   _SubjectDialog createState() => new _SubjectDialog();
@@ -54,16 +52,12 @@ class _SubjectDialog extends State<SubjectDialog> {
 
   @override
   Future initState() {
-    print("this2: ${subject}");
     subject = widget.subject;
-    print("this3: ${subject.name}");
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-
-    print("this4: ${subject.name}");
     return HazizzDialog(
         header: Container(
           color: Theme.of(context).dialogBackgroundColor,
@@ -144,12 +138,13 @@ class _SubjectDialog extends State<SubjectDialog> {
                           if(success != null && success){
                             showDeleteWasSuccessfulFlushBar(context, what: "${widget.subject.name} ${locText(context, key: "subject")}");
                             GroupBlocs().groupSubjectsBloc.dispatch(FetchData());
+                            Navigator.pop(context);
                           }
                         }else if(value == "edit"){
-                          bool success = await showDeleteSubjectDialog(context, groupId: GroupBlocs().group.id, subject: widget.subject);
-                          if(success != null && success){
-                            showDeleteWasSuccessfulFlushBar(context, what: "${widget.subject.name} ${locText(context, key: "subject")}");
-                            GroupBlocs().groupSubjectsBloc.dispatch(FetchData());
+                          PojoSubject success = await showEditSubjectDialog(context, subject: widget.subject);
+                          if(success != null){
+                           // showDeleteWasSuccessfulFlushBar(context, what: "${widget.subject.name} ${locText(context, key: "subject")}");
+                           // GroupBlocs().groupSubjectsBloc.dispatch(FetchData());
                           }
                         }
                       },
@@ -173,19 +168,32 @@ class _SubjectDialog extends State<SubjectDialog> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Text("${locText(context, key: "subscribe")}:", style: TextStyle(fontSize: 18),),
+                      Text("${locText(context, key: "subscribed")}:", style: TextStyle(fontSize: 18),),
                       Transform.scale(scale: 1.3,
                         child: Checkbox(
 
-                          value: subject.subscriberOnly,
-                          onChanged: (value){
+                          value: subject.subscribed,
+                          onChanged: (value) async {
                             setState(() {
-                              subject.subscriberOnly = value;
+                              subject.subscribed = value;
                             });
+                            HazizzResponse hazizzResponse = subject.subscribed
+                                ? await RequestSender().getResponse(SubscribeToSubject(p_subjectId: subject.id))
+                                : await RequestSender().getResponse(UnsubscribeFromSubject(p_subjectId: subject.id));
+                            if(hazizzResponse.isSuccessful){
+                              if(subject.subscribed){
+                                showSubscribedToSubjectFlushBar(context, what: subject.name);
+                              }else{
+                                showUnsubscribedFromSubjectFlushBar(context, what: subject.name);
+                              }
+                            }else{
+                              setState(() {
+                                subject.subscribed = !subject.subscribed;
+                              });
+                            }
                           },
                           activeColor: Colors.green,
                           checkColor: Colors.white,
-
                         ),
                       )
 

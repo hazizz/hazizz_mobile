@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/response_states.dart';
 import 'package:mobile/blocs/task_calendar_bloc.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/listItems/task_item_widget.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 
@@ -44,6 +45,9 @@ class _TaskCalendarPage extends State<TaskCalendarPage> with AutomaticKeepAliveC
 
   bool fabIsInactive = false;
 
+  bool firstTime = true;
+
+  DateTime currentDay = DateTime.now();
 
   @override
   void initState() {
@@ -53,7 +57,7 @@ class _TaskCalendarPage extends State<TaskCalendarPage> with AutomaticKeepAliveC
     calendarController  = CalendarController();
 
     final _selectedDay = DateTime.now();
-
+    currentDay = DateTime.now();
 
     _events = {
       _selectedDay.subtract(Duration(days: 30)): ['Event A0', 'Event B0', 'Event C0'],
@@ -175,6 +179,34 @@ class _TaskCalendarPage extends State<TaskCalendarPage> with AutomaticKeepAliveC
     );
   }
 
+  onDaySelected(DateTime date, List<dynamic> tasks){
+
+
+    print("szolga: ${date}, ${tasks.toString()}");
+
+    currentDay = date;
+    if(DateTime.now().isBefore(date)){
+      setState(() {
+        fabIsInactive = true;
+      });
+    }else{
+      setState(() {
+        fabIsInactive = false;
+      });
+    }
+    List<Widget> a = [];
+    if(tasks != null){
+      for(PojoTask t in tasks){
+        a.add(TaskItemWidget(originalPojoTask: t, key: Key(t.toJson().toString()),));
+      }
+    }else{
+      HazizzLogger.printLog("calendar: tasks is null");
+    }
+    setState(() {
+      currentTasksList = a;
+    });
+  }
+
   Widget _buildTableCalendar(Map<DateTime, List<PojoTask>> ev) {
     return TableCalendar(
 
@@ -183,22 +215,7 @@ class _TaskCalendarPage extends State<TaskCalendarPage> with AutomaticKeepAliveC
       //initialCalendarFormat: CalendarFormat.month,
       headerVisible: true,
       onDaySelected: (DateTime date, List<dynamic> tasks){
-        if(DateTime.now().isBefore(date)){
-          setState(() {
-            fabIsInactive = true;
-          });
-        }else{
-          setState(() {
-            fabIsInactive = false;
-          });
-        }
-        List<Widget> a = [];
-        for(PojoTask t in tasks){
-          a.add(TaskItemWidget(originalPojoTask: t, key: Key(t.toJson().toString()),));
-        }
-        setState(() {
-          currentTasksList = a;
-        });
+        onDaySelected(date, tasks);
       },
       builders: CalendarBuilders(
 
@@ -264,13 +281,6 @@ class _TaskCalendarPage extends State<TaskCalendarPage> with AutomaticKeepAliveC
         ),
       ),
 
-
-
-
-
-
-
-
       body: RefreshIndicator(
           child: Stack(
             children: <Widget>[
@@ -278,9 +288,26 @@ class _TaskCalendarPage extends State<TaskCalendarPage> with AutomaticKeepAliveC
               BlocBuilder(
                   bloc: tasksCalendarBloc,
                   builder: (_, TasksCalendarState state) {
-                    Map<DateTime, List<PojoTask>> events = {DateTime.now(): [PojoTask()]};
+                    Map<DateTime, List<PojoTask>> events = {};
                     if (state is TasksCalendarLoadedState) {
                       events = state.tasks;
+
+                      print("szolgas: ${events[currentDay].toString()}");
+
+                    //  calendarController.
+                      if(firstTime){
+                        _buildTableCalendar(events);
+
+                       // "${currentDay.year}-${currentDay.month}, currentDay.day}"
+
+                        WidgetsBinding.instance.addPostFrameCallback((_) =>
+                            onDaySelected(/*DateTime(currentDay.year, currentDay.month, currentDay.day, 12)*/
+                            DateTime.parse( "2019-09-25 12:00:00.000Z"), events[DateTime.parse( "2019-09-25 12:00:00.000Z")])
+                        );
+                        firstTime = false;
+                      }
+
+
                       return ListView(
                         children: <Widget>[
                           _buildTableCalendar(events),

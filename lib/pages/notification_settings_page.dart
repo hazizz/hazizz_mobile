@@ -62,7 +62,7 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage> with Aut
         if(value){
           iconBell = FontAwesomeIcons.solidBell;
         }else{
-            iconBell = FontAwesomeIcons.solidBellSlash;
+          iconBell = FontAwesomeIcons.solidBellSlash;
         }
       });
     });
@@ -105,12 +105,14 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage> with Aut
                             iconBell = FontAwesomeIcons.solidBell;
                             receive = value;
                           });
+                          HazizzNotification.scheduleNotificationAlarmManager();
                         }else{
                           setState(() {
                             iconBell = FontAwesomeIcons.solidBellSlash;
                             receive = value;
 
                           });
+                          HazizzNotification.cancel();
                         }
 
                       }
@@ -128,7 +130,7 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage> with Aut
 
                       );
                       if(newTime != null) {
-                        HazizzNotification.scheduleNotificationAlarmManager(newTime);
+                        HazizzNotification.scheduleNotificationAlarmManager(timeOfDay: newTime);
                         setState(() {
                           var a = HazizzTimeOfDay(hour: newTime.hour, minute: newTime.minute);
                           notificationTime = a.toHazizzFormat();

@@ -70,7 +70,7 @@ class GradeItemWidget extends StatelessWidget{
                                       Align(
                                         alignment: Alignment.bottomCenter,
                                         child: Padding(
-                                          padding: const EdgeInsets.only(bottom: 0.0),
+                                          padding: const EdgeInsets.only(bottom: 0, left: 4),
                                           child: Builder(
                                             builder: (context){
                                               Color textColor = Colors.black;
@@ -112,7 +112,7 @@ class GradeItemWidget extends StatelessWidget{
                                         child: Padding(
                                           padding: const EdgeInsets.only(
                                               left: 4, top: 1, bottom: 1,  right: 8, ),
-                                          child: Text(pojoGrade.subject,
+                                          child: Text(pojoGrade.subject[0].toUpperCase() + pojoGrade.subject.substring(1),
                                             style: TextStyle(fontSize: 18, color: Colors.black),),
                                         )
                                     );
@@ -176,7 +176,7 @@ class GradeItemWidget extends StatelessWidget{
                     builder: (_){
                       if(isBySubject){
                         return Positioned(bottom: 4, right: 4,
-                          child: Text(hazizzShowDateAndTimeFormat(pojoGrade.creationDate),style: Theme.of(context).textTheme.subtitle,) ,
+                          child: Text(hazizzShowDateFormat(pojoGrade.creationDate),style: Theme.of(context).textTheme.subtitle,) ,
                         );
                       }
                       return Container();

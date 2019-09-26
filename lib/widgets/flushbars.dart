@@ -8,7 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../hazizz_localizations.dart';
 
 
-dynamic showNoConnectionFlushBar(BuildContext context, {@required GlobalKey<ScaffoldState> scaffoldState}){
+dynamic showNoConnectionFlushBar(BuildContext context){
 
   return Flushbar(
     icon: Padding(
@@ -29,19 +29,9 @@ dynamic showNoConnectionFlushBar(BuildContext context, {@required GlobalKey<Scaf
     message:  locText(context, key: "info_noInternetAccess"),
     duration:  Duration(seconds: 3),
   )..show(context);
-
-  return scaffoldState.currentState.showSnackBar(SnackBar(
-    content: Text(locText(context, key: "info_noInternetAccess")),
-    duration: Duration(seconds: 3),
-  ));
 }
 
-dynamic showKretaUnavailableFlushBar(BuildContext context, {@required GlobalKey<ScaffoldState> scaffoldState}){
- /* return scaffoldState.currentState.showSnackBar(SnackBar(
-    content: Text(locText(context, key: "kreta_server_unavailable")),
-    duration: Duration(seconds: 3),
-  ));
-  */
+dynamic showKretaUnavailableFlushBar(BuildContext context){
 
   return Flushbar(
     icon: Padding(
@@ -60,26 +50,40 @@ dynamic showKretaUnavailableFlushBar(BuildContext context, {@required GlobalKey<
       ),
     ),
     message:  locText(context, key: "kreta_server_unavailable"),
-    //  message:  "Lorem Ipsum is simply dummy text of the HazizzLogger.printLoging and typesetting industry",
     duration:  Duration(seconds: 3),
   )..show(context);
 }
 
 
-void showReportSuccessFlushBar(BuildContext context, {String what}){
+void showReportSuccessFlushBar(BuildContext context, {@required String what}){
   Flushbar(
     icon: Icon(FontAwesomeIcons.solidFlag, color: Colors.green,),
     message:  locText(context, key: "report_successful", args: [what]),
-  //  message:  "Lorem Ipsum is simply dummy text of the HazizzLogger.printLoging and typesetting industry",
     duration:  Duration(seconds: 4),
   )..show(context);
 }
 
-void showDeleteWasSuccessfulFlushBar(BuildContext context, {String what}){
+void showDeleteWasSuccessfulFlushBar(BuildContext context, {@required String what}){
   Flushbar(
     icon: Icon(FontAwesomeIcons.times, color: Colors.green,),
-    message:  locText(context, key: "delete_successful", args: [what]),
-    //  message:  "Lorem Ipsum is simply dummy text of the HazizzLogger.printLoging and typesetting industry",
+    message:  locText(context, key: "subscribed_to_subject", args: [what]),
     duration:  Duration(seconds: 4),
   )..show(context);
 }
+
+void showSubscribedToSubjectFlushBar(BuildContext context, {@required String what}){
+  Flushbar(
+    icon: Icon(FontAwesomeIcons.check, color: Colors.green,),
+    message:  locText(context, key: "subscribed_to_subject", args: [what]),
+    duration:  Duration(seconds: 3),
+  )..show(context);
+}
+
+void showUnsubscribedFromSubjectFlushBar(BuildContext context, {@required String what}){
+  Flushbar(
+    icon: Icon(FontAwesomeIcons.times, color: Colors.red,),
+    message:  locText(context, key: "unsubscribed_from_subject", args: [what]),
+    duration:  Duration(seconds: 3),
+  )..show(context);
+}
+

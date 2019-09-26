@@ -45,7 +45,7 @@ class RequestSender{
           dio.lock();
         }
         */
-        HazizzLogger.printLog("HazizzLog: preparing to send request");
+        HazizzLogger.printLog("preparing to send request");
         return options; //continue
         // If you want to resolve the request with some custom data，
         // you can return a `Response` object or return `dio.resolve(data)`.
@@ -53,12 +53,12 @@ class RequestSender{
         // you can return a `DioError` object or return `dio.reject(errMsg)`
       },
       onResponse:(Response response) {
-        HazizzLogger.printLog("HazizzLog: got response: ${response.data}");
+        HazizzLogger.printLog("got response: ${response.data}");
 
         return response; // continue
       },
       onError: (DioError e) async{
-        HazizzLogger.printLog("HazizzLog: got response error: ${e}");
+        HazizzLogger.printLog("got response error: ${e}");
         // return  e;//continue
       }
     ));
@@ -102,6 +102,7 @@ class RequestSender{
   void initalize(){
     dio = new Dio();
     dio.transformer = new FlutterTransformer();
+    HazizzLogger.hprint("dio options: ${options.toString()}");
   }
 
   Future<void> waitCooldown() async{
@@ -112,14 +113,14 @@ class RequestSender{
   void lock(){
     dio.lock();
     _isLocked = true;
-    HazizzLogger.printLog("HazizzLog: dio interceptors: locked");
+    HazizzLogger.printLog("dio interceptors: locked");
 
 
   }
   void unlock(){
     dio.unlock();
     _isLocked = false;
-    HazizzLogger.printLog("HazizzLog: dio interceptors: unlocked");
+    HazizzLogger.printLog("dio interceptors: unlocked");
 
   }
   bool isLocked(){
@@ -139,70 +140,17 @@ class RequestSender{
         HazizzLogger.printLog("log: error response data: ${error.response.data}");
       }
       hazizzResponse = await HazizzResponse.onError(dioError: error, request: authRequest);
-      if(hazizzResponse.hasPojoError && hazizzResponse.pojoError.errorCode == 21){
-        AppState.logout();
+      if(hazizzResponse.pojoError != null){
+        if(hazizzResponse.pojoError.errorCode == 21){
+          await AppState.logout();
+        }
       }
 
 
-      HazizzLogger.printLog("HazizzLog: auth response: ${hazizzResponse}");
+      HazizzLogger.printLog("auth response is successful: ${hazizzResponse.isSuccessful}");
     }
     return hazizzResponse;
   }
-
-  /*
-  Future<void> onPojoError2(PojoError pojoError, Request request) async{
-    if (true) {
-      // HazizzLogger.printLog("log: error response data: ${error.response.data}");
-      // PojoError pojoError = PojoError.fromJson(json.decode(error.response?.data));
-
-      if(pojoError.errorCode == 19){// to many requests
-        HazizzLogger.printLog("here iam");
-        stop();
-      }
-      else if(pojoError.errorCode == 18 || pojoError.errorCode == 17){// wrong token
-        // a requestet elmenteni hogy újra küldje
-        HazizzLogger.printLog("hey: Locked: ${isLocked()}");
-        if(!isLocked()) {
-          lock();
-          // elküldi újra ezt a requestet ami errort dobott
-          send(request);
-          HazizzLogger.printLog("hey2: username: ${await InfoCache.getMyUsername()}");
-          HazizzLogger.printLog("hey2: token: ${await TokenManager.getRefreshToken()}");
-
-          await tokenRequestSend(new CreateTokenWithRefresh(
-              b_username: await InfoCache.getMyUsername(),
-              b_refreshToken: await TokenManager.getRefreshToken(),
-              rh: ResponseHandler(
-                  onSuccessful: (dynamic data) {
-                    HazizzLogger.printLog("hey: got token reponse: ${data.token}");
-                    unlock();
-                  },
-                  onError: (PojoError pojoError) {
-                    unlock();
-
-                  }
-              )
-          ));
-        }else{
-          send(request);
-        }
-        //  request.rh.onSuccessful();
-      }else if(pojoError.errorCode == 13 || pojoError.errorCode == 14
-          || pojoError.errorCode == 15){
-        // navigate to login/register page
-      }
-      https://github.com/hazizz/hazizz-mobile
-      HazizzLogger.printLog("log: response error: ${pojoError.toString()}");
-      //  throw new HResponseError(pojoError);
-      return pojoError;
-      //  return pojoError;
-      request.onError(pojoError);
-    }
-
-    //  return error.response;
-  }
-  */
-
 
   Set<Request> noConnectionRequestsPrioritized = Set();
   List<Request> noConnectionRequests = List();
@@ -262,14 +210,15 @@ class RequestSender{
 
     Response response;
 
-    HazizzLogger.printLog("HazizzLog: about to start sending request: ${request.toString()}");
+    HazizzLogger.printLog("about to start sending request: ${request.toString()}");
 
-    if(isLocked()) HazizzLogger.printLog("HazizzLog: Dio interceptor is locked: ${request.toString()}");
+    if(isLocked()) HazizzLogger.printLog("Dio interceptor is locked: ${request.toString()}");
 
     bool isConnected = await Connection.isOnline();
     try {
       if(isConnected) {
-        HazizzLogger.printLog("HazizzLog: request query: ${request.query}");
+        HazizzLogger.printLog("request query: ${request.query}");
+        HazizzLogger.printLog("request url: ${request.url}");
 
         if(request.httpMethod == HttpMethod.GET) {
           options.headers = await request.buildHeader();
@@ -286,20 +235,21 @@ class RequestSender{
           response = await dio.patch(request.url, queryParameters: request.query, data: request.body, options: options);
         }
 
-        HazizzLogger.printLog("HazizzLog: request was sent successfully: ${request.toString()}");
+        HazizzLogger.printLog("request was sent successfully: ${request.toString()}");
+        HazizzLogger.printLog("response for ${request.toString()}: ${response.toString()}");
         hazizzResponse = HazizzResponse.onSuccess(response: response, request: request);
        // HazizzLogger.printLog("log: request sent: ${request.toString()}");
-        HazizzLogger.printLog("HazizzLog: HazizzResponse.onSuccess ran: ${request.toString()}");
+        HazizzLogger.printLog("HazizzResponse.onSuccess ran: ${request.toString()}");
 
       }else{
-        HazizzLogger.printLog("HazizzLog: No network connection, can't send request: ${request.toString()}");
+        HazizzLogger.printLog("No network connection, can't send request: ${request.toString()}");
         throw noConnectionError;
       }
     }on DioError catch(error) {
-      HazizzLogger.printLog("HazizzLog: response is error: ${request.toString()}");
+      HazizzLogger.printLog("response is error: ${request.toString()}");
 
       hazizzResponse = await HazizzResponse.onError(dioError: error, request: request);
-      HazizzLogger.printLog("HazizzLog: HazizzResponse.onError ran: ${request.toString()}");
+      HazizzLogger.printLog("HazizzResponse.onError ran: ${request.toString()}");
 
     }
     return hazizzResponse;

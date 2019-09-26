@@ -102,7 +102,7 @@ class _KretaSettingsPage extends State<KretaSettingsPage> with AutomaticKeepAliv
                       trailing: Switch(
                           value: isRemember,
                           onChanged: (value){
-                            HazizzLogger.printLog("HazizzLog: remember kreta password is enabled: ${value}");
+                            HazizzLogger.printLog("remember kreta password is enabled: ${value}");
                             KretaSessionManager.setRememberPassword(value);
                             if(value){
                               setState(() {

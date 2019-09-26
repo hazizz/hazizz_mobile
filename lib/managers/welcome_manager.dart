@@ -9,7 +9,7 @@ class WelcomeManager{
     var sh = await SharedPreferences.getInstance();
     bool isFirstTime = sh.getBool(key_seenIntro);
   //  sh.setBool(key, true);
-    return isFirstTime == null ? true : isFirstTime;
+    return isFirstTime == null ? false : isFirstTime;
   }
 
   static Future<void> haveSeenIntro() async {

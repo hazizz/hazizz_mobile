@@ -96,19 +96,21 @@ class TasksErrorState extends TasksState {
 //region SubjectItemListBloc
 class TasksBloc extends Bloc<TasksEvent, TasksState> {
 
+  bool wholeGroup = false;
+  int groupId = null;
+
   TasksBloc(){
 
+  }
+
+  TasksBloc.group(int groupId){
+    wholeGroup = true;
+    this.groupId = groupId;
   }
 
   TaskCompleteState currentTaskCompleteState = TaskCompleteState.UNCOMPLETED;
 
   TaskExpiredState currentTaskExpiredState = TaskExpiredState.UNEXPIRED;
-
-
- // bool onlyExpired = false;
-
-
- // bool onlyIncomplete = true;
 
   DateTime lastUpdated = DateTime(0, 0, 0, 0, 0);
 
@@ -135,15 +137,10 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
       }
       return tasks;
     }
-
   }
-
-
 
   @override
   TasksState get initialState => TasksInitialState();
-
-
 
 
   @override
@@ -153,16 +150,10 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
       debugPrint("yolo: ${tasks}");
       tasks[event.mapKey].removeAt(event.index);
 
-
       if(tasks[event.mapKey].isEmpty){
         HazizzLogger.printLog("is realy empty");
         tasks.remove(event.mapKey);
       }
-      debugPrint("yolo2: ${tasks}");
-
-
-
-
 
       yield TasksLoadedState(tasks);
     }
@@ -170,7 +161,9 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
       try {
         yield TasksWaitingState();
 
-        if(currentTaskExpiredState == TaskExpiredState.UNEXPIRED && currentTaskCompleteState == TaskCompleteState.UNCOMPLETED){
+        if(currentTaskExpiredState == TaskExpiredState.UNEXPIRED
+        && currentTaskCompleteState == TaskCompleteState.UNCOMPLETED
+        && groupId == null){
           DataCache dataCache = await loadTasksCache();
           if(dataCache!= null){
             lastUpdated = dataCache.lastUpdated;
@@ -205,7 +198,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
        // HazizzResponse hazizzResponse2 = await RequestSender().getResponse(new GetRecentEvents());
 
 
-        HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetTasksFromMe(q_unfinishedOnly: unfinishedOnly, q_finishedOnly: finishedOnly, q_showThera: true, q_startingDate: startDate, q_endDate: endDate));
+        HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetTasksFromMe(q_unfinishedOnly: unfinishedOnly, q_finishedOnly: finishedOnly, q_showThera: true, q_startingDate: startDate, q_endDate: endDate, q_groupId: groupId, q_wholeGroup: wholeGroup));
 
         //  HazizzLogger.printLog("tasks.: ${tasks}");
         if(hazizzResponse.isSuccessful){
@@ -217,7 +210,9 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
             onLoaded(tasksRaw);
 
             lastUpdated = DateTime.now();
-            if(currentTaskExpiredState == TaskExpiredState.UNEXPIRED && currentTaskCompleteState == TaskCompleteState.UNCOMPLETED) {
+            if(currentTaskExpiredState == TaskExpiredState.UNEXPIRED
+            && currentTaskCompleteState == TaskCompleteState.UNCOMPLETED
+            && groupId == null) {
               saveTasksCache(tasksRaw);
             }
 
@@ -232,8 +227,6 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
 
             HazizzLogger.printLog("log: oy133");
           }
-
-
         }
         else if(hazizzResponse.isError){
 
@@ -255,61 +248,15 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
             yield TasksErrorState(hazizzResponse);
 
           }
-
-
         }
       } on Exception catch(e){
         HazizzLogger.printLog("log: Exception: ${e.toString()}");
       }
     }
   }
-
 }
 //endregion
 //endregion
-
-
-
-
-
-
-
-
-
-/*
-    return ListView.builder(
-     // itemExtent: ,
-     // addRepaintBoundaries: false,
-   //   cacheExtent: 2,
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      itemCount: map[key].length,
-      itemBuilder: (context, index){
-        return TaskItemWidget(originalPojoTask: map[key][index], onCompletedChanged: (){
-          var removedItem = map[key][index];
-
-
-          setState(() {
-            map[key].remove(removedItem);
-            MainTabBlocs().tasksBloc.tasks[key].remove(removedItem);
-            MainTabBlocs().tasksBloc.tasksRaw.remove(removedItem);
-
-            if(map[key].isEmpty){
-
-              setState(() {
-                HazizzLogger.printLog("oof22: ${map}");
-                map.remove(key);
-                MainTabBlocs().tasksBloc.tasks.remove(key);
-                HazizzLogger.printLog("oof32: ${map}");
-              });
-            }
-          });
-
-          //MainTabBlocs().tasksBloc.dispatch(TasksFetchEvent());
-        },key: Key(map[key][index].toJson().toString()),);
-      },
-    );
-    */
 
 
 

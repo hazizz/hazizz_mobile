@@ -47,7 +47,7 @@ PojoClass _$PojoClassFromJson(Map<String, dynamic> json) {
       cancelled: json['cancelled'] as bool,
       standIn: json['standIn'] as bool,
       subject: json['subject'] as String,
-      className: json['className'] as String,
+      className: (json['className'] as String) ,
       teacher: json['teacher'] as String,
       room: json['room'] as String,
       topic: json['topic'] as String);

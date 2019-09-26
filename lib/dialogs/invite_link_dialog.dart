@@ -107,7 +107,7 @@ class _InviteLinkDialog extends State<InviteLinkDialog> {
                   child: Text(locText(context, key: "share").toUpperCase(),),
                 ),
                 onPressed: () {
-                  HazizzLogger.printLog("HazizzLog: pressed share button");
+                  HazizzLogger.printLog("pressed share button");
 
                   Share.share(locText(context, key: "invite_to_group_text_title", args: [widget.group.name, inviteLink]));
                   // Navigator.of(context).pop();

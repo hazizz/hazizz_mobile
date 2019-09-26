@@ -119,17 +119,12 @@ class SchoolItemState extends ItemListState{
 }
 
 class SchoolItemPickedState extends SchoolItemState{
-
-
   SchoolItemPickedState([List props = const []]) : super(props);
-
 }
 
 
 class SchoolItemPickerBloc extends ItemListPickerBloc {
   Map data;
-
-  SchoolItemPickerBloc() {}
 
   @override
   Stream<ItemListState> mapEventToState(ItemListEvent event) async* {
@@ -148,12 +143,19 @@ class SchoolItemPickerBloc extends ItemListPickerBloc {
             yield ItemListLoaded(data: data);
           
         }else{
+          HazizzLogger.printLog("kréta schools fetch failed, retrying");
+
           HazizzResponse hazizzResponse = await RequestSender().getResponse(KretaGetSchools());
 
           if (hazizzResponse.isSuccessful) {
+            HazizzLogger.printLog("kréta schools fetch successful for the second time");
+
             data = hazizzResponse.convertedData;
             // listItemData = responseData;
             yield ItemListLoaded(data: data);
+
+          }else{
+            HazizzLogger.printLog("kréta schools fetch failed second time.");
 
           }
         }

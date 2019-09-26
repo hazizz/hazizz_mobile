@@ -8,6 +8,7 @@ import 'package:mobile/communication/pojos/PojoClass.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/listItems/class_item_widget.dart';
 import 'package:mobile/widgets/schedule_event_widget.dart';
+import 'package:mobile/widgets/scroll_space_widget.dart';
 
 import '../../hazizz_localizations.dart';
 import '../../hazizz_time_of_day.dart';
@@ -34,8 +35,6 @@ class SchedulesTabPage extends StatefulWidget {
 
 class _SchedulesTabPage extends State<SchedulesTabPage> with TickerProviderStateMixin {
 
-
-
   _SchedulesPage(){}
 
   HazizzTimeOfDay now = HazizzTimeOfDay.now();
@@ -48,24 +47,21 @@ class _SchedulesTabPage extends State<SchedulesTabPage> with TickerProviderState
 
   void updateEveryMinute(){
     Timer(Duration(minutes: 1), () {
-      updateTime();
-      updateEveryMinute();
+      if(this.mounted) {
+        updateTime();
+        updateEveryMinute();
+      }
     });
   }
 
   @override
   void initState() {
-
-
-
-
     WidgetsBinding.instance.addPostFrameCallback((_){
       setState(() {
         updateEveryMinute();
       });
     }
     );
-
 
     super.initState();
   }
@@ -112,7 +108,7 @@ class _SchedulesTabPage extends State<SchedulesTabPage> with TickerProviderState
       );
     }
 
-    HazizzLogger.printLog("HazizzLog: it is today: ${widget.isToday}");
+    HazizzLogger.printLog("it is today: ${widget.isToday}");
 
     List<Widget> listItems = [];
 
@@ -169,11 +165,15 @@ class _SchedulesTabPage extends State<SchedulesTabPage> with TickerProviderState
         }
       }
     }
-
-    return ListView(
-    //  controller: scrollController,
-      children: listItems,
-    );
+    return ListView.builder(
+      itemCount: listItems.length,
+      itemBuilder: (context, index){
+        Widget c = listItems[index];
+        if(index >= listItems.length-1){
+          return addScrollSpace(c);
+        }
+        return c;
+    });
   }
 }
 

@@ -73,7 +73,7 @@ class InfoCache{
   static Future<PojoMeInfoPrivate> getMyUserData() async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String str_myUserData = prefs.getString(_keyMe + _userData);
-    HazizzLogger.printLog("HazizzLog: str_myUserData: $str_myUserData");
+    HazizzLogger.printLog("str_myUserData: $str_myUserData");
     if(str_myUserData != null) {
       PojoMeInfoPrivate meInfo = PojoMeInfoPrivate.fromJson(jsonDecode(str_myUserData));
       return meInfo;

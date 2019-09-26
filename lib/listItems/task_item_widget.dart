@@ -153,8 +153,8 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
                 });
 
                 dynamic editedTask = await Navigator.pushNamed(context, "/viewTask", arguments: pojoTask.copy());
-                HazizzLogger.printLog("HazizzLog: edited task: ${editedTask.toJson()}");
-                HazizzLogger.printLog("HazizzLog: old task: ${pojoTask.toJson()}");
+                HazizzLogger.printLog("edited task: ${editedTask.toJson()}");
+                HazizzLogger.printLog("old task: ${pojoTask.toJson()}");
                 if(pojoTask.completed != editedTask.completed){
                     widget.onCompletedChanged();
                   }

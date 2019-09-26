@@ -113,7 +113,7 @@ class GoogleLoginBloc extends Bloc<GoogleLoginEvent, GoogleLoginState> {
   void dispose() {
     // TODO: implement dispose
 
-    HazizzLogger.printLog("HazizzLog: google login bloc DISPOSED");
+    HazizzLogger.printLog("google login bloc DISPOSED");
     authenticationBloc.dispose();
     super.dispose();
   }
@@ -137,29 +137,29 @@ class GoogleLoginBloc extends Bloc<GoogleLoginEvent, GoogleLoginState> {
       
 
 
-      HazizzLogger.printLog("HazizzLog: google login: 1");
+      HazizzLogger.printLog("google login: 1");
       final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-      HazizzLogger.printLog("HazizzLog: google login: 2");
+      HazizzLogger.printLog("google login: 2");
       if(googleUser == null){
         yield GoogleLoginFineState();
       }
-      HazizzLogger.printLog("HazizzLog: google login: 3");
+      HazizzLogger.printLog("google login: 3");
 
       final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
-      HazizzLogger.printLog("HazizzLog: google login: 4");
+      HazizzLogger.printLog("google login: 4");
 
       final AuthCredential credential = GoogleAuthProvider.getCredential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
-      HazizzLogger.printLog("HazizzLog: google login: 5");
+      HazizzLogger.printLog("google login: 5");
 
 
      // final AuthResult authResult = (await _auth.signInWithCredential(credential));
      // FirebaseUser user = authResult.user;
       final FirebaseUser user = (await _auth.signInWithCredential(credential));
-      HazizzLogger.printLog("HazizzLog: signed in " + user.displayName);
+      HazizzLogger.printLog("signed in " + user.displayName);
 
 
 

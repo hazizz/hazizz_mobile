@@ -21,6 +21,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:dynamic_theme/dynamic_theme.dart';
 
+import 'managers/welcome_manager.dart';
 import 'navigation/business_navigator.dart';
 import 'notification/notification.dart';
 
@@ -87,7 +88,7 @@ void main() async{
 
   themeData = await HazizzTheme.getCurrentTheme();
 
-  if(!(await AppState.isNewComer())) {
+  if((await WelcomeManager.getSeenIntro()) || !(await AppState.isNewComer())) {
     if(!(await AppState.isLoggedIn())) { // !(await AppState.isLoggedIn())
       isLoggedIn = false;
     }else {
@@ -106,7 +107,6 @@ void main() async{
   }else{
     isLoggedIn = false;
     newComer = true;
-    AppState.setIsntNewComer();
   }
   runApp(EasyLocalization(child: HazizzApp()));
 }
@@ -130,7 +130,6 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
   initState() {
     super.initState();
 
-
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -143,7 +142,7 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
   
   @override
   Future didChangeAppLifecycleState(AppLifecycleState state) async {
-    HazizzLogger.printLog('HazizzLog: App lifecycle state is $state');
+    HazizzLogger.printLog('App lifecycle state is $state');
 
     if(state == AppLifecycleState.paused){
       lastActive = DateTime.now();
@@ -160,12 +159,12 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
       var notificationAppLaunchDetails = await HazizzNotification.flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
         String payload = notificationAppLaunchDetails.payload;
         if(payload != null) {
-          HazizzLogger.printLog("HazizzLog: payload: $payload");
+          HazizzLogger.printLog("payload: $payload");
           Navigator.pushNamed(context, "/tasksTomorrow");
 
           tasksTomorrowSerialzed = payload;
           //  tasksForTomorrow = getIterable(payload).map<PojoTask>((json) => PojoTask.fromJson(json)).toList();
-        }else  HazizzLogger.printLog("HazizzLog: no payload");
+        }else  HazizzLogger.printLog("no payload");
 
 
 
@@ -185,9 +184,6 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
 
   @override
   Widget build(BuildContext context) {
-
-
-
       if(isLoggedIn){
         if(!isFromNotification){
           startPage = "/";

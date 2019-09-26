@@ -166,7 +166,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
         yield ScheduleWaitingState();
 
-        HazizzLogger.printLog("WIATING222 : ${event.yearNumber}, ${event.weekNumber}");
+        HazizzLogger.printLog("event.yearNumber, event.weekNumber: ${event.yearNumber}, ${event.weekNumber}");
 
 
         if(event.yearNumber == currentCurrentYearNumber && event.weekNumber == currentCurrentWeekNumber){
@@ -196,8 +196,6 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
         //  HazizzLogger.printLog("classes.: ${classes}");
         if(hazizzResponse.isSuccessful){
-
-          HazizzLogger.printLog("classes.classes: ${ hazizzResponse.convertedData}");
           classes = hazizzResponse.convertedData;
 
 
@@ -229,7 +227,6 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
           });
           */
 
-
           if(classes != null ){
 
             currentWeekNumber = event.weekNumber;
@@ -238,19 +235,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
             if(event.yearNumber == currentCurrentYearNumber && event.weekNumber == currentCurrentWeekNumber) {
               saveScheduleCache(classes);
             }
-
-            HazizzLogger.printLog("log: opsie: 0");
-
-            // classes = classesDummy;
-
-
-            HazizzLogger.printLog("log: opsie: 0");
-
-           // scheduleEventBloc.dispatch(ScheduleEventUpdateClassesEvent());
-
             yield ScheduleLoadedState(classes);
-
-            HazizzLogger.printLog("log: oy133");
           }
 
 
@@ -258,7 +243,6 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
         else if(hazizzResponse.isError){
 
           if(hazizzResponse.dioError == noConnectionError){
-            HazizzLogger.printLog("log: noConnectionError22");
             yield ScheduleErrorState(hazizzResponse);
 
             Connection.addConnectionOnlineListener((){
@@ -269,7 +253,6 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
           }else if(hazizzResponse.dioError.type == DioErrorType.CONNECT_TIMEOUT
               || hazizzResponse.dioError.type == DioErrorType.RECEIVE_TIMEOUT) {
-            HazizzLogger.printLog("log: noConnectionError22");
             this.dispatch(ScheduleFetchEvent());
           }else{
             yield ScheduleErrorState(hazizzResponse);

@@ -48,19 +48,15 @@ class _SureToJoinGroupDialog extends State<SureToJoinGroupDialog> {
             isMember = true;
           });
         }
-
         setState(() {
           groupName = group.name;
           isLoading = false;
         });
-
       }else{
         setState(() {
           someThingWentWrong = true;
         });
       }
-
-
     });
 
     super.initState();

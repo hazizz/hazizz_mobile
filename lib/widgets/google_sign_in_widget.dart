@@ -39,7 +39,7 @@ class _GoogleSignInButtonWidget extends State<GoogleSignInButtonWidget> {
 
   @override
   void dispose() {
-    HazizzLogger.printLog("HazizzLog: google bloc disposed");
+    HazizzLogger.printLog("google bloc disposed");
     LoginBlocs().googleLoginBloc.reset();
    // LoginBlocs().googleLoginBloc().dispose();
 
@@ -65,7 +65,7 @@ class _GoogleSignInButtonWidget extends State<GoogleSignInButtonWidget> {
           else if(state is GoogleLoginHaveToAcceptConditionsState){
             WidgetsBinding.instance.addPostFrameCallback((_) =>
                 showRegistrationDialog(context).then((accepted){
-                  HazizzLogger.printLog("HazizzLog: showRegistrationDialog has accepted: $accepted");
+                  HazizzLogger.printLog("showRegistrationDialog has accepted: $accepted");
                   if(accepted != null && accepted){
                     LoginBlocs().googleLoginBloc.dispatch(GoogleLoginAcceptedConditionsEvent());
                   }else{
@@ -76,7 +76,7 @@ class _GoogleSignInButtonWidget extends State<GoogleSignInButtonWidget> {
 
 
           }else if(state is GoogleLoginRejectedConditionsState){
-            HazizzLogger.printLog("HazizzLog: google signin: rejected and signing out");
+            HazizzLogger.printLog("google signin: rejected and signing out");
 
             errorText = locText(context, key: "error_conditionsNotAccepted");
           }

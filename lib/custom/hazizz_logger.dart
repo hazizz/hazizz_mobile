@@ -7,7 +7,11 @@ class HazizzLogger{
 
   // TODO: crashlytics keys
 
-  static final List<String> logs = ["-----------KEYS-----------", "------------LOGS-----------"];
+ // static final List<String> logs = ["-----------KEYS-----------", "------------LOGS-----------"];
+
+  static String _processMessage(String msg){
+    return "HazizzLog: $msg";
+  }
 
   static void printLog(String msg){
     log(msg);
@@ -16,18 +20,18 @@ class HazizzLogger{
 
   // only HazizzLogger.printLogs
   static void hprint(String msg){
-    debugPrint(msg);
+    debugPrint(_processMessage(msg));
   }
 
   // only logs
   static void log(String msg){
-    logs.add(msg);
-    CrashlyticsReporter.log(msg);
+   // logs.add(_processMessage(msg));
+    CrashlyticsReporter.log(_processMessage(msg));
   }
 
   static void addKeys(String key, String value){
-    logs.insert(1, "$key: $value");
+  //  logs.insert(1, "$key: $value");
+   // hprint("$key: $value");
     Crashlytics().setString(key, value);
   }
-
 }

@@ -45,11 +45,15 @@ class HazizzResponse{
     hazizzResponse.response = response;
     hazizzResponse.request = request;
     hazizzResponse.convertedData = request.convertData(response);
-    HazizzLogger.printLog("HazizzLog: response conversion was successful");
+    HazizzLogger.printLog("response conversion was successful");
     hazizzResponse.isSuccessful = true;
 
-    HazizzLogger.printLog("HazizzLog: successful response raw body: ${response.data}");
+    if(request is AuthRequest){
+      HazizzLogger.printLog("successful token response");
 
+    }else {
+      HazizzLogger.printLog("successful response raw body: ${response.data}");
+    }
 
     if(request is TheraRequest && KretaStatusBloc().currentState is KretaStatusUnavailableState){
       KretaStatusBloc().dispatch(KretaStatusAvailableEvent());
@@ -66,8 +70,12 @@ class HazizzResponse{
     hazizzResponse.request = request;
     hazizzResponse.isError = true;
     await hazizzResponse.onErrorResponse();
-    HazizzLogger.printLog("HazizzLog: error response raw body: ${hazizzResponse.response.data}");
-    HazizzLogger.printLog("HazizzLog: error response dio error: ${hazizzResponse.dioError.type.toString()}");
+    if(request is AuthRequest){
+      HazizzLogger.printLog("error obtaining token response. Big problem");
+    }else {
+      HazizzLogger.printLog("error response raw body: ${hazizzResponse.response.data}");
+    }
+    HazizzLogger.printLog("error response dio error: ${hazizzResponse.dioError.type.toString()}");
 
 
     return hazizzResponse;
@@ -85,13 +93,13 @@ class HazizzResponse{
           KretaStatusBloc().dispatch(KretaStatusUnavailableEvent());
         }
         else if(pojoError.errorCode == 19) { // to many requests
-          HazizzLogger.printLog("HazizzLog: To many requests");
+          HazizzLogger.printLog("To many requests");
           await RequestSender().waitCooldown();
         }
         else if(pojoError.errorCode == 18 ||
             pojoError.errorCode == 17) { // wrong token
           // a requestet elmenteni hogy újra küldje
-          HazizzLogger.printLog("HazizzLog: token is wrong or expired, the failed request is saved and a refrest token request is being sent. dio interceptro: ${RequestSender().isLocked()}");
+          HazizzLogger.printLog("token is wrong or expired, the failed request is saved and a refrest token request is being sent. dio interceptro: ${RequestSender().isLocked()}");
           if(!RequestSender().isLocked()) {
             RequestSender().lock();
 
@@ -101,17 +109,18 @@ class HazizzResponse{
               RequestSender().unlock();
             }else if(tokenResponse.pojoError != null){
               if(tokenResponse.pojoError.errorCode == 17){
-                AppState.logout();
+                await AppState.logout();
+                return;
               }
 
-              HazizzLogger.printLog("HazizzLog: obtaining token failed. The user is redirected to the login screen");
+              HazizzLogger.printLog("obtaining token failed. The user is redirected to the login screen");
 
             }
 
 
             // elküldi újra ezt a requestet ami errort dobott
             HazizzResponse hazizzResponse = await RequestSender().getResponse(request);
-            HazizzLogger.printLog("HazizzLog: resent failed request)");
+            HazizzLogger.printLog("resent failed request: ${request}");
 
             RequestSender().unlock();
 

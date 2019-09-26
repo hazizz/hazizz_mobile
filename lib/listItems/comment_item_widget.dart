@@ -33,12 +33,11 @@ class _CommentItemWidget extends State<CommentItemWidget>{
 
   bool imTheAuthor = false;
 
-
   @override
   void initState() {
     // TODO: implement initState
     InfoCache.getMyId().then((int result){
-      HazizzLogger.printLog("HazizzLog: user is the author: $result");
+      HazizzLogger.printLog("user is the author: $result");
 
       if(widget.comment.creator.id == result){
         setState(() {
@@ -58,8 +57,6 @@ class _CommentItemWidget extends State<CommentItemWidget>{
       elevation: 30,
       child: InkWell(
         onTap: () {
-          // showGradeDialog(context, grade: pojoGrade);
-        //  showClassDialog(context, pojoClass: pojoClass);
         },
         child: Column(
           children: [
@@ -128,9 +125,6 @@ class _CommentItemWidget extends State<CommentItemWidget>{
                           style: TextStyle(color: HazizzTheme.red),
                         ),
                       ),
-
-
-
                     ];
 
                     if(imTheAuthor) {
@@ -146,7 +140,7 @@ class _CommentItemWidget extends State<CommentItemWidget>{
                       icon: Icon(FontAwesomeIcons.ellipsisV, size: 20,),
                       onSelected: (value) async {
                         if(value == value_delete){
-                          await RequestSender().getResponse(DeleteTaskComment(p_taskId: widget.taskId, p_commentId: widget.comment.id));
+                          await RequestSender().getResponse(DeleteComment(p_commentId: widget.comment.id));
                           ViewTaskBloc().commentBlocs.commentSectionBloc.dispatch(CommentSectionFetchEvent());
                         }else if(value == "report"){
                           bool success = await showReportDialog(context, reportType: ReportTypeEnum.COMMENT, id: widget.comment.id, secondId: widget.taskId, name: widget.comment.creator.displayName);
@@ -165,7 +159,6 @@ class _CommentItemWidget extends State<CommentItemWidget>{
                       },
 
                     );
-
                   }
                 )
               ]

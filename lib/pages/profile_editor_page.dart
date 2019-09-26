@@ -49,7 +49,7 @@ class _ProfileEditorPage extends State<ProfileEditorPage> with TickerProviderSta
 
 
     if(image == null){
-      HazizzLogger.printLog("HazizzLog: picked image is null ");
+      HazizzLogger.printLog("picked image is null ");
       return false;
     }
 

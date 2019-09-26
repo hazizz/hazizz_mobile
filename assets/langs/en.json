@@ -224,8 +224,28 @@
     : "Settings",
 
   "developer_settings"
-  : "Fejlesztői beállítások",
+  : "Developer settings",
 
+  "about"
+  : "About",
+
+  "online"
+  : "Online",
+  "offline"
+  : "Offline",
+
+  "version"
+  : "Version",
+
+  "website"
+  : "Website",
+
+  "auth_server"
+  : "Authentication server",
+  "hazizz_server"
+  : "Hazizz server",
+  "thera_server"
+  : "Théra server",
 
 
   "logs"
@@ -282,17 +302,7 @@
     : "Subjects",
 
 
-  "subscribe"
-  : "Subscribe",
 
-  "unsubscribe"
-  : "Unsubscribe",
-
-  "subscribed"
-  : "Subscribed",
-
-  "unsubscribed"
-  : "Unsubscribed",
 
     "title"
     : "Title",
@@ -898,6 +908,30 @@
   "create_subject"
   : "Create subject",
 
+  "edit_subject"
+  : "Edit subject",
+
+  "subscribe"
+  : "Subscribe",
+
+  "unsubscribe"
+  : "Unsubscribe",
+
+  "subscribed"
+  : "Subscribed",
+
+  "unsubscribed"
+  : "Unsubscribed",
+
+  "subscribed_to_subject"
+  : "Subscribed to {}",
+
+  "unsubscribed_from_subject"
+  : "Unsubscribed from {}",
+
+  "choose_subjects_to_subscribe_to"
+  : "Subjects to subscribe to",
+
   "about_group_title"
   : "About groups",
 
@@ -1236,7 +1270,7 @@
 
 
     "thera_standin"
-    : "replacement:",
+    : "replacement",
 
 
     "thera_canceled"

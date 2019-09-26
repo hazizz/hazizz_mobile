@@ -129,13 +129,9 @@ class TasksCalendarBloc extends Bloc<TasksCalendarEvent, TasksCalendarState> {
         HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetTasksFromMe(q_unfinishedOnly: false, q_finishedOnly: false, q_showThera: true, q_startingDate: startDate, q_endDate: endDate));
 
         if(hazizzResponse.isSuccessful){
-
-          HazizzLogger.printLog("tasks.tasks: ${ hazizzResponse.convertedData}");
           tasksRaw = hazizzResponse.convertedData;
-          HazizzLogger.printLog("off: $tasksRaw");
           if(tasksRaw != null ){
             onLoaded(tasksRaw);
-            HazizzLogger.printLog("oopaa1: ${tasks}");
 
             yield TasksCalendarLoadedState(tasks);
           }
@@ -143,7 +139,6 @@ class TasksCalendarBloc extends Bloc<TasksCalendarEvent, TasksCalendarState> {
         else if(hazizzResponse.isError){
 
           if(hazizzResponse.dioError == noConnectionError){
-            HazizzLogger.printLog("log: noConnectionError22");
             yield TasksCalendarErrorState(hazizzResponse);
 
             Connection.addConnectionOnlineListener((){
@@ -154,7 +149,6 @@ class TasksCalendarBloc extends Bloc<TasksCalendarEvent, TasksCalendarState> {
 
           }else if(hazizzResponse.dioError.type == DioErrorType.CONNECT_TIMEOUT
               || hazizzResponse.dioError.type == DioErrorType.RECEIVE_TIMEOUT) {
-            HazizzLogger.printLog("log: noConnectionError22");
             this.dispatch(TasksCalendarFetchEvent());
           }else{
             yield TasksCalendarErrorState(hazizzResponse);
@@ -162,7 +156,6 @@ class TasksCalendarBloc extends Bloc<TasksCalendarEvent, TasksCalendarState> {
           }
         }
       } on Exception catch(e){
-        HazizzLogger.printLog("log: Exception: ${e.toString()}");
       }
     }
   }

@@ -81,7 +81,7 @@ class TaskEditBloc extends TaskMakerBloc {
 
       groupItemPickerBloc.dispatch(SetGroupEvent(item: taskToEdit.group != null ? taskToEdit.group : PojoGroup(0, "", "", "", 0) ));
 
-      subjectItemPickerBloc.dispatch(SetSubjectEvent(item: taskToEdit.subject != null ? taskToEdit.subject : PojoSubject(0, "", false, null)));
+      subjectItemPickerBloc.dispatch(SetSubjectEvent(item: taskToEdit.subject != null ? taskToEdit.subject : PojoSubject(0, "", false, null, false)));
 
 
     titleBloc.dispatch(TextFormSetEvent(text: taskToEdit.title));

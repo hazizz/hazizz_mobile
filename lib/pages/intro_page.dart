@@ -169,6 +169,11 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
       );
   }
 
+  void exitIntro(){
+    WelcomeManager.haveSeenIntro();
+    BusinessNavigator().currentState().pushReplacementNamed('/',);
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -389,9 +394,7 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
                   FlatButton(child: Text(locText(context, key: "skip").toUpperCase()),
                     onPressed: () async {
                       if(await showIntroCancelDialog(context)){
-                        WelcomeManager.haveSeenIntro();
-
-                        Navigator.pushReplacementNamed(context, "/");
+                        exitIntro();
                       }
                     },
                   ),
@@ -487,9 +490,8 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
             padding: const EdgeInsets.only(top: 0.0),
             child: KretaLoginWidget(
               onSuccess: (){
-              //  Navigator.pushReplacementNamed(context, "/");
-                HazizzLogger.printLog("HazizzLog: Navigation with businessNavigator -> to main app");
-                BusinessNavigator().currentState().pushReplacementNamed('/',);
+                exitIntro();
+
 
 
               },
@@ -501,9 +503,8 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
               FlatButton(child: Text(locText(context, key:  "skip").toUpperCase()),
                 onPressed: () async {
                   if(await showIntroCancelDialog(context)){
-                    WelcomeManager.haveSeenIntro();
+                    exitIntro();
 
-                    Navigator.pushReplacementNamed(context, "/");
                   }
                 },
               ),

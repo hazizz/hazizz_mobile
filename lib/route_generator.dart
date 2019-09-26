@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/pages/about_page.dart';
 import 'package:mobile/pages/developer_settings_page.dart';
 import 'package:mobile/pages/kreta_session_selector_page.dart';
 import 'package:mobile/pages/kreta_settings_page.dart';
@@ -23,7 +24,7 @@ import 'main.dart';
 
 class RouteGenerator{
   static Route<dynamic> _errorRoute(String errorLog) {
-    HazizzLogger.printLog("HazizzLog: navigation error: $errorLog");
+    HazizzLogger.printLog("navigation error: $errorLog");
     return MaterialPageRoute(builder: (_) {
       return Scaffold(
         appBar: AppBar(
@@ -40,7 +41,7 @@ class RouteGenerator{
     // Getting arguments passed in while calling Navigator.pushNamed
     final args = settings.arguments;
 
-    HazizzLogger.printLog("HazizzLog: navigating to ${settings.name} with arguments: ${settings.arguments}");
+    HazizzLogger.printLog("navigating to ${settings.name} with arguments: ${settings.arguments}");
 
 
     switch (settings.name) {
@@ -54,6 +55,8 @@ class RouteGenerator{
         return MaterialPageRoute(builder: (_) => MainTabHosterPage());
       case '/tasksTomorrow':
         return MaterialPageRoute(builder: (_) => TasksTomorrowPage());
+      case '/about':
+        return MaterialPageRoute(builder: (_) => AboutPage());
       case '/settings':
         return MaterialPageRoute(builder: (_) => SettingsPage());
       case '/settings/kreta':

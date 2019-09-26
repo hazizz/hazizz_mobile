@@ -8,7 +8,6 @@ import 'package:mobile/communication/pojos/PojoTokens.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/enums/groupTypesEnum.dart';
-import 'package:mobile/managers/app_state_manager.dart';
 import 'package:bloc/bloc.dart';
 
 import '../hazizz_response.dart';

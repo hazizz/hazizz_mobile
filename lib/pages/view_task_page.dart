@@ -12,6 +12,7 @@ import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/dialogs/report_dialog.dart';
+import 'package:mobile/enums/group_permissions_enum.dart';
 import 'package:mobile/managers/cache_manager.dart';
 import 'package:mobile/widgets/comment_section_widget.dart';
 import 'package:mobile/widgets/flushbars.dart';
@@ -41,7 +42,7 @@ class ViewTaskPage extends StatefulWidget {
 
   ViewTaskPage.fromPojo({Key key, this.pojoTask}) : super(key: key){
     taskId = pojoTask.id;
-    HazizzLogger.printLog("HazizzLog: created ViewTaskPage.fromPojo");
+    HazizzLogger.printLog("created ViewTaskPage.fromPojo");
   }
 
   @override
@@ -130,33 +131,31 @@ class _ViewTaskPage extends State<ViewTaskPage> {
 
   List<Widget> tagWidgets;
 
-  bool imTheAuthor = false;
-
+ // bool imTheAuthor = false;
+  bool canModify = false;
 
   final snapKey = GlobalKey<SnappableState>();
 
   @override
   void initState() {
-   // getData();
-
-
     pojoTask = widget.pojoTask;
 
     InfoCache.getMyId().then((int result){
       if(pojoTask.creator.id == result){
         setState(() {
-          imTheAuthor = true;
+          canModify = true;
         });
       }
     });
+    if(   pojoTask.permission == GroupPermissionsEnum.OWNER
+       || pojoTask.permission == GroupPermissionsEnum.MODERATOR
+    ){
+      setState(() {
+        canModify = true;
+      });
+    }
 
     ViewTaskBloc().reCreate(pojoTask: pojoTask);
-
-
-
-
-
-
 
     super.initState();
   }
@@ -280,7 +279,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                               child: Builder(builder: (context){
 
 
-                                                HazizzLogger.printLog("HazizzLog: redrawing coz completed: $completed");
+                                                HazizzLogger.printLog("redrawing coz completed: $completed");
                                                 IconData iconData;
                                                 if(completed){
 
@@ -568,7 +567,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                       ),
                                       Builder(
                                           builder: (context){
-                                            if(imTheAuthor){
+                                            if(canModify){
 
                                               return Column(
                                                 mainAxisAlignment: MainAxisAlignment.end,
@@ -591,12 +590,12 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                                     child: Text(locText(context, key: "delete").toUpperCase(), style: theme(context).textTheme.button),
                                                     onPressed: () async {
                                                       if(await showDeleteTaskDialog(context, taskId: widget.taskId)){
-                                                        HazizzLogger.printLog("HazizzLog: showDeleteTaskDialog : success");
+                                                        HazizzLogger.printLog("showDeleteTaskDialog : success");
                                                         MainTabBlocs().tasksBloc.dispatch(TasksFetchEvent());
                                                         Navigator.of(context).pop();
 
                                                       }else{
-                                                        HazizzLogger.printLog("HazizzLog: showDeleteTaskDialog: no success");
+                                                        HazizzLogger.printLog("showDeleteTaskDialog: no success");
 
                                                       }
 

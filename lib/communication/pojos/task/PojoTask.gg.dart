@@ -30,7 +30,9 @@ PojoTask _$PojoTaskFromJson(Map<String, dynamic> json) {
       subject: json['subject'] == null
           ? null
           : PojoSubject.fromJson(json['subject'] as Map<String, dynamic>),
-      completed: json['completed'] as bool);
+      completed: json['completed'] as bool,
+      permission: toGroupPermissionsEnum(json['permission'] as String),
+  );
 }
 
 Map<String, dynamic> _$PojoTaskToJson(PojoTask instance) => <String, dynamic>{
@@ -43,7 +45,8 @@ Map<String, dynamic> _$PojoTaskToJson(PojoTask instance) => <String, dynamic>{
   'creator': instance.creator,
   'group': instance.group,
   'subject': instance.subject,
-  'completed': instance.completed
+  'completed': instance.completed,
+  'permission': groupPermissionsEnumToString(instance.permission)
 };
 
 PojoTaskDetailed _$PojoTaskDetailedFromJson(Map<String, dynamic> json) {
@@ -74,8 +77,12 @@ PojoTaskDetailed _$PojoTaskDetailedFromJson(Map<String, dynamic> json) {
           : PojoGroup.fromJson(json['group'] as Map<String, dynamic>),
       subject: json['subject'] == null
           ? null
-          : PojoSubject.fromJson(json['subject'] as Map<String, dynamic>))
-    ..completed =json['completed'] as bool;
+          : PojoSubject.fromJson(json['subject'] as Map<String, dynamic>),
+      permission: toGroupPermissionsEnum(json['permission'] as String),
+    )
+    ..completed =json['completed'] as bool
+
+  ;
 }
 
 Map<String, dynamic> _$PojoTaskDetailedToJson(PojoTaskDetailed instance) =>
@@ -91,5 +98,7 @@ Map<String, dynamic> _$PojoTaskDetailedToJson(PojoTaskDetailed instance) =>
       'dueDate': instance.dueDate?.toIso8601String(),
       'creator': instance.creator,
       'group': instance.group,
-      'subject': instance.subject
+      'subject': instance.subject,
+      'permission': instance.permission,
+
     };

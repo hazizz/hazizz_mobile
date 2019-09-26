@@ -249,6 +249,28 @@
   : "Fejlesztői beállítások",
 
 
+  "about"
+  : "Rólunk",
+
+  "online"
+  : "Online",
+  "offline"
+  : "Offline",
+
+  "version"
+  : "Verzió",
+
+  "website"
+  : "Weboldal",
+
+  "auth_server"
+  : "Hitelesítő szerver",
+  "hazizz_server"
+  : "Házizz szerver",
+  "thera_server"
+  : "Théra szerver",
+
+
   "send_log_via_email"
   : "Log elküldése emailben",
 
@@ -304,17 +326,7 @@
     : "Témák",
 
 
-  "subscribe"
-  : "Felíratkozás",
 
-  "unsubscribe"
-  : "Leíratkozás",
-
-  "subscribed"
-  : "Felíratkozva",
-
-  "unsubscribed"
-  : "Leíratkozva",
 
 
     "title"
@@ -913,6 +925,29 @@
   "create_subject"
   : "Téma létrehozás",
 
+  "edit_subject"
+  : "Téma szerkesztés",
+
+  "subscribe"
+  : "Feliratkozás",
+
+  "unsubscribe"
+  : "Leiratkozás",
+
+  "subscribed"
+  : "Feliratkozva",
+
+  "unsubscribed"
+  : "Leiratkozva",
+
+  "subscribed_to_subject"
+  : "{} témára feliratkozva",
+
+  "unsubscribed_from_subject"
+  : "{} témáról leiratkozva",
+
+  "choose_subjects_to_subscribe_to"
+  : "Témák amikre feliratkozhatsz:",
 
   "about_group_title"
   : "Csoportokról",
@@ -1267,7 +1302,7 @@
 
 
     "gradeType_midYear"
-    : "Év közben",
+    : "Év közbeni",
 
     "gradeType_endYear"
     : "Év végi",

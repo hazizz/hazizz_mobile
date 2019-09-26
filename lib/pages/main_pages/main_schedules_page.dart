@@ -122,9 +122,9 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
       bottomNavBarItems.clear();
       for(int day = 0; day <= 6; day++){ // String dayIndex in schedule.keys
 
-        HazizzLogger.printLog("HazizzLog: current weekday: ${now.weekday}");
+        HazizzLogger.printLog("current weekday: ${now.weekday}");
 
-        HazizzLogger.printLog("HazizzLog: schedule.keys.toList(): ${schedule.keys.toList()}, ");
+        HazizzLogger.printLog("schedule.keys.toList(): ${schedule.keys.toList()}, ");
         if(!schedule.keys.toList().contains(day.toString())) {
           if(day <= 4){
             addNoClassDay(day.toString());
@@ -143,7 +143,7 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
           }
         }
         else{
-          HazizzLogger.printLog("HazizzLog: day index in iteration: $day");
+          HazizzLogger.printLog("day index in iteration: $day");
          // String dayIndex = schedule.keys.toList()[day];
           String dayIndex = day.toString();
 
@@ -154,21 +154,60 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
             String dayMName = locText(context, key: "days_m_$dayIndex");
             _tabList.add(SchedulesTabPage(classes: schedule[dayIndex], isToday:  MainTabBlocs().schedulesBloc.todayIndex == int.parse(dayIndex)
                       && MainTabBlocs().schedulesBloc.currentCurrentWeekNumber ==  MainTabBlocs().schedulesBloc.currentWeekNumber,));
-            bottomNavBarItems.add(BottomNavigationBarItem(
+            bottomNavBarItems.add(
+                BottomNavigationBarItem(
               title: Container(),
               icon: Padding(
                 padding: const EdgeInsets.only(bottom: 4.0),
-                child: Text(dayMName,
-                  overflow: TextOverflow.fade,
-                  maxLines: 1,
-                  style: TextStyle(color: Colors.red, fontSize: 22, fontWeight: FontWeight.w600, /*backgroundColor: currentDayColor*/),
-                ),
+                child: Column(
+                  children: <Widget>[
+                   /* Builder(
+                      builder: (context){
+
+                        if(MainTabBlocs().schedulesBloc.currentWeekNumber == MainTabBlocs().schedulesBloc.currentCurrentWeekNumber
+                            && MainTabBlocs().schedulesBloc.todayIndex == MainTabBlocs().schedulesBloc.currentDayIndex
+                            && (MainTabBlocs().schedulesBloc.currentDayIndex).toString() == dayIndex
+                        ){
+                          return  Text("Ma");
+                        }
+                        return  Container();
+
+                      },
+                    ),
+                    */
+
+                    Text(dayMName,
+                      overflow: TextOverflow.fade,
+                      maxLines: 1,
+                      style: TextStyle(color: Colors.red, fontSize: 22, fontWeight: FontWeight.w600, /*backgroundColor: currentDayColor*/),
+                    ),
+                  ],
+                )
               ),
-              activeIcon: Text(dayName,
-                overflow: TextOverflow.fade,
-                maxLines: 1,
-                style: TextStyle(color: Colors.red, fontSize: 28, fontWeight: FontWeight.bold, /*backgroundColor: currentDayColor*/),
-              ),
+              activeIcon: Column(
+                children: <Widget>[
+                  Builder(
+                    builder: (context){
+
+
+                      TextDecoration d;
+
+                      if(MainTabBlocs().schedulesBloc.currentWeekNumber == MainTabBlocs().schedulesBloc.currentCurrentWeekNumber
+                      && MainTabBlocs().schedulesBloc.todayIndex == MainTabBlocs().schedulesBloc.currentDayIndex
+                       ){
+                        d = TextDecoration.underline;
+                      }
+                      return  Text(dayName,
+                        overflow: TextOverflow.fade,
+                        maxLines: 1,
+                        style: TextStyle(color: Colors.red, fontSize: 28, fontWeight: FontWeight.bold, decoration: d),
+                      );
+
+                    },
+                  ),
+
+                ],
+              )
             ));
           }else{
             addNoClassDay((day).toString());
@@ -176,7 +215,7 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
         }
       }
 
-      HazizzLogger.printLog("HazizzLog: _tabList.length, MainTabBlocs().schedulesBloc.todayIndex:  ${ _tabList.length}, ${MainTabBlocs().schedulesBloc.todayIndex}");
+      HazizzLogger.printLog("_tabList.length, MainTabBlocs().schedulesBloc.todayIndex:  ${ _tabList.length}, ${MainTabBlocs().schedulesBloc.todayIndex}");
 
       _tabController = TabController(vsync: this, length: _tabList.length, initialIndex: MainTabBlocs().schedulesBloc.todayIndex
       );
@@ -191,110 +230,41 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
         );
       }
 
-      body =
-          Column(
-            children: <Widget>[
+      body = Column(
+        children: <Widget>[
+          Expanded(child: _tabList[MainTabBlocs().schedulesBloc.currentDayIndex]),
+          Builder(
+            builder: (context){
+              if(canBuildBottomNavBar){
+                return Container(
+                    color: Theme.of(context).primaryColorDark,
+                    child: BottomNavigationBar(
 
-              Expanded(child: _tabList[MainTabBlocs().schedulesBloc.currentDayIndex]),
+                      currentIndex: MainTabBlocs().schedulesBloc.currentDayIndex,
+                      onTap: (int index){
+                        setState(() {
+                          MainTabBlocs().schedulesBloc.currentDayIndex = index;
+                          HazizzLogger.printLog("currentDayIndex: ${MainTabBlocs().schedulesBloc.currentDayIndex}");
+                          _tabController.animateTo(index);
+                          HazizzLogger.printLog("_tabController.index: ${_tabController.index}");
 
-
-              Builder(
-                builder: (context){
-                  if(canBuildBottomNavBar){
-                    return Container(
-                        color: Theme.of(context).primaryColorDark,
-                        child: BottomNavigationBar(
-
-                          currentIndex: MainTabBlocs().schedulesBloc.currentDayIndex,
-                          onTap: (int index){
-                            setState(() {
-                              MainTabBlocs().schedulesBloc.currentDayIndex = index;
-                              HazizzLogger.printLog("HazizzLog: currentDayIndex: ${MainTabBlocs().schedulesBloc.currentDayIndex}");
-                              _tabController.animateTo(index);
-                              HazizzLogger.printLog("HazizzLog: _tabController.index: ${_tabController.index}");
-
-                            });
-
-                          },
-                          items: bottomNavBarItems
-                        )
-                    );
-                  }
-                  return Container();
-                },
-              )
-            ],
-          );
+                        });
+                      },
+                      items: bottomNavBarItems
+                    )
+                );
+              }
+              return Container();
+            },
+          )
+        ],
+      );
     }
-
-    /*
-    WidgetsBinding.instance.addPostFrameCallback((_) =>
-        Navigator.pushNamed(context, "/kreta/login/auth", arguments: widget.session)
-    );
-    */
-
 
     return Column(
       children: [
-        /*
-        Container(
-          height: 100,
-          child: DropdownMenu(
-            menus: [
-              Text("asd")
-            ],
-          ),
-        ),
-        */
-        /*
-        Container(
-          width: MediaQuery.of(context).size.width,
-          child: Card(
-            child: ExpandablePanel(
-              tapHeaderToExpand: true,
-              collapsed: Container(
-                width: MediaQuery.of(context).size.width,
-
-                child: Card(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      IconButton(
-                        icon: Icon(FontAwesomeIcons.chevronLeft),
-                        onPressed: (){
-                          MainTabBlocs().schedulesBloc.dispatch(ScheduleFetchEvent(yearNumber: MainTabBlocs().schedulesBloc.currentYearNumber, weekNumber: MainTabBlocs().schedulesBloc.currentWeekNumber-1));
-                        },
-                      ),
-                      Text(MainTabBlocs().schedulesBloc.currentWeekNumber.toString()),
-
-                    //  Text("${weekStart.day}-${weekEnd.day}"),
-                      IconButton(
-                        icon: Icon(FontAwesomeIcons.chevronRight),
-                        onPressed: (){
-                          MainTabBlocs().schedulesBloc.dispatch(ScheduleFetchEvent(yearNumber: MainTabBlocs().schedulesBloc.currentYearNumber, weekNumber: MainTabBlocs().schedulesBloc.currentWeekNumber+1));
-                        },
-                      ),
-                    ],
-                  )
-                ),
-              ),
-              expanded: Card(
-                child: Column(
-                  children: <Widget>[
-                    Text("date"),
-                    Text("date"),
-                    Text("date"),
-                  ],
-                )
-              ),
-            ),
-          ),
-        ),
-        */
         Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().schedulesBloc.lastUpdated)),
-      //  Expanded(child: body),
         Expanded(child: body)
-        // Container( width: MediaQuery.of(context).size.width,child: ScheduleEventWidget()),
       ]
     );
 
@@ -305,21 +275,15 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
 
     });
 
-
     MainTabBlocs().schedulesBloc.dispatch(ScheduleFetchEvent(yearNumber: MainTabBlocs().schedulesBloc.currentYearNumber, weekNumber: MainTabBlocs().schedulesBloc.currentWeekNumber-1));
-
   }
 
-  GlobalKey<ScaffoldState> scaffoldState = new GlobalKey();
 
   ScheduleState lastState = ScheduleInitialState();
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        key: scaffoldState,
-
         body: KretaServiceHolder(
           child: BlocBuilder(
             bloc: MainTabBlocs().schedulesBloc,
@@ -398,7 +362,7 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
                                 },
                                 builder: (_, ScheduleState state) {
 
-                                  HazizzLogger.printLog("HazizzLog: ScheduleState: ${state}");
+                                  HazizzLogger.printLog("ScheduleState: ${state}");
                                   if (state is ScheduleWaitingState || (state is ScheduleLoadedCacheState && lastState is ScheduleWaitingState)) {
                                     //return Center(child: Text("Loading Data"));
                                     return Center(child: CircularProgressIndicator(),);
@@ -429,12 +393,12 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
                                   }else if(state is ScheduleErrorState ){
                                     if(state.hazizzResponse.pojoError != null && state.hazizzResponse.pojoError.errorCode == 138){
                                       WidgetsBinding.instance.addPostFrameCallback((_) {
-                                        showKretaUnavailableFlushBar(context, scaffoldState: scaffoldState);
+                                        showKretaUnavailableFlushBar(context);
                                       });
                                     }
                                     else if(state.hazizzResponse.dioError == noConnectionError){
                                       WidgetsBinding.instance.addPostFrameCallback((_) {
-                                        showNoConnectionFlushBar(context, scaffoldState: scaffoldState);
+                                        showNoConnectionFlushBar(context);
                                       });
                                     }else{
                                       WidgetsBinding.instance.addPostFrameCallback((_) {

@@ -112,7 +112,7 @@ class _TaskMakerPage extends State<TaskMakerPage> {
     //  blocs.subjectItemPickerBloc.dispatch(SetSubjectEvent(item: widget.taskToEdit.subject));
 
     }else{
-      HazizzLogger.printLog("HazizzLog: this should not be visible: 542311z8");
+      HazizzLogger.printLog("this should not be visible: 542311z8");
     }
 
   //  blocs.groupItemPickerBloc.dispatch(ItemListLoadData());
@@ -178,7 +178,7 @@ class _TaskMakerPage extends State<TaskMakerPage> {
               onClick: () async {
 
                 PojoTag result = await showDialogTaskTag(context, except: blocs.taskTagBloc.pickedTags);
-                HazizzLogger.printLog("HazizzLog: showDialogTaskTag dialog result: ${result?.getName()}");
+                HazizzLogger.printLog("showDialogTaskTag dialog result: ${result?.getName()}");
                 if(result != null){
                   blocs.taskTagBloc.dispatch(TaskTagAddEvent(result));
                 }

@@ -142,9 +142,10 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
 
     int i = 0;
     for(PojoGrade grade in gradesByDate){
-      if (i == 0 || gradesByDate[i].creationDate
-          .difference(gradesByDate[i - 1].creationDate)
-          .inDays >= 1) {
+      if (i == 0
+          || gradesByDate[i].creationDate
+          .difference(gradesByDate[i - 1].creationDate).inDays >= 1
+          || map[gradesByDate[i].creationDate] == null) {
         map[gradesByDate[i].creationDate] = List();
         map[gradesByDate[i].creationDate].add(grade);
 
@@ -265,13 +266,13 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
                         }else if(state is GradesErrorState ){
                           if(state.hazizzResponse.pojoError != null && state.hazizzResponse.pojoError.errorCode == 138){
                             WidgetsBinding.instance.addPostFrameCallback((_) {
-                              showKretaUnavailableFlushBar(context, scaffoldState: scaffoldState);
+                              showKretaUnavailableFlushBar(context);
                             });
                           }
 
                           else if(state.hazizzResponse.dioError == noConnectionError){
                             WidgetsBinding.instance.addPostFrameCallback((_) {
-                              showNoConnectionFlushBar(context, scaffoldState: scaffoldState);
+                              showNoConnectionFlushBar(context);
                             });
                           }else{
                             WidgetsBinding.instance.addPostFrameCallback((_) {

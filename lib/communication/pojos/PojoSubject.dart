@@ -12,8 +12,9 @@ class  PojoSubject implements Pojo {
   String name;
   bool subscriberOnly;
   PojoComplient manager;
+  bool subscribed;
 
-  PojoSubject(this.id, this.name, this.subscriberOnly, this.manager);
+  PojoSubject(this.id, this.name, this.subscriberOnly, this.manager, this.subscribed);
 
   factory PojoSubject.fromJson(Map<String, dynamic> json) =>
       _$PojoSubjectFromJson(json);

@@ -54,20 +54,20 @@ class AppState{
     // set islogged in to true
     logInProcedureDone = false;
 
-    HazizzLogger.printLog("HazizzLog: logInProcedure: 0");
+    HazizzLogger.printLog("logInProcedure: 0");
     TokenManager.setToken(tokens.token);
-    HazizzLogger.printLog("HazizzLog: logInProcedure: 1");
+    HazizzLogger.printLog("logInProcedure: 1");
 
     TokenManager.setRefreshToken(tokens.refresh);
-    HazizzLogger.printLog("HazizzLog: logInProcedure: 2");
+    HazizzLogger.printLog("logInProcedure: 2");
 
 
     var sh = await SharedPreferences.getInstance();
     sh.setBool(key_isLoggedIn, true);
 
-    HazizzLogger.printLog("HazizzLog: logInProcedure: 3");
+    HazizzLogger.printLog("logInProcedure: 3");
 
-    HazizzNotification.scheduleNotificationAlarmManager(await HazizzNotification.getNotificationTime());
+    HazizzNotification.scheduleNotificationAlarmManager();
 
     HazizzResponse hazizzResponse = await RequestSender().getResponse(GetMyInfo.private());
     if(hazizzResponse.isSuccessful){
@@ -80,7 +80,7 @@ class AppState{
         setUserData(meInfo: meInfo);
       }
     }
-    HazizzLogger.printLog("HazizzLog: logInProcedure: 4");
+    HazizzLogger.printLog("logInProcedure: 4");
 
 
     hazizzResponse = await RequestSender().getResponse(GetMyProfilePicture.full());
@@ -109,22 +109,22 @@ class AppState{
    // await TokenManager.fetchRefreshTokens(username: (await InfoCache.getMyUserData()).username, refreshToken: await TokenManager.getRefreshToken());
 
 
-    HazizzLogger.printLog("HazizzLog: mainAppPartStartProcedure 1");
+    HazizzLogger.printLog("mainAppPartStartProcedure 1");
     await KretaSessionManager.loadSelectedSession();
-    HazizzLogger.printLog("HazizzLog: mainAppPartStartProcedure 2");
+    HazizzLogger.printLog("mainAppPartStartProcedure 2");
     SelectedSessionBloc().dispatch(SelectedSessionInitalizeEvent());
-    HazizzLogger.printLog("HazizzLog: mainAppPartStartProcedure 3");
+    HazizzLogger.printLog("mainAppPartStartProcedure 3");
     LoginBlocs().googleLoginBloc.dispatch(GoogleLoginResetEvent());
-    HazizzLogger.printLog("HazizzLog: mainAppPartStartProcedure 4");
+    HazizzLogger.printLog("mainAppPartStartProcedure 4");
     MainTabBlocs().initialize();
-    HazizzLogger.printLog("HazizzLog: mainAppPartStartProcedure 5");
+    HazizzLogger.printLog("mainAppPartStartProcedure 5");
     UserDataBlocs().initialize();
-    HazizzLogger.printLog("HazizzLog: mainAppPartStartProcedure 6");
+    HazizzLogger.printLog("mainAppPartStartProcedure 6");
 
   }
 
   static Future logoutProcedure() async {
-    RequestSender().clearAllRequests();
+
 
     /*
     final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: [
@@ -145,12 +145,17 @@ class AppState{
     var sh = await SharedPreferences.getInstance();
     sh.setBool(key_isLoggedIn, false);
     InfoCache.forgetMyUser();
+    RequestSender().clearAllRequests();
     RequestSender().unlock();
   }
 
-  static void logout(){
-    logoutProcedure();
-    BusinessNavigator().currentState().pushNamedAndRemoveUntil('login', (Route<dynamic> route) => false);
+  static Future logout() async {
+    await logoutProcedure();
+    var sh = await SharedPreferences.getInstance();
+    bool isLoggedIn = sh.getBool(key_isLoggedIn);
+    if(!isLoggedIn){
+      BusinessNavigator().currentState().pushNamedAndRemoveUntil('login', (Route<dynamic> route) => false);
+    }
   //  Navigator.of(context).pushNamedAndRemoveUntil('login', (Route<dynamic> route) => false);
   }
 

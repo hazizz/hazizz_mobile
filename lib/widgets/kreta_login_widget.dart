@@ -171,7 +171,7 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
               ){
                 showSchoolsDialog(context, data: kretaLoginBlocs.schoolBloc.data,
                     onPicked: ({String key, String value}){
-                      HazizzLogger.printLog("HazizzLog: school picked: key: $key, value: $value");
+                      HazizzLogger.printLog("school picked: key: $key, value: $value");
                       kretaLoginBlocs.schoolBloc.dispatch(PickedEvent(item: SchoolItem(key, value)));
                     }
                 );

@@ -81,7 +81,7 @@ class _SettingsPage extends State<SettingsPage> with AutomaticKeepAliveClientMix
     if(supportedLocaleItems.isEmpty){
       supportedLocales = getSupportedLocales();
 
-      HazizzLogger.printLog("HazizzLog: supported locales: ${supportedLocales.toString()}");
+      HazizzLogger.printLog("supported locales: ${supportedLocales.toString()}");
 
       for(Locale locale in supportedLocales) {
 
@@ -109,8 +109,23 @@ class _SettingsPage extends State<SettingsPage> with AutomaticKeepAliveClientMix
         body: Container(
           child: Column(
             children: <Widget>[
+
               Padding(
                 padding: const EdgeInsets.only(top: 10.0),
+                child: GestureDetector(
+                  onTap: (){
+                    Navigator.pushNamed(context, "/about");
+                  },
+                  child: ListTile(
+                    title: Text(locText(context, key: "about")),
+                    leading: Icon(FontAwesomeIcons.infoCircle),
+                  ),
+                )
+              ),
+              Divider(),
+
+              Padding(
+                padding: const EdgeInsets.only(top: 0.0),
                 child: ListTile(
                   title: Text(locText(context, key: "starting_page")),
                   leading: Icon(FontAwesomeIcons.doorOpen),

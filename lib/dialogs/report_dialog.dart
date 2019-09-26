@@ -88,7 +88,7 @@ class _ReportDialog extends State<ReportDialog> {
         something = locText(context, key: "user");
         break;
     }
-    HazizzLogger.printLog("HazizzLog: about to report a $something");
+    HazizzLogger.printLog("about to report a $something");
 
     String title = locText(context, key: "report_something", args: ["${widget.name} $something"]);
 
@@ -188,7 +188,7 @@ class _ReportDialog extends State<ReportDialog> {
           FlatButton(
               child: Text(locText(context, key: "send").toUpperCase()),
               onPressed: () async {
-                HazizzLogger.printLog("HazizzLog: report descp: ${descriptionController.text}");
+                HazizzLogger.printLog("report descp: ${descriptionController.text}");
                 if(descriptionController.text != "" && descriptionController.text != null){
                   if(!acceptedHazizzPolicy){
                     setState(() {

@@ -67,16 +67,20 @@ class _GroupTabHosterPage extends State<GroupTabHosterPage> with SingleTickerPro
     groupBlocs = new GroupBlocs();
     groupBlocs.newGroup(widget.group);
 
-    tasksTabPage = GroupTasksPage(groupTasksBloc: groupBlocs.groupTasksBloc,);
+    tasksTabPage = GroupTasksPage();
     subjectsTabPage = GroupSubjectsPage(groupSubjectsBloc: groupBlocs.groupSubjectsBloc);
     membersTabPage = GroupMembersPage(groupMembersBloc: groupBlocs.groupMembersBloc);
 
     _tabController = new TabController(length: 3, vsync: this);
     _tabController.addListener(_handleTabSelection);
 
+
+
     if(widget.visitorEnum == VisitorEnum.newComer){
-      WidgetsBinding.instance.addPostFrameCallback((_) =>
-          showJoinedGroupDialog(context, group: widget.group)
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        await showJoinedGroupDialog(context, group: widget.group);
+        await showSubscribeToSubjectDialog(context);
+      }
       );
     }else if(widget.visitorEnum == VisitorEnum.notNewComer){
 

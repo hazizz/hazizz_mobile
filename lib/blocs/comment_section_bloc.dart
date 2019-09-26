@@ -90,14 +90,10 @@ class CommentSectionBloc extends Bloc<CommentSectionEvent, CommentSectionState> 
     if (event is CommentSectionFetchEvent) {
       try {
         yield CommentSectionWaitingState();
-        HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetTaskComments(taskId: taskId));
-        HazizzLogger.printLog("log: responseData: ${hazizzResponse}");
-        HazizzLogger.printLog("log: responseData type:  ${hazizzResponse.runtimeType.toString()}");
-
+        HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetTaskComments(p_taskId: taskId));
         if(hazizzResponse.isSuccessful){
           comments = hazizzResponse.convertedData;
-          HazizzLogger.printLog("log: comments: $comments");
-          HazizzLogger.printLog("log: response is List2134");
+          HazizzLogger.printLog("comments: $comments");
           if(comments.isEmpty) {
             yield CommentSectionLoadedState(items: comments);
           }else {
@@ -105,12 +101,9 @@ class CommentSectionBloc extends Bloc<CommentSectionEvent, CommentSectionState> 
           }
         }
         else if(hazizzResponse.isError){
-          HazizzLogger.printLog("log: response is List<PojoComment>");
           yield CommentSectionFailState(error: hazizzResponse.pojoError);
         }
       } on Exception catch(e){
-        HazizzLogger.printLog("log: Exception: ${e.toString()}");
-        // yield TasksError();
       }
     }else if(event is CommentSectionLoadedEvent){
       yield CommentSectionLoadedState(items: event.items);
@@ -119,11 +112,8 @@ class CommentSectionBloc extends Bloc<CommentSectionEvent, CommentSectionState> 
     else if(state is CommentSectionAddCommentEvent){
 
     }
-
-
   }
 }
-
 
 class CommentBlocs{
   int taskId;
@@ -141,11 +131,7 @@ class CommentBlocs{
     commentSectionBloc.dispose();
     commentWriterBloc.dispose();
   }
-
-
 }
-
-
 
 abstract class CommentWriterEvent extends HEvent {
   CommentWriterEvent([List props = const []]) : super(props);
@@ -190,13 +176,11 @@ class CommentWriterBloc extends Bloc<CommentWriterEvent,  CommentWriterState> {
 
   final TextEditingController commentController = TextEditingController();
 
-
   int taskId;
 
   CommentSectionBloc commentSectionBloc;
 
   String content;
-
 
   CommentWriterBloc({@required this.taskId, @required this.commentSectionBloc}){
     commentController.addListener((){
@@ -210,7 +194,6 @@ class CommentWriterBloc extends Bloc<CommentWriterEvent,  CommentWriterState> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     commentSectionBloc.dispose();
     super.dispose();
   }

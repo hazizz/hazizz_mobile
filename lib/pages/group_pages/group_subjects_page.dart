@@ -8,6 +8,7 @@ import 'package:mobile/communication/pojos/PojoSubject.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/listItems/subject_item_widget.dart';
 import 'package:mobile/managers/welcome_manager.dart';
+import 'package:mobile/widgets/scroll_space_widget.dart';
 
 import '../../hazizz_localizations.dart';
 
@@ -70,6 +71,9 @@ class _GroupSubjectsPage extends State<GroupSubjectsPage> with AutomaticKeepAliv
                         return new ListView.builder(
                             itemCount: subjects.length,
                             itemBuilder: (BuildContext context, int index) {
+                              if(index >= subjects.length-1){
+                                return addScrollSpace(SubjectItemWidget(subject: subjects[index]));
+                              }
                               return SubjectItemWidget(subject: subjects[index]);
 
                             }

@@ -15,6 +15,7 @@ import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/managers/app_state_manager.dart';
 import 'package:mobile/managers/cache_manager.dart';
 import 'package:mobile/managers/deep_link_receiver.dart';
+import 'package:mobile/managers/version_handler.dart';
 import 'package:mobile/pages/main_pages/main_grades_page.dart';
 import 'package:mobile/pages/main_pages/main_tasks_page.dart';
 
@@ -72,7 +73,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
 
     InfoCache.getMyDisplayName().then(
       (value){
-        HazizzLogger.printLog("HazizzLog: getMyDisplayName: $value");
+        HazizzLogger.printLog("getMyDisplayName: $value");
 
         setState(() {
           displayName = value;
@@ -98,6 +99,10 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
 
 
 
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async =>
+        await VersionHandler.check()
+    );
 
 
     super.initState();
@@ -353,15 +358,8 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
                                   child:  Icon(FontAwesomeIcons.signOutAlt)
                               ),
                               title: Text(locText(context, key: "textview_logout_drawer")),
-                              onTap: () {
-
-                                AppState.logout();
-                                /*
-                                AppState.logOutProcedure();
-
-
-                                Navigator.of(context).pushNamedAndRemoveUntil('login', (Route<dynamic> route) => false);
-                                */
+                              onTap: () async {
+                                await AppState.logout();
                               },
                             ),),
                             Padding(
