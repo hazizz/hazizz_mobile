@@ -1,7 +1,7 @@
 import 'package:mobile/communication/pojos/PojoClass.dart';
 import 'package:mobile/communication/pojos/PojoSchedules.dart';
 
-import '../hazizz_time_of_day.dart';
+import 'package:mobile/custom/hazizz_time_of_day.dart';
 
 PojoSchedules classesDummy = PojoSchedules(
 

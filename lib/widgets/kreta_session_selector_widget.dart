@@ -2,17 +2,18 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mobile/blocs/request_event.dart';
-import 'package:mobile/blocs/response_states.dart';
-import 'package:mobile/blocs/selected_session_bloc.dart';
-import 'package:mobile/blocs/sessions_bloc.dart';
+import 'package:mobile/blocs/other/request_event.dart';
+import 'package:mobile/blocs/other/response_states.dart';
+import 'package:mobile/blocs/kreta/selected_session_bloc.dart';
+import 'package:mobile/blocs/kreta/sessions_bloc.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
-import 'package:mobile/hazizz_localizations.dart';
+import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/listItems/session_item_widget.dart';
 import 'package:mobile/managers/welcome_manager.dart';
+import 'package:mobile/widgets/scroll_space_widget.dart';
 
-import '../hazizz_theme.dart';
+import 'package:mobile/theme/hazizz_theme.dart';
 
 class SessionSelectorWidget extends StatefulWidget {
 
@@ -264,6 +265,9 @@ class _SessionSelectorWidget extends State<SessionSelectorWidget> with Automatic
                                       return new ListView.builder(
                                           itemCount: sessions.length,
                                           itemBuilder: (BuildContext context, int index) {
+                                            if(index >= sessions.length-1){
+                                              return addScrollSpace(SessionItemWidget(session: sessions[index],));
+                                            }
                                             return SessionItemWidget(session: sessions[index],);
                                           }
                                       );

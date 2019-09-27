@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../hazizz_localizations.dart';
+import 'package:mobile/custom/hazizz_localizations.dart';
 
 class StartPageItem{
   final String name;

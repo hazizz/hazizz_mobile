@@ -1,15 +1,15 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile/blocs/group_bloc.dart';
-import 'package:mobile/blocs/request_event.dart';
-import 'package:mobile/blocs/response_states.dart';
-import 'package:mobile/blocs/task_maker_blocs.dart';
+import 'package:mobile/blocs/group/group_bloc.dart';
+import 'package:mobile/blocs/other/request_event.dart';
+import 'package:mobile/blocs/other/response_states.dart';
+import 'package:mobile/blocs/tasks/task_maker_blocs.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
 import 'package:mobile/defaults/pojo_subject_empty.dart';
 import 'package:mobile/enums/groupTypesEnum.dart';
 import 'package:mobile/listItems/subject_item_widget.dart';
-import '../hazizz_localizations.dart';
+import 'package:mobile/custom/hazizz_localizations.dart';
 import 'dialogs.dart';
 
 class SubscribeToSubjectDialog extends StatefulWidget {

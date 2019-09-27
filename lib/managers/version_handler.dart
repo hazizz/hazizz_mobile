@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../hazizz_app_info.dart';
+import 'package:mobile/custom/hazizz_app_info.dart';
 
 class VersionHandler{
 

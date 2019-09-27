@@ -5,7 +5,7 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-import '../../hazizz_theme.dart';
+import 'package:mobile/theme/hazizz_theme.dart';
 import 'Pojo.dart';
 
 part 'PojoGrade.gg.dart';

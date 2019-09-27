@@ -4,12 +4,10 @@ import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mobile/blocs/group_bloc.dart';
-import 'package:mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
-import 'package:mobile/blocs/request_event.dart';
-import 'package:mobile/blocs/response_states.dart';
-import 'package:mobile/blocs/tasks_bloc.dart';
-import 'package:mobile/communication/errors.dart';
+import 'package:mobile/blocs/group/group_bloc.dart';
+import 'package:mobile/blocs/other/response_states.dart';
+import 'package:mobile/blocs/tasks/tasks_bloc.dart';
+import 'package:mobile/communication/custom_response_errors.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/custom/formats.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
@@ -23,7 +21,7 @@ import 'package:mobile/widgets/scroll_space_widget.dart';
 
 import 'package:sticky_headers/sticky_headers.dart';
 
-import '../../hazizz_localizations.dart';
+import 'package:mobile/custom/hazizz_localizations.dart';
 
 class GroupTasksPage extends StatefulWidget {
   // This widget is the root of your application.

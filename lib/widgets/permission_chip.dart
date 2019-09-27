@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/enums/group_permissions_enum.dart';
-import '../hazizz_localizations.dart';
-import '../hazizz_theme.dart';
+import 'package:mobile/custom/hazizz_localizations.dart';
+import 'package:mobile/theme/hazizz_theme.dart';
 
 
 class PermissionChip extends StatefulWidget {

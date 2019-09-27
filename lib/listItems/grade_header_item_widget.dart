@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../hazizz_date.dart';
+import 'package:mobile/custom/hazizz_date.dart';
 
 class GradeHeaderItemWidget extends StatelessWidget{
    String subjectName;

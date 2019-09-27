@@ -29,9 +29,9 @@ import 'package:package_info/package_info.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:mobile/converters/PojoConverter.dart';
 
-import '../../HttpMethod.dart';
-import '../../hazizz_date.dart';
+import 'package:mobile/custom/hazizz_date.dart';
 import '../ResponseHandler.dart';
+import '../htttp_methods.dart';
 
 //region The base request
 class Request {

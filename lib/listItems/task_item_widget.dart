@@ -4,13 +4,13 @@ import 'package:mobile/communication/pojos/PojoTag.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
-import 'package:mobile/pages/view_task_page.dart';
+import 'package:mobile/pages/tasks_page/view_task_page.dart';
 
-import '../hazizz_localizations.dart';
+import 'package:mobile/custom/hazizz_localizations.dart';
 
-import '../hazizz_response.dart';
-import '../hazizz_theme.dart';
-import '../request_sender.dart';
+import 'package:mobile/communication/hazizz_response.dart';
+import 'package:mobile/theme/hazizz_theme.dart';
+import 'package:mobile/communication/request_sender.dart';
 
 class TaskItemWidget extends StatefulWidget  {
 

@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mobile/blocs/create_group_bloc.dart';
+import 'package:mobile/blocs/group/create_group_bloc.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/enums/groupTypesEnum.dart';
-import 'package:mobile/request_sender.dart';
-import '../hazizz_localizations.dart';
-import '../hazizz_response.dart';
+import 'package:mobile/communication/request_sender.dart';
+import 'package:mobile/custom/hazizz_localizations.dart';
+import 'package:mobile/communication/hazizz_response.dart';
 import 'dialogs.dart';
 
 class SureToJoinGroupDialog extends StatefulWidget {

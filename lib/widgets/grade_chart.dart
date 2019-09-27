@@ -1,26 +1,8 @@
 import 'dart:async';
 
-import 'package:expandable/expandable.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
-import 'package:mobile/blocs/request_event.dart';
-import 'package:mobile/blocs/response_states.dart';
-import 'package:mobile/blocs/schedule_bloc.dart';
-import 'package:mobile/communication/errors.dart';
-import 'package:mobile/communication/pojos/PojoClass.dart';
 import 'package:mobile/communication/pojos/PojoGrade.dart';
-import 'package:mobile/communication/pojos/PojoSchedules.dart';
-import 'package:mobile/custom/formats.dart';
-import 'package:mobile/listItems/schedule_event_widget.dart';
-import 'package:mobile/widgets/flushbars.dart';
-import 'package:toast/toast.dart';
-
-import '../hazizz_localizations.dart';
 
 
 class GradesChart extends StatefulWidget {

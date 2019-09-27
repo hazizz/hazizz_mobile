@@ -6,15 +6,15 @@ import 'package:easy_localization/easy_localization_provider.dart';
 import 'package:easy_localization/easy_localization_provider.dart';
 
 import 'package:flutter/material.dart';
-import 'package:mobile/hazizz_localizations.dart';
-import 'package:mobile/route_generator.dart';
-import 'blocs/google_login_bloc.dart';
-import 'blocs/main_tab_blocs/main_tab_blocs.dart';
+import 'package:mobile/custom/hazizz_localizations.dart';
+import 'package:mobile/navigation/route_generator.dart';
+import 'package:mobile/blocs/auth/google_login_bloc.dart';
+import 'blocs/main_tab/main_tab_blocs.dart';
 import 'communication/pojos/task/PojoTask.dart';
 //import 'hazizz_alarm_manager.dart';
 import 'custom/hazizz_logger.dart';
-import 'hazizz_theme.dart';
-import 'managers/token_manager.dart';
+import 'package:mobile/theme/hazizz_theme.dart';
+import 'package:mobile/managers/token_manager.dart';
 import 'managers/app_state_manager.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -167,12 +167,9 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
         }else  HazizzLogger.printLog("no payload");
 
 
-
-
       if(await fromNotification()) {
         Navigator.pushNamed(context, "/tasksTomorrow");
       }
-
     }
 
     if(state == AppLifecycleState.suspending){

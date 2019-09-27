@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mobile/blocs/create_group_bloc.dart';
-import 'package:mobile/blocs/group_bloc.dart';
-import 'package:mobile/blocs/request_event.dart';
+import 'package:mobile/blocs/group/create_group_bloc.dart';
+import 'package:mobile/blocs/group/group_bloc.dart';
+import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/communication/pojos/PojoCreator.dart';
 import 'package:mobile/communication/pojos/PojoUser.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
@@ -14,13 +14,13 @@ import 'package:mobile/custom/hazizz_date_time.dart';
 import 'package:mobile/dialogs/report_dialog.dart';
 import 'package:mobile/enums/groupTypesEnum.dart';
 import 'package:mobile/enums/group_permissions_enum.dart';
-import 'package:mobile/image_operations.dart';
+import 'package:mobile/custom/image_operations.dart';
 import 'package:mobile/widgets/flushbars.dart';
 import 'package:mobile/widgets/permission_chip.dart';
-import '../hazizz_localizations.dart';
-import '../hazizz_response.dart';
-import '../hazizz_theme.dart';
-import '../request_sender.dart';
+import 'package:mobile/custom/hazizz_localizations.dart';
+import 'package:mobile/communication/hazizz_response.dart';
+import 'package:mobile/theme/hazizz_theme.dart';
+import 'package:mobile/communication/request_sender.dart';
 import 'dialogs.dart';
 
 class UserDialog extends StatefulWidget {
@@ -124,6 +124,20 @@ class _UserDialog extends State<UserDialog> {
           child: Text(locText(context, key: "promote_to_user"),),
         ));
       }
+      
+      if(myPermission == GroupPermissionsEnum.OWNER){
+        popupMenuItems.add(PopupMenuItem(
+          value: "kick",
+          child: Text(locText(context, key: "kick"),),
+        ));
+      }else if(myPermission == GroupPermissionsEnum.MODERATOR){
+        if(permission == GroupPermissionsEnum.USER) {
+          popupMenuItems.add(PopupMenuItem(
+            value: "kick",
+            child: Text(locText(context, key: "kick")))
+          );
+        }
+      }
     }
     popupMenuItems.add(
       PopupMenuItem(
@@ -133,27 +147,7 @@ class _UserDialog extends State<UserDialog> {
         ),
       )
     );
-
-
-    /*
-    if(promotableTo != PromotableTo.NONE){
-
-      if(promotableTo == PromotableTo.MODERATOR){
-        popupMenuItems.add(PopupMenuItem(
-          value: "promote_to_moderator",
-          child: Text(locText(context, key: "promote_to_moderator"),),
-        ));
-      }else if(promotableTo == PromotableTo.USER){
-        popupMenuItems.add(PopupMenuItem(
-          value: "promote_to_USER",
-          child: Text(locText(context, key: "promote_to_user"),),
-        ));
-      }
-    }
-    */
-
-
-
+    
     return HazizzDialog(
         header: Container(
           color: Theme.of(context).dialogBackgroundColor,
@@ -207,6 +201,14 @@ class _UserDialog extends State<UserDialog> {
 
                       }
                     }
+
+                    else if(value == "kick"){
+                      bool success = await showSureToKickFromGroupDialog(context, groupId: GroupBlocs().group.id, pojoUser: PojoUser(id: widget.id, displayName: widget.displayName, username: widget.username, registrationDate: DateTime(2000)));
+                      if(success != null && success){
+                        GroupBlocs().groupMembersBloc.dispatch(FetchData());
+                      }
+                    }
+                    
                   },
                   itemBuilder: (BuildContext context) {
                     return popupMenuItems;

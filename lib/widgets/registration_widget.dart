@@ -3,13 +3,13 @@
 import 'package:flutter/material.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:mobile/blocs/TextFormBloc.dart';
-import 'package:mobile/blocs/login_bloc.dart';
-import 'package:mobile/blocs/registration_bloc.dart';
+import 'package:mobile/blocs/other/text_form_bloc.dart';
+import 'package:mobile/blocs/auth/login_bloc.dart';
+import 'package:mobile/blocs/auth/registration_bloc.dart';
 import 'package:mobile/controller/hashed_text_controller.dart';
 
-import '../request_sender.dart';
-import '../hazizz_localizations.dart';
+import 'package:mobile/communication/request_sender.dart';
+import 'package:mobile/custom/hazizz_localizations.dart';
 import '../main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_auth_buttons/src/button.dart';

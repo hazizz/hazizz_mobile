@@ -3,26 +3,26 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:mobile/blocs/google_login_bloc.dart';
-import 'package:mobile/blocs/UserDataBloc.dart';
-import 'package:mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
-import 'package:mobile/blocs/selected_session_bloc.dart';
+import 'package:mobile/blocs/auth/google_login_bloc.dart';
+import 'package:mobile/blocs/other/user_data_bloc.dart';
+import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
+import 'package:mobile/blocs/kreta/selected_session_bloc.dart';
 import 'package:mobile/communication/connection.dart';
 import 'package:mobile/communication/pojos/PojoMeInfo.dart';
 import 'package:mobile/communication/pojos/PojoMeInfoPrivate.dart';
 import 'package:mobile/communication/pojos/PojoTokens.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
-import 'package:mobile/hazizz_response.dart';
+import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/navigation/business_navigator.dart';
 import 'package:mobile/notification/notification.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../hazizz_app_info.dart';
-import '../request_sender.dart';
-import 'kreta_session_manager.dart';
-import 'token_manager.dart';
-import 'cache_manager.dart';
+import 'package:mobile/custom/hazizz_app_info.dart';
+import 'package:mobile/communication/request_sender.dart';
+import 'package:mobile/managers/kreta_session_manager.dart';
+import 'package:mobile/managers/token_manager.dart';
+import 'package:mobile/storage/cache_manager.dart';
 
 class AppState{
 

@@ -2,12 +2,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile/blocs/google_login_bloc.dart';
+import 'package:mobile/blocs/auth/google_login_bloc.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
-import '../hazizz_localizations.dart';
+import 'package:mobile/custom/hazizz_localizations.dart';
 
 class GoogleSignInButtonWidget extends StatefulWidget {
 

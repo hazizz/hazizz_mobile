@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../hazizz_theme.dart';
+import 'package:mobile/theme/hazizz_theme.dart';
 
 
 class TagChip extends StatefulWidget {

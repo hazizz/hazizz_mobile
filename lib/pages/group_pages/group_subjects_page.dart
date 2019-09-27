@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mobile/blocs/group_bloc.dart';
-import 'package:mobile/blocs/request_event.dart';
-import 'package:mobile/blocs/response_states.dart';
+import 'package:mobile/blocs/group/group_bloc.dart';
+import 'package:mobile/blocs/other/request_event.dart';
+import 'package:mobile/blocs/other/response_states.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/listItems/subject_item_widget.dart';
 import 'package:mobile/managers/welcome_manager.dart';
 import 'package:mobile/widgets/scroll_space_widget.dart';
 
-import '../../hazizz_localizations.dart';
+import 'package:mobile/custom/hazizz_localizations.dart';
 
-import '../../hazizz_localizations.dart';
+import 'package:mobile/custom/hazizz_localizations.dart';
 
 
 class GroupSubjectsPage extends StatefulWidget {

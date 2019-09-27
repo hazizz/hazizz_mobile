@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/enums/groupTypesEnum.dart';
-import '../hazizz_localizations.dart';
+import 'package:mobile/custom/hazizz_localizations.dart';
 import 'dialogs.dart';
 
 class JoinGroupDialog extends StatefulWidget {

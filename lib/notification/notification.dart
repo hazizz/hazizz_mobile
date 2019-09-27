@@ -8,10 +8,10 @@ import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workmanager/workmanager.dart';
 
-import '../hazizz_time_of_day.dart';
-import '../request_sender.dart';
-import '../hazizz_localizations.dart';
-import '../hazizz_response.dart';
+import 'package:mobile/custom/hazizz_time_of_day.dart';
+import 'package:mobile/communication/request_sender.dart';
+import 'package:mobile/custom/hazizz_localizations.dart';
+import 'package:mobile/communication/hazizz_response.dart';
 
 
 

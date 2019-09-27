@@ -1,9 +1,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
-import 'package:mobile/hazizz_date.dart';
+import 'package:mobile/custom/hazizz_date.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:mobile/hazizz_time_of_day.dart';
+import 'package:mobile/custom/hazizz_time_of_day.dart';
 
 import 'Pojo.dart';
 

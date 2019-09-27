@@ -1,10 +1,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mobile/blocs/TextFormBloc.dart';
-import 'package:mobile/blocs/item_list_picker_bloc/item_list_picker_bloc.dart';
-import 'package:mobile/blocs/kreta_login_blocs.dart';
-import 'package:mobile/blocs/login_bloc.dart';
+import 'package:mobile/blocs/item_list/item_list_picker_bloc.dart';
+import 'package:mobile/blocs/kreta/kreta_login_blocs.dart';
 import 'package:mobile/communication/errorcode_collection.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
@@ -13,11 +11,11 @@ import 'package:mobile/dialogs/dialogs.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/dialogs/loading_dialog.dart';
-import 'package:mobile/hazizz_theme.dart';
+import 'package:mobile/theme/hazizz_theme.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:xs_progress_hud/xs_progress_hud.dart';
 
-import '../hazizz_localizations.dart';
+import 'package:mobile/custom/hazizz_localizations.dart';
 
 class KretaLoginWidget extends StatefulWidget {
 
@@ -85,34 +83,50 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
     }
     var usernameWidget = TextField(
 
+
       enabled: widget.sessionToAuth == null,
       style: TextStyle(fontSize: 18),
 
       controller: kretaLoginBlocs.kretaLoginBloc.usernameController,
       textInputAction: TextInputAction.next,
       decoration:
-      InputDecoration(labelText: locText(context, key: "kreta_username"), errorStyle: TextStyle(color: Colors.black)               // helperText: "Oktatási azonositó",
+      InputDecoration(
+        labelText: locText(context, key: "kreta_username"), errorStyle: TextStyle(color: Colors.black),
+
+        filled: true,
+        fillColor: Colors.grey.withAlpha(120)
+
+        // helperText: "Oktatási azonositó",
       ),
     );
 
-    var passwordWidget =  Container(
-      height: 75,
-      child: TextField(
-        style: TextStyle(fontSize: 18),
-        maxLines: 1,
+    var passwordWidget =  Stack(
+      children: <Widget>[
+        Container(
+          //  height: 75,
+          child: TextField(
+            style: TextStyle(fontSize: 18),
+            maxLines: 1,
 
-        controller: kretaLoginBlocs.kretaLoginBloc.passwordController,
-        textInputAction: TextInputAction.next,
-        obscureText: passwordVisible,
-        decoration:
-        InputDecoration(labelText: locText(context, key: "kreta_password"),// helperText: "Oktatási azonositó",
-          alignLabelWithHint: true,
-          labelStyle: TextStyle(
+            controller: kretaLoginBlocs.kretaLoginBloc.passwordController,
+            textInputAction: TextInputAction.next,
+            obscureText: passwordVisible,
+            decoration:
+            InputDecoration(labelText: locText(context, key: "kreta_password"),// helperText: "Oktatási azonositó",
+              alignLabelWithHint: true,
+              labelStyle: TextStyle(
 
+              ),
+              filled: true,
+              fillColor: Colors.grey.withAlpha(120),
+
+            ),
           ),
-
-          suffix: IconButton(
-            padding: const EdgeInsets.only(top:  20),
+        ),
+        Positioned(
+          right: 6, top: 8,
+          child: IconButton(
+            //  padding: const EdgeInsets.only(top:  20),
             icon: Icon(
               // Based on passwordVisible state choose the icon
 
@@ -127,9 +141,11 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
               });
             },
           ),
-        ),
-      ),
+        )
+      ],
     );
+
+
 
     var schoolPickerWidget = BlocBuilder(
       bloc: kretaLoginBlocs.schoolBloc,
@@ -143,9 +159,11 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
               return InputDecorator(
                   baseStyle: TextStyle(fontSize: 22, color: Colors.black),
                   decoration: InputDecoration(
-
+                    filled: true,
+                    fillColor: Colors.grey.withAlpha(120),
                     labelText: locText(context, key: "school"),
                   ),
+
                   child: Builder(
                     builder: (BuildContext context){//, ItemListState state) {
                       if (state is ItemListLoaded) {
@@ -191,8 +209,6 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
 
         if(state is KretaLoginWaiting) {
           //  isLoading = true;
-
-
           WidgetsBinding.instance.addPostFrameCallback((_) =>
               showCustomHud(context)
           );
@@ -204,9 +220,11 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
           );
 
         }else{
+          print("debugerman1");
           WidgetsBinding.instance.addPostFrameCallback((_) =>
               stopCustomHud()
           );
+          print("debugerman2");
           if(state is KretaLoginFailure) {
             if(state.error.errorCode == ErrorCodes.THERA_AUTHENTICATION_ERROR.code){
               responseInfo = locText(context, key: "incorrect_data");

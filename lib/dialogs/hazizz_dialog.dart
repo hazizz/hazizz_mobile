@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/blocs/task_maker_blocs.dart';
+import 'package:mobile/blocs/tasks/task_maker_blocs.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
 import 'package:mobile/defaults/pojo_subject_empty.dart';
 import 'package:mobile/enums/groupTypesEnum.dart';
-import '../hazizz_localizations.dart';
+import 'package:mobile/custom/hazizz_localizations.dart';
 import 'dialogs.dart';
 
 class HazizzDialog extends StatefulWidget {

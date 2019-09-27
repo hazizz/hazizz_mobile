@@ -1,7 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 
-import 'crashlytics_reporter.dart';
 
 class HazizzLogger{
 
@@ -26,7 +25,7 @@ class HazizzLogger{
   // only logs
   static void log(String msg){
    // logs.add(_processMessage(msg));
-    CrashlyticsReporter.log(_processMessage(msg));
+    Crashlytics().log(_processMessage(msg));
   }
 
   static void addKeys(String key, String value){

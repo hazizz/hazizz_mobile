@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mobile/blocs/comment_section_bloc.dart';
-import 'package:mobile/blocs/view_task_bloc.dart';
+import 'package:mobile/blocs/other/comment_section_bloc.dart';
+import 'package:mobile/blocs/other/view_task_bloc.dart';
 import 'package:mobile/communication/pojos/pojo_comment.dart';
 import 'package:mobile/listItems/comment_item_widget.dart';
 
-import '../hazizz_localizations.dart';
+import 'package:mobile/custom/hazizz_localizations.dart';
 
 class CommentSectionWidget extends StatefulWidget {
 

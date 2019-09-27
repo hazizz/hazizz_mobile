@@ -5,24 +5,21 @@ import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mobile/blocs/UserDataBloc.dart';
-import 'package:mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
-import 'package:mobile/blocs/selected_session_bloc.dart';
-import 'package:mobile/communication/pojos/PojoGroup.dart';
-import 'package:mobile/communication/requests/request_collection.dart';
+import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
+import 'package:mobile/blocs/other/user_data_bloc.dart';
+import 'package:mobile/blocs/kreta/selected_session_bloc.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/managers/app_state_manager.dart';
-import 'package:mobile/managers/cache_manager.dart';
+import 'package:mobile/storage/cache_manager.dart';
 import 'package:mobile/managers/deep_link_receiver.dart';
 import 'package:mobile/managers/version_handler.dart';
 import 'package:mobile/pages/main_pages/main_grades_page.dart';
 import 'package:mobile/pages/main_pages/main_tasks_page.dart';
 
-import '../../hazizz_localizations.dart';
-import '../../hazizz_response.dart';
-import '../../hazizz_theme.dart';
-import '../../request_sender.dart';
+import 'package:mobile/custom/hazizz_localizations.dart';
+import 'package:mobile/communication/hazizz_response.dart';
+import 'package:mobile/theme/hazizz_theme.dart';
 import 'main_schedules_page.dart';
 
 

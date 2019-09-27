@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:mobile/communication/pojos/PojoClass.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 
-import '../hazizz_date.dart';
-import '../hazizz_localizations.dart';
-import '../hazizz_theme.dart';
+import 'package:mobile/custom/hazizz_date.dart';
+import 'package:mobile/custom/hazizz_localizations.dart';
+import 'package:mobile/theme/hazizz_theme.dart';
 
 class ClassItemWidget extends StatelessWidget{
 

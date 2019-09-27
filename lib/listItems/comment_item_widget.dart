@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mobile/blocs/comment_section_bloc.dart';
-import 'package:mobile/blocs/view_task_bloc.dart';
+import 'package:mobile/blocs/other/comment_section_bloc.dart';
+import 'package:mobile/blocs/other/view_task_bloc.dart';
 import 'package:mobile/communication/pojos/pojo_comment.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/dialogs/report_dialog.dart';
-import 'package:mobile/managers/cache_manager.dart';
+import 'package:mobile/storage/cache_manager.dart';
 import 'package:mobile/widgets/comment_section_widget.dart';
 import 'package:mobile/widgets/flushbars.dart';
 
-import '../hazizz_date.dart';
-import '../hazizz_localizations.dart';
-import '../hazizz_theme.dart';
-import '../request_sender.dart';
+import 'package:mobile/custom/hazizz_date.dart';
+import 'package:mobile/custom/hazizz_localizations.dart';
+import 'package:mobile/theme/hazizz_theme.dart';
+import 'package:mobile/communication/request_sender.dart';
 
 class CommentItemWidget extends StatefulWidget  {
 

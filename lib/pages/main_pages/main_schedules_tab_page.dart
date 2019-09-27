@@ -2,16 +2,16 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
-import 'package:mobile/blocs/schedule_bloc.dart';
+import 'package:mobile/blocs/kreta/schedule_bloc.dart';
+import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
 import 'package:mobile/communication/pojos/PojoClass.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/listItems/class_item_widget.dart';
 import 'package:mobile/widgets/schedule_event_widget.dart';
 import 'package:mobile/widgets/scroll_space_widget.dart';
 
-import '../../hazizz_localizations.dart';
-import '../../hazizz_time_of_day.dart';
+import 'package:mobile/custom/hazizz_localizations.dart';
+import 'package:mobile/custom/hazizz_time_of_day.dart';
 
 
 class SchedulesTabPage extends StatefulWidget {

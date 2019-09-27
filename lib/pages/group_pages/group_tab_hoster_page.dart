@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mobile/blocs/group_bloc.dart';
+import 'package:mobile/blocs/group/group_bloc.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/dialogs/report_dialog.dart';
@@ -10,8 +10,8 @@ import 'package:mobile/widgets/hazizz_back_button.dart';
 import 'package:toast/toast.dart';
 
 
-import '../../hazizz_localizations.dart';
-import '../../hazizz_theme.dart';
+import 'package:mobile/custom/hazizz_localizations.dart';
+import 'package:mobile/theme/hazizz_theme.dart';
 import 'group_members_page.dart';
 import 'group_subjects_page.dart';
 import 'group_tasks_page.dart';

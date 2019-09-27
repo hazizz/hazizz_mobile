@@ -29,11 +29,11 @@ import 'package:share/share.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 
-import '../request_sender.dart';
-import '../hazizz_date.dart';
-import '../hazizz_localizations.dart';
-import '../hazizz_response.dart';
-import '../hazizz_theme.dart';
+import 'package:mobile/communication/request_sender.dart';
+import 'package:mobile/custom/hazizz_date.dart';
+import 'package:mobile/custom/hazizz_localizations.dart';
+import 'package:mobile/communication/hazizz_response.dart';
+import 'package:mobile/theme/hazizz_theme.dart';
 import 'choose_subject_dialog.dart';
 import 'create_group_dialog.dart';
 import 'subject_editor_dialog.dart';

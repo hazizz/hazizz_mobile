@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
-import 'package:mobile/request_sender.dart';
-import '../hazizz_localizations.dart';
-import '../hazizz_response.dart';
-import '../hazizz_theme.dart';
+import 'package:mobile/communication/request_sender.dart';
+import 'package:mobile/custom/hazizz_localizations.dart';
+import 'package:mobile/communication/hazizz_response.dart';
+import 'package:mobile/theme/hazizz_theme.dart';
 import 'dialogs.dart';
 
 class SureToDeleteSubjectDialog extends StatefulWidget {

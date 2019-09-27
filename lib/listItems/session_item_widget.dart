@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mobile/blocs/request_event.dart';
-import 'package:mobile/blocs/selected_session_bloc.dart';
-import 'package:mobile/blocs/sessions_bloc.dart';
+import 'package:mobile/blocs/other/request_event.dart';
+import 'package:mobile/blocs/kreta/selected_session_bloc.dart';
+import 'package:mobile/blocs/kreta/sessions_bloc.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 
-import '../hazizz_localizations.dart';
-import '../hazizz_response.dart';
-import '../hazizz_theme.dart';
-import '../request_sender.dart';
+import 'package:mobile/custom/hazizz_localizations.dart';
+import 'package:mobile/communication/hazizz_response.dart';
+import 'package:mobile/theme/hazizz_theme.dart';
+import 'package:mobile/communication/request_sender.dart';
 
 
 class SessionItemWidget extends StatefulWidget  {

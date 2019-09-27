@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
-import 'package:mobile/blocs/schedule_event_bloc.dart';
+import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
+
+import 'package:mobile/blocs/kreta/schedule_event_bloc.dart';
 import 'package:mobile/custom/hazizz_date_time.dart';
 
-import '../hazizz_time_of_day.dart';
-import '../logger.dart';
+import 'package:mobile/custom/logger.dart';
 
 
 class ScheduleEventWidget extends StatefulWidget {

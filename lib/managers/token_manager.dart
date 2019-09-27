@@ -9,10 +9,10 @@ import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/navigation/business_navigator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../request_sender.dart';
-import '../hazizz_response.dart';
+import 'package:mobile/communication/request_sender.dart';
+import 'package:mobile/communication/hazizz_response.dart';
 import 'app_state_manager.dart';
-import 'cache_manager.dart';
+import 'package:mobile/storage/cache_manager.dart';
 
 class LoginError implements Exception{
 

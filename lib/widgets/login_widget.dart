@@ -1,18 +1,16 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:mobile/blocs/google_login_bloc.dart';
-import 'package:mobile/blocs/TextFormBloc.dart';
-import 'package:mobile/blocs/login_bloc.dart';
-import 'package:mobile/blocs/main_tab_blocs/main_tab_blocs.dart';
+import 'package:mobile/blocs/auth/google_login_bloc.dart';
+import 'package:mobile/blocs/auth/login_bloc.dart';
 import 'package:mobile/controller/hashed_text_controller.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/managers/app_state_manager.dart';
 import 'package:mobile/widgets/google_sign_in_widget.dart';
 
-import '../hazizz_localizations.dart';
-import '../hazizz_theme.dart';
+import 'package:mobile/custom/hazizz_localizations.dart';
+import 'package:mobile/theme/hazizz_theme.dart';
 import 'notebook_background_widget.dart';
 
 

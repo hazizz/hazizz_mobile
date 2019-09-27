@@ -5,8 +5,8 @@ import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/dialogs/report_dialog.dart';
 import 'package:mobile/widgets/flushbars.dart';
 
-import '../hazizz_localizations.dart';
-import '../hazizz_theme.dart';
+import 'package:mobile/custom/hazizz_localizations.dart';
+import 'package:mobile/theme/hazizz_theme.dart';
 
 class GroupItemWidget extends StatelessWidget{
 

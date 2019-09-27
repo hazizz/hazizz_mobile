@@ -2,8 +2,8 @@ import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mobile/blocs/group_bloc.dart';
-import 'package:mobile/blocs/request_event.dart';
+import 'package:mobile/blocs/group/group_bloc.dart';
+import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/dialogs/dialogs.dart';
@@ -11,10 +11,10 @@ import 'package:mobile/dialogs/report_dialog.dart';
 import 'package:mobile/enums/group_permissions_enum.dart';
 import 'package:mobile/widgets/flushbars.dart';
 
-import '../hazizz_localizations.dart';
-import '../hazizz_response.dart';
-import '../hazizz_theme.dart';
-import '../request_sender.dart';
+import 'package:mobile/custom/hazizz_localizations.dart';
+import 'package:mobile/communication/hazizz_response.dart';
+import 'package:mobile/theme/hazizz_theme.dart';
+import 'package:mobile/communication/request_sender.dart';
 
 
 class SubjectItemWidget extends StatefulWidget{
