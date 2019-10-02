@@ -990,7 +990,13 @@
     : "Hiba",
 
     "error_signing_in_with_google"
-    : "Google bejelentkezés sikertelen, probáld újra késöbb",
+: "Google bejelentkezés sikertelen, probáld újra késöbb",
+
+  "error_signing_in_with_facebook"
+: "Facebook bejelentkezés sikertelen, probáld újra késöbb",
+
+  "error_signing_in_with_facebook_no_email"
+  : "Facebook bejelentkezés sikertelen, mert nincs email cím rendelve a Facebook fiókhoz.",
 
     "error_conditionsNotAccepted"
     : "El kell fogadnod az ÁSZF-t, adatvédelmi szabályzatunkat és a házirendet!",
@@ -1382,6 +1388,8 @@
   "sign_in_google"
   : "Google bejelentkezés",
 
+  "sign_in_facebook"
+  : "Facebook bejelentkezés",
 
     "days_0" : "Hétfő",
     "days_1" : "Kedd",

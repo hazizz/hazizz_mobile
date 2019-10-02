@@ -103,9 +103,28 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
 
   List<PojoGrade> getGradesByDate(){
     gradesByDate.clear();
+    HazizzLogger.printLog("Grades sub1: ${grades.grades.values.length}");
+
+
+    for(int i = 0; i < grades.grades.values.length; i++){
+      print("Grades sub index: ${i}");
+      HazizzLogger.printLog("Grades sub2: ${grades.grades.values.toList()[i]}");
+      gradesByDate.addAll(grades.grades.values.toList()[i]);
+    }
+
+
+
+    /*
     for(List<PojoGrade> gradesSubject in grades.grades.values){
+      HazizzLogger.printLog("Grades sub3: ${gradesSubject}");
       gradesByDate.addAll(gradesSubject);
     }
+    */
+    HazizzLogger.printLog("Grades sub LENGTH: ${gradesByDate.length}");
+
+    gradesByDate.sort((a,b) => a.compareTo(b));
+
+
     return gradesByDate;
   }
 
@@ -168,16 +187,29 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
                   PojoGrade(creationDate: DateTime(2012), date: DateTime(2019), grade: "4", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 100)],
 
                 "Komplex Természet Tudomány" : [
-                  PojoGrade(creationDate: DateTime(2011), date: DateTime(2019), grade: "5", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 200),
-                  PojoGrade(creationDate: DateTime(2012), date: DateTime(2019), grade: "5", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 200),
-                  PojoGrade(creationDate: DateTime(2032), date: DateTime(2019), grade: "5", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 200),
-                  PojoGrade(creationDate: DateTime(2010), date: DateTime(2019), grade: "5", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 600)]
+              PojoGrade(creationDate: DateTime(2011), date: DateTime(2019), grade: "5", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 200),
+              PojoGrade(creationDate: DateTime(2012), date: DateTime(2019), grade: "5", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 200),
+              PojoGrade(creationDate: DateTime(2032), date: DateTime(2019), grade: "5", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 200),
+              PojoGrade(creationDate: DateTime(2010), date: DateTime(2019), grade: "5", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 600)]
+
+              ,"Komplex Természet Tudomány2" : [
+              PojoGrade(creationDate: DateTime(2011), date: DateTime(2019), grade: "5", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 200),
+              PojoGrade(creationDate: DateTime(2012), date: DateTime(2019), grade: "5", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 200),
+              PojoGrade(creationDate: DateTime(2032), date: DateTime(2019), grade: "5", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 200),
+              PojoGrade(creationDate: DateTime(2010), date: DateTime(2019), grade: "5", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 600)]
+              ,"Komplex Természet Tudomány3" : [
+              PojoGrade(creationDate: DateTime(2011), date: DateTime(2019), grade: "5", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 200),
+              PojoGrade(creationDate: DateTime(2012), date: DateTime(2019), grade: "5", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 200),
+              PojoGrade(creationDate: DateTime(2032), date: DateTime(2019), grade: "3", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 200),
+              PojoGrade(creationDate: DateTime(2010), date: DateTime(2019), grade: "5", gradeType: "teszt jegy", subject: "Nyelvtan Teszt", topic: "Ez csak teszt", weight: 600)]
+
               }
           );
           yield GradesLoadedState(grades);
           return;
         }
         */
+
 
         yield GradesWaitingState();
         HazizzLogger.printLog("log: am0 i here?");

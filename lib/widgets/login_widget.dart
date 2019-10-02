@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mobile/blocs/auth/google_login_bloc.dart';
 import 'package:mobile/blocs/auth/login_bloc.dart';
+import 'package:mobile/blocs/auth/social_login_bloc.dart';
 import 'package:mobile/controller/hashed_text_controller.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -54,35 +55,31 @@ class _LoginWidget extends State<LoginWidget> with SingleTickerProviderStateMixi
   @override
   Widget build(BuildContext context) {
 
-    GoogleSignInButtonWidget googleSignInButtonWidget = GoogleSignInButtonWidget();
+    SocialSignInButtonWidget googleSignInButtonWidget = SocialSignInButtonWidget.google();
+    SocialSignInButtonWidget facebookSignInButtonWidget = SocialSignInButtonWidget.facebook();
 
     return MultiBlocListener(
       listeners: [
         BlocListener(
           bloc: LoginBlocs().googleLoginBloc,//loginWidgetBlocs.googleLoginBloc,
           listener: (context, state) {
-            if(state is GoogleLoginSuccessfulState){
+            if(state is SocialLoginSuccessfulState){
+              print("proceedToApp");
               proceedToApp(context);
             }
           },
         ),
         BlocListener(
-          bloc: loginWidgetBlocs.basicLoginBloc,
+          bloc: LoginBlocs().facebookLoginBloc,
           listener: (context, state) {
-            if (state is LoginSuccessState) {
+            if (state is SocialLoginSuccessfulState) {
+              print("proceedToApp");
+
               proceedToApp(context);
             }
           },
         )
       ],
-
-        /*
-        final String assetName = 'assets/image.svg';
-    final Widget svg = new SvgPicture.asset(
-    assetName,
-    semanticsLabel: 'Acme Logo'
-    );
-    */
 
       child: Container(
         height: MediaQuery.of(context).size.height,
@@ -108,9 +105,6 @@ class _LoginWidget extends State<LoginWidget> with SingleTickerProviderStateMixi
 
 
 
-
-
-
               Column(
                   children: <Widget>[
 
@@ -127,61 +121,6 @@ class _LoginWidget extends State<LoginWidget> with SingleTickerProviderStateMixi
 
                     Expanded(child: AutoSizeText(locText(context, key: "login"), style: TextStyle(/*fontSize: 60,*/ fontWeight: FontWeight.w800, color: HazizzTheme.blue, ), maxLines: 1, minFontSize: 44,)),
 
-                    /*
-                    BlocBuilder(
-                        bloc: loginWidgetBlocs.usernameBloc,
-                        builder: (BuildContext context, HFormState state) {
-                          String errorText = null;
-                          if (state is UserNotFoundState) {
-                            errorText = "No such user";
-                          } else if (state is TextFormErrorTooShort) {
-                            errorText = "too short mann...";
-                          }
-                          return TextField(
-                            onChanged: (dynamic text) {
-                              HazizzLogger.printLog("change: $text");
-                              loginWidgetBlocs.usernameBloc.dispatch(TextFormValidate(text: text));
-                            },
-                            controller: _usernameTextEditingController,
-                            textInputAction: TextInputAction.next,
-                            decoration:
-                            InputDecoration(labelText: "Age", errorText: errorText),
-                          );
-                        }),
-                    TextFormField(
-                      obscureText: true,
-                      maxLines: 1,
-                      autofocus: false,
-                      controller: _passwordTextEditingController,
-                      decoration: InputDecoration(
-                        labelText: "Password",
-                      ),
-                    ),
-                    RaisedButton(
-                        child: Text("Küldés"),
-                        onPressed: () async {
-                          HazizzLogger.printLog("log: pressed login button");
-                          loginWidgetBlocs.basicLoginBloc.dispatch(
-                              LoginButtonPressedTEST(
-                                  password: _passwordTextEditingController.text,
-                                  username: _usernameTextEditingController.text
-                              )
-                          );
-                        }
-                    ),
-                    */
-
-
-
-                    /*
-                    RaisedButton(
-                        child: Text("Registration"),
-                        onPressed: () async {
-                          Navigator.pushReplacementNamed(context, "registration");
-
-                        }
-                    ),
-                    */
                   ],
                 ),
 
@@ -193,20 +132,27 @@ class _LoginWidget extends State<LoginWidget> with SingleTickerProviderStateMixi
                   padding: const EdgeInsets.only(bottom: 50.0),
                   child: Container(
                     width: MediaQuery.of(context).size.width,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    child: Column(
                       children: <Widget>[
-                        googleSignInButtonWidget
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            googleSignInButtonWidget
+                          ],
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            facebookSignInButtonWidget
+                          ],
+                        ),
                       ],
-                    ),
+                    )
                   ),
                 )
               )
-
-
-
-
             ],
           ),
       ),

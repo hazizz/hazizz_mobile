@@ -101,6 +101,18 @@ class TokenManager {
     return hazizzResponse;
   }
 
+  static Future<HazizzResponse> createTokenWithFacebookAccount(String facebookToken) async{
+    HazizzResponse hazizzResponse = await RequestSender().getAuthResponse(new CreateToken.withFacebookAccount(q_facebookToken: facebookToken));
+    if(hazizzResponse.isSuccessful){
+      PojoTokens tokens = hazizzResponse.convertedData;
+      await setTokens(tokens.token, tokens.refresh);
+      AppState.logInProcedure(tokens: tokens);
+    }else if(hazizzResponse.hasPojoError){
+
+    }
+    return hazizzResponse;
+  }
+
 
 
 

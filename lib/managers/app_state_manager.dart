@@ -4,6 +4,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mobile/blocs/auth/google_login_bloc.dart';
+import 'package:mobile/blocs/auth/social_login_bloc.dart';
 import 'package:mobile/blocs/other/user_data_bloc.dart';
 import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
 import 'package:mobile/blocs/kreta/selected_session_bloc.dart';
@@ -114,7 +115,7 @@ class AppState{
     HazizzLogger.printLog("mainAppPartStartProcedure 2");
     SelectedSessionBloc().dispatch(SelectedSessionInitalizeEvent());
     HazizzLogger.printLog("mainAppPartStartProcedure 3");
-    LoginBlocs().googleLoginBloc.dispatch(GoogleLoginResetEvent());
+    LoginBlocs().googleLoginBloc.dispatch(SocialLoginResetEvent());
     HazizzLogger.printLog("mainAppPartStartProcedure 4");
     MainTabBlocs().initialize();
     HazizzLogger.printLog("mainAppPartStartProcedure 5");
@@ -124,7 +125,7 @@ class AppState{
   }
 
   static Future logoutProcedure() async {
-
+    RequestSender().lock();
 
     /*
     final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: [

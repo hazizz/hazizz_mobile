@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/auth/google_login_bloc.dart';
+import 'package:mobile/blocs/auth/social_login_bloc.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
@@ -97,8 +98,6 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
 
 
 
-
-  bool googleSignInButtonPressed = false;
 
   var slides;
 
@@ -248,74 +247,83 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
     slides = [
       Builder(
         builder: (context){
-          GoogleSignInButtonWidget googleSignInButtonWidget = GoogleSignInButtonWidget();
+          SocialSignInButtonWidget googleSignInButtonWidget = SocialSignInButtonWidget.google();
+          SocialSignInButtonWidget facebookSignInButtonWidget = SocialSignInButtonWidget.facebook();
 
           return BlocBuilder(
-              bloc: LoginBlocs().googleLoginBloc,
-              builder: (context, state){
+            bloc: LoginBlocs().googleLoginBloc,
+            builder: (context, state){
 
-                bool _isLoading;
+              return BlocBuilder(
+                  bloc: LoginBlocs().facebookLoginBloc,
+                  builder: (context, state2){
 
-                HazizzLogger.printLog("log: ggoogle: $state");
+                    bool _isLoading;
 
-                // ProgressDialog pg;
-                //  pg = new ProgressDialog(context,ProgressDialogType.Normal);
+                    HazizzLogger.printLog("log: ggoogle: $state");
 
+                    if(state is SocialLoginSuccessfulState || state2 is SocialLoginSuccessfulState ){
+                      _isLoading = false;
 
-                if(state is GoogleLoginSuccessfulState && !googleSignInButtonPressed){
-                  _isLoading = false;
+                      if(joinLater){
+                        joinGroup();
+                      }
 
-                  if(joinLater){
-                    joinGroup();
+                      AppState.mainAppPartStartProcedure();
+                      nextPage();
+                    }
+                    else if(state is SocialLoginWaitingState || state2 is SocialLoginWaitingState/* || state is GoogleLoginFineState && googleSignInButtonWidget.googleLoginBloc*/){
+                      _isLoading = true;
 
+                    }else{
+                      _isLoading = false;
+                    }
+
+                    return LoadingDialog(
+                      child: introPageBuilder(Transform.translate(
+                        offset: const Offset(0.0, -30.0),
+                        child: Container(
+                          // padding: const EdgeInsets.all(8.0),
+                          //  color: const Color(0xFF7F7F7F),
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 0.0),
+                            child: Image.asset(
+                              'assets/images/Logo.png',
+                            ),
+                          ),
+                        ),
+                      ), Column(children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0, right: 8),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 8.0, right: 8),
+                            child: Center(
+                                child: Text(locText(context, key: "hazizz_intro"), style: TextStyle(fontSize: 19), textAlign: TextAlign.center)
+                            ),
+                          ),
+
+                        ),
+
+                        Expanded(
+                          child: Padding(
+                              padding: const EdgeInsets.only(top: 16.0),
+                              child: Column(
+                                children: <Widget>[
+                                  googleSignInButtonWidget,
+                                  facebookSignInButtonWidget
+                                ],
+                              ),
+                          ),
+                        )
+                      ],),
+                        backgroundIndex: 1,
+                      ),
+                      show: _isLoading,
+                    );
                   }
+              );
+            }
 
-                  AppState.mainAppPartStartProcedure();
-                  nextPage();
-                }else if(state is GoogleLoginWaitingState/* || state is GoogleLoginFineState && googleSignInButtonWidget.googleLoginBloc*/){
-                  _isLoading = true;
-
-                }else{
-                  _isLoading = false;
-                }
-
-                return LoadingDialog(
-                  child: introPageBuilder(Transform.translate(
-                    offset: const Offset(0.0, -30.0),
-                    child: Container(
-                      // padding: const EdgeInsets.all(8.0),
-                      //  color: const Color(0xFF7F7F7F),
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 0.0),
-                        child: Image.asset(
-                          'assets/images/Logo.png',
-                        ),
-                      ),
-                    ),
-                  ), Column(children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0, right: 8),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 8.0, right: 8),
-                        child: Center(
-                            child: Text(locText(context, key: "hazizz_intro"), style: TextStyle(fontSize: 19), textAlign: TextAlign.center)
-                        ),
-                      ),
-
-                    ),
-
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 16.0),
-                        child: googleSignInButtonWidget,
-                      ),
-                    )
-                  ],),
-                    backgroundIndex: 1,
-                  ),
-                  show: _isLoading,
-                );
-              }
           );
         },
       ),

@@ -962,6 +962,12 @@
     "error_signing_in_with_google"
     : "Google sign in was not successful, try again later",
 
+  "error_signing_in_with_facebook"
+  : "Facebook sign in was not successful, try again later",
+
+  "error_signing_in_with_facebook_no_email"
+  : "Facebook sign in error, due to Facebook account not having email address",
+
     "error_conditionsNotAccepted"
     : "You have to accept our terms of service, privacy policy and the guidelines!",
 
@@ -1343,7 +1349,10 @@
     : "TheraActivity",
 
   "sign_in_google"
-  : "Sign in with Google",
+: "Sign in with Google",
+
+  "sign_in_facebook"
+  : "Sign in with Facebook",
 
 
     "days_0" : "Monday",

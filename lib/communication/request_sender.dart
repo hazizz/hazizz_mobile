@@ -126,6 +126,7 @@ class RequestSender{
     return _isLocked;
   }
   Future<HazizzResponse> getAuthResponse(AuthRequest authRequest) async{
+    HazizzLogger.printLog("about to start sending AUTH request: ${authRequest.toString()}");
     HazizzResponse hazizzResponse;
     try{
       options.headers = await authRequest.buildHeader();

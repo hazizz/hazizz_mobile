@@ -205,20 +205,23 @@ class CreateToken extends AuthRequest{
     query["openid_token"] = q_openIdToken;
   }
 
-  /*
-  @override
-  void onSuccessful(Response response) {
-    PojoTokens tokens = PojoTokens.fromJson(jsonDecode(response.data));
-    TokenManager.setToken(tokens.token);
-    TokenManager.setRefreshToken(tokens.refresh);
+  CreateToken.withFacebookAccount({@required String q_facebookToken}) : super(null){
+    hardCodeReducer();
 
+    query["grant_type"] = "facebook_token";
+    query["facebook_token"] = q_facebookToken;
   }
-  */
 
   @override
   convertData(Response response) {
     PojoTokens tokens = PojoTokens.fromJson(jsonDecode(response.data));
     return tokens;
+  }
+
+
+  @override
+  String toString() {
+    return "Instance of 'CreateToken': $PATH";
   }
 
 }
@@ -257,6 +260,25 @@ class RegisterWithGoogleAccount extends AuthRequest{
     return response;
   }
 }
+
+class RegisterWithFacebookAccount extends AuthRequest{
+  RegisterWithFacebookAccount({@required String b_facebookToken}) : super(null){
+    print("here iam0");
+    httpMethod = HttpMethod.POST;
+    PATH = "account/facebookregister";
+    body["facebookToken"] = b_facebookToken;
+    body["consent"] = true;
+    contentTypeHeader = true;
+    print("here iam");
+  }
+
+  @override
+  dynamic convertData(Response response) {
+    print("here iam2");
+    return response;
+  }
+}
+
 
 class Information extends AuthRequest{
   Information() : super(null){

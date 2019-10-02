@@ -14,11 +14,11 @@ class GradeItemWidget extends StatelessWidget{
 
   bool isBySubject = false;
 
-  GradeItemWidget.bySubject({this.pojoGrade}){
+  GradeItemWidget.bySubject({this.pojoGrade}) : super(key: UniqueKey()){
     isBySubject = true;
   }
 
-  GradeItemWidget.byDate({this.pojoGrade}){
+  GradeItemWidget.byDate({this.pojoGrade}) : super(key: UniqueKey()){
 
   }
 

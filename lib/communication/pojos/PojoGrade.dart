@@ -63,7 +63,7 @@ class PojoGrade extends Pojo implements Comparable {
   @override
   int compareTo(other) {
     if(other is PojoGrade){
-      int a = this.date.compareTo(other.date);
+      int a = this.creationDate.compareTo(other.creationDate);
       return a;
     }
     return null;

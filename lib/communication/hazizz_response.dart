@@ -66,7 +66,7 @@ class HazizzResponse{
     hazizzResponse.request = request;
     hazizzResponse.isError = true;
     await hazizzResponse.onErrorResponse();
-    if(request is AuthRequest){
+    if(request is CreateToken){
       HazizzLogger.printLog("error obtaining token response. Big problem");
     }else {
       HazizzLogger.printLog("error response raw body: ${hazizzResponse.response.data}");
@@ -93,10 +93,12 @@ class HazizzResponse{
           await RequestSender().waitCooldown();
         }
         else if(pojoError.errorCode == 18 ||
-            pojoError.errorCode == 17) { // wrong token
+                pojoError.errorCode == 17) { // wrong token
           // a requestet elmenteni hogy újra küldje
-          HazizzLogger.printLog("token is wrong or expired, the failed request is saved and a refrest token request is being sent. dio interceptro: ${RequestSender().isLocked()}");
+          HazizzLogger.printLog("token is wrong or expired, the failed request is saved and a refresh token request is being sent. dio interceptro: ${RequestSender().isLocked()}");
           if(!RequestSender().isLocked()) {
+            HazizzLogger.printLog("Locking dio interceptor and sending refresh token request");
+
             RequestSender().lock();
 
             HazizzResponse tokenResponse = await TokenManager.createTokenWithRefresh();
@@ -121,6 +123,8 @@ class HazizzResponse{
             RequestSender().unlock();
 
           }else {
+            HazizzLogger.printLog("Still waiting for refresh token request response, saving the new request in the queue");
+
             RequestSender().getResponse(request);
           }
         }else if(pojoError.errorCode == 13 || pojoError.errorCode == 14 ||

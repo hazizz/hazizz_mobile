@@ -130,16 +130,29 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
     }
 
     List<PojoGrade> gradesByDate =  MainTabBlocs().gradesBloc.getGradesByDate();
+    gradesByDate = gradesByDate.reversed.toList();
+
+    print("Grades page length: ${gradesByDate}");
+
+    for(PojoGrade g in gradesByDate){
+      print("Grades page grade date: ${g.creationDate}");
+
+    }
 
     Map<DateTime, List<PojoGrade>> map = Map();
 
     int i = 0;
     for(PojoGrade grade in gradesByDate){
+     // print("Grades page index: ${i}");
+
       if (i == 0
           || gradesByDate[i].creationDate
-          .difference(gradesByDate[i - 1].creationDate).inDays >= 1
-          || map[gradesByDate[i].creationDate] == null) {
-        map[gradesByDate[i].creationDate] = List();
+          .difference(gradesByDate[i - 1].creationDate).inDays.abs() >= 1
+          ) { // || map[gradesByDate[i].creationDate] == null
+        if(map[gradesByDate[i].creationDate] == null){
+          map[gradesByDate[i].creationDate] = List();
+
+        }
         map[gradesByDate[i].creationDate].add(grade);
 
       }else{
@@ -148,6 +161,13 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
 
       i++;
     }
+
+   // DateTime key = map.keys.elementAt(index-1);
+   // print("Grades page asd: ${map[key]}");
+
+    print("Grades page map: ${map}");
+
+
 
     return new ListView.builder(
         itemCount: map.keys.length+1,
@@ -159,7 +179,7 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
           }
 
           DateTime key = map.keys.elementAt(index-1);
-
+          print("Grades page asd: ${map[key]}");
 
           return StickyHeader(
             header: GradeHeaderItemWidget.byDate(date: key),
@@ -167,8 +187,11 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
                 builder: (context) {
                   List<Widget> widgetList = List();
 
+                  int i = 0;
                   for(PojoGrade gs in map[key]){
+                    print("Grades page index: ${i}");
                     widgetList.add(GradeItemWidget.byDate(pojoGrade: gs,));
+                    i++;
                   }
                   return Container(
 

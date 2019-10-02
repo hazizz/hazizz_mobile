@@ -142,6 +142,7 @@ dependencies {
     // Add dependency
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
     implementation "com.google.gms:google-services:4.2.0"
+    implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
 }
 
 

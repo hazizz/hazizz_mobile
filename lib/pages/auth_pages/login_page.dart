@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/blocs/auth/google_login_bloc.dart';
 import 'package:mobile/blocs/auth/login_bloc.dart';
+import 'package:mobile/blocs/auth/social_login_bloc.dart';
 import 'package:mobile/dialogs/loading_dialog.dart';
 import 'package:mobile/widgets/login_widget.dart';
 
@@ -21,6 +22,8 @@ class _LoginPage extends State<LoginPage> with SingleTickerProviderStateMixin {
     super.initState();
   }
 
+  bool _isLoading = false;
+
   @override
   void dispose() {
     super.dispose();
@@ -33,11 +36,13 @@ class _LoginPage extends State<LoginPage> with SingleTickerProviderStateMixin {
           bloc: LoginBlocs().googleLoginBloc,
           builder: (context, state){
             return BlocBuilder(
-              bloc: LoginBlocs().googleLoginBloc,
+              bloc: LoginBlocs().facebookLoginBloc,
               builder: (context2, state2){
-                bool _isLoading = false;
-                if(state is GoogleLoginWaitingState || state2 is LoginWaiting){
+
+                if(state is SocialLoginWaitingState || state2 is SocialLoginWaitingState){
                   _isLoading = true;
+                }else{
+                  _isLoading = false;
                 }
                 return LoadingDialog(
                 child: LoginWidget(),

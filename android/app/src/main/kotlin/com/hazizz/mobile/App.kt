@@ -6,14 +6,39 @@ import io.flutter.plugin.common.PluginRegistry
 import io.flutter.plugins.GeneratedPluginRegistrant
 import io.flutter.plugins.androidalarmmanager.AlarmService
 
+import com.facebook.FacebookSdk
+import com.facebook.appevents.AppEventsLogger
+
 class App : FlutterApplication(), PluginRegistry.PluginRegistrantCallback {
     override fun onCreate() {
         super.onCreate()
        // WorkmanagerPlugin.setPluginRegistrantCallback(this)
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this)
+
         AlarmService.setPluginRegistrant(this)
+
+       // generateKeyHash()
     }
 
     override fun registerWith(reg: PluginRegistry?) {
         GeneratedPluginRegistrant.registerWith(reg)
     }
+
+    /*
+    fun generateKeyHash() {
+        try {
+            val info = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES)
+            for (signature in info.signatures) {
+                val md = MessageDigest.getInstance("SHA")
+                md.update(signature.toByteArray())
+                Log.d(">>>>>KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT))
+            }
+        } catch (e: PackageManager.NameNotFoundException) {
+            Log.i(">>>>>>", e.toString())
+        } catch (e: NoSuchAlgorithmException) {
+            Log.i(">>>>", e.toString())
+        }
+    }
+    */
 }
