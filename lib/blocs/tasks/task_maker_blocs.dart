@@ -181,6 +181,8 @@ class GroupItemPickerBloc extends ItemListPickerBloc {
             if(dataList.isNotEmpty) {
               HazizzLogger.printLog("log: response is List");
               yield ItemListLoaded(data: dataList);
+            }else{
+              yield ItemListLoaded(data: dataList);
             }
           }
         }on Exception catch(e) {

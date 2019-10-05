@@ -95,7 +95,7 @@ class AppState{
 
 
   static Future<void> appStartProcedure() async {
-    RequestSender().initalize();
+    RequestSender().initialize();
     await HazizzAppInfo().initalize();
     await Connection.listener();
     Crashlytics.instance.enableInDevMode = false;
@@ -109,7 +109,7 @@ class AppState{
 
    // await TokenManager.fetchRefreshTokens(username: (await InfoCache.getMyUserData()).username, refreshToken: await TokenManager.getRefreshToken());
 
-
+  //  RequestSender._internal();
     HazizzLogger.printLog("mainAppPartStartProcedure 1");
     await KretaSessionManager.loadSelectedSession();
     HazizzLogger.printLog("mainAppPartStartProcedure 2");
@@ -119,6 +119,7 @@ class AppState{
     HazizzLogger.printLog("mainAppPartStartProcedure 4");
     MainTabBlocs().initialize();
     HazizzLogger.printLog("mainAppPartStartProcedure 5");
+   // await Future.delayed(const Duration(milliseconds: 50));
     UserDataBlocs().initialize();
     HazizzLogger.printLog("mainAppPartStartProcedure 6");
 

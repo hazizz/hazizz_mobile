@@ -1,18 +1,13 @@
 import 'dart:async';
-
 import 'package:easy_localization/easy_localization.dart';
-import 'package:easy_localization/easy_localization_provider.dart';
-import 'package:easy_localization/easy_localization_provider.dart';
 import 'package:easy_localization/easy_localization_provider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/auth/social_login_bloc.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/navigation/route_generator.dart';
-import 'package:mobile/blocs/auth/google_login_bloc.dart';
 import 'blocs/main_tab/main_tab_blocs.dart';
 import 'communication/pojos/task/PojoTask.dart';
-//import 'hazizz_alarm_manager.dart';
 import 'custom/hazizz_logger.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'package:mobile/managers/token_manager.dart';
@@ -26,9 +21,6 @@ import 'managers/welcome_manager.dart';
 import 'navigation/business_navigator.dart';
 import 'notification/notification.dart';
 
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-
 String startPage;
 
 ThemeData themeData;
@@ -39,33 +31,11 @@ bool isLoggedIn = true;
 
 bool isFromNotification = false;
 
-
 String tasksTomorrowSerialzed;
 List<PojoTask> tasksForTomorrow;
 
 MainTabBlocs mainTabBlocs = MainTabBlocs();
 LoginBlocs loginBlocs = LoginBlocs();
-
-final GoogleSignIn _googleSignIn = GoogleSignIn();
-final FirebaseAuth _auth = FirebaseAuth.instance;
-
-
-/*
-Future<FirebaseUser> _handleSignIn() async {
-  final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-  final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-  final AuthCredential credential = GoogleAuthProvider.getCredential(
-    accessToken: googleAuth.accessToken,
-
-    idToken: googleAuth.idToken,
-  );
-
-  final FirebaseUser user = await _auth.signInWithCredential(credential);
-  HazizzLogger.printLog("signed in " + user.displayName);
-  return user;
-}
-*/
-
 
 Future<bool> fromNotification() async {
   var notificationAppLaunchDetails = await HazizzNotification.flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
@@ -74,18 +44,15 @@ Future<bool> fromNotification() async {
     String payload = notificationAppLaunchDetails.payload;
     if(payload != null) {
       tasksTomorrowSerialzed = payload;
-      //  tasksForTomorrow = getIterable(payload).map<PojoTask>((json) => PojoTask.fromJson(json)).toList();
     }
   }
   return isFromNotification;
 }
 
-
 void main() async{
 
   WidgetsFlutterBinding.ensureInitialized();
   await AppState.appStartProcedure();
-
 
   themeData = await HazizzTheme.getCurrentTheme();
 
@@ -96,14 +63,9 @@ void main() async{
       if(await TokenManager.checkIfTokenRefreshIsNeeded()) {
         await TokenManager.createTokenWithRefresh();
       }
-
       fromNotification();
 
-
       AppState.mainAppPartStartProcedure();
-
-
-     // mainTabBlocs.initialize();
     }
   }else{
     isLoggedIn = false;
@@ -123,8 +85,6 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
   DateTime currentBackPressTime;
 
   DateTime lastActive;
-
- // final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
 
 
   @override
@@ -178,8 +138,6 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
       if(isLoggedIn){
@@ -193,46 +151,39 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
       }
       else{
         startPage = "login";
-
-       // startPage = "intro";
-
       }
 
       return new DynamicTheme(
           data: (brightness) => themeData,
           themedWidgetBuilder: (context, theme) {
             return MaterialApp(
-                navigatorKey: BusinessNavigator().navigatorKey,
-                title: 'Hazizz Mobile',
-                showPerformanceOverlay: false,
-                theme: theme,//HazizzTheme. darkThemeData,//lightThemeData,Demo Home Page'),
+              navigatorKey: BusinessNavigator().navigatorKey,
+              title: 'Hazizz Mobile',
+              showPerformanceOverlay: false,
+              theme: theme,
               initialRoute: startPage,
-                // home: _startPage,//MyHomePage(title: 'Hazizz Demo Home Page') //_startPage, // MyHomePage(title: 'Hazizz
-                onGenerateRoute: RouteGenerator.generateRoute,
-                localizationsDelegates: [
-                  HazizzLocalizations.delegate,
-                  GlobalMaterialLocalizations.delegate,
-                  GlobalWidgetsLocalizations.delegate,
-                ],
-                supportedLocales: getSupportedLocales(),
+              onGenerateRoute: RouteGenerator.generateRoute,
+              localizationsDelegates: [
+                HazizzLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+              ],
+              supportedLocales: getSupportedLocales(),
 
-                localeResolutionCallback: (locale, supportedLocales) {
-                  // Check if the current device locale is supported
-                  // Locale myLocale = Localizations.localeOf(context);
-
-
-                  for(var supportedLocale in supportedLocales) {
-                    if(supportedLocale.languageCode == locale.languageCode &&
-                        supportedLocale.countryCode == locale.countryCode) {
-                      setPreferredLocal(supportedLocale);
-                      return supportedLocale;
-                    }
+              localeResolutionCallback: (locale, supportedLocales) {
+                // Check if the current device locale is supported
+                for(var supportedLocale in supportedLocales) {
+                  if(supportedLocale.languageCode == locale.languageCode &&
+                      supportedLocale.countryCode == locale.countryCode) {
+                    setPreferredLocal(supportedLocale);
+                    return supportedLocale;
                   }
-                  // If the locale of the device is not supported, use the first one
-                  // from the list (English, in this case).
-                  return supportedLocales.first;
-                },
-              );
+                }
+                // If the locale of the device is not supported, use the first one
+                // from the list (English, in this case).
+                return supportedLocales.first;
+              },
+            );
           }
       );
   }

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:meta/meta.dart';
@@ -35,6 +36,8 @@ class HazizzResponse{
   PojoError pojoError;
 
   HazizzResponse._();
+
+
 
   static HazizzResponse onSuccess({@required Response response, @required Request request}){
     HazizzResponse hazizzResponse = new HazizzResponse._();
@@ -79,9 +82,9 @@ class HazizzResponse{
 
   onErrorResponse()async {
     if(response != null) {
-      HazizzLogger.printLog("log: error response: $response");
-
       pojoError = PojoError.fromJson(json.decode(response?.data));
+
+      HazizzLogger.printLog("log: error response: $response");
 
       if(pojoError != null){
         hasPojoError = true;
@@ -89,8 +92,9 @@ class HazizzResponse{
           KretaStatusBloc().dispatch(KretaStatusUnavailableEvent());
         }
         else if(pojoError.errorCode == 19) { // to many requests
-          HazizzLogger.printLog("To many requests");
+          HazizzLogger.printLog("Too many requests");
           await RequestSender().waitCooldown();
+
         }
         else if(pojoError.errorCode == 18 ||
                 pojoError.errorCode == 17) { // wrong token
@@ -112,20 +116,21 @@ class HazizzResponse{
               }
 
               HazizzLogger.printLog("obtaining token failed. The user is redirected to the login screen");
-
             }
 
-
             // elküldi újra ezt a requestet ami errort dobott
-            HazizzResponse hazizzResponse = await RequestSender().getResponse(request);
+
+            RequestSender().refreshRequestQueue.add(request);
+        //    HazizzResponse hazizzResponse = await RequestSender().getResponse(await refreshTokenInRequest(request));
             HazizzLogger.printLog("resent failed request: ${request}");
 
-            RequestSender().unlock();
+            RequestSender().unlockTokenRefreshRequests();
 
           }else {
             HazizzLogger.printLog("Still waiting for refresh token request response, saving the new request in the queue");
 
-            RequestSender().getResponse(request);
+            RequestSender().refreshRequestQueue.add(request);
+           // RequestSender().getResponse(request);
           }
         }else if(pojoError.errorCode == 13 || pojoError.errorCode == 14 ||
             pojoError.errorCode == 15) {

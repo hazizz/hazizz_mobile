@@ -17,10 +17,7 @@ class KretaSessionManager {
 
   static PojoSession selectedSession;
 
-//  static bool tokenIsValid = true;
-
   SharedPreferences prefs;
-
 
   static Future<bool> hasSelectedSession() async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();

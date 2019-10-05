@@ -21,6 +21,9 @@ Future<HazizzResponse> getResponse(Request request)async{
 }
 
 class RequestSender{
+
+  List<Request> refreshRequestQueue = List();
+
   static final RequestSender _instance = new RequestSender._internal();
   
   bool _isLocked = false;
@@ -29,37 +32,68 @@ class RequestSender{
     return _instance;
   }
 
-  RequestSender._internal(){
+  int lastSeconds = DateTime.now().millisecondsSinceEpoch;
 
+  int requestCount = 0;
+
+  RequestSender._internal(){
+    addInterceptor();
+  }
+
+  addInterceptor(){
+    print("_internal is called");
     dio.interceptors.add(InterceptorsWrapper(
-      onRequest:(RequestOptions options) async{
-        // Do something before request is sent
-        /*
+        onRequest:(RequestOptions options) async{
+          // Do something before request is sent
+          /*
         dio.interceptors.requestLock.lock();
         dio.clear();
         */
-        /*
+          /*
         connectivity = await Connectivity().checkConnectivity();
         if(!(connectivity == ConnectivityResult.wifi ||connectivity == ConnectivityResult.mobile)){
           dio.lock();
         }
         */
-        HazizzLogger.printLog("preparing to send request");
-        return options; //continue
-        // If you want to resolve the request with some custom data，
-        // you can return a `Response` object or return `dio.resolve(data)`.
-        // If you want to reject the request with a error message,
-        // you can return a `DioError` object or return `dio.reject(errMsg)`
-      },
-      onResponse:(Response response) {
-        HazizzLogger.printLog("got response: ${response.data}");
+          print("boi: b1");
 
-        return response; // continue
-      },
-      onError: (DioError e) async{
-        HazizzLogger.printLog("got response error: ${e}");
-        // return  e;//continue
-      }
+          if(DateTime.now().millisecondsSinceEpoch - lastSeconds >= 1000){
+            print("boi: b2");
+            lastSeconds = DateTime.now().millisecondsSinceEpoch;
+            requestCount = 1;
+            return options;
+          }else{
+            print("boi: b3");
+            if(requestCount >= 3){
+              print("boi: b4");
+              print("oops: too many requests. Waiting");
+              await Future.delayed(const Duration(milliseconds: 1000));
+            }
+            print("boi: b5");
+            requestCount++;
+            return options;
+          }
+
+
+
+
+
+          HazizzLogger.printLog("preparing to send request");
+          return options; //continue
+          // If you want to resolve the request with some custom data，
+          // you can return a `Response` object or return `dio.resolve(data)`.
+          // If you want to reject the request with a error message,
+          // you can return a `DioError` object or return `dio.reject(errMsg)`
+        },
+        onResponse:(Response response) {
+          HazizzLogger.printLog("got response: ${response.data}");
+
+          return response; // continue
+        },
+        onError: (DioError e) async{
+          HazizzLogger.printLog("got response error: ${e}");
+          return  e;//continue
+        }
     ));
   }
   /*
@@ -78,12 +112,6 @@ class RequestSender{
       int maxRedirects,
   */
   final Options options = new Options(
-    /*
-    responseDecoder: (List<int> responseBytes, RequestOptions options, ResponseBody responseBody){
-      responseBody.
-    },
-    */
-
     connectTimeout: 6000,
     sendTimeout: 6000,
     receiveTimeout: 6000,
@@ -98,30 +126,43 @@ class RequestSender{
   Dio dio = new Dio();
 
 
-  void initalize(){
+  void initialize(){
     dio = new Dio();
     dio.transformer = new FlutterTransformer();
+    addInterceptor();
     HazizzLogger.hprint("dio options: ${options.toString()}");
   }
 
   Future<void> waitCooldown() async{
-    dio.interceptors.requestLock.lock();
+    lock();
     await new Future.delayed(const Duration(milliseconds: 1000));
-    dio.interceptors.requestLock.unlock();
+    unlock();
   }
   void lock(){
+ //   refreshRequestQueue.clear();
     dio.lock();
     _isLocked = true;
     HazizzLogger.printLog("dio interceptors: locked");
-
-
   }
-  void unlock(){
+
+  Future unlock() async {
     dio.unlock();
     _isLocked = false;
     HazizzLogger.printLog("dio interceptors: unlocked");
-
   }
+  Future unlockTokenRefreshRequests() async {
+    await clearQueue();
+    for(Request r in refreshRequestQueue){
+      r = await refreshTokenInRequest(r);
+      getResponse(r);
+    }
+    refreshRequestQueue.clear();
+
+    dio.unlock();
+    _isLocked = false;
+    HazizzLogger.printLog("dio interceptors: unlocked");
+  }
+
   bool isLocked(){
     return _isLocked;
   }
@@ -196,8 +237,6 @@ class RequestSender{
     await clearQueue();
   }
 
-
-
   Future<HazizzResponse> getResponse(Request request) async{
 
 
@@ -238,7 +277,6 @@ class RequestSender{
         HazizzLogger.printLog("request was sent successfully: ${request.toString()}");
         HazizzLogger.printLog("response for ${request.toString()}: ${response.toString()}");
         hazizzResponse = HazizzResponse.onSuccess(response: response, request: request);
-       // HazizzLogger.printLog("log: request sent: ${request.toString()}");
         HazizzLogger.printLog("HazizzResponse.onSuccess ran: ${request.toString()}");
 
       }else{

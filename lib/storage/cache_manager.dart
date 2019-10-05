@@ -28,6 +28,8 @@ class InfoCache{
     prefs.setString(_keyMe + _displayName, null);
     prefs.setInt(_keyMe + _id, null);
 
+    prefs.setString(_keyMe + _profilePicture, null);
+    prefs.setString(_keyMe + _userData, null);
   }
 
   static void setMyUsername(String myUsername) async{

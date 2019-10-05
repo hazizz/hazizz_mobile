@@ -154,6 +154,7 @@ class _ProfileEditorPage extends State<ProfileEditorPage> with TickerProviderSta
                             ),
                           ),
                         ),
+                        /*
                         Positioned(
                           bottom: 0,
                           right: 0,
@@ -191,6 +192,7 @@ class _ProfileEditorPage extends State<ProfileEditorPage> with TickerProviderSta
                             },
                           ),
                         )
+                        */
                       ],
                     );
                   },

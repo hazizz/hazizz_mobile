@@ -44,40 +44,34 @@ class _AboutPage extends State<AboutPage> with AutomaticKeepAliveClientMixin {
 
   _AboutPage();
 
-
-  // FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
-
   @override
   void initState() {
     // widget.myGroupsBloc.dispatch(FetchData());
 
     RequestSender().getResponse(PingAuthServer()).then((hazizzResponse){
-      if(hazizzResponse.isError){
+      if(hazizzResponse != null && !hazizzResponse.isSuccessful){
         setState(() {
           authServerIsOnline = false;
         });
       }
     });
     RequestSender().getResponse(PingHazizzServer()).then((hazizzResponse){
-      if(hazizzResponse.isError){
+      if(hazizzResponse != null && !hazizzResponse.isSuccessful){
         setState(() {
           hazizzServerIsOnline = false;
         });
       }
     });
     RequestSender().getResponse(PingTheraServer()).then((hazizzResponse){
-      if(hazizzResponse.isError){
+      if(hazizzResponse != null && !hazizzResponse.isSuccessful){
         setState(() {
           theraServerIsOnline = false;
         });
       }
     });
 
-
-
     super.initState();
   }
-
 
   Widget isOnlineWidget(){
     return Text(locText(context, key: "online"), style: TextStyle(color: Colors.green, fontSize: 17),);
@@ -86,7 +80,6 @@ class _AboutPage extends State<AboutPage> with AutomaticKeepAliveClientMixin {
   Widget isOfflineWidget(){
     return Text(locText(context, key: "offline"), style: TextStyle(color: Colors.red, fontSize: 17),);
   }
-
 
 
   @override
@@ -195,12 +188,8 @@ class _AboutPage extends State<AboutPage> with AutomaticKeepAliveClientMixin {
                           }
                         },
                         child: Container(
-                         // height: 40,
-                         // width: 40,
                           child: SvgPicture.asset(
                             "assets/icons/facebook.svg",
-                           // fit: BoxFit.fitHeight,
-
                             height: 40,
                             width: 40,
                           ),
@@ -265,10 +254,6 @@ class _AboutPage extends State<AboutPage> with AutomaticKeepAliveClientMixin {
                     ],
                   ),
                 )
-
-
-
-
               ]
             ),
           )

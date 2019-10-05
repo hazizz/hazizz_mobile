@@ -33,6 +33,13 @@ import 'package:mobile/custom/hazizz_date.dart';
 import '../ResponseHandler.dart';
 import '../htttp_methods.dart';
 
+Future<Request> refreshTokenInRequest(Request request) async {
+  if(request.header[HttpHeaders.authorizationHeader] != null){
+    request.header[HttpHeaders.authorizationHeader] = await TokenManager.getToken();
+  }
+  return request;
+}
+
 //region The base request
 class Request {
   dynamic responseData;

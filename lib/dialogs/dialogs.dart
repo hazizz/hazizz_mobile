@@ -259,6 +259,20 @@ Future<PojoGroup> showDialogGroup(BuildContext context, {List<PojoGroup> data}) 
     ),
     actionButtons: Row(
       children: <Widget>[
+       /* Builder(
+          builder: (context){
+            if(groups_data.length <= 1){
+              return FlatButton(
+                child: new Text(locText(context, key: "close").toUpperCase()),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              );
+            }
+            return Container();
+          },
+        ),
+        */
         FlatButton(
           child: new Text(locText(context, key: "close").toUpperCase()),
           onPressed: () {
