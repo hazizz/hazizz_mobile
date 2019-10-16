@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:easy_localization/easy_localization_provider.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:mobile/blocs/auth/social_login_bloc.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/navigation/route_generator.dart';
@@ -38,18 +39,28 @@ MainTabBlocs mainTabBlocs = MainTabBlocs();
 LoginBlocs loginBlocs = LoginBlocs();
 
 Future<bool> fromNotification() async {
-  var notificationAppLaunchDetails = await HazizzNotification.flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+  var flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  var notificationAppLaunchDetails =
+  await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+
+ // var notificationAppLaunchDetails = await HazizzNotification.flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+  print("from notif1: ${notificationAppLaunchDetails.didNotificationLaunchApp}");
+  print("from notif2: ${notificationAppLaunchDetails.payload}");
   if(notificationAppLaunchDetails.didNotificationLaunchApp) {
     isFromNotification = true;
     String payload = notificationAppLaunchDetails.payload;
     if(payload != null) {
       tasksTomorrowSerialzed = payload;
     }
+  }else{
+    //isFromNotification = true;
   }
   return isFromNotification;
 }
 
 void main() async{
+
+  fromNotification();
 
   WidgetsFlutterBinding.ensureInitialized();
   await AppState.appStartProcedure();
@@ -63,7 +74,7 @@ void main() async{
       if(await TokenManager.checkIfTokenRefreshIsNeeded()) {
         await TokenManager.createTokenWithRefresh();
       }
-      fromNotification();
+
 
       AppState.mainAppPartStartProcedure();
     }
@@ -153,6 +164,8 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
         startPage = "login";
       }
 
+      print("startpage: ${startPage}");
+
       return new DynamicTheme(
           data: (brightness) => themeData,
           themedWidgetBuilder: (context, theme) {
@@ -161,7 +174,7 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
               title: 'Hazizz Mobile',
               showPerformanceOverlay: false,
               theme: theme,
-              initialRoute: startPage,
+              initialRoute: /*"/tasksTomorrow",*/  startPage,
               onGenerateRoute: RouteGenerator.generateRoute,
               localizationsDelegates: [
                 HazizzLocalizations.delegate,

@@ -41,7 +41,7 @@ class _SchedulesTabPage extends State<SchedulesTabPage> with TickerProviderState
 
   void updateTime(){
     setState(() {
-      now = HazizzTimeOfDay.now();
+      now =  HazizzTimeOfDay.now();
     });
   }
 
@@ -136,7 +136,7 @@ class _SchedulesTabPage extends State<SchedulesTabPage> with TickerProviderState
         else if(currentClass.startOfClass > now && previousClass == null){
           // óra elött, nem kezdödött el a suli
 
-          listItems.insert(0, ScheduleEventWidget.beforeClasses(context));
+          listItems.insert(0, ScheduleEventWidget.beforeClasses(context, currentClass.startOfClass));
           i = 0;//i-1;
           break;
         }
@@ -144,7 +144,7 @@ class _SchedulesTabPage extends State<SchedulesTabPage> with TickerProviderState
         else if(currentClass.startOfClass > now && previousClass.endOfClass < now){
           // óra elött
           // i < 0 ? i = 0: i-1
-          listItems.insert(i-1, ScheduleEventWidget.breakTime(context));
+          listItems.insert(i-1, ScheduleEventWidget.breakTime(context, currentClass.startOfClass));
           i = i-1;
           break;
 
@@ -158,7 +158,7 @@ class _SchedulesTabPage extends State<SchedulesTabPage> with TickerProviderState
         }
         else if(currentClass.endOfClass < now && nextClass.startOfClass > now){
           // óra után
-          listItems.insert(i+1, ScheduleEventWidget.breakTime(context));
+          listItems.insert(i+1, ScheduleEventWidget.breakTime(context, nextClass.startOfClass));
           i = i+1;
           break;
 
@@ -166,6 +166,7 @@ class _SchedulesTabPage extends State<SchedulesTabPage> with TickerProviderState
       }
     }
     return ListView.builder(
+     // physics: BouncingScrollPhysics(),
       itemCount: listItems.length,
       itemBuilder: (context, index){
         Widget c = listItems[index];

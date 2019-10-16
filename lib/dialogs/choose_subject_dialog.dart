@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/blocs/tasks/task_maker_blocs.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
 import 'package:mobile/defaults/pojo_subject_empty.dart';
-import 'package:mobile/enums/groupTypesEnum.dart';
+import 'package:mobile/enums/group_types_enum.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'dialogs.dart';
 
@@ -29,7 +29,11 @@ class _ChooseSubjectDialog extends State<ChooseSubjectDialog> {
   @override
   void initState() {
 
-    subjects_data.addAll(widget.data);
+    for(PojoSubject s in widget.data){
+      if(s.subscribed || !s.subscriberOnly){
+        subjects_data.add(s);
+      }
+    }
 
     super.initState();
   }
@@ -44,8 +48,6 @@ class _ChooseSubjectDialog extends State<ChooseSubjectDialog> {
 
   final double searchBarHeight = 50;
 
-  TextEditingController _subjectTextEditingController = TextEditingController();
-
 
 
   setGroupTypeValue(GroupType groupType){
@@ -56,11 +58,6 @@ class _ChooseSubjectDialog extends State<ChooseSubjectDialog> {
 
   @override
   Widget build(BuildContext context) {
-
-
-    //subjects_data = widget.subjectItemPickerBloc.dispatch(ItemP);
-
-
 
     if(!addedEmptySubject){
       subjects_data.insert(0, getEmptyPojoSubject(context));
@@ -82,11 +79,6 @@ class _ChooseSubjectDialog extends State<ChooseSubjectDialog> {
     double width = 280;
 
 
-    String errorText = null;
-
-    bool isEnabled = true;
-
-
     var dialog = HazizzDialog(height: height, width: width,
       header: Container(
         width: width,
@@ -97,8 +89,8 @@ class _ChooseSubjectDialog extends State<ChooseSubjectDialog> {
           child:
           Text(locText(context, key: "select_subject"),
               style: TextStyle(
-                fontSize: 28.0,
-                fontWeight: FontWeight.w800,
+                fontSize: 26,
+                fontWeight: FontWeight.w700,
               )
           ),
         ),
@@ -121,6 +113,9 @@ class _ChooseSubjectDialog extends State<ChooseSubjectDialog> {
                 child: ListView.builder(
                   itemCount: subjects_data.length,
                   itemBuilder: (BuildContext context, int index) {
+
+
+
                     return GestureDetector(
                         onTap: () {
                           Navigator.pop(context, subjects_data[index]);
@@ -131,9 +126,7 @@ class _ChooseSubjectDialog extends State<ChooseSubjectDialog> {
                           child: Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.all(Radius.circular(20)),
-                                color: Theme
-                                    .of(context)
-                                    .primaryColor
+                                color: Theme.of(context).primaryColor
                             ),
                             width: width,
                             child: Center(

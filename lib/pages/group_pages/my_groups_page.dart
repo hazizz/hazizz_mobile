@@ -78,6 +78,7 @@ class _MyGroupsPage extends State<MyGroupsPage> with AutomaticKeepAliveClientMix
                     if (state is ResponseDataLoaded) {
                       List<PojoGroup> groups = state.data;
                       return new ListView.builder(
+                         // physics: BouncingScrollPhysics(),
                           itemCount: groups.length,
                           itemBuilder: (BuildContext context, int index) {
                             return GroupItemWidget(group: groups[index]);

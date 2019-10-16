@@ -69,6 +69,7 @@ class _GroupSubjectsPage extends State<GroupSubjectsPage> with AutomaticKeepAliv
                       if (state is ResponseDataLoaded) {
                         List<PojoSubject> subjects = state.data;
                         return new ListView.builder(
+                         //   physics: BouncingScrollPhysics(),
                             itemCount: subjects.length,
                             itemBuilder: (BuildContext context, int index) {
                               if(index >= subjects.length-1){

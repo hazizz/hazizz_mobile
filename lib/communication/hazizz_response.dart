@@ -2,20 +2,23 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:meta/meta.dart';
 import 'package:mobile/blocs/kreta/kreta_status_bloc.dart';
 import 'package:mobile/blocs/kreta/selected_session_bloc.dart';
 import 'package:mobile/communication/pojos/PojoError.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
+import 'package:mobile/custom/custom_exception.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/managers/app_state_manager.dart';
 import 'package:mobile/managers/token_manager.dart';
+
+import 'custom_response_errors.dart';
 //import 'package:mobile/packages/hazizz-dio-2.1.3/lib/dio.dart';
 //import 'package:mobile/packages/hazizz-dio-2.1.3/lib/dio.dart';
 
 //import 'package:dio/dio.dart';
-
 
 class HazizzResponse{
 
@@ -36,8 +39,6 @@ class HazizzResponse{
   PojoError pojoError;
 
   HazizzResponse._();
-
-
 
   static HazizzResponse onSuccess({@required Response response, @required Request request}){
     HazizzResponse hazizzResponse = new HazizzResponse._();
@@ -88,7 +89,10 @@ class HazizzResponse{
 
       if(pojoError != null){
         hasPojoError = true;
-        if(pojoError.errorCode == 138){
+        if(pojoError.errorCode == 1){
+          Crashlytics().recordError(CustomException(pojoError.toJson().toString()), StackTrace.current);
+        }
+        else if(pojoError.errorCode == 138){
           KretaStatusBloc().dispatch(KretaStatusUnavailableEvent());
         }
         else if(pojoError.errorCode == 19) { // to many requests
@@ -108,24 +112,20 @@ class HazizzResponse{
             HazizzResponse tokenResponse = await TokenManager.createTokenWithRefresh();
 
             if(tokenResponse.isSuccessful) {
-              RequestSender().unlock();
-            }else if(tokenResponse.pojoError != null){
-              if(tokenResponse.pojoError.errorCode == 17){
+              RequestSender().unlockTokenRefreshRequests();
+            }else{
+              if(tokenResponse.pojoError != null && tokenResponse.pojoError.errorCode == 17){
                 await AppState.logout();
                 return;
               }
-
               HazizzLogger.printLog("obtaining token failed. The user is redirected to the login screen");
             }
-
             // elküldi újra ezt a requestet ami errort dobott
-
             RequestSender().refreshRequestQueue.add(request);
         //    HazizzResponse hazizzResponse = await RequestSender().getResponse(await refreshTokenInRequest(request));
-            HazizzLogger.printLog("resent failed request: ${request}");
+            HazizzLogger.printLog("added request to refreshtoken list: ${request}");
 
-            RequestSender().unlockTokenRefreshRequests();
-
+           // RequestSender().unlockTokenRefreshRequests();
           }else {
             HazizzLogger.printLog("Still waiting for refresh token request response, saving the new request in the queue");
 
@@ -144,6 +144,10 @@ class HazizzResponse{
         if(dioError.type == DioErrorType.CONNECT_TIMEOUT){
           dioError.response.headers.contentType.toString();
         }
+      }
+    }else{
+      if(dioError == noConnectionError){
+
       }
     }
   }

@@ -1,5 +1,11 @@
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mobile/communication/hazizz_response.dart';
+import 'package:mobile/communication/request_sender.dart';
+import 'package:mobile/communication/requests/request_collection.dart';
+import 'package:mobile/dialogs/dialogs.dart';
+import 'package:mobile/managers/app_state_manager.dart';
+import 'package:mobile/storage/cache_manager.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 
 import 'package:mobile/custom/hazizz_localizations.dart';
@@ -62,6 +68,15 @@ class _DeveloperSettingsPage extends State<DeveloperSettingsPage> with Automatic
                       Navigator.pushNamed(context, "/settings/developer/logs");
                     },
                   ),
+                ),
+                Divider(),
+                ListTile(
+                  leading: Icon(FontAwesomeIcons.times, color: Colors.red,),
+
+                  title: Text(locText(context, key: "delete_me")),
+                  onTap: () async {
+                    await showSureToDeleteMeDialog(context);
+                  },
                 ),
 
               ],

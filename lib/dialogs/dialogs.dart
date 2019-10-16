@@ -19,6 +19,7 @@ import 'package:mobile/dialogs/report_dialog.dart';
 import 'package:mobile/dialogs/school_dialog.dart';
 import 'package:mobile/dialogs/subject_dialog.dart';
 import 'package:mobile/dialogs/subscribe_to_subjects_dialog.dart';
+import 'package:mobile/dialogs/sure_to_delete_me_dialog.dart';
 import 'package:mobile/dialogs/sure_to_delete_subject_dialog.dart';
 import 'package:mobile/dialogs/sure_to_join_group_dialog.dart';
 import 'package:mobile/dialogs/sure_to_leave_group_dialog.dart';
@@ -521,6 +522,21 @@ Future<bool> showSureToLeaveGroupDialog(BuildContext context, {@required int gro
   return result;
 }
 
+Future<bool> showSureToDeleteMeDialog(BuildContext context) async{
+
+  bool result = await showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      // return object of type Dialog
+      return SureToDeleteMeDialog();
+    },
+  );
+  return result;
+}
+
+
+
+
 Future<bool> showSureToKickFromGroupDialog(BuildContext context, {@required int groupId, @required PojoUser pojoUser}) async{
 
   var result = await showDialog(
@@ -1016,7 +1032,7 @@ Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(locText(context, key: "date") + ":", style: TextStyle(fontSize: 18),),
-                        Expanded(child: Text(grade.date == null ? "" : hazizzShowDateFormat(grade.date), style: TextStyle(fontSize: 18), textAlign: TextAlign.end,)),
+                        Expanded(child: Text(grade.creationDate == null ? "" : hazizzShowDateFormat(grade.creationDate), style: TextStyle(fontSize: 18), textAlign: TextAlign.end,)),
                       ],
                     ),
 

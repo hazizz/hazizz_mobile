@@ -5,6 +5,7 @@ import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mobile/blocs/kreta/new_grade_bloc.dart';
 import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
 import 'package:mobile/blocs/other/user_data_bloc.dart';
 import 'package:mobile/blocs/kreta/selected_session_bloc.dart';
@@ -54,6 +55,9 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
   bool isDark = false;
 
   void _handleTabSelection() {
+    if(_tabController.index == 2){
+      NewGradesBloc().dispatch(DoesntHaveNewGradesEvent());
+    }
     setState(() {
 
     });
@@ -100,6 +104,8 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
     WidgetsBinding.instance.addPostFrameCallback((_) async =>
         await VersionHandler.check()
     );
+
+
 
 
     super.initState();
@@ -152,7 +158,112 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
             bottom: TabBar(controller: _tabController, tabs: [
             Tab(text: tasksTabPage.getTabName(context), icon: Icon(FontAwesomeIcons.bookOpen),),
             Tab(text: schedulesTabPage.getTabName(context), icon: Icon(FontAwesomeIcons.calendarAlt)),
-              Tab(text: gradesTabPage.getTabName(context), icon: Icon(FontAwesomeIcons.listOl)),
+             /* Tab(child: Stack(
+                children: <Widget>[
+               //   Center(child: Icon(FontAwesomeIcons.listOl)),
+                 /* BlocBuilder(
+                        bloc: NewGradesBloc(),
+                        builder: (context, state){
+                          if(state is HasNewGradesState){
+                            return Positioned(
+                                bottom: 0, right: 0,
+                                child: Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 4, right: 4),
+                                    child: Text("", style: TextStyle(fontSize: 8),),
+                                  ),
+
+
+                                  color: Colors.red,
+                                )
+                            );
+                          }
+                          return Container();
+                        },
+                      ),*/
+
+
+                  Stack(
+                    children: <Widget>[
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 32),
+                          child: Text(gradesTabPage.getTabName(context)),
+                        ),
+                      ),
+                      BlocBuilder(
+                        bloc: NewGradesBloc(),
+                        builder: (context, state){
+                          if(state is HasNewGradesState){
+                            return Positioned(
+                                bottom: 0, right: 18,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(bottom:8.0),
+                                  child: Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 4, right: 4),
+                                      child: Text("", style: TextStyle(fontSize: 8),),
+                                    ),
+
+
+                                    color: Colors.red,
+                                  ),
+                                )
+                            );
+                          }
+                          return Container();
+                        },
+                      )
+                    ],
+                  ),
+
+
+
+                ],
+              )
+              ),
+              */
+
+              Tab(text: gradesTabPage.getTabName(context), icon:
+                Stack(
+                children: <Widget>[
+                  Center(child: Icon(FontAwesomeIcons.listOl)),
+
+                  BlocBuilder(
+                    bloc: NewGradesBloc(),
+                    builder: (context, state){
+                      if(state is HasNewGradesState){
+                        return Positioned(
+                            top: 0, right: 27,
+                            child: Transform.translate(
+                              offset: const Offset(0.0, -6.0),
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 4, right: 4),
+                                  child: Text(" ", style: TextStyle(fontSize: 8),),
+                                ),
+
+
+                                color: Colors.red,
+                              ),
+                            )
+                        );
+                      }
+                      return Container();
+                    },
+                  )
+                ],
+              ),
+              ),
 
             /*
             GestureDetector(
@@ -324,6 +435,14 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with SingleTickerProvi
                     title: Text(locText(context, key: "kreta_accounts")),
                     onTap: () {
                       Navigator.popAndPushNamed(context, "/kreta/accountSelector");
+                    },
+                  ),
+
+                  ListTile(
+                    leading: Icon(FontAwesomeIcons.stickyNote),
+                    title: Text(locText(context, key: "kreta_notes")),
+                    onTap: () {
+                      Navigator.popAndPushNamed(context, "/kreta/notes");
                     },
                   ),
 

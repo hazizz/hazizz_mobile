@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
+import 'package:mobile/pages/kreta_pages/kreta_notes_page.dart';
 import 'package:mobile/pages/settings_page/about_page.dart';
 import 'package:mobile/pages/settings_page/developer_settings_page.dart';
 import 'package:mobile/pages/kreta_pages/kreta_session_selector_page.dart';
@@ -7,6 +8,7 @@ import 'package:mobile/pages/settings_page/kreta_settings_page.dart';
 import 'package:mobile/pages/auth_pages/login_page.dart';
 import 'package:mobile/pages/settings_page/logs_page.dart';
 import 'package:mobile/pages/settings_page/notification_settings_page.dart';
+import 'package:mobile/pages/settings_page/preferences_settings_page.dart';
 import 'package:mobile/pages/tasks_page/task_calendar_page.dart';
 import 'package:mobile/pages/tasks_page/view_task_page.dart';
 import 'package:mobile/pages/group_pages/group_tab_hoster_page.dart';
@@ -58,6 +60,8 @@ class RouteGenerator{
         return MaterialPageRoute(builder: (_) => AboutPage());
       case '/settings':
         return MaterialPageRoute(builder: (_) => SettingsPage());
+      case '/settings/preferences':
+        return MaterialPageRoute(builder: (_) => PreferencesSettingsPage());
       case '/settings/kreta':
         return MaterialPageRoute(builder: (_) => KretaSettingsPage());
       case '/settings/notification':
@@ -92,6 +96,8 @@ class RouteGenerator{
         return MaterialPageRoute(builder: (_) => KretaLoginPage.auth(sessionToAuth: args));
       case '/kreta/accountSelector':
         return MaterialPageRoute(builder: (_) => SessionSelectorPage());
+      case '/kreta/notes':
+        return MaterialPageRoute(builder: (_) => KretaNotesPage());
       default:
         String errorLog = "log: route: ${settings.name}, args: ${settings.arguments}";
         return _errorRoute(errorLog);

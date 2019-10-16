@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart' as prefix0;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mobile/blocs/auth/facebook_login_bloc.dart';
 import 'package:mobile/blocs/other/request_event.dart';
@@ -136,8 +137,8 @@ class SocialLoginBloc extends Bloc<SocialLoginEvent, SocialLoginState> {
 
       try{
         _socialToken = await getSocialToken();
-        if(_socialToken == null){
-          Crashlytics().recordError(CustomException("Social Token is null"), StackTrace.current);
+        if(_socialToken == null && _socialToken == "canceled"){
+          Crashlytics().recordError(CustomException("Social Token is null"), StackTrace.current, context: "Social Token is null");
           yield SocialLoginFineState();
         }
       }catch(exception, stacktrace){

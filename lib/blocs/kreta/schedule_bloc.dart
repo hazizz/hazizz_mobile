@@ -30,16 +30,15 @@ abstract class ScheduleEvent extends HEvent {
 class ScheduleFetchEvent extends ScheduleEvent {
   int yearNumber;
   int weekNumber;
-  bool isDefault = false;
 
   ScheduleFetchEvent({this.yearNumber, this.weekNumber}) :  super([yearNumber, weekNumber]){
-    if(weekNumber == null || yearNumber == null){
+   /* if(weekNumber == null || yearNumber == null){
       yearNumber ??= DateTime.now().year;
       DateTime now = DateTime.now();
       int dayOfYear = int.parse(DateFormat("D").format(now));
       weekNumber = ((dayOfYear - now.weekday + 10) / 7).floor();
-      isDefault = true;
     }
+    */
   }
   @override
   String toString() => 'ScheduleFetchEvent';
@@ -114,6 +113,9 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     currentCurrentWeekNumber = ((dayOfYear - now.weekday + 10) / 7).floor();
 
     currentCurrentYearNumber = now.year;
+
+    currentWeekNumber = currentCurrentWeekNumber;
+    currentYearNumber = currentCurrentYearNumber;
   }
 
   DateTime lastUpdated = DateTime(0, 0, 0, 0, 0);
@@ -128,12 +130,11 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
   void nextWeek(){
     MainTabBlocs().schedulesBloc.dispatch(ScheduleFetchEvent(yearNumber: MainTabBlocs().schedulesBloc.currentYearNumber, weekNumber: MainTabBlocs().schedulesBloc.currentWeekNumber+1));
-    currentDayIndex = 0;
+
   }
 
   void previousWeek(){
     MainTabBlocs().schedulesBloc.dispatch(ScheduleFetchEvent(yearNumber: MainTabBlocs().schedulesBloc.currentYearNumber, weekNumber: MainTabBlocs().schedulesBloc.currentWeekNumber-1));
-    currentDayIndex= 0;
   }
 
 
@@ -144,10 +145,18 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
   Stream<ScheduleState> mapEventToState(ScheduleEvent event) async* {
     if (event is ScheduleFetchEvent) {
       try {
-        currentWeekNumber = event.weekNumber;
+
+        if(event.weekNumber != null){
+          currentWeekNumber = event.weekNumber;
+        }
+
+        if(event.yearNumber != null){
+          currentYearNumber = event.yearNumber;
+        }
+
         HazizzLogger.printLog("currentWeekNumber: $currentWeekNumber");
 
-        currentWeekMonday = DateTime(event.yearNumber, 1, 1);
+        currentWeekMonday = DateTime(currentYearNumber, 1, 1);
         HazizzLogger.printLog("currentWeekMonday: $currentWeekMonday");
 
         currentWeekMonday = currentWeekMonday.add(Duration(days: 7 * (currentWeekNumber-1)));
@@ -160,14 +169,20 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
         HazizzLogger.printLog("currentWeekSunday: $currentWeekSunday");
 
+        if(currentWeekNumber == currentCurrentWeekNumber){
+          currentDayIndex = todayIndex;
+        }else{
+          currentDayIndex = 0;
+        }
+
 
         yield ScheduleWaitingState();
 
         HazizzLogger.printLog("event.yearNumber, event.weekNumber: ${event.yearNumber}, ${event.weekNumber}");
 
 
-        if(event.yearNumber == currentCurrentYearNumber && event.weekNumber == currentCurrentWeekNumber){
-          DataCache dataCache = await loadScheduleCache();
+        if(currentYearNumber == currentCurrentYearNumber && currentWeekNumber == currentCurrentWeekNumber){
+          DataCache dataCache = await loadScheduleCache(year: currentYearNumber, weekNumber: currentWeekNumber);
           if(dataCache!= null){
             lastUpdated = dataCache.lastUpdated;
             classes = dataCache.data;
@@ -176,25 +191,13 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
           }
         }
 
+        HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetSchedulesWithSession(q_year: currentYearNumber, q_weekNumber: currentWeekNumber));
 
 
-       // DateTime now = DateTime.now();
-/*
-        int dayOfYear = int.parse(DateFormat("D").format(n ow));
-        int weekOfYear = ((dayOfYear - now.weekday + 10) / 7).floor();
+        //  HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetSchedules(q_year: currentYearNumber, q_weekNumber: currentWeekNumber));
 
-        HazizzLogger.printLog("WEEK OF YEAR: $weekOfYear");*/
-
-          // now.month, 7 * (currentWeekNumber-1)
-
-
-
-        HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetSchedules(q_year: event.yearNumber, q_weekNumber: event.weekNumber));
-
-        //  HazizzLogger.printLog("classes.: ${classes}");
         if(hazizzResponse.isSuccessful){
           classes = hazizzResponse.convertedData;
-
 
           /*
           classes = PojoSchedules({"0": [
@@ -218,24 +221,19 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
               PojoClass(date: DateTime(2000), periodNumber: 2, startOfClass: HazizzTimeOfDay(hour: 2, minute: 2), endOfClass: HazizzTimeOfDay(hour: 2, minute: 2), className: "TEST", topic: "TOPIC", subject: "SUBJECT", room: "", cancelled: true, standIn: true, teacher: "PEKÁR LOL"),
 
             ],
-
-
-
           });
           */
 
           if(classes != null ){
 
-            currentWeekNumber = event.weekNumber;
-            currentYearNumber = event.yearNumber;
+           // currentWeekNumber = event.weekNumber;
+           // currentYearNumber = event.yearNumber;
             lastUpdated = DateTime.now();
-            if(event.yearNumber == currentCurrentYearNumber && event.weekNumber == currentCurrentWeekNumber) {
-              saveScheduleCache(classes);
+            if(currentYearNumber == currentCurrentYearNumber && currentWeekNumber == currentCurrentWeekNumber) {
+              saveScheduleCache(classes, year: currentYearNumber, weekNumber: currentWeekNumber);
             }
             yield ScheduleLoadedState(classes);
           }
-
-
         }
         else if(hazizzResponse.isError){
 
@@ -255,8 +253,6 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
             yield ScheduleErrorState(hazizzResponse);
 
           }
-
-
         }
       } on Exception catch(e){
         HazizzLogger.printLog("log: Exception: ${e.toString()}");

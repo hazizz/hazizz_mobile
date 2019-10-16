@@ -1,5 +1,8 @@
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mobile/blocs/kreta/selected_session_bloc.dart';
+import 'package:mobile/blocs/kreta/selected_session_bloc.dart' as prefix0;
+import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/managers/kreta_session_manager.dart';
 import 'package:mobile/managers/token_manager.dart';
@@ -105,11 +108,17 @@ class _KretaSettingsPage extends State<KretaSettingsPage> with AutomaticKeepAliv
                             HazizzLogger.printLog("remember kreta password is enabled: ${value}");
                             KretaSessionManager.setRememberPassword(value);
                             if(value){
+
                               setState(() {
                                 iconBell = FontAwesomeIcons.solidBell;
                                 isRemember = value;
                               });
                             }else{
+                              PojoSession selectedSession = SelectedSessionBloc().selectedSession;
+                              if(selectedSession != null){
+                                selectedSession.password = null;
+                              }
+                              SelectedSessionBloc().dispatch(SelectedSessionSetEvent(selectedSession));
                               setState(() {
                                 iconBell = FontAwesomeIcons.solidBellSlash;
                                 isRemember = value;

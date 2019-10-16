@@ -33,6 +33,7 @@ class _AboutPage extends State<AboutPage> with AutomaticKeepAliveClientMixin {
 
   String website = "https://hazizz.github.io/";
 
+  bool gatewayServerIsOnline = true;
   bool authServerIsOnline = true;
   bool hazizzServerIsOnline = true;
   bool theraServerIsOnline = true;
@@ -48,6 +49,13 @@ class _AboutPage extends State<AboutPage> with AutomaticKeepAliveClientMixin {
   void initState() {
     // widget.myGroupsBloc.dispatch(FetchData());
 
+    RequestSender().getResponse(PingGatewayServer()).then((hazizzResponse){
+      if(hazizzResponse != null && !hazizzResponse.isSuccessful){
+        setState(() {
+          gatewayServerIsOnline = false;
+        });
+      }
+    });
     RequestSender().getResponse(PingAuthServer()).then((hazizzResponse){
       if(hazizzResponse != null && !hazizzResponse.isSuccessful){
         setState(() {
@@ -119,6 +127,25 @@ class _AboutPage extends State<AboutPage> with AutomaticKeepAliveClientMixin {
                 ),
                 Divider(),
 
+                Padding(
+                    padding: const EdgeInsets.only(top: 8.0, bottom: 8, left: 15, right: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text("${locText(context, key: "gateway_server")}:", style: TextStyle(fontSize: 17),),
+                        Builder(
+                          builder: (context){
+                            if(gatewayServerIsOnline){
+                              return isOnlineWidget();
+                            }
+                            return isOfflineWidget();
+                          },
+                        )
+                      ],
+                    )
+                ),
+
+                Divider(),
 
                 Padding(
                     padding: const EdgeInsets.only(top: 8.0, bottom: 8, left: 15, right: 15),

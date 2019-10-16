@@ -30,8 +30,6 @@ DateTime timeOfDayToDateTime(TimeOfDay timeOfDay){
 }
 
 
-
-
 Duration hazizzParseDuration(String hhmmss){
   List<String> timeList = hhmmss.split(":");
   List<int> timeListFinal = List();
@@ -46,6 +44,10 @@ Duration hazizzParseDuration(String hhmmss){
 
 
 bool hazizzIsAfterHHMMSS({@required DateTime mainTime, @required TimeOfDay compareTime}){
+  if(mainTime == null || compareTime == null){
+    return false;
+  }
+
   Duration mainDuration = Duration(hours: mainTime.hour, minutes: mainTime.minute, seconds: mainTime.second);
 
   int mainInSec = mainDuration.inSeconds;

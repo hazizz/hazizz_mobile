@@ -28,15 +28,12 @@ import 'package:mobile/communication/request_sender.dart';
 
 class ViewTaskPage extends StatefulWidget {
 
-//  CommentSectionBloc commentSectionBloc;
-
   CommentSectionWidget commentSectionWidget = CommentSectionWidget();
 
   int taskId;
   PojoTask pojoTask;
 
-  ViewTaskPage({Key key, this.taskId}) : super(key: key){
-  }
+  ViewTaskPage({Key key, this.taskId}) : super(key: key);
 
   ViewTaskPage.fromPojo({Key key, this.pojoTask}) : super(key: key){
     taskId = pojoTask.id;
@@ -88,25 +85,20 @@ class _ViewTaskPage extends State<ViewTaskPage> {
      // _type = pojoTask.tags[0].getDisplayName(context);
 
       for(PojoTag t in pojoTask.tags){
-        if(mainTag == null){
-          for(PojoTag defT in PojoTag.defaultTags){
-            if(t.name ==  defT.name){
-              mainTag = t;
-            }
+        for(PojoTag defT in PojoTag.defaultTags){
+          if(t.name ==  defT.name){
+            mainTag = t;
           }
         }
       }
       _tags = pojoTask.tags;
-
 
       DateTime date_deadline =  pojoTask.dueDate;
       _deadline = hazizzShowDateFormat(date_deadline);//"${date_deadline.day}.${date_deadline.month}.${date_deadline.year}";
       _description = pojoTask.description;
       _title = pojoTask.title;
 
-
       tagWidgets = List();
-
 
       for(PojoTag t in pojoTask.tags){
         if(mainTag == null ||  t.name != mainTag.name){
@@ -129,7 +121,6 @@ class _ViewTaskPage extends State<ViewTaskPage> {
 
   List<Widget> tagWidgets;
 
- // bool imTheAuthor = false;
   bool canModify = false;
 
   final snapKey = GlobalKey<SnappableState>();
@@ -158,28 +149,12 @@ class _ViewTaskPage extends State<ViewTaskPage> {
     super.initState();
   }
 
-  /*
-  setComplete(bool c){
-    setState(() {
-      HazizzLogger.printLog("obungaööö: $c");
-
-      completed = c;
-    });
-  }
-  */
-
-
-
-
   @override
   Widget build(BuildContext context) {
 
     if(pojoTask != null) {
       processData(context, pojoTask);
     }
-
-
-
 
     return Hero(
         tag: "hero_task${pojoTask.id}",
@@ -202,14 +177,10 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                     bool success = await showReportDialog(context, reportType: ReportTypeEnum.TASK, id: widget.pojoTask.id, name: "");
                     if(success != null && success){
                       showReportSuccessFlushBar(context, what: locText(context, key: "task"));
-
                     }
-
                   }
-
                   if(value == "snap"){
                     snapKey.currentState.snap();
-
                   }
                 },
                 itemBuilder: (BuildContext context) {
@@ -245,12 +216,6 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                       maxWidth: MediaQuery.of(context).size.width,
 
                     ),
-                    /*
-                    width: MediaQuery.of(context).size.width,
-                    // valamiért 3* kell megszorozni a paddingot hogy jó legyen
-                    height: MediaQuery.of(context).size.height-appBar.preferredSize.height - padding*3,
-                    */
-
                     child: Padding(
                       padding: EdgeInsets.all(padding),
                       child: Card(
@@ -347,8 +312,6 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                                   return Container();
                                                 },
                                               ),
-
-
                                               Wrap(
                                                 alignment: WrapAlignment.start,
                                                 //  runAlignment: WrapAlignment.start,
@@ -506,8 +469,6 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                                 ],
                                               ),
                                             ),
-
-
                                           ],
                                         ),
                                       ],
@@ -515,104 +476,102 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                   ],
                                 ),
                                 Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: <Widget>[
-                                      BlocBuilder(
-                                          bloc: ViewTaskBloc().commentBlocs.commentSectionBloc,
-                                          builder: (context, state){
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: <Widget>[
+                                    BlocBuilder(
+                                        bloc: ViewTaskBloc().commentBlocs.commentSectionBloc,
+                                        builder: (context, state){
 
-                                            Widget chip = Container();
+                                          Widget chip = Container();
 
-                                            if(state is CommentSectionLoadedState){
-                                              chip = Card(
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(50.0),
+                                          if(state is CommentSectionLoadedState){
+                                            chip = Card(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(50.0),
+
+                                              ),
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(left: 5.0, right: 5),
+                                                child: Text(state.items.length.toString()),
+                                              ), color: Colors.red,
+                                            );
+                                          }
+
+                                          return Stack(
+                                            children: <Widget>[
+                                              Padding(
+                                                padding: const EdgeInsets.only(top: 3.0, right: 3),
+                                                child: FlatButton(
+                                                  onPressed: () async {
+                                                    setState(() {
+                                                      showComments = true;
+                                                    });
+                                                    await Future.delayed(const Duration(milliseconds: 50));
+                                                    _scrollController.animateTo(_scrollController.position.maxScrollExtent, curve: Curves.ease, duration: Duration(milliseconds: 340));
+                                                  },
+
+                                                   child: Text(locText(context, key: "comments").toUpperCase(), style: theme(context).textTheme.button)
 
                                                 ),
-                                                child: Padding(
-                                                  padding: const EdgeInsets.only(left: 5.0, right: 5),
-                                                  child: Text(state.items.length.toString()),
-                                                ), color: Colors.red,
-                                              );
-                                            }
+                                              ),
+                                              Positioned(top: 0, right: 0,
+                                                child: chip,
+                                              )
 
-                                            return Stack(
+                                            ],
+                                          );
+
+                                      }
+                                    ),
+                                    Builder(
+                                        builder: (context){
+                                          if(canModify){
+
+                                            return Column(
+                                              mainAxisAlignment: MainAxisAlignment.end,
+                                              // crossAxisAlignment: CrossAxisAlignment.end,
                                               children: <Widget>[
-                                                Padding(
-                                                  padding: const EdgeInsets.only(top: 3.0, right: 3),
-                                                  child: FlatButton(
-                                                    onPressed: () async {
+                                                FlatButton(
+                                                  onPressed: () async {
+                                                    var editedTask = await Navigator.of(context).pushNamed( "/editTask", arguments: pojoTask);
+                                                    if(editedTask != null && editedTask is PojoTask){
                                                       setState(() {
-                                                        showComments = true;
+                                                        pojoTask = editedTask;
+                                                        processData(context, pojoTask);
                                                       });
-                                                      await Future.delayed(const Duration(milliseconds: 50));
-                                                      _scrollController.animateTo(_scrollController.position.maxScrollExtent, curve: Curves.ease, duration: Duration(milliseconds: 340));
-                                                    },
-
-                                                     child: Text(locText(context, key: "comments").toUpperCase(), style: theme(context).textTheme.button)
-
-                                                  ),
+                                                      MainTabBlocs().tasksBloc.dispatch(TasksFetchEvent());
+                                                    }
+                                                  },
+                                                  child: Text(locText(context, key: "edit").toUpperCase(), style: theme(context).textTheme.button,),
                                                 ),
-                                                Positioned(top: 0, right: 0,
-                                                  child: chip,
-                                                )
+                                                FlatButton(
+                                                  child: Text(locText(context, key: "delete").toUpperCase(), style: theme(context).textTheme.button),
+                                                  onPressed: () async {
+                                                    if(await showDeleteTaskDialog(context, taskId: widget.taskId)){
+                                                      HazizzLogger.printLog("showDeleteTaskDialog : success");
+                                                      MainTabBlocs().tasksBloc.dispatch(TasksFetchEvent());
+                                                      Navigator.of(context).pop();
 
+                                                    }else{
+                                                      HazizzLogger.printLog("showDeleteTaskDialog: no success");
+
+                                                    }
+
+                                                  },
+
+                                                ),
                                               ],
                                             );
-
-                                        }
-                                      ),
-                                      Builder(
-                                          builder: (context){
-                                            if(canModify){
-
-                                              return Column(
-                                                mainAxisAlignment: MainAxisAlignment.end,
-                                                // crossAxisAlignment: CrossAxisAlignment.end,
-                                                children: <Widget>[
-                                                  FlatButton(
-                                                    onPressed: () async {
-                                                      var editedTask = await Navigator.of(context).pushNamed( "/editTask", arguments: pojoTask);
-                                                      if(editedTask != null && editedTask is PojoTask){
-                                                        setState(() {
-                                                          pojoTask = editedTask;
-                                                          processData(context, pojoTask);
-                                                        });
-                                                        MainTabBlocs().tasksBloc.dispatch(TasksFetchEvent());
-                                                      }
-                                                    },
-                                                    child: Text(locText(context, key: "edit").toUpperCase(), style: theme(context).textTheme.button,),
-                                                  ),
-                                                  FlatButton(
-                                                    child: Text(locText(context, key: "delete").toUpperCase(), style: theme(context).textTheme.button),
-                                                    onPressed: () async {
-                                                      if(await showDeleteTaskDialog(context, taskId: widget.taskId)){
-                                                        HazizzLogger.printLog("showDeleteTaskDialog : success");
-                                                        MainTabBlocs().tasksBloc.dispatch(TasksFetchEvent());
-                                                        Navigator.of(context).pop();
-
-                                                      }else{
-                                                        HazizzLogger.printLog("showDeleteTaskDialog: no success");
-
-                                                      }
-
-                                                    },
-
-                                                  ),
-                                                ],
-                                              );
-                                            }
-                                            else return Container();
                                           }
-                                      )
-                                    ],
-                                  ),
+                                          else return Container();
+                                        }
+                                    )
+                                  ],
+                                ),
                               ]
                             ),
                         ),
-
-
                     ),
                   ),
                   Builder(
@@ -620,12 +579,10 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                       if(showComments) {
                         return Container(
                           width: MediaQuery.of(context).size.width,
-                          // valamiért 3* kell megszorozni a paddingot hogy jó legyen
-                          //  height: MediaQuery.of(context).size.height-appBar.preferredSize.height - padding*3,
                           child: Padding(
-                              padding: EdgeInsets.all(padding),
-                              child:
-                              widget.commentSectionWidget
+                            padding: EdgeInsets.all(padding),
+                            child:
+                            widget.commentSectionWidget
                           ),
                         );
                       }
@@ -638,8 +595,8 @@ class _ViewTaskPage extends State<ViewTaskPage> {
               ),
             ),
           )
-      ),
-        )
+        ),
+      )
     );
   }
 }

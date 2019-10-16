@@ -220,11 +220,9 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
           );
 
         }else{
-          print("debugerman1");
           WidgetsBinding.instance.addPostFrameCallback((_) =>
               stopCustomHud()
           );
-          print("debugerman2");
           if(state is KretaLoginFailure) {
             if(state.error.errorCode == ErrorCodes.THERA_AUTHENTICATION_ERROR.code){
               responseInfo = locText(context, key: "incorrect_data");

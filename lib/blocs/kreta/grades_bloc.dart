@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
+import 'package:mobile/blocs/kreta/new_grade_bloc.dart';
 
 import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/response_states.dart';
@@ -17,6 +18,7 @@ import 'package:mobile/enums/grades_sort_enum.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/storage/caches/data_cache.dart';
+import 'package:collection/collection.dart';
 
 //region EditTask bloc parts
 //region EditTask events
@@ -86,8 +88,10 @@ class GradesErrorState extends GradesState {
 class GradesBloc extends Bloc<GradesEvent, GradesState> {
 
 
-  GradesSort gradesSort = GradesSort.BYSUBJECT;
+ // bool hasNewGrade = false;
 
+  //GradesSort gradesSort = GradesSort.BYSUBJECT;
+  GradesSort currentGradeSort = GradesSort.BYCREATIONDATE;
   GradesBloc(){
 
   }
@@ -107,7 +111,7 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
 
 
     for(int i = 0; i < grades.grades.values.length; i++){
-      print("Grades sub index: ${i}");
+
       HazizzLogger.printLog("Grades sub2: ${grades.grades.values.toList()[i]}");
       gradesByDate.addAll(grades.grades.values.toList()[i]);
     }
@@ -122,8 +126,11 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
     */
     HazizzLogger.printLog("Grades sub LENGTH: ${gradesByDate.length}");
 
-    gradesByDate.sort((a,b) => a.compareTo(b));
-
+    if(currentGradeSort == GradesSort.BYCREATIONDATE) {
+      gradesByDate.sort((a, b) => a.compareToByCreationDate(b));
+    }else{
+      gradesByDate.sort((a, b) => a.compareToByDate(b));
+    }
 
     return gradesByDate;
   }
@@ -220,15 +227,26 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
           grades = dataCache.data;
           yield GradesLoadedCacheState(grades);
         }
+        HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetGradesWithSession());
 
-        HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetGrades());
-
-        HazizzLogger.printLog("log: hazizzResponse: ${hazizzResponse.dioError}");
-
-
+       // HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetGrades());
+        print("CHANGE HAPPENDE03");
         if(hazizzResponse.isSuccessful){
+          print("CHANGE HAPPENDE02");
           if(hazizzResponse.convertedData != null){
             grades = hazizzResponse.convertedData;
+
+            print("CHANGE HAPPENDE01");
+            PojoGrades oldGrades = dataCache?.data;
+
+            if(oldGrades == null || grades.grades.toString() != oldGrades.grades.toString()){
+              print("CHANGE HAPPENDE1");
+              NewGradesBloc().dispatch(HasNewGradesEvent());
+            }else{
+              print("CHANGE HAPPENDE2");
+            }
+
+
             lastUpdated = DateTime.now();
             saveGradesCache(grades);
             yield GradesLoadedState(grades);

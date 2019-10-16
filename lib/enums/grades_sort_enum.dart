@@ -1,4 +1,6 @@
 enum GradesSort{
   BYSUBJECT,
-  BYDATE
+  BYDATE,
+  BYCREATIONDATE
 }
+

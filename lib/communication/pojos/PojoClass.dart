@@ -12,6 +12,7 @@ part 'PojoClass.gg.dart';
 // removing so it wont recreate
 //@JsonSerializable()
 class PojoClass extends Pojo{
+  String accountId;
   DateTime date;
   HazizzTimeOfDay startOfClass;
   HazizzTimeOfDay endOfClass;
@@ -24,7 +25,7 @@ class PojoClass extends Pojo{
   String room;
   String topic;
 
-  PojoClass({this.date, this.startOfClass, this.endOfClass, this.periodNumber,
+  PojoClass({this.accountId, this.date, this.startOfClass, this.endOfClass, this.periodNumber,
       this.cancelled, this.standIn, this.subject, this.className, this.teacher,
       this.room, this.topic});
 

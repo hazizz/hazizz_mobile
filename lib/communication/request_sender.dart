@@ -1,15 +1,12 @@
 // EZT NÉZD MEG -->https://github.com/Solido/awesome-flutter
 import 'dart:async';
-import 'dart:collection';
 
 import 'package:dio/dio.dart';
 import 'package:dio_flutter_transformer/dio_flutter_transformer.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/managers/app_state_manager.dart';
 import 'package:mobile/managers/token_manager.dart';
-//import 'package:mobile/packages/hazizz-dio-2.1.3/lib/dio.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'connection.dart';
 import 'custom_response_errors.dart';
@@ -41,7 +38,6 @@ class RequestSender{
   }
 
   addInterceptor(){
-    print("_internal is called");
     dio.interceptors.add(InterceptorsWrapper(
         onRequest:(RequestOptions options) async{
           // Do something before request is sent
@@ -55,13 +51,11 @@ class RequestSender{
           dio.lock();
         }
         */
-          print("boi: b1");
-
+          HazizzLogger.printLog("In onRequest function");
           if(DateTime.now().millisecondsSinceEpoch - lastSeconds >= 1000){
             print("boi: b2");
             lastSeconds = DateTime.now().millisecondsSinceEpoch;
             requestCount = 1;
-            return options;
           }else{
             print("boi: b3");
             if(requestCount >= 3){
@@ -71,11 +65,10 @@ class RequestSender{
             }
             print("boi: b5");
             requestCount++;
-            return options;
           }
+          HazizzLogger.printLog("In onRequest function: sending request: ${options.baseUrl}");
 
-
-
+          return options;
 
 
           HazizzLogger.printLog("preparing to send request");
@@ -160,7 +153,7 @@ class RequestSender{
 
     dio.unlock();
     _isLocked = false;
-    HazizzLogger.printLog("dio interceptors: unlocked");
+    HazizzLogger.printLog("(unlockTokenRefreshRequests) dio interceptors: unlocked");
   }
 
   bool isLocked(){
@@ -239,11 +232,10 @@ class RequestSender{
 
   Future<HazizzResponse> getResponse(Request request) async{
 
-
-    if((await TokenManager.getLastTokenUpdateTime()).difference(DateTime.now()).inHours >= 23){
+    final DateTime lastUpdate = await TokenManager.getLastTokenUpdateTime();
+    if(lastUpdate.difference(DateTime.now()).inHours >= 24){
       await TokenManager.createTokenWithRefresh();
     }
-
 
     HazizzResponse hazizzResponse;
 
@@ -254,6 +246,7 @@ class RequestSender{
     if(isLocked()) HazizzLogger.printLog("Dio interceptor is locked: ${request.toString()}");
 
     bool isConnected = await Connection.isOnline();
+    print("isConnexcted: $isConnected");
     try {
       if(isConnected) {
         HazizzLogger.printLog("request query: ${request.query}");

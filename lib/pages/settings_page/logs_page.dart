@@ -1,8 +1,6 @@
 
 import 'dart:io';
 
-import 'package:esys_flutter_share/esys_flutter_share.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_mailer/flutter_mailer.dart';
 import 'package:mobile/custom/logcat/logcat-master/lib/logcat.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
@@ -18,7 +16,6 @@ class LogsPage extends StatefulWidget {
     return locText(context, key: "logs");
   }
 
-
   LogsPage({Key key}) : super(key: key);
 
   @override
@@ -32,11 +29,11 @@ class _LogsPage extends State<LogsPage> with AutomaticKeepAliveClientMixin {
   File logFile;
   String filePath;
 
+  TextEditingController controller = TextEditingController();
+
   @override
   void initState() {
     // widget.myGroupsBloc.dispatch(FetchData());
-
-
     Logcat.execute().then((String l){
       setState(() {
         logs = l;
@@ -53,11 +50,8 @@ class _LogsPage extends State<LogsPage> with AutomaticKeepAliveClientMixin {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
-
-
     return Hero(
       tag: "logs",
       child: Scaffold(
@@ -67,6 +61,17 @@ class _LogsPage extends State<LogsPage> with AutomaticKeepAliveClientMixin {
           ),
           body: Column(
             children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(controller: controller,
+                  minLines: 1,
+                  maxLines: 3,
+                  decoration:  InputDecoration(
+
+                    labelText: locText(context, key: "tell_us_what_happened"),
+                  ),
+                ),
+              ),
               Text("length: ${logs.length.toString()} characters"),
               Expanded(
                 child: Padding(
@@ -88,7 +93,7 @@ class _LogsPage extends State<LogsPage> with AutomaticKeepAliveClientMixin {
                         // await Share.file('Hazizz Mobile logs', 'hazizz_mobile_logs.txt', bytes.buffer.asUint8List(), 'text/txt', text: 'Hazizz Mobile logs');
                         final MailOptions mailOptions = MailOptions(
 
-                          body: 'version: ${HazizzAppInfo().getInfo.version}\n buildNumber: ${HazizzAppInfo().getInfo.buildNumber}',
+                          body: 'version: ${HazizzAppInfo().getInfo.version}\nbuildNumber: ${HazizzAppInfo().getInfo.buildNumber}\nstory: ${controller.text}',
                           subject: 'Hazizz Mobile log',
                           recipients: ['hazizzvelunk@gmail.com'],
                           //  isHTML: true,

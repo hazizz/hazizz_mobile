@@ -22,4 +22,7 @@ class PojoError extends Pojo{
 
   factory PojoError.fromJson(Map<String, dynamic> json) =>
       _$PojoErrorFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PojoErrorToJson(this);
+
 }

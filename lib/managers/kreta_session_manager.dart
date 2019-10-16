@@ -105,6 +105,6 @@ class KretaSessionManager {
     bool success = await prefs.setString(_keySession, jsonEncode(jsonSession));
     if(success){
       selectedSession = session;
-    }
   }
+}
 }

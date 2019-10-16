@@ -16,7 +16,6 @@ import 'package:mobile/custom/hazizz_localizations.dart';
 import '../../main.dart';
 
 
-
 class TasksTomorrowPage extends StatefulWidget {
 
   TomorrowTasksBloc tasksBloc = TomorrowTasksBloc();
@@ -42,11 +41,6 @@ class TasksTomorrowPage extends StatefulWidget {
 }
 
 class _TasksTomorrowPage extends State<TasksTomorrowPage> with SingleTickerProviderStateMixin , AutomaticKeepAliveClientMixin {
-
-
-  _TasksTomorrowPage(){
-
-  }
 
   @override
   void initState() {
@@ -83,42 +77,36 @@ class _TasksTomorrowPage extends State<TasksTomorrowPage> with SingleTickerProvi
 
                   Map<DateTime, List<PojoTask>> map = Map();
 
-                  int count = 0;
-
                   int i = 0;
                   for(PojoTask task in tasks){
-                    if (i == 0 || tasks[i].dueDate
-                        .difference(tasks[i - 1].dueDate)
-                        .inDays > 0) {
+                    int d = tasks[i].dueDate
+                        .difference(DateTime.now())
+                        .inDays;
+                    if (d == 1) {
                       map[tasks[i].dueDate] = List();
                       map[tasks[i].dueDate].add(task);
-
-                      count +=2;
-                    }else{
-                      map[tasks[i].dueDate].add(task);
-                      count++;
                     }
-
                     i++;
                   }
 
-                  return new ListView.builder(
-                      itemCount: tasks.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        if (index == 0 || tasks[index].dueDate
-                            .difference(tasks[index - 1].dueDate)
-                            .inDays > 0) {
-                          return new StickyHeader(
-                            header: TaskHeaderItemWidget(
-                                dateTime: tasks[index].dueDate),
-                            content: TaskItemWidget(originalPojoTask: tasks[index],),
-                          );
-                        } else {
-                          return TaskItemWidget(originalPojoTask: tasks[index],
-                          );
+                    return new ListView.builder(
+                        itemCount: tasks.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          if (index == 0 || tasks[index].dueDate
+                              .difference(tasks[index - 1].dueDate)
+                              .inDays > 0) {
+                            return new StickyHeader(
+                              header: TaskHeaderItemWidget(
+                                  dateTime: tasks[index].dueDate),
+                              content: TaskItemWidget(originalPojoTask: tasks[index],),
+                            );
+                          } else {
+                            return TaskItemWidget(originalPojoTask: tasks[index],
+                            );
+                          }
                         }
-                      }
-                  );
+                    );
+
 
 
                   return new StickyList.builder(

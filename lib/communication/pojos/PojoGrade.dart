@@ -13,6 +13,7 @@ part 'PojoGrade.gg.dart';
 //@JsonSerializable()
 class PojoGrade extends Pojo implements Comparable {
 
+  String accountId;
   DateTime date;
   DateTime creationDate;
   String subject;
@@ -28,7 +29,7 @@ class PojoGrade extends Pojo implements Comparable {
 
   Color color;
 
-  PojoGrade({this.date, this.creationDate, this.subject, this.topic,
+  PojoGrade({this.accountId, this.date, this.creationDate, this.subject, this.topic,
       this.gradeType, this.grade, this.weight}){
   //  grade = "5";
     _setColor();
@@ -68,4 +69,21 @@ class PojoGrade extends Pojo implements Comparable {
     }
     return null;
   }
+
+  int compareToByCreationDate(other) {
+    if(other is PojoGrade){
+      int a = this.creationDate.compareTo(other.creationDate);
+      return a;
+    }
+    return null;
+  }
+
+  int compareToByDate(other) {
+    if(other is PojoGrade){
+      int a = this.date.compareTo(other.date);
+      return a;
+    }
+    return null;
+  }
+
 }

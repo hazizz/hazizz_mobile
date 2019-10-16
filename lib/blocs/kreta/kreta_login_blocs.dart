@@ -241,7 +241,7 @@ class KretaLoginBloc extends Bloc<KretaLoginEvent, KretaLoginState> {
         if(true){
           yield KretaLoginWaiting();
           HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaAuthenticateSession(
-              p_session: session.id.toString(), b_password: passwordController.text)
+              p_session: session.id, b_password: passwordController.text)
           );
           if(hazizzResponse.isSuccessful){
             HazizzLogger.printLog("debuglol111");
@@ -261,7 +261,6 @@ class KretaLoginBloc extends Bloc<KretaLoginEvent, KretaLoginState> {
               yield KretaLoginFailure(error: hazizzResponse.pojoError);
             }
             else {
-              print("debugerman0");
               yield KretaLoginSomethingWentWrong();
             }
           }else {

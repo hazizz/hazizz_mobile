@@ -246,7 +246,10 @@
     : "Beállítások",
 
   "developer_settings"
-  : "Fejlesztői beállítások",
+: "Fejlesztői beállítások",
+
+  "delete_me"
+  : "Fiók törlése",
 
 
   "about"
@@ -263,6 +266,9 @@
   "website"
   : "Weboldal",
 
+  "gateway_server"
+  : "Gateway szerver",
+
   "auth_server"
   : "Hitelesítő szerver",
   "hazizz_server"
@@ -277,6 +283,11 @@
   "logs"
   : "Logok",
 
+  "tell_us_what_happened"
+  : "Mondd el mi történt",
+
+  "preferences"
+  : "Preferenciák",
 
   "starting_page"
     : "Kezdő oldal",
@@ -320,6 +331,9 @@
 
     "subject"
     : "Téma",
+
+  "kreta_subject"
+  : "Tantárgy",
 
 
     "subjects"
@@ -671,6 +685,8 @@
     : "Téma:",
 
 
+
+
     "tasktype_"
     : "Feladat típusa:",
 
@@ -737,6 +753,9 @@
 
   "areyousure_delete_subject"
   : "Biztos hogy törlöd a {} témát?",
+
+  "areyousure_delete_me"
+  : "Biztos hogy törlöd ezt a fiókot?",
 
 
     "areyousure_delete_announcement"
@@ -1262,6 +1281,9 @@
     "kreta_login_later"
     : "Krétába késöbb is be tudsz jelentkezni",
 
+  "kreta_notes"
+  : "Kréta bejegyzések",
+
 
     "kreta"
     : "Kréta",
@@ -1330,13 +1352,15 @@
 
 
   "classes_not_started"
-  : "A tanítás még nem kezdődött el",
+  : "Tanítás kezdete: {} perc múlva",
+
+
 
   "classes_over"
   : "Vége a tanításnak",
 
   "classes_break"
-  : "Szünet",
+  : "Szünet : {} perc maradt hátra",
 
     "thera_classStart"
     : "kezdet:",
@@ -1361,6 +1385,8 @@
     "date"
     : "Dátum",
 
+  "creation_date"
+  : "Létrehozás",
 
     "thera_grade_"
     : "jegy:",

@@ -31,11 +31,11 @@ class TaskCalendarPage extends StatefulWidget {
 
 class _TaskCalendarPage extends State<TaskCalendarPage> with AutomaticKeepAliveClientMixin {
 
-  CalendarController calendarController;
+  CalendarController calendarController = CalendarController();
 
   DateTime now = DateTime.now();
 
-  TasksCalendarBloc tasksCalendarBloc;
+  TasksCalendarBloc tasksCalendarBloc = TasksCalendarBloc();
 
   _TaskCalendarPage();
 
@@ -53,10 +53,7 @@ class _TaskCalendarPage extends State<TaskCalendarPage> with AutomaticKeepAliveC
 
   @override
   void initState() {
-    tasksCalendarBloc = TasksCalendarBloc();
     tasksCalendarBloc.dispatch(TasksCalendarFetchEvent());
-
-    calendarController  = CalendarController();
 
     final _selectedDay = DateTime.now();
     currentDay = DateTime.now();
@@ -69,6 +66,7 @@ class _TaskCalendarPage extends State<TaskCalendarPage> with AutomaticKeepAliveC
   @override
   void dispose() {
     calendarController?.dispose();
+    tasksCalendarBloc.dispose();
     super.dispose();
   }
 
@@ -214,8 +212,6 @@ class _TaskCalendarPage extends State<TaskCalendarPage> with AutomaticKeepAliveC
      // currentTasksList = pojoToWidget(ev[DateTime.now().subtract(Duration(days: 2))]);
    // });
     return TableCalendar(
-
-
       availableCalendarFormats: {CalendarFormat.month: ""},
       //initialCalendarFormat: CalendarFormat.month,
       headerVisible: true,
@@ -247,6 +243,9 @@ class _TaskCalendarPage extends State<TaskCalendarPage> with AutomaticKeepAliveC
       calendarController: calendarController,
       events: ev,
      // holidays: _holidays,
+      availableGestures: AvailableGestures.horizontalSwipe,
+      formatAnimation: FormatAnimation.scale,
+
       startingDayOfWeek: StartingDayOfWeek.monday,
       calendarStyle: CalendarStyle(
         selectedColor: Theme.of(context).primaryColorDark,
@@ -334,12 +333,13 @@ class _TaskCalendarPage extends State<TaskCalendarPage> with AutomaticKeepAliveC
                             child: Builder(
                               builder: (context){
                                 currentTasksList = pojoToWidget(tasksCalendarBloc.tasks[currentDay]);
-                                print("show szolga raw: ${tasksCalendarBloc.tasks}");
-                                print("show szolga: ${currentTasksList}");
 
                                 if(currentTasksList.isNotEmpty){
-                                  return Column(
-                                      children: currentTasksList
+                                  return Padding(
+                                    padding: const EdgeInsets.only(top: 8),
+                                    child: Column(
+                                        children: currentTasksList
+                                    ),
                                   );
                                 }
                                 return Padding(

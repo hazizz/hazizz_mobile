@@ -20,12 +20,9 @@ class FacebookLoginBloc extends SocialLoginBloc{
 
   @override
   Future<String> getSocialToken() async {
-  //  facebookLogin.loginBehavior(2);
-
     await facebookLogin.logOut();
     facebookLogin.loginBehavior = FacebookLoginBehavior.nativeWithFallback;
     FacebookLoginResult result = await facebookLogin.logIn(["email", 'public_profile']);
-
 
     switch(result.status){
       case FacebookLoginStatus.loggedIn:
@@ -38,11 +35,10 @@ class FacebookLoginBloc extends SocialLoginBloc{
         return result.accessToken.token;
       case FacebookLoginStatus.cancelledByUser:
         print("facebook token: ${result}, FacebookLoginStatus.cancelledByUser");
-        return null;
+        return "canceled";
       case FacebookLoginStatus.error:
         print("facebook token: ${result.errorMessage}, FacebookLoginStatus.error, ${result.status.toString()}");
         return null;
-
     }
     print("facebook token: null, none");
 

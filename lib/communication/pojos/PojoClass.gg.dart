@@ -36,24 +36,35 @@ String convertBack(HazizzTimeOfDay a){
 }
 
 PojoClass _$PojoClassFromJson(Map<String, dynamic> json) {
+
+  String start = (json['startOfClass'] != null ? json['startOfClass'] :  json['start'])as String;
+  String end = (json['endOfClass'] != null ? json['endOfClass'] :  json['end']) as String;
+  String topic = (json['topic'] != null ? json['topic'] :  json['description'])  as String;
+  String attendee = (json['className'] != null ? json['className'] :  json['attendee']) as String;
+  bool standIn = (json['standIn'] != null ? json['standIn'] :  json['hostReplaced']) as bool;
+  String room = (json['room'] != null ? json['room'] :  json['location']) as String;
+  String teacher = (json['teacher'] != null ? json['teacher'] :  json['host']) as String;
+  String subject = (json['subject'] != null ? json['subject'] :  json['title']) as String;
+
+
   return PojoClass(
+      accountId: json['accountId'] as String,
       date:
       json['date'] == null ? null : DateTime.parse(json['date'] as String),
-      startOfClass:
-      json['startOfClass'] == null ? null : convertToHazizzTimeOfDay(json['startOfClass'] as String),
-      endOfClass:
-      json['endOfClass'] == null ? null : convertToHazizzTimeOfDay(json['endOfClass'] as String),
+      startOfClass: convertToHazizzTimeOfDay(start),
+      endOfClass: convertToHazizzTimeOfDay(end),
       periodNumber: json['periodNumber'] as int,
       cancelled: json['cancelled'] as bool,
-      standIn: json['standIn'] as bool,
-      subject: json['subject'] as String,
-      className: (json['className'] as String) ,
-      teacher: json['teacher'] as String,
-      room: json['room'] as String,
-      topic: json['topic'] as String);
+      standIn: standIn,
+      subject: subject,
+      className: attendee ,
+      teacher: teacher,
+      room: room,
+      topic: topic);
 }
 
 Map<String, dynamic> _$PojoClassToJson(PojoClass instance) => <String, dynamic>{
+  'accountId': instance.accountId,
   'date': instance.date?.toIso8601String(),
   'startOfClass': convertBack(instance.startOfClass),
   'endOfClass': convertBack(instance.endOfClass),

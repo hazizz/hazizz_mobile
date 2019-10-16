@@ -7,7 +7,7 @@ import 'package:mobile/blocs/other/response_states.dart';
 import 'package:mobile/blocs/tasks/task_maker_blocs.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
 import 'package:mobile/defaults/pojo_subject_empty.dart';
-import 'package:mobile/enums/groupTypesEnum.dart';
+import 'package:mobile/enums/group_types_enum.dart';
 import 'package:mobile/listItems/subject_item_widget.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'dialogs.dart';

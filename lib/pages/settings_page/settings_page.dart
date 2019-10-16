@@ -112,34 +112,24 @@ class _SettingsPage extends State<SettingsPage> with AutomaticKeepAliveClientMix
 
               Padding(
                 padding: const EdgeInsets.only(top: 10.0),
-                child: GestureDetector(
+                child: ListTile(
                   onTap: (){
                     Navigator.pushNamed(context, "/about");
                   },
-                  child: ListTile(
-                    title: Text(locText(context, key: "about")),
-                    leading: Icon(FontAwesomeIcons.infoCircle),
-                  ),
-                )
+                  title: Text(locText(context, key: "about")),
+                  leading: Icon(FontAwesomeIcons.infoCircle),
+                ),
               ),
               Divider(),
 
               Padding(
                 padding: const EdgeInsets.only(top: 0.0),
                 child: ListTile(
-                  title: Text(locText(context, key: "starting_page")),
-                  leading: Icon(FontAwesomeIcons.doorOpen),
-                  trailing: DropdownButton(
-
-                    items: startPageItems,
-                    onChanged: (dynamic newStartPageIndex) async {
-                      StartPageService.setStartPageIndex(newStartPageIndex);
-                      setState(() {
-                        currentStartPageItemIndex = newStartPageIndex;
-                      });
-                    },
-                    value: currentStartPageItemIndex,
-                  ),
+                  onTap: (){
+                    Navigator.pushNamed(context, "/settings/preferences");
+                  },
+                  title: Text(locText(context, key: "preferences")),
+                  leading: Icon(FontAwesomeIcons.asterisk),
                 ),
               ),
               Divider(),

@@ -8,6 +8,7 @@ part of 'PojoGrade.dart';
 
 PojoGrade _$PojoGradeFromJson(Map<String, dynamic> json) {
   return PojoGrade(
+      accountId: json['accountId'] as String,
       date:
           json['date'] == null ? null : DateTime.parse(json['date'] as String),
       creationDate: json['creationDate'] == null

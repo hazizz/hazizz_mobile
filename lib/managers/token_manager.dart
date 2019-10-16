@@ -79,10 +79,13 @@ class TokenManager {
   }
 
   static Future<HazizzResponse> createTokenWithRefresh() async{
+    HazizzLogger.printLog("In createTokenWithRefresh function");
     HazizzResponse hazizzResponse = await RequestSender().getAuthResponse(new CreateToken.withRefresh(q_username: await InfoCache.getMyUsername(), q_refreshToken: await getRefreshToken()));
     if(hazizzResponse.isSuccessful){
+      HazizzLogger.printLog("In createTokenWithRefresh function: token response successful");
       PojoTokens tokens = hazizzResponse.convertedData;
       setTokens(tokens.token, tokens.refresh);
+      HazizzLogger.printLog("In createTokenWithRefresh function: token is set and should be working");
     }else if(hazizzResponse.hasPojoError){
       await AppState.logout();
     }
@@ -140,8 +143,10 @@ class TokenManager {
   static Future<DateTime> getLastTokenUpdateTime() async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String str = prefs.getString(key_lastTokenUpdateTime);
-
-    return DateTime.parse(str);
+    if(str != null){
+      return DateTime.parse(str);
+    }
+    return null;
 
   }
 

@@ -102,6 +102,7 @@ class _GroupMembersPage extends State<GroupMembersPage> with AutomaticKeepAliveC
                         }
 
                         return new ListView.builder(
+                         //   physics: BouncingScrollPhysics(),
                             itemCount: membersWidget.length,
                             itemBuilder: (BuildContext context, int index) {
                               if(index >= membersWidget.length-1){

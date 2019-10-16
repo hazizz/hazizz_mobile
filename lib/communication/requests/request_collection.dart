@@ -11,6 +11,7 @@ import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/pojos/PojoGroupDetailed.dart';
 import 'package:mobile/communication/pojos/PojoGroupPermissions.dart';
 import 'package:mobile/communication/pojos/PojoInviteLink.dart';
+import 'package:mobile/communication/pojos/PojoKretaNote.dart';
 import 'package:mobile/communication/pojos/PojoMeInfoPrivate.dart';
 import 'package:mobile/communication/pojos/PojoMeInfo.dart';
 import 'package:mobile/communication/pojos/PojoSchedules.dart';
@@ -21,7 +22,7 @@ import 'package:mobile/communication/pojos/PojoUser.dart';
 import 'package:mobile/communication/pojos/pojo_comment.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
-import 'package:mobile/enums/groupTypesEnum.dart';
+import 'package:mobile/enums/group_types_enum.dart';
 import 'package:mobile/managers/kreta_session_manager.dart';
 import 'package:mobile/managers/token_manager.dart';
 import 'package:meta/meta.dart';
@@ -34,9 +35,8 @@ import '../ResponseHandler.dart';
 import '../htttp_methods.dart';
 
 Future<Request> refreshTokenInRequest(Request request) async {
-  if(request.header[HttpHeaders.authorizationHeader] != null){
-    request.header[HttpHeaders.authorizationHeader] = await TokenManager.getToken();
-  }
+  request.header[HttpHeaders.authorizationHeader] = await TokenManager.getToken();
+
   return request;
 }
 
@@ -50,7 +50,7 @@ class Request {
   bool contentTypeHeader = false;
 
   static const String BASE_URL = "https://hazizz.duckdns.org:9000/";
-  String SERVER_PATH;
+  String SERVER_PATH = "";
   String PATH;
   ResponseHandler rh;
 
@@ -148,11 +148,22 @@ class AuthRequest extends Request{
 //region Auth server requests
 //region Token requests
 
+class PingGatewayServer extends Request{
+  PingGatewayServer({ResponseHandler rh}) : super(rh){
+    httpMethod = HttpMethod.GET;
+    PATH = "actuator/health";
+  }
+
+  @override
+  dynamic convertData(Response response) {
+    return response.data;
+  }
+}
 
 class PingAuthServer extends AuthRequest{
   PingAuthServer({ResponseHandler rh}) : super(rh){
     httpMethod = HttpMethod.GET;
-    PATH = "/actuator/health";
+    PATH = "actuator/health";
   }
 
   @override
@@ -163,7 +174,7 @@ class PingAuthServer extends AuthRequest{
 class PingHazizzServer extends HazizzRequest{
   PingHazizzServer({ResponseHandler rh}) : super(rh){
     httpMethod = HttpMethod.GET;
-    PATH = "/actuator/health";
+    PATH = "actuator/health";
   }
 
   @override
@@ -174,7 +185,7 @@ class PingHazizzServer extends HazizzRequest{
 class PingTheraServer extends TheraRequest{
   PingTheraServer({ResponseHandler rh}) : super(rh){
     httpMethod = HttpMethod.GET;
-    PATH = "/actuator/health";
+    PATH = "actuator/health";
   }
 
   @override
@@ -222,6 +233,7 @@ class CreateToken extends AuthRequest{
   @override
   convertData(Response response) {
     PojoTokens tokens = PojoTokens.fromJson(jsonDecode(response.data));
+    print("TOKENS PLS DELETE: ${tokens.toString()}");
     return tokens;
   }
 
@@ -270,27 +282,39 @@ class RegisterWithGoogleAccount extends AuthRequest{
 
 class RegisterWithFacebookAccount extends AuthRequest{
   RegisterWithFacebookAccount({@required String b_facebookToken}) : super(null){
-    print("here iam0");
+
     httpMethod = HttpMethod.POST;
     PATH = "account/facebookregister";
     body["facebookToken"] = b_facebookToken;
     body["consent"] = true;
     contentTypeHeader = true;
-    print("here iam");
+
   }
 
   @override
   dynamic convertData(Response response) {
-    print("here iam2");
+
     return response;
   }
 }
-
 
 class Information extends AuthRequest{
   Information() : super(null){
     httpMethod = HttpMethod.GET;
     PATH = "information/detailed";
+    authTokenHeader = true;
+  }
+
+  @override
+  dynamic convertData(Response response) {
+    return response;
+  }
+}
+
+class DeleteMe extends AuthRequest{
+  DeleteMe({@required int userId}) : super(null){
+    httpMethod = HttpMethod.DELETE;
+    PATH = "users/${userId}";
     authTokenHeader = true;
   }
 
@@ -1078,7 +1102,7 @@ class KretaRemoveSessions extends TheraRequest {
 }
 
 class KretaAuthenticateSession extends TheraRequest {
-  KretaAuthenticateSession({ResponseHandler rh, @required String p_session, @required String b_password}) : super(rh) {
+  KretaAuthenticateSession({ResponseHandler rh, @required int p_session, @required String b_password}) : super(rh) {
     httpMethod = HttpMethod.POST;
     PATH = "kreta/sessions/${p_session}/auth";
     authTokenHeader = true;
@@ -1098,8 +1122,40 @@ class KretaAuthenticateSession extends TheraRequest {
 }
 //endregion
 
+
+class KretaGetNotes extends TheraRequest {
+  KretaGetNotes({ResponseHandler rh}) : super(rh) {
+    httpMethod = HttpMethod.GET;
+    PATH = "kreta/sessions/${KretaSessionManager.selectedSession.id}/notes";
+    authTokenHeader = true;
+  }
+
+  @override
+  dynamic convertData(Response response) {
+
+    Iterable iter = getIterable(response.data);
+    List<PojoKretaNote> notes = iter.map<PojoKretaNote>((json) => PojoKretaNote.fromJson(json)).toList();
+
+    return notes;
+  }
+}
+
 class KretaGetGrades extends TheraRequest {
   KretaGetGrades({ResponseHandler rh,}) : super(rh) {
+    httpMethod = HttpMethod.GET;
+    PATH = "grades";
+    authTokenHeader = true;
+  }
+
+  @override
+  dynamic convertData(Response response) {
+    PojoGrades pojoGrades = PojoGrades.fromJson(jsonDecode(response.data));
+    return pojoGrades;
+  }
+}
+
+class KretaGetGradesWithSession extends TheraRequest {
+  KretaGetGradesWithSession({ResponseHandler rh,}) : super(rh) {
     httpMethod = HttpMethod.GET;
     PATH = "kreta/sessions/${KretaSessionManager.selectedSession.id}/grades";
     authTokenHeader = true;
@@ -1107,17 +1163,49 @@ class KretaGetGrades extends TheraRequest {
 
   @override
   dynamic convertData(Response response) {
-  //  Iterable iter = getIterable(response.data);
-   // List<PojoSession> grades = iter.map<PojoSession>((json) => PojoSession.fromJson(json)).toList();
-    
+    //  Iterable iter = getIterable(response.data);
+    // List<PojoSession> grades = iter.map<PojoSession>((json) => PojoSession.fromJson(json)).toList();
+
     PojoGrades pojoGrades = PojoGrades.fromJson(jsonDecode(response.data));
-    
+
     return pojoGrades;
   }
 }
 
+
+
 class KretaGetSchedules extends TheraRequest {
   KretaGetSchedules({ResponseHandler rh, int q_weekNumber, int q_year}) : super(rh) {
+    httpMethod = HttpMethod.GET;
+    PATH = "schedules";
+    authTokenHeader = true;
+
+    if(q_weekNumber != null && q_year != null) {
+      query["weekNumber"] = q_weekNumber.toString();
+      query["year"] = q_year.toString();
+    }else{
+      DateTime now = DateTime.now();
+      int dayOfYear = int.parse(DateFormat("D").format(now));
+      int weekOfYear = ((dayOfYear - now.weekday + 10) / 7).floor();
+      query["weekNumber"] = weekOfYear.toString();
+      query["year"] = dayOfYear.toString();
+    }
+  }
+
+  @override
+  dynamic convertData(Response response) {
+    try {
+      PojoSchedules schedules = PojoSchedules.fromJson(
+          jsonDecode(response.data));
+      return schedules;
+    }catch(e){
+      return null;
+    }
+  }
+}
+
+class KretaGetSchedulesWithSession extends TheraRequest {
+  KretaGetSchedulesWithSession({ResponseHandler rh, int q_weekNumber, int q_year}) : super(rh) {
     httpMethod = HttpMethod.GET;
     PATH = "v2/kreta/sessions/${KretaSessionManager.selectedSession.id}/schedule";
     authTokenHeader = true;

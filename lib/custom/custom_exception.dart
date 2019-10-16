@@ -1,4 +1,9 @@
 class CustomException implements Exception {
-  String message;
+  final String message;
   CustomException(this.message);
+
+  @override
+  String toString() {
+    return "Custom exception: $message";
+  }
 }

@@ -226,6 +226,9 @@
   "developer_settings"
   : "Developer settings",
 
+  "delete_me"
+  : "Delete account",
+
   "about"
   : "About",
 
@@ -240,6 +243,9 @@
   "website"
   : "Website",
 
+  "gateway_server"
+  : "Gateway server",
+
   "auth_server"
   : "Authentication server",
   "hazizz_server"
@@ -251,11 +257,17 @@
   "logs"
   : "Logs",
 
+  "tell_us_what_happened"
+  : "Tell us what happened",
+
   "send_log_via_email"
   : "Send log via email",
 
     "starting_page"
     : "Starting page",
+
+  "preferences"
+  : "Preferences",
 
     "language"
     : "Language",
@@ -297,6 +309,8 @@
     "subject"
     : "Subject",
 
+  "kreta_subject"
+  : "Subject",
 
     "subjects"
     : "Subjects",
@@ -707,6 +721,8 @@
   "areyousure_delete_subject"
 : "Are you sure you want to delete {} subject?",
 
+  "areyousure_delete_me"
+  : "Are you sure you want to delete this account?",
 
     "areyousure_delete_announcement"
     : "Are you sure you want to delete this announcement?",
@@ -1223,6 +1239,9 @@
     "kreta_login_later"
     : "You can log in to Kréta later",
 
+  "kreta_notes"
+  : "Kréta notes",
+
     "kreta"
     : "Kréta",
 
@@ -1284,13 +1303,13 @@
 
 
   "classes_not_started"
-  : "The classes have not started yet",
+  : "Classes will start in {} minutes",
 
   "classes_over"
   : "The classes are over",
 
   "classes_break"
-  : "Break",
+  : "Break : {} minutes remaining",
 
     "thera_classStart"
     : "start:",
@@ -1315,6 +1334,10 @@
     "date"
     : "Date",
 
+  "creation_date"
+  : "Creation",
+
+
 
     "thera_grade_"
     : "grade:",
@@ -1337,7 +1360,7 @@
     : "theme:",
 
 
-    "thera_subject_"
+    "thera_subject"
     : "subject:",
 
 

@@ -50,26 +50,42 @@ class _GradesChart extends State<GradesChart> with TickerProviderStateMixin , Au
           ),
           titlesData: FlTitlesData(
             bottomTitles: SideTitles(
+
               showTitles: true,
-              reservedSize: 22,
+              reservedSize: 12,
               textStyle: TextStyle(
                 color: const Color(0xff72719b),
                 fontWeight: FontWeight.bold,
-                fontSize: 16,
+                fontSize: 14,
               ),
               margin: 10,
               getTitles: (value) {
                 switch(value.toInt()) {
-                  case 2:
+                  case 1:
                     return 'SEPT';
-                  case 7:
+                  case 2:
                     return 'OCT';
-                  case 12:
+                  case 3:
+                    return 'NOV';
+                  case 4:
                     return 'DEC';
-                  case 16:
-                    return 'DEC2';
-                  case 19:
-                    return 'DEC3';
+                  case 5:
+                    return 'JAN';
+                  case 6:
+                    return 'FEBR';
+                  case 7:
+                    return 'SEPT1';
+                  case 1:
+                    return 'SEPT1';
+                  case 1:
+                    return 'SEPT1';
+                  case 1:
+                    return 'SEPT1';
+                  case 1:
+                    return 'SEPT1';
+                  case 1:
+                    return 'SEPT1';
+
                 }
                 return '';
               },
@@ -120,7 +136,7 @@ class _GradesChart extends State<GradesChart> with TickerProviderStateMixin , Au
           lineBarsData: [
             LineChartBarData(
               spots: [
-                FlSpot(1, 1),
+                FlSpot(0, 4),
                 FlSpot(3, 1.5),
                 FlSpot(5, 1.4),
                 FlSpot(7, 3.4),

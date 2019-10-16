@@ -7,7 +7,7 @@ import 'package:mobile/communication/errorcode_collection.dart';
 import 'package:mobile/communication/pojos/PojoTokens.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
-import 'package:mobile/enums/groupTypesEnum.dart';
+import 'package:mobile/enums/group_types_enum.dart';
 import 'package:bloc/bloc.dart';
 
 import 'package:mobile/communication/hazizz_response.dart';

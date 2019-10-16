@@ -147,7 +147,6 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
   Stream<TasksState> mapEventToState(TasksEvent event) async* {
     if(event is TasksRemoveItemEvent){
 
-      debugPrint("yolo: ${tasks}");
       tasks[event.mapKey].removeAt(event.index);
 
       if(tasks[event.mapKey].isEmpty){

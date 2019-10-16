@@ -161,6 +161,7 @@ class _GroupTasksPage extends State<GroupTasksPage> with AutomaticKeepAliveClien
             }else{
 
               return ListView.builder(
+                //  physics: BouncingScrollPhysics(),
                   itemCount: map.keys.length+1,
                   itemBuilder: (BuildContext context, int index) {
 

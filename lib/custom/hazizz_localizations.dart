@@ -10,7 +10,7 @@ import 'hazizz_logger.dart';
 const _keyLangCode = "key_langCode";
 
 String locText(BuildContext context, {@required String key, List<String> args}){
-  return HazizzLocalizations.of(context).translate(key, args: args);
+  return HazizzLocalizations.of(context)?.translate(key, args: args);
 }
 
 Future<String> locTextContextless({@required String key, List<String> args}) async {
@@ -162,17 +162,6 @@ class HazizzLocalizations {
    // List asd = jsonList.map((i)=>i).toList();
     List<String> textList = jsonDecode(_localizedStrings[key]);
     String text = textList[index];
-    /*
-    jsonMap.map(
-            (k, e) => MapEntry(
-          k,
-          (e as List)
-              ?.map((e) => e == null
-              ? null
-              : e
-              ?.toList()),
-        );
-            */
     return text;
   }
 

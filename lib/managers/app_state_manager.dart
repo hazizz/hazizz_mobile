@@ -17,6 +17,7 @@ import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/navigation/business_navigator.dart';
 import 'package:mobile/notification/notification.dart';
+import 'package:mobile/storage/caches/data_cache.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:mobile/custom/hazizz_app_info.dart';
@@ -128,25 +129,15 @@ class AppState{
   static Future logoutProcedure() async {
     RequestSender().lock();
 
-    /*
-    final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: [
-      "https://www.googleapis.com/auth/userinfo.email",
-      "https://www.googleapis.com/auth/userinfo.profile",
-      "openid"
-    ]);
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-
-    await _auth.signOut().then((_) {
-      _googleSignIn.signOut();
-    });
-    */
-
     await GoogleLoginBloc().logout();
 
     TokenManager.invalidateTokens();
     var sh = await SharedPreferences.getInstance();
     sh.setBool(key_isLoggedIn, false);
     InfoCache.forgetMyUser();
+    forgetTasksCache();
+    forgetScheduleCache();
+    forgetGradesCache();
     RequestSender().clearAllRequests();
     RequestSender().unlock();
   }

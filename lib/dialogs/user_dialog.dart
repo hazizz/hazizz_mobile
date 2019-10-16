@@ -12,7 +12,7 @@ import 'package:mobile/communication/pojos/PojoUser.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_date_time.dart';
 import 'package:mobile/dialogs/report_dialog.dart';
-import 'package:mobile/enums/groupTypesEnum.dart';
+import 'package:mobile/enums/group_types_enum.dart';
 import 'package:mobile/enums/group_permissions_enum.dart';
 import 'package:mobile/custom/image_operations.dart';
 import 'package:mobile/widgets/flushbars.dart';

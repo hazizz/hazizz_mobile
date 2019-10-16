@@ -158,6 +158,8 @@ class TextFormBloc extends Bloc<HFormEvent, HFormState> {
     HazizzLogger.printLog("isLocked: $isLocked");
     HazizzLogger.printLog("lastText: $lastText, ");
 */
+
+    Exception("asd");
     if(event is TextFormLock){
       isLocked = true;
       yield TextFormLocked();

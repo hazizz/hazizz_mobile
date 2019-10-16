@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:mobile/communication/pojos/PojoGrades.dart';
 import 'package:mobile/communication/pojos/PojoSchedules.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
@@ -19,7 +20,6 @@ class DataCache{
 
   DataCache.fromList({ this.lastUpdated, this.iter});
 
-
   setDataList(dynamic data){
     this.data = data;
   }
@@ -27,9 +27,6 @@ class DataCache{
   setData(dynamic data){
     this.data = data;
   }
-
-
-
 }
 
 Future _save(String key, dynamic data) async {
@@ -108,17 +105,13 @@ Future<DataCache> loadTasksCache() async {
   return dataCache;
 }
 
-
-
-
-
-void saveScheduleCache(PojoSchedules schedule){
+void saveScheduleCache(PojoSchedules schedule, {@required int year, @required int weekNumber}){
  // List<String> asd = tasks[0].tags.map((e) => e == null ? null : e.name)?.toList();
-  _save("scheduleCache", schedule.toJson());// tasks.map((e) => e == null ? null : e.toJson())?.toList());
+  _save("${year}_${weekNumber}_scheduleCache", schedule.toJson());// tasks.map((e) => e == null ? null : e.toJson())?.toList());
 }
 
-Future<DataCache> loadScheduleCache() async {
-  DataCache dataCache = await _load("scheduleCache");
+Future<DataCache> loadScheduleCache({@required int year, @required int weekNumber}) async {
+  DataCache dataCache = await _load("${year}_${weekNumber}_scheduleCache");
 
   if(dataCache != null) {
     dataCache.setData(PojoSchedules.fromJson(dataCache.json));
@@ -128,8 +121,7 @@ Future<DataCache> loadScheduleCache() async {
 
 
 void saveGradesCache(PojoGrades grades){
-  // List<String> asd = tasks[0].tags.map((e) => e == null ? null : e.name)?.toList();
-  _save("gradesCache", grades.toJson());// tasks.map((e) => e == null ? null : e.toJson())?.toList());
+  _save("gradesCache", grades.toJson());
 }
 
 Future<DataCache> loadGradesCache() async {
@@ -139,4 +131,22 @@ Future<DataCache> loadGradesCache() async {
     dataCache.setData(PojoGrades.fromJson(dataCache.json));
   }
   return dataCache;
+}
+
+Future forgetScheduleCache() async {
+  var sh = await SharedPreferences.getInstance();
+  bool a = await sh.remove("scheduleCache");
+  bool s = await sh.remove("scheduleCache" + "_time");
+}
+
+Future forgetGradesCache() async {
+  var sh = await SharedPreferences.getInstance();
+  bool a = await sh.remove("gradesCache");
+  bool s = await sh.remove("gradesCache" + "_time");
+}
+
+Future forgetTasksCache() async {
+  var sh = await SharedPreferences.getInstance();
+  bool a = await sh.remove("tasksCache");
+  bool s = await sh.remove("tasksCache" + "_time");
 }

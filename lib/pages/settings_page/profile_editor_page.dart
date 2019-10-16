@@ -117,7 +117,7 @@ class _ProfileEditorPage extends State<ProfileEditorPage> with TickerProviderSta
                             height: 140,
                             child: GestureDetector(
                               onTap: (){
-                                getImage();
+                              //  getImage();
                               },
                               child: CircleAvatar(
                                   child: BlocBuilder(

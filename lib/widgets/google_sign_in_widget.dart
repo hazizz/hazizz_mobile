@@ -48,7 +48,7 @@ class _SocialSignInButtonWidget extends State<SocialSignInButtonWidget> {
   }
 
   void onPressedSocialButton(){
-    print("presss");
+
     return widget.socialSignInMode == SocialSignInMode.google
         ? LoginBlocs().googleLoginBloc.dispatch(SocialLoginButtonPressedEvent())
         : LoginBlocs().facebookLoginBloc.dispatch(SocialLoginButtonPressedEvent());

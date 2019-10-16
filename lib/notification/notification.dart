@@ -206,7 +206,7 @@ class HazizzNotification{
       "${await locTextContextless(key: "check_your_tasks")}",
       time,
       platformChannelSpecifics,
-      payload: 'none',
+      payload: "payload",
 
     );
 

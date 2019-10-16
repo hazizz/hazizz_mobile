@@ -146,6 +146,7 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
             }else{
 
               return ListView.builder(
+              //  physics:  BouncingScrollPhysics(),
                   itemCount: map.keys.length+1,
                   itemBuilder: (BuildContext context, int index) {
 
@@ -338,77 +339,95 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldState,
-      body: new RefreshIndicator(
-
-          child: Stack(
-            children: <Widget>[
-              ListView(),
-              BlocBuilder(
-                  bloc: MainTabBlocs().tasksBloc,
-                  //  stream: tasksBloc.subject.stream,
-                  builder: (_, TasksState state) {
-                    if (state is TasksLoadedState) {
-                      Map<DateTime, List<PojoTask>> tasks = state.tasks;
-
-                      HazizzLogger.printLog("onLoaded asdasd");
-                      return onLoaded(tasks);
-
-                    }if (state is TasksLoadedCacheState) {
-                      Map<DateTime, List<PojoTask>> tasks = state.tasks;
-
-                      return onLoaded(tasks);
-
-                    } else if (state is ResponseEmpty) {
-                      return Column(
-                          children: [
-                            Center(
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 50.0),
-                                child: Text(locText(context, key: "no_tasks_yet")),
-                              ),
-                            )
-                          ]
-                      );
-                    } else if (state is TasksWaitingState) {
-                      //return Center(child: Text("Loading Data"));
-                      return Center(child: CircularProgressIndicator(),);
-                    }else if (state is TasksErrorState) {
-                      //return Center(child: Text("Loading Data"));
-                      if(state.hazizzResponse.dioError == noConnectionError){
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          showNoConnectionFlushBar(context);
-                        });
-                      }else{
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          Flushbar(
-                            icon: Icon(FontAwesomeIcons.exclamation, color: Colors.red,),
-
-                            message: "${locText(context, key: "tasks")}: ${locText(context, key: "info_something_went_wrong")}",
-                            duration: Duration(seconds: 3),
-                          );
-                        });
-                      }
-
-                      if(MainTabBlocs().tasksBloc.tasks!= null){
-                        return onLoaded(MainTabBlocs().tasksBloc.tasks);
-                      }
-                      return Center(
-                          child: Text(locText(context, key: "info_something_went_wrong")));
-                    }
-                    return Center(
-                        child: Text(locText(context, key: "info_something_went_wrong")));
-                  }
-
-              ),
-
-            ],
+      body: Column(
+        children: <Widget>[
+          BlocBuilder(
+            bloc: MainTabBlocs().tasksBloc,
+            builder: (context, state){
+              if(state is TasksWaitingState || state is TasksLoadedCacheState){
+                return LinearProgressIndicator(
+                  value: null,
+                );
+              }
+              return Container();
+            },
           ),
-          onRefresh: () async{
-            applyFilters();
-            MainTabBlocs().tasksBloc.dispatch(TasksFetchEvent()); //await getData()
-            HazizzLogger.printLog("log: refreshing tasks");
-            return;
-          }
+          Expanded(
+            child: new RefreshIndicator(
+
+                child: Stack(
+                  children: <Widget>[
+                    ListView(),
+                    BlocBuilder(
+                        bloc: MainTabBlocs().tasksBloc,
+                        //  stream: tasksBloc.subject.stream,
+                        builder: (_, TasksState state) {
+                          if (state is TasksLoadedState) {
+                            Map<DateTime, List<PojoTask>> tasks = state.tasks;
+
+                            HazizzLogger.printLog("onLoaded asdasd");
+                            return onLoaded(tasks);
+
+                          }if (state is TasksLoadedCacheState) {
+                            Map<DateTime, List<PojoTask>> tasks = state.tasks;
+
+                            return onLoaded(tasks);
+
+                          } else if (state is ResponseEmpty) {
+                            return Column(
+                                children: [
+                                  Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top: 50.0),
+                                      child: Text(locText(context, key: "no_tasks_yet")),
+                                    ),
+                                  )
+                                ]
+                            );
+                          } else if (state is TasksWaitingState) {
+                            //return Center(child: Text("Loading Data"));
+                            return Center(child: CircularProgressIndicator(),);
+                          }else if (state is TasksErrorState) {
+                            //return Center(child: Text("Loading Data"));
+                            if(state.hazizzResponse.dioError == noConnectionError){
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                showNoConnectionFlushBar(context);
+                              });
+                            }else{
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                Flushbar(
+                                  icon: Icon(FontAwesomeIcons.exclamation, color: Colors.red,),
+
+                                  message: "${locText(context, key: "tasks")}: ${locText(context, key: "info_something_went_wrong")}",
+                                  duration: Duration(seconds: 3),
+                                );
+                              });
+                            }
+
+                            if(MainTabBlocs().tasksBloc.tasks!= null){
+                              return onLoaded(MainTabBlocs().tasksBloc.tasks);
+                            }
+                            return Center(
+                                child: Text(locText(context, key: "info_something_went_wrong")));
+                          }
+                          return Center(
+                              child: Text(locText(context, key: "info_something_went_wrong")));
+                        }
+
+                    ),
+
+                  ],
+                ),
+                onRefresh: () async{
+                  applyFilters();
+                  MainTabBlocs().tasksBloc.dispatch(TasksFetchEvent()); //await getData()
+                  HazizzLogger.printLog("log: refreshing tasks");
+                  return;
+                }
+            ),
+          ),
+        ],
+
       ),
       floatingActionButton:FloatingActionButton(
         // heroTag: "hero_fab_tasks_main",
