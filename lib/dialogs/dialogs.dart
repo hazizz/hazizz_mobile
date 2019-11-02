@@ -8,6 +8,7 @@ import 'package:mobile/communication/pojos/PojoClass.dart';
 import 'package:mobile/communication/pojos/PojoCreator.dart';
 import 'package:mobile/communication/pojos/PojoGrade.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
+import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
 import 'package:mobile/communication/pojos/PojoTag.dart';
 import 'package:mobile/communication/pojos/PojoUser.dart';
@@ -25,6 +26,7 @@ import 'package:mobile/dialogs/sure_to_join_group_dialog.dart';
 import 'package:mobile/dialogs/sure_to_leave_group_dialog.dart';
 import 'package:mobile/dialogs/user_dialog.dart';
 import 'package:mobile/enums/group_permissions_enum.dart';
+import 'package:mobile/widgets/hero_dialog.dart';
 import 'package:mobile/widgets/hyper_link.dart';
 import 'package:share/share.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -37,6 +39,7 @@ import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'choose_subject_dialog.dart';
 import 'create_group_dialog.dart';
+import 'kreta_profile_dialog.dart';
 import 'subject_editor_dialog.dart';
 import 'invite_link_dialog.dart';
 import 'join_group_dialog.dart';
@@ -920,9 +923,154 @@ Future<PojoSubject> showEditSubjectDialog(context, {@required PojoSubject subjec
 }
 
 
-Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
+Future<Widget> showGradeDialog(context, {@required PojoGrade grade}) {
  // Widget space = SizedBox(height: 5);
 
+  Widget getGradeAvatar(){
+    return CircleAvatar(
+      child: Stack(
+          children: [
+            Align(
+              alignment: Alignment.topCenter,
+              child: AutoSizeText(
+                grade.grade == null ? "5" : grade.grade,
+                maxLines: 1,
+                style: TextStyle(
+                    fontSize: 50,
+                    color: Colors.black,
+                    fontFamily: "Nunito",
+                    fontWeight: FontWeight.w700
+                ),
+              ),
+            ),
+
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Text(
+                  grade.weight == null ? "100%" : "${grade.weight}%",
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.black,
+                      fontFamily: "Nunito",
+                      fontWeight: FontWeight.w700
+                  ),
+                ),
+              ),
+            ),
+
+          ]
+      ),
+      backgroundColor: grade.color,
+      radius: 50,
+    );
+  }
+
+  Navigator.push(context, HeroDialogRoute(builder: (context){
+    return HazizzDialog(
+        header: Container(
+          color: Theme.of(context).dialogBackgroundColor,
+          height: 98,
+          child: Stack(
+            children: <Widget>[
+              //  Container(color: Theme.of(context).dialogBackgroundColor,),
+              Container(
+                  height: 62.0,
+                  color: Theme.of(context).primaryColor
+
+              ),
+              Center(
+                child: Padding(
+                    padding: EdgeInsets.only(top: 6, bottom: 4),
+                    child: Hero(
+                      tag: grade,
+                      flightShuttleBuilder: (context, animation, heroFlightDirection, context2, context3){
+                        return getGradeAvatar();
+                      },
+                      child: getGradeAvatar(),
+                    )
+                ),
+              ),
+            ],
+          ),
+        ),
+        content: Container(child:  Padding(
+          padding: const EdgeInsets.only(left: 10, right: 10),
+          child: Column(
+              children:
+              [
+
+                Center(child: Text(grade.subject[0].toUpperCase() + grade.subject.substring(1), style: TextStyle(fontSize: 22), textAlign: TextAlign.center,) ),
+                Spacer(),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+
+                  children: <Widget>[
+                    Text(locText(context, key: "topic") + ":", style: TextStyle(fontSize: 18)),
+                    Expanded(child: Text(grade.topic == null ? "" : (grade.topic), style: TextStyle(fontSize: 18), textAlign: TextAlign.end,)),
+                  ],
+                ),
+                Spacer(),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+
+                  children: <Widget>[
+                    Text(locText(context, key: "grade_type") + ":", style: TextStyle(fontSize: 18)),
+                    Builder(
+                      builder: (context){
+                        String gradeType = grade.gradeType;
+                        if(gradeType.toLowerCase() == "midyear"){
+                          gradeType = locText(context, key: "gradeType_midYear");
+                        }else if(gradeType.toLowerCase() == "halfyear"){
+                          gradeType = locText(context, key: "gradeType_halfYear");
+                        }else if(gradeType.toLowerCase() == "endyear"){
+                          gradeType = locText(context, key: "gradeType_endYear");
+                        }
+                        return Expanded(child: Text(gradeType, style: TextStyle(fontSize: 18), textAlign: TextAlign.end,));
+                      },
+                    ),
+                  ],
+                ),
+                Spacer(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(locText(context, key: "date") + ":", style: TextStyle(fontSize: 18),),
+                    Expanded(child: Text(grade.creationDate == null ? "" : hazizzShowDateFormat(grade.creationDate), style: TextStyle(fontSize: 18), textAlign: TextAlign.end,)),
+                  ],
+                ),
+
+              ]
+          ),
+        ),),
+        actionButtons: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 0),
+                child: FlatButton(
+                    child: Center(
+                      child: Text(locText(context, key: "close").toUpperCase(),),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    color: Colors.transparent
+                ),
+              ),
+            ]
+        ),
+        height: 250,
+        width: 200);
+  }));
+
+/*
   return showDialog(
       context: context,
       barrierDismissible: true,
@@ -942,43 +1090,46 @@ Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
                   Center(
                     child: Padding(
                         padding: EdgeInsets.only(top: 6, bottom: 4),
-                        child: CircleAvatar(
-                          child: Stack(
-                              children: [
-                                Align(
-                                  alignment: Alignment.topCenter,
-                                  child: AutoSizeText(
-                                    grade.grade == null ? "5" : grade.grade,
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                        fontSize: 50,
-                                        color: Colors.black,
-                                      fontFamily: "Nunito",
-                                      fontWeight: FontWeight.w700
-                                    ),
-                                  ),
-                                ),
-
-                                Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(bottom: 8.0),
-                                    child: Text(
-                                      grade.weight == null ? "100%" : "${grade.weight}%",
+                        child: Hero(
+                          tag: grade,
+                          child: CircleAvatar(
+                            child: Stack(
+                                children: [
+                                  Align(
+                                    alignment: Alignment.topCenter,
+                                    child: AutoSizeText(
+                                      grade.grade == null ? "5" : grade.grade,
+                                      maxLines: 1,
                                       style: TextStyle(
-                                          fontSize: 20,
+                                          fontSize: 50,
                                           color: Colors.black,
-                                          fontFamily: "Nunito",
-                                          fontWeight: FontWeight.w700
+                                        fontFamily: "Nunito",
+                                        fontWeight: FontWeight.w700
                                       ),
                                     ),
                                   ),
-                                ),
 
-                              ]
+                                  Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(bottom: 8.0),
+                                      child: Text(
+                                        grade.weight == null ? "100%" : "${grade.weight}%",
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            color: Colors.black,
+                                            fontFamily: "Nunito",
+                                            fontWeight: FontWeight.w700
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+
+                                ]
+                            ),
+                            backgroundColor: grade.color,
+                            radius: 50,
                           ),
-                          backgroundColor: grade.color,
-                          radius: 50,
                         )
                     ),
                   ),
@@ -1059,6 +1210,7 @@ Future<void> showGradeDialog(context, {@required PojoGrade grade}) {
             height: 250,
             width: 200);
       });
+      */
 }
 
 Future<bool> showJoinedGroupDialog(context, {@required PojoGroup group}) async {
@@ -1112,6 +1264,17 @@ Future showSubscribeToSubjectDialog(context){
   );
 }
 
+Future showKretaProfileDialog(BuildContext context, PojoSession session){
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return KretaProfileDialog(session: session,);
+    },
+  );
+}
+
+
+
 
 void showSchoolsDialog(BuildContext context, {@required Function({String key, String value}) onPicked, @required Map data}) async{
   showDialog(
@@ -1159,7 +1322,7 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
       color: Theme.of(context).primaryColor,
       child: Row(children: <Widget>[
         Container(
-          color: Theme.of(context).primaryColorDark,
+         // color: Theme.of(context).primaryColorDark,
           child: Padding(
             padding: const EdgeInsets.only(left: 8, right: 2),
             child: Text("${pojoClass.periodNumber}.", style: TextStyle(fontSize: 40)),
@@ -1210,9 +1373,9 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
                 mainAxisAlignment: MainAxisAlignment.center,
 
                 children: <Widget>[
-                  Text(hazizzTimeOfDayToShow(pojoClass.startOfClass), style: TextStyle(fontSize: 25)),
-                  Text("-", style: TextStyle(fontSize: 25)),
-                  Text(hazizzTimeOfDayToShow(pojoClass.endOfClass), style: TextStyle(fontSize: 25)),
+                  Text(hazizzTimeOfDayToShow(pojoClass.startOfClass), style: TextStyle(fontSize: 22)),
+                  Text("-", style: TextStyle(fontSize: 22)),
+                  Text(hazizzTimeOfDayToShow(pojoClass.endOfClass), style: TextStyle(fontSize: 22)),
                 ],
               ),
             ),
@@ -1234,10 +1397,10 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text(locText(context, key: "class_name") + ":", style: TextStyle(fontSize: 20)),
+              Text(locText(context, key: "class_name") + ":", style: TextStyle(fontSize: 18)),
               Expanded(
                 child: Text(pojoClass.className == null ? "" : (pojoClass.className),
-                        style: TextStyle(fontSize: 20), textAlign: TextAlign.end,),
+                        style: TextStyle(fontSize: 18), textAlign: TextAlign.end,),
               ),
             ],
           ));
@@ -1248,8 +1411,8 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
               crossAxisAlignment: CrossAxisAlignment.start,
 
               children: <Widget>[
-                Text("${locText(context, key: "thera_standin")}:", style: TextStyle(fontSize: 20, color: HazizzTheme.red)),
-                Expanded(child: Text(pojoClass.teacher, style: TextStyle(fontSize: 20,  color: HazizzTheme.red), textAlign: TextAlign.end,)),
+                Text("${locText(context, key: "thera_standin")}:", style: TextStyle(fontSize: 18, color: HazizzTheme.red)),
+                Expanded(child: Text(pojoClass.teacher, style: TextStyle(fontSize: 18,  color: HazizzTheme.red), textAlign: TextAlign.end,)),
               ],
             ));
           }else{
@@ -1257,8 +1420,8 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(locText(context, key: "teacher") + ":", style: TextStyle(fontSize: 20)),
-                Expanded(child: Text(pojoClass.teacher == null ? "" : pojoClass.teacher, style: TextStyle(fontSize: 20), textAlign:TextAlign.end,),),
+                Text(locText(context, key: "teacher") + ":", style: TextStyle(fontSize: 18)),
+                Expanded(child: Text(pojoClass.teacher == null ? "" : pojoClass.teacher, style: TextStyle(fontSize: 18), textAlign:TextAlign.end,),),
               ],
             ),);
           }
@@ -1269,8 +1432,8 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
             crossAxisAlignment: CrossAxisAlignment.start,
 
             children: <Widget>[
-              Text(locText(context, key: "room") + ":", style: TextStyle(fontSize: 20)),
-              Expanded(child: Text(pojoClass.room == null ? "" : pojoClass.room, style: TextStyle(fontSize: 20), textAlign: TextAlign.end,)),
+              Text(locText(context, key: "room") + ":", style: TextStyle(fontSize: 18)),
+              Expanded(child: Text(pojoClass.room == null ? "" : pojoClass.room, style: TextStyle(fontSize: 18), textAlign: TextAlign.end,)),
             ],
           ),);
 
@@ -1281,8 +1444,8 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
               crossAxisAlignment: CrossAxisAlignment.start,
 
               children: <Widget>[
-                Text(locText(context, key: "topic") + ":", style: TextStyle(fontSize: 20)),
-                Expanded(child: Text(pojoClass.topic, style: TextStyle(fontSize: 20), textAlign: TextAlign.end,)),
+                Text(locText(context, key: "topic") + ":", style: TextStyle(fontSize: 18)),
+                Expanded(child: Text(pojoClass.topic, style: TextStyle(fontSize: 18), textAlign: TextAlign.end,)),
               ],
             ));
           }
@@ -1341,8 +1504,6 @@ Future<bool> showIntroCancelDialog(context) async {
       child: Text(
         "Are you sure you want to delete this task?",
         style: TextStyle(
-
-          fontFamily: 'Quicksand',
           fontSize: 20.0,
           fontWeight: FontWeight.w300,
         ),
@@ -1482,6 +1643,96 @@ Future<bool> showRegistrationDialog(context) async {
     builder: (context){
       return RegistrationDialog();
     }
+  );
+}
+
+
+Future<void> showNewFeatureDialog(context) async {
+
+  double height = 240;
+  double width = 200;
+
+  HazizzDialog hazizzDialog = new HazizzDialog(
+      header:
+      Container(
+       // height: height,
+        width: 400,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10.0),
+              topRight: Radius.circular(10.0),
+            ),
+            color: Theme.of(context).primaryColor,
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(6),
+          child: Text( "${locText(context, key: "new_features")}:",
+            style: TextStyle(
+              fontSize: 20.0,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ),
+      content: Container(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 4, right: 4),
+            child: Column(
+
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(right: 4),
+                        child: Text("-"),
+                      ),
+                      Expanded(child: Text("${locText(context, key: "new_feature_subject_subscribe")}", style: TextStyle(fontSize: 15.4),)),
+                    ],
+                  ),
+                ),
+
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(right: 4),
+                      child: Text("-"),
+                    ),
+                    Expanded(child: Text("${locText(context, key: "new_feature_notifications")}", style: TextStyle(fontSize: 15.4),)),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+      actionButtons:
+      Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          FlatButton(
+              child: Center(
+                child: Text(locText(context, key: "ok").toUpperCase()),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              color: Colors.transparent
+          ),
+        ],
+      )
+      ,height: height,width: width);
+
+  await showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return hazizzDialog;
+      }
   );
 }
 

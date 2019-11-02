@@ -1,4 +1,3 @@
-
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -20,7 +19,6 @@ import 'package:mobile/pages/kreta_pages/kreta_service_holder.dart';
 import 'main_schedules_tab_page.dart';
 
 class SchedulesPage extends StatefulWidget {
-
 
   SchedulesPage({Key key}) : super(key: key);
 
@@ -57,7 +55,7 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
     /*
     if(schedulesBloc.currentState is ResponseError) {
       HazizzLogger.printLog("log: here233");
-      schedulesBloc.dispatch(FetchData());
+      schedulesBloc.add(FetchData());
     }
     */
 
@@ -73,7 +71,7 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
   Widget selectedPage = Container();
 
 
-  Widget onLoaded(PojoSchedules pojoSchedule){
+  Widget onLoaded(){
 
     void addNoClassDay(String dayIndex){
       _tabList.add(SchedulesTabPage.noClasses());
@@ -97,7 +95,7 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
 
 
 
-    Map<String, List<PojoClass>> schedule = pojoSchedule.classes;
+    Map<String, List<PojoClass>> schedule = MainTabBlocs().schedulesBloc.getScheduleFromSession().classes;//pojoSchedule.classes;
 
     Widget body;
 
@@ -382,13 +380,13 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
                                           lastState = state;
 
                                           if (state is ScheduleLoadedState) {
-                                            if(state.schedules != null /*&& state.data.isNotEmpty()*/){
-                                              return onLoaded(state.schedules);
+                                            if(MainTabBlocs().schedulesBloc.classes?.classes != null/*state.schedules != null && state.data.isNotEmpty()*/){
+                                              return onLoaded();
 
                                             }
                                           }else if (state is ScheduleLoadedCacheState) {
-                                            if(state.data != null /*&& state.data.isNotEmpty()*/){
-                                              return onLoaded(state.data);
+                                            if(MainTabBlocs().schedulesBloc.classes?.classes != null/*state.data != null && state.data.isNotEmpty()*/){
+                                              return onLoaded();
 
                                             }                          }
                                           else if (state is ResponseEmpty) {
@@ -410,6 +408,7 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
                                             }
                                             else if(state.hazizzResponse.dioError == noConnectionError){
                                               WidgetsBinding.instance.addPostFrameCallback((_) {
+                                                print("boi: no internetr");
                                                 showNoConnectionFlushBar(context);
                                               });
                                             }else{
@@ -424,7 +423,7 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
                                             }
 
                                             if(MainTabBlocs().schedulesBloc.classes != null){
-                                              return onLoaded(MainTabBlocs().schedulesBloc.classes);
+                                              return onLoaded();
                                             }
                                             return Center(
                                                 child: Text(locText(context, key: "info_something_went_wrong")));

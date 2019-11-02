@@ -84,7 +84,7 @@ class _TaskCalendarPage extends State<TaskCalendarPage> with AutomaticKeepAliveC
       Color innerColor;
       Color externalColor;
 
-      if(t.completed){
+      if(t.completed != null && t.completed){
         innerColor = Colors.green;
       }else{
         innerColor = Colors.red;

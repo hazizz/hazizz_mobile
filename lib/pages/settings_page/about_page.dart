@@ -47,7 +47,7 @@ class _AboutPage extends State<AboutPage> with AutomaticKeepAliveClientMixin {
 
   @override
   void initState() {
-    // widget.myGroupsBloc.dispatch(FetchData());
+    // widget.myGroupsBloc.add(FetchData());
 
     RequestSender().getResponse(PingGatewayServer()).then((hazizzResponse){
       if(hazizzResponse != null && !hazizzResponse.isSuccessful){

@@ -30,12 +30,12 @@ class GradeHeaderItemWidget extends StatelessWidget{
                   children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.only(left: 5.0, top: 2, bottom: 2),
-                      child: Text(subjectName[0].toUpperCase() + subjectName.substring(1), style: TextStyle(fontSize: 21, fontWeight: FontWeight.w700),),
+                      child: Text(subjectName[0].toUpperCase() + subjectName.substring(1), style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),),
                     ),
                     SizedBox(width: 20),
                     Padding(
                         padding: const EdgeInsets.only(left: 5.0, top: 2, bottom: 2),
-                        child: Text(gradesAvarage, style: TextStyle(fontSize: 21, fontWeight: FontWeight.w700))
+                        child: Text(gradesAvarage, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700))
                     ),
                   ],
                 );

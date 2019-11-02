@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:easy_localization/easy_localization_provider.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:mobile/blocs/auth/social_login_bloc.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/navigation/route_generator.dart';
+import 'package:mobile/services/hazizz_message_handler.dart';
 import 'blocs/main_tab/main_tab_blocs.dart';
 import 'communication/pojos/task/PojoTask.dart';
 import 'custom/hazizz_logger.dart';
@@ -38,6 +38,9 @@ List<PojoTask> tasksForTomorrow;
 MainTabBlocs mainTabBlocs = MainTabBlocs();
 LoginBlocs loginBlocs = LoginBlocs();
 
+
+
+
 Future<bool> fromNotification() async {
   var flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   var notificationAppLaunchDetails =
@@ -58,11 +61,15 @@ Future<bool> fromNotification() async {
   return isFromNotification;
 }
 
+
+
 void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await HazizzMessageHandler().configure();
 
   fromNotification();
 
-  WidgetsFlutterBinding.ensureInitialized();
   await AppState.appStartProcedure();
 
   themeData = await HazizzTheme.getCurrentTheme();
@@ -74,14 +81,14 @@ void main() async{
       if(await TokenManager.checkIfTokenRefreshIsNeeded()) {
         await TokenManager.createTokenWithRefresh();
       }
-
-
       AppState.mainAppPartStartProcedure();
     }
   }else{
     isLoggedIn = false;
     newComer = true;
   }
+
+
   runApp(EasyLocalization(child: HazizzApp()));
 }
 
@@ -97,17 +104,14 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
 
   DateTime lastActive;
 
-
   @override
   initState() {
     super.initState();
-
     WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
-
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -186,7 +190,7 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
               localeResolutionCallback: (locale, supportedLocales) {
                 // Check if the current device locale is supported
                 for(var supportedLocale in supportedLocales) {
-                  if(supportedLocale.languageCode == locale.languageCode &&
+                  if(supportedLocale.languageCode == locale?.languageCode &&
                       supportedLocale.countryCode == locale.countryCode) {
                     setPreferredLocal(supportedLocale);
                     return supportedLocale;

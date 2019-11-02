@@ -61,9 +61,9 @@ class TaskHeaderItemWidget extends StatelessWidget{
           child: InkWell(
               child: Row(
                 children: <Widget>[
-                  Text(title, style: TextStyle(fontSize: 21, fontWeight: FontWeight.w700),),
+                  Text(title, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),),
                   SizedBox(width: 20),
-                  Text("${hazizzShowDateFormat(dateTime)}", style: TextStyle(fontSize: 21, fontWeight: FontWeight.w700)),
+                  Text("${hazizzShowDateFormat(dateTime)}", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
                 ],
               )
           ),

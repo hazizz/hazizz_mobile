@@ -12,7 +12,9 @@ class DateTimeNotPickedState extends DateTimePickerState {
   DateTimeNotPickedState() : super([]);
   @override
   String toString() => 'NotPicked';
+  List<Object> get props => null;
 }
+
 
 class DateTimePickedState extends DateTimePickerState {
   final DateTime dateTime;
@@ -20,6 +22,7 @@ class DateTimePickedState extends DateTimePickerState {
       : assert(dateTime != null), super([dateTime]);
   @override
   String toString() => 'PickedState';
+  List<Object> get props => [dateTime];
 }
 //endregion
 
@@ -34,11 +37,13 @@ class DateTimePickedEvent extends DateTimePickerEvent {
       : assert(dateTime != null), super([dateTime]);
   @override
   String toString() => 'PickedEvent';
+  List<Object> get props => [dateTime];
 }
 
 class DateTimeNotPickedEvent extends DateTimePickerEvent {
   @override
   String toString() => 'NotPickedEvent';
+  List<Object> get props => null;
 }
 //endregion
 

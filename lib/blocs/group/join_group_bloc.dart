@@ -26,33 +26,41 @@ class JoinGroupCreateEvent extends JoinGroupEvent {
       : assert(groupType != null), assert(groupName != null), super([groupName, password]);
 
   @override String toString() => 'JoinGroupCreateEvent';
+
+  List<Object> get props => [groupName, password];
 }
 
 
 
 class JoinGroupFineState extends JoinGroupState {
   @override String toString() => 'JoinGroupFineState';
+  List<Object> get props => null;
 }
 
 class JoinGroupWaitingState extends JoinGroupState {
   @override String toString() => 'JoinGroupWaitingState';
+  List<Object> get props => null;
 }
 class JoinGroupPasswordIncorrectState extends JoinGroupState {
   @override String toString() => 'JoinGroupPasswordIncorrectState';
+  List<Object> get props => null;
 }
 
 class JoinGroupGroupNameTakenState extends JoinGroupState {
   @override String toString() => 'JoinGroupGroupNameTakenState';
+  List<Object> get props =>null;
 }
 
 class JoinGroupInvalidState extends JoinGroupState {
   @override String toString() => 'JoinGroupInvalidState';
+  List<Object> get props => null;
 }
 
 
 
 class JoinGroupSuccessfulState extends JoinGroupState {
   @override String toString() => 'JoinGroupSuccessfulState';
+  List<Object> get props => null;
 }
 
 

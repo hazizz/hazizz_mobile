@@ -25,18 +25,21 @@ class CommentSectionLoadedEvent extends CommentSectionEvent {
       : assert(items != null), super([items]);
   @override
   String toString() => 'CommentSectionLoadedEvent';
+  List<Object> get props => [items];
 }
 
 class CommentSectionFetchEvent extends CommentSectionEvent {
   CommentSectionFetchEvent();
   @override
   String toString() => 'CommentSectionFetchEvent';
+  List<Object> get props => null;
 }
 
 class CommentSectionAddCommentEvent extends CommentSectionEvent {
   CommentSectionAddCommentEvent();
   @override
   String toString() => 'CommentSectionAddCommentEvent';
+  List<Object> get props => null;
 }
 
 
@@ -45,6 +48,7 @@ class CommentSectionWaitingState extends CommentSectionState {
   CommentSectionWaitingState();
   @override
   String toString() => 'CommentSectionWaitingState';
+  List<Object> get props => null;
 }
 
 
@@ -54,6 +58,7 @@ class CommentSectionLoadedState extends CommentSectionState {
       :  assert(items != null), super(items);
   @override
   String toString() => 'CommentSectionLoadedState';
+  List<Object> get props => [items];
 }
 
 class CommentSectionFailState extends CommentSectionState {
@@ -62,12 +67,14 @@ class CommentSectionFailState extends CommentSectionState {
       :  assert(error != null), super([error]);
   @override
   String toString() => 'CommentSectionFailState';
+  List<Object> get props => [error];
 }
 
 class CommentSectionInitialState extends CommentSectionState {
   CommentSectionInitialState();
   @override
   String toString() => 'CommentSectionInitialState';
+  List<Object> get props => null;
 }
 
 
@@ -142,32 +149,38 @@ abstract class CommentWriterState extends HState {
 
 class CommentWriterSendEvent extends CommentWriterEvent {
   CommentWriterSendEvent();
+  List<Object> get props => null;
 }
 
 class CommentWriterUpdateContentEvent extends CommentWriterEvent {
   String content;
-  CommentWriterUpdateContentEvent({@required String this.content}): assert(content != null), super([content]){
+  CommentWriterUpdateContentEvent({@required String this.content}): assert(content != null), super([content]);
 
-  }
+  List<Object> get props => [content];
 }
 
 class CommentWriterFineEvent extends CommentWriterEvent {
+  List<Object> get props => null;
 }
 
 
 class CommentWriterEmptyState extends CommentWriterState {
   CommentWriterEmptyState();
+  List<Object> get props => null;
 }
 
 class CommentWriterFineState extends CommentWriterState {
+  List<Object> get props => null;
 }
 
 class CommentWriterSentState extends CommentWriterState {
   CommentWriterSentState();
+  List<Object> get props => null;
 }
 
 class CommentWriterErrorState extends CommentWriterState {
   CommentWriterErrorState();
+  List<Object> get props => null;
 }
 
 

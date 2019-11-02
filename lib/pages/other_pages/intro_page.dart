@@ -347,7 +347,7 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
                       padding: const EdgeInsets.all(8.0),
                       child: RaisedButton(child: Text(locText(context, key: "create_group").toUpperCase()), onPressed: () async {
                         bool success = await showCreateGroupDialog(context);
-                        if(success){
+                        if(success != null && success){
                           Toast.show(locText(context, key: "group_created"), context, duration: 2);
                           nextPage();
                         }

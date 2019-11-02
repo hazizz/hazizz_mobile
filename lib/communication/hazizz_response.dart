@@ -4,9 +4,12 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:meta/meta.dart';
+import 'package:mobile/blocs/flush_bloc.dart';
 import 'package:mobile/blocs/kreta/kreta_status_bloc.dart';
 import 'package:mobile/blocs/kreta/selected_session_bloc.dart';
+import 'package:mobile/blocs/kreta/sessions_bloc.dart' as prefix0;
 import 'package:mobile/communication/pojos/PojoError.dart';
+import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/custom_exception.dart';
@@ -94,6 +97,7 @@ class HazizzResponse{
         }
         else if(pojoError.errorCode == 138){
           KretaStatusBloc().dispatch(KretaStatusUnavailableEvent());
+          flushBloc.dispatch(FlushKretaUnavailableEvent());
         }
         else if(pojoError.errorCode == 19) { // to many requests
           HazizzLogger.printLog("Too many requests");
@@ -135,7 +139,19 @@ class HazizzResponse{
         }else if(pojoError.errorCode == 13 || pojoError.errorCode == 14 ||
             pojoError.errorCode == 15) {
           // navigate to login/register page
-        }else if(pojoError.errorCode == 136 || pojoError.errorCode == 132 || pojoError.errorCode == 130){
+        }else if(pojoError.errorCode == 132 && !(request is KretaAuthenticateSession)){
+         // SelectedSessionBloc().dispatch(SelectedSessionSetEvent(null));
+          Crashlytics().recordError(CustomException("Tried authenticating a non existing session"), StackTrace.current, context: "Session is null");
+          // TODO handle this
+          HazizzResponse hazizzResponse = await RequestSender().getResponse(KretaCreateSession(b_username: SelectedSessionBloc().selectedSession.username, b_password: SelectedSessionBloc().selectedSession.password, b_url: SelectedSessionBloc().selectedSession.url));
+          if(hazizzResponse.isSuccessful){
+            PojoSession newSession = hazizzResponse.convertedData;
+            SelectedSessionBloc().dispatch(SelectedSessionSetEvent(newSession));
+          }else{
+            Crashlytics().recordError(CustomException("Session creation failed. ErrorCode: ${hazizzResponse.pojoError?.errorCode}"), StackTrace.current, context: "Session creation failed");
+          }
+        }
+        else if(pojoError.errorCode == 136 || pojoError.errorCode == 132 || pojoError.errorCode == 130){
           SelectedSessionBloc().dispatch(SelectedSessionInactiveEvent());
         }
         HazizzLogger.printLog("log: response error: ${pojoError.toString()}");
@@ -147,7 +163,8 @@ class HazizzResponse{
       }
     }else{
       if(dioError == noConnectionError){
-
+        print("No connection error fired");
+        flushBloc.dispatch(FlushNoConnectionEvent());
       }
     }
   }

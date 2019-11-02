@@ -96,7 +96,7 @@ class _SubjectEditorDialog extends State<SubjectEditorDialog> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Text("felíratkozás alapú: ", style: TextStyle(fontSize: 19),),
+                            Text(locText(context, key: "subscription_based"), style: TextStyle(fontSize: 19),),
                             Transform.scale(scale: 1.3,
                               child: Checkbox(
                                 value: isSubscriberOnly,

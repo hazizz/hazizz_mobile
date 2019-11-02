@@ -34,6 +34,7 @@ class TasksFetchEvent extends TasksEvent {
   }
   @override
   String toString() => 'TasksFetchEvent';
+  List<Object> get props => null;
 }
 
 class TasksRemoveItemEvent extends TasksEvent {
@@ -46,6 +47,7 @@ class TasksRemoveItemEvent extends TasksEvent {
   }
   @override
   String toString() => 'TasksRemoveItemEvent';
+  List<Object> get props => [mapKey, index, DateTime.now()];
 }
 //endregion
 
@@ -57,11 +59,13 @@ abstract class TasksState extends HState {
 class TasksInitialState extends TasksState {
   @override
   String toString() => 'TasksInitialState';
+  List<Object> get props => null;
 }
 
 class TasksWaitingState extends TasksState {
   @override
   String toString() => 'TasksWaitingState';
+  List<Object> get props => null;
 }
 
 
@@ -72,6 +76,7 @@ class TasksLoadedState extends TasksState {
   TasksLoadedState(this.tasks) : assert(tasks!= null), super([tasks, DateTime.now()]);
   @override
   String toString() => 'TasksLoadedState';
+  List<Object> get props => [tasks, DateTime.now()];
 }
 
 class TasksLoadedCacheState extends TasksState {
@@ -80,6 +85,7 @@ class TasksLoadedCacheState extends TasksState {
   TasksLoadedCacheState(this.tasks) : assert(tasks!= null), super([tasks]);
   @override
   String toString() => 'TasksLoadedCacheState';
+  List<Object> get props => [tasks];
 }
 
 class TasksErrorState extends TasksState {
@@ -88,6 +94,7 @@ class TasksErrorState extends TasksState {
 
   @override
   String toString() => 'TasksErrorState';
+  List<Object> get props => [hazizzResponse];
 }
 
 

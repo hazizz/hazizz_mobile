@@ -7,7 +7,7 @@ import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/listItems/task_header_item_widget.dart';
 import 'package:mobile/listItems/task_item_widget.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
-import 'package:sticky_header_list/sticky_header_list.dart';
+
 
 import 'package:sticky_headers/sticky_headers.dart';
 
@@ -48,7 +48,7 @@ class _TasksTomorrowPage extends State<TasksTomorrowPage> with SingleTickerProvi
     HazizzLogger.printLog("in tomorrow task page");
 
     if(widget.tasksBloc.currentState is ResponseError) {
-    //  widget.tasksBloc.dispatch(FetchData());
+    //  widget.tasksBloc.add(FetchData());
     }
     //   widget.tasksBloc.fetchMyTasks();
     super.initState();
@@ -106,30 +106,6 @@ class _TasksTomorrowPage extends State<TasksTomorrowPage> with SingleTickerProvi
                           }
                         }
                     );
-
-
-
-                  return new StickyList.builder(
-                      itemCount: tasks.length,
-                      builder: (BuildContext context, int index) {
-                        if (index == 0 || tasks[index].dueDate
-                            .difference(tasks[index - 1].dueDate)
-                            .inDays > 0) {
-                          return new HeaderRow(
-                              child: Column(
-                                  children: [
-                                    TaskHeaderItemWidget(dateTime: tasks[index].dueDate),
-                                    TaskItemWidget(originalPojoTask: tasks[index])
-                                  ]
-                              ));
-                        } else {
-                          return RegularRow(child: TaskItemWidget(originalPojoTask: tasks[index]),
-                          );
-                        }
-                      }
-                  );
-
-
 
                 } else if (state is TasksTomorrowInitialState) {
                   return Container();

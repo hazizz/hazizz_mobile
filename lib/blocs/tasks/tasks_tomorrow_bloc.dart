@@ -24,12 +24,14 @@ class TasksTomorrowLoadedEvent extends TasksTomorrowEvent {
       : assert(items != null), super([items]);
   @override
   String toString() => 'TasksTomorrowLoadedEvent';
+  List<Object> get props => [items];
 }
 
 class TasksTomorrowFetchEvent extends TasksTomorrowEvent {
   TasksTomorrowFetchEvent();
   @override
   String toString() => 'TasksTomorrowFetchEvent';
+  List<Object> get props => null;
 }
 
 
@@ -38,6 +40,7 @@ class TasksTomorrowWaitingState extends TasksTomorrowState {
   TasksTomorrowWaitingState();
   @override
   String toString() => 'TasksTomorrowWaitingState';
+  List<Object> get props => null;
 }
 
 
@@ -47,6 +50,7 @@ class TasksTomorrowLoadedState extends TasksTomorrowState {
       :  assert(items != null), super([items]);
   @override
   String toString() => 'TasksTomorrowLoadedState';
+  List<Object> get props => [items];
 }
 
 class TasksTomorrowFailState extends TasksTomorrowState {
@@ -55,12 +59,14 @@ class TasksTomorrowFailState extends TasksTomorrowState {
       :  assert(error != null), super([error]);
   @override
   String toString() => 'TasksTomorrowFailState';
+  List<Object> get props => [error];
 }
 
 class TasksTomorrowInitialState extends TasksTomorrowState {
   TasksTomorrowInitialState();
   @override
   String toString() => 'TasksTomorrowInitialState';
+  List<Object> get props => null;
 }
 
 

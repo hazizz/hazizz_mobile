@@ -292,6 +292,7 @@ class _GroupTasksPage extends State<GroupTasksPage> with AutomaticKeepAliveClien
                       //return Center(child: Text("Loading Data"));
                       if(state.hazizzResponse.dioError == noConnectionError){
                         WidgetsBinding.instance.addPostFrameCallback((_) {
+                          print("boi: no internetr");
                           showNoConnectionFlushBar(context);
                         });
                       }else{
@@ -397,7 +398,7 @@ class _GroupTasksPage extends State<GroupTasksPage> with AutomaticKeepAliveClien
 
                   ],
                 ),
-                onRefresh: () async => groupTasksBloc.dispatch(FetchData()) //await getData()
+                onRefresh: () async => groupTasksBloc.add(FetchData()) //await getData()
             ),
 
     );*/

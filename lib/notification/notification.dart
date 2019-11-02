@@ -6,7 +6,7 @@ import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:workmanager/workmanager.dart';
+//import 'package:workmanager/workmanager.dart';
 
 import 'package:mobile/custom/hazizz_time_of_day.dart';
 import 'package:mobile/communication/request_sender.dart';
@@ -22,7 +22,7 @@ Future callbackDispatcher2() async {
   await HazizzNotification.showHazizzNotification();
 
 }
-
+/*
 void callbackDispatcher() {
   Workmanager.executeTask((backgroundTask)  async {
     HazizzLogger.printLog("work manager: fired");
@@ -30,13 +30,11 @@ void callbackDispatcher() {
     HazizzLogger.printLog("work manager: fired2");
     return Future.value(true);
   });
-}
+}*/
 
 class HazizzNotification{
 
-
   static const int dailyTaskNotificationId = 1;
-
 
 
   static final String tasksTomorrowChannelId = tasksTomorrowNotificationId.toString();
@@ -255,7 +253,30 @@ class HazizzNotification{
   static Future<bool> getReceiveNotification() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     bool receive = sp.getBool(key_receiveNotification);
-    return receive == null ? true : receive;
+    return receive == null ? false : receive;
+  }
+
+
+  static Future<void> showNotif(String title, String body) async {
+    final androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      tasksTomorrowChannelId, "asd", "sad",
+      importance: Importance.Max,
+      priority: Priority.High,
+      //  color: HazizzTheme.blue,
+      //  ledColor: HazizzTheme.blue,
+      // icon: "ic_launcher_foreground",
+      // ticker: 'ticker'
+    );
+    final iOSPlatformChannelSpecifics = IOSNotificationDetails();
+    final platformChannelSpecifics = NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+
+    await flutterLocalNotificationsPlugin.show(
+        0, title, body,
+    platformChannelSpecifics,
+    payload: "paylod"
+    );
+
   }
 
 }

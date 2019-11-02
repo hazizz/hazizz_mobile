@@ -52,7 +52,7 @@ android {
 
 
     defaultConfig {
-
+        resConfigs "en", "hu"
 
         /*
         if(buildTypes == release){
@@ -101,9 +101,13 @@ android {
             }
             */
             signingConfig signingConfigs.release
+
+            minifyEnabled true
+            useProguard true
+
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
 
     /*
     buildTypes {
@@ -125,7 +129,6 @@ flutter {
 }
 
 
-
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     testImplementation 'junit:junit:4.12'
@@ -134,19 +137,15 @@ dependencies {
 
     implementation 'com.android.support:multidex:1.0.3'
 
-
-
-
     // Check for v11.4.2 or higher
     implementation 'com.google.firebase:firebase-core:17.0.1'
     // Add dependency
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
     implementation "com.google.gms:google-services:4.2.0"
     implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
+
+
 }
-
-
-
 
 configurations.all {
 
@@ -164,6 +163,5 @@ configurations.all {
 
 apply plugin: 'io.fabric'
 apply plugin: 'com.google.gms.google-services'
-
 
 

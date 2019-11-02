@@ -51,7 +51,7 @@ class _RegistrationWidget extends State<RegistrationWidget> with SingleTickerPro
     );
     _passwordTextEditingController.addListener(
         (){
-          // registrationBlocs.usernameBloc.dispatch(TextFormValidate(text: _usernameTextEditingController.text));
+          // registrationBlocs.usernameBloc.add(TextFormValidate(text: _usernameTextEditingController.text));
         }
     );
     super.initState();

@@ -28,6 +28,7 @@ class InitializeTaskCreateEvent extends TaskCreateEvent {
   InitializeTaskCreateEvent({this.group}) :   super([group]);
   @override
   String toString() => 'InitializeTaskCreateState';
+  List<Object> get props => [group];
 }
 
 //endregion
@@ -44,6 +45,7 @@ class InitializedTaskCreateState extends TaskCreateState {
   InitializedTaskCreateState({this.group}) : super([group]);
 
   String toString() => 'InitializeTaskEditState';
+  List<Object> get props => [group];
 }
 
 
@@ -123,7 +125,7 @@ class TaskCreateBloc extends TaskMakerBloc {
           subjectId = subjectState.item.id;
         }else{
           if(groupId != 0){
-            HazizzLogger.printLog("log: subjectItemPickerBloc.dispatch(NotPickedEvent());");
+            HazizzLogger.printLog("log: subjectItemPickerBloc.add(NotPickedEvent());");
 
             subjectItemPickerBloc.dispatch(NotPickedEvent());
             missingInfo = true;
@@ -144,7 +146,7 @@ class TaskCreateBloc extends TaskMakerBloc {
             HazizzLogger.printLog("log: lulu0");
           } else {
             HazizzLogger.printLog("log: lulu1");
-            groupItemPickerBloc.dispatch(NotPickedEvent());
+            groupItemPickerBloc.add(NotPickedEvent());
             HazizzLogger.printLog("log: lulu2");
             missingInfo = true;
           }

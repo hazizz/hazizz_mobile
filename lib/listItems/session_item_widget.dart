@@ -50,29 +50,27 @@ class _SessionItemWidget extends State<SessionItemWidget>{
   @override
   Widget build(BuildContext context) {
 
-    Color backgroundColor = Theme.of(context).backgroundColor;
-
-
     const String value_remove = "remove";
-    const String value_select = "select";
-
-
-    return Card(
+    return GestureDetector(
+      onTap: () async {
+        await showKretaProfileDialog(context, widget.session);
+      },
+      child: Card(
       // borderOnForeground: true,
        // color: backgroundColor,
         clipBehavior: Clip.antiAliasWithSaveLayer,
         elevation: 30,
-        child: InkWell(
-            onTap: () {
 
-            },
-            child: Column(
+        child: Column(
                 children: [
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Text(widget.session.username),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 4, top: 2),
+                        child: Text(widget.session.username, style: TextStyle(fontSize: 16)),
+                      ),
                       Container(
                         // color: PojoType.getColor(widget.pojoTask.type),
                         decoration: BoxDecoration(
@@ -81,7 +79,7 @@ class _SessionItemWidget extends State<SessionItemWidget>{
                         ),
                         child: Padding(
                           padding: const EdgeInsets.only(left: 4, top: 4, right: 8, bottom: 6),
-                          child: Text(widget.session.status),
+                          child: Text(widget.session.status, style: TextStyle(fontSize: 14)),
                         )
                       ),
                     ],
@@ -89,8 +87,12 @@ class _SessionItemWidget extends State<SessionItemWidget>{
                   Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
+
+                        Padding(
+                          padding: const EdgeInsets.only(left: 4, bottom: 2),
+                          child: Text(widget.session.url, style: TextStyle(fontSize: 14),),
+                        ),
                         Spacer(),
-                        Text(widget.session.url),
                         PopupMenuButton(
                           icon: Icon(FontAwesomeIcons.ellipsisV, size: 20,),
                           onSelected: (value) async {
@@ -101,36 +103,32 @@ class _SessionItemWidget extends State<SessionItemWidget>{
                               if(hazizzResponse.isSuccessful){
                                 SessionsBloc().dispatch(FetchData());
                               }
-                             // ViewTaskBloc().commentBlocs.commentSectionBloc.dispatch(CommentSectionFetchEvent());
-                            }else if(value == value_select){
+                             // ViewTaskBloc().commentBlocs.commentSectionBloc.add(CommentSectionFetchEvent());
+                            }/*else if(value == value_select){
 
                               if(widget.session.status != "ACTIVE"){
                                 if(await showDialogSessionReauth(context)){
-
                                   WidgetsBinding.instance.addPostFrameCallback((_) =>
                                       Navigator.pushNamed(context, "/kreta/login/auth", arguments: widget.session)
                                   );
-                                 // Navigator.pushReplacementNamed(context, "routeName", arguments: List());
                                 }else{
-
                                 }
                               }else{
-                                SelectedSessionBloc().dispatch(SelectedSessionSetEvent(widget.session));
+                                SelectedSessionBloc().add(SelectedSessionSetEvent(widget.session));
                               }
-
-
                             }
+                            */
                           },
                           itemBuilder: (BuildContext context) {
                             return [
-                              PopupMenuItem(
+                              /*PopupMenuItem(
                                   value: value_select,
                                   child: GestureDetector(
                                     child: Text(locText(context, key: "select"),
                                       //   style: TextStyle(color: HazizzTheme.red),
                                     ),
                                   )
-                              ),
+                              ),*/
                               PopupMenuItem(
                                   value: value_remove,
                                   child: GestureDetector(
@@ -147,7 +145,7 @@ class _SessionItemWidget extends State<SessionItemWidget>{
                   )
                 ]
             )
-        )
+      ),
     );
   }
 }

@@ -29,11 +29,13 @@ class RegisterButtonPressed extends RegistrationEvent {
     @required this.username,
     @required this.email,
     @required this.password,
-  }) : super([username, email, password]);
+  });
 
   @override
   String toString() =>
       'RegisterButtonPressed { username: $username, password: $password }';
+  @override
+  List<Object> get props => ([username, email, password]);
 }
 //endregion
 
@@ -45,17 +47,23 @@ abstract class RegistrationState extends HState {
 class RegisterInitial extends RegistrationState {
   @override
   String toString() => 'RegisterInitial';
+  @override
+  List<Object> get props => null;
 }
 
 class RegisterLoading extends RegistrationState {
   @override
   String toString() => 'RegisterLoading';
+  @override
+  List<Object> get props => null;
 }
 
 class RegisterSuccessState extends RegistrationState {
 
   @override
   String toString() => 'RegisterSuccessState';
+  @override
+  List<Object> get props => null;
 }
 
 
@@ -116,6 +124,8 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
 class TextFormUsernameTakenEvent extends HFormEvent {
   @override
   String toString() => 'TextFormUsernameTakenEvent';
+  @override
+  List<Object> get props => null;
 }
 //endregion
 
@@ -123,10 +133,14 @@ class TextFormUsernameTakenEvent extends HFormEvent {
 class TextFormUsernameTakenState extends HFormState {
   @override
   String toString() => 'TextFormUsernameTakenState';
+  @override
+  List<Object> get props => null;
 }
 class TextFormEmailInvalidState extends HFormState {
   @override
   String toString() => 'TextFormEmailInvalid';
+  @override
+  List<Object> get props => null;
 }
 //endregion
 

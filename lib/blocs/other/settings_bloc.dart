@@ -11,6 +11,8 @@ class PickedStartPageEvent extends ItemListEvent {
       : assert(item != null), super([item]);
   @override
   String toString() => 'PickedStartPageEvent';
+  @override
+  List<Object> get props => [item];
 }
 
 class StartPageLoadDataEvent extends ItemListEvent {
@@ -18,6 +20,8 @@ class StartPageLoadDataEvent extends ItemListEvent {
 
   @override
   String toString() => 'StartPageLoadDataEvent';
+  @override
+  List<Object> get props => null;
 }
 
 //endregion
@@ -29,6 +33,8 @@ class PickedStartPageState extends ItemListState {
       : assert(item != null), super([item]);
   @override
   String toString() => 'PickedStartPageState';
+  @override
+  List<Object> get props => [item];
 }
 //endregion
 

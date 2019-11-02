@@ -4,15 +4,18 @@ import io.flutter.app.FlutterApplication;
 import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugin.common.PluginRegistry.PluginRegistrantCallback;
 import io.flutter.plugins.GeneratedPluginRegistrant;
-import be.tramckrijte.workmanager.WorkmanagerPlugin;
+//import be.tramckrijte.workmanager.WorkmanagerPlugin;
 import io.flutter.plugins.androidalarmmanager.AlarmService;
 
+import io.flutter.plugins.firebasemessaging.FlutterFirebaseMessagingService;
 
 public class Application extends FlutterApplication implements PluginRegistrantCallback {
     @Override
     public void onCreate() {
         super.onCreate();
         AlarmService.setPluginRegistrant(this);
+
+        FlutterFirebaseMessagingService.setPluginRegistrant(this);
       //  WorkmanagerPlugin.setPluginRegistrantCallback(this);
 
      //  WorkmanagerPlugin.setPluginRegistrantCallback(this)

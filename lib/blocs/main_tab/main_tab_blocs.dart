@@ -2,29 +2,21 @@ import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
-import 'package:intl/intl.dart';
 import 'package:mobile/communication/connection.dart';
 import 'package:mobile/communication/custom_response_errors.dart';
-//import 'package:flutter/material.dart';
-import 'package:mobile/communication/pojos/PojoClass.dart';
 import 'package:mobile/communication/pojos/PojoGrade.dart';
 import 'package:mobile/communication/pojos/PojoGrades.dart';
-import 'package:mobile/communication/pojos/PojoSchedules.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
-import 'package:mobile/dummy/schedule_dummy.dart';
-import 'package:mobile/managers/preference_services.dart';
-
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/communication/hazizz_response.dart';
-import 'package:mobile/custom/hazizz_time_of_day.dart';
 import 'package:mobile/blocs/kreta/grades_bloc.dart';
 import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/response_states.dart';
 import 'package:mobile/blocs/kreta/schedule_bloc.dart';
-import 'package:mobile/blocs/kreta/schedule_event_bloc.dart';
 import 'package:mobile/blocs/tasks/tasks_bloc.dart';
+import 'package:mobile/managers/preference_services.dart';
 import 'package:mobile/storage/caches/data_cache.dart';
 
 class MainTasksBloc extends Bloc<HEvent, HState> {
@@ -180,7 +172,7 @@ class MainSchedulesBloc extends Bloc<HEvent, HState> {
 
             HazizzLogger.printLog("log: opsie: 0");
 
-           // scheduleEventBloc.dispatch(ScheduleEventUpdateClassesEvent());
+           // scheduleEventBloc.add(ScheduleEventUpdateClassesEvent());
 
 
             HazizzLogger.printLog("log: opsie: 1");
@@ -209,7 +201,7 @@ class MainSchedulesBloc extends Bloc<HEvent, HState> {
             yield ResponseError(errorResponse: hazizzResponse);
 
             Connection.addConnectionOnlineListener((){
-              this.dispatch(FetchData());
+              this.add(FetchData());
             },
             "schedule_fetch"
             );
@@ -217,7 +209,7 @@ class MainSchedulesBloc extends Bloc<HEvent, HState> {
           }else if(hazizzResponse.dioError.type == DioErrorType.CONNECT_TIMEOUT
                 || hazizzResponse.dioError.type == DioErrorType.RECEIVE_TIMEOUT) {
             HazizzLogger.printLog("log: noConnectionError22");
-            this.dispatch(FetchData());
+            this.add(FetchData());
           }else{
             yield ResponseError(errorResponse: hazizzResponse);
 
@@ -409,7 +401,7 @@ class MainTabBlocs{
   }
   MainTabBlocs._internal();
 
-  int initialIndex = StartPageService.tasksPage;
+  int initialIndex = PreferenceService.tasksPage;
 
   final TasksBloc tasksBloc = new TasksBloc();
   //final MainSchedulesBloc schedulesBloc = new MainSchedulesBloc();
@@ -425,7 +417,7 @@ class MainTabBlocs{
 
   void initialize()async{
     fetchAll();
-    initialIndex = await StartPageService.getStartPageIndex();
+    initialIndex = await PreferenceService.getStartPageIndex();
   }
 }
 

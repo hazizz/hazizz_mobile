@@ -172,16 +172,19 @@ class MyPermissionSetEvent extends MyPermissionEvent {
   }) : super([permission]);
 
   @override String toString() => 'MyPermissionSetEvent';
+  List<Object> get props => [permission];
 }
 
 class MyPermissionResetEvent extends MyPermissionEvent {
 
   @override String toString() => 'MyPermissionResetEvent';
+  List<Object> get props => null;
 }
 
 
 class MyPermissionInitialState extends MyPermissionState {
   @override String toString() => 'MyPermissionInitialState';
+  List<Object> get props => null;
 }
 
 class MyPermissionSetState extends MyPermissionState {
@@ -193,6 +196,7 @@ class MyPermissionSetState extends MyPermissionState {
   }) : super([permission]);
 
   @override String toString() => 'MyPermissionSetState';
+  List<Object> get props => [permission];
 }
 
 

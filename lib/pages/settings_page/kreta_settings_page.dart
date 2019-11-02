@@ -60,7 +60,7 @@ class _KretaSettingsPage extends State<KretaSettingsPage> with AutomaticKeepAliv
 
   @override
   void initState() {
-    // widget.myGroupsBloc.dispatch(FetchData());
+    // widget.myGroupsBloc.add(FetchData());
 
     KretaSessionManager.isRememberPassword().then((value){
       setState(() {

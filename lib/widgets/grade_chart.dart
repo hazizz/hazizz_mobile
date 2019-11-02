@@ -35,6 +35,80 @@ class _GradesChart extends State<GradesChart> with TickerProviderStateMixin , Au
 
   @override
   Widget build(BuildContext context) {
+
+    int toInt(String s){
+      try{
+        return int.parse(s);
+      }catch(e){
+        return null;
+      }
+    }
+
+    List<DateTime> dates;
+    List<int> gradePossibilities = [1, 2, 3, 4, 5];
+
+    Map<int, List<PojoGrade>> subject = {1 : List(), 2 : List(), 3 : List(), 4 : List(), 5 : List(), };
+
+    int gradesCount = 0;
+
+    for(PojoGrade g in widget.grades){
+      if(toInt(g.grade) != null){
+        if(subject[toInt(g.grade)] == null){
+          subject[toInt(g.grade)] = List();
+        }
+        subject[toInt(g.grade)].add(g);
+        gradesCount++;
+      }
+    }
+
+    return FlChart(
+
+      chart: PieChart(
+
+        PieChartData(
+
+          sections: [
+            PieChartSectionData(
+              value: subject[1].length / gradesCount*100,
+              color: Colors.white,
+              radius: 30,
+              showTitle: true,
+              title: "1",
+            ),
+            PieChartSectionData(
+              value: subject[2].length / gradesCount*100,
+              color: Colors.blue,
+              radius: 30,
+              showTitle: true,
+              title: "2",
+            ),
+            PieChartSectionData(
+              value: subject[3].length / gradesCount*100,
+              color: Colors.red,
+              radius: 30,
+              showTitle: true,
+              title: "3",
+
+            ),
+            PieChartSectionData(
+              value: subject[4].length / gradesCount*100,
+              color: Colors.yellow,
+              radius: 30,
+              showTitle: true,
+              title: "4",
+            ),
+            PieChartSectionData(
+              value: subject[5].length / gradesCount*100,
+              color: Colors.green,
+              radius: 30,
+              showTitle: true,
+              title: "5",
+            )
+          ]
+        )
+      ),
+    );
+
     return FlChart(
       chart: LineChart(
         LineChartData(

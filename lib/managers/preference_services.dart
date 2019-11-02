@@ -9,9 +9,11 @@ class StartPageItem{
   StartPageItem(this.name, this.index);
 }
 
-class StartPageService{
+class PreferenceService{
 
-  static const String _key = "key_startPage";
+  static const String _key_startPage = "key_startPage";
+
+  static const String _key_gradeRectForm = "_key_gradeRectForm";
 
   static const int tasksPage = 0;
   static const int schedulePage = 1;
@@ -27,7 +29,7 @@ class StartPageService{
 
   static Future<int> getStartPageIndex()async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String str = prefs.get(_key);
+    String str = prefs.get(_key_startPage);
     if(str != null){
       return int.parse(str);
     }
@@ -35,6 +37,16 @@ class StartPageService{
   }
   static Future<void> setStartPageIndex(int startPage)async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(_key, startPage.toString());
+    prefs.setString(_key_startPage, startPage.toString());
+  }
+
+  static Future<bool> getGradeRectForm()async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool yes = prefs.get(_key_gradeRectForm);
+    return yes == null ? false : yes;
+  }
+  static Future<void> setGradeRectForm(bool gradeRectForm)async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool(_key_gradeRectForm, gradeRectForm);
   }
 }

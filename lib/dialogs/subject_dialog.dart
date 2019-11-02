@@ -63,29 +63,26 @@ class _SubjectDialog extends State<SubjectDialog> {
           color: Theme.of(context).dialogBackgroundColor,
           child: Stack(
             children: <Widget>[
-              //  Container(color: Theme.of(context).dialogBackgroundColor,),
               Container(
                  height: 52.0,
                   width: 2000,
                   color: Theme.of(context).primaryColor
 
               ),
-
-              Padding(
-                padding: const EdgeInsets.only(right: 40.0, left: 0),
-                child: Center(
-                  child: AutoSizeText(
-                    subject.name,
-                    style: TextStyle(fontSize: 36),
-                    minFontSize: 20,
-                    maxFontSize: 360,
-                    maxLines: 1,
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 40.0, left: 0),
+                  child: Center(
+                    child: AutoSizeText(
+                      subject.name,
+                      style: TextStyle(fontSize: 36),
+                      minFontSize: 20,
+                      maxFontSize: 360,
+                      maxLines: 1,
+                    ),
                   ),
                 ),
               ),
-
-
-
               Positioned(
                 right: 0,
                 top: 0,
@@ -144,7 +141,7 @@ class _SubjectDialog extends State<SubjectDialog> {
                           PojoSubject success = await showEditSubjectDialog(context, subject: widget.subject);
                           if(success != null){
                            // showDeleteWasSuccessfulFlushBar(context, what: "${widget.subject.name} ${locText(context, key: "subject")}");
-                           // GroupBlocs().groupSubjectsBloc.dispatch(FetchData());
+                           // GroupBlocs().groupSubjectsBloc.add(FetchData());
                           }
                         }
                       },

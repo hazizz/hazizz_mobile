@@ -67,20 +67,24 @@ class ProfilePictureEditorChangedEvent extends ProfilePictureEditorEvent {
       : assert(imageBytes != null), super([imageBytes]);
   @override
   String toString() => 'ProfilePictureEditorChangedEvent';
+  List<Object> get props => [imageBytes];
 }
 
 class ProfilePictureEditorSavedEvent extends ProfilePictureEditorEvent {
   @override
   String toString() => 'ProfilePictureEditorSavedEvent';
+  List<Object> get props => null;
 }
 
 class ProfilePictureEditorLoadFromCacheEvent extends ProfilePictureEditorEvent{
   @override
   String toString() => 'ProfilePictureEditorLoadFromCacheEvent';
+  List<Object> get props => null;
 }
 
 class ProfilePictureEditorFetchEvent extends ProfilePictureEditorEvent {
   @override String toString() => 'ProfilePictureEditorFetchEvent';
+  List<Object> get props => null;
 }
 
 
@@ -94,11 +98,13 @@ class ProfilePictureEditorChangedState extends ProfilePictureEditorState {
       : assert(imageBytes != null), super([imageBytes]);
   @override
   String toString() => 'ProfilePictureEditorChangedState';
+  List<Object> get props => [imageBytes];
 }
 
 class ProfilePictureEditorWaitingState extends ProfilePictureEditorState {
   @override
   String toString() => 'ProfilePictureEditorWaitingState';
+  List<Object> get props => null;
 }
 
 class ProfilePictureEditorFineState extends ProfilePictureEditorState {
@@ -108,10 +114,12 @@ class ProfilePictureEditorFineState extends ProfilePictureEditorState {
       : assert(imageBytes != null), super([imageBytes]);
   @override
   String toString() => 'ProfilePictureEditorFineState';
+  List<Object> get props => [imageBytes];
 }
 
 class ProfilePictureEditorInitialState extends ProfilePictureEditorState {
   @override String toString() => 'ProfilePictureEditorInitialState';
+  List<Object> get props => null;
 }
 
 
@@ -221,11 +229,13 @@ abstract class DisplayNameEvent extends HEvent {
 class DisplayNameLoadFromCacheEvent extends DisplayNameEvent {
   @override
   String toString() => 'DisplayNameLoadFromCacheEvent';
+  List<Object> get props => null;
 }
 
 class DisplayNameSendEvent extends DisplayNameEvent {
   @override
   String toString() => 'DisplayNameSendEvent';
+  List<Object> get props => null;
 }
 
 class DisplayNameLoadedFromCacheState extends DisplayNameState {
@@ -233,10 +243,12 @@ class DisplayNameLoadedFromCacheState extends DisplayNameState {
   DisplayNameLoadedFromCacheState({@required this.displayName})
       : assert(displayName != null), super([displayName]);
   @override String toString() => 'DisplayNameLoadedFromCacheState';
+  List<Object> get props => [displayName];
 }
 
 class DisplayNameSavedState extends DisplayNameState {
   @override String toString() => 'DisplayNameSavedState';
+  List<Object> get props => null;
 }
 
 class DisplayNameChangedState extends DisplayNameState {
@@ -244,6 +256,7 @@ class DisplayNameChangedState extends DisplayNameState {
   DisplayNameChangedState({@required this.displayName})
       : assert(displayName != null), super([displayName]);
   @override String toString() => 'DisplayNameChangedState';
+  List<Object> get props => [displayName];
 }
 
 class DisplayNameChangedEvent extends DisplayNameEvent {
@@ -251,10 +264,12 @@ class DisplayNameChangedEvent extends DisplayNameEvent {
   DisplayNameChangedEvent({@required this.displayName})
       : assert(displayName != null), super([displayName]);
   @override String toString() => 'DisplayNameChangedEvent';
+  List<Object> get props => [displayName];
 }
 
 class DisplayNameInitialState extends DisplayNameState {
   @override String toString() => 'DisplayNameInitialState';
+  List<Object> get props => null;
 }
 
 

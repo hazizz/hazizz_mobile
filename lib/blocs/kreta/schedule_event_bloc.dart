@@ -32,6 +32,8 @@ class ScheduleEventInitializeState extends ScheduleEventState {
 
   @override
   String toString() => 'ScheduleEventInitializeState';
+  List<Object> get props => null;
+
 }
 
 
@@ -42,6 +44,7 @@ class ScheduleEventFineState extends ScheduleEventState {
 
   @override
   String toString() => 'ScheduleEventFineState';
+  List<Object> get props => [currentEvent];
 }
 
 
@@ -51,6 +54,7 @@ class ScheduleEventTimerFiredEvent extends ScheduleEventEvent {
 
   @override
   String toString() => 'ScheduleEventTimerFiredEvent';
+  List<Object> get props => null;
 }
 
 
@@ -61,6 +65,7 @@ class ScheduleEventUpdateEvent extends ScheduleEventEvent {
 
   @override
   String toString() => 'ScheduleEventUpdateEvent';
+  List<Object> get props => null;
 }
 
 class ScheduleEventNextEvent extends ScheduleEventEvent {
@@ -69,6 +74,7 @@ class ScheduleEventNextEvent extends ScheduleEventEvent {
 
   @override
   String toString() => 'ScheduleEventNextEvent';
+  List<Object> get props => null;
 }
 
 class ScheduleEventNextDayEvent extends ScheduleEventEvent {
@@ -77,6 +83,7 @@ class ScheduleEventNextDayEvent extends ScheduleEventEvent {
 
   @override
   String toString() => 'ScheduleEventNextDayEvent';
+  List<Object> get props => null;
 }
 
 
@@ -87,6 +94,7 @@ class ScheduleEventUpdateClassesEvent extends ScheduleEventEvent {
 
   @override
   String toString() => 'ScheduleEventUpdateClassesEvent';
+  List<Object> get props => null;
 }
 
 //endregion

@@ -10,28 +10,37 @@ import 'package:mobile/blocs/other/response_states.dart';
 //region EditTask events
 abstract class NewGradesEvent extends HEvent {
   NewGradesEvent([List props = const []]) : super(props);
+  @override
+  List<Object> get props => null;
 }
 
 class HasNewGradesEvent extends NewGradesEvent {
 
   @override
   String toString() => 'HasNewGradesEvent';
+  @override
+  List<Object> get props => null;
 }
 class DoesntHaveNewGradesEvent extends NewGradesEvent {
 
   @override
   String toString() => 'DoesntHaveNewGradesEvent';
+  List<Object> get props => null;
 }
 //endregion
 
 abstract class NewGradesState extends HState {
   NewGradesState([List props = const []]) : super(props);
+  @override
+  List<Object> get props => null;
 }
 
 class HasNewGradesState extends NewGradesState {
 
   @override
   String toString() => 'HasNewGradesState';
+  @override
+  List<Object> get props => null;
 }
 class DoesntHaveNewGradesState extends NewGradesState {
 

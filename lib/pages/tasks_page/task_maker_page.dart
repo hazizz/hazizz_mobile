@@ -105,18 +105,18 @@ class _TaskMakerPage extends State<TaskMakerPage> {
       blocs = TaskCreateBloc(group: widget.group);
 
     }else if(widget.mode == TaskMakerMode.edit){
-      blocs =  new TaskEditBloc(taskToEdit: widget.taskToEdit);
+      blocs = new TaskEditBloc(taskToEdit: widget.taskToEdit);
    //   blocs.subjectItemPickerBloc.isLocked = true;
  //     blocs.groupItemPickerBloc.isLocked = true;
 
-    //  blocs.groupItemPickerBloc.dispatch(SetGroupEvent(item: widget.taskToEdit.group));
-    //  blocs.subjectItemPickerBloc.dispatch(SetSubjectEvent(item: widget.taskToEdit.subject));
+    //  blocs.groupItemPickerBloc.add(SetGroupEvent(item: widget.taskToEdit.group));
+    //  blocs.subjectItemPickerBloc.add(SetSubjectEvent(item: widget.taskToEdit.subject));
 
     }else{
       HazizzLogger.printLog("this should not be visible: 542311z8");
     }
 
-  //  blocs.groupItemPickerBloc.dispatch(ItemListLoadData());
+  //  blocs.groupItemPickerBloc.add(ItemListLoadData());
 
     super.initState();
   }
@@ -487,10 +487,12 @@ class _TaskMakerPage extends State<TaskMakerPage> {
           }
 
           return TextFormField(
-            /*
+
+            /*a
+
             onChanged: (dynamic text) {
               HazizzLogger.printLog("change: $text");
-              blocs.descriptionBloc.dispatch(TextFormValidate(text: text));
+              blocs.descriptionBloc.add(TextFormValidate(text: text));
             },
             */
 

@@ -31,6 +31,7 @@ class InitializeTaskEditEvent extends TaskEditEvent {
   InitializeTaskEditEvent({@required this.taskToEdit}) : assert(taskToEdit != null),  super([taskToEdit]);
   @override
   String toString() => 'InitializeTaskEditEvent';
+  List<Object> get props => [taskToEdit];
 }
 
 abstract class TaskEditState extends TaskMakerState {
@@ -42,6 +43,7 @@ class InitializedTaskEditState extends TaskEditState {
   InitializedTaskEditState({@required this.taskToEdit}) : assert(taskToEdit != null),  super([taskToEdit]);
 
   String toString() => 'InitializeTaskEditState';
+  List<Object> get props => [taskToEdit];
 }
 
 //endregion
@@ -73,7 +75,7 @@ class TaskEditBloc extends TaskMakerBloc {
 
 
     deadlineBloc.dispatch(DateTimePickedEvent(dateTime: taskToEdit.dueDate));
-   // taskTagBloc.dispatch(TaskTypePickedEvent(taskToEdit.tags[0]));
+   // taskTagBloc.add(TaskTypePickedEvent(taskToEdit.tags[0]));
 
     for(PojoTag t in taskToEdit.tags){
       taskTagBloc.dispatch(TaskTagAddEvent(t));

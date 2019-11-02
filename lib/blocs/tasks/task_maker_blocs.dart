@@ -101,6 +101,7 @@ class PickedGroupEvent extends ItemListEvent {
       : assert(item != null), super([item]);
   @override
   String toString() => 'PickedGroupEvent';
+  List<Object> get props => [item];
 }
 
 class SetGroupEvent extends ItemListEvent {
@@ -109,6 +110,7 @@ class SetGroupEvent extends ItemListEvent {
       : assert(item != null), super([item]);
   @override
   String toString() => 'SetGroupEvent';
+  List<Object> get props => [item];
 }
 
 
@@ -123,6 +125,7 @@ class PickedGroupState extends ItemListState {
       : assert(item != null), super([item]);
   @override
   String toString() => 'PickedGroupState';
+  List<Object> get props => [item];
 }
 //endregion
 
@@ -204,6 +207,7 @@ class PickedSubjectEvent extends ItemListEvent {
       : assert(item != null), super([item]);
   @override
   String toString() => 'PickedSubjectEvent';
+  List<Object> get props => [item];
 }
 
 
@@ -217,6 +221,7 @@ class SetSubjectEvent extends ItemListEvent {
       : super([item, 5]);
   @override
   String toString() => 'SetSubjectEvent';
+  List<Object> get props => [item];
 }
 
 class SubjectLoadData extends ItemListEvent {
@@ -227,6 +232,7 @@ class SubjectLoadData extends ItemListEvent {
 
   @override
   String toString() => 'SubjectItemListLoadData';
+  List<Object> get props => [groupId];
 }
 
 //endregion
@@ -238,6 +244,7 @@ class PickedSubjectState extends ItemListState {
       : assert(item != null), super([item]);
   @override
   String toString() => 'PickedSubjectState';
+  List<Object> get props => [item];
 }
 //endregion
 
@@ -356,13 +363,15 @@ abstract class TaskTagState extends HState {
 }
 class TaskTagFineState extends TaskTagState {
   final List<PojoTag> tags;
+  DateTime time;
 
  // PojoTag tag;
 
-  TaskTagFineState(this.tags, DateTime time) : assert(tags!= null), super([tags, time]);
+  TaskTagFineState(this.tags, this.time) : assert(tags!= null), super([tags, time]);
 
   @override
   String toString() => 'TaskTagFineState';
+  List<Object> get props => [tags, time];
 }
 //endregion
 
@@ -380,6 +389,7 @@ class TaskTagAddEvent extends TaskTagEvent {
 
   @override
   String toString() => 'TaskTagAddEvent';
+  List<Object> get props => [tag];
 }
 
 class TaskTagRemoveEvent extends TaskTagEvent {
@@ -392,6 +402,7 @@ class TaskTagRemoveEvent extends TaskTagEvent {
 
   @override
   String toString() => 'TaskTagRemoveEvent';
+  List<Object> get props => [tag, index];
 }
 //endregion
 
@@ -439,6 +450,7 @@ abstract class TaskMakerState extends HState {
 class TaskMakerWaitingState extends TaskMakerState {
   @override
   String toString() => 'TaskMakerWaitingState';
+  List<Object> get props => null;
 }
 
 class TaskMakerSuccessfulState extends TaskMakerState {
@@ -447,11 +459,13 @@ class TaskMakerSuccessfulState extends TaskMakerState {
   TaskMakerSuccessfulState(this.task) : assert(task!= null), super([task]);
   @override
   String toString() => 'TaskMakerSuccessfulState';
+  List<Object> get props => [task];
 }
 
 class TaskMakerFailedState extends TaskMakerState {
   @override
   String toString() => 'TaskMakerFailedState';
+  List<Object> get props => null;
 }
 
 
@@ -462,10 +476,12 @@ abstract class TaskMakerEvent extends HEvent {
 class TaskMakerSendEvent extends TaskMakerEvent {
   @override
   String toString() => 'TaskMakerSendEvent';
+  List<Object> get props => null;
 }
 class TaskMakerFailedEvent extends TaskMakerEvent {
   @override
   String toString() => 'TaskMakerFailedEvent';
+  List<Object> get props => null;
 }
 
 

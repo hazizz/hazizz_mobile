@@ -390,6 +390,8 @@
     "users"
     : "Felhasználók",
 
+    "user"
+    : "Felhasználó",
 
     "password"
     : "Jelszó",
@@ -444,6 +446,8 @@
   "remember_kreta_password"
   : "Kréta jelszó megjegyzése",
 
+  "kreta_grade_statistics"
+  : "Kréta jegy statisztikák",
 
     "notification_settings"
     : "Értesítés beállítások",
@@ -639,6 +643,7 @@
 
     "no_comment"
     : "Nincs megjegyzés",
+
 
   "somebodys_comment"
   : "megjegyzésének",
@@ -959,6 +964,9 @@
   "unsubscribed"
   : "Leiratkozva",
 
+  "subscription_based"
+  : "feliratkozás alapú",
+
   "subscribed_to_subject"
   : "{} témára feliratkozva",
 
@@ -1197,7 +1205,7 @@
     : "Értesítés időpont beállítása",
 
     "notif_settings_notify_everyday_tasks"
-    : "Értesítés minden nap a holnapi feladatokról",
+    : "Értesítés minden nap, ha van holnapra feladat",
 
 
     "taskType_1"
@@ -1338,6 +1346,14 @@
     "gradeType_halfYear"
     : "Fél évi",
 
+    "average"
+    : "Átlag",
+
+    "class_average"
+    : "Osztály átlag",
+
+    "difference"
+    : "Különbség",
 
     "thera_schedules"
     : "Théra órák",
@@ -1417,7 +1433,16 @@
   "sign_in_facebook"
   : "Facebook bejelentkezés",
 
-    "days_0" : "Hétfő",
+  "new_features"
+  : "Újdonságok",
+
+  "new_feature_subject_subscribe"
+  : "Lehetőséged van témákra feliratkozni, így csak azokat a témákat fogod látni amik érdekelnek.",
+
+  "new_feature_notifications"
+  : "Mostantól a szerver fogja a holnapi feladat értesítést küldeni. Ezt bekapcsolhatod az értesítés menüpontban",
+
+  "days_0" : "Hétfő",
     "days_1" : "Kedd",
     "days_2" : "Szerda",
     "days_3" : "Csütörtök",

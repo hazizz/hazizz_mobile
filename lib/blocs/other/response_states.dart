@@ -6,12 +6,14 @@ import 'package:mobile/communication/hazizz_response.dart';
 
 abstract class HState extends Equatable {
   static int id = 0;
-  HState([List props = const []]) : super(props); // [Id.get()]
+  HState([List props = const []]); // [Id.get()]
 }
 
 class ResponseEmpty extends HState {
   @override
   String toString() => 'ResponseEmpty';
+  @override
+  List<Object> get props => null;
 }
 
 class ResponseDataLoaded extends HState {
@@ -22,6 +24,8 @@ class ResponseDataLoaded extends HState {
 
   @override
   String toString() => 'ResponseDataLoaded';
+  @override
+  List<Object> get props => [data];
 }
 
 class ResponseDataLoadedFromCache extends HState {
@@ -32,6 +36,8 @@ class ResponseDataLoadedFromCache extends HState {
 
   @override
   String toString() => 'ResponseDataLoadedFromCache';
+  @override
+  List<Object> get props => [data];
 }
 
 class ResponseError extends HState {
@@ -40,9 +46,13 @@ class ResponseError extends HState {
 
   @override
   String toString() => 'ResponseError';
+  @override
+  List<Object> get props => [errorResponse];
 }
 
 class ResponseWaiting extends HState {
   @override
   String toString() => 'ResponseWaiting';
+  @override
+  List<Object> get props => null;
 }

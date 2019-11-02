@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/blocs/kreta/kreta_notes_bloc.dart';
@@ -6,12 +5,12 @@ import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/response_states.dart';
 import 'package:mobile/communication/pojos/PojoKretaNote.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
-import 'package:mobile/widgets/hazizz_back_button.dart';
 
-import 'package:mobile/widgets/note_widget.dart';
+import 'package:mobile/listItems/note_item_widget.dart';
+import 'package:mobile/widgets/hazizz_back_button.dart';
+import 'package:mobile/widgets/hazizz_drawer.dart';
 
 class KretaNotesPage extends StatefulWidget {
-
   @override
   _KretaNotesPage createState() => _KretaNotesPage();
 }
@@ -29,7 +28,7 @@ class _KretaNotesPage extends State<KretaNotesPage> with AutomaticKeepAliveClien
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
+     //   drawer: HazizzDrawer(),
         appBar: AppBar(
           leading: HazizzBackButton(),
           title: Text(locText(context, key: "kreta_notes")),
@@ -40,23 +39,40 @@ class _KretaNotesPage extends State<KretaNotesPage> with AutomaticKeepAliveClien
           },
           child: Stack(
             children: <Widget>[
-
               ListView(),
-              BlocBuilder(
-                bloc: notesBloc,
-                builder: (context, state){
-                  if(state is ResponseDataLoaded){
-                    List<PojoKretaNote> notes = state.data;
-                    return ListView.builder(
-                      itemCount: notes.length,
-                      itemBuilder: (context, index){
-                        return NoteItemWidget(note: notes[index]);
-
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  /* ListView(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    children: <Widget>[
+                      ToggleSessionButton(sessionName: "72154615551",isSelected: false, ),
+                      ToggleSessionButton(sessionName: "72154615551",isSelected: false, ),
+                      ToggleSessionButton(sessionName: "72154615551",isSelected: false, ),
+                      ToggleSessionButton(sessionName: "72154615551",isSelected: false, ),
+                      ToggleSessionButton(sessionName: "72154615551",isSelected: false, ),
+                    ],
+                  ),*/
+                  Expanded(
+                    child: BlocBuilder(
+                      bloc: notesBloc,
+                      builder: (context, state){
+                        if(state is ResponseDataLoaded){
+                          List<PojoKretaNote> notes = state.data;
+                          return ListView.builder(
+                            itemCount: notes.length,
+                            itemBuilder: (context, index){
+                              return NoteItemWidget(note: notes[index]);
+                            },
+                          );
+                        }
+                        return Center(child: CircularProgressIndicator());
                       },
-                    );
-                  }
-                  return Center(child: CircularProgressIndicator());
-                },
+                    ),
+                  )
+                ],
               )
             ],
           ),

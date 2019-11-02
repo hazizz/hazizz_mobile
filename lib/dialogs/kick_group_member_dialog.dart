@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mobile/blocs/group/create_group_bloc.dart';
-import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/pojos/PojoUser.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
-import 'package:mobile/enums/group_types_enum.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/hazizz_response.dart';
@@ -26,26 +20,17 @@ class KickGroupMemberDialog extends StatefulWidget {
 }
 
 class _KickGroupMemberDialog extends State<KickGroupMemberDialog> {
-
-
-
   bool isLoading = false;
-
 
   @override
   void initState() {
-
-
-
     super.initState();
   }
-
 
   final double width = 300;
   final double height = 90;
 
   final double searchBarHeight = 50;
-
 
   @override
   Widget build(BuildContext context) {
@@ -77,19 +62,6 @@ class _KickGroupMemberDialog extends State<KickGroupMemberDialog> {
         actionButtons: Builder(builder: (context){
 
           if(!isLoading){
-            /*
-            if(isMember || someThingWentWrong){
-              return Row(children: <Widget>[
-                FlatButton(
-                  child: Text(locText(context, key: "ok").toUpperCase(),),
-                  onPressed: (){
-                    Navigator.pop(context);
-                  },
-                ),
-              ],);
-            }
-            */
-
             return Row(children: <Widget>[
               FlatButton(
                 child: Text(locText(context, key: "no").toUpperCase(),),

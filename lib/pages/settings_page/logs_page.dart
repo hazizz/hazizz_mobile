@@ -33,7 +33,7 @@ class _LogsPage extends State<LogsPage> with AutomaticKeepAliveClientMixin {
 
   @override
   void initState() {
-    // widget.myGroupsBloc.dispatch(FetchData());
+    // widget.myGroupsBloc.add(FetchData());
     Logcat.execute().then((String l){
       setState(() {
         logs = l;

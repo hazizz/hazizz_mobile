@@ -86,7 +86,7 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
                   padding: const EdgeInsets.only(
                       left: 4, top: 2, right: 8, bottom: 4),
                   child: Text(t.getDisplayName(context),
-                    style: TextStyle(fontSize: 18),),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),),
                 )
             );
             doBreak = true;
@@ -97,7 +97,6 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
         break;
       }
     }
-
     List<Widget> tagWidgets = List();
     for(PojoTag t in tags){
       tagWidgets.add(Container(
@@ -108,36 +107,11 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
         ),
         child: Padding(
           padding: const EdgeInsets.only(top: 2.0, bottom: 2, left: 6, right: 6),
-          child: Text(t.getDisplayName(context)),
+          child: Text(t.getDisplayName(context), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),),
         ),
       ));
     }
-
-
-    /*
-      if(widget.pojoTask.subject != null) {
-        return Padding(
-          padding: const EdgeInsets.only(left: 8.0),
-          child: Container(
-            // color: PojoType.getColor(widget.pojoTask.type),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(bottomRight: Radius.circular(10), bottomLeft: Radius.circular(10)),
-                  color: widget.pojoTask.tags[0].getColor()
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8, top: 4, right: 8, bottom: 6),
-                child: Text(widget.pojoTask.subject.name,
-                  style: TextStyle(fontSize: 18),
-                ),
-              )
-          ),
-        );
-      }
-      */
-
     tagWidgets.insert(0, highlightTag);
-
-
 
     return  Opacity(
       opacity: opacity,
@@ -206,77 +180,7 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
 
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[ /*
-                        Row(
-                          children: <Widget>[
-                           // highlightTag,
-                            /*
-                            Builder(builder: (context){
-                              for(PojoTag t in widget.pojoTask.tags){
-                                for(PojoTag defT in PojoTag.defaultTags){
-                                  if(defT.name == t.name){
-                                    tagWidgets.remove(t);
-                                    return Container(
-                                      // color: PojoType.getColor(widget.pojoTask.type),
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.only(Right: Radius.circular(12)),
-                                            color: t.getColor()
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(left: 4, top: 4, right: 8, bottom: 6),
-                                          child: Text(t.getDisplayName(context), style: TextStyle(fontSize: 18),),
-                                        )
-                                    );
-                                  }
-                                }
-                              }
-                              return Container();
-                            }),
-                            */
-
-                            /*
-                            Builder(
-                              builder: (BuildContext context){
-                                if(widget.pojoTask.subject != null) {
-                                  return Padding(
-                                    padding: const EdgeInsets.only(left: 8.0),
-                                    child: Container(
-                                      // color: PojoType.getColor(widget.pojoTask.type),
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.only(bottomRight: Radius.circular(10), bottomLeft: Radius.circular(10)),
-                                            color: widget.pojoTask.tags[0].getColor()
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(left: 8, top: 4, right: 8, bottom: 6),
-                                          child: Text(widget.pojoTask.subject.name,
-                                            style: TextStyle(fontSize: 18),
-                                          ),
-                                        )
-                                    ),
-                                  );
-                                }else{return Container();}
-                              },
-                            ),
-                            */
-
-                            Wrap(
-                              spacing: 2,
-                              children:  tagWidgets
-                            ),
-
-
-
-
-                            // Text(widget.pojoTask.subject != null ? widget.pojoTask.subject.name : "", style: TextStyle(fontSize: 18),),
-                            /*
-                    Padding(
-                      padding: const EdgeInsets.only(left: 6),
-                      child: Text(widget.pojoTask.title, style: TextStyle(fontSize: 18),),
-                    ),
-                    */
-                          ],
-                        ),
-                        */
+                    children: <Widget>[
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -313,7 +217,7 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
                                 padding: const EdgeInsets.only(
                                     left: 4, top: 0, right: 8, bottom: 4),
                                 child: Text(pojoTask.subject.name,
-                                  style: TextStyle(fontSize: 18),),
+                                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700),),
                               )
                           );
                         },
@@ -323,7 +227,7 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
                           children: [
                             Padding(
                               padding: const EdgeInsets.only(left: 6),
-                              child: Text(pojoTask.title, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),),
+                              child: Text(pojoTask.title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),),
                             ),
                           ]
                       ),

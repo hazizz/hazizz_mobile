@@ -19,8 +19,7 @@ class SessionSelectorWidget extends StatefulWidget {
 
   bool fromDedicatedPage = false;
 
-  SessionSelectorWidget({Key key}) : super(key: key){
-  }
+  SessionSelectorWidget({Key key}) : super(key: key);
 
   SessionSelectorWidget.fromDedicatedPage({Key key}) : super(key: key){
     fromDedicatedPage = true;
@@ -69,20 +68,19 @@ class _SessionSelectorWidget extends State<SessionSelectorWidget> with Automatic
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton:FloatingActionButton(
-        heroTag: null,// "create_session_hero_tag",
-        child: Icon(FontAwesomeIcons.userPlus),
-        onPressed: (){
-          Navigator.pushNamed(context, "/kreta/login", arguments: (){
-            Navigator.pop(context);
-          });
-        },
-      ),
-
+      floatingActionButton: SessionsBloc().sessions.length <= 10 ?
+        FloatingActionButton(
+          heroTag: null,
+          child: Icon(FontAwesomeIcons.userPlus),
+          onPressed: (){
+            Navigator.pushNamed(context, "/kreta/login", /* arguments: (){
+              Navigator.pop(context);
+            }*/);
+          },
+        ) : Container(),
 
       body: RefreshIndicator(
           child: Stack(
@@ -93,7 +91,7 @@ class _SessionSelectorWidget extends State<SessionSelectorWidget> with Automatic
                   Expanded(
                     child: Column(
                       children: [
-
+                        /*
                         BlocBuilder(
                           bloc: SelectedSessionBloc(),
                           builder: (context, state){
@@ -172,39 +170,7 @@ class _SessionSelectorWidget extends State<SessionSelectorWidget> with Automatic
 
                           },
                         ),
-
-                        /*
-                        Column(
-                          children: <Widget>[
-                            Text("Selected session goes here"),
-                            DragTarget(
-                              builder: (context, c, r){
-                                return BlocBuilder(
-                                  bloc: SelectedSessionBloc(),
-                                  builder: (context, state){
-
-                                    if(state is SelectedSessionEmptyState){
-                                      HazizzLogger.printLog("log: qwe: SelectedSessionEmptyState");
-                                    }else if(state is SelectedSessionInactiveState){
-                                      HazizzLogger.printLog("log: qwe: SelectedSessionInactiveState");
-
-                                    }else if(state is SelectedSessionFineState){
-                                      HazizzLogger.printLog("log: qwe: SelectedSessionFineState");
-
-                                      PojoSession selectedSession = state.session;
-                                   //   sessions.remove(selectedSession);
-                                      selectedSessionWidget = SessionItemWidget(session: selectedSession,);
-                                    }
-                                    return Container(width: 400, height: 100, color: Colors.grey, child: selectedSessionWidget,);
-
-                                  },
-                                );
-                              },
-                            )
-                          ],
-                        ),
                         */
-
                         Expanded(
                           child: BlocBuilder(
                             bloc: SessionsBloc(),
@@ -217,33 +183,6 @@ class _SessionSelectorWidget extends State<SessionSelectorWidget> with Automatic
                                   return Center(child: Text(locText(context, key: "no_kreta_account_added_yet")));
                                 }
 
-
-                                /*
-                                List<Widget> sessionWidgets = List();
-                                for(PojoSession s in sessions){
-                                  sessionWidgets.add(SessionItemWidget(session: s));
-                                }
-                                */
-
-                                /*
-                                if( SelectedSessionBloc().selectedSession != null){
-                                 // sessions.remove(SSessielectedonBloc().selectedSession);
-                                  for(PojoSession s in sessions){
-                                    if(s.id == SelectedSessionBloc().selectedSession.id){
-                                      sessions.remove(s);
-                                      break;
-                                    }
-                                  }
-                                }
-
-                                return new ListView.builder(
-                                    itemCount: sessions.length,
-                                    itemBuilder: (BuildContext context, int index) {
-                                      return SessionItemWidget(session: sessions[index],);
-                                    }
-                                );
-                                */
-
                                 return BlocBuilder(
                                   bloc: SelectedSessionBloc(),
                                   builder: (context2, state2){
@@ -252,7 +191,7 @@ class _SessionSelectorWidget extends State<SessionSelectorWidget> with Automatic
 
 
                                     HazizzLogger.printLog("session change: $state2: ${sessions1}");
-                                    if( SelectedSessionBloc().selectedSession != null){
+                                  /* if( SelectedSessionBloc().selectedSession != null){
                                       // sessions.remove(SSessielectedonBloc().selectedSession);
                                       for(PojoSession s in sessions){
                                         if(s.id == SelectedSessionBloc().selectedSession.id){
@@ -261,6 +200,7 @@ class _SessionSelectorWidget extends State<SessionSelectorWidget> with Automatic
                                         }
                                       }
                                     }
+                                    */
                                     if(sessions.isNotEmpty){
                                       return new ListView.builder(
                                           itemCount: sessions.length,

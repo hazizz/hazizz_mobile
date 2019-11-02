@@ -12,6 +12,8 @@ import 'package:mobile/storage/cache_manager.dart';
 class KretaSessionManager {
 
   static const String _keySession = "key_session";
+  static const String _keySessions = "key_sessions";
+
 
   static const String _key_rememberPassword= "key_remember_session_password";
 
@@ -35,34 +37,6 @@ class KretaSessionManager {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool(_key_rememberPassword, a);
   }
-
-  /*
-  static Future<List<PojoSession>> fetchSessions() async {
-    dynamic responseData = await RequestSender().getResponse(new GetKretaSessions());
-    if(responseData is List){
-      return responseData;
-    }else if(responseData is PojoError){
-      int errorCode = responseData.errorCode;
-      HazizzLogger.printLog("log: errorCode: $errorCode");
-      return null;
-    //  return responseData;
-    }
-    throw new UnexpectedResponse(responseData);
-  }
-
-  static Future<List<PojoSession>> createSession({@required String username, @required String password, @required String url}) async {
-    dynamic responseData = await RequestSender().getResponse(new CreateKretaSessions(b_username: username, b_password: password, b_url: url));
-    if(responseData is Response ){
-      return responseData;
-    }else if(responseData is PojoError){
-      int errorCode = responseData.errorCode;
-      HazizzLogger.printLog("log: errorCode: $errorCode");
-      return null;
-      //  return responseData;
-    }
-    throw new UnexpectedResponse(responseData);
-  }
-  */
 
   static Future<void> loadSelectedSession() async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -101,10 +75,28 @@ class KretaSessionManager {
   static Future<void> setSelectedSession(PojoSession session) async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     Map jsonSession = session.toJson();
-
     bool success = await prefs.setString(_keySession, jsonEncode(jsonSession));
     if(success){
       selectedSession = session;
+    }
   }
-}
+
+
+
+  static Future<List<PojoSession>> getSessions() async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String encodedSessions = prefs.getString(_keySessions);
+    if(encodedSessions == null) return null;
+    Iterable iter = json.decode(encodedSessions);
+    if(iter == null) return null;
+    List<PojoSession> sessions = iter.map<PojoSession>((json) => PojoSession.fromJson(json)).toList();
+
+    return sessions;
+  }
+
+  static Future<void> setSessions(List<PojoSession> sessions) async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<Map> jsonSessions = sessions.map((e) => e == null ? null : e.toJson())?.toList();
+    await prefs.setString(_keySessions, jsonEncode(jsonSessions));
+  }
 }

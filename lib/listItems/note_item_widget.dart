@@ -30,7 +30,7 @@ class _NoteItemWidget extends State<NoteItemWidget> with SingleTickerProviderSta
   void initState() {
     animationController = new AnimationController(
       vsync: this,
-      duration: new Duration(milliseconds: 2500),
+      duration: new Duration(milliseconds: 2300 + Random().nextInt(500) ),
     );
 
     animationController.forward();
@@ -73,7 +73,8 @@ class _NoteItemWidget extends State<NoteItemWidget> with SingleTickerProviderSta
             children: <Widget>[
 
               Transform.rotate(
-                origin: Offset( 0, -19),
+
+                origin: Offset( 0, -40),
                 angle: animation.value as double,
                 child: getWidget(),
               ),

@@ -233,7 +233,7 @@ class RequestSender{
   Future<HazizzResponse> getResponse(Request request) async{
 
     final DateTime lastUpdate = await TokenManager.getLastTokenUpdateTime();
-    if(lastUpdate.difference(DateTime.now()).inHours >= 24){
+    if(lastUpdate == null || lastUpdate.difference(DateTime.now()).inHours >= 24){
       await TokenManager.createTokenWithRefresh();
     }
 

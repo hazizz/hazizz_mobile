@@ -2,8 +2,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
+//import 'package:image_cropper/image_cropper.dart';
+//import 'package:image_picker/image_picker.dart';
 import 'package:mobile/blocs/other/profile_editor_blocs.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
@@ -38,13 +38,14 @@ class _ProfileEditorPage extends State<ProfileEditorPage> with TickerProviderSta
 
   @override
   void initState() {
-   // widget.myGroupsBloc.dispatch(FetchData());
+   // widget.myGroupsBloc.add(FetchData());
     super.initState();
   }
 
   Future<bool> getImage() async {
 
-    File image = await ImagePicker.pickImage(source: ImageSource.gallery);
+   // File image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    File image;
 
 
 
@@ -53,7 +54,8 @@ class _ProfileEditorPage extends State<ProfileEditorPage> with TickerProviderSta
       return false;
     }
 
-    image = await ImageCropper.cropImage(
+
+  /*  image = await ImageCropper.cropImage(
       controlWidgetColor: Theme.of(context).primaryColor,
       controlWidgetVisibility: false,
       circleShape: true,
@@ -65,7 +67,7 @@ class _ProfileEditorPage extends State<ProfileEditorPage> with TickerProviderSta
       ratioY: 1.0,
       maxWidth: 512,
       maxHeight: 512,
-    );
+    );*/
     if(image == null){
       return false;
     }
@@ -165,7 +167,7 @@ class _ProfileEditorPage extends State<ProfileEditorPage> with TickerProviderSta
                               if(state is ProfilePictureEditorChangedState){
                                 _currentProfilePicIconData = _checkIconData;
                                 onPress = (){
-                                  profileEditorBlocs.pictureEditorBloc.dispatch(ProfilePictureEditorSavedEvent());
+                                  profileEditorBlocs.pictureEditorBloc.add(ProfilePictureEditorSavedEvent());
                                 };
                               }else if(state is ProfilePictureEditorFineState){
                                 _currentProfilePicIconData = _editIconData;

@@ -67,16 +67,19 @@ class ProfilePictureSetEvent extends ProfilePictureEvent {
       : assert(imageBytes != null), super([imageBytes]);
   @override
   String toString() => 'ProfilePictureSetEvent';
+  List<Object> get props => [imageBytes];
 }
 
 class ProfilePictureGetEvent extends ProfilePictureEvent {
   @override
   String toString() => 'ProfilePictureGetEvent';
+  List<Object> get props => null;
 }
 
 class ProfilePictureRefreshEvent extends ProfilePictureEvent {
   @override
   String toString() => 'ProfilePictureChangedState';
+  List<Object> get props => null;
 }
 
 //endregion
@@ -85,16 +88,19 @@ class ProfilePictureRefreshEvent extends ProfilePictureEvent {
 class ProfilePictureInitialState extends ProfilePictureState {
   @override
   String toString() => 'ProfilePictureInitialState';
+  List<Object> get props => null;
 }
 
 class ProfilePictureLoadedState extends ProfilePictureState {
   @override
   String toString() => 'ProfilePictureLoadedState';
+  List<Object> get props => null;
 }
 
 class ProfilePictureWaitingState extends ProfilePictureState {
   @override
   String toString() => 'ProfilePictureWaitingState';
+  List<Object> get props => null;
 }
 
 //endregion
@@ -276,7 +282,7 @@ class DisplayNameBloc extends Bloc<DisplayNameEvent, DisplayNameState> {
     displayNameController.addListener((){
       if(this.currentState is! DisplayNameInitialState && displayNameController.text != lastText){
         lastText = displayNameController.text;
-        this.dispatch(DisplayNameChangedEvent(displayName: displayNameController.text));
+        this.add(DisplayNameChangedEvent(displayName: displayNameController.text));
       }
     });
   }
@@ -367,11 +373,13 @@ class DisplayNameSetEvent extends DisplayNameEvent {
       : assert(newDisplayName != null), super([newDisplayName]);
   @override
   String toString() => 'DisplayNameSetEvent';
+  List<Object> get props => [newDisplayName];
 }
 
 class DisplayNameRefreshEvent extends DisplayNameEvent {
   @override
   String toString() => 'DisplayNameRefreshEvent';
+  List<Object> get props => null;
 }
 
 //endregion
@@ -380,16 +388,19 @@ class DisplayNameRefreshEvent extends DisplayNameEvent {
 class DisplayNameInitialState extends DisplayNameState {
   @override
   String toString() => 'DisplayNameInitialState';
+  List<Object> get props => null;
 }
 
 class DisplayNameLoadedState extends DisplayNameState {
   @override
   String toString() => 'DisplayNameLoadedState';
+  List<Object> get props => null;
 }
 
 class DisplayNameWaitingState extends DisplayNameState {
   @override
   String toString() => 'DisplayNameWaitingState';
+  List<Object> get props => null;
 }
 
 //endregion
@@ -481,11 +492,13 @@ abstract class MyUserDataEvent extends HEvent {
 class MyUserDataGetEvent extends MyUserDataEvent {
   @override
   String toString() => 'MyUserDataGetEvent';
+  List<Object> get props => null;
 }
 
 class MyUserDataRefreshEvent extends MyUserDataEvent {
   @override
   String toString() => 'MyUserDataRefreshEvent';
+  List<Object> get props => null;
 }
 
 class MyUserDataChangeDisplaynameEvent extends MyUserDataEvent {
@@ -495,6 +508,7 @@ class MyUserDataChangeDisplaynameEvent extends MyUserDataEvent {
   }
   @override
   String toString() => 'MyUserDataChangeDisplaynameEvent';
+  List<Object> get props => [displayName];
 }
 
 
@@ -504,6 +518,7 @@ class MyUserDataChangeDisplaynameEvent extends MyUserDataEvent {
 class MyUserDataInitialState extends MyUserDataState {
   @override
   String toString() => 'MyUserDataInitialState';
+  List<Object> get props => null;
 }
 
 class MyUserDataLoadedState extends MyUserDataState {
@@ -513,12 +528,14 @@ class MyUserDataLoadedState extends MyUserDataState {
   }
   @override
   String toString() => 'MyUserDataLoadedState';
+  List<Object> get props => [meInfo];
 }
 
 
 class MyUserDataWaitingState extends MyUserDataState {
   @override
   String toString() => 'MyUserDataWaitingState';
+  List<Object> get props => null;
 }
 
 //endregion

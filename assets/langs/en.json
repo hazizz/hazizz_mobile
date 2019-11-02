@@ -419,6 +419,9 @@
   "remember_kreta_password"
   : "Remember Kréta password",
 
+  "kreta_grade_statistics"
+  : "Kréta grade statistics",
+
     "notification_settings"
     : "Notification settings",
 
@@ -945,6 +948,9 @@
   "unsubscribed_from_subject"
   : "Unsubscribed from {}",
 
+  "subscription_based"
+  : "Subscription based",
+
   "choose_subjects_to_subscribe_to"
   : "Subjects to subscribe to",
 
@@ -1160,7 +1166,7 @@
 
 
     "notif_settings_notify_everyday_tasks"
-    : "Notify every day about tasks for tomorrow",
+    : "Notify every day, if there is task to complete for tomorrow",
 
 
     "taskType_1"
@@ -1351,6 +1357,14 @@
     "gradeType_halfYear"
     : "Half year",
 
+    "average"
+    : "Average",
+
+    "class_average"
+    : "Class average",
+
+    "difference"
+    : "Difference",
 
     "thera_weight_"
     : "weight:",
@@ -1377,8 +1391,17 @@
   "sign_in_facebook"
   : "Sign in with Facebook",
 
+  "new_features"
+  : "New features",
 
-    "days_0" : "Monday",
+  "new_feature_subject_subscribe"
+  : "Lehetőséged van témákra feliratkozni, így csak azokat a témákat fogod látni amik érdekelnek.",
+
+  "new_feature_notifications"
+  : "Mostantól a szerver fogja a holnapi feladat értesítést küldeni. Ezt bekapcsolhatod az értesítés menüpontban",
+
+
+  "days_0" : "Monday",
     "days_1" : "Tuesday",
     "days_2" : "Wednesday",
     "days_3" : "Thursday",

@@ -57,8 +57,7 @@ class PojoGrade extends Pojo implements Comparable {
     pojoGrade._setColor();
     return pojoGrade;
   }
-
-
+  
   Map<String, dynamic> toJson() => _$PojoGradeToJson(this);
 
   @override

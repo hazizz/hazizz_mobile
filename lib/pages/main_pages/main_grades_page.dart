@@ -14,22 +14,28 @@ import 'package:mobile/custom/formats.dart';
 import 'package:mobile/enums/grades_sort_enum.dart';
 import 'package:mobile/listItems/grade_header_item_widget.dart';
 import 'package:mobile/listItems/grade_item_widget.dart';
+import 'package:mobile/managers/preference_services.dart';
 import 'package:mobile/widgets/flushbars.dart';
-import 'package:mobile/widgets/grade_chart.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/pages/kreta_pages/kreta_service_holder.dart';
 
 class GradesPage extends StatefulWidget  {
 
-  GradesPage({Key key}) : super(key: key);
+  GradesPage({Key key}) : super(key: key){
+    PreferenceService.getGradeRectForm().then((bool r){
+      rectForm = r;
+    });
+  }
 
   getTabName(BuildContext context){
     return locText(context, key: "grades").toUpperCase();
   }
-  
+
   @override
   _GradesPage createState() => _GradesPage();
+
+  bool rectForm = false;
 }
 
 class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin , AutomaticKeepAliveClientMixin {
@@ -37,64 +43,57 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
   StreamController<LineTouchResponse> controller;
 
 
+
   @override
   void initState() {
-    // getData();
-  //  gradesBloc.dispatch(FetchData());
-    //   gradesBloc.fetchMyTasks();
-    /*
-    if(gradesBloc.currentState is ResponseError) {
-      gradesBloc.dispatch(FetchData());
-    }
-    */
-
-
-
+    /*PreferenceService.getGradeRectForm().then((bool rectFrom){
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        setState(() {
+          widget.rectForm = rectFrom;
+        });
+      }
+      );
+    });*/
     super.initState();
   }
 
   @override
   void dispose() {
-   // gradesBloc.dispose();
+    // gradesBloc.dispose();
     super.dispose();
   }
 
 
 
   Widget onLoaded(PojoGrades pojoGrades){
-    Map<String, List<PojoGrade>> grades = pojoGrades.grades;
-    int itemCount = grades.keys.length;
-
-    if(grades.isEmpty){
-      return Stack(
-        children: <Widget>[
-          Align(alignment: Alignment.topCenter, child: Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().gradesBloc.lastUpdated))),
-          Center(child: Text(locText(context, key: "no_grades_yet")))
-        ],
-      );
-    }
-
     /*
                   grades.forEach((String key, List<PojoGrade> value){
                     itemCount += value.length;
                   });
                   */
-
     if(MainTabBlocs().gradesBloc.currentGradeSort == GradesSort.BYSUBJECT){
+      Map<String, List<PojoGrade>> grades = MainTabBlocs().gradesBloc.getGradesFromSession().grades;// pojoGrades.grades;
+      int itemCount = grades.keys.length;
+
+      if(grades.isEmpty){
+        return Stack(
+          children: <Widget>[
+            Align(alignment: Alignment.topCenter, child: Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().gradesBloc.lastUpdated))),
+            Center(child: Text(locText(context, key: "no_grades_yet")))
+          ],
+        );
+      }
       return new ListView.builder(
           itemCount: itemCount +1,
           itemBuilder: (BuildContext context, int index) {
 
             if(index == 0){
               return Center(child: Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().gradesBloc.lastUpdated)));
-
             }
 
             String key = grades.keys.elementAt(index-1);
 
             String gradesAvarage = MainTabBlocs().gradesBloc.calculateAvarage(grades[key]);
-
-
 
             return StickyHeader(
               header: Column(
@@ -106,11 +105,12 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
                   /*
                   Container(
                     color: Theme.of(context).backgroundColor,
-                    height: 200,
+                    height: 260,
                     width: MediaQuery.of(context).size.width,
                     child: GradesChart(subjectName: key, grades: grades[key] ),
                   ),
                   */
+
 
 
                 ],
@@ -118,6 +118,19 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
               content: Builder(
                   builder: (context) {
                     List<Widget> widgetList = List();
+
+                    if(widget.rectForm){
+                      for(int i = grades[key].length-1; i >= 0; i--){
+                        widgetList.add(GradeItemWidget.bySubject(pojoGrade: grades[key][i], rectForm: true,));
+                      }
+                      return Wrap(
+                        direction: Axis.horizontal,
+                        runSpacing: 0,
+                        spacing: 0,
+                        //runAlignment: WrapAlignment.end,
+                        children: widgetList
+                      );
+                    }
 
                     for(int i = grades[key].length-1; i >= 0; i--){
                       widgetList.add(GradeItemWidget.bySubject(pojoGrade: grades[key][i],));
@@ -133,10 +146,10 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
     }
 
     else{// if(MainTabBlocs().gradesBloc.currentGradeSort == GradesSort.BYDATE){
-      List<PojoGrade> gradesByDate =  MainTabBlocs().gradesBloc.getGradesByDate();
+      List<PojoGrade> gradesByDate =  MainTabBlocs().gradesBloc.getGradesByDateFromSession();
       gradesByDate = gradesByDate.reversed.toList();
 
-      print("Grades page length: ${gradesByDate}");
+      print("Grades page length: ${gradesByDate.length}");
 
       for(PojoGrade g in gradesByDate){
         print("Grades page grade date: ${g.creationDate}");
@@ -156,45 +169,42 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
           ) { // || map[gradesByDate[i].creationDate] == null
             if(map[gradesByDate[i].creationDate] == null){
               map[gradesByDate[i].creationDate] = List();
-
             }
             map[gradesByDate[i].creationDate].add(grade);
 
+
           }else{
+            if(map[gradesByDate[i].creationDate] == null){
+              map[gradesByDate[i].creationDate] = List();
+            }
             map[gradesByDate[i].creationDate].add(grade);
           }
         }else{
           if (i == 0
               || gradesByDate[i].date
-                  .difference(gradesByDate[i - 1].date).inDays.abs() >= 1
+                 .difference(gradesByDate[i - 1].date).inDays.abs() >= 1
           ) { // || map[gradesByDate[i].creationDate] == null
             if(map[gradesByDate[i].date] == null){
               map[gradesByDate[i].date] = List();
-
             }
             map[gradesByDate[i].date].add(grade);
 
           }else{
+            if(map[gradesByDate[i].date] == null){
+              map[gradesByDate[i].date] = List();
+            }
             map[gradesByDate[i].date].add(grade);
           }
         }
-
         i++;
       }
 
-      // DateTime key = map.keys.elementAt(index-1);
-      // print("Grades page asd: ${map[key]}");
-
       print("Grades page map: ${map}");
-
-
 
       return new ListView.builder(
         //  physics: BouncingScrollPhysics(),
           itemCount: map.keys.length+1,
           itemBuilder: (BuildContext context, int index) {
-
-
             if(index == 0){
               return Center(child: Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().tasksBloc.lastUpdated)));
             }
@@ -209,16 +219,29 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
                     List<Widget> widgetList = List();
 
                     int i = 0;
+                    if(widget.rectForm){
+                      for(PojoGrade gs in map[key]){
+                        print("Grades page index: ${i}");
+                        widgetList.add(GradeItemWidget.byDate(pojoGrade: gs, rectForm: true,));
+                        i++;
+                      }
+                      return Wrap(
+                          direction: Axis.horizontal,
+                          //runAlignment: WrapAlignment.end,
+                          spacing: 0,
+                          runSpacing: 0,
+                          children: widgetList
+                      );
+                    }
+
+
                     for(PojoGrade gs in map[key]){
                       print("Grades page index: ${i}");
                       widgetList.add(GradeItemWidget.byDate(pojoGrade: gs,));
                       i++;
                     }
-                    return Container(
-
-                      child: Column(
-                          children: widgetList
-                      ),
+                    return Column(
+                      children: widgetList
                     );
                   }
               ),
@@ -226,141 +249,143 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
           }
       );
     }
-
-
   }
 
   GlobalKey<ScaffoldState> scaffoldState = new GlobalKey();
 
-
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
-      body: Column(
-        children: <Widget>[
-          BlocBuilder(
-            bloc: MainTabBlocs().gradesBloc,
-            builder: (context, state){
-              if(state is GradesWaitingState || state is GradesLoadedCacheState){
-                return LinearProgressIndicator(
-                  value: null,
-                );
-              }
-              return Container();
-            },
-          ),
-          Expanded(
-            child: KretaServiceHolder(
-              child: new RefreshIndicator(
-                  child: Stack(
-                    children: <Widget>[
-                      ListView(),
+        body: Column(
+          children: <Widget>[
+            BlocBuilder(
+              bloc: MainTabBlocs().gradesBloc,
+              builder: (context, state){
+                if(state is GradesWaitingState || state is GradesLoadedCacheState){
+                  return LinearProgressIndicator(
+                    value: null,
+                  );
+                }
+                return Container();
+              },
+            ),
+            Expanded(
+              child: KretaServiceHolder(
+                child: new RefreshIndicator(
+                    child: Stack(
+                      children: <Widget>[
+                        ListView(),
+                        Column(children: <Widget>[
+                          Card(
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 4.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 6.0),
+                                      child: Text("${locText(context, key: "sort_by")}:", style: TextStyle(fontSize: 16),),
+                                    ),
+                                    DropdownButton(
+                                      value: MainTabBlocs().gradesBloc.currentGradeSort,
+                                      onChanged: (value){
+                                        setState(() {
+                                          MainTabBlocs().gradesBloc.currentGradeSort = value;
+                                        });
+                                      },
+                                      items: [
+                                        DropdownMenuItem(child: Text(locText(context, key: "creation_date")), value: GradesSort.BYCREATIONDATE, ),
+                                        DropdownMenuItem(child: Text(locText(context, key: "date")), value: GradesSort.BYDATE, ),
+                                        DropdownMenuItem(child: Text(locText(context, key: "kreta_subject")), value: GradesSort.BYSUBJECT, ),
+                                      ],
+                                    ),
+                                    Spacer(),
 
-                      Column(children: <Widget>[
-                        Card(
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 4.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 6.0),
-                                    child: Text("${locText(context, key: "sort_by")}:", style: TextStyle(fontSize: 16),),
-                                  ),
+                                    IconButton(
+                                      icon: Icon(widget.rectForm ? FontAwesomeIcons.listUl : FontAwesomeIcons.th),
+                                      onPressed: (){
+                                        setState(() {
+                                          widget.rectForm = !widget.rectForm;
+                                        });
+                                        PreferenceService.setGradeRectForm(widget.rectForm);
+                                      },
+                                    ),
 
-                                  DropdownButton(
-                                    value: MainTabBlocs().gradesBloc.currentGradeSort,
-                                    onChanged: (value){
-                                      setState(() {
-                                        MainTabBlocs().gradesBloc.currentGradeSort = value;
-                                      });
-                                    },
-                                    items: [
-                                      DropdownMenuItem(child: Text(locText(context, key: "creation_date")), value: GradesSort.BYCREATIONDATE, ),
-                                      DropdownMenuItem(child: Text(locText(context, key: "date")), value: GradesSort.BYDATE, ),
-                                      DropdownMenuItem(child: Text(locText(context, key: "kreta_subject")), value: GradesSort.BYSUBJECT, ),
-                                    ],
-                                  ),
-                                  // Text("Feladatok:"),
-
-                                  Spacer(),
-
-                                  /*
+                                    /*
                               FlatButton(child: Text(locText(context, key: "apply").toUpperCase(), style: TextStyle(fontSize: 13),),
                                 onPressed: (){
-
                                   applyFilters();
-
-                                  MainTabBlocs().tasksBloc.dispatch(TasksFetchEvent());
+                                  MainTabBlocs().tasksBloc.add(TasksFetchEvent());
                                 },
                               )
                               */
-                                ],
-                              ),
-                            )
-                        ),
+                                  ],
+                                ),
+                              )
+                          ),
 
-                        Expanded(
-                          child: BlocBuilder(
-                              bloc: MainTabBlocs().gradesBloc,
-                              //  stream: gradesBloc.subject.stream,
-                              builder: (_, GradesState state) {
-                                if (state is GradesLoadedState) {
-                                  return onLoaded(state.data);
+                          Expanded(
+                            child: BlocBuilder(
+                                bloc: MainTabBlocs().gradesBloc,
+                                //  stream: gradesBloc.subject.stream,
+                                builder: (_, GradesState state) {
+                                  if (state is GradesLoadedState) {
+                                    return onLoaded(state.data);
 
 
-                                }else if (state is GradesLoadedCacheState) {
-                                  return onLoaded(state.data);
-                                } else if (state is GradesWaitingState) {
-                                  //return Center(child: Text("Loading Data"));
-                                  return Center(child: CircularProgressIndicator(),);
-                                }else if(state is GradesErrorState ){
-                                  if(state.hazizzResponse.pojoError != null && state.hazizzResponse.pojoError.errorCode == 138){
-                                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                                      showKretaUnavailableFlushBar(context);
-                                    });
-                                  }
+                                  }else if (state is GradesLoadedCacheState) {
+                                    return onLoaded(state.data);
+                                  } else if (state is GradesWaitingState) {
+                                    //return Center(child: Text("Loading Data"));
+                                    return Center(child: CircularProgressIndicator(),);
+                                  }else if(state is GradesErrorState ){
+                                    if(state.hazizzResponse.pojoError != null && state.hazizzResponse.pojoError.errorCode == 138){
+                                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                                        showKretaUnavailableFlushBar(context);
+                                      });
+                                    }
 
-                                  else if(state.hazizzResponse.dioError == noConnectionError){
-                                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                                      showNoConnectionFlushBar(context);
-                                    });
-                                  }else{
-                                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                                      Flushbar(
-                                        icon: Icon(FontAwesomeIcons.exclamation, color: Colors.red,),
+                                    else if(state.hazizzResponse.dioError == noConnectionError){
+                                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                                        print("boi: no internetr");
+                                        showNoConnectionFlushBar(context);
+                                      });
+                                    }else{
+                                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                                        Flushbar(
+                                          icon: Icon(FontAwesomeIcons.exclamation, color: Colors.red,),
 
-                                        message: "${locText(context, key: "grades")}: ${locText(context, key: "info_something_went_wrong")}",
-                                        duration: Duration(seconds: 3),
-                                      );
-                                    });
-                                  }
+                                          message: "${locText(context, key: "grades")}: ${locText(context, key: "info_something_went_wrong")}",
+                                          duration: Duration(seconds: 3),
+                                        );
+                                      });
+                                    }
 
-                                  if(MainTabBlocs().gradesBloc.grades != null){
-                                    return onLoaded(MainTabBlocs().gradesBloc.grades);
+                                    if(MainTabBlocs().gradesBloc.grades != null){
+                                      return onLoaded(MainTabBlocs().gradesBloc.grades);
+                                    }
+                                    return Center(
+                                        child: Text(locText(context, key: "info_something_went_wrong")));
                                   }
                                   return Center(
                                       child: Text(locText(context, key: "info_something_went_wrong")));
                                 }
-                                return Center(
-                                    child: Text(locText(context, key: "info_something_went_wrong")));
-                              }
-
+                            ),
                           ),
-                        ),
-                      ],)
+                        ],)
 
-                    ],
-                  ),
-                  onRefresh: () async{
-                    MainTabBlocs().gradesBloc.dispatch(GradesFetchEvent()); //await getData()
-                    return;
-                  }
+                      ],
+                    ),
+                    onRefresh: () async{
+                      MainTabBlocs().gradesBloc.dispatch(GradesFetchEvent()); //await getData()
+                      return;
+                    }
+                ),
               ),
             ),
-          ),
-        ],
-      )
+          ],
+        )
     );
   }
 
@@ -368,5 +393,3 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 }
-
-

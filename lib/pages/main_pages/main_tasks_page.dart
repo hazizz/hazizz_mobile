@@ -16,16 +16,12 @@ import 'package:mobile/enums/task_complete_state_enum.dart';
 import 'package:mobile/enums/task_expired_state_enum.dart';
 import 'package:mobile/listItems/task_header_item_widget.dart';
 import 'package:mobile/listItems/task_item_widget.dart';
-import 'package:mobile/managers/welcome_manager.dart';
 import 'package:mobile/widgets/flushbars.dart';
 import 'package:mobile/widgets/scroll_space_widget.dart';
-import 'package:sticky_header_list/sticky_header_list.dart';
 
 import 'package:sticky_headers/sticky_headers.dart';
-import 'package:toast/toast.dart';
 
 import 'package:mobile/custom/hazizz_localizations.dart';
-import 'package:mobile/theme/hazizz_theme.dart';
 
 class TasksPage extends StatefulWidget {
 
@@ -220,7 +216,7 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
                                 }
                               });
 
-                              //MainTabBlocs().tasksBloc.dispatch(TasksFetchEvent());
+                              //MainTabBlocs().tasksBloc.add(TasksFetchEvent());
                             },key: Key(map[key][index].toJson().toString()),);
                           },
                         );
@@ -255,7 +251,7 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
                                       map[key].remove(removedItem);
                                       MainTabBlocs().tasksBloc.tasks[key].remove(removedItem);
                                       MainTabBlocs().tasksBloc.tasksRaw.remove(removedItem);
-                                      MainTabBlocs().tasksBloc.dispatch(TasksRemoveItemEvent());
+                                      MainTabBlocs().tasksBloc.add(TasksRemoveItemEvent());
                                     });
                                     */
 
@@ -390,6 +386,7 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
                           }else if (state is TasksErrorState) {
                             //return Center(child: Text("Loading Data"));
                             if(state.hazizzResponse.dioError == noConnectionError){
+                              print("boi: no internetr");
                               WidgetsBinding.instance.addPostFrameCallback((_) {
                                 showNoConnectionFlushBar(context);
                               });

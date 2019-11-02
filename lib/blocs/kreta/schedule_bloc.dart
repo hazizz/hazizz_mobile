@@ -3,11 +3,13 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
+import 'package:mobile/blocs/kreta/selected_session_bloc.dart';
 import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
 import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/response_states.dart';
 import 'package:mobile/communication/connection.dart';
 import 'package:mobile/communication/custom_response_errors.dart';
+import 'package:mobile/communication/pojos/PojoClass.dart';
 import 'package:mobile/communication/pojos/PojoSchedules.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
@@ -42,6 +44,16 @@ class ScheduleFetchEvent extends ScheduleEvent {
   }
   @override
   String toString() => 'ScheduleFetchEvent';
+  @override
+  List<Object> get props => [yearNumber, weekNumber];
+}
+
+class ScheduleSetSessionEvent extends ScheduleEvent {
+  ScheduleSetSessionEvent() :  super([DateTime.now()]){
+  }
+  @override
+  String toString() => 'ScheduleSetSessionEvent';
+  List<Object> get props => [DateTime.now()];
 }
 //endregion
 
@@ -53,11 +65,13 @@ abstract class ScheduleState extends HState {
 class ScheduleInitialState extends ScheduleState {
   @override
   String toString() => 'ScheduleInitialState';
+  List<Object> get props => null;
 }
 
 class ScheduleWaitingState extends ScheduleState {
   @override
   String toString() => 'ScheduleWaitingState';
+  List<Object> get props => null;
 }
 
 
@@ -65,17 +79,20 @@ class ScheduleWaitingState extends ScheduleState {
 class ScheduleLoadedState extends ScheduleState {
   PojoSchedules schedules;
 
-  ScheduleLoadedState(this.schedules) : assert(schedules!= null), super([schedules]);
+  ScheduleLoadedState(this.schedules) : assert(schedules!= null), super([schedules, SelectedSessionBloc().selectedSession]);
   @override
   String toString() => 'ScheduleLoadedState';
+  List<Object> get props => [schedules, SelectedSessionBloc().selectedSession];
 }
 
 class ScheduleLoadedCacheState extends ScheduleState {
   PojoSchedules data;
 
-  ScheduleLoadedCacheState(this.data) : assert(data!= null), super([data]);
+  ScheduleLoadedCacheState(this.data) : assert(data!= null), super([data, SelectedSessionBloc().selectedSession]);
   @override
   String toString() => 'ScheduleLoadedCacheState';
+  List<Object> get props => [data, SelectedSessionBloc().selectedSession];
+
 }
 
 class ScheduleErrorState extends ScheduleState {
@@ -84,6 +101,8 @@ class ScheduleErrorState extends ScheduleState {
 
   @override
   String toString() => 'ScheduleErrorState';
+  List<Object> get props => [hazizzResponse];
+
 }
 
 
@@ -104,6 +123,25 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
   DateTime currentWeekSunday = HazizzDateTime(0, 0, 0, 0, 0);
 
 
+  PojoSchedules getScheduleFromSession(){
+    Map<String, List<PojoClass>> sessionSchedules = {};
+
+    for(String key in classes.classes.keys){
+      int newI = 0;
+      for(int i = 0; i < classes.classes[key].length; i++){
+        if(classes.classes[key][i].accountId?.split("_")[2] == SelectedSessionBloc().selectedSession.username){
+          if(sessionSchedules[key] == null){
+            sessionSchedules[key] = [];
+          }
+          sessionSchedules[key].insert(newI, classes.classes[key][i]);
+          newI++;
+        }
+      }
+    }
+    return PojoSchedules(sessionSchedules);
+  }
+
+
   ScheduleBloc(){
     currentDayIndex = todayIndex;
     scheduleEventBloc = ScheduleEventBloc();
@@ -121,6 +159,8 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
   DateTime lastUpdated = DateTime(0, 0, 0, 0, 0);
 
   PojoSchedules classes;
+
+  PojoSchedules sessionClasses;
 
   int todayIndex = DateTime.now().weekday-1;
 
@@ -143,7 +183,10 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
   @override
   Stream<ScheduleState> mapEventToState(ScheduleEvent event) async* {
-    if (event is ScheduleFetchEvent) {
+    if(event is ScheduleSetSessionEvent){
+      yield ScheduleLoadedState(classes);
+    }
+    else if (event is ScheduleFetchEvent) {
       try {
 
         if(event.weekNumber != null){
@@ -191,10 +234,10 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
           }
         }
 
-        HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetSchedulesWithSession(q_year: currentYearNumber, q_weekNumber: currentWeekNumber));
+        //HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetSchedulesWithSession(q_year: currentYearNumber, q_weekNumber: currentWeekNumber));
 
 
-        //  HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetSchedules(q_year: currentYearNumber, q_weekNumber: currentWeekNumber));
+        HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetSchedules(q_year: currentYearNumber, q_weekNumber: currentWeekNumber));
 
         if(hazizzResponse.isSuccessful){
           classes = hazizzResponse.convertedData;
@@ -259,7 +302,6 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
       }
     }
   }
-
 }
 //endregion
 //endregion

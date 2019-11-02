@@ -29,33 +29,47 @@ class CreateGroupCreateEvent extends CreateGroupEvent {
       : assert(groupType != null), assert(groupName != null), super([groupName, password]);
 
   @override String toString() => 'CreateGroupCreateEvent';
+  @override
+  List<Object> get props => [groupName, password];
 }
 
 
 
 class CreateGroupFineState extends CreateGroupState {
   @override String toString() => 'CreateGroupFineState';
+  @override
+  List<Object> get props => null;
 }
 
 class CreateGroupWaitingState extends CreateGroupState {
   @override String toString() => 'CreateGroupWaitingState';
+  @override
+  List<Object> get props => null;
 }
 class CreateGroupPasswordIncorrectState extends CreateGroupState {
   @override String toString() => 'CreateGroupPasswordIncorrectState';
+  @override
+  List<Object> get props => null;
 }
 
 class CreateGroupGroupNameTakenState extends CreateGroupState {
   @override String toString() => 'CreateGroupGroupNameTakenState';
+  @override
+  List<Object> get props => null;
 }
 
 class CreateGroupInvalidState extends CreateGroupState {
   @override String toString() => 'CreateGroupInvalidState';
+  @override
+  List<Object> get props => null;
 }
 
 
 
 class CreateGroupSuccessfulState extends CreateGroupState {
   @override String toString() => 'CreateGroupSuccessfulState';
+  @override
+  List<Object> get props => null;
 }
 
 

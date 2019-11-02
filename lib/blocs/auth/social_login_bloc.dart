@@ -29,58 +29,84 @@ abstract class SocialLoginState extends HState {
 
 class SocialLoginButtonPressedEvent extends SocialLoginEvent {
   @override String toString() => 'SocialLoginButtonPressed';
+  @override
+  List<Object> get props => null;
 }
 
 class SocialLoginResetEvent extends SocialLoginEvent {
   @override String toString() => 'SocialLoginResetEvent';
+  @override
+  List<Object> get props => null;
 }
 
 class SocialLoginHaveToAcceptConditionsEvent extends SocialLoginEvent {
   @override String toString() => 'SocialLoginHaveToAcceptConditionsEvent';
+  @override
+  List<Object> get props => null;
 }
 
 class SocialLoginAcceptedConditionsEvent extends SocialLoginEvent {
   @override String toString() => 'SocialLoginAcceptedConditionsEvent';
+  @override
+  List<Object> get props => null;
 }
 
 class SocialLoginRejectConditionsEvent extends SocialLoginEvent {
   @override String toString() => 'SocialLoginRejectedConditionsState';
+  @override
+  List<Object> get props => null;
 }
 
 
 
 class SocialLoginFineState extends SocialLoginState {
   @override String toString() => 'SocialLoginFineState';
+  @override
+  List<Object> get props => null;
 }
 
 class SocialLoginPressedButtonState extends SocialLoginState {
   @override String toString() => 'SocialLoginFineState';
+  @override
+  List<Object> get props => null;
 }
 class SocialLoginSuccessfulState extends SocialLoginState {
   @override String toString() => 'SocialLoginSuccessfulState';
+  @override
+  List<Object> get props => null;
 }
 
 class SocialLoginWaitingState extends SocialLoginState {
   @override String toString() => 'SocialLoginWaitingState';
+  @override
+  List<Object> get props => null;
 }
 
 class SocialLoginFailedState extends SocialLoginState {
   PojoError error;
-  SocialLoginFailedState({this.error}): super([error]);
+  SocialLoginFailedState({this.error}) : super([error]);
 
   @override String toString() => 'SocialLoginFailedState';
+  @override
+  List<Object> get props => [error];
 }
 
 class SocialLoginAcceptedConditionsState extends SocialLoginState {
   @override String toString() => 'SocialLoginAcceptedConditionsState';
+  @override
+  List<Object> get props => null;
 }
 
 class SocialLoginRejectedConditionsState extends SocialLoginState {
   @override String toString() => 'SocialLoginRejectedConditionsState';
+  @override
+  List<Object> get props => null;
 }
 
 class SocialLoginHaveToAcceptConditionsState extends SocialLoginState {
   @override String toString() => 'SocialLoginHaveToAcceptConditionsState';
+  @override
+  List<Object> get props => null;
 }
 
 

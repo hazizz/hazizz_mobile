@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:mobile/blocs/kreta/sessions_bloc.dart';
 import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
 import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/response_states.dart';
@@ -24,6 +25,7 @@ abstract class SelectedSessionEvent extends HEvent {
 class SelectedSessionInactiveEvent extends SelectedSessionEvent {
   @override
   String toString() => 'SelectedSessionInactiveEvent';
+  List<Object> get props => null;
 }
 class SelectedSessionSetEvent extends SelectedSessionEvent {
   PojoSession session;
@@ -31,11 +33,13 @@ class SelectedSessionSetEvent extends SelectedSessionEvent {
   SelectedSessionSetEvent(this.session) : assert(session!= null), super([session]);
   @override
   String toString() => 'SelectedSessionSetEvent';
+  List<Object> get props => [session];
 }
 
 class SelectedSessionInitalizeEvent extends SelectedSessionEvent {
   @override
   String toString() => 'SelectedSessionInitalizeEvent';
+  List<Object> get props => null;
 }
 //endregion
 
@@ -47,11 +51,13 @@ abstract class SelectedSessionState extends HState {
 class SelectedSessionInitialState extends SelectedSessionState {
   @override
   String toString() => 'SelectedSessionInitialState';
+  List<Object> get props => null;
 }
 
 class SelectedSessionEmptyState extends SelectedSessionState {
   @override
   String toString() => 'SelectedSessionEmptyState';
+  List<Object> get props => null;
 }
 
 class SelectedSessionFineState extends SelectedSessionState {
@@ -60,16 +66,19 @@ class SelectedSessionFineState extends SelectedSessionState {
   SelectedSessionFineState(this.session) : assert(session!= null), super([session]);
   @override
   String toString() => 'SelectedSessionFineState';
+  List<Object> get props => [session];
 }
 
 class SelectedSessionInactiveState extends SelectedSessionState {
   @override
   String toString() => 'SelectedSessionSentState';
+  List<Object> get props => null;
 }
 
 class SelectedSessionWaiting extends SelectedSessionState {
   @override
   String toString() => 'SelectedSessionWaiting';
+  List<Object> get props => null;
 }
 
 //endregion
@@ -99,13 +108,27 @@ class SelectedSessionBloc extends Bloc<SelectedSessionEvent, SelectedSessionStat
       }else{
         yield SelectedSessionEmptyState();
       }
+
+      if(selectedSession == null){
+        StreamSubscription sub;
+        sub = SessionsBloc().state.listen((state){
+          if(state is ResponseDataLoaded){
+            print("haz: ${state.data}");
+            if(state.data != null && state.data.isNotEmpty && state.data[0] != null){
+              dispatch(SelectedSessionSetEvent(state.data[0]));
+              sub.cancel();
+            }
+          }
+        });
+      }
     }else if(event is SelectedSessionSetEvent){
       selectedSession = event.session;
       await KretaSessionManager.setSelectedSession(selectedSession);
-      MainTabBlocs().schedulesBloc.dispatch(ScheduleFetchEvent());
-      MainTabBlocs().gradesBloc.dispatch(GradesFetchEvent());
-
+     // MainTabBlocs().schedulesBloc.add(ScheduleFetchEvent());
+     // MainTabBlocs().gradesBloc.add(GradesFetchEvent());
       yield SelectedSessionFineState(selectedSession);
+      MainTabBlocs().schedulesBloc.dispatch(ScheduleSetSessionEvent());
+      MainTabBlocs().gradesBloc.dispatch(GradesSetSessionEvent());
     }
     else if (event is SelectedSessionInactiveEvent) {
       if(await KretaSessionManager.isRememberPassword()){
@@ -116,6 +139,8 @@ class SelectedSessionBloc extends Bloc<SelectedSessionEvent, SelectedSessionStat
           newSession.password = selectedSession.password;
           selectedSession = newSession;
           KretaSessionManager.selectedSession = selectedSession;
+          await KretaSessionManager.setSelectedSession(selectedSession);
+
           yield SelectedSessionFineState(selectedSession);
         }else{
           yield SelectedSessionInactiveState();

@@ -5,6 +5,8 @@ import 'package:flutter/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mobile/blocs/auth/google_login_bloc.dart';
 import 'package:mobile/blocs/auth/social_login_bloc.dart';
+import 'package:mobile/blocs/kreta/sessions_bloc.dart';
+import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/user_data_bloc.dart';
 import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
 import 'package:mobile/blocs/kreta/selected_session_bloc.dart';
@@ -121,8 +123,10 @@ class AppState{
     MainTabBlocs().initialize();
     HazizzLogger.printLog("mainAppPartStartProcedure 5");
    // await Future.delayed(const Duration(milliseconds: 50));
-    UserDataBlocs().initialize();
+    SessionsBloc().dispatch(FetchData());
     HazizzLogger.printLog("mainAppPartStartProcedure 6");
+    UserDataBlocs().initialize();
+    HazizzLogger.printLog("mainAppPartStartProcedure 7");
 
   }
 

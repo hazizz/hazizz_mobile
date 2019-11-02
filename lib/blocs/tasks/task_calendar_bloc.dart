@@ -20,10 +20,10 @@ abstract class TasksCalendarEvent extends HEvent {
 }
 
 class TasksCalendarFetchEvent extends TasksCalendarEvent {
-  TasksCalendarFetchEvent() :  super([]){
-  }
+  TasksCalendarFetchEvent() :  super([]);
   @override
   String toString() => 'TasksCalendarFetchEvent';
+  List<Object> get props => null;
 }
 //endregion
 
@@ -35,11 +35,13 @@ abstract class TasksCalendarState extends HState {
 class TasksCalendarInitialState extends TasksCalendarState {
   @override
   String toString() => 'TasksCalendarInitialState';
+  List<Object> get props => null;
 }
 
 class TasksCalendarWaitingState extends TasksCalendarState {
   @override
   String toString() => 'TasksCalendarWaitingState';
+  List<Object> get props => null;
 }
 
 
@@ -49,6 +51,7 @@ class TasksCalendarLoadedState extends TasksCalendarState {
   TasksCalendarLoadedState(this.tasks) : assert(tasks!= null), super([tasks]);
   @override
   String toString() => 'TasksCalendarLoadedState';
+  List<Object> get props => [tasks];
 }
 
 class TasksCalendarLoadedCacheState extends TasksCalendarState {
@@ -57,6 +60,7 @@ class TasksCalendarLoadedCacheState extends TasksCalendarState {
   TasksCalendarLoadedCacheState(this.tasks) : assert(tasks!= null), super([tasks]);
   @override
   String toString() => 'TasksCalendarLoadedCacheState';
+  List<Object> get props => [tasks];
 }
 
 class TasksCalendarErrorState extends TasksCalendarState {
@@ -65,6 +69,7 @@ class TasksCalendarErrorState extends TasksCalendarState {
 
   @override
   String toString() => 'TasksCalendarErrorState';
+  List<Object> get props => [hazizzResponse];
 }
 
 

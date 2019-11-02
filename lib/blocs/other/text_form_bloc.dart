@@ -20,6 +20,8 @@ class TextFormValidate extends HFormEvent {
   @override
   String toString() =>
       'TextFormValidate: $text';
+  @override
+  List<Object> get props => [text];
 }
 
 
@@ -27,11 +29,15 @@ class TextFormValidate extends HFormEvent {
 class TextFormLock extends HFormEvent {
   @override
   String toString() => 'TextFormLock';
+  @override
+  List<Object> get props => null;
 }
 
 class TextFormUnlock extends HFormEvent {
   @override
   String toString() => 'TextFormUnlock';
+  @override
+  List<Object> get props => null;
 }
 
 class TextFormSetEvent extends HFormEvent {
@@ -43,11 +49,15 @@ class TextFormSetEvent extends HFormEvent {
 
   @override
   String toString() => 'TextFormSetEvent';
+  @override
+  List<Object> get props => [text];
 }
 
 class TextFormClear extends HFormEvent {
   @override
   String toString() => 'TextFormClear';
+  @override
+  List<Object> get props => null;
 }
 
 
@@ -56,6 +66,8 @@ class TextFormClear extends HFormEvent {
 class TextFormIllegalCharacterEvent extends HFormEvent {
   @override
   String toString() => 'TextFormIllegalCharacterEvent';
+  @override
+  List<Object> get props => null;
 }
 //endregion
 
@@ -67,15 +79,19 @@ abstract class HFormState extends HState {
 class TextFormInitial extends HFormState {
   @override
   String toString() => 'TextFormInitial';
+  List<Object> get props => null;
 }
 
 class TextFormFine extends HFormState {
   @override
   String toString() => 'TextFormFine';
+  List<Object> get props => null;
 }
 class TextFormDontShow extends HFormState {
   @override
   String toString() => 'TextFormDontShow';
+  List<Object> get props => null;
+
 }
 
 
@@ -83,11 +99,13 @@ class TextFormDontShow extends HFormState {
 class TextFormLocked extends HFormState {
   @override
   String toString() => 'TextFormLocked';
+  List<Object> get props => null;
 }
 
 class TextFormUnlocked extends HFormState {
   @override
   String toString() => 'TextFormUnlocked';
+  List<Object> get props => null;
 }
 
 class TextFormSetState extends HFormState {
@@ -100,11 +118,13 @@ class TextFormSetState extends HFormState {
   
   @override
   String toString() => 'TextFormSetState';
+ List<Object> get props => [text];
 }
 
 class TextFormCleared extends HFormState {
   @override
   String toString() => 'TextFormCleared';
+  List<Object> get props => null;
 }
 
 
@@ -113,20 +133,24 @@ class TextFormCleared extends HFormState {
 class TextFormEmpty extends HFormState {
   @override
   String toString() => 'TextFormDontShow';
+  List<Object> get props => null;
 }
 
 class TextFormErrorTooLong extends HFormState {
   @override
   String toString() => 'TextFormErrorTooLong';
+  List<Object> get props => null;
 }
 class TextFormErrorTooShort extends HFormState {
   @override
   String toString() => 'TextFormErrorTooShort';
+  List<Object> get props => null;
 }
 
 class TextFormIllegalCharacterState extends HFormState {
   @override
   String toString() => 'TextFormIllegalCharacterEvent';
+  List<Object> get props => null;
 }
 //endregion
 

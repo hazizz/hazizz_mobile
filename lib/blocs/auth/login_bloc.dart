@@ -18,7 +18,7 @@ import 'package:mobile/exceptions/exceptions.dart';
 
 //region LoginEvents
 abstract class LoginEvent extends HEvent {
-  LoginEvent([List props = const []]) : super(props);
+  LoginEvent([List props = const []]);
 }
 
 class LoginButtonPressed extends LoginEvent {
@@ -33,6 +33,8 @@ class LoginButtonPressed extends LoginEvent {
   @override
   String toString() =>
       'LoginButtonPressed { username: $username, password: $password }';
+  @override
+  List<Object> get props => [username, password];
 }
 
 class LoginButtonPressedTEST extends LoginEvent {
@@ -43,12 +45,14 @@ class LoginButtonPressedTEST extends LoginEvent {
   LoginButtonPressedTEST({
     @required this.username,
     @required this.password,
-  }) : super([username, password]);
+  });
 
 
   @override
   String toString() =>
       'LoginButtonPressed';
+   @override
+   List<Object> get props => [username, password];
 }
 //endregion
 
@@ -60,25 +64,34 @@ abstract class LoginState extends HState {
 class LoginInitial extends LoginState {
   @override
   String toString() => 'LoginInitial';
+  @override
+  List<Object> get props => null;
 }
 
 class LoginWaiting extends LoginState {
   @override
   String toString() => 'LoginWaiting';
+  @override
+  List<Object> get props => null;
 }
 
 class LoginStock extends LoginState {
   @override
   String toString() => 'LoginStock';
+  @override
+  List<Object> get props => null;
 }
 
 class LoginFailure extends LoginState {
   final String error;
 
-  LoginFailure({@required this.error}) : super([error]);
+  LoginFailure({@required this.error});
 
   @override
   String toString() => 'LoginFailure { error: $error }';
+
+  @override
+  List<Object> get props => [error];
 }
 
 class LoginFailPasswordWrong extends LoginState {
@@ -87,6 +100,8 @@ class LoginFailPasswordWrong extends LoginState {
 
   @override
   String toString() => 'LoginFailPasswordTooShort';
+  @override
+  List<Object> get props => null;
 }
 class LoginFailUsernameWrong extends LoginState {
 
@@ -94,6 +109,8 @@ class LoginFailUsernameWrong extends LoginState {
 
   @override
   String toString() => 'LoginFailUsernameWrong';
+  @override
+  List<Object> get props => null;
 }
 
 class LoginSuccessState extends LoginState {
@@ -102,6 +119,8 @@ class LoginSuccessState extends LoginState {
 
   @override
   String toString() => 'LoginSuccess';
+  @override
+  List<Object> get props => null;
 }
 //endregion
 
@@ -175,20 +194,29 @@ class BasicLoginBloc extends Bloc<LoginEvent, LoginState> {
 class UserNotFoundEvent extends HFormEvent {
   @override
   String toString() => 'UserNotFoundEvent';
+  @override
+  List<Object> get props => null;
 }
 class UserNotFoundState extends HFormState {
   @override
   String toString() => 'UserNotFoundState';
+  @override
+  List<Object> get props => null;
 }
 
 
 class PasswordIncorrectEvent extends HFormEvent {
   @override
   String toString() => 'PasswordIncorrectEvent';
+  @override
+  List<Object> get props => null;
 }
 class PasswordIncorrectState extends HFormState {
   @override
   String toString() => 'PasswordIncorrectState';
+
+  @override
+  List<Object> get props => null;
 }
 
 

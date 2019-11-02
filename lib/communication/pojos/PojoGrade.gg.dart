@@ -7,13 +7,14 @@ part of 'PojoGrade.dart';
 // **************************************************************************
 
 PojoGrade _$PojoGradeFromJson(Map<String, dynamic> json) {
+  DateTime creationDate = DateTime.parse(json['creationDate'] as String);
   return PojoGrade(
       accountId: json['accountId'] as String,
       date:
           json['date'] == null ? null : DateTime.parse(json['date'] as String),
       creationDate: json['creationDate'] == null
           ? null
-          : DateTime.parse(json['creationDate'] as String),
+          : DateTime(creationDate.year, creationDate.month, creationDate.day),
       subject: json['subject'] as String,
       topic: json['topic'] as String,
       gradeType: json['gradeType'] as String,
@@ -23,6 +24,7 @@ PojoGrade _$PojoGradeFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$PojoGradeToJson(PojoGrade instance) => <String, dynamic>{
+      'accountId': instance.accountId,
       'date': instance.date?.toIso8601String(),
       'creationDate': instance.creationDate?.toIso8601String(),
       'subject': instance.subject,

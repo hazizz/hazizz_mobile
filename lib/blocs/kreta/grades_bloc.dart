@@ -3,8 +3,8 @@ import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
-import 'package:intl/intl.dart';
 import 'package:mobile/blocs/kreta/new_grade_bloc.dart';
+import 'package:mobile/blocs/kreta/selected_session_bloc.dart';
 
 import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/response_states.dart';
@@ -18,12 +18,24 @@ import 'package:mobile/enums/grades_sort_enum.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/storage/caches/data_cache.dart';
-import 'package:collection/collection.dart';
-
 //region EditTask bloc parts
 //region EditTask events
 abstract class GradesEvent extends HEvent {
   GradesEvent([List props = const []]) : super(props);
+}
+
+class GradesSetSessionEvent extends GradesEvent {
+  /*
+  bool finishedOnly = true;
+  bool unfinishedOnly = false;
+
+  bool expired = false;
+  */
+  GradesSetSessionEvent() :  super([DateTime.now()]);
+  @override
+  String toString() => 'GradesSetSessionEvent';
+  List<Object> get props => null;
+
 }
 
 class GradesFetchEvent extends GradesEvent {
@@ -33,13 +45,12 @@ class GradesFetchEvent extends GradesEvent {
 
   bool expired = false;
   */
-
-
   GradesFetchEvent(/*{this.unfinishedOnly, this.expired}*/) :  super([/*unfinishedOnly*/]){
 
   }
   @override
   String toString() => 'GradesFetchEvent';
+  List<Object> get props => null;
 }
 //endregion
 
@@ -51,26 +62,30 @@ abstract class GradesState extends HState {
 class GradesInitialState extends GradesState {
   @override
   String toString() => 'GradesInitialState';
+  List<Object> get props => null;
 }
 
 class GradesWaitingState extends GradesState {
   @override
   String toString() => 'GradesWaitingState';
+  List<Object> get props => null;
 }
 
 class GradesLoadedState extends GradesState {
   PojoGrades data;
 
-  GradesLoadedState(this.data) : assert(data!= null), super([data]);
+  GradesLoadedState(this.data) : assert(data!= null), super([data, SelectedSessionBloc().selectedSession]);
   @override
   String toString() => 'GradesLoadedState';
+  List<Object> get props => [data, SelectedSessionBloc().selectedSession];
 }
 
 class GradesLoadedCacheState extends GradesState {
   PojoGrades data;
-  GradesLoadedCacheState(this.data) : assert(data!= null), super([data]);
+  GradesLoadedCacheState(this.data) : assert(data!= null), super([data, SelectedSessionBloc().selectedSession]);
   @override
   String toString() => 'GradesLoadedCacheState';
+  List<Object> get props => [data, SelectedSessionBloc().selectedSession];
 }
 
 class GradesErrorState extends GradesState {
@@ -79,6 +94,7 @@ class GradesErrorState extends GradesState {
 
   @override
   String toString() => 'GradesErrorState';
+  List<Object> get props => [hazizzResponse];
 }
 
 
@@ -86,7 +102,6 @@ class GradesErrorState extends GradesState {
 
 //region SubjectItemListBloc
 class GradesBloc extends Bloc<GradesEvent, GradesState> {
-
 
  // bool hasNewGrade = false;
 
@@ -101,6 +116,40 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
   PojoGrades grades;
   List<PojoGrade> gradesByDate = List();
 
+  //PojoGrades sessionGrades;
+ // List<PojoGrade> sessionGradesByDate = List();
+
+
+  PojoGrades getGradesFromSession(){
+
+    Map<String, List<PojoGrade>> sessionGrades = {};
+    for(String key in grades.grades.keys){
+      int newI = 0;
+      for(int i = 0; i < grades.grades[key].length; i++){
+
+        if(grades.grades[key][i].accountId?.split("_")[2] == SelectedSessionBloc().selectedSession?.username){
+          if(sessionGrades[key] == null){
+            sessionGrades[key] = [];
+          }
+          sessionGrades[key].insert(newI, grades.grades[key][i]);
+          newI++;
+        }
+      }
+    }
+    return PojoGrades(sessionGrades);
+  }
+
+  List<PojoGrade> getGradesByDateFromSession(){
+    gradesByDate = getGradesByDate();
+    List<PojoGrade> sessionGradesByDate = [];
+    for(PojoGrade g in gradesByDate){
+      if(g.accountId?.split("_")[2] == SelectedSessionBloc().selectedSession?.username){
+        sessionGradesByDate.add(g);
+      }
+    }
+    return sessionGradesByDate;
+  }
+
 
   @override
   GradesState get initialState => GradesInitialState();
@@ -109,14 +158,11 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
     gradesByDate.clear();
     HazizzLogger.printLog("Grades sub1: ${grades.grades.values.length}");
 
-
     for(int i = 0; i < grades.grades.values.length; i++){
 
       HazizzLogger.printLog("Grades sub2: ${grades.grades.values.toList()[i]}");
       gradesByDate.addAll(grades.grades.values.toList()[i]);
     }
-
-
 
     /*
     for(List<PojoGrade> gradesSubject in grades.grades.values){
@@ -153,7 +199,6 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
         }catch(e){
 
         }
-
       }
     }
     if(gradeSum != 0 && gradeAmount != 0){
@@ -163,19 +208,18 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
       double d = gradeSum/gradeAmount;
       d = (d * fac).round() / fac;
       //  HazizzLogger.printLog("d: $d");
-
-
       return d.toString();
     }
     return "";
   }
 
 
-
-
   @override
   Stream<GradesState> mapEventToState(GradesEvent event) async* {
-    if (event is GradesFetchEvent) {
+    if(event is GradesSetSessionEvent){
+      yield GradesLoadedState(grades);
+    }
+    else if (event is GradesFetchEvent) {
       try {
 
         /*
@@ -217,7 +261,6 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
         }
         */
 
-
         yield GradesWaitingState();
         HazizzLogger.printLog("log: am0 i here?");
 
@@ -227,9 +270,9 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
           grades = dataCache.data;
           yield GradesLoadedCacheState(grades);
         }
-        HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetGradesWithSession());
+       // HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetGradesWithSession());
 
-       // HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetGrades());
+        HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetGrades());
         print("CHANGE HAPPENDE03");
         if(hazizzResponse.isSuccessful){
           print("CHANGE HAPPENDE02");

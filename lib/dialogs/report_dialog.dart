@@ -28,9 +28,7 @@ class ReportDialog extends StatefulWidget {
 
   ReportTypeEnum reportType;
 
-  ReportDialog({@required this.reportType, @required this.id, this.secondId, @required this.name,}){
-
-  }
+  ReportDialog({@required this.reportType, @required this.id, this.secondId, @required this.name,});
 
   @override
   _ReportDialog createState() => new _ReportDialog();
@@ -38,14 +36,11 @@ class ReportDialog extends StatefulWidget {
 
 class _ReportDialog extends State<ReportDialog> {
 
-
   bool isLoading = false;
 
   bool acceptedHazizzPolicy = false;
 
-
   TextEditingController descriptionController;
-
 
   @override
   void initState() {
@@ -58,13 +53,10 @@ class _ReportDialog extends State<ReportDialog> {
     super.initState();
   }
 
-
   final double width = 360;
   final double height = 350;
 
-
   String errorText = "";
-
 
   @override
   Widget build(BuildContext context) {

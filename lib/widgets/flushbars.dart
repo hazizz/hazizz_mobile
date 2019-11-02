@@ -9,7 +9,6 @@ import 'package:mobile/custom/hazizz_localizations.dart';
 
 
 dynamic showNoConnectionFlushBar(BuildContext context){
-
   return Flushbar(
     icon: Padding(
       padding: const EdgeInsets.only(left: 4.0),
@@ -19,8 +18,8 @@ dynamic showNoConnectionFlushBar(BuildContext context){
           Padding(
             padding: const EdgeInsets.only(left: 3.0, top: 2),
             child: Transform.rotate(
-                angle: -math.pi/2,
-                child:  Icon(FontAwesomeIcons.slash, color: Colors.red,)
+              angle: -math.pi/2,
+              child:  Icon(FontAwesomeIcons.slash, color: Colors.red,)
             ),
           ),
         ],
@@ -32,6 +31,29 @@ dynamic showNoConnectionFlushBar(BuildContext context){
 }
 
 dynamic showKretaUnavailableFlushBar(BuildContext context){
+
+  return Flushbar(
+    icon: Padding(
+      padding: const EdgeInsets.only(left: 4.0),
+      child: Stack(
+        children: <Widget>[
+          Icon(FontAwesomeIcons.landmark, color: Colors.white,),
+          Padding(
+            padding: const EdgeInsets.only(left: 3.0, top: 2),
+            child: Transform.rotate(
+                angle: -math.pi/2,
+                child:  Icon(FontAwesomeIcons.slash, color: Colors.red,)
+            ),
+          ),
+        ],
+      ),
+    ),
+    message:  locText(context, key: "kreta_server_unavailable"),
+    duration:  Duration(seconds: 3),
+  )..show(context);
+}
+
+dynamic showServerUnavailableFlushBar(BuildContext context){
 
   return Flushbar(
     icon: Padding(

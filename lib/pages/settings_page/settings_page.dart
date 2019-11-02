@@ -48,9 +48,9 @@ class _SettingsPage extends State<SettingsPage> with AutomaticKeepAliveClientMix
 
   @override
   void initState() {
-   // widget.myGroupsBloc.dispatch(FetchData());
+   // widget.myGroupsBloc.add(FetchData());
 
-    StartPageService.getStartPageIndex().then(
+    PreferenceService.getStartPageIndex().then(
       (int value){
         setState(() {
           currentStartPageItemIndex = value;
@@ -68,7 +68,7 @@ class _SettingsPage extends State<SettingsPage> with AutomaticKeepAliveClientMix
   Widget build(BuildContext context) {
     if(startPageItems.isEmpty) {
 
-      List<StartPageItem> startPages = StartPageService.getStartPages(context);
+      List<StartPageItem> startPages = PreferenceService.getStartPages(context);
       for(StartPageItem startPage in startPages) {
         startPageItems.add(DropdownMenuItem(
           value: startPage.index,

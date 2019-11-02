@@ -16,6 +16,7 @@ class ItemListNotPickedState extends ItemListState {
  /// NotPicked([List props = const []]) : super(props);
   @override
   String toString() => 'ItemListNotPickedState';
+  List<Object> get props => null;
 }
 
 class ItemListLoaded extends ItemListState {
@@ -24,21 +25,25 @@ class ItemListLoaded extends ItemListState {
       : assert(data != null);
   @override
   String toString() => 'ItemListLoaded';
+  List<Object> get props => [data];
 }
 
 class Waiting extends ItemListState {
   @override
   String toString() => 'ItemListLoading';
+  List<Object> get props => null;
 }
 
 class Empty extends ItemListState {
   @override
   String toString() => 'ItemListEmtpy';
+  List<Object> get props => null;
 }
 
 class InitialState extends ItemListState {
   @override
   String toString() => 'InitialState';
+  List<Object> get props => null;
 }
 
 class ItemListFail extends ItemListState {
@@ -47,6 +52,7 @@ class ItemListFail extends ItemListState {
       : assert(error != null);
   @override
   String toString() => 'ItemListFail';
+  List<Object> get props => [error];
 }
 
 class ItemListPickedState extends ItemListState {
@@ -57,13 +63,14 @@ class ItemListPickedState extends ItemListState {
       : assert(item != null), super([item]);
   @override
   String toString() => 'ItemListPickedState';
+  List<Object> get props => [item];
 }
 
 class InactiveState extends ItemListState {
   @override
   String toString() => 'InactiveState';
+  List<Object> get props => null;
 }
-
 
 abstract class ItemListEvent extends HEvent {
   ItemListEvent([List props = const []]) : super(props);
@@ -72,11 +79,13 @@ abstract class ItemListEvent extends HEvent {
 class InactiveEvent extends ItemListEvent {
   @override
   String toString() => 'InactiveEvent';
+  List<Object> get props => null;
 }
 
 class ItemListLoadData extends ItemListEvent {
   @override
   String toString() => 'ItemListLoadData';
+  List<Object> get props => null;
 }
 class PickedEvent extends ItemListEvent {
   final dynamic item;
@@ -84,6 +93,7 @@ class PickedEvent extends ItemListEvent {
       : assert(item != null), super([item]);
   @override
   String toString() => 'ItemListPicked';
+  List<Object> get props => [item];
 }
 
 
@@ -91,12 +101,14 @@ class NotPickedEvent extends ItemListEvent {
 
   @override
   String toString() => 'ItemListNotPickedEvent';
+  List<Object> get props => null;
 }
 
 class ItemListCheckPickedEvent extends ItemListEvent {
 
   @override
   String toString() => 'ItemListCheckPickedEvent';
+  List<Object> get props => null;
 }
 
 

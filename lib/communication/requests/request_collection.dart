@@ -4,14 +4,18 @@ import 'dart:io';
 
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
+import 'package:mobile/blocs/kreta/selected_session_bloc.dart';
 import 'package:mobile/communication/pojos/PojoError.dart';
+import 'package:mobile/communication/pojos/PojoGradeAvarage.dart';
 import 'package:mobile/communication/pojos/PojoGrades.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/pojos/PojoGroupDetailed.dart';
 import 'package:mobile/communication/pojos/PojoGroupPermissions.dart';
 import 'package:mobile/communication/pojos/PojoInviteLink.dart';
 import 'package:mobile/communication/pojos/PojoKretaNote.dart';
+import 'package:mobile/communication/pojos/PojoKretaProfile.dart';
 import 'package:mobile/communication/pojos/PojoMeInfoPrivate.dart';
 import 'package:mobile/communication/pojos/PojoMeInfo.dart';
 import 'package:mobile/communication/pojos/PojoSchedules.dart';
@@ -141,6 +145,7 @@ class AuthRequest extends Request{
   AuthRequest(ResponseHandler rh) : super(rh){
     super.SERVER_PATH = "auth-server/";
     SERVER_PATH = "auth-server/";
+    query["client_id"] = "H_MOBILE";
   }
 }
 //endregion
@@ -1052,11 +1057,12 @@ class GetGroupInviteLink extends HazizzRequest {
 //region Thera server requests
 //region Kreta requests
 //region Kreta session requests
+
 class KretaGetSessions extends TheraRequest {
   KretaGetSessions({ResponseHandler rh}) : super(rh) {
-  httpMethod = HttpMethod.GET;
-  PATH = "kreta/sessions";
-  authTokenHeader = true;
+    httpMethod = HttpMethod.GET;
+    PATH = "kreta/sessions";
+    authTokenHeader = true;
   }
 
   @override
@@ -1064,6 +1070,20 @@ class KretaGetSessions extends TheraRequest {
     Iterable iter = getIterable(response.data);
     List<PojoSession> sessions = iter.map<PojoSession>((json) => PojoSession.fromJson(json)).toList();
     return sessions;
+  }
+}
+
+class KretaGetProfile extends TheraRequest {
+  KretaGetProfile({ResponseHandler rh, @required PojoSession session}) : super(rh) {
+  httpMethod = HttpMethod.GET;
+  PATH = "kreta/sessions/${session.id}/profile";
+  authTokenHeader = true;
+  }
+
+  @override
+  dynamic convertData(Response response) {
+    PojoKretaProfile profile = PojoKretaProfile.fromJson(jsonDecode(response.data));
+    return profile;
   }
 }
 
@@ -1172,7 +1192,20 @@ class KretaGetGradesWithSession extends TheraRequest {
   }
 }
 
+class KretaGetGradeAvarages extends TheraRequest {
+  KretaGetGradeAvarages({ResponseHandler rh,}) : super(rh) {
+    httpMethod = HttpMethod.GET;
+    PATH = "kreta/sessions/${SelectedSessionBloc().selectedSession.id}/averages";
+    authTokenHeader = true;
+  }
 
+  @override
+  dynamic convertData(Response response) {
+    Iterable iter = getIterable(response.data);
+    List<PojoGradeAvarage> avarages = iter.map<PojoGradeAvarage>((json) => PojoGradeAvarage.fromJson(json)).toList();
+    return avarages;
+  }
+}
 
 class KretaGetSchedules extends TheraRequest {
   KretaGetSchedules({ResponseHandler rh, int q_weekNumber, int q_year}) : super(rh) {

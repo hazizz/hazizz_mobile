@@ -200,7 +200,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
             key: snapKey,
             child: RefreshIndicator(
               onRefresh: () async{
-               // widget.commentSectionWidget.commentBlocs.commentSectionBloc.dispatch(CommentSectionFetchEvent());
+               // widget.commentSectionWidget.commentBlocs.commentSectionBloc.add(CommentSectionFetchEvent());
                 ViewTaskBloc().commentBlocs.commentSectionBloc.dispatch(CommentSectionFetchEvent());
 
               },

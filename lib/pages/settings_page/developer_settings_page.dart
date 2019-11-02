@@ -1,25 +1,12 @@
 
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mobile/communication/hazizz_response.dart';
-import 'package:mobile/communication/request_sender.dart';
-import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/dialogs/dialogs.dart';
-import 'package:mobile/managers/app_state_manager.dart';
-import 'package:mobile/storage/cache_manager.dart';
+import 'package:mobile/services/hazizz_message_handler.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:mobile/blocs/other/settings_bloc.dart';
-import 'package:mobile/managers/preference_services.dart';
-import 'package:mobile/notification/notification.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:easy_localization/easy_localization.dart';
-
-import 'package:mobile/theme/hazizz_theme.dart';
-import 'package:mobile/custom/hazizz_time_of_day.dart';
 
 class DeveloperSettingsPage extends StatefulWidget {
 
@@ -38,7 +25,7 @@ class _DeveloperSettingsPage extends State<DeveloperSettingsPage> with Automatic
 
   @override
   void initState() {
-    // widget.myGroupsBloc.dispatch(FetchData());
+    // widget.myGroupsBloc.add(FetchData());
 
     super.initState();
   }
@@ -78,6 +65,19 @@ class _DeveloperSettingsPage extends State<DeveloperSettingsPage> with Automatic
                     await showSureToDeleteMeDialog(context);
                   },
                 ),
+                Divider(),
+                GestureDetector(
+                  onTap: () async {
+                    await Clipboard.setData(new ClipboardData(text: await HazizzMessageHandler().token));
+                    print("oi12120: saved ");
+                  },
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 60,
+
+                  ),
+                ),
+                Divider(),
 
               ],
             ),

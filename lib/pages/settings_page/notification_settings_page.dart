@@ -47,14 +47,14 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage> with Aut
 
   // FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
-  bool receive = true;
+  bool receive = false;
   String notificationTime = "";
 
   IconData iconBell;
 
   @override
   void initState() {
-    // widget.myGroupsBloc.dispatch(FetchData());
+    // widget.myGroupsBloc.add(FetchData());
 
     HazizzNotification.getReceiveNotification().then((value){
       setState(() {
@@ -122,6 +122,7 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage> with Aut
                 ),
                 Divider(),
                 ListTile(
+                    enabled: receive,
                     onTap: () async {
                       TimeOfDay newTime = await showTimePicker(
                         context: context,
@@ -152,6 +153,176 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage> with Aut
 
                 ),
 
+                /*
+                Divider(),
+                ListTile(
+                    title: Text(locText(context, key: "days_0")),
+                    trailing: Switch(
+                      value: receive,
+                      onChanged: (value){
+                        HazizzNotification.setReceiveNotification(value);
+                        if(value){
+                          setState(() {
+                            iconBell = FontAwesomeIcons.solidBell;
+                            receive = value;
+                          });
+                          HazizzNotification.scheduleNotificationAlarmManager();
+                        }else{
+                          setState(() {
+                            iconBell = FontAwesomeIcons.solidBellSlash;
+                            receive = value;
+
+                          });
+                          HazizzNotification.cancel();
+                        }
+                      }
+                    )
+                ),
+                Divider(),
+                ListTile(
+                    title: Text(locText(context, key: "days_1")),
+                    trailing: Switch(
+                        value: receive,
+                        onChanged: (value){
+                          HazizzNotification.setReceiveNotification(value);
+                          if(value){
+                            setState(() {
+                              iconBell = FontAwesomeIcons.solidBell;
+                              receive = value;
+                            });
+                            HazizzNotification.scheduleNotificationAlarmManager();
+                          }else{
+                            setState(() {
+                              iconBell = FontAwesomeIcons.solidBellSlash;
+                              receive = value;
+
+                            });
+                            HazizzNotification.cancel();
+                          }
+                        }
+                    )
+                ),
+                Divider(),
+                ListTile(
+                    title: Text(locText(context, key: "days_2")),
+                    trailing: Switch(
+                        value: receive,
+                        onChanged: (value){
+                          HazizzNotification.setReceiveNotification(value);
+                          if(value){
+                            setState(() {
+                              iconBell = FontAwesomeIcons.solidBell;
+                              receive = value;
+                            });
+                            HazizzNotification.scheduleNotificationAlarmManager();
+                          }else{
+                            setState(() {
+                              iconBell = FontAwesomeIcons.solidBellSlash;
+                              receive = value;
+
+                            });
+                            HazizzNotification.cancel();
+                          }
+                        }
+                    )
+                ),
+                Divider(),
+                ListTile(
+                    title: Text(locText(context, key: "days_3")),
+                    trailing: Switch(
+                        value: receive,
+                        onChanged: (value){
+                          HazizzNotification.setReceiveNotification(value);
+                          if(value){
+                            setState(() {
+                              iconBell = FontAwesomeIcons.solidBell;
+                              receive = value;
+                            });
+                            HazizzNotification.scheduleNotificationAlarmManager();
+                          }else{
+                            setState(() {
+                              iconBell = FontAwesomeIcons.solidBellSlash;
+                              receive = value;
+
+                            });
+                            HazizzNotification.cancel();
+                          }
+                        }
+                    )
+                ),
+                Divider(),
+                ListTile(
+                    title: Text(locText(context, key: "days_4")),
+                    trailing: Switch(
+                        value: receive,
+                        onChanged: (value){
+                          HazizzNotification.setReceiveNotification(value);
+                          if(value){
+                            setState(() {
+                              iconBell = FontAwesomeIcons.solidBell;
+                              receive = value;
+                            });
+                            HazizzNotification.scheduleNotificationAlarmManager();
+                          }else{
+                            setState(() {
+                              iconBell = FontAwesomeIcons.solidBellSlash;
+                              receive = value;
+
+                            });
+                            HazizzNotification.cancel();
+                          }
+                        }
+                    )
+                ),
+                Divider(),
+                ListTile(
+                    title: Text(locText(context, key: "days_5")),
+                    trailing: Switch(
+                        value: receive,
+                        onChanged: (value){
+                          HazizzNotification.setReceiveNotification(value);
+                          if(value){
+                            setState(() {
+                              iconBell = FontAwesomeIcons.solidBell;
+                              receive = value;
+                            });
+                            HazizzNotification.scheduleNotificationAlarmManager();
+                          }else{
+                            setState(() {
+                              iconBell = FontAwesomeIcons.solidBellSlash;
+                              receive = value;
+
+                            });
+                            HazizzNotification.cancel();
+                          }
+                        }
+                    )
+                ),
+                Divider(),
+                ListTile(
+                    title: Text(locText(context, key: "days_6")),
+                    trailing: Switch(
+                        value: receive,
+                        onChanged: (value){
+                          HazizzNotification.setReceiveNotification(value);
+                          if(value){
+                            setState(() {
+                              iconBell = FontAwesomeIcons.solidBell;
+                              receive = value;
+                            });
+                            HazizzNotification.scheduleNotificationAlarmManager();
+                          }else{
+                            setState(() {
+                              iconBell = FontAwesomeIcons.solidBellSlash;
+                              receive = value;
+
+                            });
+                            HazizzNotification.cancel();
+                          }
+                        }
+                    )
+                ),
+                */
               ],
             ),
           )

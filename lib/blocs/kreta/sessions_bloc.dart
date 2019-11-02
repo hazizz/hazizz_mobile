@@ -1,17 +1,24 @@
 import 'package:bloc/bloc.dart';
 import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/response_states.dart';
-import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
-import 'package:mobile/communication/pojos/PojoSubject.dart';
-import 'package:mobile/communication/pojos/PojoUser.dart';
-import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 
 
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/communication/hazizz_response.dart';
+import 'package:mobile/managers/kreta_session_manager.dart';
+
+abstract class SessionsEvent extends HEvent {
+  SessionsEvent([List props = const []]) : super(props);
+}
+
+class SelectedSessionInactiveEvent extends SessionsEvent {
+  @override
+  String toString() => 'SelectedSessionInactiveEvent';
+  List<Object> get props => null;
+}
 
 class SessionsBloc extends Bloc<HEvent, HState> {
 
@@ -24,52 +31,52 @@ class SessionsBloc extends Bloc<HEvent, HState> {
   @override
   HState get initialState => ResponseEmpty();
 
+  List<PojoSession> activeSessions = [];
+  List<PojoSession> sessions = [];
+
+  List<PojoSession> getActiveSessions(List<PojoSession> allSessions){
+    List<PojoSession> actS = [];
+    for(PojoSession s in sessions){
+      if(s.status == "ACTIVE"){
+        actS.add(s);
+      }
+    }
+    return actS;
+  }
+
   @override
   Stream<HState> mapEventToState(HEvent event) async* {
     if (event is FetchData) {
-      try {
-        yield ResponseWaiting();
+      yield ResponseWaiting();
+      sessions = getActiveSessions(await KretaSessionManager.getSessions());
+      activeSessions = getActiveSessions(sessions);
+      yield ResponseDataLoadedFromCache(data: sessions);
+
+      HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetSessions());
+      print("KretaGetSessions request was sent!");
+      if(hazizzResponse.isSuccessful){
+        sessions = hazizzResponse.convertedData;
+        KretaSessionManager.setSessions(sessions);
+        activeSessions = getActiveSessions(sessions);
+        yield ResponseDataLoaded(data: sessions);
+      }
+      else{
         HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetSessions());
-
+        print("KretaGetSessions request was sent2!");
         if(hazizzResponse.isSuccessful){
-          List<PojoSession> sessions = hazizzResponse.convertedData;
+          sessions = hazizzResponse.convertedData;
+          KretaSessionManager.setSessions(sessions);
+          activeSessions = getActiveSessions(sessions);
           yield ResponseDataLoaded(data: sessions);
-
         }
-        if(hazizzResponse.isError){
+        else{
           yield ResponseError(errorResponse: hazizzResponse);
         }
-      } on Exception catch(e){
-        HazizzLogger.printLog("log: Exception: ${e.toString()}");
       }
+
     }
   }
 }
-
-/*
-class GroupBlocs{
-  // static int groupId = 0;
-  PojoGroup group;
-  SessionsBloc SessionsBloc = new SessionsBloc();
-  GroupSubjectsBloc groupSubjectsBloc = new GroupSubjectsBloc();
-  GroupMembersBloc groupMembersBloc = new GroupMembersBloc();
-
-  static final GroupBlocs _singleton = new GroupBlocs._internal();
-  factory GroupBlocs() {
-    return _singleton;
-  }
-  GroupBlocs._internal();
-
-  void newGroup(PojoGroup group){
-    this.group = group;
-    SessionsBloc.dispatch(FetchData());
-    groupSubjectsBloc.dispatch(FetchData());
-    groupMembersBloc.dispatch(FetchData());
-  }
-
-}
-*/
-
 
 
 

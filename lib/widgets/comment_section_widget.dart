@@ -11,17 +11,7 @@ import 'package:mobile/custom/hazizz_localizations.dart';
 
 class CommentSectionWidget extends StatefulWidget {
 
- // CommentSectionBloc commentSectionBloc;
-
-
- // static CommentBlocs commentBlocs;
-
-  CommentSectionWidget({Key key,}) : super(key: key){
-   // commentBlocs = CommentBlocs();
-
-   // commentBlocs.commentSectionBloc.dispatch(CommentSectionFetchEvent());
-  }
-
+  CommentSectionWidget({Key key,}) : super(key: key);
 
   @override
   _CommentSectionWidget createState() => _CommentSectionWidget();
@@ -31,16 +21,9 @@ class _CommentSectionWidget extends State<CommentSectionWidget>{
 
   List<PojoComment> comments = List();
 
-
   @override
   void initState() {
-    // TODO: implement initState
-
-
     super.initState();
-
-   // commentBlocs = CommentSectionWidget.commentBlocs;
-
   }
 
   @override
@@ -63,7 +46,6 @@ class _CommentSectionWidget extends State<CommentSectionWidget>{
                 if(beforeState is CommentSectionLoadedState && currentState is CommentSectionWaitingState){
                   return false;
                 }
-
                 return true;
               },
               bloc: ViewTaskBloc().commentBlocs.commentSectionBloc,
@@ -80,7 +62,6 @@ class _CommentSectionWidget extends State<CommentSectionWidget>{
                             onTap: () {
                               // Navigator.of(context2).pop();
                               //      onPicked(groups_data[index]);
-
                             },
                             child: CommentItemWidget(taskId: ViewTaskBloc().commentBlocs.taskId ,comment: comments[index],)
                         );
@@ -121,7 +102,7 @@ class _CommentSectionWidget extends State<CommentSectionWidget>{
 
                   }
                   else if(commentWriterState is CommentWriterEmptyState){
-                    error = "No comment written";
+                    error = locText(context, key: "empty_field");
                   }
 
                   return Card(
@@ -137,6 +118,7 @@ class _CommentSectionWidget extends State<CommentSectionWidget>{
                               child: TextField(
                                 inputFormatters:[
                                   LengthLimitingTextInputFormatter(300),
+
                                 ],
 
                                 decoration:
@@ -146,10 +128,8 @@ class _CommentSectionWidget extends State<CommentSectionWidget>{
                                 controller: ViewTaskBloc().commentBlocs.commentWriterBloc
                                     .commentController,
                                 autofocus: false,
-                                maxLines: null,
-                                //  minLines: 2,
-                                //  maxLines: 5,
-                                style: TextStyle(fontSize: 20),
+                                maxLines: 4,
+                                style: TextStyle(fontSize: 18),
                                 //  controller: _commentController,
                               ),
                             ),

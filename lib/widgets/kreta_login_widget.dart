@@ -13,7 +13,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/dialogs/loading_dialog.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'package:progress_dialog/progress_dialog.dart';
-import 'package:xs_progress_hud/xs_progress_hud.dart';
 
 import 'package:mobile/custom/hazizz_localizations.dart';
 
@@ -32,9 +31,6 @@ class KretaLoginWidget extends StatefulWidget {
 
 class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin{
   KretaLoginPageBlocs kretaLoginBlocs;
-
-
-  XsProgressHud hud = XsProgressHud();
 
   ProgressDialog pr;
 
@@ -151,35 +147,38 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
       bloc: kretaLoginBlocs.schoolBloc,
       builder: (BuildContext context, ItemListState state) {
         return GestureDetector(
-          child: FormField(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: 62),
+            child: FormField(
 
-            enabled: widget.sessionToAuth == null,
+              enabled: widget.sessionToAuth == null,
 
-            builder: (FormFieldState formState) {
-              return InputDecorator(
-                  baseStyle: TextStyle(fontSize: 22, color: Colors.black),
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.grey.withAlpha(120),
-                    labelText: locText(context, key: "school"),
-                  ),
+              builder: (FormFieldState formState) {
+                return InputDecorator(
+                    baseStyle: TextStyle(fontSize: 22, color: Colors.black),
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.grey.withAlpha(120),
+                      labelText: locText(context, key: "school"),
+                    ),
 
-                  child: Builder(
-                    builder: (BuildContext context){//, ItemListState state) {
-                      if (state is ItemListLoaded) {
-                        return Container();
-                      }
-                      if(state is ItemListPickedState){
-                        return Text('${state.item.name}',
-                          style: TextStyle(fontSize: 16),
+                    child: Builder(
+                      builder: (BuildContext context){//, ItemListState state) {
+                        if (state is ItemListLoaded) {
+                          return Text(" ");
+                        }
+                        if(state is ItemListPickedState){
+                          return Text('${state.item.name}',
+                            style: TextStyle(fontSize: 16),
 
-                        );
-                      }
-                      return Text(locText(context, key: "loading"));
-                    },
-                  )
-              );
-            },
+                          );
+                        }
+                        return Text(locText(context, key: "loading"));
+                      },
+                    )
+                );
+              },
+            ),
           ), //groupFormField,
           onTap: () {
 
@@ -303,15 +302,15 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
                     child: RaisedButton(
                         child: Text(locText(context, key: "login").toUpperCase()),
                         onPressed: () async {
-                          if(kretaLoginBlocs.schoolBloc.currentState is ItemListPickedState || true) {
+                          if(kretaLoginBlocs.schoolBloc.currentState is ItemListPickedState) {
                             FocusScope.of(context).requestFocus(new FocusNode());
 
                             kretaLoginBlocs.kretaLoginBloc.dispatch(
-                                KretaLoginButtonPressed(
-                                    password: _passwordTextEditingController.text,
-                                    username: _usernameTextEditingController.text,
-                                    schoolUrl: kretaLoginBlocs.schoolBloc.pickedItem?.url
-                                )
+                              KretaLoginButtonPressed(
+                                password: _passwordTextEditingController.text,
+                                username: _usernameTextEditingController.text,
+                                schoolUrl: kretaLoginBlocs.schoolBloc.pickedItem?.url
+                              )
                             );
                           }
                         }
