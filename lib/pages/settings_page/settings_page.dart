@@ -1,6 +1,7 @@
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
+import 'package:mobile/enums/task_complete_state_enum.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 
 import 'package:mobile/custom/hazizz_localizations.dart';
@@ -31,6 +32,8 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPage extends State<SettingsPage> with AutomaticKeepAliveClientMixin {
 
+  String currentLanguageCode ;//= Locale("en", "EN");
+
   List<DropdownMenuItem> startPageItems = List();
   static List<Locale> supportedLocales = getSupportedLocales();
   List<DropdownMenuItem> supportedLocaleItems = List();
@@ -49,6 +52,12 @@ class _SettingsPage extends State<SettingsPage> with AutomaticKeepAliveClientMix
   @override
   void initState() {
    // widget.myGroupsBloc.add(FetchData());
+
+    getPreferredLocale().then((preferredLocale){
+      setState(() {
+        currentLanguageCode = preferredLocale.languageCode;
+      });
+    });
 
     PreferenceService.getStartPageIndex().then(
       (int value){
@@ -87,7 +96,7 @@ class _SettingsPage extends State<SettingsPage> with AutomaticKeepAliveClientMix
 
         supportedLocaleItems.add(DropdownMenuItem(
           value: locale.languageCode,
-          child: Text(locale.countryCode,
+          child: Text(locale.languageCode,
             textAlign: TextAlign.end,
           ),
         ));
@@ -197,6 +206,29 @@ class _SettingsPage extends State<SettingsPage> with AutomaticKeepAliveClientMix
                 leading: Icon(FontAwesomeIcons.wrench),
                 title: Text(locText(context, key: "developer_settings")),
               ),
+              Divider(),
+              Builder(
+                builder: (context){
+                  return ListTile(
+                    leading: Icon(FontAwesomeIcons.language),
+                    title: Text(locText(context, key: "language")),
+                    trailing: DropdownButton(
+                      value: currentLanguageCode,
+                      onChanged: (value){
+                        setState(() {
+                          currentLanguageCode = value;
+                          HazizzLocalizations.of(context).load(Locale(currentLanguageCode));
+                          setPreferredLocale(Locale(currentLanguageCode));
+                        });
+
+                      },
+                      items: supportedLocaleItems
+                    ),
+                  );
+
+                },
+              ),
+              Divider(),
             ],
           ),
         )

@@ -108,7 +108,7 @@ class AppState{
 
   }
 
-  static void mainAppPartStartProcedure() async {
+  static Future<void> mainAppPartStartProcedure() async {
 
    // await TokenManager.fetchRefreshTokens(username: (await InfoCache.getMyUserData()).username, refreshToken: await TokenManager.getRefreshToken());
 

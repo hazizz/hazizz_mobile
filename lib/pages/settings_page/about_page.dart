@@ -29,19 +29,19 @@ class AboutPage extends StatefulWidget {
 
 class _AboutPage extends State<AboutPage> with AutomaticKeepAliveClientMixin {
 
-  String version = HazizzAppInfo().getInfo.version;
+  static final String version = HazizzAppInfo().getInfo.version;
 
-  String website = "https://hazizz.github.io/";
+  static const String website = "https://hazizz.github.io/";
 
   bool gatewayServerIsOnline = true;
   bool authServerIsOnline = true;
   bool hazizzServerIsOnline = true;
   bool theraServerIsOnline = true;
 
-  String fb_site = "https://www.facebook.com/hazizzvelunk/";
-  String tw_site = "https://twitter.com/Hzizz1";
-  String dc_site = "https://discord.gg/TABMV3M";
-  String gh_site = "https://github.com/hazizz";
+  static const String fb_site = "https://www.facebook.com/hazizzvelunk/";
+  static const String tw_site = "https://twitter.com/Hzizz1";
+  static const String dc_site = "https://discord.gg/TABMV3M";
+  static const String gh_site = "https://github.com/hazizz";
 
   _AboutPage();
 

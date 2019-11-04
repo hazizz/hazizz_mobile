@@ -42,8 +42,6 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
 
   StreamController<LineTouchResponse> controller;
 
-
-
   @override
   void initState() {
     /*PreferenceService.getGradeRectForm().then((bool rectFrom){
@@ -303,7 +301,7 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
                                     Spacer(),
 
                                     IconButton(
-                                      icon: Icon(widget.rectForm ? FontAwesomeIcons.listUl : FontAwesomeIcons.th),
+                                      icon: Icon(widget.rectForm ? FontAwesomeIcons.th : FontAwesomeIcons.listUl),
                                       onPressed: (){
                                         setState(() {
                                           widget.rectForm = !widget.rectForm;

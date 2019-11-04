@@ -148,9 +148,11 @@ class HazizzResponse{
             PojoSession newSession = hazizzResponse.convertedData;
             SelectedSessionBloc().dispatch(SelectedSessionSetEvent(newSession));
           }else{
-            Crashlytics().recordError(CustomException("Session creation failed. ErrorCode: ${hazizzResponse.pojoError?.errorCode}"), StackTrace.current, context: "Session creation failed");
+            Crashlytics().recordError(CustomException("Session creation failed. ErrorCode: ${pojoError?.errorCode}"), StackTrace.current, context: "Session creation failed");
+            SelectedSessionBloc().dispatch(SelectedSessionInactiveEvent());
           }
         }
+        // TODO ^ massive rework needed
         else if(pojoError.errorCode == 136 || pojoError.errorCode == 132 || pojoError.errorCode == 130){
           SelectedSessionBloc().dispatch(SelectedSessionInactiveEvent());
         }

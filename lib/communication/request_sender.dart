@@ -12,7 +12,6 @@ import 'connection.dart';
 import 'custom_response_errors.dart';
 import 'htttp_methods.dart';
 
-
 Future<HazizzResponse> getResponse(Request request)async{
   return await RequestSender().getResponse(request);
 }

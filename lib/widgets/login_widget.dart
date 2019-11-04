@@ -46,9 +46,9 @@ class _LoginWidget extends State<LoginWidget> with SingleTickerProviderStateMixi
     super.dispose();
   }
 
-  void proceedToApp(BuildContext context){
+  Future proceedToApp(BuildContext context) async {
    // MainTabBlocs().initialize();
-    AppState.mainAppPartStartProcedure();
+    await AppState.mainAppPartStartProcedure();
     Navigator.popAndPushNamed(context, "/");
   }
 
@@ -62,20 +62,20 @@ class _LoginWidget extends State<LoginWidget> with SingleTickerProviderStateMixi
       listeners: [
         BlocListener(
           bloc: LoginBlocs().googleLoginBloc,//loginWidgetBlocs.googleLoginBloc,
-          listener: (context, state) {
+          listener: (context, state) async {
             if(state is SocialLoginSuccessfulState){
               print("proceedToApp");
-              proceedToApp(context);
+              await proceedToApp(context);
             }
           },
         ),
         BlocListener(
           bloc: LoginBlocs().facebookLoginBloc,
-          listener: (context, state) {
+          listener: (context, state) async {
             if (state is SocialLoginSuccessfulState) {
               print("proceedToApp");
 
-              proceedToApp(context);
+              await proceedToApp(context);
             }
           },
         )

@@ -17,16 +17,16 @@ Future<String> locTextContextless({@required String key, List<String> args}) asy
   return await HazizzLocalizationsNoContext.translate(key, args: args);
 }
 
-getPreferredLocal() async{
+Future<Locale> getPreferredLocale() async{
   String preferredLangCode = (await getPreferredLangCode());
   HazizzLogger.printLog("preferredLangCode:  ${preferredLangCode}");
   if(preferredLangCode != null) {
     return Locale(preferredLangCode,);
   }
-  return null;
+  return null;//Locale("en", "EN");
 }
 
-setPreferredLocal(Locale preferredLocale) async{
+setPreferredLocale(Locale preferredLocale) async{
   String preferredLangCode = preferredLocale.languageCode;
   if(preferredLangCode != null) {
     setPreferredLangCode(preferredLangCode);
@@ -109,7 +109,7 @@ class HazizzLocalizationsNoContext{
 class HazizzLocalizations {
 
 
-  final Locale locale;
+  Locale locale;
 
   HazizzLocalizations(this.locale);
 
@@ -121,7 +121,8 @@ class HazizzLocalizations {
 
   Map<String, String> _localizedStrings;
 
-  Future<bool> load() async {
+  Future<bool> load(Locale l) async {
+    locale = l;
     // Load the language JSON file from the "lang" folder
     String jsonString = await rootBundle.loadString('assets/langs/${locale.languageCode}.json');
     Map<String, dynamic> jsonMap = json.decode(jsonString);
@@ -189,7 +190,7 @@ class _HazizzLocalizationsDelegate
   Future<HazizzLocalizations> load(Locale locale) async {
     // AppLocalizations class is where the JSON loading actually runs
     HazizzLocalizations localizations = new HazizzLocalizations(locale);
-    await localizations.load();
+    await localizations.load(locale);
     return localizations;
   }
 

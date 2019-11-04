@@ -13,11 +13,8 @@ import 'custom/hazizz_logger.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'package:mobile/managers/token_manager.dart';
 import 'managers/app_state_manager.dart';
-
 import 'package:flutter_localizations/flutter_localizations.dart';
-
 import 'package:dynamic_theme/dynamic_theme.dart';
-
 import 'managers/welcome_manager.dart';
 import 'navigation/business_navigator.dart';
 import 'notification/notification.dart';
@@ -38,8 +35,7 @@ List<PojoTask> tasksForTomorrow;
 MainTabBlocs mainTabBlocs = MainTabBlocs();
 LoginBlocs loginBlocs = LoginBlocs();
 
-
-
+Locale preferredLocale;
 
 Future<bool> fromNotification() async {
   var flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -61,10 +57,10 @@ Future<bool> fromNotification() async {
   return isFromNotification;
 }
 
-
-
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+
+  preferredLocale = await getPreferredLocale();
 
   await HazizzMessageHandler().configure();
 
@@ -98,7 +94,7 @@ class HazizzApp extends StatefulWidget{
 }
 
 class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
-  Locale preferredLocale;
+ // Locale preferredLocale;
 
   DateTime currentBackPressTime;
 
@@ -189,10 +185,15 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
 
               localeResolutionCallback: (locale, supportedLocales) {
                 // Check if the current device locale is supported
+                print("prCode1: ${preferredLocale.toString()}");
+                if(preferredLocale != null){
+                  print("prCode: ${preferredLocale.languageCode}, ${preferredLocale.countryCode}");
+                  return preferredLocale;
+                }
                 for(var supportedLocale in supportedLocales) {
                   if(supportedLocale.languageCode == locale?.languageCode &&
                       supportedLocale.countryCode == locale.countryCode) {
-                    setPreferredLocal(supportedLocale);
+                    setPreferredLocale(supportedLocale);
                     return supportedLocale;
                   }
                 }

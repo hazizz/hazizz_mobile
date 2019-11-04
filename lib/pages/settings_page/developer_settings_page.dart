@@ -23,9 +23,17 @@ class DeveloperSettingsPage extends StatefulWidget {
 
 class _DeveloperSettingsPage extends State<DeveloperSettingsPage> with AutomaticKeepAliveClientMixin {
 
+  String token = "semmi";
+
   @override
   void initState() {
     // widget.myGroupsBloc.add(FetchData());
+
+    HazizzMessageHandler().token.then((token){
+      setState(() {
+        this.token = token;
+      });
+    });
 
     super.initState();
   }
@@ -66,15 +74,14 @@ class _DeveloperSettingsPage extends State<DeveloperSettingsPage> with Automatic
                   },
                 ),
                 Divider(),
-                GestureDetector(
-                  onTap: () async {
-                    await Clipboard.setData(new ClipboardData(text: await HazizzMessageHandler().token));
-                    print("oi12120: saved ");
-                  },
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 60,
-
+                ListTile(
+                  title: Text("copy cm token"),
+                  trailing: FlatButton(
+                    child: Text("COPY"),
+                    onPressed: (){
+                      Clipboard.setData(new ClipboardData(text: token));
+                      print("oi12120: saved :${token}");
+                    },
                   ),
                 ),
                 Divider(),

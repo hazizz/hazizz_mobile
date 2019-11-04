@@ -39,7 +39,7 @@ class _LogsPage extends State<LogsPage> with AutomaticKeepAliveClientMixin {
         logs = l;
 
         getTemporaryDirectory().then((directory){
-          filePath = '${directory.path}/logs.txt';
+          filePath = '${directory.path}/hazizz_logs.txt';
 
           logFile = File(filePath);
 
