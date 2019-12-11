@@ -1,5 +1,3 @@
-
-import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
@@ -12,10 +10,6 @@ import 'package:mobile/custom/hazizz_time_of_day.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/hazizz_response.dart';
-
-
-
-
 
 Future callbackDispatcher2() async {
   HazizzLogger.printLog("ALARM MANAGER FIRED");
@@ -61,8 +55,9 @@ class HazizzNotification{
     HazizzLogger.printLog("log: notification onSelectNotification()");
   }
 
-  static var initializationSettingsAndroid = new AndroidInitializationSettings(
-      "@mipmap/ic_launcher");
+  static var initializationSettingsAndroid = new AndroidInitializationSettings("icon");
+
+ // static var initializationSettingsAndroid = new AndroidInitializationSettings("@mipmap/ic_launcher");
   static var initializationSettingsIOS = new IOSInitializationSettings(
     //  onDidReceiveLocalNotification: onDidReceiveLocalNotification
   );

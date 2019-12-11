@@ -32,7 +32,7 @@ class TaskHeaderItemWidget extends StatelessWidget{
     dateTime.microsecondsSinceEpoch;
     */
 
-    int days = daysTask - daysNow+1;
+    int days = daysTask - daysNow;
 
     Color backColor = Theme.of(context).primaryColorDark;
 

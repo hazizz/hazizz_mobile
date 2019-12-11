@@ -84,7 +84,7 @@
     : "Add widget",
 
 
-    "button_save"
+    "save"
     : "Save",
 
 
@@ -225,6 +225,9 @@
 
   "developer_settings"
   : "Developer settings",
+
+  "google_drive_settings"
+  : "Google Drive settings",
 
   "delete_me"
   : "Delete account",
@@ -1262,7 +1265,10 @@
     : "Kréta accounts",
 
   "kreta_account"
-  : "Kréta account",
+: "Kréta account",
+
+  "reauth"
+  : "Reauthenticate",
 
   "not_logged_in_to_kreta_account"
   : "Not logged in to Kréta",

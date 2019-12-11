@@ -2,11 +2,16 @@
 import 'dart:convert';
 import 'dart:io';
 
-
+import 'dart:convert' show base64;
+import 'dart:math';
+import 'dart:typed_data';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:image/image.dart' as package;
 import 'package:intl/intl.dart';
 import 'package:mobile/blocs/kreta/selected_session_bloc.dart';
+import 'package:mobile/communication/pojos/PojoAlertSettings.dart';
 import 'package:mobile/communication/pojos/PojoError.dart';
 import 'package:mobile/communication/pojos/PojoGradeAvarage.dart';
 import 'package:mobile/communication/pojos/PojoGrades.dart';
@@ -26,15 +31,18 @@ import 'package:mobile/communication/pojos/PojoUser.dart';
 import 'package:mobile/communication/pojos/pojo_comment.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
+import 'package:mobile/custom/image_operations.dart';
 import 'package:mobile/enums/group_types_enum.dart';
 import 'package:mobile/managers/kreta_session_manager.dart';
 import 'package:mobile/managers/token_manager.dart';
 import 'package:meta/meta.dart';
+import 'package:mobile/services/hazizz_crypt.dart';
 import 'package:package_info/package_info.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:mobile/converters/PojoConverter.dart';
 
 import 'package:mobile/custom/hazizz_date.dart';
+import 'package:steel_crypt/steel_crypt.dart';
 import '../ResponseHandler.dart';
 import '../htttp_methods.dart';
 
@@ -53,9 +61,9 @@ class Request {
   bool authTokenHeader = false;
   bool contentTypeHeader = false;
 
-  static const String BASE_URL = "https://hazizz.duckdns.org:9000/";
+  String BASE_URL = "https://hazizz.duckdns.org:9000/";
   String SERVER_PATH = "";
-  String PATH;
+  String PATH = "";
   ResponseHandler rh;
 
   Request(ResponseHandler rh){
@@ -329,7 +337,48 @@ class DeleteMe extends AuthRequest{
   }
 }
 
+class GetFirebaseTokens extends AuthRequest{
+  GetFirebaseTokens({@required int userId}) : super(null){
+    httpMethod = HttpMethod.GET;
+    PATH = "users/$userId/firebasetokens";
+    authTokenHeader = true;
+  }
 
+  @override
+  dynamic convertData(Response response) {
+    return response;
+  }
+}
+
+class AddFirebaseToken extends AuthRequest{
+  AddFirebaseToken({@required int userId, @required String firebaseToken}) : super(null){
+    httpMethod = HttpMethod.POST;
+    PATH = "users/$userId/firebasetokens";
+    authTokenHeader = true;
+
+    body = firebaseToken;
+  }
+
+  @override
+  dynamic convertData(Response response) {
+    return response;
+  }
+}
+
+class RemoveFirebaseTokens extends AuthRequest{
+  RemoveFirebaseTokens({@required int userId, @required String firebaseToken}) : super(null){
+    httpMethod = HttpMethod.DELETE;
+    PATH = "users/$userId/firebasetokens";
+    authTokenHeader = true;
+
+    body = firebaseToken;
+  }
+
+  @override
+  dynamic convertData(Response response) {
+    return response;
+  }
+}
 
 //endregion
 
@@ -437,6 +486,8 @@ class UpdateMyProfilePicture extends HazizzRequest {
   }
 }
 
+
+
 class UpdateMyDisplayName extends HazizzRequest {
   UpdateMyDisplayName({ResponseHandler rh, @required String b_displayName}) : super(rh) {
     PATH = "me/displayname";
@@ -453,6 +504,52 @@ class UpdateMyDisplayName extends HazizzRequest {
   }
 }
 
+class UploadImage extends Request {
+  UploadImage({ResponseHandler rh, @required EncryptedImageData imageData, @required String key, @required String iv}) : super(rh) {
+   // package.Image im = package.decodeImage(image.readAsBytesSync());
+    authTokenHeader = false;
+    contentTypeHeader = false;
+    BASE_URL = "https://transfer.sh/${Random().nextInt(1000)}.txt";
+    httpMethod = HttpMethod.PUT;
+    header[HttpHeaders.contentTypeHeader] = "text/plain";
+  //  List<String> a = image.path.split("/");
+
+    // body = package.encodeJpg(im, quality: 100);
+
+    print("melody1");
+   // Uint8List s = image.readAsBytesSync();
+    print("melody2");
+
+   // String crypted = HazizzCrypt.encrypt(base64.encode(s), key, iv); //encrypt
+    print("melody3");
+
+    body = imageData.encryptedData;
+
+    debugPrint(body);
+  }
+
+  @override
+  convertData(Response response) {
+    print(response.data);
+    String imgUrl = response.data;
+    return imgUrl;
+  }
+}
+
+class GetUploadedImage extends Request {
+  GetUploadedImage({ResponseHandler rh, @required String url}) : super(rh) {
+    BASE_URL = url;
+    httpMethod = HttpMethod.GET;
+    authTokenHeader = false;
+    contentTypeHeader = false;
+  }
+
+  @override
+  convertData(Response response) {
+    String encryptedImg = response.data;
+    return encryptedImg;
+  }
+}
 
 class Report extends HazizzRequest {
   void hardCodeReducer( String description){
@@ -843,12 +940,52 @@ class GetTaskByTaskId extends HazizzRequest {
   }
 }
 
+class GetAlertSettings extends HazizzRequest {
+  GetAlertSettings({ResponseHandler rh, @required int q_userId}) : super(rh) {
+    httpMethod = HttpMethod.GET;
+    PATH = "users/$q_userId/alertsettings";
+    authTokenHeader = true;
+  }
+
+  @override
+  dynamic convertData(Response response) {
+    PojoAlertSettings alertSetting = PojoAlertSettings.fromJson(jsonDecode(response.data));
+    return alertSetting;
+  }
+}
+
+class UpdateAlertSettings extends HazizzRequest {
+  UpdateAlertSettings({ResponseHandler rh, @required int q_userId, @required String b_alarmTime,
+  @required bool b_mondayEnabled, @required bool b_tuesdayEnabled, @required bool b_wednesdayEnabled,
+  @required bool b_thursdayEnabled, @required bool b_fridayEnabled, @required bool b_saturdayEnabled,
+  @required bool b_sundayEnabled}) : super(rh) {
+    httpMethod = HttpMethod.POST;
+    PATH = "users/$q_userId/alertsettings";
+    authTokenHeader = true;
+
+    body["alarmTime"] = b_alarmTime;
+    body["mondayEnabled"] = b_mondayEnabled;
+    body["tuesdayEnabled"] = b_tuesdayEnabled;
+    body["wednesdayEnabled"] = b_wednesdayEnabled;
+    body["thursdayEnabled"] = b_thursdayEnabled;
+    body["fridayEnabled"] = b_fridayEnabled;
+    body["saturdayEnabled"] = b_saturdayEnabled;
+    body["sundayEnabled"] = b_sundayEnabled;
+  }
+
+  @override
+  dynamic convertData(Response response) {
+   // PojoAlertSettings alertSetting = PojoAlertSettings.fromJson(jsonDecode(response.data));
+    return response;
+  }
+}
+
+
 class GetRecentEvents extends HazizzRequest {
   GetRecentEvents({ResponseHandler rh}) : super(rh) {
     httpMethod = HttpMethod.GET;
     PATH = "me/notifications";
     authTokenHeader = true;
-
   }
 
   @override
@@ -857,6 +994,8 @@ class GetRecentEvents extends HazizzRequest {
     return response;
   }
 }
+
+
 
 //ha groupId != 0 és subject = 0
 //akkor csak a csoporthoz rendeltet küldi vissza

@@ -13,7 +13,6 @@ class NoteItemWidget extends StatefulWidget  {
 
   PojoKretaNote note;
 
-
   NoteItemWidget({Key key, this.note}) : super(key: key);
 
   @override
@@ -59,10 +58,6 @@ class _NoteItemWidget extends State<NoteItemWidget> with SingleTickerProviderSta
 
   @override
   Widget build(BuildContext context) {
-
-
-
-
     return AnimatedBuilder(
       animation: animationController,
       child : getWidget(),

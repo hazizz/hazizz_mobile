@@ -11,9 +11,10 @@ PojoKretaProfile _$PojoKretaProfileFromJson(Map<String, dynamic> json) {
       id: json['id'] as int,
       name: json['name'] as String,
       schoolName: json['schoolName'] as String,
-      formTeacher: json['formTeacher'] == null ? null :
-      PojoKretaTeacherProfile.fromJson(json['formTeacher']  as Map<String, dynamic>)
-  );
+      formTeacher: json['formTeacher'] == null
+          ? null
+          : PojoKretaTeacherProfile.fromJson(
+              json['formTeacher'] as Map<String, dynamic>));
 }
 
 Map<String, dynamic> _$PojoKretaProfileToJson(PojoKretaProfile instance) =>

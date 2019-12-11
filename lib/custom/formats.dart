@@ -1,7 +1,15 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 import 'package:mobile/custom/hazizz_localizations.dart';
+
+String add0(int n){
+  if(n < 10){
+    return "0$n";
+  }
+  return n.toString();
+}
 
 String dateTimeToLastUpdatedFormat(BuildContext context, DateTime dateTime){
 
@@ -29,6 +37,13 @@ String dateTimeToLastUpdatedFormat(BuildContext context, DateTime dateTime){
   }
 
   return locText(context, key: "last_updated") + ": " + "${dateTime.year.toString()}.$str_month.$str_day $str_hour:$str_minute";
+}
+
+String toHazizzFormat(TimeOfDay timeOfDay){
+  String str_h = timeOfDay.hour >= 10 ? timeOfDay.hour.toString() : "0${timeOfDay.hour}";
+  String str_m = timeOfDay.minute >= 10 ? timeOfDay.minute.toString() : "0${timeOfDay.minute}";
+
+  return "$str_h:$str_m";
 }
 
 String hazizzRequestDateFormat(DateTime dateTime){

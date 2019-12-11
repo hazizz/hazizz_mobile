@@ -60,7 +60,7 @@ class HazizzTheme{
 
 
     textTheme: TextTheme(
-      body1: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
+      body1: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600,),
       body2: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
       title: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w800),
       caption: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
@@ -106,7 +106,7 @@ class HazizzTheme{
     splashColor: lightblue,
 */
     textTheme: TextTheme(
-      body1: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
+      body1: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600, ),
       body2: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
       title: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w800),
       caption: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),

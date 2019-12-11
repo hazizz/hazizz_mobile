@@ -1,12 +1,8 @@
-
 import 'package:intl/intl.dart';
-import 'package:mobile/communication/errorcode_collection.dart';
-import 'package:mobile/communication/pojos/PojoError.dart';
 import 'package:mobile/communication/pojos/PojoTokens.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:meta/meta.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
-import 'package:mobile/navigation/business_navigator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:mobile/communication/request_sender.dart';
@@ -70,7 +66,7 @@ class TokenManager {
       PojoTokens tokens = hazizzResponse.convertedData;
 
       InfoCache.setMyUsername(username);
-      setTokens(tokens.token, tokens.refresh);
+      setTokens(tokens.access_token, tokens.refresh_token);
 
     }else if(hazizzResponse.isError){
     }
@@ -84,7 +80,7 @@ class TokenManager {
     if(hazizzResponse.isSuccessful){
       HazizzLogger.printLog("In createTokenWithRefresh function: token response successful");
       PojoTokens tokens = hazizzResponse.convertedData;
-      setTokens(tokens.token, tokens.refresh);
+      setTokens(tokens.access_token, tokens.refresh_token);
       HazizzLogger.printLog("In createTokenWithRefresh function: token is set and should be working");
     }else if(hazizzResponse.hasPojoError){
       await AppState.logout();
@@ -96,7 +92,7 @@ class TokenManager {
     HazizzResponse hazizzResponse = await RequestSender().getAuthResponse(new CreateToken.withGoogleAccount(q_openIdToken: openIdToken));
     if(hazizzResponse.isSuccessful){
       PojoTokens tokens = hazizzResponse.convertedData;
-      await setTokens(tokens.token, tokens.refresh);
+      await setTokens(tokens.access_token, tokens.refresh_token);
       AppState.logInProcedure(tokens: tokens);
     }else if(hazizzResponse.hasPojoError){
 
@@ -108,7 +104,7 @@ class TokenManager {
     HazizzResponse hazizzResponse = await RequestSender().getAuthResponse(new CreateToken.withFacebookAccount(q_facebookToken: facebookToken));
     if(hazizzResponse.isSuccessful){
       PojoTokens tokens = hazizzResponse.convertedData;
-      await setTokens(tokens.token, tokens.refresh);
+      await setTokens(tokens.access_token, tokens.refresh_token);
       AppState.logInProcedure(tokens: tokens);
     }else if(hazizzResponse.hasPojoError){
 

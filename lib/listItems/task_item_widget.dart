@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/communication/pojos/PojoTag.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
+import 'package:mobile/custom/markdown_image_remover.dart';
 import 'package:mobile/pages/tasks_page/view_task_page.dart';
 
 import 'package:mobile/custom/hazizz_localizations.dart';
@@ -59,59 +61,66 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
 
     Color mainColor = Colors.grey;
 
-    List<PojoTag> tags = List();
-    tags.addAll(pojoTask.tags);
+    List<PojoTag> tags = [];
+    if(pojoTask.tags != null && tags != null){
+      tags.addAll(pojoTask.tags);
+    }
 
 
 
     Widget highlightTag = Container();
 
     bool doBreak = false;
-    for(PojoTag t in pojoTask.tags) {
-      if(!doBreak){
-        for(PojoTag defT in PojoTag.defaultTags) {
-          if(defT.name == t.name) {
-            tags.remove(t);
 
-            mainColor = t.getColor();
-
-            highlightTag = Container(
-              // color: PojoType.getColor(widget.pojoTask.type),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        bottomRight: Radius.circular(12)),
-                    color: mainColor
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      left: 4, top: 2, right: 8, bottom: 4),
-                  child: Text(t.getDisplayName(context),
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),),
-                )
-            );
-            doBreak = true;
-            break;
-          }
-        }
-      }else{
-        break;
-      }
-    }
     List<Widget> tagWidgets = List();
-    for(PojoTag t in tags){
-      tagWidgets.add(Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-          color: Colors.grey,
 
-        ),
-        child: Padding(
-          padding: const EdgeInsets.only(top: 2.0, bottom: 2, left: 6, right: 6),
-          child: Text(t.getDisplayName(context), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),),
-        ),
-      ));
+    if(pojoTask.tags != null){
+      for(PojoTag t in pojoTask.tags) {
+        if(!doBreak){
+          for(PojoTag defT in PojoTag.defaultTags) {
+            if(defT.name == t.name) {
+              tags.remove(t);
+
+              mainColor = t.getColor();
+
+              highlightTag = Container(
+                // color: PojoType.getColor(widget.pojoTask.type),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          bottomRight: Radius.circular(12)),
+                      color: mainColor
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 4, top: 2, right: 8, bottom: 4),
+                    child: Text(t.getDisplayName(context),
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),),
+                  )
+              );
+              doBreak = true;
+              break;
+            }
+          }
+        }else{
+          break;
+        }
+      }
+      for(PojoTag t in tags){
+        tagWidgets.add(Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            color: Colors.grey,
+
+          ),
+          child: Padding(
+            padding: const EdgeInsets.only(top: 2.0, bottom: 2, left: 6, right: 6),
+            child: Text(t.getDisplayName(context), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),),
+          ),
+        ));
+      }
+      tagWidgets.insert(0, highlightTag);
     }
-    tagWidgets.insert(0, highlightTag);
+
 
     return  Opacity(
       opacity: opacity,
@@ -145,8 +154,8 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
                     child: Builder(
                       builder: (context){
                         IconData iconData;
-
-                        if(isCompleted){
+                        if(isCompleted == null) return Container();
+                        else if(isCompleted){
                           iconData = FontAwesomeIcons.checkSquare;
                         }else {
                           iconData = FontAwesomeIcons.square;
@@ -234,7 +243,28 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
 
                       Padding(
                         padding: const EdgeInsets.only(left: 10, top: 0, bottom: 0),
-                        child: Text(pojoTask.description, style: TextStyle(fontSize: 18),),
+                       // child: Text(markdownImageRemover(pojoTask.description), style: TextStyle(fontSize: 18),),
+                        child: Markdown(data: pojoTask.description,
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          imageBuilder: (uri){
+                            return Padding(
+                              padding: const EdgeInsets.only(left: 3, right: 3),
+                              child: Icon(FontAwesomeIcons.image),
+                            );
+                          },
+                          styleSheet: MarkdownStyleSheet(
+                            p:  TextStyle(fontFamily: "Nunito", fontSize: 14, color: Colors.black),
+                            h1: TextStyle(fontFamily: "Nunito", fontSize: 26, color: Colors.black),
+                            h2: TextStyle(fontFamily: "Nunito", fontSize: 24, color: Colors.black),
+                            h3: TextStyle(fontFamily: "Nunito", fontSize: 22, color: Colors.black),
+                            h4: TextStyle(fontFamily: "Nunito", fontSize: 20, color: Colors.black),
+                            h5: TextStyle(fontFamily: "Nunito", fontSize: 18, color: Colors.black),
+                            h6: TextStyle(fontFamily: "Nunito", fontSize: 16, color: Colors.black),
+                            a:  TextStyle(fontFamily: "Nunito", color: Colors.blue, decoration: TextDecoration.underline),
+                          ),
+                        )
+
                       ),
 
 

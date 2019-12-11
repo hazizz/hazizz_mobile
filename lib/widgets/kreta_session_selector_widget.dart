@@ -31,14 +31,10 @@ class SessionSelectorWidget extends StatefulWidget {
 
 class _SessionSelectorWidget extends State<SessionSelectorWidget> with AutomaticKeepAliveClientMixin {
 
-  //SessionsBloc sessionsBloc = SessionsBloc();
-  
   @override
   void initState() {
     initalizeSelectedSession();
     SessionsBloc().dispatch(FetchData());
-
-
     super.initState();
   }
 
@@ -68,6 +64,46 @@ class _SessionSelectorWidget extends State<SessionSelectorWidget> with Automatic
     }
   }
 
+  Widget showSessionWidgets(List<PojoSession> s){
+    List<PojoSession> sessions1 = s;
+
+    if(sessions1.isEmpty){
+      return Center(child: Text(locText(context, key: "no_kreta_account_added_yet")));
+    }
+    return BlocBuilder(
+      bloc: SelectedSessionBloc(),
+      builder: (context2, state2){
+        sessions.clear();
+        sessions.addAll(sessions1);
+        HazizzLogger.printLog("session change: $state2: ${sessions1}");
+        /* if( SelectedSessionBloc().selectedSession != null){
+                                      // sessions.remove(SSessielectedonBloc().selectedSession);
+                                      for(PojoSession s in sessions){
+                                        if(s.id == SelectedSessionBloc().selectedSession.id){
+                                          sessions.remove(s);
+                                          break;
+                                        }
+                                      }
+                                    }
+                                    */
+        if(sessions.isNotEmpty){
+          return new ListView.builder(
+              itemCount: sessions.length,
+              itemBuilder: (BuildContext context, int index) {
+                if(index >= sessions.length-1){
+                  return addScrollSpace(SessionItemWidget(session: sessions[index],));
+                }
+                return SessionItemWidget(session: sessions[index],);
+              }
+          );
+        }
+        return Text(locText(context, key: "should_add_kreta_account"));
+
+
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,134 +127,17 @@ class _SessionSelectorWidget extends State<SessionSelectorWidget> with Automatic
                   Expanded(
                     child: Column(
                       children: [
-                        /*
-                        BlocBuilder(
-                          bloc: SelectedSessionBloc(),
-                          builder: (context, state){
-                            String info = "";
-                            if(state is SelectedSessionEmptyState){
-                              info = "no selected account";
-                            }else if(state is SelectedSessionInactiveState){
-                              info = "selected account is inactive";
-
-                            }else if(state is SelectedSessionFineState){
-
-                              PojoSession selectedSession = state.session;
-                              //   sessions.remove(selectedSession);
-                              selectedSessionWidget = SessionItemWidget(session: selectedSession,);
-                            }
-
-
-
-                            return Column(
-                              children: <Widget>[
-                                Builder(
-                                  builder: (context){
-                                    if(state is SelectedSessionEmptyState){
-                                      return AutoSizeText(
-                                        locText(context, key: "no_selected_kreta_account"),
-                                        maxLines: 1,
-                                        minFontSize: 18,
-                                        maxFontSize: 30,
-                                      );
-                                    }
-                                    else if(SelectedSessionBloc().currentState is SelectedSessionInactiveState){
-                                      return Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: <Widget>[
-                                          AutoSizeText(
-
-                                            locText(context, key: "selected_kreta_account_inactive"),
-                                            maxLines: 1,
-
-                                            maxFontSize: 30,
-                                         //   minFontSize: 30,
-                                          ),
-                                        ],
-                                      );
-                                    }else return Container();
-                                  },
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 16.0),
-                                  child: Builder(
-                                    builder: (context){
-                                      if(selectedSessionWidget != null){
-                                        return Column(
-                                          children: <Widget>[
-                                            Text(locText(context, key: "selected_kreta_account"), style: TextStyle(fontSize: 20),),
-                                            Container(
-                                                width: MediaQuery.of(context).size.width,
-                                                height: 95,
-                                                child: Card( color: Colors.grey, child: Builder(builder: (context){
-                                                  if(selectedSessionWidget != null){
-                                                    return selectedSessionWidget;
-                                                  }
-                                                  return Container();//Text("");
-                                                },),)
-                                            )
-                                          ],
-                                        );
-                                      }
-                                      return Container();
-                                    },
-                                  ),
-                                )
-
-                              ],
-                            );
-
-                          },
-                        ),
-                        */
                         Expanded(
                           child: BlocBuilder(
                             bloc: SessionsBloc(),
                             builder: (_, HState state) {
                               if (state is ResponseDataLoaded) {
-                                List<PojoSession> sessions1 = state.data;
+                                return showSessionWidgets(state.data);
 
-
-                                if(sessions1.isEmpty){
-                                  return Center(child: Text(locText(context, key: "no_kreta_account_added_yet")));
-                                }
-
-                                return BlocBuilder(
-                                  bloc: SelectedSessionBloc(),
-                                  builder: (context2, state2){
-                                    sessions.clear();
-                                    sessions.addAll(sessions1);
-
-
-                                    HazizzLogger.printLog("session change: $state2: ${sessions1}");
-                                  /* if( SelectedSessionBloc().selectedSession != null){
-                                      // sessions.remove(SSessielectedonBloc().selectedSession);
-                                      for(PojoSession s in sessions){
-                                        if(s.id == SelectedSessionBloc().selectedSession.id){
-                                          sessions.remove(s);
-                                          break;
-                                        }
-                                      }
-                                    }
-                                    */
-                                    if(sessions.isNotEmpty){
-                                      return new ListView.builder(
-                                          itemCount: sessions.length,
-                                          itemBuilder: (BuildContext context, int index) {
-                                            if(index >= sessions.length-1){
-                                              return addScrollSpace(SessionItemWidget(session: sessions[index],));
-                                            }
-                                            return SessionItemWidget(session: sessions[index],);
-                                          }
-                                      );
-                                    }
-                                    return Text(locText(context, key: "should_add_kreta_account"));
-
-
-                                  },
-                                );
-
-                              } else if (state is ResponseWaiting) {
+                              }else if(state is ResponseDataLoadedFromCache){
+                                return showSessionWidgets(state.data);
+                              }
+                              else if (state is ResponseWaiting) {
                                 return Center(child: CircularProgressIndicator(),);
                               }
                               return Center(

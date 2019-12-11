@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -14,6 +16,7 @@ import 'package:mobile/communication/pojos/PojoSubject.dart';
 import 'package:mobile/communication/pojos/PojoTag.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
+import 'package:mobile/custom/image_operations.dart';
 
 import 'package:mobile/defaults/pojo_group_empty.dart';
 import 'package:mobile/defaults/pojo_subject_empty.dart';
@@ -59,6 +62,9 @@ class _TaskMakerPage extends State<TaskMakerPage> {
 //  final TextEditingController _descriptionTextEditingController = TextEditingController();
 //  final TextEditingController _titleTextEditingController = TextEditingController();
 
+  List<EncryptedImageData> imageDatas = List();
+
+
   final FocusNode _descriptionFocusNode = FocusNode();
   final FocusNode _titleFocusNode = FocusNode();
 
@@ -75,6 +81,8 @@ class _TaskMakerPage extends State<TaskMakerPage> {
   static PojoSubject chosenSubject;
 
   FormField groupFormField;
+
+  final ScrollController scrollController = ScrollController();
 
 
 
@@ -614,66 +622,129 @@ class _TaskMakerPage extends State<TaskMakerPage> {
 
 
                                        // Flex(direction: Axis.vertical, ),
-                                        Column(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: <Widget>[
-                                            Padding(
-                                              padding: const EdgeInsets.only(left: 12, top: 16, right: 12),
-                                              child: new Row(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                children: [
-                                                  new Flexible(
-                                                      child: titleTextForm
-                                                  )
-                                                ],
+                                        Center(
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: <Widget>[
+                                              Padding(
+                                                padding: const EdgeInsets.only(left: 12, top: 16, right: 12),
+                                                child: new Row(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    new Flexible(
+                                                        child: titleTextForm
+                                                    )
+                                                  ],
+                                                ),
                                               ),
-                                            ),
 
-                                            Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 12, right: 12, top: 0),
-                                                child: descriptionTextForm
-                                            ),
+                                              Padding(
+                                                  padding: const EdgeInsets.only(
+                                                      left: 12, right: 12, top: 0),
+                                                  child: descriptionTextForm
+                                              ),
 
-                                            Center(
-                                                child:
+                                              Padding(
+                                                padding: const EdgeInsets.only(left: 6, right: 6),
+                                                child: Card(
+                                                  color: Colors.grey,
+                                                  child: Padding(
+                                                    padding: EdgeInsets.all(4),
+                                                    child: ConstrainedBox(
+                                                      constraints: new BoxConstraints(
+                                                        minHeight: 0,
+                                                        maxHeight: 100,
+                                                      ),
+                                                      child: SingleChildScrollView(
+                                                        controller: scrollController,
 
-                                                Padding(
-                                                  padding: const EdgeInsets.only(bottom: 8.0),
-                                                  child: BlocBuilder(
-                                                      bloc: blocs,
-                                                      builder: (BuildContext context, TaskMakerState state) {
-                                                        if(state is TaskMakerWaitingState) {
-                                                          return RaisedButton(
-                                                            child: Transform.scale(
-                                                              scale: 0.8,
-                                                              child: FittedBox(
-                                                                child: Padding(
-                                                                  padding: const EdgeInsets.all(1),
-                                                                  child: CircularProgressIndicator(),
-                                                                ),
-                                                                fit: BoxFit.scaleDown,
+                                                        scrollDirection: Axis.horizontal,
+                                                        child: Row(
+
+                                                          children: <Widget>[
+                                                            Container(
+                                                              child: ListView.builder(
+                                                                  shrinkWrap: true,
+                                                                  scrollDirection: Axis.horizontal,
+                                                                  itemCount: imageDatas.length,
+                                                                  itemBuilder: (context, index){
+                                                                    return Padding(
+                                                                      padding: EdgeInsets.only(left: 6, ),
+                                                                      child: ClipRRect(
+                                                                        child: Image.file(imageDatas[index].originalImage, height: 70, ),
+                                                                        borderRadius: BorderRadius.circular(8),
+                                                                      ),
+                                                                    );
+                                                                  }
                                                               ),
                                                             ),
-                                                          );
-                                                        }else{
-                                                          return RaisedButton(
-                                                              child: Text((widget.mode == TaskMakerMode.create ? locText(context, key: "create") : locText(context, key: "edit")).toUpperCase()),
-                                                              onPressed: () async {
-                                                                if(!(state is TaskMakerWaitingState)) {
-                                                                  blocs.dispatch(
-                                                                      TaskMakerSendEvent());
+
+
+                                                            Padding(
+                                                              padding: EdgeInsets.only(left: 4, right: 4),
+                                                              child: IconButton(
+                                                                icon: Icon(imageDatas.isEmpty ? FontAwesomeIcons.image : FontAwesomeIcons.plus),
+                                                                onPressed: () async {
+                                                                  EncryptedImageData imageData = await ImageOpeations.pickAndEncrypt();
+                                                                  setState(() {
+                                                                    imageDatas.add(imageData);
+                                                                  });
+                                                                  Future.delayed(Duration(milliseconds: 400), (){
+                                                                    scrollController.animateTo(scrollController.position.maxScrollExtent, duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+
+                                                                  });
+                                                                },
+                                                              ),
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  )
+                                                ),
+                                              ),
+
+                                              Center(
+                                                  child:
+
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(bottom: 8.0),
+                                                    child: BlocBuilder(
+                                                        bloc: blocs,
+                                                        builder: (BuildContext context, TaskMakerState state) {
+                                                          if(state is TaskMakerWaitingState) {
+                                                            return RaisedButton(
+                                                              onPressed: null,
+                                                              child: Transform.scale(
+                                                                scale: 0.8,
+                                                                child: FittedBox(
+                                                                  child: Padding(
+                                                                    padding: const EdgeInsets.all(1),
+                                                                    child: CircularProgressIndicator(),
+                                                                  ),
+                                                                  fit: BoxFit.scaleDown,
+                                                                ),
+                                                              ),
+                                                            );
+                                                          }else{
+                                                            return RaisedButton(
+                                                                child: Text((widget.mode == TaskMakerMode.create ? locText(context, key: "create") : locText(context, key: "edit")).toUpperCase()),
+                                                                onPressed: () async {
+                                                                  if(!(state is TaskMakerWaitingState)) {
+                                                                    blocs.dispatch(
+                                                                        TaskMakerSendEvent(imageDatas));
+                                                                  }
                                                                 }
-                                                              }
-                                                          );
+                                                            );
+                                                          }
+
+
                                                         }
-
-
-                                                      }
-                                                  ),
-                                                )
-                                            ),
-                                          ],
+                                                    ),
+                                                  )
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ]
                                   );

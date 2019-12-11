@@ -9,8 +9,9 @@ part of 'PojoKretaTeacherProfile.dart';
 PojoKretaTeacherProfile _$PojoKretaTeacherProfileFromJson(
     Map<String, dynamic> json) {
   return PojoKretaTeacherProfile(
-      id: json['id'] as int, name: json['name'] as String)
-    ..email = json['email'] as String;
+      id: json['id'] as int,
+      name: json['name'] as String,
+      email: json['email'] as String);
 }
 
 Map<String, dynamic> _$PojoKretaTeacherProfileToJson(

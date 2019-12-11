@@ -38,7 +38,7 @@ PojoTask _$PojoTaskFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$PojoTaskToJson(PojoTask instance) => <String, dynamic>{
   'id': instance.id,
   'assignation': instance.assignation,
-  'tags': instance.tags.map((e) => e == null ? null : e.name)?.toList(),
+  'tags': instance.tags?.map((e) => e == null ? null : e.name)?.toList(),
   'title': instance.title,
   'description': instance.description,
   'dueDate': instance.dueDate?.toIso8601String(),

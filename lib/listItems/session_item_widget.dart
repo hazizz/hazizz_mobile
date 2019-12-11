@@ -51,6 +51,7 @@ class _SessionItemWidget extends State<SessionItemWidget>{
   Widget build(BuildContext context) {
 
     const String value_remove = "remove";
+    const String value_reauth = "reauth";
     return GestureDetector(
       onTap: () async {
         await showKretaProfileDialog(context, widget.session);
@@ -93,18 +94,54 @@ class _SessionItemWidget extends State<SessionItemWidget>{
                           child: Text(widget.session.url, style: TextStyle(fontSize: 14),),
                         ),
                         Spacer(),
-                        PopupMenuButton(
-                          icon: Icon(FontAwesomeIcons.ellipsisV, size: 20,),
-                          onSelected: (value) async {
-                            HazizzLogger.printLog("session popupmenuitem value: $value");
+                        Builder(
+                          builder: (context){
 
-                            if(value == value_remove){
-                              HazizzResponse hazizzResponse = await RequestSender().getResponse(KretaRemoveSessions(p_session: widget.session.id));
-                              if(hazizzResponse.isSuccessful){
-                                SessionsBloc().dispatch(FetchData());
-                              }
-                             // ViewTaskBloc().commentBlocs.commentSectionBloc.add(CommentSectionFetchEvent());
-                            }/*else if(value == value_select){
+                            List<PopupMenuEntry> menuItems = [
+                              PopupMenuItem(
+                                value: value_remove,
+                                child: GestureDetector(
+                                  child: Text(locText(context, key: "remove"),
+                                    style: TextStyle(color: HazizzTheme.red),
+                                  ),
+                                )
+                              ),
+                            ];
+
+                            if(widget.session.status != "ACTIVE"){
+                              menuItems.add(
+                                PopupMenuItem(
+                                    value: value_reauth,
+                                    child: GestureDetector(
+                                      child: Text(locText(context, key: "reauth"),
+                                        //   style: TextStyle(color: HazizzTheme.red),
+                                      ),
+                                    )
+                                ),
+                              );
+                            }
+
+                            return PopupMenuButton(
+                              icon: Icon(FontAwesomeIcons.ellipsisV, size: 20,),
+                              onSelected: (value) async {
+                                HazizzLogger.printLog("session popupmenuitem value: $value");
+
+                                if(value == value_remove){
+                                  HazizzResponse hazizzResponse = await RequestSender().getResponse(KretaRemoveSessions(p_session: widget.session.id));
+                                  if(hazizzResponse.isSuccessful){
+                                    SessionsBloc().dispatch(FetchData());
+                                  }
+                                  // ViewTaskBloc().commentBlocs.commentSectionBloc.add(CommentSectionFetchEvent());
+                                }
+                                if(value == value_reauth){
+                                  WidgetsBinding.instance.addPostFrameCallback((_) =>
+                                      Navigator.pushNamed(context, "/kreta/login/auth", arguments: widget.session)
+                                  );
+                                  // ViewTaskBloc().commentBlocs.commentSectionBloc.add(CommentSectionFetchEvent());
+                                }
+
+
+                                /*else if(value == value_select){
 
                               if(widget.session.status != "ACTIVE"){
                                 if(await showDialogSessionReauth(context)){
@@ -118,27 +155,12 @@ class _SessionItemWidget extends State<SessionItemWidget>{
                               }
                             }
                             */
-                          },
-                          itemBuilder: (BuildContext context) {
-                            return [
-                              /*PopupMenuItem(
-                                  value: value_select,
-                                  child: GestureDetector(
-                                    child: Text(locText(context, key: "select"),
-                                      //   style: TextStyle(color: HazizzTheme.red),
-                                    ),
-                                  )
-                              ),*/
-                              PopupMenuItem(
-                                  value: value_remove,
-                                  child: GestureDetector(
-                                    child: Text(locText(context, key: "remove"),
-                                      style: TextStyle(color: HazizzTheme.red),
-                                    ),
-                                  )
-                              ),
+                              },
+                              itemBuilder: (BuildContext context) {
+                                return menuItems;
+                              },
+                            );
 
-                            ];
                           },
                         )
                       ]

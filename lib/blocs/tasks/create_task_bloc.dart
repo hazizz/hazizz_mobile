@@ -1,4 +1,9 @@
 
+
+import 'dart:io';
+
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:image/image.dart';
 import 'package:mobile/blocs/item_list/item_list_picker_bloc.dart';
 import 'package:mobile/blocs/other/date_time_picker_bloc.dart';
 import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
@@ -12,6 +17,11 @@ import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/communication/hazizz_response.dart';
+import 'package:mobile/custom/image_operations.dart';
+import 'package:mobile/services/hazizz_crypt.dart';
+import 'package:steel_crypt/steel_crypt.dart';
+
+import '../../google_drive_manager.dart';
 
 
 //region EditTask bloc parts
@@ -133,28 +143,6 @@ class TaskCreateBloc extends TaskMakerBloc {
         }
         HazizzLogger.printLog("log: lul12");
 
-
-        /*
-        if(subjectId == null) {
-          HazizzLogger.printLog("log: uff: ${groupItemPickerBloc.currentState}");
-          HazizzLogger.printLog("log: lulu0000");
-
-          ItemListState groupState =  groupItemPickerBloc.currentState;
-          HazizzLogger.printLog("log: lulu00");
-          if (groupState is PickedGroupState) {
-            groupId = groupItemPickerBloc.pickedItem.id;
-            HazizzLogger.printLog("log: lulu0");
-          } else {
-            HazizzLogger.printLog("log: lulu1");
-            groupItemPickerBloc.add(NotPickedEvent());
-            HazizzLogger.printLog("log: lulu2");
-            missingInfo = true;
-          }
-        }
-        */
-
-
-
         HazizzLogger.printLog("log: lul2");
 
 
@@ -186,7 +174,7 @@ class TaskCreateBloc extends TaskMakerBloc {
         }
         */
 
-        description = descriptionBloc.lastText;
+        description = descriptionBloc.lastText ?? "";
 
 
         HazizzLogger.printLog("log: lul3");
@@ -199,39 +187,88 @@ class TaskCreateBloc extends TaskMakerBloc {
         }
         HazizzLogger.printLog("log: not missing info");
 
+        List<Future<Uri>> fimageUrls = [];
+        List<String> imageUrls = [];
+        String imageUrlsDesc = "";
+
+        if(event.imageDatas != null && event.imageDatas.isNotEmpty){
+        /*  List<List<int>> compressedImages = List();
+
+          for(File file in event.images){
+              List<int> result = await FlutterImageCompress.compressWithFile(
+                file.absolute.path,
+                minWidth: 2300,
+                minHeight: 1500,
+                quality: 94,
+                rotate: 90,
+              );
+              compressedImages.add(result);
+          }
+          */
+        //  ivsalt = CryptKey().genDart(8);
+        //  key = HazizzCrypt.generateKey();
+      /*    for(EncryptedImageData d in event.imageDatas){
+            HazizzResponse imgUploadResponse = await RequestSender().getResponse(new UploadImage(
+                imageData: d, key: d.key, iv: d.iv
+            ));
+            if(imgUploadResponse.isSuccessful){
+              imgUrl = imgUploadResponse.convertedData;
+            }
+          }
+          List<Future<HazizzResponse>> requests = [];
+          */
+
+          await Database().initialize();
+          List<Future<HazizzResponse>> responses = [];
+          for(EncryptedImageData d in event.imageDatas){
+            fimageUrls.add(Database().uploadImageToDrive(d));
+           /* responses.add(RequestSender().getResponse(new UploadImage(
+                imageData: d, key: d.key, iv: d.iv
+            )));
+            */
+          }
+
+          await Future.wait(fimageUrls)
+              .then((List<dynamic> responses) {
+            for(Uri uri in responses){
+              imageUrls.add(uri.toString());
+            }
+          }
+          );
+
+          for(int i = 0; i < imageUrls.length; i++){
+            imageUrlsDesc += "\n![hazizz_image](${imageUrls[i]}~~${event.imageDatas[i].key}~~${event.imageDatas[i].iv})";
+          }
+        }
+
         HazizzResponse hazizzResponse;
 
-
         HazizzLogger.printLog("BEFORE POIOP: ${groupId}, ${subjectId},");
-        hazizzResponse = await RequestSender().getResponse(new CreateTask(
+
+        if(event.imageDatas != null && event.imageDatas.isNotEmpty){
+          print("majas1: ${event?.imageDatas[0]}");
+
+          print("majas2: ${event?.imageDatas[0]?.key}");
+
+          print("majas3: ${imageUrls}");
+          print("majas4: ${description}");
+
+          print("majas5: ${imageUrlsDesc}");
+
+          print("leírás hosz: ${(description + imageUrlsDesc).length}");
+        }
+
+
+        hazizzResponse = await getResponse(new CreateTask(
             groupId: groupId,
             subjectId: subjectId,
             b_tags: tags,
             b_title: title,
-            b_description: description,
+            b_description: imageUrls.isEmpty ? description : description + imageUrlsDesc,
             b_deadline: deadline
         ));
 
-        /*
-        if(subjectId != null) {
-          hazizzResponse = await RequestSender().getResponse(new CreateTask(
-              subjectId: subjectId,
-              b_taskType: typeId,
-              b_title: title,
-              b_description: description,
-              b_deadline: deadline
-          ));
-        }else {
-          hazizzResponse = await RequestSender().getResponse(new CreateTask(
-              groupId: groupId,
-              b_taskType: typeId,
-              b_title: title,
-              b_description: description,
-              b_deadline: deadline
-          ));
-        }
-        */
-
+        print("majas3: broo");
         if(hazizzResponse.isSuccessful){
           HazizzLogger.printLog("log: task making was succcessful");
           yield TaskMakerSuccessfulState(hazizzResponse.convertedData);

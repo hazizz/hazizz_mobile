@@ -1,4 +1,8 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/other/comment_section_bloc.dart';
 import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
@@ -6,6 +10,7 @@ import 'package:mobile/blocs/other/view_task_bloc.dart';
 import 'package:mobile/blocs/tasks/tasks_bloc.dart';
 import 'package:mobile/communication/pojos/PojoTag.dart';
 
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
@@ -13,6 +18,7 @@ import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/dialogs/report_dialog.dart';
 import 'package:mobile/enums/group_permissions_enum.dart';
+import 'package:mobile/services/hazizz_crypt.dart';
 import 'package:mobile/storage/cache_manager.dart';
 import 'package:mobile/widgets/comment_section_widget.dart';
 import 'package:mobile/widgets/flushbars.dart';
@@ -25,6 +31,7 @@ import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'package:mobile/communication/request_sender.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ViewTaskPage extends StatefulWidget {
 
@@ -73,6 +80,8 @@ class _ViewTaskPage extends State<ViewTaskPage> {
   bool showComments = false;
 
   PojoTask pojoTask;
+  Image img;
+
 
   void processData(BuildContext context, PojoTask pojoTask){
     widget.pojoTask = pojoTask;
@@ -84,14 +93,16 @@ class _ViewTaskPage extends State<ViewTaskPage> {
 
      // _type = pojoTask.tags[0].getDisplayName(context);
 
-      for(PojoTag t in pojoTask.tags){
-        for(PojoTag defT in PojoTag.defaultTags){
-          if(t.name ==  defT.name){
-            mainTag = t;
+      if(pojoTask.tags != null){
+        for(PojoTag t in pojoTask.tags){
+          for(PojoTag defT in PojoTag.defaultTags){
+            if(t.name ==  defT.name){
+              mainTag = t;
+            }
           }
         }
+        _tags = pojoTask.tags;
       }
-      _tags = pojoTask.tags;
 
       DateTime date_deadline =  pojoTask.dueDate;
       _deadline = hazizzShowDateFormat(date_deadline);//"${date_deadline.day}.${date_deadline.month}.${date_deadline.year}";
@@ -100,13 +111,15 @@ class _ViewTaskPage extends State<ViewTaskPage> {
 
       tagWidgets = List();
 
-      for(PojoTag t in pojoTask.tags){
-        if(mainTag == null ||  t.name != mainTag.name){
-          tagWidgets.add(
-              TagChip(child: Text(t.getDisplayName(context), style: TextStyle(fontSize: 21, ),),
-                hasCloseButton: false,
-              )
-          );
+      if(pojoTask.tags != null){
+        for(PojoTag t in pojoTask.tags){
+          if(mainTag == null ||  t.name != mainTag.name){
+            tagWidgets.add(
+                TagChip(child: Text(t.getDisplayName(context), style: TextStyle(fontSize: 21, ),),
+                  hasCloseButton: false,
+                )
+            );
+          }
         }
       }
 
@@ -170,28 +183,33 @@ class _ViewTaskPage extends State<ViewTaskPage> {
             },),
             title: Text(locText(context, key: "view_task")),
             actions: <Widget>[
-              PopupMenuButton(
-                icon: Icon(FontAwesomeIcons.ellipsisV, size: 20,),
-                onSelected: (value) async {
-                  if(value == "report"){
-                    bool success = await showReportDialog(context, reportType: ReportTypeEnum.TASK, id: widget.pojoTask.id, name: "");
-                    if(success != null && success){
-                      showReportSuccessFlushBar(context, what: locText(context, key: "task"));
-                    }
-                  }
-                  if(value == "snap"){
-                    snapKey.currentState.snap();
-                  }
-                },
-                itemBuilder: (BuildContext context) {
-                  return [
-                    PopupMenuItem(
-                      value: "report",
-                      child: Text(locText(context, key: "report"),
-                        style: TextStyle(color: HazizzTheme.red),
-                      ),
-                    )
-                  ];
+              Builder(
+                builder: (context){
+                  if(widget.pojoTask.assignation.name.toLowerCase() == "thera") return Container();
+                  return PopupMenuButton(
+                    icon: Icon(FontAwesomeIcons.ellipsisV, size: 20,),
+                    onSelected: (value) async {
+                      if(value == "report"){
+                        bool success = await showReportDialog(context, reportType: ReportTypeEnum.TASK, id: widget.pojoTask.id, name: "");
+                        if(success != null && success){
+                          showReportSuccessFlushBar(context, what: locText(context, key: "task"));
+                        }
+                      }
+                      if(value == "snap"){
+                        snapKey.currentState.snap();
+                      }
+                    },
+                    itemBuilder: (BuildContext context) {
+                      return [
+                        PopupMenuItem(
+                          value: "report",
+                          child: Text(locText(context, key: "report"),
+                            style: TextStyle(color: HazizzTheme.red),
+                          ),
+                        )
+                      ];
+                    },
+                  );
                 },
               )
             ],
@@ -240,13 +258,10 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                             child: Padding(
                                               padding: const EdgeInsets.only(right: 6, bottom: 6),
                                               child: Builder(builder: (context){
-
-
                                                 HazizzLogger.printLog("redrawing coz completed: $completed");
+                                                if(completed == null) return Container();
                                                 IconData iconData;
                                                 if(completed){
-
-
                                                   return IconButton(
                                                       icon: Icon(FontAwesomeIcons.checkSquare, size: 32,),
                                                       onPressed: () async {
@@ -452,18 +467,90 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsets.only( left: 20, right: 20, top: 4),
+                                              padding: const EdgeInsets.only( left: 4, right: 4, top: 4),
                                               child: new Row(
                                                 mainAxisAlignment: MainAxisAlignment.start,
                                                 children: [
                                                   new Flexible(
-                                                      child: Text(_description,
-
+                                                      child: /* Text(
+                                                        _description,
                                                         style: TextStyle(
                                                           // fontFamily: shortStackFont,
                                                             fontWeight: FontWeight.w400,
                                                             fontSize: 26
                                                         ),
+                                                      ),*/
+
+                                                    Markdown(data: _description,
+                                                        shrinkWrap: true,
+                                                        physics: NeverScrollableScrollPhysics(),
+                                                        imageBuilder: (uri){
+                                                          print("mivan?1");
+
+                                                          if(uri.host == "drive.google.com"){
+                                                            return Padding(
+                                                              padding: const EdgeInsets.only(top: 2, bottom: 2),
+                                                              child: ClipRRect(
+                                                                child: Image.network(uri.toString()),
+                                                                borderRadius: BorderRadius.circular(3),
+
+                                                              ),
+                                                            );
+                                                          }
+
+                                                          List<String> urlList = uri.toString().split("~~");
+
+
+
+                                                          print("mivan?2");
+                                                          String url = urlList[0];
+                                                          String key = urlList[1];
+                                                          String iv = urlList[2];
+
+                                                          print("mivan?3");
+                                                          return FutureBuilder(
+                                                            future: img != null ? Future.value(false) : /*RequestSender().getResponse(new GetUploadedImage(
+                                                                url: uri.toString()
+                                                            )), */
+                                                            http.get(url),
+                                                            builder: (context, responseState){
+                                                              if(img != null){
+                                                                return Container(child: img);
+                                                              }
+                                                              else if(responseState.connectionState == ConnectionState.done){
+                                                               // HazizzResponse g = responseState.data;
+                                                               // g.response.data
+                                                                String cryptedBase64Img = responseState.data.body;
+
+//                                                                String cryptedBase64Img = responseState.data.response.data;
+                                                                String base64Img = HazizzCrypt.decrypt(cryptedBase64Img, key, iv);
+                                                                Uint8List byteImg = Base64Decoder().convert(base64Img);
+                                                                img = Image.memory(byteImg);
+                                                                return Container(child: img,);
+                                                              }else{
+                                                                return Center(child: CircularProgressIndicator(),);
+                                                              }
+                                                            },
+                                                          );
+                                                        },
+                                                      styleSheet: MarkdownStyleSheet(
+                                                        p:  TextStyle(fontFamily: "Nunito", fontSize: 20, color: Colors.black),
+                                                        h1: TextStyle(fontFamily: "Nunito", fontSize: 32, color: Colors.black),
+                                                        h2: TextStyle(fontFamily: "Nunito", fontSize: 30, color: Colors.black),
+                                                        h3: TextStyle(fontFamily: "Nunito", fontSize: 28, color: Colors.black),
+                                                        h4: TextStyle(fontFamily: "Nunito", fontSize: 26, color: Colors.black),
+                                                        h5: TextStyle(fontFamily: "Nunito", fontSize: 24, color: Colors.black),
+                                                        h6: TextStyle(fontFamily: "Nunito", fontSize: 22, color: Colors.black),
+                                                        a:  TextStyle(fontFamily: "Nunito", color: Colors.blue, decoration: TextDecoration.underline),
+                                                      ),
+                                                      onTapLink: (String url) async {
+                                                        if (await canLaunch(url)) {
+                                                        await launch(url);
+                                                        }
+                                                      },
+
+
+
                                                       )
                                                   )
                                                 ],
@@ -502,18 +589,24 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                             children: <Widget>[
                                               Padding(
                                                 padding: const EdgeInsets.only(top: 3.0, right: 3),
-                                                child: FlatButton(
-                                                  onPressed: () async {
-                                                    setState(() {
-                                                      showComments = true;
-                                                    });
-                                                    await Future.delayed(const Duration(milliseconds: 50));
-                                                    _scrollController.animateTo(_scrollController.position.maxScrollExtent, curve: Curves.ease, duration: Duration(milliseconds: 340));
+                                                child: Builder(
+                                                  builder: (context){
+                                                    if(widget.pojoTask.assignation.name.toLowerCase() == "thera") return Container();
+                                                    return FlatButton(
+                                                        onPressed: () async {
+                                                          setState(() {
+                                                            showComments = true;
+                                                          });
+                                                          await Future.delayed(const Duration(milliseconds: 50));
+                                                          _scrollController.animateTo(_scrollController.position.maxScrollExtent, curve: Curves.ease, duration: Duration(milliseconds: 340));
+                                                        },
+
+                                                        child: Text(locText(context, key: "comments").toUpperCase(), style: theme(context).textTheme.button)
+
+                                                    );
+
                                                   },
-
-                                                   child: Text(locText(context, key: "comments").toUpperCase(), style: theme(context).textTheme.button)
-
-                                                ),
+                                                )
                                               ),
                                               Positioned(top: 0, right: 0,
                                                 child: chip,

@@ -1449,6 +1449,7 @@ Future<void> showNewFeatureDialog(context) async {
         return hazizzDialog;
       }
   );
+
 }
 
 //TODO a good lookin dialog this is

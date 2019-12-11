@@ -5,12 +5,12 @@ part 'PojoTokens.g.dart';
 @JsonSerializable()
 class PojoTokens{
   PojoTokens({
-    this.token,
-    this.refresh
+    this.access_token,
+    this.refresh_token
   });
 
-  final String token;
-  final String refresh;
+  final String access_token;
+  final String refresh_token;
 
   factory PojoTokens.fromJson(Map<String, dynamic> json) =>
       _$PojoTokensFromJson(json);

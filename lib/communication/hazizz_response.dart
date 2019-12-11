@@ -76,7 +76,7 @@ class HazizzResponse{
     if(request is CreateToken){
       HazizzLogger.printLog("error obtaining token response. Big problem");
     }else {
-      HazizzLogger.printLog("error response raw body: ${hazizzResponse.response.data}");
+      HazizzLogger.printLog("error response raw body: ${hazizzResponse?.response?.data}");
     }
     HazizzLogger.printLog("error response dio error: ${hazizzResponse.dioError.type.toString()}");
 
@@ -156,6 +156,10 @@ class HazizzResponse{
         else if(pojoError.errorCode == 136 || pojoError.errorCode == 132 || pojoError.errorCode == 130){
           SelectedSessionBloc().dispatch(SelectedSessionInactiveEvent());
         }
+       /* else if(pojoError.errorCode == 131){
+          SelectedSessionBloc().dispatch(SelectedSessionInactiveEvent());
+        }
+        */
         HazizzLogger.printLog("log: response error: ${pojoError.toString()}");
       }
       else{

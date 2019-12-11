@@ -95,11 +95,7 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
 
   int groupId;
 
-
-
-
-
-  var slides;
+  List<Widget> slides;
 
   @override
   void initState() {
@@ -110,7 +106,6 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
   //  _tabController.addListener(_handleTabSelection);
     super.initState();
   }
-
 
 
   @override
@@ -141,7 +136,7 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
               ),
               Container(
                 height: MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top,
-            //    width: MediaQuery.of(context).size.width,
+            //    width: MediaQuery.of(context).size.width,Transform.rotateTransform.rotate
                 child: Center(
                   child: Column(
                     children: <Widget>[

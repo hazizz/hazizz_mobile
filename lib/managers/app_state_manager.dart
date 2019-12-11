@@ -59,10 +59,10 @@ class AppState{
     logInProcedureDone = false;
 
     HazizzLogger.printLog("logInProcedure: 0");
-    TokenManager.setToken(tokens.token);
+    TokenManager.setToken(tokens.access_token);
     HazizzLogger.printLog("logInProcedure: 1");
 
-    TokenManager.setRefreshToken(tokens.refresh);
+    TokenManager.setRefreshToken(tokens.refresh_token);
     HazizzLogger.printLog("logInProcedure: 2");
 
 

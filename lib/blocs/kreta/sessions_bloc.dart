@@ -1,9 +1,9 @@
 import 'package:bloc/bloc.dart';
+import 'package:mobile/blocs/kreta/selected_session_bloc.dart';
 import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/response_states.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
-import 'package:mobile/custom/hazizz_logger.dart';
 
 
 import 'package:mobile/communication/request_sender.dart';
@@ -44,11 +44,24 @@ class SessionsBloc extends Bloc<HEvent, HState> {
     return actS;
   }
 
+  void checkSession(){
+    if(sessions != null && sessions.isNotEmpty){
+      if( !sessions.any((element) => element.username == SelectedSessionBloc().selectedSession.username)){
+        SelectedSessionBloc().dispatch(SelectedSessionSetEvent(sessions[0]));
+      }
+    }
+  }
+
   @override
   Stream<HState> mapEventToState(HEvent event) async* {
     if (event is FetchData) {
+
+      // TODO check currentSession is here
       yield ResponseWaiting();
       sessions = getActiveSessions(await KretaSessionManager.getSessions());
+
+      checkSession();
+
       activeSessions = getActiveSessions(sessions);
       yield ResponseDataLoadedFromCache(data: sessions);
 
@@ -56,11 +69,11 @@ class SessionsBloc extends Bloc<HEvent, HState> {
       print("KretaGetSessions request was sent!");
       if(hazizzResponse.isSuccessful){
         sessions = hazizzResponse.convertedData;
+        checkSession();
         KretaSessionManager.setSessions(sessions);
         activeSessions = getActiveSessions(sessions);
         yield ResponseDataLoaded(data: sessions);
-      }
-      else{
+      }else{
         HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetSessions());
         print("KretaGetSessions request was sent2!");
         if(hazizzResponse.isSuccessful){

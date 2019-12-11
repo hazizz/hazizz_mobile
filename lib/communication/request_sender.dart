@@ -1,5 +1,6 @@
 // EZT NÉZD MEG -->https://github.com/Solido/awesome-flutter
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:dio/dio.dart';
 import 'package:dio_flutter_transformer/dio_flutter_transformer.dart';
@@ -264,7 +265,11 @@ class RequestSender{
         }else if(request.httpMethod == HttpMethod.PATCH) {
           options.headers = await request.buildHeader();
           response = await dio.patch(request.url, queryParameters: request.query, data: request.body, options: options);
+        }else if(request.httpMethod == HttpMethod.PUT) {
+          options.headers = await request.buildHeader();
+          response = await dio.put(request.url, queryParameters: request.query, data: request.body, options: options);
         }
+
 
         HazizzLogger.printLog("request was sent successfully: ${request.toString()}");
         HazizzLogger.printLog("response for ${request.toString()}: ${response.toString()}");

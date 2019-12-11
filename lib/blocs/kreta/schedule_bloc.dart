@@ -11,12 +11,9 @@ import 'package:mobile/communication/connection.dart';
 import 'package:mobile/communication/custom_response_errors.dart';
 import 'package:mobile/communication/pojos/PojoClass.dart';
 import 'package:mobile/communication/pojos/PojoSchedules.dart';
-import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_date_time.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
-
-import 'package:mobile/managers/kreta_session_manager.dart';
 
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/communication/request_sender.dart';
@@ -129,8 +126,8 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     for(String key in classes.classes.keys){
       int newI = 0;
       for(int i = 0; i < classes.classes[key].length; i++){
-        if(classes.classes[key][i].accountId?.split("_")[2] == SelectedSessionBloc().selectedSession.username){
-          if(sessionSchedules[key] == null){
+        if(classes.classes[key][i].accountId?.split("_")[2] == SelectedSessionBloc().selectedSession?.username){
+          if(!sessionSchedules.containsKey(key) ){
             sessionSchedules[key] = [];
           }
           sessionSchedules[key].insert(newI, classes.classes[key][i]);
@@ -223,7 +220,6 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
         HazizzLogger.printLog("event.yearNumber, event.weekNumber: ${event.yearNumber}, ${event.weekNumber}");
 
-
         if(currentYearNumber == currentCurrentYearNumber && currentWeekNumber == currentCurrentWeekNumber){
           DataCache dataCache = await loadScheduleCache(year: currentYearNumber, weekNumber: currentWeekNumber);
           if(dataCache!= null){
@@ -235,8 +231,6 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
         }
 
         //HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetSchedulesWithSession(q_year: currentYearNumber, q_weekNumber: currentWeekNumber));
-
-
         HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetSchedules(q_year: currentYearNumber, q_weekNumber: currentWeekNumber));
 
         if(hazizzResponse.isSuccessful){

@@ -1,5 +1,6 @@
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 
 import 'package:mobile/blocs/other/date_time_picker_bloc.dart';
+import 'package:mobile/custom/image_operations.dart';
 
 enum TaskMakerMode{ create,edit }
 
@@ -474,6 +476,10 @@ abstract class TaskMakerEvent extends HEvent {
 }
 
 class TaskMakerSendEvent extends TaskMakerEvent {
+  List<EncryptedImageData> imageDatas;
+  TaskMakerSendEvent(this.imageDatas){
+
+  }
   @override
   String toString() => 'TaskMakerSendEvent';
   List<Object> get props => null;

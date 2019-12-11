@@ -88,7 +88,7 @@
     : "Add widget",
 
 
-    "button_save"
+    "save"
     : "Mentés",
 
 
@@ -247,6 +247,9 @@
 
   "developer_settings"
 : "Fejlesztői beállítások",
+
+  "google_drive_settings"
+  : "Google Drive beállítások",
 
   "delete_me"
   : "Fiók törlése",
@@ -1307,6 +1310,9 @@
 
   "kreta_account"
   : "Kréta fiók",
+
+  "reauth"
+  : "Újra bejelentkezés",
 
   "not_logged_in_to_kreta_account"
   : "Nem vagy bejelentkezve a Krétába",

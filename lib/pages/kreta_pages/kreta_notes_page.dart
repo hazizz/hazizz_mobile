@@ -44,17 +44,6 @@ class _KretaNotesPage extends State<KretaNotesPage> with AutomaticKeepAliveClien
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  /* ListView(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    children: <Widget>[
-                      ToggleSessionButton(sessionName: "72154615551",isSelected: false, ),
-                      ToggleSessionButton(sessionName: "72154615551",isSelected: false, ),
-                      ToggleSessionButton(sessionName: "72154615551",isSelected: false, ),
-                      ToggleSessionButton(sessionName: "72154615551",isSelected: false, ),
-                      ToggleSessionButton(sessionName: "72154615551",isSelected: false, ),
-                    ],
-                  ),*/
                   Expanded(
                     child: BlocBuilder(
                       bloc: notesBloc,

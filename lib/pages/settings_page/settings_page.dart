@@ -143,6 +143,14 @@ class _SettingsPage extends State<SettingsPage> with AutomaticKeepAliveClientMix
               ),
               Divider(),
               ListTile(
+                onTap: (){
+                  Navigator.pushNamed(context, "/settings/google_drive_settings");
+                },
+                title: Text(locText(context, key: "google_drive_settings")),
+                leading: Icon(FontAwesomeIcons.googleDrive),
+              ),
+              Divider(),
+              ListTile(
                 onTap: () async {
                   Navigator.pushNamed(context, "/settings/kreta");
                 },
