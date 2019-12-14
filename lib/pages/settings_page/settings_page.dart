@@ -108,9 +108,7 @@ class _SettingsPage extends State<SettingsPage> with AutomaticKeepAliveClientMix
     
     
 
-    return Hero(
-      tag: "settings",
-      child: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           leading: HazizzBackButton(),
           title: Text(widget.getTitle(context)),
@@ -240,8 +238,7 @@ class _SettingsPage extends State<SettingsPage> with AutomaticKeepAliveClientMix
             ],
           ),
         )
-      ),
-    );
+      );
   }
 
   @override

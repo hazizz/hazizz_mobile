@@ -64,14 +64,11 @@ class TaskEditBloc extends TaskMakerBloc {
 
 
     descriptionController.text = taskToEdit.description;
-    titleController.text = taskToEdit.title;
 
     descriptionController.selection = TextSelection.fromPosition(TextPosition(offset: descriptionController.text.length));
-    titleController.selection = TextSelection.fromPosition(TextPosition(offset: titleController.text.length));
 
 
     HazizzLogger.printLog("log: descr: ${descriptionController.text}");
-    HazizzLogger.printLog("log: title: ${titleController.text}");
 
 
     deadlineBloc.dispatch(DateTimePickedEvent(dateTime: taskToEdit.dueDate));
@@ -86,7 +83,6 @@ class TaskEditBloc extends TaskMakerBloc {
       subjectItemPickerBloc.dispatch(SetSubjectEvent(item: taskToEdit.subject != null ? taskToEdit.subject : PojoSubject(0, "", false, null, false)));
 
 
-    titleBloc.dispatch(TextFormSetEvent(text: taskToEdit.title));
     descriptionBloc.dispatch(TextFormSetEvent(text: taskToEdit.description));
   }
 
@@ -106,7 +102,7 @@ class TaskEditBloc extends TaskMakerBloc {
         int groupId, subjectId;
         List<String> tags = List();
         DateTime deadline;
-        String title, description;
+        String description;
 
         bool missingInfo = false;
 
@@ -137,22 +133,6 @@ class TaskEditBloc extends TaskMakerBloc {
           missingInfo = true;
         }
 
-        HFormState titleState = titleBloc.currentState;
-        if(titleState is TextFormFine || titleState is TextFormSetState){
-          title = titleBloc.lastText;
-        }else{
-          HazizzLogger.printLog("log: missing: title");
-          missingInfo = true;
-        }
-        HFormState descriptionState = descriptionBloc.currentState;
-        /*
-        if(descriptionState is TextFormFine ||descriptionState is TextFormSetState){
-          description = descriptionBloc.lastText;
-        }else{
-          HazizzLogger.printLog("log: missing: description");
-          missingInfo = true;
-        }
-        */
         description = descriptionBloc.lastText;
 
         if(missingInfo){
@@ -168,7 +148,6 @@ class TaskEditBloc extends TaskMakerBloc {
           hazizzResponse = await RequestSender().getResponse(new EditTask(
               taskId: taskToEdit.id,
               b_tags: tags,
-              b_title: title,
               b_description: description,
               b_deadline: deadline
           ));
@@ -176,7 +155,6 @@ class TaskEditBloc extends TaskMakerBloc {
           hazizzResponse = await RequestSender().getResponse(new EditTask(
               taskId: taskToEdit.id,
               b_tags: tags,
-              b_title: title,
               b_description: description,
               b_deadline: deadline
           ));

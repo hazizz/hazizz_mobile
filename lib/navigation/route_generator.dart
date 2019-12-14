@@ -5,6 +5,7 @@ import 'package:mobile/pages/kreta_pages/kreta_statistics_page.dart';
 import 'package:mobile/pages/settings_page/about_page.dart';
 import 'package:mobile/pages/settings_page/developer_settings_page.dart';
 import 'package:mobile/pages/kreta_pages/kreta_session_selector_page.dart';
+import 'package:mobile/pages/settings_page/google_drive_settings_page.dart';
 import 'package:mobile/pages/settings_page/kreta_settings_page.dart';
 import 'package:mobile/pages/auth_pages/login_page.dart';
 import 'package:mobile/pages/settings_page/logs_page.dart';
@@ -73,6 +74,9 @@ class RouteGenerator{
         return MaterialPageRoute(builder: (_) => DeveloperSettingsPage());
       case '/settings/developer/logs':
         return MaterialPageRoute(builder: (_) => LogsPage());
+      case '/settings/google_drive_settings':
+        return MaterialPageRoute(builder: (_) => GoogleDriveSettingsPage());
+
       case '/groups':
         return MaterialPageRoute(builder: (_) => MyGroupsPage());
       case '/group/groupId': //assert(args != null);

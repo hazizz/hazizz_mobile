@@ -19,8 +19,6 @@ class GoogleLoginBloc extends SocialLoginBloc{
       "https://www.googleapis.com/auth/userinfo.email",
       "https://www.googleapis.com/auth/userinfo.profile",
       "openid",
-      "https://www.googleapis.com/auth/drive.appdata",
-      "https://www.googleapis.com/auth/drive.file"
     ]);
     _auth = FirebaseAuth.instance;
   }

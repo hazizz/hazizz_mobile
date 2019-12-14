@@ -30,44 +30,20 @@ abstract class TaskMakerBloc extends Bloc<TaskMakerEvent, TaskMakerState> {
   SubjectItemPickerBloc subjectItemPickerBloc;
   DateTimePickerBloc deadlineBloc;
   TaskTagBloc taskTagBloc;
-  TextFormBloc titleBloc;
   TextFormBloc descriptionBloc;
 
   final TextEditingController descriptionController = TextEditingController();
-  final TextEditingController titleController = TextEditingController();
 
-/*
- TaskMakerBloc({@required this.groupItemPickerBloc, @required this.subjectItemPickerBloc,
-    @required this.deadlineBloc, @required this.taskTypePickerBloc,
-    @required this.titleBloc, @required this.descriptionBloc,
-  });
-  */
+
 
   TaskMakerBloc(){
     subjectItemPickerBloc = SubjectItemPickerBloc();
     groupItemPickerBloc = GroupItemPickerBloc(subjectItemPickerBloc);
     deadlineBloc = DateTimePickerBloc();
     taskTagBloc = TaskTagBloc();
-    titleBloc = TextFormBloc(
-     validate: (String text){
-       if(text.length < 2){
-         return TextFormErrorTooShort();
-       }
-       if(text.length > 20){
-         return TextFormErrorTooLong();
-       }
-       return TextFormFine();
-     },
-    );
+
     descriptionBloc = TextFormBloc();
-    titleController.addListener((){
 
-      String text = titleController.text;
-
-      HazizzLogger.printLog("change: $text");
-      titleBloc.dispatch(TextFormValidate(text: text));
-
-    });
 
     descriptionController.addListener((){
 
@@ -88,7 +64,6 @@ abstract class TaskMakerBloc extends Bloc<TaskMakerEvent, TaskMakerState> {
     subjectItemPickerBloc.dispose();
     deadlineBloc.dispose();
     taskTagBloc.dispose();
-    titleBloc.dispose();
     descriptionBloc.dispose();
   
     super.dispose();

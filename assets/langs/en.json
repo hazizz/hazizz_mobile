@@ -717,6 +717,11 @@
     "passwordagain_fragment_register"
     : "Confirm password",
 
+  "delete_all_gdrive_images"
+  : "Delete all images",
+
+  "no_images_gdrive"
+  : "No Hazizz images in your drive",
 
   "delete_successful"
   : "{} successfully deleted",

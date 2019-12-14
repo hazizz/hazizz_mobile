@@ -96,7 +96,7 @@ class TaskCreateBloc extends TaskMakerBloc {
         int groupId, subjectId;
         List<String> tags = List();
         DateTime deadline;
-        String title, description;
+        String description;
 
         bool missingInfo = false;
 
@@ -154,25 +154,6 @@ class TaskCreateBloc extends TaskMakerBloc {
           missingInfo = true;
         }
 
-        HFormState titleState = titleBloc.currentState;
-        if(titleState is TextFormFine){
-          title = titleBloc.lastText;
-          HazizzLogger.printLog("log: title: $title");
-          if(title == null || title == ""){
-            missingInfo = true;
-          }
-        }else{
-          missingInfo = true;
-        }
-        HFormState descriptionState = descriptionBloc.currentState;
-        /*
-        if(descriptionState is TextFormFine){
-          description = descriptionBloc.lastText;
-
-        }else{
-          missingInfo = true;
-        }
-        */
 
         description = descriptionBloc.lastText ?? "";
 
@@ -218,10 +199,10 @@ class TaskCreateBloc extends TaskMakerBloc {
           List<Future<HazizzResponse>> requests = [];
           */
 
-          await Database().initialize();
+          await GoogleDriveManager().initialize();
           List<Future<HazizzResponse>> responses = [];
           for(EncryptedImageData d in event.imageDatas){
-            fimageUrls.add(Database().uploadImageToDrive(d));
+            fimageUrls.add(GoogleDriveManager().uploadImageToDrive(d));
            /* responses.add(RequestSender().getResponse(new UploadImage(
                 imageData: d, key: d.key, iv: d.iv
             )));
@@ -263,7 +244,6 @@ class TaskCreateBloc extends TaskMakerBloc {
             groupId: groupId,
             subjectId: subjectId,
             b_tags: tags,
-            b_title: title,
             b_description: imageUrls.isEmpty ? description : description + imageUrlsDesc,
             b_deadline: deadline
         ));

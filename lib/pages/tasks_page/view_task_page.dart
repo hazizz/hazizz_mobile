@@ -23,6 +23,7 @@ import 'package:mobile/storage/cache_manager.dart';
 import 'package:mobile/widgets/comment_section_widget.dart';
 import 'package:mobile/widgets/flushbars.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
+import 'package:mobile/widgets/image_viewer_widget.dart';
 import 'package:mobile/widgets/tag_chip.dart';
 import 'package:snappable/snappable.dart';
 
@@ -169,9 +170,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
       processData(context, pojoTask);
     }
 
-    return Hero(
-        tag: "hero_task${pojoTask.id}",
-        child: WillPopScope(
+    return WillPopScope(
           onWillPop: (){
             Navigator.pop(context, pojoTask);
             return Future.value(false);
@@ -450,21 +449,26 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                                 ],
                                               ),
                                             ) : Container(),
-                                            Padding(
-                                              padding: const EdgeInsets.only( left: 10,top: 5),
-                                              child: new Row(
-                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                children: [
-                                                  new Flexible(
-                                                    child: new Text(_title,
-                                                      style: TextStyle(
-                                                        //  fontFamily: "ShortStack",
-                                                          fontSize: 33
-                                                      ),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
+                                            Builder(
+                                              builder: (context){
+                                                if(_title == null) return Container();
+                                                return Padding(
+                                                  padding: const EdgeInsets.only( left: 10,top: 5),
+                                                  child: new Row(
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    children: [
+                                                      new Flexible(
+                                                        child: new Text(_title,
+                                                          style: TextStyle(
+                                                            //  fontFamily: "ShortStack",
+                                                              fontSize: 33
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                );
+                                              },
                                             ),
                                             Padding(
                                               padding: const EdgeInsets.only( left: 4, right: 4, top: 4),
@@ -472,16 +476,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                                 mainAxisAlignment: MainAxisAlignment.start,
                                                 children: [
                                                   new Flexible(
-                                                      child: /* Text(
-                                                        _description,
-                                                        style: TextStyle(
-                                                          // fontFamily: shortStackFont,
-                                                            fontWeight: FontWeight.w400,
-                                                            fontSize: 26
-                                                        ),
-                                                      ),*/
-
-                                                    Markdown(data: _description,
+                                                      child: Markdown(data: _description,
                                                         shrinkWrap: true,
                                                         physics: NeverScrollableScrollPhysics(),
                                                         imageBuilder: (uri){
@@ -490,17 +485,13 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                                           if(uri.host == "drive.google.com"){
                                                             return Padding(
                                                               padding: const EdgeInsets.only(top: 2, bottom: 2),
-                                                              child: ClipRRect(
-                                                                child: Image.network(uri.toString()),
-                                                                borderRadius: BorderRadius.circular(3),
-
-                                                              ),
+                                                              child: ImageViewer.fromNetwork(
+                                                                uri.toString(),
+                                                                heroTag: uri.toString(),
+                                                              )
                                                             );
                                                           }
-
                                                           List<String> urlList = uri.toString().split("~~");
-
-
 
                                                           print("mivan?2");
                                                           String url = urlList[0];
@@ -548,9 +539,6 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                                         await launch(url);
                                                         }
                                                       },
-
-
-
                                                       )
                                                   )
                                                 ],
@@ -689,7 +677,6 @@ class _ViewTaskPage extends State<ViewTaskPage> {
             ),
           )
         ),
-      )
-    );
+      );
   }
 }

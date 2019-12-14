@@ -752,6 +752,11 @@
     "passwordagain_fragment_register"
     : "Jelszó mégegyszer",
 
+  "delete_all_gdrive_images"
+  : "Összes Házizz kép törlése",
+
+  "no_images_gdrive"
+  : "Nincs Házizz kép a driveban",
 
   "delete_successful"
   : "{} sikeresen törölve",

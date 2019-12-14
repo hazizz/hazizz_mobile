@@ -22,6 +22,7 @@ import 'package:mobile/defaults/pojo_group_empty.dart';
 import 'package:mobile/defaults/pojo_subject_empty.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
+import 'package:mobile/widgets/image_viewer_widget.dart';
 import 'package:mobile/widgets/tag_chip.dart';
 
 import 'package:mobile/custom/hazizz_date.dart';
@@ -451,6 +452,7 @@ class _TaskMakerPage extends State<TaskMakerPage> {
         );
       }
     );
+    /*
     var titleTextForm = BlocBuilder(
         bloc: blocs.titleBloc,
         builder: (BuildContext context, HFormState state) {
@@ -486,17 +488,18 @@ class _TaskMakerPage extends State<TaskMakerPage> {
           );
         }
     );
+    */
     var descriptionTextForm = BlocBuilder(
-        bloc: blocs.descriptionBloc,
-        builder: (BuildContext context, HFormState state) {
+          bloc: blocs.descriptionBloc,
+          builder: (BuildContext context, HFormState state) {
 
-          if(state is TextFormSetState){
-            blocs.descriptionController.text = state.text;
-          }
+            if(state is TextFormSetState){
+              blocs.descriptionController.text = state.text;
+            }
 
-          return TextFormField(
+            return TextFormField(
 
-            /*a
+              /*a
 
             onChanged: (dynamic text) {
               HazizzLogger.printLog("change: $text");
@@ -504,30 +507,30 @@ class _TaskMakerPage extends State<TaskMakerPage> {
             },
             */
 
-            focusNode: _descriptionFocusNode,
-            controller: blocs.descriptionController,
-            textInputAction: TextInputAction.newline,
-            onFieldSubmitted: (String value){
-              FocusScope.of(context).requestFocus(new FocusNode());
-            },
-            decoration:
-                InputDecoration(labelText: locText(context, key: "description"), errorText: null,
-                 alignLabelWithHint: true,
-                 filled: true,
-              //    fillColor: HazizzTheme.formColor,
-            ),
-            maxLength: 240,
-            maxLines: 8,
-            minLines: 6,
-            expands: false,
-            style: TextStyle(
-                fontSize: 21
-            ),
-          );
+              focusNode: _descriptionFocusNode,
+              controller: blocs.descriptionController,
+              textInputAction: TextInputAction.newline,
+              onFieldSubmitted: (String value){
+                FocusScope.of(context).requestFocus(new FocusNode());
+              },
+              decoration:
+              InputDecoration(labelText: locText(context, key: "description"), errorText: null,
+                alignLabelWithHint: true,
+                filled: true,
+                //    fillColor: HazizzTheme.formColor,
+              ),
+              maxLength: 500,
+              maxLines: 8,
+              minLines: 6,
+              expands: false,
+              style: TextStyle(
+                  fontSize: 21
+              ),
+            );
 
 
-        }
-    );
+          }
+      );
 
     return BlocListener(
       bloc: blocs,
@@ -537,9 +540,7 @@ class _TaskMakerPage extends State<TaskMakerPage> {
           Navigator.pop(context, state.task);
         }
       },
-      child: Hero(
-          tag: "hero_task_edit",
-          child: Scaffold(
+      child: Scaffold(
               appBar: appBar,
               body:SingleChildScrollView(
                 child:
@@ -625,8 +626,9 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                                         Center(
                                           child: Column(
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: <Widget>[
-                                              Padding(
+                                             /* Padding(
                                                 padding: const EdgeInsets.only(left: 12, top: 16, right: 12),
                                                 child: new Row(
                                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -637,10 +639,11 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                                                   ],
                                                 ),
                                               ),
+                                              */
 
                                               Padding(
                                                   padding: const EdgeInsets.only(
-                                                      left: 12, right: 12, top: 0),
+                                                      left: 12, right: 12, top: 10),
                                                   child: descriptionTextForm
                                               ),
 
@@ -670,10 +673,38 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                                                                   itemBuilder: (context, index){
                                                                     return Padding(
                                                                       padding: EdgeInsets.only(left: 6, ),
-                                                                      child: ClipRRect(
-                                                                        child: Image.file(imageDatas[index].originalImage, height: 70, ),
-                                                                        borderRadius: BorderRadius.circular(8),
-                                                                      ),
+                                                                      child: Container(
+                                                                        height: 100,
+                                                                        child: Stack(
+                                                                          children: <Widget>[
+                                                                           /* ClipRRect(
+                                                                              child: Image.file(imageDatas[index].originalImage, height: 100, ),
+                                                                              borderRadius: BorderRadius.circular(8),
+                                                                            ),*/
+                                                                            Container(
+                                                                              height: 100,
+                                                                              child: ImageViewer.fromFile(
+                                                                                  imageDatas[index].originalImage,
+                                                                                  heroTag: imageDatas[index].originalImage.path
+                                                                              ),
+                                                                            ),
+                                                                            Positioned(
+                                                                              top: 0, left: 0,
+                                                                              child: Transform.translate(
+                                                                                offset: Offset(-1, -1),
+                                                                                child: GestureDetector(
+                                                                                  child: Icon(FontAwesomeIcons.solidTimesCircle, size: 20, color: Colors.red,),
+                                                                                  onTap: (){
+                                                                                    setState(() {
+                                                                                      imageDatas.removeAt(index);
+                                                                                    });
+                                                                                  },
+                                                                                )
+                                                                              )
+                                                                            )
+                                                                          ],
+                                                                        ),
+                                                                      )
                                                                     );
                                                                   }
                                                               ),
@@ -756,7 +787,6 @@ class _TaskMakerPage extends State<TaskMakerPage> {
 
                 ),
               ),
-      ),
     );
   }
 

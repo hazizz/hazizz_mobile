@@ -216,12 +216,13 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
       );
 
       if(canBuildBottomNavBar == false) {
-        SchedulerBinding.instance.addPostFrameCallback((_) =>
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          if(this.mounted){
             setState(() {
-              if(this.mounted){
-                canBuildBottomNavBar = true;
-              }
-            })
+              canBuildBottomNavBar = true;
+            });
+          }
+        }
         );
       }
 

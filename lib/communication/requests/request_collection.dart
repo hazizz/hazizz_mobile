@@ -856,8 +856,8 @@ class GetSubjects extends HazizzRequest {
 //region Task requests
 class CreateTask extends HazizzRequest {
   CreateTask({ResponseHandler rh,  int groupId, int subjectId,
-    @required  List<String> b_tags, @required String b_title,
-    @required String b_description, @required DateTime b_deadline }) : super(rh) {
+    @required  List<String> b_tags, @required String b_description,
+    @required DateTime b_deadline }) : super(rh) {
     httpMethod = HttpMethod.POST;
     if(subjectId != null && subjectId != 0){
       PATH = "tasks/subjects/${subjectId}";
@@ -870,7 +870,6 @@ class CreateTask extends HazizzRequest {
     contentTypeHeader = true;
 
     body["tags"] = b_tags;
-    body["taskTitle"] = b_title;
     body["description"] = b_description == null ? "" : b_description;
     body["dueDate"] = hazizzRequestDateFormat(b_deadline);
   }
@@ -883,7 +882,7 @@ class CreateTask extends HazizzRequest {
 
 class EditTask extends HazizzRequest {
   EditTask({ResponseHandler rh, @required int taskId,
-    @required List<String> b_tags, @required String b_title,
+    @required List<String> b_tags,
     @required String b_description,@required  DateTime b_deadline }) : super(rh) {
     httpMethod = HttpMethod.PATCH;
     PATH = "tasks/${taskId}";
@@ -892,7 +891,6 @@ class EditTask extends HazizzRequest {
     contentTypeHeader = true;
 
     body["tags"] = b_tags;
-    body["taskTitle"] = b_title;
     body["description"] = b_description;
     body["dueDate"] = hazizzRequestDateFormat(b_deadline);
 

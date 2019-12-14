@@ -232,13 +232,18 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
                         },
                       ),
 
-                      Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 6),
-                              child: Text(pojoTask.title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),),
-                            ),
-                          ]
+                      Builder(
+                        builder: (context){
+                          if(pojoTask.title == null) return Container();
+                          return Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 6),
+                                  child: Text(pojoTask.title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),),
+                                ),
+                              ]
+                          );
+                        },
                       ),
 
                       Padding(

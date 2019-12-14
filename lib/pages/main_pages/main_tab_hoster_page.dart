@@ -631,15 +631,13 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: <Widget>[
                             //   Divider(),
-                            Hero(
-                              tag: "settings",
-                              child: ListTile(
-                                  onTap: (){
-                                    Navigator.pop(context);
-                                    Navigator.pushNamed(context, "/settings");
-                                  },
-                                  leading: Icon(FontAwesomeIcons.cog),
-                                  title: Text(locText(context, key: "settings"))),
+                            ListTile(
+                              onTap: (){
+                                Navigator.pop(context);
+                                Navigator.pushNamed(context, "/settings");
+                              },
+                              leading: Icon(FontAwesomeIcons.cog),
+                              title: Text(locText(context, key: "settings"))
                             ),
                             Row(
                               children: [
