@@ -1,25 +1,14 @@
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/kreta/selected_session_bloc.dart';
-import 'package:mobile/blocs/kreta/selected_session_bloc.dart' as prefix0;
 import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/managers/kreta_session_manager.dart';
-import 'package:mobile/managers/token_manager.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:mobile/blocs/other/settings_bloc.dart';
-import 'package:mobile/managers/preference_services.dart';
 import 'package:mobile/notification/notification.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:easy_localization/easy_localization.dart';
-
-import 'package:mobile/theme/hazizz_theme.dart';
-import 'package:mobile/custom/hazizz_time_of_day.dart';
 
 class KretaSettingsPage extends StatefulWidget {
 
@@ -27,15 +16,13 @@ class KretaSettingsPage extends StatefulWidget {
     return locText(context, key: "kreta_settings");
   }
 
-  StartPageItemPickerBloc startPageItemPickerBloc = new StartPageItemPickerBloc();
-
   KretaSettingsPage({Key key}) : super(key: key);
 
   @override
   _KretaSettingsPage createState() => _KretaSettingsPage();
 }
 
-class _KretaSettingsPage extends State<KretaSettingsPage> with AutomaticKeepAliveClientMixin {
+class _KretaSettingsPage extends State<KretaSettingsPage>  {
 
 
   List<DropdownMenuItem> startPageItems = List();
@@ -47,12 +34,6 @@ class _KretaSettingsPage extends State<KretaSettingsPage> with AutomaticKeepAliv
 
   int currentStartPageItemIndex = 0;
 
-
-  // __KretaSettingsPage();
-
-
-  // FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
-
   bool isRemember = true;
   String notificationTime = "";
 
@@ -60,8 +41,6 @@ class _KretaSettingsPage extends State<KretaSettingsPage> with AutomaticKeepAliv
 
   @override
   void initState() {
-    // widget.myGroupsBloc.add(FetchData());
-
     KretaSessionManager.isRememberPassword().then((value){
       setState(() {
         isRemember = value;
@@ -82,11 +61,8 @@ class _KretaSettingsPage extends State<KretaSettingsPage> with AutomaticKeepAliv
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
-
-
     return Hero(
       tag: "kreta_settings",
       child: Scaffold(
@@ -100,35 +76,32 @@ class _KretaSettingsPage extends State<KretaSettingsPage> with AutomaticKeepAliv
                 Padding(
                   padding: const EdgeInsets.only(top: 10.0),
                   child: ListTile(
-                      title: Text(locText(context, key: "remember_kreta_password")),
-                     // leading: Icon(iconBell),
-                      trailing: Switch(
-                          value: isRemember,
-                          onChanged: (value){
-                            HazizzLogger.printLog("remember kreta password is enabled: ${value}");
-                            KretaSessionManager.setRememberPassword(value);
-                            if(value){
+                    title: Text(locText(context, key: "remember_kreta_password")),
+                    trailing: Switch(
+                      value: isRemember,
+                      onChanged: (value){
+                        HazizzLogger.printLog("remember kreta password is enabled: ${value}");
+                        KretaSessionManager.setRememberPassword(value);
+                        if(value){
 
-                              setState(() {
-                                iconBell = FontAwesomeIcons.solidBell;
-                                isRemember = value;
-                              });
-                            }else{
-                              PojoSession selectedSession = SelectedSessionBloc().selectedSession;
-                              if(selectedSession != null){
-                                selectedSession.password = null;
-                              }
-                              SelectedSessionBloc().dispatch(SelectedSessionSetEvent(selectedSession));
-                              setState(() {
-                                iconBell = FontAwesomeIcons.solidBellSlash;
-                                isRemember = value;
-
-                              });
-                            }
-
+                          setState(() {
+                            iconBell = FontAwesomeIcons.solidBell;
+                            isRemember = value;
+                          });
+                        }else{
+                          PojoSession selectedSession = SelectedSessionBloc().selectedSession;
+                          if(selectedSession != null){
+                            selectedSession.password = null;
                           }
-                      )
+                          SelectedSessionBloc().dispatch(SelectedSessionSetEvent(selectedSession));
+                          setState(() {
+                            iconBell = FontAwesomeIcons.solidBellSlash;
+                            isRemember = value;
 
+                          });
+                        }
+                      }
+                    )
                   ),
                 ),
               ],
@@ -137,8 +110,4 @@ class _KretaSettingsPage extends State<KretaSettingsPage> with AutomaticKeepAliv
       ),
     );
   }
-
-  @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
 }

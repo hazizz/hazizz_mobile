@@ -5,8 +5,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class HazizzBackButton extends StatelessWidget{
   Function onPressed;
 
-  HazizzBackButton({this.onPressed}){
+  Color c;
+  HazizzBackButton({this.onPressed});
 
+  HazizzBackButton.light(){
+    c = Colors.white;
   }
 
   @override
@@ -15,7 +18,7 @@ class HazizzBackButton extends StatelessWidget{
       Navigator.maybePop(context);
     };
     return IconButton(
-      icon: Icon(FontAwesomeIcons.arrowLeft),
+      icon: Icon(FontAwesomeIcons.arrowLeft, color: c,),
       onPressed: onPressed
     );
   }

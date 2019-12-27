@@ -1,19 +1,10 @@
-
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
-import 'package:mobile/enums/task_complete_state_enum.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:mobile/blocs/other/settings_bloc.dart';
 import 'package:mobile/managers/preference_services.dart';
-import 'package:mobile/notification/notification.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 
 
 class SettingsPage extends StatefulWidget {
@@ -22,15 +13,13 @@ class SettingsPage extends StatefulWidget {
     return locText(context, key: "settings");
   }
 
-  StartPageItemPickerBloc startPageItemPickerBloc = new StartPageItemPickerBloc();
-
   SettingsPage({Key key}) : super(key: key);
 
   @override
   _SettingsPage createState() => _SettingsPage();
 }
 
-class _SettingsPage extends State<SettingsPage> with AutomaticKeepAliveClientMixin {
+class _SettingsPage extends State<SettingsPage>  {
 
   String currentLanguageCode ;//= Locale("en", "EN");
 
@@ -113,7 +102,7 @@ class _SettingsPage extends State<SettingsPage> with AutomaticKeepAliveClientMix
           leading: HazizzBackButton(),
           title: Text(widget.getTitle(context)),
         ),
-        body: Container(
+        body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
 
@@ -240,10 +229,4 @@ class _SettingsPage extends State<SettingsPage> with AutomaticKeepAliveClientMix
         )
       );
   }
-
-  @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
-
-
 }

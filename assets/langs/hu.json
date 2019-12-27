@@ -7,29 +7,15 @@
 
 
     "hazizz_motto"
-    : "Nekünk és nektek mert mi is diákok vagyunk",
+    : "Nekünk és nektek, mert mi is diákok vagyunk",
 
 
     "hazizz_intro" : "Köszönjük, hogy letöltötted a Házizz Mobil-t! Az applikáció segítségével egy helyen tárolhatod az összes iskolai teendődet. \nLegyen szó házi feladatról, dolgozatról vagy beadandóról, az applikációban könnyen feljegyezhetsz mindent és megoszthatod osztálytársaiddal.\nKezdésképp jelentkez be a Google fiókodal!",
 
     "kreta_intro" : "Az e-Kréta jegyeidet és órarendedet is egyből elérheted a Házizz Mobilban.\nEhhez nem kell mást tenned, mint bejelentkezned a Kréta fiókodba és meg is vagy! \n",
 
-
-    "header_item_in"
-    : "",
-
-
-    "header_item_day"
-    : "nap",
-
-
-    "header_item_later"
-    : "múlva",
-
-
     "days"
     : "nap",
-
 
     "days_later"
     : "{} nap múlva",
@@ -91,6 +77,8 @@
     "save"
     : "Mentés",
 
+  "image_saved"
+  : "Kép elmentve a gallériába",
 
     "send"
     : "Küldés",
@@ -102,14 +90,8 @@
   "report"
   : "Jelentés",
 
-  "user"
-  : "Felhasználó",
-
   "commment"
   : "Megjegyzés",
-
-
-
 
   "report_something"
   : "{} jelentése",
@@ -117,8 +99,6 @@
 
   "report_successful"
   : "{} sikeresen jelentve",
-
-
 
   "accept_hazizz_guidelines1"
   : "Elfogadom a ",
@@ -128,11 +108,6 @@
 
   "error_accept_hazizz_guidelines"
   : "El kell fogadnod a házirendet!",
-
-
-    "button_add"
-    : "Hozzáad",
-
 
     "create"
     : "Létrehozás",
@@ -371,9 +346,6 @@
     : "Regisztráció",
 
 
-    "displayName"
-    : "Becenév",
-
 
     "registrationDate"
     : "Regisztráció ideje",
@@ -417,9 +389,6 @@
 
     "no_comments_yet"
     : "Még nincsenek megjegyzések",
-
-    "write_comment"
-    : "Írj egy megjegyzést",
 
     "delete"
     : "Törlés",
@@ -483,6 +452,11 @@
   "forward"
   : "Tovább",
 
+  "proceed"
+  : "Tovább",
+
+  "allow"
+  : "Engedélyezem",
 
     "skip"
     : "Kihagyás",
@@ -552,7 +526,6 @@
 
   "invite_others"
   : "Meghívás",
-
 
 
     "loading"
@@ -746,11 +719,21 @@
 
 
     "invite_to_group_text_title"
-    : "Házizz Mobile: Csatlakozz a {} csoportba hogy megkapd a házi feladataidat: \n{}",
+    : "Házizz Mobil: Csatlakozz a {} csoportba hogy megkapd a házi feladataidat: \n{}",
 
+  "invite_to_task_text_title"
+  : "Házizz Mobil: Nézd meg a feladatod: \n{}",
 
     "passwordagain_fragment_register"
     : "Jelszó mégegyszer",
+
+
+  "gdrive_info"
+  : "Hogy képeket tudj feltölteni a feladatokhoz, a Google Drive-odban létrehozott mappában tároljuk.",
+
+
+  "gdrive_grant_permission"
+  : "Az \"engedélyezem\" gombra nyomva, engedélyezed hogy a Google Drive-odban tároljuk a feladat képeket.",
 
   "delete_all_gdrive_images"
   : "Összes Házizz kép törlése",
@@ -761,7 +744,14 @@
   "delete_successful"
   : "{} sikeresen törölve",
 
-    "areyousure_delete_task"
+  "areyousure_delete_image"
+  : "Biztos hogy törlöd a képet a Drive-ból? A feladatból is törölve lesz.",
+
+  "areyousure_delete_all_images"
+  : "Biztos hogy törlöd az összes Házizz képet a Drive-ból? A feladatokból is törölve lesznek.",
+
+
+  "areyousure_delete_task"
     : "Biztos hogy törlöd a feladatot?",
 
   "areyousure_delete_subject"
@@ -1104,6 +1094,8 @@
     "error_noPermissionToJoinGroup"
     : "Nincs jogod belépni",
 
+  "no_permission_to_view"
+  : "Nincs jogod ezt a tartalmat megtekinteni!",
 
     "error_groupNameNotAcceptable"
     : "Helytelen csoport név",
@@ -1310,6 +1302,18 @@
     "kreta_server_unavailable"
     : "Kréta szerver nem elérhető",
 
+  "server_unavailable"
+  : "Szerver nem elérhető",
+
+  "gateway_server_unavailable"
+  : "Gateway szerver nem elérhető",
+  "auth_server_unavailable"
+  : "Auth szerver nem elérhető",
+  "hazizz_server_unavailable"
+  : "Hazizz szerver nem elérhető",
+  "thera_server_unavailable"
+  : "Théra szerver nem elérhető",
+
     "kreta_accounts"
     : "Kréta fiókok",
 
@@ -1371,7 +1375,7 @@
 
 
     "thera_standin"
-    : "helyettesítés",
+    : "Helyettesítés",
 
 
     "thera_canceled"
@@ -1388,26 +1392,6 @@
 
   "classes_break"
   : "Szünet : {} perc maradt hátra",
-
-    "thera_classStart"
-    : "kezdet:",
-
-
-    "thera_classEnd"
-    : "vége:",
-
-
-    "thera_teacher"
-    : "tanár:",
-
-
-    "thera_classRoom"
-    : "terem:",
-
-
-    "thera:classGroup"
-    : "csoport:",
-
 
     "date"
     : "Dátum",

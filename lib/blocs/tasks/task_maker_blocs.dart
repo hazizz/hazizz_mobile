@@ -44,18 +44,13 @@ abstract class TaskMakerBloc extends Bloc<TaskMakerEvent, TaskMakerState> {
 
     descriptionBloc = TextFormBloc();
 
-
     descriptionController.addListener((){
-
       String text = descriptionController.text;
-
       HazizzLogger.printLog("change: $text");
       descriptionBloc.dispatch(TextFormValidate(text: text));
     });
 
-
     groupItemPickerBloc.dispatch(ItemListLoadData());
-
   }
 
   @override

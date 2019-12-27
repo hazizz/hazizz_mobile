@@ -15,7 +15,7 @@ class KretaNotesPage extends StatefulWidget {
   _KretaNotesPage createState() => _KretaNotesPage();
 }
 
-class _KretaNotesPage extends State<KretaNotesPage> with AutomaticKeepAliveClientMixin {
+class _KretaNotesPage extends State<KretaNotesPage> {
 
   KretaNotesBloc notesBloc = KretaNotesBloc();
 
@@ -68,10 +68,6 @@ class _KretaNotesPage extends State<KretaNotesPage> with AutomaticKeepAliveClien
         )
     );
   }
-
-  @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
 }
 
 

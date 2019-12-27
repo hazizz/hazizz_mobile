@@ -74,9 +74,8 @@ class ClassItemWidget extends StatelessWidget{
                       ),
                       Expanded(
                         child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
+
                           children: <Widget>[
                             Container(
                                 decoration: BoxDecoration(
@@ -96,6 +95,17 @@ class ClassItemWidget extends StatelessWidget{
                                       ]
                                   ),
                                 )
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 4.0),
+                                child: Builder(builder: (context){
+                                  if(pojoClass.topic != null && pojoClass.topic != ""){
+                                    return Text(pojoClass.topic, style: TextStyle(fontSize: 16, color: Colors.grey));
+                                  }
+                                  return Container();
+                                }),
+                              ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 4.0),
@@ -129,7 +139,7 @@ class ClassItemWidget extends StatelessWidget{
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
-                          Text(pojoClass.room == null ? "U125" : pojoClass.room, style: TextStyle(fontSize: 18),)
+                          Text(pojoClass.room ?? "", style: TextStyle(fontSize: 18),)
                         ],
                       ),
                     ],

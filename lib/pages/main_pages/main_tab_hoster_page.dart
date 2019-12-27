@@ -141,8 +141,8 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
       reverseCurve: Curves.elasticOut,
     ));
 
-    if(Random().nextInt(3) == 1){
-      doEvent = true;
+    if(Random().nextInt(5) == 1){
+      doEvent = false;
     }
 
     super.initState();
@@ -262,39 +262,40 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                   ]
                 ),
               ),
-              body:
-              BlocBuilder(
-                bloc: flushBloc,
-                builder: (context, state){
-                  if(state is FlushNoConnectionState){
-                    WidgetsBinding.instance.addPostFrameCallback((_) =>
-                      showNoConnectionFlushBar(context)
-                    );
-                  }else if(state is FlushKretaUnavailableState){
-                    WidgetsBinding.instance.addPostFrameCallback((_) =>
-                      showKretaUnavailableFlushBar(context)
-                    );
-                  }
-                  FlushBloc().dispatch(FlushInitialEvent());
-
-                  return TabBarView(
-                      controller: _tabController,
-                      children: [
-                        tasksTabPage,
-                        schedulesTabPage,
-                        gradesTabPage
-                      ]
-                  );
-                },
-                /*
+              body: BlocListener(
+                bloc: FlushBloc(),
                 listener: (context, state){
-                  print("dude: ${state.toString()}");
                   if(state is FlushNoConnectionState){
-                    showNoConnectionFlushBar(context);
+                    WidgetsBinding.instance.addPostFrameCallback((_) =>
+                        showNoConnectionFlushBar(context)
+                    );
                   }else if(state is FlushKretaUnavailableState){
-                    showKretaUnavailableFlushBar(context);
+                    WidgetsBinding.instance.addPostFrameCallback((_) =>
+                        showKretaUnavailableFlushBar(context)
+                    );
+                  }else if(state is FlushServerUnavailableState){
+                    WidgetsBinding.instance.addPostFrameCallback((_) =>
+                        showServerUnavailableFlushBar(context)
+                    );
                   }
-                  FlushBloc().dispatch(FlushInitialEvent());
+
+                  else if(state is FlushGatewayServerUnavailableState){
+                    WidgetsBinding.instance.addPostFrameCallback((_) =>
+                        showGatewayServerUnavailableFlushBar(context)
+                    );
+                  }else if(state is FlushAuthServerUnavailableState){
+                    WidgetsBinding.instance.addPostFrameCallback((_) =>
+                        showAuthServerUnavailableFlushBar(context)
+                    );
+                  }else if(state is FlushHazizzServerUnavailableState){
+                    WidgetsBinding.instance.addPostFrameCallback((_) =>
+                        showHazizzServerUnavailableFlushBar(context)
+                    );
+                  }else if(state is FlushTheraServerUnavailableState){
+                    WidgetsBinding.instance.addPostFrameCallback((_) =>
+                        showTheraServerUnavailableFlushBar(context)
+                    );
+                  }
                 },
                 child: TabBarView(
                     controller: _tabController,
@@ -304,9 +305,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                       gradesTabPage
                     ]
                 ),
-                */
               ),
-
               drawer: SizedBox(
                 width: 270,
                 child: Drawer(

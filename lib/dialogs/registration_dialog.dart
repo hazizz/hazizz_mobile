@@ -136,7 +136,7 @@ class _RegistrationDialog extends State<RegistrationDialog> {
               },
             ),
             FlatButton(
-              child: Text(locText(context, key: "forward").toUpperCase()),
+              child: Text(locText(context, key: "proceed").toUpperCase()),
               onPressed: (){
 
                 if(accepted){

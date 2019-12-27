@@ -4,12 +4,11 @@ import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/response_states.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
-
-
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/managers/kreta_session_manager.dart';
 
+//region Sessions event
 abstract class SessionsEvent extends HEvent {
   SessionsEvent([List props = const []]) : super(props);
 }
@@ -19,7 +18,9 @@ class SelectedSessionInactiveEvent extends SessionsEvent {
   String toString() => 'SelectedSessionInactiveEvent';
   List<Object> get props => null;
 }
+//endregion
 
+//region Sessions bloc
 class SessionsBloc extends Bloc<HEvent, HState> {
 
   static final SessionsBloc _singleton = new SessionsBloc._internal();
@@ -90,8 +91,7 @@ class SessionsBloc extends Bloc<HEvent, HState> {
     }
   }
 }
-
-
+//endregion
 
 
 

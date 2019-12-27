@@ -1,15 +1,13 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/item_list/item_list_picker_bloc.dart';
-import 'package:mobile/blocs/item_list/item_list_picker_group_bloc.dart';
+import 'package:mobile/custom/line_break_limit_text_formatter.dart';
+import 'package:mobile/managers/google_drive_manager.dart';
 import 'package:mobile/blocs/other/text_form_bloc.dart';
 import 'package:mobile/blocs/tasks/create_task_bloc.dart';
 import 'package:mobile/blocs/other/date_time_picker_bloc.dart';
 import 'package:mobile/blocs/tasks/edit_task_bloc.dart';
-import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
 import 'package:mobile/blocs/tasks/task_maker_blocs.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
@@ -21,6 +19,7 @@ import 'package:mobile/custom/image_operations.dart';
 import 'package:mobile/defaults/pojo_group_empty.dart';
 import 'package:mobile/defaults/pojo_subject_empty.dart';
 import 'package:mobile/dialogs/dialogs.dart';
+import 'package:mobile/managers/app_state_manager.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 import 'package:mobile/widgets/image_viewer_widget.dart';
 import 'package:mobile/widgets/tag_chip.dart';
@@ -28,7 +27,7 @@ import 'package:mobile/widgets/tag_chip.dart';
 import 'package:mobile/custom/hazizz_date.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
-
+import 'package:native_state/native_state.dart';
 
 class TaskMakerPage extends StatefulWidget {
   int groupId;
@@ -41,14 +40,12 @@ class TaskMakerPage extends StatefulWidget {
 
   String title;
 
- // EditTaskPage({Key key, this.taskId}) : super(key: key);
-
-  TaskMakerPage.editMode({Key key, this.taskToEdit}) : super(key: key){
+  TaskMakerPage.edit({Key key, this.taskToEdit}) : super(key: key){
     taskId = taskToEdit.id;
     mode = TaskMakerMode.edit;
   }
 
-  TaskMakerPage.createMode({Key key, this.groupId}) : super(key: key){
+  TaskMakerPage.create({Key key, this.groupId}) : super(key: key){
     mode = TaskMakerMode.create;
   }
 
@@ -56,26 +53,17 @@ class TaskMakerPage extends StatefulWidget {
   _TaskMakerPage createState() => _TaskMakerPage();
 }
 
-class _TaskMakerPage extends State<TaskMakerPage> {
-
-  ItemListPickerGroupBloc itemListPickerGroupBloc = ItemListPickerGroupBloc();
-
-//  final TextEditingController _descriptionTextEditingController = TextEditingController();
-//  final TextEditingController _titleTextEditingController = TextEditingController();
+class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
 
   List<EncryptedImageData> imageDatas = List();
 
-
   final FocusNode _descriptionFocusNode = FocusNode();
-  final FocusNode _titleFocusNode = FocusNode();
 
   Color headerColor = HazizzTheme.homeworkColor;
 
   static String _color = '';
 
   static final double padding = 8;
-
-  static bool _isExpanded = false;
 
   TaskMakerBloc blocs;
 
@@ -85,26 +73,11 @@ class _TaskMakerPage extends State<TaskMakerPage> {
 
   final ScrollController scrollController = ScrollController();
 
-
-
-  List<PojoTask> task_data = List();
-  List<PojoSubject> subjects_data = List();
-
- // TextEditingController titleController = new TextEditingController();
-
-//  FocusNode titleTextFocus = new FocusNode();
-
-
   AppBar getAppBar(BuildContext context){
     return AppBar(
       leading: HazizzBackButton(),
         title: Text(widget.mode == TaskMakerMode.create ? locText(context, key: "createTask") : locText(context, key: "editTask") )
     );
-  }
-
-  void processData(PojoTask pojoTask){
-   // expandablePanel.c
-    widget.taskToEdit = pojoTask;
   }
 
   @override
@@ -115,18 +88,14 @@ class _TaskMakerPage extends State<TaskMakerPage> {
 
     }else if(widget.mode == TaskMakerMode.edit){
       blocs = new TaskEditBloc(taskToEdit: widget.taskToEdit);
-   //   blocs.subjectItemPickerBloc.isLocked = true;
- //     blocs.groupItemPickerBloc.isLocked = true;
-
-    //  blocs.groupItemPickerBloc.add(SetGroupEvent(item: widget.taskToEdit.group));
-    //  blocs.subjectItemPickerBloc.add(SetSubjectEvent(item: widget.taskToEdit.subject));
 
     }else{
       HazizzLogger.printLog("this should not be visible: 542311z8");
     }
 
-  //  blocs.groupItemPickerBloc.add(ItemListLoadData());
-
+    blocs.descriptionController.addListener((){
+      SavedState.of(context).putString("task_description", blocs.descriptionController.text);
+    });
     super.initState();
   }
 
@@ -136,59 +105,41 @@ class _TaskMakerPage extends State<TaskMakerPage> {
     super.dispose();
   }
 
-  _fieldFocusChange(BuildContext context, FocusNode currentFocus,FocusNode nextFocus) {
-
-    currentFocus.unfocus();
-    FocusScope.of(context).requestFocus(nextFocus);
-  }
-
-
   @override
   Widget build(BuildContext context) {
-
     AppBar appBar = AppBar(
-        leading: HazizzBackButton(),
-
-        title: Text(widget.mode == TaskMakerMode.create ? locText(context, key: "createTask") : locText(context, key: "editTask") )
+      leading: HazizzBackButton(),
+      title: Text(widget.mode == TaskMakerMode.create ? locText(context, key: "createTask") : locText(context, key: "editTask") )
     );
 
     var taskTypePicker = BlocBuilder(
         bloc: blocs.taskTagBloc,
         builder: (BuildContext context, TaskTagState state) {
-
           List<PojoTag> pickedTags =  blocs.taskTagBloc.pickedTags;
-
           List<Widget> tagWidgets = List();
-
           for(PojoTag t in pickedTags){
             tagWidgets.add(
-                TagChip(child: Text(t.getDisplayName(context), style: TextStyle(fontSize: 21, ), textAlign: TextAlign.center,),
-                  // backgroundColor: t.getColor(),
-                  hasCloseButton: true,
-                  onCloseClick: (){
-                    // notify bloc
-                    HazizzLogger.printLog("locsing");
-                    blocs.taskTagBloc.dispatch(TaskTagRemoveEvent(tag: t));
-                  },
-               //   padding: EdgeInsets.only(left: 5, right: 5, top: 4, bottom: 4),
-
-                )
+              TagChip(child: Text(t.getDisplayName(context), style: TextStyle(fontSize: 21, ), textAlign: TextAlign.center,),
+                hasCloseButton: true,
+                onCloseClick: (){
+                  HazizzLogger.printLog("locsing");
+                  blocs.taskTagBloc.dispatch(TaskTagRemoveEvent(tag: t));
+                },
+              )
             );
           }
-
           if(pickedTags.length < 8){
             tagWidgets.add(TagChip(
-              child: Row(children: <Widget>[
-                Icon(FontAwesomeIcons.plus, size: 18,),
-                Text(locText(context, key: "add"), style: TextStyle(fontSize: 20),)
-              ],),
-
-              //  padding: EdgeInsets.only(left: 5, right: 5, top: 4, bottom: 4),
+              child: Row(
+                children: <Widget>[
+                  Icon(FontAwesomeIcons.plus, size: 18,),
+                  Text(locText(context, key: "add"), style: TextStyle(fontSize: 20),)
+                ],
+              ),
               hasCloseButton: false,
               onClick: () async {
-
                 PojoTag result = await showDialogTaskTag(context, except: blocs.taskTagBloc.pickedTags);
-                HazizzLogger.printLog("showDialogTaskTag dialog result: ${result?.getName()}");
+                HazizzLogger.printLog("showDialogTaskTag dialog result: ${result?.name}");
                 if(result != null){
                   blocs.taskTagBloc.dispatch(TaskTagAddEvent(result));
                 }
@@ -196,8 +147,6 @@ class _TaskMakerPage extends State<TaskMakerPage> {
             ));
           }
           return Wrap(
-           // alignment: WrapAlignment.start,
-          //  runAlignment: WrapAlignment.start,
             spacing: 8,
             crossAxisAlignment: WrapCrossAlignment.center,
             children: tagWidgets,
@@ -227,57 +176,42 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                         hint = locText(context, key: "group");
                       }
                       return InputDecorator(
-
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.only(left: 6, bottom: 8, top: 10),
                             errorText: error,
-                            // error
-                          //  filled: true,
-                          //  fillColor: HazizzTheme.formColor,
-                            //  icon: const Icon(Icons.group),
                             labelText: hint,
                           ),
                           isEmpty: _color == '',
                           child: Builder(
-                            //  bloc: blocs.groupItemPickerBloc,
-                            builder: (BuildContext context){//, ItemListState state) {
+                            builder: (BuildContext context){
                               if (state is ItemListLoaded) {
                                 return Container();
                               }
                               if(state is PickedGroupState){
-                                /*
-                                return Text('${state.item.name}',
-                                  style: TextStyle(fontSize: 20.0),
-                                );
-                                */
-
                                 return Text('${ state.item.id != 0
                                     ? state.item.name
                                     : getEmptyPojoGroup(context).name}',
                                   style: TextStyle(fontSize: 20, color: blocs is TaskCreateBloc
-                                      ? null
-                                      : Colors.black45,)
-
+                                    ? null
+                                    : Colors.black45,)
                                 );
-
-
                               }
                               return Text(locText(context, key: "loading"));
                             },
                           )
                       );
                     },
-                  ),),
+                  ),
+                ),
               )
             ],
-          ), //groupFormField,
+          ),
           onTap: () async {
             if(blocs is TaskCreateBloc) {
               List<PojoGroup> dataList = blocs.groupItemPickerBloc.dataList;
               if(dataList != null) {
                 if(state is ItemListLoaded || state is PickedGroupState) {
-                  PojoGroup result = await showDialogGroup(
-                    context, data: dataList,);
+                  PojoGroup result = await showDialogGroup(context, data: dataList);
                   if(result != null) {
                     blocs.groupItemPickerBloc.dispatch(
                         PickedGroupEvent(item: result));
@@ -285,7 +219,6 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                 }
               }
             }
-
           },
         );
       }
@@ -299,7 +232,6 @@ class _TaskMakerPage extends State<TaskMakerPage> {
               if(blocs.groupItemPickerBloc.pickedItem == null || blocs.groupItemPickerBloc.pickedItem.id == 0){
                 return Container();
               }
-
               return GestureDetector(
                 child: Row(children: <Widget>[
                   Padding(
@@ -323,19 +255,14 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                           }
 
                           return InputDecorator(
-
                               decoration: InputDecoration(
-                                //    filled: true,
-                                //   fillColor: HazizzTheme.formColor,
-                                //     icon: const Icon(Icons.group),
                                   contentPadding: EdgeInsets.only(left: 6, bottom: 8, top: 10),
-
                                   labelText: hint,
                                   errorText: error
                               ),
                               isEmpty: _color == '',
                               child: Builder(
-                                builder: (BuildContext context){//, ItemListState state) {
+                                builder: (BuildContext context){
                                   if (state is ItemListLoaded) {
                                     return Container();
                                   }
@@ -346,8 +273,8 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                                         : getEmptyPojoSubject(context).name}',
                                       style: TextStyle(fontSize: 20, color: blocs is TaskCreateBloc
                                         ? null
-                                        : Colors.black45,),
-
+                                        : Colors.black45,
+                                      ),
                                     );
                                   }
                                   else if(state is NotPickedEvent){
@@ -363,7 +290,7 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                       ),
                     ),
                   )
-                ],), //groupFormField,
+                ],),
                 onTap: () async {
                   if(blocs is TaskCreateBloc) {
                     List<PojoSubject> dataList = blocs.subjectItemPickerBloc.dataList;
@@ -374,17 +301,10 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                       }
                     }
                   }
-
-
                 },
               );
-
             },
           );
-
-
-
-
         }
     );
     var deadlinePicker = BlocBuilder(
@@ -409,10 +329,6 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                       return InputDecorator(
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.only(left: 6, bottom: 8, top: 10),
-
-                         // filled: true,
-                         // fillColor: HazizzTheme.formColor,
-                          //   icon: const Icon(Icons.date_range),
                           labelText: hint,
                         ),
                         isEmpty: _color == '',
@@ -424,7 +340,6 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                             if(state is DateTimePickedState){
                               return Text('${hazizzShowDateFormat(state.dateTime)}',
                                 style: TextStyle(fontSize: 20.0),
-
                               );
                             }
                             return Text(locText(context, key: "loading"));
@@ -439,11 +354,11 @@ class _TaskMakerPage extends State<TaskMakerPage> {
           ),
           onTap: () async {
             final DateTime picked = await showDatePicker(
-                context: context,
-                initialDate: widget.mode == TaskMakerMode.edit ? widget.taskToEdit.dueDate : DateTime.now(),
+              context: context,
+              initialDate: widget.mode == TaskMakerMode.edit ? widget.taskToEdit.dueDate : DateTime.now(),
 
-                firstDate: DateTime.now().subtract(Duration(hours: 24)),
-                lastDate: DateTime.now().add(Duration(days: 364))
+              firstDate: DateTime.now().subtract(Duration(hours: 24)),
+              lastDate: DateTime.now().add(Duration(days: 364))
             );
             if(picked != null) {
               blocs.deadlineBloc.dispatch(DateTimePickedEvent(dateTime: picked));
@@ -452,43 +367,6 @@ class _TaskMakerPage extends State<TaskMakerPage> {
         );
       }
     );
-    /*
-    var titleTextForm = BlocBuilder(
-        bloc: blocs.titleBloc,
-        builder: (BuildContext context, HFormState state) {
-          String errorText = null;
-          if(state is TextFormSetState){
-            blocs.titleController.text = state.text;
-          }
-          else if(state is TextFormErrorTooShort){
-            errorText = "Title is too short";
-          }
-          return TextFormField(
-            style: TextStyle(
-                fontSize: 22,
-            ),
-
-
-            maxLength: 20,
-            focusNode: _titleFocusNode,
-            controller: blocs.titleController,
-            textInputAction: TextInputAction.next,
-            onFieldSubmitted: (String value){
-              _fieldFocusChange(context, _titleFocusNode, _descriptionFocusNode);
-            },
-            decoration:
-                InputDecoration(labelText: locText(context, key: "title"), errorText: errorText,
-                  contentPadding: EdgeInsets.only(left: 6, bottom: 2, top: 2),
-
-                  //   hintStyle: TextStyle(fontSize: 20),
-                  errorStyle: TextStyle(fontSize: 16),
-                  filled: true,
-              //    fillColor: HazizzTheme.formColor
-                ),
-          );
-        }
-    );
-    */
     var descriptionTextForm = BlocBuilder(
           bloc: blocs.descriptionBloc,
           builder: (BuildContext context, HFormState state) {
@@ -496,28 +374,19 @@ class _TaskMakerPage extends State<TaskMakerPage> {
             if(state is TextFormSetState){
               blocs.descriptionController.text = state.text;
             }
-
             return TextFormField(
-
-              /*a
-
-            onChanged: (dynamic text) {
-              HazizzLogger.printLog("change: $text");
-              blocs.descriptionBloc.add(TextFormValidate(text: text));
-            },
-            */
-
+              inputFormatters:[
+                LineBreakLimitingTextInputFormatter(10)
+              ],
               focusNode: _descriptionFocusNode,
               controller: blocs.descriptionController,
               textInputAction: TextInputAction.newline,
               onFieldSubmitted: (String value){
                 FocusScope.of(context).requestFocus(new FocusNode());
               },
-              decoration:
-              InputDecoration(labelText: locText(context, key: "description"), errorText: null,
+              decoration: InputDecoration(labelText: locText(context, key: "description"), errorText: null,
                 alignLabelWithHint: true,
                 filled: true,
-                //    fillColor: HazizzTheme.formColor,
               ),
               maxLength: 500,
               maxLines: 8,
@@ -527,274 +396,248 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                   fontSize: 21
               ),
             );
-
-
           }
       );
 
-    return BlocListener(
-      bloc: blocs,
-      listener: (context, state) {
-        if (state is TaskMakerSuccessfulState) {
-          //  Navigator.of(context).pushNamed('/details');
-          Navigator.pop(context, state.task);
-        }
-      },
-      child: Scaffold(
-              appBar: appBar,
-              body:SingleChildScrollView(
-                child:
-                    ConstrainedBox(
-                      constraints: BoxConstraints(
-                        minHeight: MediaQuery.of(context).size.height-appBar.preferredSize.height - padding*3,
-                        maxHeight: (MediaQuery.of(context).size.height-appBar.preferredSize.height - padding*3)*2,
+    return Center(
+      child: BlocListener(
+        bloc: blocs,
+        listener: (context, state) {
+          if (state is TaskMakerSuccessfulState) {
+            Navigator.pop(context, state.task);
+          }
+        },
+        child: Scaffold(
+          appBar: appBar,
+          body:SingleChildScrollView(
+            child:
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: MediaQuery.of(context).size.height-appBar.preferredSize.height - padding*3,
+                  maxHeight: (MediaQuery.of(context).size.height-appBar.preferredSize.height - padding*3)*2,
 
-                        minWidth: MediaQuery.of(context).size.width,
-                        maxWidth: MediaQuery.of(context).size.width,
+                  minWidth: MediaQuery.of(context).size.width,
+                  maxWidth: MediaQuery.of(context).size.width,
 
-                      ),
-                    /*
-                    width: MediaQuery.of(context).size.width,
-                    // valamiért 3* kell megszorozni a paddingot hogy jó legyen
-                    height: MediaQuery.of(context).size.height-appBar.preferredSize.height - padding*3,
-                    */
-                    child: Padding(
-                      padding: EdgeInsets.all(padding),
-                      child: Card(
-                        clipBehavior: Clip.antiAliasWithSaveLayer,
-                        elevation: 100,
-                          child: BlocBuilder(
-                              bloc: blocs.taskTagBloc,
-                              builder: (BuildContext context, TaskTagState state) {
-                               // String typeName = "Not picked";
-                                headerColor = HazizzTheme.blue;
+                ),
+              child: Padding(
+                padding: EdgeInsets.all(padding),
+                child: Card(
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  elevation: 100,
+                  child: BlocBuilder(
+                    bloc: blocs.taskTagBloc,
+                    builder: (BuildContext context, TaskTagState state) {
+                      headerColor = HazizzTheme.blue;
+                      if(state is TaskTagFineState){
+                        if(state.tags.length == 1 && state.tags[0] != null){
+                          headerColor = state.tags[0].getColor();
+                        }
 
-                                if(state is TaskTagFineState){
-                                 // typeName = state.tag.getDisplayName(context);
+                      }
+                      return new Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          AnimatedContainer(
+                            duration: Duration(milliseconds: 500),
+                            color: headerColor,
+                            child:
+                            Padding(
+                              padding: EdgeInsets.only(left: 10, top: 10,
+                                  right: 10,
+                                  bottom: 16),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Padding(
+                                      padding: EdgeInsets.only(
+                                          bottom: 10),
+                                      child: taskTypePicker
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(bottom: 4),
+                                    child: groupPicker,
+                                  ),
 
-
-
-                                  if(state.tags.length == 1 && state.tags[0] != null){
-                                    headerColor = state.tags[0].getColor();
-                                  }
-
-                                }
-                                return new Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        AnimatedContainer(
-                                          duration: Duration(milliseconds: 500),
-                                          color: headerColor,
-                                          child:
-                                          Padding(
-                                            padding: EdgeInsets.only(left: 10, top: 10,
-                                                right: 10,
-                                                bottom: 16),
-                                            child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                Padding(
-                                                    padding: EdgeInsets.only(
-                                                        bottom: 10),
-                                                    child: taskTypePicker
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.only(bottom: 4),
-                                                  child: groupPicker,
-                                                ),
-
-                                                Padding(
-                                                    padding: EdgeInsets.only(
-                                                        bottom: 10),
-                                                    child: subjectPicker
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.only(
-                                                      bottom: 4),
-                                                  child: deadlinePicker,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
+                                  Padding(
+                                      padding: EdgeInsets.only(
+                                          bottom: 10),
+                                      child: subjectPicker
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        bottom: 4),
+                                    child: deadlinePicker,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 12, right: 12, top: 10),
+                                  child: descriptionTextForm
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 6, right: 10),
+                                  child: Card(
+                                    color: Colors.grey,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(4),
+                                      child: ConstrainedBox(
+                                        constraints: new BoxConstraints(
+                                          minHeight: 0,
+                                          maxHeight: 100,
                                         ),
+                                        child: SingleChildScrollView(
+                                          controller: scrollController,
 
-
-                                       // Flex(direction: Axis.vertical, ),
-                                        Center(
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                          scrollDirection: Axis.horizontal,
+                                          child: Row(
                                             children: <Widget>[
-                                             /* Padding(
-                                                padding: const EdgeInsets.only(left: 12, top: 16, right: 12),
-                                                child: new Row(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    new Flexible(
-                                                        child: titleTextForm
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                              */
-
-                                              Padding(
-                                                  padding: const EdgeInsets.only(
-                                                      left: 12, right: 12, top: 10),
-                                                  child: descriptionTextForm
-                                              ),
-
-                                              Padding(
-                                                padding: const EdgeInsets.only(left: 6, right: 6),
-                                                child: Card(
-                                                  color: Colors.grey,
-                                                  child: Padding(
-                                                    padding: EdgeInsets.all(4),
-                                                    child: ConstrainedBox(
-                                                      constraints: new BoxConstraints(
-                                                        minHeight: 0,
-                                                        maxHeight: 100,
-                                                      ),
-                                                      child: SingleChildScrollView(
-                                                        controller: scrollController,
-
-                                                        scrollDirection: Axis.horizontal,
-                                                        child: Row(
-
-                                                          children: <Widget>[
-                                                            Container(
-                                                              child: ListView.builder(
-                                                                  shrinkWrap: true,
-                                                                  scrollDirection: Axis.horizontal,
-                                                                  itemCount: imageDatas.length,
-                                                                  itemBuilder: (context, index){
-                                                                    return Padding(
-                                                                      padding: EdgeInsets.only(left: 6, ),
-                                                                      child: Container(
-                                                                        height: 100,
-                                                                        child: Stack(
-                                                                          children: <Widget>[
-                                                                           /* ClipRRect(
-                                                                              child: Image.file(imageDatas[index].originalImage, height: 100, ),
-                                                                              borderRadius: BorderRadius.circular(8),
-                                                                            ),*/
-                                                                            Container(
-                                                                              height: 100,
-                                                                              child: ImageViewer.fromFile(
-                                                                                  imageDatas[index].originalImage,
-                                                                                  heroTag: imageDatas[index].originalImage.path
-                                                                              ),
-                                                                            ),
-                                                                            Positioned(
-                                                                              top: 0, left: 0,
-                                                                              child: Transform.translate(
-                                                                                offset: Offset(-1, -1),
-                                                                                child: GestureDetector(
-                                                                                  child: Icon(FontAwesomeIcons.solidTimesCircle, size: 20, color: Colors.red,),
-                                                                                  onTap: (){
-                                                                                    setState(() {
-                                                                                      imageDatas.removeAt(index);
-                                                                                    });
-                                                                                  },
-                                                                                )
-                                                                              )
-                                                                            )
-                                                                          ],
-                                                                        ),
-                                                                      )
-                                                                    );
-                                                                  }
-                                                              ),
-                                                            ),
-
-
-                                                            Padding(
-                                                              padding: EdgeInsets.only(left: 4, right: 4),
-                                                              child: IconButton(
-                                                                icon: Icon(imageDatas.isEmpty ? FontAwesomeIcons.image : FontAwesomeIcons.plus),
-                                                                onPressed: () async {
-                                                                  EncryptedImageData imageData = await ImageOpeations.pickAndEncrypt();
-                                                                  setState(() {
-                                                                    imageDatas.add(imageData);
-                                                                  });
-                                                                  Future.delayed(Duration(milliseconds: 400), (){
-                                                                    scrollController.animateTo(scrollController.position.maxScrollExtent, duration: Duration(milliseconds: 300), curve: Curves.easeOut);
-
-                                                                  });
-                                                                },
-                                                              ),
-                                                            )
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  )
-                                                ),
-                                              ),
-
-                                              Center(
-                                                  child:
-
-                                                  Padding(
-                                                    padding: const EdgeInsets.only(bottom: 8.0),
-                                                    child: BlocBuilder(
-                                                        bloc: blocs,
-                                                        builder: (BuildContext context, TaskMakerState state) {
-                                                          if(state is TaskMakerWaitingState) {
-                                                            return RaisedButton(
-                                                              onPressed: null,
-                                                              child: Transform.scale(
-                                                                scale: 0.8,
-                                                                child: FittedBox(
-                                                                  child: Padding(
-                                                                    padding: const EdgeInsets.all(1),
-                                                                    child: CircularProgressIndicator(),
-                                                                  ),
-                                                                  fit: BoxFit.scaleDown,
+                                              Container(
+                                                child: ListView.builder(
+                                                    shrinkWrap: true,
+                                                    scrollDirection: Axis.horizontal,
+                                                    itemCount: imageDatas.length,
+                                                    itemBuilder: (context, index){
+                                                      return Padding(
+                                                        padding: EdgeInsets.only(left: 6, ),
+                                                        child: Container(
+                                                          height: 100,
+                                                          child: Stack(
+                                                            children: <Widget>[
+                                                              Container(
+                                                                height: 100,
+                                                                child: ImageViewer.fromFile(
+                                                                    imageDatas[index].originalImage,
+                                                                    heroTag: imageDatas[index].originalImage.path
                                                                 ),
                                                               ),
-                                                            );
-                                                          }else{
-                                                            return RaisedButton(
-                                                                child: Text((widget.mode == TaskMakerMode.create ? locText(context, key: "create") : locText(context, key: "edit")).toUpperCase()),
-                                                                onPressed: () async {
-                                                                  if(!(state is TaskMakerWaitingState)) {
-                                                                    blocs.dispatch(
-                                                                        TaskMakerSendEvent(imageDatas));
-                                                                  }
-                                                                }
-                                                            );
-                                                          }
-
-
-                                                        }
-                                                    ),
-                                                  )
+                                                              Positioned(
+                                                                top: 0, left: 0,
+                                                                child: Transform.translate(
+                                                                  offset: Offset(-1, -1),
+                                                                  child: GestureDetector(
+                                                                    child: Icon(FontAwesomeIcons.solidTimesCircle, size: 20, color: Colors.red,),
+                                                                    onTap: (){
+                                                                      setState(() {
+                                                                        imageDatas.removeAt(index);
+                                                                      });
+                                                                    },
+                                                                  )
+                                                                )
+                                                              )
+                                                            ],
+                                                          ),
+                                                        )
+                                                      );
+                                                    }
+                                                ),
                                               ),
+                                              Builder(
+                                                builder: (context){
+                                                  if(imageDatas.length >= 3) return Container();
+                                                  return Padding(
+                                                    padding: EdgeInsets.only(left: 4),
+                                                    child: IconButton(
+                                                      icon: Icon(imageDatas.isEmpty ? FontAwesomeIcons.image : FontAwesomeIcons.plus),
+                                                      onPressed: () async {
+                                                        print("miva? 1");
+                                                        if(!await AppState.isAllowedGDrive()){
+                                                          print("miva? 2");
+                                                         if(await showGrantAccessToGDRiveDialog(context)){
+                                                           await GoogleDriveManager().initialize();
+                                                         }else{
+                                                           return;
+                                                         }
+                                                        }
+                                                        EncryptedImageData imageData = await ImageOpeations.pickAndEncrypt();
+                                                        if(imageData == null){
+                                                          return;
+                                                        }
+                                                        setState(() {
+                                                          imageDatas.add(imageData);
+                                                        });
+                                                        Future.delayed(Duration(milliseconds: 400), (){
+                                                          scrollController.animateTo(scrollController.position.maxScrollExtent, duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+
+                                                        });
+
+
+                                                      },
+                                                    ),
+                                                  );
+                                                },
+                                              )
                                             ],
                                           ),
                                         ),
-                                      ]
-                                  );
-                              }
+                                      ),
+                                    )
+                                  ),
+                                ),
+                                Center(
+                                    child:
+                                    Padding(
+                                      padding: const EdgeInsets.only(bottom: 8.0),
+                                      child: BlocBuilder(
+                                          bloc: blocs,
+                                          builder: (BuildContext context, TaskMakerState state) {
+                                            if(state is TaskMakerWaitingState) {
+                                              return RaisedButton(
+                                                onPressed: null,
+                                                child: Transform.scale(
+                                                  scale: 0.8,
+                                                  child: FittedBox(
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.all(1),
+                                                      child: CircularProgressIndicator(),
+                                                    ),
+                                                    fit: BoxFit.scaleDown,
+                                                  ),
+                                                ),
+                                              );
+                                            }else{
+                                              return RaisedButton(
+                                                  child: Text((widget.mode == TaskMakerMode.create ? locText(context, key: "create") : locText(context, key: "edit")).toUpperCase()),
+                                                  onPressed: () async {
+                                                    if(!(state is TaskMakerWaitingState)) {
+                                                      blocs.dispatch(
+                                                          TaskMakerSendEvent(imageDatas));
+                                                    }
+                                                  }
+                                              );
+                                            }
+                                          }
+                                      ),
+                                    )
+                                ),
+                              ],
+                            ),
                           ),
-                          ),
-                        )
-                      ),
-
+                        ]
+                      );
+                    }
+                  ),
                 ),
-              ),
+              )
+            ),
+          ),
+        ),
+      ),
     );
   }
 
-  Future<Null> _handleRefresh() async{
-   // await getData();
-
-    var now = new DateTime.now();
-    var berlinWallFell = new DateTime.utc(1989, 11, 9);
-    var moonLanding = DateTime.parse("1969-07-20 20:18:04Z");  // 8:18pm
+  @override
+  void restoreState(SavedStateData savedState) {
+   // blocs.descriptionController.text = savedState.getString("task_description") ?? "";
   }
 }

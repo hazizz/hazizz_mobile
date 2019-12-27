@@ -1,15 +1,10 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mobile/blocs/kreta/kreta_notes_bloc.dart';
 import 'package:mobile/blocs/kreta/selected_session_bloc.dart';
 import 'package:mobile/blocs/kreta/sessions_bloc.dart';
-import 'package:mobile/blocs/other/request_event.dart';
-import 'package:mobile/blocs/other/response_states.dart';
 import 'package:mobile/blocs/other/user_data_bloc.dart';
-import 'package:mobile/communication/pojos/PojoKretaNote.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/managers/app_state_manager.dart';
@@ -88,26 +83,23 @@ class _HazizzDrawer extends State<HazizzDrawer> {
                         UserDataBlocs().pictureBloc.profilePictureBytes);
 
                     return CircleAvatar(
-                        child: Container(
-                          decoration: new BoxDecoration(
-                            image: new DecorationImage(
-                              image: img.image,
-                              fit: BoxFit.cover,
-                            ),
-                            borderRadius: new BorderRadius.all(
-                                const Radius.circular(80.0)),
+                      child: Container(
+                        decoration: new BoxDecoration(
+                          image: new DecorationImage(
+                            image: img.image,
+                            fit: BoxFit.cover,
                           ),
-                        )
+                          borderRadius: new BorderRadius.all(
+                              const Radius.circular(80.0)),
+                        ),
+                      )
                     );
                   }
-
-
                   return CircleAvatar(
                     child: new Text(locText(context, key: "loading")),
                   );
                 },
               ),
-
             ),
 
             Hero(
@@ -117,8 +109,6 @@ class _HazizzDrawer extends State<HazizzDrawer> {
 
                 title: Text(locText(context, key: "my_groups")),
                 onTap: () {
-                  //Navigator.pop(context);
-                  // Navigator.push(context,MaterialPageRoute(builder: (context) => GroupTabHosterPage(groupId: 2)));
                   Navigator.popAndPushNamed(context, "/groups");
                 },
               ),
@@ -149,7 +139,6 @@ class _HazizzDrawer extends State<HazizzDrawer> {
                   child: IconButton(
                     icon: Icon(FontAwesomeIcons.userEdit),
                     onPressed: () {
-                      // SessionsBloc().add(FetchData());
                       Navigator.popAndPushNamed(
                           context, "/kreta/accountSelector");
                     },
@@ -185,40 +174,27 @@ class _HazizzDrawer extends State<HazizzDrawer> {
                       return Padding(
                         padding: const EdgeInsets.only(left: 8),
                         child: DropdownButton(
-                            value: selectedKretaAccount,
-                            onChanged: (item) {
-                              if(item == "add Kréta account") {
-                                Navigator.of(context).pushNamed("/kreta/login");
-                              }else {
-                                SelectedSessionBloc().dispatch(
-                                    SelectedSessionSetEvent(item));
-                                setState(() {
-                                  selectedKretaAccount = item;
-                                });
-                              }
-                            },
-                            items: items
+                          value: selectedKretaAccount,
+                          onChanged: (item) {
+                            if(item == "add Kréta account") {
+                              Navigator.of(context).pushNamed("/kreta/login");
+                            }else {
+                              SelectedSessionBloc().dispatch(
+                                  SelectedSessionSetEvent(item));
+                              setState(() {
+                                selectedKretaAccount = item;
+                              });
+                            }
+                          },
+                          items: items
                         ),
                       );
                     }
                     return Container();
                   },
                 ),
-
-
               ],
             ),
-
-
-            /*
-                  ListTile(
-                    leading: Icon(FontAwesomeIcons.landmark),
-                    title: Text(locText(context, key: "kreta_accounts")),
-                    onTap: () {
-
-                    },
-                  ),
-                  */
 
             ListTile(
               leading: Transform.rotate(
@@ -237,7 +213,6 @@ class _HazizzDrawer extends State<HazizzDrawer> {
                 Navigator.popAndPushNamed(context, "/kreta/statistics");
               },
             ),
-
 
             Expanded(
               child: Column(

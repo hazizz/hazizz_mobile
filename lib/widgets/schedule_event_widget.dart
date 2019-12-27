@@ -12,7 +12,6 @@ class ScheduleEventWidget extends StatelessWidget{
 
   ScheduleEventWidget.beforeClasses(BuildContext context, HazizzTimeOfDay timeOfClassStart){
     timerClassStart = HazizzTimeOfDay.now().compare(timeOfClassStart);
-
     text = locText(context, key: "classes_not_started", args: [timerClassStart.inMinutes.toString()]);
   }
 
@@ -23,30 +22,27 @@ class ScheduleEventWidget extends StatelessWidget{
   ScheduleEventWidget.breakTime(BuildContext context, HazizzTimeOfDay timeOfClassStart){
     timerClassStart = HazizzTimeOfDay.now().compare( timeOfClassStart);
     text = locText(context, key: "classes_break", args: [timerClassStart.inMinutes.toString()]);
-
-
   }
 
   @override
   Widget build(BuildContext context) {
     return Card(
-       // margin: EdgeInsets.only(left: 2, top: 2, bottom: 2, right: 2),
-        elevation: 5,
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        color: HazizzTheme.red,
-        child: Padding(
-          padding: const EdgeInsets.only(top: 1.8, bottom: 1.8, left: 6),
-          child: Row(
-            children: <Widget>[
-              AutoSizeText(text,
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-                maxLines: 1,
-                maxFontSize: 20,
-                minFontSize: 16,
-              ),
-            ],
-          ),
-        )
+      elevation: 5,
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      color: HazizzTheme.red,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 1.8, bottom: 1.8, left: 6),
+        child: Row(
+          children: <Widget>[
+            AutoSizeText(text,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+              maxLines: 1,
+              maxFontSize: 20,
+              minFontSize: 16,
+            ),
+          ],
+        ),
+      )
     );
   }
 }

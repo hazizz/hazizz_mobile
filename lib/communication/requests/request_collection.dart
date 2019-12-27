@@ -932,9 +932,9 @@ class GetTaskByTaskId extends HazizzRequest {
   }
 
   @override
-  void onSuccessful(Response response) {
+  dynamic convertData(Response response) {
     PojoTaskDetailed task = PojoTaskDetailed.fromJson(jsonDecode(response.data));
-    rh.onSuccessful(task);
+    return task;
   }
 }
 

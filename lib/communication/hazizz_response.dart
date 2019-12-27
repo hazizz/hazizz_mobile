@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -7,7 +6,6 @@ import 'package:meta/meta.dart';
 import 'package:mobile/blocs/flush_bloc.dart';
 import 'package:mobile/blocs/kreta/kreta_status_bloc.dart';
 import 'package:mobile/blocs/kreta/selected_session_bloc.dart';
-import 'package:mobile/blocs/kreta/sessions_bloc.dart' as prefix0;
 import 'package:mobile/communication/pojos/PojoError.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/communication/request_sender.dart';
@@ -18,10 +16,6 @@ import 'package:mobile/managers/app_state_manager.dart';
 import 'package:mobile/managers/token_manager.dart';
 
 import 'custom_response_errors.dart';
-//import 'package:mobile/packages/hazizz-dio-2.1.3/lib/dio.dart';
-//import 'package:mobile/packages/hazizz-dio-2.1.3/lib/dio.dart';
-
-//import 'package:dio/dio.dart';
 
 class HazizzResponse{
 
@@ -32,8 +26,6 @@ class HazizzResponse{
   Request request;
 
   Response response;
-
- // Function convertData;
 
   dynamic convertedData;
 
@@ -53,7 +45,6 @@ class HazizzResponse{
 
     if(request is AuthRequest){
       HazizzLogger.printLog("successful token response");
-
     }else {
       HazizzLogger.printLog("successful response raw body: ${response.data}");
     }
@@ -97,7 +88,7 @@ class HazizzResponse{
         }
         else if(pojoError.errorCode == 138){
           KretaStatusBloc().dispatch(KretaStatusUnavailableEvent());
-          flushBloc.dispatch(FlushKretaUnavailableEvent());
+          FlushBloc().dispatch(FlushKretaUnavailableEvent());
         }
         else if(pojoError.errorCode == 19) { // to many requests
           HazizzLogger.printLog("Too many requests");
@@ -156,21 +147,22 @@ class HazizzResponse{
         else if(pojoError.errorCode == 136 || pojoError.errorCode == 132 || pojoError.errorCode == 130){
           SelectedSessionBloc().dispatch(SelectedSessionInactiveEvent());
         }
-       /* else if(pojoError.errorCode == 131){
-          SelectedSessionBloc().dispatch(SelectedSessionInactiveEvent());
-        }
-        */
+
+
         HazizzLogger.printLog("log: response error: ${pojoError.toString()}");
       }
       else{
-        if(dioError.type == DioErrorType.CONNECT_TIMEOUT){
-          dioError.response.headers.contentType.toString();
+        if(dioError.type == DioErrorType.CONNECT_TIMEOUT
+        || dioError.type == DioErrorType.RECEIVE_TIMEOUT
+        || dioError?.response?.statusCode == 503
+        ){
+          FlushBloc().dispatch(FlushServerUnavailableEvent());
         }
       }
     }else{
       if(dioError == noConnectionError){
         print("No connection error fired");
-        flushBloc.dispatch(FlushNoConnectionEvent());
+        FlushBloc().dispatch(FlushNoConnectionEvent());
       }
     }
   }

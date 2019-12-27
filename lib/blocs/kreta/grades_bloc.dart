@@ -18,8 +18,9 @@ import 'package:mobile/enums/grades_sort_enum.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/storage/caches/data_cache.dart';
-//region EditTask bloc parts
-//region EditTask events
+
+//region Grades bloc parts
+//region Grades events
 abstract class GradesEvent extends HEvent {
   GradesEvent([List props = const []]) : super(props);
 }
@@ -54,7 +55,7 @@ class GradesFetchEvent extends GradesEvent {
 }
 //endregion
 
-//region SubjectItemListStates
+//region Grades states
 abstract class GradesState extends HState {
   GradesState([List props = const []]) : super(props);
 }
@@ -100,25 +101,15 @@ class GradesErrorState extends GradesState {
 
 //endregion
 
-//region SubjectItemListBloc
+//region Grades bloc
 class GradesBloc extends Bloc<GradesEvent, GradesState> {
-
- // bool hasNewGrade = false;
-
-  //GradesSort gradesSort = GradesSort.BYSUBJECT;
   GradesSort currentGradeSort = GradesSort.BYCREATIONDATE;
-  GradesBloc(){
-
-  }
+  GradesBloc();
 
   DateTime lastUpdated = DateTime(0, 0, 0, 0, 0);
 
   PojoGrades grades;
   List<PojoGrade> gradesByDate = List();
-
-  //PojoGrades sessionGrades;
- // List<PojoGrade> sessionGradesByDate = List();
-
 
   PojoGrades getGradesFromSession(){
 
@@ -126,7 +117,6 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
     for(String key in grades.grades.keys){
       int newI = 0;
       for(int i = 0; i < grades.grades[key].length; i++){
-
         if(grades.grades[key][i].accountId?.split("_")[2] == SelectedSessionBloc().selectedSession?.username){
           if(sessionGrades[key] == null){
             sessionGrades[key] = [];
@@ -159,17 +149,9 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
     HazizzLogger.printLog("Grades sub1: ${grades.grades.values.length}");
 
     for(int i = 0; i < grades.grades.values.length; i++){
-
       HazizzLogger.printLog("Grades sub2: ${grades.grades.values.toList()[i]}");
       gradesByDate.addAll(grades.grades.values.toList()[i]);
     }
-
-    /*
-    for(List<PojoGrade> gradesSubject in grades.grades.values){
-      HazizzLogger.printLog("Grades sub3: ${gradesSubject}");
-      gradesByDate.addAll(gradesSubject);
-    }
-    */
     HazizzLogger.printLog("Grades sub LENGTH: ${gradesByDate.length}");
 
     if(currentGradeSort == GradesSort.BYCREATIONDATE) {
@@ -177,14 +159,12 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
     }else{
       gradesByDate.sort((a, b) => a.compareToByDate(b));
     }
-
     return gradesByDate;
   }
 
   String calculateAvarage(List<PojoGrade> pojoGrades){
     double gradeAmount = 0;
     double gradeSum = 0;
-
     for(PojoGrade pojoGrade in pojoGrades){
       if(pojoGrade != null && pojoGrade.grade != null && pojoGrade.weight != null){
         try {
@@ -207,7 +187,6 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
       int fac = pow(10, decimals);
       double d = gradeSum/gradeAmount;
       d = (d * fac).round() / fac;
-      //  HazizzLogger.printLog("d: $d");
       return d.toString();
     }
     return "";
@@ -221,7 +200,6 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
     }
     else if (event is GradesFetchEvent) {
       try {
-
         /*
         if(true){
           grades = new PojoGrades(
@@ -270,8 +248,6 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
           grades = dataCache.data;
           yield GradesLoadedCacheState(grades);
         }
-       // HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetGradesWithSession());
-
         HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetGrades());
         print("CHANGE HAPPENDE03");
         if(hazizzResponse.isSuccessful){
@@ -288,7 +264,6 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
             }else{
               print("CHANGE HAPPENDE2");
             }
-
 
             lastUpdated = DateTime.now();
             saveGradesCache(grades);
@@ -312,15 +287,12 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
             this.dispatch(GradesFetchEvent());
           } else if(hazizzResponse.hasPojoError && hazizzResponse.pojoError.errorCode == 138) {
             yield GradesErrorState(hazizzResponse);
-
           }
 
           else{
             yield GradesErrorState(hazizzResponse);
-
           }
         }
-
       } on Exception catch(e){
         HazizzLogger.printLog("log: Exception: ${e.toString()}");
       }

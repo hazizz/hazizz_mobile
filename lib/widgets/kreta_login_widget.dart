@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/item_list/item_list_picker_bloc.dart';
@@ -7,8 +6,6 @@ import 'package:mobile/communication/errorcode_collection.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/dialogs/dialogs.dart';
-
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/dialogs/loading_dialog.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
@@ -29,7 +26,7 @@ class KretaLoginWidget extends StatefulWidget {
   _KretaLoginWidget createState() => _KretaLoginWidget();
 }
 
-class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin{
+class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProviderStateMixin{
   KretaLoginPageBlocs kretaLoginBlocs;
 
   ProgressDialog pr;
@@ -67,8 +64,8 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
 
   Future<void> stopCustomHud() async {
     pr.hide();
-   // hud.navigator.pop();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -88,11 +85,8 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
       decoration:
       InputDecoration(
         labelText: locText(context, key: "kreta_username"), errorStyle: TextStyle(color: Colors.black),
-
         filled: true,
         fillColor: Colors.grey.withAlpha(120)
-
-        // helperText: "Oktatási azonositó",
       ),
     );
 
@@ -122,16 +116,12 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
         Positioned(
           right: 6, top: 8,
           child: IconButton(
-            //  padding: const EdgeInsets.only(top:  20),
             icon: Icon(
-              // Based on passwordVisible state choose the icon
-
               passwordVisible
                   ? FontAwesomeIcons.solidEyeSlash
                   : FontAwesomeIcons.solidEye,
             ),
             onPressed: () {
-              // Update the state i.e. Ftoogle the state of passwordVisible variable
               setState(() {
                 passwordVisible = !passwordVisible;
               });
@@ -140,8 +130,6 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
         )
       ],
     );
-
-
 
     var schoolPickerWidget = BlocBuilder(
       bloc: kretaLoginBlocs.schoolBloc,
@@ -205,9 +193,7 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
         String responseInfo = "";
         bool isLoading = false;
 
-
         if(state is KretaLoginWaiting) {
-          //  isLoading = true;
           WidgetsBinding.instance.addPostFrameCallback((_) =>
               showCustomHud(context)
           );
@@ -234,25 +220,15 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
 
           }else if(state is KretaLoginSomethingWentWrong){
             responseInfo = locText(context, key: "try_again_later");
-            //stopCustomHud();
           }else{
-            // stopCustomHud();
+
           }
         }
-
-
-
 
         return LoadingDialog(
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                /*
-              Image.asset(
-                'assets/images/Logo.png',
-              ),
-              */
-
                 Padding(
                   padding: EdgeInsets.only(left:16, right:16, bottom: 0),
                   child: usernameWidget,
@@ -265,7 +241,6 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
                     ],
                   ),
                 ),
-
 
                 Padding(
                   padding: EdgeInsets.only(left:16, right:16, bottom: 0),
@@ -292,9 +267,7 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
                   bloc: kretaLoginBlocs.kretaLoginBloc,
                   listener: (context, state) {
                     if (state is KretaLoginSuccessState) {
-                      //  Navigator.of(context).pushNamed('/details');
 
-                      //  Navigator.popAndPushNamed(context, "/");
                     }
                   },
                   child: Padding(
@@ -325,8 +298,4 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
       },
     );
   }
-
-  @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
 }

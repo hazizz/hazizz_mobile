@@ -29,7 +29,7 @@ class TaskCalendarPage extends StatefulWidget {
   _TaskCalendarPage createState() => _TaskCalendarPage();
 }
 
-class _TaskCalendarPage extends State<TaskCalendarPage> with AutomaticKeepAliveClientMixin {
+class _TaskCalendarPage extends State<TaskCalendarPage> {
 
   CalendarController calendarController = CalendarController();
 
@@ -366,9 +366,6 @@ class _TaskCalendarPage extends State<TaskCalendarPage> with AutomaticKeepAliveC
     );
   }
 
-  @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
 }
 
 

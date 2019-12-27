@@ -87,6 +87,8 @@
     "save"
     : "Save",
 
+  "image_saved"
+  : "Image saved to gallery",
 
     "send"
     : "Send",
@@ -453,6 +455,12 @@
     "next"
     : "Next",
 
+  "proceed"
+  : "Proceed",
+
+  "allow"
+  : "Allow",
+
   "forward"
   : "Forward",
 
@@ -696,6 +704,8 @@
     : "Send this link to your classmates to join {} group!",
 
 
+
+
     "already_in_group"
     : "You are already a member of this group",
 
@@ -712,10 +722,18 @@
     "invite_to_group_text_title"
     : "Hazizz Mobile: Join to {} group to receive your homeworks: \n{}",
 
-
+  "invite_to_task_text_title"
+  : "Hazizz Mobile: View your task: \n{}",
 
     "passwordagain_fragment_register"
     : "Confirm password",
+
+  "gdrive_info"
+  : "To upload images to tasks, we store the image in your Google Drive's folder.",
+
+  "gdrive_grant_permission"
+  : "By pressing \"allow\", you allow us to store task images in your Google Drive",
+
 
   "delete_all_gdrive_images"
   : "Delete all images",
@@ -725,6 +743,12 @@
 
   "delete_successful"
   : "{} successfully deleted",
+
+  "areyousure_delete_image"
+  : "Are you sure you want to delete this image from your Drive? It will be deleted from the task too.",
+
+  "areyousure_delete_all_images"
+  : "Are you sure you want to delete all Hazizz images from your Drive? They will be deleted from the tasks too.",
 
     "areyousure_delete_task"
     : "Are you sure you want to delete this task?",
@@ -1071,6 +1095,8 @@
     "error_noPermissionToJoinGroup"
     : "You don't have permission to login",
 
+  "no_permission_to_view"
+  : "You don't have permission to view this content!",
 
     "error_groupNameNotAcceptable"
     : "Incorrect group name",
@@ -1266,6 +1292,18 @@
     "kreta_server_unavailable"
     : "Kréta server unavailable",
 
+  "server_unavailable"
+  : "Server unavailable",
+
+  "gateway_server_unavailable"
+  : "Gateway server unavailable",
+  "auth_server_unavailable"
+  : "Auth server unavailable",
+  "hazizz_server_unavailable"
+  : "Hazizz server unavailable",
+  "thera_server_unavailable"
+  : "Théra server unavailable",
+
     "kreta_accounts"
     : "Kréta accounts",
 
@@ -1312,7 +1350,7 @@
 
 
     "thera_standin"
-    : "replacement",
+    : "Replacement",
 
 
     "thera_canceled"

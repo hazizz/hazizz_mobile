@@ -1,8 +1,6 @@
 import 'package:android_alarm_manager/android_alarm_manager.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/widgets.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mobile/blocs/auth/google_login_bloc.dart';
 import 'package:mobile/blocs/auth/social_login_bloc.dart';
 import 'package:mobile/blocs/kreta/sessions_bloc.dart';
@@ -17,6 +15,7 @@ import 'package:mobile/communication/pojos/PojoTokens.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/communication/hazizz_response.dart';
+import 'package:mobile/managers/server_checker.dart';
 import 'package:mobile/navigation/business_navigator.dart';
 import 'package:mobile/notification/notification.dart';
 import 'package:mobile/storage/caches/data_cache.dart';
@@ -29,16 +28,15 @@ import 'package:mobile/managers/token_manager.dart';
 import 'package:mobile/storage/cache_manager.dart';
 
 class AppState{
-
   static const key_newComer = "key_newComer";
   static const value_newComer_false = "value_newComer_false";
   static const key_isLoggedIn = "key_isLoggedIn";
 
+  static const key_isAllowedGDrive = "key_isAllowedGDrive";
+
   static bool logInProcedureDone = true;
 
-
   static Future setUserData({@required PojoMeInfo meInfo}) async {
-
     InfoCache.setMyId(meInfo.id);
     InfoCache.setMyUsername(meInfo.username);
     InfoCache.setMyDisplayName(meInfo.displayName);
@@ -46,16 +44,9 @@ class AppState{
     if(meInfo is PojoMeInfoPrivate){
 
     }
-
-  }
-
-
-  static Future logInProcedure2({@required PojoTokens tokens}) async {
-
   }
 
   static Future logInProcedure({@required PojoTokens tokens}) async {
-    // set islogged in to true
     logInProcedureDone = false;
 
     HazizzLogger.printLog("logInProcedure: 0");
@@ -64,7 +55,6 @@ class AppState{
 
     TokenManager.setRefreshToken(tokens.refresh_token);
     HazizzLogger.printLog("logInProcedure: 2");
-
 
     var sh = await SharedPreferences.getInstance();
     sh.setBool(key_isLoggedIn, true);
@@ -96,7 +86,6 @@ class AppState{
     logInProcedureDone = true;
   }
 
-
   static Future<void> appStartProcedure() async {
     RequestSender().initialize();
     await HazizzAppInfo().initalize();
@@ -111,7 +100,7 @@ class AppState{
   static Future<void> mainAppPartStartProcedure() async {
 
    // await TokenManager.fetchRefreshTokens(username: (await InfoCache.getMyUserData()).username, refreshToken: await TokenManager.getRefreshToken());
-
+    ServerChecker.checkAll();
   //  RequestSender._internal();
     HazizzLogger.printLog("mainAppPartStartProcedure 1");
     await KretaSessionManager.loadSelectedSession();
@@ -142,6 +131,7 @@ class AppState{
     forgetTasksCache();
     forgetScheduleCache();
     forgetGradesCache();
+    setDisallowedGDrive();
     RequestSender().clearAllRequests();
     RequestSender().unlock();
   }
@@ -153,7 +143,6 @@ class AppState{
     if(!isLoggedIn){
       BusinessNavigator().currentState().pushNamedAndRemoveUntil('login', (Route<dynamic> route) => false);
     }
-  //  Navigator.of(context).pushNamedAndRemoveUntil('login', (Route<dynamic> route) => false);
   }
 
 
@@ -161,20 +150,16 @@ class AppState{
   static Future<bool> isLoggedIn() async {
     bool hasToken = await TokenManager.hasToken();
     bool hasRefreshToken = await TokenManager.hasRefreshToken();
-   // String username = await InfoCache.getMyUsername();
     var sh = await SharedPreferences.getInstance();
     bool isLoggedIn = sh.getBool(key_isLoggedIn);
     isLoggedIn ??= false;
 
-  //  bool hasUsername = username != null && username != "";
- //   HazizzLogger.printLog("log: is logged in: ${hasRefreshToken}");
     return hasRefreshToken && isLoggedIn && hasToken;
   }
 
 
   static Future setIsntNewComer() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
-
     sp.setString(key_newComer, value_newComer_false);
   }
 
@@ -189,6 +174,22 @@ class AppState{
   }
 
 
+  static Future setDisallowedGDrive() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
 
+    sp.setBool(key_isAllowedGDrive, false);
+  }
 
+  static Future setAllowedGDrive() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+
+    sp.setBool(key_isAllowedGDrive, true);
+  }
+
+  static Future<bool> isAllowedGDrive() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+
+    bool allowed = sp.getBool(key_isAllowedGDrive);
+    return allowed ?? false;
+  }
 }

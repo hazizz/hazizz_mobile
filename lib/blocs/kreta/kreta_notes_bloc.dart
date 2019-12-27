@@ -10,36 +10,24 @@ import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 
 class KretaNotesBloc extends Bloc<HEvent, HState> {
-
-  /*
-  static final KretaNotesBloc _singleton = new KretaNotesBloc._internal();
-  factory KretaNotesBloc() {
-    return _singleton;
-  }
-  KretaNotesBloc._internal();
-  */
-
   @override
   HState get initialState => ResponseEmpty();
 
   @override
   Stream<HState> mapEventToState(HEvent event) async* {
     if (event is FetchData) {
-      try {
-        yield ResponseWaiting();
-        HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetNotes());
+      yield ResponseWaiting();
+      HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetNotes());
 
-        if(hazizzResponse.isSuccessful){
-          List<PojoKretaNote> notes = hazizzResponse.convertedData;
-          yield ResponseDataLoaded(data: notes);
+      if(hazizzResponse.isSuccessful){
+        List<PojoKretaNote> notes = hazizzResponse.convertedData;
+        yield ResponseDataLoaded(data: notes);
 
-        }
-        if(hazizzResponse.isError){
-          yield ResponseError(errorResponse: hazizzResponse);
-        }
-      } on Exception catch(e){
-        HazizzLogger.printLog("log: Exception: ${e.toString()}");
       }
+      if(hazizzResponse.isError){
+        yield ResponseError(errorResponse: hazizzResponse);
+      }
+
     }
   }
 }

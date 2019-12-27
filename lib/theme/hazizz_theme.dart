@@ -10,6 +10,9 @@ ThemeData theme(BuildContext context){
 
 class HazizzTheme{
 
+  static ThemeData currentTheme = lightThemeData;
+  static bool currentThemeIsDark = false;
+
   static const Color
   red = Color.fromRGBO(242, 59, 80, 1),
   yellow = Color.fromRGBO(255, 202, 4, 1),
@@ -171,10 +174,12 @@ class HazizzTheme{
   }
 
   static Future<void> setDark() async {
+    currentThemeIsDark = true;
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setString(_key_theme, _value_dark);
   }
   static Future<void> setLight() async {
+    currentThemeIsDark = false;
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setString(_key_theme, _value_light);
   }
@@ -182,10 +187,14 @@ class HazizzTheme{
 
   static Future<ThemeData> getCurrentTheme() async {
     if(await isDark()) {
-      return HazizzTheme.darkThemeData;
+      currentThemeIsDark = true;
+      currentTheme = HazizzTheme.darkThemeData;
+      return currentTheme;
     }else{
-      return HazizzTheme.lightThemeData;
+      currentThemeIsDark = false;
+      currentTheme = HazizzTheme.lightThemeData;
 
+      return currentTheme;
     }
   }
 

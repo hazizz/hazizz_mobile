@@ -4,10 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/blocs/group/group_bloc.dart';
 import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/response_states.dart';
-import 'package:mobile/blocs/tasks/task_maker_blocs.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
-import 'package:mobile/defaults/pojo_subject_empty.dart';
-import 'package:mobile/enums/group_types_enum.dart';
 import 'package:mobile/listItems/subject_item_widget.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'dialogs.dart';
@@ -106,7 +103,7 @@ class _SubscribeToSubjectDialog extends State<SubscribeToSubjectDialog> {
       actionButtons: Row(
         children: <Widget>[
           FlatButton(
-            child: new Text(locText(context, key: "forward").toUpperCase()),
+            child: new Text(locText(context, key: "proceed").toUpperCase()),
             onPressed: () {
               pop(context);
             },

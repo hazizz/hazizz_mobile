@@ -20,8 +20,8 @@ import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/blocs/kreta/schedule_event_bloc.dart';
 import 'package:mobile/storage/caches/data_cache.dart';
 
-//region EditTask bloc parts
-//region EditTask events
+//region Schedule bloc parts
+//region Schedule events
 abstract class ScheduleEvent extends HEvent {
   ScheduleEvent([List props = const []]) : super(props);
 }
@@ -30,15 +30,7 @@ class ScheduleFetchEvent extends ScheduleEvent {
   int yearNumber;
   int weekNumber;
 
-  ScheduleFetchEvent({this.yearNumber, this.weekNumber}) :  super([yearNumber, weekNumber]){
-   /* if(weekNumber == null || yearNumber == null){
-      yearNumber ??= DateTime.now().year;
-      DateTime now = DateTime.now();
-      int dayOfYear = int.parse(DateFormat("D").format(now));
-      weekNumber = ((dayOfYear - now.weekday + 10) / 7).floor();
-    }
-    */
-  }
+  ScheduleFetchEvent({this.yearNumber, this.weekNumber}) :  super([yearNumber, weekNumber]);
   @override
   String toString() => 'ScheduleFetchEvent';
   @override
@@ -46,15 +38,14 @@ class ScheduleFetchEvent extends ScheduleEvent {
 }
 
 class ScheduleSetSessionEvent extends ScheduleEvent {
-  ScheduleSetSessionEvent() :  super([DateTime.now()]){
-  }
+  ScheduleSetSessionEvent() :  super([DateTime.now()]);
   @override
   String toString() => 'ScheduleSetSessionEvent';
   List<Object> get props => [DateTime.now()];
 }
 //endregion
 
-//region SubjectItemListStates
+//region Schedule states
 abstract class ScheduleState extends HState {
   ScheduleState([List props = const []]) : super(props);
 }
@@ -105,7 +96,7 @@ class ScheduleErrorState extends ScheduleState {
 
 //endregion
 
-//region SubjectItemListBloc
+//region Schedule bloc
 class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
   ScheduleEventBloc scheduleEventBloc;
@@ -163,17 +154,13 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
   int currentDayIndex;
 
-
-
   void nextWeek(){
     MainTabBlocs().schedulesBloc.dispatch(ScheduleFetchEvent(yearNumber: MainTabBlocs().schedulesBloc.currentYearNumber, weekNumber: MainTabBlocs().schedulesBloc.currentWeekNumber+1));
-
   }
 
   void previousWeek(){
     MainTabBlocs().schedulesBloc.dispatch(ScheduleFetchEvent(yearNumber: MainTabBlocs().schedulesBloc.currentYearNumber, weekNumber: MainTabBlocs().schedulesBloc.currentWeekNumber-1));
   }
-
 
   @override
   ScheduleState get initialState => ScheduleInitialState();
@@ -262,9 +249,6 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
           */
 
           if(classes != null ){
-
-           // currentWeekNumber = event.weekNumber;
-           // currentYearNumber = event.yearNumber;
             lastUpdated = DateTime.now();
             if(currentYearNumber == currentCurrentYearNumber && currentWeekNumber == currentCurrentWeekNumber) {
               saveScheduleCache(classes, year: currentYearNumber, weekNumber: currentWeekNumber);

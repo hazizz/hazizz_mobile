@@ -13,7 +13,7 @@ class SessionSelectorPage extends StatefulWidget {
   _SessionSelectorPage createState() => _SessionSelectorPage();
 }
 
-class _SessionSelectorPage extends State<SessionSelectorPage> with AutomaticKeepAliveClientMixin {
+class _SessionSelectorPage extends State<SessionSelectorPage> {
   
   @override
   void initState() {
@@ -34,9 +34,6 @@ class _SessionSelectorPage extends State<SessionSelectorPage> with AutomaticKeep
     );
   }
 
-  @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
 }
 
 

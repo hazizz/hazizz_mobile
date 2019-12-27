@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-
 import 'package:flutter/widgets.dart';
 import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/response_states.dart';
@@ -7,8 +6,6 @@ import 'package:bloc/bloc.dart';
 import 'package:mobile/communication/pojos/PojoMeInfo.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
-import 'package:mobile/storage/cache_manager.dart';
-
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/custom/image_operations.dart';
 import 'package:mobile/communication/request_sender.dart';
@@ -129,13 +126,9 @@ class ProfilePictureEditorInitialState extends ProfilePictureEditorState {
 class ProfilePictureEditorBloc extends Bloc<ProfilePictureEditorEvent, ProfilePictureEditorState> {
   Uint8List profilePictureBytes;
 
-  static int counter = 0;
 
 
-  ProfilePictureEditorBloc() {
-    counter++;
-    HazizzLogger.printLog("log: ProfilePictureEditorBloc instances: $counter");
-  }
+  ProfilePictureEditorBloc();
 
   @override
   // TODO: implement initialState
@@ -337,8 +330,6 @@ class DisplayNameEditorBloc extends Bloc<DisplayNameEvent, DisplayNameState> {
       yield DisplayNameChangedState(displayName: event.displayName);
     }
   }
-
-
 }
 
 

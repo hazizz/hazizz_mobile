@@ -22,7 +22,7 @@ class LogsPage extends StatefulWidget {
   _LogsPage createState() => _LogsPage();
 }
 
-class _LogsPage extends State<LogsPage> with AutomaticKeepAliveClientMixin {
+class _LogsPage extends State<LogsPage> {
 
 
   String logs = "none";
@@ -33,11 +33,9 @@ class _LogsPage extends State<LogsPage> with AutomaticKeepAliveClientMixin {
 
   @override
   void initState() {
-    // widget.myGroupsBloc.add(FetchData());
     Logcat.execute().then((String l){
       setState(() {
         logs = l;
-
         getTemporaryDirectory().then((directory){
           filePath = '${directory.path}/hazizz_logs.txt';
 
@@ -67,7 +65,6 @@ class _LogsPage extends State<LogsPage> with AutomaticKeepAliveClientMixin {
                   minLines: 1,
                   maxLines: 3,
                   decoration:  InputDecoration(
-
                     labelText: locText(context, key: "tell_us_what_happened"),
                   ),
                 ),
@@ -89,16 +86,11 @@ class _LogsPage extends State<LogsPage> with AutomaticKeepAliveClientMixin {
                     onPressed: () async {
 
                       if(logFile != null){
-                        // final ByteData bytes = await rootBundle.load(logFile.path);
-                        // await Share.file('Hazizz Mobile logs', 'hazizz_mobile_logs.txt', bytes.buffer.asUint8List(), 'text/txt', text: 'Hazizz Mobile logs');
                         final MailOptions mailOptions = MailOptions(
 
                           body: 'version: ${HazizzAppInfo().getInfo.version}\nbuildNumber: ${HazizzAppInfo().getInfo.buildNumber}\nstory: ${controller.text}',
                           subject: 'Hazizz Mobile log',
                           recipients: ['hazizzvelunk@gmail.com'],
-                          //  isHTML: true,
-                          //  bccRecipients: ['other@example.com'],
-                          // ccRecipients: ['third@example.com'],
                           attachments: [ filePath, ],
                         );
 
@@ -114,8 +106,4 @@ class _LogsPage extends State<LogsPage> with AutomaticKeepAliveClientMixin {
       ),
     );
   }
-
-  @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
 }

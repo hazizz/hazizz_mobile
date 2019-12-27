@@ -7,6 +7,7 @@ import 'package:mobile/blocs/auth/social_login_bloc.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/navigation/route_generator.dart';
 import 'package:mobile/services/hazizz_message_handler.dart';
+import 'package:native_state/native_state.dart';
 import 'blocs/main_tab/main_tab_blocs.dart';
 import 'communication/pojos/task/PojoTask.dart';
 import 'custom/hazizz_logger.dart';
@@ -52,7 +53,6 @@ Future<bool> fromNotification() async {
       tasksTomorrowSerialzed = payload;
     }
   }else{
-    //isFromNotification = true;
   }
   return isFromNotification;
 }
@@ -85,7 +85,12 @@ void main() async{
   }
 
 
-  runApp(EasyLocalization(child: HazizzApp()));
+  runApp(SavedState(
+    name: "Main State",
+    child: EasyLocalization(
+        child: HazizzApp()
+    ),
+  ));
 }
 
 class HazizzApp extends StatefulWidget{
@@ -94,8 +99,6 @@ class HazizzApp extends StatefulWidget{
 }
 
 class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
- // Locale preferredLocale;
-
   DateTime currentBackPressTime;
 
   DateTime lastActive;
@@ -121,13 +124,11 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
     }
 
     if(state == AppLifecycleState.resumed){
-
       if(lastActive != null){
         if(DateTime.now().difference(lastActive).inSeconds >= 60){
           MainTabBlocs().fetchAll();
         }
       }
-
       var notificationAppLaunchDetails = await HazizzNotification.flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
         String payload = notificationAppLaunchDetails.payload;
         if(payload != null) {
@@ -135,7 +136,6 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
           Navigator.pushNamed(context, "/tasksTomorrow");
 
           tasksTomorrowSerialzed = payload;
-          //  tasksForTomorrow = getIterable(payload).map<PojoTask>((json) => PojoTask.fromJson(json)).toList();
         }else  HazizzLogger.printLog("no payload");
 
 
@@ -166,43 +166,45 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
 
       print("startpage: ${startPage}");
 
-      return new DynamicTheme(
-          data: (brightness) => themeData,
-          themedWidgetBuilder: (context, theme) {
-            return MaterialApp(
-              navigatorKey: BusinessNavigator().navigatorKey,
-              title: 'Hazizz Mobile',
-              showPerformanceOverlay: false,
-              theme: theme,
-              initialRoute: /*"/tasksTomorrow",*/  startPage,
-              onGenerateRoute: RouteGenerator.generateRoute,
-              localizationsDelegates: [
-                HazizzLocalizations.delegate,
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-              ],
-              supportedLocales: getSupportedLocales(),
+      var savedState = SavedState.of(context);
+      print("restore route: ${SavedStateRouteObserver.restoreRoute(savedState)}");
 
-              localeResolutionCallback: (locale, supportedLocales) {
-                // Check if the current device locale is supported
-                print("prCode1: ${preferredLocale.toString()}");
-                if(preferredLocale != null){
-                  print("prCode: ${preferredLocale.languageCode}, ${preferredLocale.countryCode}");
-                  return preferredLocale;
-                }
-                for(var supportedLocale in supportedLocales) {
-                  if(supportedLocale.languageCode == locale?.languageCode &&
-                      supportedLocale.countryCode == locale.countryCode) {
-                    setPreferredLocale(supportedLocale);
-                    return supportedLocale;
+      return DynamicTheme(
+            data: (brightness) => themeData,
+            themedWidgetBuilder: (context, theme) {
+              return MaterialApp(
+                navigatorKey: BusinessNavigator().navigatorKey,
+                navigatorObservers: [SavedStateRouteObserver(savedState: savedState)],
+                initialRoute: startPage ?? SavedStateRouteObserver.restoreRoute(savedState),
+                onGenerateRoute: RouteGenerator.generateRoute,
+
+                title: locText(context, key: "hazizz_appname") ?? "Hazizz Mobile",
+                showPerformanceOverlay: false,
+                theme: theme,
+                localizationsDelegates: [
+                  HazizzLocalizations.delegate,
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                ],
+                supportedLocales: getSupportedLocales(),
+
+                localeResolutionCallback: (locale, supportedLocales) {
+                  print("prCode1: ${preferredLocale.toString()}");
+                  if(preferredLocale != null){
+                    print("prCode: ${preferredLocale.languageCode}, ${preferredLocale.countryCode}");
+                    return preferredLocale;
                   }
-                }
-                // If the locale of the device is not supported, use the first one
-                // from the list (English, in this case).
-                return supportedLocales.first;
-              },
-            );
-          }
-      );
+                  for(var supportedLocale in supportedLocales) {
+                    if(supportedLocale.languageCode == locale?.languageCode &&
+                        supportedLocale.countryCode == locale.countryCode) {
+                      setPreferredLocale(supportedLocale);
+                      return supportedLocale;
+                    }
+                  }
+                  return supportedLocales.first;
+                },
+              );
+            }
+        );
   }
 }

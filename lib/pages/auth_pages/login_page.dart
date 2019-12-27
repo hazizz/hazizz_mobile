@@ -1,8 +1,5 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile/blocs/auth/google_login_bloc.dart';
-import 'package:mobile/blocs/auth/login_bloc.dart';
 import 'package:mobile/blocs/auth/social_login_bloc.dart';
 import 'package:mobile/dialogs/loading_dialog.dart';
 import 'package:mobile/widgets/login_widget.dart';

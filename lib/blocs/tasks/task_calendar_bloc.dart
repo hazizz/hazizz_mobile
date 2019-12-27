@@ -13,8 +13,8 @@ import 'package:mobile/custom/hazizz_date.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/communication/request_sender.dart';
 
-//region EditTask bloc parts
-//region EditTask events
+//region TasksCalendar bloc parts
+//region TasksCalendar events
 abstract class TasksCalendarEvent extends HEvent {
   TasksCalendarEvent([List props = const []]) : super(props);
 }
@@ -27,7 +27,7 @@ class TasksCalendarFetchEvent extends TasksCalendarEvent {
 }
 //endregion
 
-//region SubjectItemListStates
+//region TasksCalendar states
 abstract class TasksCalendarState extends HState {
   TasksCalendarState([List props = const []]) : super(props);
 }
@@ -75,7 +75,7 @@ class TasksCalendarErrorState extends TasksCalendarState {
 
 //endregion
 
-//region SubjectItemListBloc
+//region TasksCalendar bloc
 class TasksCalendarBloc extends Bloc<TasksCalendarEvent, TasksCalendarState> {
 
   TasksCalendarBloc(){}

@@ -21,7 +21,7 @@ class DeveloperSettingsPage extends StatefulWidget {
   _DeveloperSettingsPage createState() => _DeveloperSettingsPage();
 }
 
-class _DeveloperSettingsPage extends State<DeveloperSettingsPage> with AutomaticKeepAliveClientMixin {
+class _DeveloperSettingsPage extends State<DeveloperSettingsPage> {
 
   String token = "semmi";
 
@@ -92,8 +92,4 @@ class _DeveloperSettingsPage extends State<DeveloperSettingsPage> with Automatic
       ),
     );
   }
-
-  @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
 }

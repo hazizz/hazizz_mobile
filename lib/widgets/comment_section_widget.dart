@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/other/comment_section_bloc.dart';
 import 'package:mobile/blocs/other/view_task_bloc.dart';
 import 'package:mobile/communication/pojos/pojo_comment.dart';
+import 'package:mobile/custom/line_break_limit_text_formatter.dart';
 import 'package:mobile/listItems/comment_item_widget.dart';
 
 import 'package:mobile/custom/hazizz_localizations.dart';
@@ -118,6 +119,7 @@ class _CommentSectionWidget extends State<CommentSectionWidget>{
                               child: TextField(
                                 inputFormatters:[
                                   LengthLimitingTextInputFormatter(300),
+                                  LineBreakLimitingTextInputFormatter(5)
 
                                 ],
 
@@ -128,7 +130,8 @@ class _CommentSectionWidget extends State<CommentSectionWidget>{
                                 controller: ViewTaskBloc().commentBlocs.commentWriterBloc
                                     .commentController,
                                 autofocus: false,
-                                maxLines: 4,
+                                maxLines: 6,
+                                minLines: 1,
                                 style: TextStyle(fontSize: 18),
                                 //  controller: _commentController,
                               ),

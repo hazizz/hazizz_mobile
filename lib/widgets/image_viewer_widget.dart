@@ -13,10 +13,12 @@ class ImageViewer extends StatefulWidget {
   String imageUrl;
   Object heroTag;
 
+  Function onSmallDelete;
   Function onDelete;
 
-  ImageViewer.fromNetwork(this.imageUrl, {Key key, @required this.heroTag, this.onDelete, this.height}) : super(key: key);
-  ImageViewer.fromFile(this.imageFile, {Key key, @required this.heroTag, this.onDelete, this.height}) : super(key: key);
+
+  ImageViewer.fromNetwork(this.imageUrl, {Key key, @required this.heroTag, this.onSmallDelete, this.onDelete, this.height}) : super(key: key);
+  ImageViewer.fromFile(this.imageFile, {Key key, @required this.heroTag, this.onSmallDelete, this.onDelete, this.height}) : super(key: key);
 
   @override
   _ImageViewer createState() => _ImageViewer();
@@ -67,13 +69,11 @@ class _ImageViewer extends State<ImageViewer>{
 
                 if(widget.onDelete == null) return Container(width: 1,);
                 return Positioned(
-                    top: 1, left: 1,
+                    top: 3, left: 3,
                     child: GestureDetector(
                       child: Icon(FontAwesomeIcons.solidTimesCircle, size: 20, color: Colors.red,),
-                      onTap: (){
-                        setState(() {
-
-                        });
+                      onTap: () async {
+                        await widget.onSmallDelete();
                       },
                     )
                 );

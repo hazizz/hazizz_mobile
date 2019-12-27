@@ -1,6 +1,5 @@
-
 import 'package:flutter_svg/svg.dart';
-import 'package:mobile/communication/requests/request_collection.dart';
+import 'package:mobile/managers/server_checker.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 import 'package:mobile/widgets/hyper_link.dart';
 
@@ -8,9 +7,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:mobile/custom/hazizz_app_info.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/blocs/other/settings_bloc.dart';
-
-import 'package:mobile/communication/request_sender.dart';
 
 
 class AboutPage extends StatefulWidget {
@@ -19,7 +15,6 @@ class AboutPage extends StatefulWidget {
     return locText(context, key: "about");
   }
 
-  StartPageItemPickerBloc startPageItemPickerBloc = new StartPageItemPickerBloc();
 
   AboutPage({Key key}) : super(key: key);
 
@@ -27,7 +22,7 @@ class AboutPage extends StatefulWidget {
   _AboutPage createState() => _AboutPage();
 }
 
-class _AboutPage extends State<AboutPage> with AutomaticKeepAliveClientMixin {
+class _AboutPage extends State<AboutPage> {
 
   static final String version = HazizzAppInfo().getInfo.version;
 
@@ -45,37 +40,20 @@ class _AboutPage extends State<AboutPage> with AutomaticKeepAliveClientMixin {
 
   _AboutPage();
 
+  void _map(){
+    gatewayServerIsOnline = ServerChecker.gatewayOnline;
+    authServerIsOnline = ServerChecker.authOnline;
+    hazizzServerIsOnline = ServerChecker.hazizzOnline;
+    theraServerIsOnline = ServerChecker.theraOnline;
+  }
+
   @override
   void initState() {
-    // widget.myGroupsBloc.add(FetchData());
-
-    RequestSender().getResponse(PingGatewayServer()).then((hazizzResponse){
-      if(hazizzResponse != null && !hazizzResponse.isSuccessful){
-        setState(() {
-          gatewayServerIsOnline = false;
-        });
-      }
-    });
-    RequestSender().getResponse(PingAuthServer()).then((hazizzResponse){
-      if(hazizzResponse != null && !hazizzResponse.isSuccessful){
-        setState(() {
-          authServerIsOnline = false;
-        });
-      }
-    });
-    RequestSender().getResponse(PingHazizzServer()).then((hazizzResponse){
-      if(hazizzResponse != null && !hazizzResponse.isSuccessful){
-        setState(() {
-          hazizzServerIsOnline = false;
-        });
-      }
-    });
-    RequestSender().getResponse(PingTheraServer()).then((hazizzResponse){
-      if(hazizzResponse != null && !hazizzResponse.isSuccessful){
-        setState(() {
-          theraServerIsOnline = false;
-        });
-      }
+    _map();
+    ServerChecker.checkAll(notifyFlush: false).then((val){
+      setState(() {
+        _map();
+      });
     });
 
     super.initState();
@@ -108,22 +86,9 @@ class _AboutPage extends State<AboutPage> with AutomaticKeepAliveClientMixin {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text("${locText(context, key: "version")}:", style: TextStyle(fontSize: 17),),
-                      Text(version)
+                      Text(version, style: TextStyle(fontSize: 17))
                     ],
                   )
-                ),
-
-                Divider(),
-
-                Padding(
-                    padding: const EdgeInsets.only(top: 8.0, bottom: 8, left: 15, right: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text("${locText(context, key: "website")}:", style: TextStyle(fontSize: 17),),
-                        Hyperlink(website, Text(website, style: TextStyle(color: Colors.blueAccent, fontSize: 17, decoration: TextDecoration.underline),))
-                      ],
-                    )
                 ),
                 Divider(),
 
@@ -202,6 +167,17 @@ class _AboutPage extends State<AboutPage> with AutomaticKeepAliveClientMixin {
                 ),
                 Divider(),
 
+                Padding(
+                    padding: const EdgeInsets.only(top: 8, bottom: 12, left: 15, right: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text("${locText(context, key: "website")}:", style: TextStyle(fontSize: 17),),
+                        Hyperlink(website, Text(website, style: TextStyle(color: Colors.blueAccent, fontSize: 17, decoration: TextDecoration.underline),))
+                      ],
+                    )
+                ),
+
 
                 Padding(
                   padding: const EdgeInsets.only(top: 24.0),
@@ -276,8 +252,6 @@ class _AboutPage extends State<AboutPage> with AutomaticKeepAliveClientMixin {
                           ),
                         ),
                       ),
-
-
                     ],
                   ),
                 )
@@ -287,10 +261,4 @@ class _AboutPage extends State<AboutPage> with AutomaticKeepAliveClientMixin {
       ),
     );
   }
-
-  @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
-
-
 }

@@ -10,13 +10,9 @@ import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 
-
-
+//region CommentSection events
 abstract class CommentSectionEvent extends HEvent {
   CommentSectionEvent([List props = const []]) : super(props);
-}
-abstract class CommentSectionState extends HState {
-  CommentSectionState([List props = const []]) : super(props);
 }
 
 class CommentSectionLoadedEvent extends CommentSectionEvent {
@@ -41,8 +37,12 @@ class CommentSectionAddCommentEvent extends CommentSectionEvent {
   String toString() => 'CommentSectionAddCommentEvent';
   List<Object> get props => null;
 }
+//endregion
 
-
+//region CommentSection events
+abstract class CommentSectionState extends HState {
+  CommentSectionState([List props = const []]) : super(props);
+}
 
 class CommentSectionWaitingState extends CommentSectionState {
   CommentSectionWaitingState();
@@ -54,8 +54,7 @@ class CommentSectionWaitingState extends CommentSectionState {
 
 class CommentSectionLoadedState extends CommentSectionState {
   final List<PojoComment> items;
-  CommentSectionLoadedState({@required this.items})
-      :  assert(items != null), super(items);
+  CommentSectionLoadedState({@required this.items}): assert(items != null), super(items);
   @override
   String toString() => 'CommentSectionLoadedState';
   List<Object> get props => [items];
@@ -76,17 +75,15 @@ class CommentSectionInitialState extends CommentSectionState {
   String toString() => 'CommentSectionInitialState';
   List<Object> get props => null;
 }
+//endregion
 
-
-
+//region CommentSection bloc
 class CommentSectionBloc extends Bloc<CommentSectionEvent, CommentSectionState> {
   List<PojoComment> comments;
 
   int taskId;
 
-  CommentSectionBloc({@required this.taskId}){
-
-  }
+  CommentSectionBloc({@required this.taskId});
 
   @override
   CommentSectionState get initialState => CommentSectionInitialState();
@@ -121,6 +118,7 @@ class CommentSectionBloc extends Bloc<CommentSectionEvent, CommentSectionState> 
     }
   }
 }
+//endregion
 
 class CommentBlocs{
   int taskId;
@@ -185,8 +183,6 @@ class CommentWriterErrorState extends CommentWriterState {
 
 
 class CommentWriterBloc extends Bloc<CommentWriterEvent,  CommentWriterState> {
-
-
   final TextEditingController commentController = TextEditingController();
 
   int taskId;
@@ -203,7 +199,6 @@ class CommentWriterBloc extends Bloc<CommentWriterEvent,  CommentWriterState> {
       }
     });
   }
-
 
   @override
   void dispose() {

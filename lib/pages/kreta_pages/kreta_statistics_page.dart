@@ -21,7 +21,7 @@ class KretaStatisticsPage extends StatefulWidget {
   _KretaStatisticsPage createState() => _KretaStatisticsPage();
 }
 
-class _KretaStatisticsPage extends State<KretaStatisticsPage> with AutomaticKeepAliveClientMixin {
+class _KretaStatisticsPage extends State<KretaStatisticsPage> {
 
   KretaGradeStatisticsBloc gradeAvaragesBloc = KretaGradeStatisticsBloc();
 
@@ -47,7 +47,6 @@ class _KretaStatisticsPage extends State<KretaStatisticsPage> with AutomaticKeep
           },
           child: Stack(
             children: <Widget>[
-
               ListView(),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -71,7 +70,6 @@ class _KretaStatisticsPage extends State<KretaStatisticsPage> with AutomaticKeep
                             }
                             return Center(
                               child: DropdownButton(
-                               // style: TextStyle(fontSize: 16),
                                 value: selectedSubject,
                                 onChanged: (item) {
                                   setState(() {
@@ -101,7 +99,6 @@ class _KretaStatisticsPage extends State<KretaStatisticsPage> with AutomaticKeep
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: <Widget>[
                                           Text("${locText(context, key: "average")}:", style: TextStyle(fontSize: 18),),
-                                        //  SizedBox(width: 50,),
                                           Text(avarage.grade.toString(), style: TextStyle(fontSize: 18),),
                                         ],
                                       ),
@@ -109,7 +106,6 @@ class _KretaStatisticsPage extends State<KretaStatisticsPage> with AutomaticKeep
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: <Widget>[
                                           Text("${locText(context, key: "class_average")}:", style: TextStyle(fontSize: 18),),
-                                         // SizedBox(width: 50,),
                                           Text(avarage.classGrade.toString(), style: TextStyle(fontSize: 18),),
                                         ],
                                       ),
@@ -117,7 +113,6 @@ class _KretaStatisticsPage extends State<KretaStatisticsPage> with AutomaticKeep
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: <Widget>[
                                           Text("${locText(context, key: "difference")}:", style: TextStyle(fontSize: 18),),
-                                        //  SizedBox(width: 50,),
                                           avarage.difference >= 0 ?
                                           Text("+${avarage.difference.toString()}", style: TextStyle(color: Colors.green, fontSize: 18),) :
                                           Text(avarage.difference.toString(), style: TextStyle(color: Colors.red, fontSize: 18))
@@ -146,11 +141,11 @@ class _KretaStatisticsPage extends State<KretaStatisticsPage> with AutomaticKeep
                             return Center(child: Text(locText(context, key: "no_grades_yet")));
                           }
                           return new ListView.builder(
-                              itemCount: grades.length,
-                              itemBuilder: (BuildContext context, int index) {
+                            itemCount: grades.length,
+                            itemBuilder: (BuildContext context, int index) {
 
-                                return GradeItemWidget.bySubject(pojoGrade: grades[index],);
-                              }
+                              return GradeItemWidget.bySubject(pojoGrade: grades[index],);
+                            }
                           );
                         }
                         if(state is GradesLoadedState){
@@ -171,9 +166,6 @@ class _KretaStatisticsPage extends State<KretaStatisticsPage> with AutomaticKeep
         )
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }
 
 

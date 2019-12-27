@@ -1,16 +1,10 @@
 import 'dart:async';
-
 import 'package:bloc/bloc.dart';
-
 import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/response_states.dart';
-import 'package:mobile/communication/pojos/PojoSession.dart';
 
-import 'package:mobile/managers/kreta_session_manager.dart';
-
-
-//region EditTask bloc parts
-//region EditTask events
+//region KretaStatus bloc parts
+//region KretaStatus events
 abstract class KretaStatusEvent extends HEvent {
   KretaStatusEvent([List props = const []]) : super(props);
 }
@@ -27,8 +21,6 @@ class KretaStatusAvailableEvent extends KretaStatusEvent {
   List<Object> get props => null;
 }
 
-
-
 class KretaStatusInitalizeEvent extends KretaStatusEvent {
   @override
   String toString() => 'KretaStatusInitalizeEvent';
@@ -36,7 +28,7 @@ class KretaStatusInitalizeEvent extends KretaStatusEvent {
 }
 //endregion
 
-//region SubjectItemListStates
+//region KretaStatus states
 abstract class KretaStatusState extends HState {
   KretaStatusState([List props = const []]) : super(props);
 }
@@ -66,9 +58,8 @@ class KretaStatusWaiting extends KretaStatusState {
 
 //endregion
 
-//region SubjectItemListBloc
+//region KretaStatusBloc
 class KretaStatusBloc extends Bloc<KretaStatusEvent, KretaStatusState> {
-
   static final KretaStatusBloc _singleton = new KretaStatusBloc._internal();
   factory KretaStatusBloc() {
     return _singleton;
@@ -84,11 +75,8 @@ class KretaStatusBloc extends Bloc<KretaStatusEvent, KretaStatusState> {
       yield KretaStatusUnavailableState();
     }
   }
-
   @override
   KretaStatusState get initialState => KretaStatusAvailableState();
-
-
 }
 //endregion
 //endregion

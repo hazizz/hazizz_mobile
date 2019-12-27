@@ -40,17 +40,6 @@ class RequestSender{
   addInterceptor(){
     dio.interceptors.add(InterceptorsWrapper(
         onRequest:(RequestOptions options) async{
-          // Do something before request is sent
-          /*
-        dio.interceptors.requestLock.lock();
-        dio.clear();
-        */
-          /*
-        connectivity = await Connectivity().checkConnectivity();
-        if(!(connectivity == ConnectivityResult.wifi ||connectivity == ConnectivityResult.mobile)){
-          dio.lock();
-        }
-        */
           HazizzLogger.printLog("In onRequest function");
           if(DateTime.now().millisecondsSinceEpoch - lastSeconds >= 1000){
             print("boi: b2");
@@ -69,14 +58,6 @@ class RequestSender{
           HazizzLogger.printLog("In onRequest function: sending request: ${options.baseUrl}");
 
           return options;
-
-
-          HazizzLogger.printLog("preparing to send request");
-          return options; //continue
-          // If you want to resolve the request with some custom data，
-          // you can return a `Response` object or return `dio.resolve(data)`.
-          // If you want to reject the request with a error message,
-          // you can return a `DioError` object or return `dio.reject(errMsg)`
         },
         onResponse:(Response response) {
           HazizzLogger.printLog("got response: ${response.data}");
@@ -89,31 +70,14 @@ class RequestSender{
         }
     ));
   }
-  /*
-      String method,
-      int connectTimeout,
-      int sendTimeout,
-      int receiveTimeout,
-      Iterable<Cookie> cookies,
-      Map<String, dynamic> extra,
-      Map<String, dynamic> headers,
-      ResponseType responseType,
-      ContentType contentType,
-      ValidateStatus validateStatus,
-      bool receiveDataWhenStatusError,
-      bool followRedirects,
-      int maxRedirects,
-  */
+
   final Options options = new Options(
-    connectTimeout: 6000,
-    sendTimeout: 6000,
-    receiveTimeout: 6000,
-  //  headers: request.header,
+    connectTimeout: 8000,
+    sendTimeout: 8000,
+    receiveTimeout: 8000,
     responseType: ResponseType.plain,
     receiveDataWhenStatusError: true,
-    followRedirects: true,
-
-
+    followRedirects: true
   );
 
   Dio dio = new Dio();
@@ -179,7 +143,6 @@ class RequestSender{
           await AppState.logout();
         }
       }
-
 
       HazizzLogger.printLog("auth response is successful: ${hazizzResponse.isSuccessful}");
     }
@@ -270,7 +233,6 @@ class RequestSender{
           response = await dio.put(request.url, queryParameters: request.query, data: request.body, options: options);
         }
 
-
         HazizzLogger.printLog("request was sent successfully: ${request.toString()}");
         HazizzLogger.printLog("response for ${request.toString()}: ${response.toString()}");
         hazizzResponse = HazizzResponse.onSuccess(response: response, request: request);
@@ -285,7 +247,6 @@ class RequestSender{
 
       hazizzResponse = await HazizzResponse.onError(dioError: error, request: request);
       HazizzLogger.printLog("HazizzResponse.onError ran: ${request.toString()}");
-
     }
     return hazizzResponse;
   }

@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mobile/blocs/auth/social_login_bloc.dart';
 import 'package:mobile/communication/hazizz_response.dart';
@@ -8,8 +9,6 @@ import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/managers/token_manager.dart';
 
 class GoogleLoginBloc extends SocialLoginBloc{
-
-
   GoogleSignIn _googleSignIn;
   FirebaseAuth _auth;
 
@@ -27,7 +26,6 @@ class GoogleLoginBloc extends SocialLoginBloc{
   Future<String> getSocialToken() async {
     HazizzLogger.printLog("google login: 1");
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-
     HazizzLogger.printLog("google login: 2");
 
     HazizzLogger.printLog("google login: 3");
@@ -36,15 +34,14 @@ class GoogleLoginBloc extends SocialLoginBloc{
 
     HazizzLogger.printLog("google login: 4");
 
+    debugPrint("access Token 1: ${googleAuth.accessToken}");
+
     final AuthCredential credential = GoogleAuthProvider.getCredential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
     HazizzLogger.printLog("google login: 5");
 
-
-    // final AuthResult authResult = (await _auth.signInWithCredential(credential));
-    // FirebaseUser user = authResult.user;
     final FirebaseUser user = (await _auth.signInWithCredential(credential)).user;
     HazizzLogger.printLog("signed in " + user.displayName);
 
@@ -74,9 +71,4 @@ class GoogleLoginBloc extends SocialLoginBloc{
     await _auth.signOut();
     await _googleSignIn.signOut();
   }
-
-
-
-
-
 }

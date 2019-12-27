@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/pages/kreta_pages/kreta_notes_page.dart';
 import 'package:mobile/pages/kreta_pages/kreta_statistics_page.dart';
@@ -86,11 +87,16 @@ class RouteGenerator{
       case '/group/groupId/notNewComer': //assert(args != null);
         return MaterialPageRoute(builder: (_) => GroupTabHosterPage(group: args,  visitorEnum: VisitorEnum.notNewComer));
       case '/createTask':
-        return MaterialPageRoute(builder: (_) => TaskMakerPage.createMode(groupId: args));
+        return MaterialPageRoute(builder: (_) => TaskMakerPage.create(groupId: args));
       case '/editTask': assert(args != null);
-        return MaterialPageRoute(builder: (_) => TaskMakerPage.editMode(taskToEdit: args,));
+        return MaterialPageRoute(builder: (_) => TaskMakerPage.edit(taskToEdit: args,));
       case '/viewTask': assert(args != null);
-        return MaterialPageRoute(builder: (_) => ViewTaskPage.fromPojo(pojoTask: args,));
+        if(args is PojoTask) {
+          return MaterialPageRoute(builder: (_) => ViewTaskPage.fromPojo(pojoTask: args,));
+        }else{
+          return MaterialPageRoute(builder: (_) => ViewTaskPage.fromId(taskId: args,));
+        }
+        break;
       case '/calendarTasks':
         return MaterialPageRoute(builder: (_) => TaskCalendarPage());
 

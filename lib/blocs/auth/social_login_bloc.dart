@@ -1,21 +1,14 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart' as prefix0;
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mobile/blocs/auth/facebook_login_bloc.dart';
 import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/response_states.dart';
 import 'package:mobile/communication/errorcode_collection.dart';
 import 'package:mobile/communication/pojos/PojoError.dart';
-import 'package:mobile/communication/request_sender.dart';
-import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/custom_exception.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:bloc/bloc.dart';
-import 'package:mobile/managers/token_manager.dart';
 
 import 'package:mobile/communication/hazizz_response.dart';
-import 'package:mobile/custom/logger.dart';
 
 import 'google_login_bloc.dart';
 

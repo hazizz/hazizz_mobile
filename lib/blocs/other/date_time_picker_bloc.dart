@@ -3,7 +3,7 @@ import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/response_states.dart';
 
 
-//region DateTimePickerStates
+//region DateTimePicker states
 abstract class DateTimePickerState extends HState {
   DateTimePickerState([List props = const []]) : super(props);
 }
@@ -26,7 +26,7 @@ class DateTimePickedState extends DateTimePickerState {
 }
 //endregion
 
-//region DateTimePickerEvent
+//region DateTimePicker events
 abstract class DateTimePickerEvent extends HEvent {
   DateTimePickerEvent([List props = const []]) : super(props);
 }
@@ -47,6 +47,8 @@ class DateTimeNotPickedEvent extends DateTimePickerEvent {
 }
 //endregion
 
+
+//region DateTimePicker bloc
 class DateTimePickerBloc extends Bloc<DateTimePickerEvent, DateTimePickerState> {
   @override
   DateTimePickerState get initialState => DateTimeNotPickedState();
@@ -61,3 +63,4 @@ class DateTimePickerBloc extends Bloc<DateTimePickerEvent, DateTimePickerState> 
     }
   }
 }
+//endregion

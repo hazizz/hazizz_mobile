@@ -28,7 +28,7 @@ class MyGroupsPage extends StatefulWidget {
   _MyGroupsPage createState() => _MyGroupsPage();
 }
 
-class _MyGroupsPage extends State<MyGroupsPage> with AutomaticKeepAliveClientMixin {
+class _MyGroupsPage extends State<MyGroupsPage> {
 
   MyGroupsBloc myGroupsBloc = new MyGroupsBloc();
 
@@ -107,10 +107,6 @@ class _MyGroupsPage extends State<MyGroupsPage> with AutomaticKeepAliveClientMix
       ),
     );
   }
-
-  @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
 }
 
 

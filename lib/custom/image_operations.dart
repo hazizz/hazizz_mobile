@@ -43,11 +43,11 @@ class ImageOpeations{
   }
 
   static Future<File> pick() async {
+    try{
+      File image = await ImagePicker.pickImage(source: ImageSource.gallery);
 
-    File image = await ImagePicker.pickImage(source: ImageSource.gallery);
 
-
-    /*  image = await ImageCropper.cropImage(
+      /*  image = await ImageCropper.cropImage(
       controlWidgetColor: Theme.of(context).primaryColor,
       controlWidgetVisibility: false,
       circleShape: true,
@@ -60,12 +60,10 @@ class ImageOpeations{
       maxWidth: 512,
       maxHeight: 512,
     );*/
-    if(image == null){
-      return null;
-    }
-
-
-    /*
+      if(image == null){
+        return null;
+      }
+      /*
     package.Image im = package.decodeImage(image.readAsBytesSync());
 
     List<String> a = image.path.split("/");
@@ -73,17 +71,20 @@ class ImageOpeations{
     print(package.encodeNamedImage(im, a[a.length-1]));
     */
 
+      // profileEditorBlocs.pictureEditorBloc.dispatch(ProfilePictureEditorChangedEvent(imageBytes: image.readAsBytesSync()));
 
-   // profileEditorBlocs.pictureEditorBloc.dispatch(ProfilePictureEditorChangedEvent(imageBytes: image.readAsBytesSync()));
-
-  //  Clipboard.setData(new ClipboardData(text: image.readAsBytesSync().toString()));
-
-
-    return image;
+      //  Clipboard.setData(new ClipboardData(text: image.readAsBytesSync().toString()));
+      return image;
+    }catch(e){
+      return null;
+    }
   }
 
   static Future<EncryptedImageData> pickAndEncrypt() async {
     File f = await pick();
+    if(f == null){
+      return null;
+    }
 
     String key = HazizzCrypt.generateKey();
     String iv = HazizzCrypt.generateIv();

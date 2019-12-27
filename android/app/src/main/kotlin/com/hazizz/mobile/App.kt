@@ -10,6 +10,7 @@ import com.facebook.FacebookSdk
 import com.facebook.appevents.AppEventsLogger
 import io.flutter.plugin.common.PluginRegistry.PluginRegistrantCallback;
 import io.flutter.plugins.firebasemessaging.FlutterFirebaseMessagingService;
+import nl.littlerobots.flutter.native_state.StateRegistry
 
 class App : FlutterApplication(), PluginRegistry.PluginRegistrantCallback {
     override fun onCreate() {
@@ -21,7 +22,7 @@ class App : FlutterApplication(), PluginRegistry.PluginRegistrantCallback {
         AppEventsLogger.activateApp(this)
 
         AlarmService.setPluginRegistrant(this)
-
+        StateRegistry.registerCallbacks(this)
        // generateKeyHash()
     }
 

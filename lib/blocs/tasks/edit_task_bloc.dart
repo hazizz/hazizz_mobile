@@ -99,29 +99,18 @@ class TaskEditBloc extends TaskMakerBloc {
         yield TaskMakerWaitingState();
 
         //region send
-        int groupId, subjectId;
+        int subjectId;
         List<String> tags = List();
         DateTime deadline;
         String description;
 
         bool missingInfo = false;
 
-        /*
-        TaskTypePickerState typeState = taskTypePickerBloc.currentState;
-        if(typeState is TaskTypePickedState){
-          tags[0] = typeState.tag.getName();
-        }
-        */
-
-        taskTagBloc.pickedTags.forEach((f){tags.add(f.getName());});
+        taskTagBloc.pickedTags.forEach((f){tags.add(f.name);});
 
 
         if(subject != null){
           subjectId = subject.id;
-        }
-
-        if(group != null){
-          groupId = group.id;
         }
 
         DateTimePickerState deadlineState = deadlineBloc.currentState;
@@ -175,10 +164,6 @@ class TaskEditBloc extends TaskMakerBloc {
 
   @override
   TaskEditState get initialState => InitializedTaskEditState(taskToEdit: taskToEdit);
-
-
-
-
 }
 //endregion
 //endregion

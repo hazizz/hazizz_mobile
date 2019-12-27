@@ -40,7 +40,7 @@ class TasksTomorrowPage extends StatefulWidget {
   _TasksTomorrowPage createState() => _TasksTomorrowPage();
 }
 
-class _TasksTomorrowPage extends State<TasksTomorrowPage> with SingleTickerProviderStateMixin , AutomaticKeepAliveClientMixin {
+class _TasksTomorrowPage extends State<TasksTomorrowPage> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
@@ -122,10 +122,6 @@ class _TasksTomorrowPage extends State<TasksTomorrowPage> with SingleTickerProvi
       ),
     );
   }
-
-  @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
 }
 
 

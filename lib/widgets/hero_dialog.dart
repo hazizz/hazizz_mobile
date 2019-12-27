@@ -24,11 +24,11 @@ class HeroDialogRoute<T> extends PageRoute<T> {
   @override
   Widget buildTransitions(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
     return new FadeTransition(
-        opacity: new CurvedAnimation(
-            parent: animation,
-            curve: Curves.easeOut
-        ),
-        child: child
+      opacity: new CurvedAnimation(
+        parent: animation,
+        curve: Curves.easeOut
+      ),
+      child: child
     );
   }
 

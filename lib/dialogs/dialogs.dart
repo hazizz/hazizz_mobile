@@ -16,6 +16,8 @@ import 'package:mobile/dialogs/report_dialog.dart';
 import 'package:mobile/dialogs/school_dialog.dart';
 import 'package:mobile/dialogs/subject_dialog.dart';
 import 'package:mobile/dialogs/subscribe_to_subjects_dialog.dart';
+import 'package:mobile/dialogs/sure_to_delete_all_images_dialog.dart';
+import 'package:mobile/dialogs/sure_to_delete_image_dialog.dart';
 import 'package:mobile/dialogs/sure_to_delete_me_dialog.dart';
 import 'package:mobile/dialogs/sure_to_delete_subject_dialog.dart';
 import 'package:mobile/dialogs/sure_to_join_group_dialog.dart';
@@ -32,6 +34,7 @@ import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'choose_subject_dialog.dart';
 import 'create_group_dialog.dart';
+import 'grant_access_to_gdrive_dialog.dart';
 import 'kreta_profile_dialog.dart';
 import 'subject_editor_dialog.dart';
 import 'invite_link_dialog.dart';
@@ -468,7 +471,40 @@ Future<bool> showReportDialog(BuildContext context, {@required ReportTypeEnum re
   return result;
 }
 
+Future<bool> showGrantAccessToGDRiveDialog(BuildContext context) async{
 
+  bool result = await showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return GrantAccessToGDRiveDialog();
+    },
+  );
+  return result ?? false;
+}
+
+Future<bool> showSureToDeleteGDriveImageDialog(BuildContext context, {@required String fileId}) async{
+
+  var result = await showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      // return object of type Dialog
+      return SureToDeleteHazizzImageDialog(fileId: fileId,);
+    },
+  );
+  return result;
+}
+
+Future<bool> showSureToDeleteAllGDriveImageDialog(BuildContext context) async{
+
+  var result = await showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      // return object of type Dialog
+      return SureToDeleteAllHazizzImageDialog();
+    },
+  );
+  return result ?? false;
+}
 
 
 Future<void> showSureToJoinGroupDialog(BuildContext context, {@required int groupId}) async{
@@ -530,18 +566,10 @@ Future<PojoTag> showDialogTaskTag(BuildContext context, {List<PojoTag> except}) 
 
   final TextEditingController newTagController = TextEditingController();
 
-  /*
-  var d = JoinGroupDialog();
-  var result = showDialog(context: context, builder: (context2){
-    return d;
-  });
-  return result;
-  */
-
   for(PojoTag defaultTag in defaultTags){
     bool foundDuplicate = false;
     for(PojoTag exceptTag in except){
-      if(defaultTag.getName() == exceptTag.getName()){
+      if(defaultTag.name  == exceptTag.name){
         foundDuplicate = true;
         break;
       }
@@ -585,17 +613,6 @@ Future<PojoTag> showDialogTaskTag(BuildContext context, {List<PojoTag> except}) 
                 LengthLimitingTextInputFormatter(20),
               ],
               style: TextStyle(fontSize: 20),
-              onChanged: (String searchText){
-                //   List<String> searchKeys = keys;
-                /*
-                List<String> nextSearchKeys = List();
-                for(String s in keys){
-                  if(s.toLowerCase().contains(searchText.toLowerCase())){
-                    nextSearchKeys.add(s);
-                  }
-                }
-                */
-              },
               controller: newTagController,
               decoration: InputDecoration(
                 suffix: IconButton(icon: Icon(FontAwesomeIcons.plus), onPressed: (){
@@ -605,7 +622,6 @@ Future<PojoTag> showDialogTaskTag(BuildContext context, {List<PojoTag> except}) 
                 }),
                 hintText: locText(context, key: "add_new_tag"),
                 prefixIcon: Icon(FontAwesomeIcons.searchPlus),
-                //  border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(25.0)))
               )
             ),
           ),
@@ -682,13 +698,10 @@ Future<dynamic> showUserDialog(context, { PojoUser user, PojoCreator creator, Gr
 }
 
 Future<dynamic> showSubjectDialog(context, { @required PojoSubject subject}) {
-
   return showDialog(
     context: context,
     barrierDismissible: true,
-
     builder: (BuildContext context) {
-
       return SubjectDialog(subject: subject,);
     }
   );
@@ -800,41 +813,39 @@ Future<Widget> showGradeDialog(context, {@required PojoGrade grade}) {
   Widget getGradeAvatar(){
     return CircleAvatar(
       child: Stack(
-          children: [
-            Align(
-              alignment: Alignment.topCenter,
-              child: AutoSizeText(
-                grade.grade == null ? "5" : grade.grade,
-                maxLines: 1,
+        children: [
+          Align(
+            alignment: Alignment.topCenter,
+            child: AutoSizeText(
+              grade.grade == null ? "5" : grade.grade,
+              maxLines: 1,
+              style: TextStyle(
+                fontSize: 58,
+                color: Colors.black,
+                fontFamily: "Nunito",
+                fontWeight: FontWeight.w700
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Text(
+                grade.weight == null ? "100%" : "${grade.weight}%",
                 style: TextStyle(
-                    fontSize: 50,
-                    color: Colors.black,
-                    fontFamily: "Nunito",
-                    fontWeight: FontWeight.w700
+                  fontSize: 20,
+                  color: Colors.black,
+                  fontFamily: "Nunito",
+                  fontWeight: FontWeight.w700
                 ),
               ),
             ),
-
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child: Text(
-                  grade.weight == null ? "100%" : "${grade.weight}%",
-                  style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.black,
-                      fontFamily: "Nunito",
-                      fontWeight: FontWeight.w700
-                  ),
-                ),
-              ),
-            ),
-
-          ]
+          ),
+        ]
       ),
       backgroundColor: grade.color,
-      radius: 50,
+      radius: 46,
     );
   }
 
@@ -842,25 +853,22 @@ Future<Widget> showGradeDialog(context, {@required PojoGrade grade}) {
     return HazizzDialog(
         header: Container(
           color: Theme.of(context).dialogBackgroundColor,
-          height: 98,
           child: Stack(
             children: <Widget>[
-              //  Container(color: Theme.of(context).dialogBackgroundColor,),
               Container(
-                  height: 62.0,
-                  color: Theme.of(context).primaryColor
-
+                height: 62.0,
+                color: Theme.of(context).primaryColor
               ),
               Center(
                 child: Padding(
-                    padding: EdgeInsets.only(top: 6, bottom: 4),
-                    child: Hero(
-                      tag: grade,
-                      flightShuttleBuilder: (context, animation, heroFlightDirection, context2, context3){
-                        return getGradeAvatar();
-                      },
-                      child: getGradeAvatar(),
-                    )
+                  padding: EdgeInsets.only(top: 6, bottom: 4),
+                  child: Hero(
+                    tag: grade,
+                    flightShuttleBuilder: (context, animation, heroFlightDirection, context2, context3){
+                      return getGradeAvatar();
+                    },
+                    child: getGradeAvatar(),
+                  )
                 ),
               ),
             ],
@@ -871,14 +879,11 @@ Future<Widget> showGradeDialog(context, {@required PojoGrade grade}) {
           child: Column(
               children:
               [
-
                 Center(child: Text(grade.subject[0].toUpperCase() + grade.subject.substring(1), style: TextStyle(fontSize: 22), textAlign: TextAlign.center,) ),
                 Spacer(),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
-
                   children: <Widget>[
                     Text(locText(context, key: "topic") + ":", style: TextStyle(fontSize: 18)),
                     Expanded(child: Text(grade.topic == null ? "" : (grade.topic), style: TextStyle(fontSize: 18), textAlign: TextAlign.end,)),
@@ -921,24 +926,25 @@ Future<Widget> showGradeDialog(context, {@required PojoGrade grade}) {
           ),
         ),),
         actionButtons: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 0),
-                child: FlatButton(
-                    child: Center(
-                      child: Text(locText(context, key: "close").toUpperCase(),),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    color: Colors.transparent
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 0),
+              child: FlatButton(
+                child: Center(
+                  child: Text(locText(context, key: "close").toUpperCase(),),
                 ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                color: Colors.transparent
               ),
-            ]
+            ),
+          ]
         ),
-        height: 250,
-        width: 200);
+        height: 270,
+        width: 200
+    );
   }));
 }
 
@@ -962,23 +968,22 @@ Future<bool> showJoinedGroupDialog(context, {@required PojoGroup group}) async {
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           FlatButton(
-              child: Center(
-                child: Text(
-                  locText(context, key: "ok").toUpperCase(),
-                ),
+            child: Center(
+              child: Text(
+                locText(context, key: "ok").toUpperCase(),
               ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              color: Colors.transparent
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            color: Colors.transparent
           ),
         ],
       ) ,height: height,width: width);
-
   return showDialog(context: context, barrierDismissible: true,
-      builder: (BuildContext context) {
-        return h;
-      }
+    builder: (BuildContext context) {
+      return h;
+    }
   );
 }
 
@@ -1006,15 +1011,12 @@ void showSchoolsDialog(BuildContext context, {@required Function({String key, St
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      // return object of type Dialog
       return SchoolDialog(onPicked: onPicked, data: data);
     },
   );
 }
 
 Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
-  Widget space = SizedBox(height: 5);
-
   pojoClass.subject = pojoClass.subject[0].toUpperCase() + pojoClass.subject.substring(1);
 
   double headerHeight = 50;
@@ -1024,8 +1026,6 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
   if(pojoClass.cancelled){
     contentHeight += 20;
   }
-
-
 
   double height = headerHeight + contentHeight + buttonBarHeight;
   double width = 340;
@@ -1048,7 +1048,6 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
       color: Theme.of(context).primaryColor,
       child: Row(children: <Widget>[
         Container(
-         // color: Theme.of(context).primaryColorDark,
           child: Padding(
             padding: const EdgeInsets.only(left: 8, right: 2),
             child: Text("${pojoClass.periodNumber}.", style: TextStyle(fontSize: 40)),
@@ -1069,7 +1068,6 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
     ),
     content:
     Container(
-    //  height: contentHeight,
       child: Padding(
         padding: const EdgeInsets.only(left: 8, right: 8),
         child: Builder(builder: (BuildContext context){
@@ -1189,7 +1187,7 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
           )
         ],
       ),
-      height: height, width: width);
+      height: (pojoClass.topic == null || pojoClass.topic == "") ? height - 60 : height, width: width);
 
   return showDialog(
       context: context,
@@ -1277,15 +1275,6 @@ Future<bool> showIntroCancelDialog(context) async {
 
 
 Future<bool> showDialogSessionReauth(BuildContext context) async{
-
-  /*
-  var d = JoinGroupDialog();
-  var result = showDialog(context: context, builder: (context2){
-    return d;
-  });
-  return result;
-  */
-
   double height = 80;
   double width = 360;
 
@@ -1311,14 +1300,6 @@ Future<bool> showDialogSessionReauth(BuildContext context) async{
     ),
     actionButtons: Row(
       children: <Widget>[
-        /*
-        FlatButton(
-          child: new Text("FIÓK ELTÁVOLITÁSA"),
-          onPressed: () {
-            Navigator.pop(context, null);
-          },
-        ),
-        */
         FlatButton(
           child: new Text(locText(context, key: "no").toUpperCase()),
           onPressed: () {
@@ -1359,14 +1340,12 @@ Future<bool> showRegistrationDialog(context) async {
 
 
 Future<void> showNewFeatureDialog(context) async {
-
-  double height = 120;//240;
+  double height = 120;
   double width = 200;
 
   HazizzDialog hazizzDialog = new HazizzDialog(
       header:
       Container(
-       // height: height,
         width: 400,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.only(
@@ -1406,19 +1385,6 @@ Future<void> showNewFeatureDialog(context) async {
                       ],
                     ),
                   ),
-
-                  /*
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(right: 4),
-                        child: Text("-"),
-                      ),
-                      Expanded(child: Text("${locText(context, key: "new_feature_notifications")}", style: TextStyle(fontSize: 15.4),)),
-                    ],
-                  ),
-                  */
                 ],
               ),
             ),
@@ -1449,87 +1415,6 @@ Future<void> showNewFeatureDialog(context) async {
         return hazizzDialog;
       }
   );
-
 }
-
-//TODO a good lookin dialog this is
-/*Future<bool> showReview(context, review) {
-  return showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        return Dialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
-            child: Container(
-                height: 350.0,
-                width: 200.0,
-                decoration:
-                BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
-                child: Column(
-                  children: <Widget>[
-                    Stack(
-                      children: <Widget>[
-                        Container(height: 150.0),
-                        Container(
-                          height: 100.0,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10.0),
-                                topRight: Radius.circular(10.0),
-                              ),
-                              color: Colors.teal),
-                        ),
-                        Positioned(
-                            top: 50.0,
-                            left: 94.0,
-                            child: Container(
-                              height: 90.0,
-                              width: 90.0,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(45.0),
-                                  border: Border.all(
-                                      color: Colors.white,
-                                      style: BorderStyle.solid,
-                                      width: 2.0),
-                                  image: DecorationImage(
-                                      image:
-                                      NetworkImage(review['reviewerPic']),
-                                      fit: BoxFit.cover)),
-                            ))
-                      ],
-                    ),
-                    SizedBox(height: 20.0),
-                    Padding(
-                        padding: EdgeInsets.all(10.0),
-                        child: Text(
-                          review['reviewMade'],
-                          style: TextStyle(
-                            fontFamily: 'Quicksand',
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w300,
-                          ),
-                        )),
-                    SizedBox(height: 15.0),
-                    FlatButton(
-                        child: Center(
-                          child: Text(
-                            'OKAY',
-                            style: TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontSize: 14.0,
-                                color: Colors.teal),
-                          ),
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        color: Colors.transparent
-                    )
-                  ],
-                )));
-      });
-} */
-
 
 

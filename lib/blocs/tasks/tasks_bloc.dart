@@ -2,9 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-
 import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/response_states.dart';
 import 'package:mobile/communication/connection.dart';
@@ -21,17 +18,15 @@ import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/storage/caches/data_cache.dart';
 
-//region EditTask bloc parts
-//region EditTask events
+//region Tasks bloc parts
+//region Tasks events
 abstract class TasksEvent extends HEvent {
   TasksEvent([List props = const []]) : super(props);
 }
 
 class TasksFetchEvent extends TasksEvent {
 
-  TasksFetchEvent(/*{this.unfinishedOnly, this.expired}*/) :  super([/*unfinishedOnly*/]){
-
-  }
+  TasksFetchEvent() :  super();
   @override
   String toString() => 'TasksFetchEvent';
   List<Object> get props => null;
@@ -51,7 +46,7 @@ class TasksRemoveItemEvent extends TasksEvent {
 }
 //endregion
 
-//region SubjectItemListStates
+//region Tasks states
 abstract class TasksState extends HState {
   TasksState([List props = const []]) : super(props);
 }
@@ -100,7 +95,7 @@ class TasksErrorState extends TasksState {
 
 //endregion
 
-//region SubjectItemListBloc
+//region Tasks bloc
 class TasksBloc extends Bloc<TasksEvent, TasksState> {
 
   bool wholeGroup = false;

@@ -2,8 +2,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-//import 'package:image_cropper/image_cropper.dart';
-//import 'package:image_picker/image_picker.dart';
 import 'package:mobile/blocs/other/profile_editor_blocs.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
@@ -14,8 +13,8 @@ import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/communication/request_sender.dart';
-//region EditTask bloc parts
-//region EditTask events
+
+//region KretaGradeStatistics events
 abstract class KretaGradeStatisticsEvent extends HEvent {
   KretaGradeStatisticsEvent([List props = const []]) : super(props);
 }
@@ -29,7 +28,7 @@ class KretaGradeStatisticsFetchEvent extends KretaGradeStatisticsEvent {
 }
 //endregion
 
-//region SubjectItemListStates
+//region KretaGradeStatistics states
 abstract class KretaGradeStatisticsState extends HState {
   KretaGradeStatisticsState([List props = const []]) : super(props);
 }
@@ -71,11 +70,9 @@ class KretaGradeStatisticsErrorState extends KretaGradeStatisticsState {
   String toString() => 'KretaGradeStatisticsErrorState';
   List<Object> get props => [hazizzResponse];
 }
-
-
 //endregion
 
-//region SubjectItemListBloc
+//region KretaGradeStatisticsBloc
 class KretaGradeStatisticsBloc extends Bloc<KretaGradeStatisticsEvent, KretaGradeStatisticsState> {
 
   List<PojoGradeAvarage> gradeAvarages = List();
@@ -133,5 +130,4 @@ class KretaGradeStatisticsBloc extends Bloc<KretaGradeStatisticsEvent, KretaGrad
     }
   }
 }
-//endregion
 //endregion

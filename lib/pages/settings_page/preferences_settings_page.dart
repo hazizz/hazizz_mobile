@@ -1,18 +1,9 @@
-
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:mobile/blocs/other/settings_bloc.dart';
 import 'package:mobile/managers/preference_services.dart';
-import 'package:mobile/notification/notification.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 
 
 class PreferencesSettingsPage extends StatefulWidget {
@@ -21,15 +12,13 @@ class PreferencesSettingsPage extends StatefulWidget {
     return locText(context, key: "preferences");
   }
 
-  StartPageItemPickerBloc startPageItemPickerBloc = new StartPageItemPickerBloc();
-
   PreferencesSettingsPage({Key key}) : super(key: key);
 
   @override
   _PreferencesSettingsPage createState() => _PreferencesSettingsPage();
 }
 
-class _PreferencesSettingsPage extends State<PreferencesSettingsPage> with AutomaticKeepAliveClientMixin {
+class _PreferencesSettingsPage extends State<PreferencesSettingsPage> {
 
   List<DropdownMenuItem> startPageItems = List();
   static List<Locale> supportedLocales = getSupportedLocales();
@@ -43,20 +32,13 @@ class _PreferencesSettingsPage extends State<PreferencesSettingsPage> with Autom
 
   _PreferencesSettingsPage();
 
-
-  // FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
-
   @override
   void initState() {
-    // widget.myGroupsBloc.add(FetchData());
-
-    PreferenceService.getStartPageIndex().then(
-            (int value){
-          setState(() {
-            currentStartPageItemIndex = value;
-          });
-        }
-    );
+    PreferenceService.getStartPageIndex().then((int value){
+      setState(() {
+        currentStartPageItemIndex = value;
+      });
+    });
 
     super.initState();
   }
@@ -111,8 +93,4 @@ class _PreferencesSettingsPage extends State<PreferencesSettingsPage> with Autom
       ),
     );
   }
-
-  @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
 }

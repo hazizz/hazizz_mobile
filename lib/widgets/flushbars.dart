@@ -1,4 +1,3 @@
-
 import 'dart:math' as math;
 
 import 'package:flushbar/flushbar.dart';
@@ -6,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:mobile/custom/hazizz_localizations.dart';
-
 
 dynamic showNoConnectionFlushBar(BuildContext context){
   return Flushbar(
@@ -31,7 +29,6 @@ dynamic showNoConnectionFlushBar(BuildContext context){
 }
 
 dynamic showKretaUnavailableFlushBar(BuildContext context){
-
   return Flushbar(
     icon: Padding(
       padding: const EdgeInsets.only(left: 4.0),
@@ -54,13 +51,12 @@ dynamic showKretaUnavailableFlushBar(BuildContext context){
 }
 
 dynamic showServerUnavailableFlushBar(BuildContext context){
-
   return Flushbar(
     icon: Padding(
       padding: const EdgeInsets.only(left: 4.0),
       child: Stack(
         children: <Widget>[
-          Icon(FontAwesomeIcons.landmark, color: Colors.white,),
+          Icon(FontAwesomeIcons.plug, color: Colors.white,),
           Padding(
             padding: const EdgeInsets.only(left: 3.0, top: 2),
             child: Transform.rotate(
@@ -71,11 +67,96 @@ dynamic showServerUnavailableFlushBar(BuildContext context){
         ],
       ),
     ),
-    message:  locText(context, key: "kreta_server_unavailable"),
+    message:  locText(context, key: "server_unavailable"),
     duration:  Duration(seconds: 3),
   )..show(context);
 }
 
+
+dynamic showGatewayServerUnavailableFlushBar(BuildContext context){
+  return Flushbar(
+    icon: Padding(
+      padding: const EdgeInsets.only(left: 4.0),
+      child: Stack(
+        children: <Widget>[
+          Icon(FontAwesomeIcons.plug, color: Colors.white,),
+          Padding(
+            padding: const EdgeInsets.only(left: 3.0, top: 2),
+            child: Transform.rotate(
+                angle: -math.pi/2,
+                child:  Icon(FontAwesomeIcons.slash, color: Colors.red,)
+            ),
+          ),
+        ],
+      ),
+    ),
+    message:  locText(context, key: "gateway_server_unavailable"),
+    duration:  Duration(seconds: 3),
+  )..show(context);
+}
+dynamic showAuthServerUnavailableFlushBar(BuildContext context){
+  return Flushbar(
+    icon: Padding(
+      padding: const EdgeInsets.only(left: 4.0),
+      child: Stack(
+        children: <Widget>[
+          Icon(FontAwesomeIcons.plug, color: Colors.white,),
+          Padding(
+            padding: const EdgeInsets.only(left: 3.0, top: 2),
+            child: Transform.rotate(
+                angle: -math.pi/2,
+                child:  Icon(FontAwesomeIcons.slash, color: Colors.red,)
+            ),
+          ),
+        ],
+      ),
+    ),
+    message:  locText(context, key: "auth_server_unavailable"),
+    duration:  Duration(seconds: 3),
+  )..show(context);
+}
+dynamic showHazizzServerUnavailableFlushBar(BuildContext context){
+  return Flushbar(
+    icon: Padding(
+      padding: const EdgeInsets.only(left: 4.0),
+      child: Stack(
+        children: <Widget>[
+          Icon(FontAwesomeIcons.plug, color: Colors.white,),
+          Padding(
+            padding: const EdgeInsets.only(left: 3.0, top: 2),
+            child: Transform.rotate(
+                angle: -math.pi/2,
+                child:  Icon(FontAwesomeIcons.slash, color: Colors.red,)
+            ),
+          ),
+        ],
+      ),
+    ),
+    message:  locText(context, key: "hazizz_server_unavailable"),
+    duration:  Duration(seconds: 3),
+  )..show(context);
+}
+dynamic showTheraServerUnavailableFlushBar(BuildContext context){
+  return Flushbar(
+    icon: Padding(
+      padding: const EdgeInsets.only(left: 4.0),
+      child: Stack(
+        children: <Widget>[
+          Icon(FontAwesomeIcons.plug, color: Colors.white,),
+          Padding(
+            padding: const EdgeInsets.only(left: 3.0, top: 2),
+            child: Transform.rotate(
+                angle: -math.pi/2,
+                child:  Icon(FontAwesomeIcons.slash, color: Colors.red,)
+            ),
+          ),
+        ],
+      ),
+    ),
+    message:  locText(context, key: "thera_server_unavailable"),
+    duration:  Duration(seconds: 3),
+  )..show(context);
+}
 
 void showReportSuccessFlushBar(BuildContext context, {@required String what}){
   Flushbar(

@@ -11,26 +11,19 @@ import 'package:mobile/custom/logger.dart';
 
 
 class ScheduleEventWidget extends StatefulWidget {
-
-  // MainTasksBloc tasksBloc;
-
   ScheduleEventWidget({Key key}) : super(key: key);
-
 
   @override
   _ScheduleEventWidget createState() => _ScheduleEventWidget();
 }
 
-class _ScheduleEventWidget extends State<ScheduleEventWidget> with SingleTickerProviderStateMixin , AutomaticKeepAliveClientMixin {
+class _ScheduleEventWidget extends State<ScheduleEventWidget> with SingleTickerProviderStateMixin {
 
 
   Duration countdownToEventEnd;
   HazizzDateTime eventEnd;
 
-  void asd(){
-
-
-
+  void resetCountdown(){
     new Timer.periodic(Duration(seconds: 1), (Timer t) => setState((){
       HazizzDateTime now = HazizzDateTime.now();
 
@@ -56,7 +49,6 @@ class _ScheduleEventWidget extends State<ScheduleEventWidget> with SingleTickerP
 
           logger.d("ScheduleEventFineState: currentEvent: ${state.currentEvent}, nextEvent: ${state.nextEvent}");
 
-
           var currentEvent = state.currentEvent;
           var nextEvent = state.nextEvent;
 
@@ -70,17 +62,14 @@ class _ScheduleEventWidget extends State<ScheduleEventWidget> with SingleTickerP
                    "The next event is: $nextEventText";
 
             eventEnd = currentEvent.end;
-            asd();
+            resetCountdown();
 
           } if(currentEvent is BreakEventItem){
             text = "Break will be over: ${currentEvent.end.hour}:${currentEvent.end.minute}";
 
             eventEnd = currentEvent.end;
-            asd();
+            resetCountdown();
           }
-
-         // text = "event will be over: ${currentEvent.end.hour}:${currentEvent.end.minute}";
-
           if(currentEvent is NoSchoolEventItem){
             text = "Tanítási szünet: ${currentEvent.end.hour}:${currentEvent.end.minute}";
           }
@@ -97,8 +86,6 @@ class _ScheduleEventWidget extends State<ScheduleEventWidget> with SingleTickerP
         }else if(state is ScheduleEventInitializeState){
           text = "log: state is ScheduleEventInitializeState";
         }
-
-
         return Card(
           color: Colors.red,
           clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -125,8 +112,4 @@ class _ScheduleEventWidget extends State<ScheduleEventWidget> with SingleTickerP
       },
     );
   }
-
-  @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
 }

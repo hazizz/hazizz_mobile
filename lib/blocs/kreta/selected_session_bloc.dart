@@ -16,8 +16,8 @@ import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/blocs/kreta/grades_bloc.dart';
 
-//region EditTask bloc parts
-//region EditTask events
+//region SelectedSession bloc parts
+//region SelectedSession events
 abstract class SelectedSessionEvent extends HEvent {
   SelectedSessionEvent([List props = const []]) : super(props);
 }
@@ -43,7 +43,7 @@ class SelectedSessionInitalizeEvent extends SelectedSessionEvent {
 }
 //endregion
 
-//region SubjectItemListStates
+//region SelectedSession states
 abstract class SelectedSessionState extends HState {
   SelectedSessionState([List props = const []]) : super(props);
 }
@@ -83,7 +83,7 @@ class SelectedSessionWaiting extends SelectedSessionState {
 
 //endregion
 
-//region SubjectItemListBloc
+//region SelectedSession bloc
 class SelectedSessionBloc extends Bloc<SelectedSessionEvent, SelectedSessionState> {
 
   PojoSession selectedSession;

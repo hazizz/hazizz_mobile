@@ -14,11 +14,10 @@ class PojoTag implements Pojo{
 
   //Color color;
 
-  PojoTag({this.name}){
-  }
+  PojoTag({this.name});
 
-  String getName(){
-    return name;
+  bool get isDefault{
+    return defaultTags.contains(this);
   }
 
   Color getColor(){
@@ -43,6 +42,19 @@ class PojoTag implements Pojo{
       return locText(context, key: "taskType_3");
     } else if(name == defaultTags[3].name){
       return locText(context, key: "taskType_4");
+    }
+    return name;
+  }
+
+  Future<String> getDisplayNameAsync() async {
+    if(name == defaultTags[0].name){
+      return await locTextContextless(key: "taskType_1");
+    } else if(name == defaultTags[1].name){
+      return await locTextContextless(key: "taskType_2");
+    } else if(name == defaultTags[2].name){
+      return await locTextContextless(key: "taskType_3");
+    } else if(name == defaultTags[3].name){
+      return await locTextContextless( key: "taskType_4");
     }
     return name;
   }

@@ -9,7 +9,6 @@ import 'package:mobile/blocs/other/response_states.dart';
 
 abstract class ItemListState extends HState {
   ItemListState([List props = const []]) : super(props);
- // ItemListState(this.name) : super([name]);
 }
 
 class ItemListNotPickedState extends ItemListState {
@@ -56,7 +55,6 @@ class ItemListFail extends ItemListState {
 }
 
 class ItemListPickedState extends ItemListState {
- // PickedState(this.item, [List props = const []]) : assert(item != null), super(props);
   final dynamic item;
 
   ItemListPickedState({this.item})
@@ -112,16 +110,12 @@ class ItemListCheckPickedEvent extends ItemListEvent {
 }
 
 
-class ItemListPickerBloc extends Bloc<ItemListEvent, ItemListState> {
+abstract class ItemListPickerBloc extends Bloc<ItemListEvent, ItemListState> {
   dynamic listItemData;
   dynamic pickedItem;
 
   @override
   ItemListState get initialState => InitialState();
-
-  Future<ItemListState> fetchedData()async{
-
-  }
 
   void onPicked(dynamic item){
 

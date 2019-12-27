@@ -1,10 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/response_states.dart';
 import 'package:mobile/communication/errorcode_collection.dart';
-import 'package:mobile/communication/pojos/PojoTokens.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/enums/group_types_enum.dart';
@@ -72,17 +69,9 @@ class CreateGroupSuccessfulState extends CreateGroupState {
   List<Object> get props => null;
 }
 
-
 class CreateGroupBloc extends Bloc<CreateGroupEvent, CreateGroupState> {
   
   CreateGroupState get initialState => CreateGroupFineState();
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-  }
-
 
   @override
   Stream<CreateGroupState> mapEventToState(CreateGroupEvent event) async* {
@@ -91,14 +80,10 @@ class CreateGroupBloc extends Bloc<CreateGroupEvent, CreateGroupState> {
     if (event is CreateGroupCreateEvent) {
       yield CreateGroupWaitingState();
 
-      HazizzResponse hazizzResponse = await RequestSender().getResponse(CreateGroup(type: event.groupType, b_groupName: event.groupName, b_password: event.password));
+      HazizzResponse hazizzResponse = await getResponse(CreateGroup(type: event.groupType, b_groupName: event.groupName, b_password: event.password));
 
       if(hazizzResponse.isSuccessful){
-
-    //    PojoTokens tokens = hazizzResponseLogin.convertedData;
-
         yield CreateGroupSuccessfulState();
-        // proceed to the app
       }else{
         if(hazizzResponse.hasPojoError){
           if(hazizzResponse.pojoError.errorCode == ErrorCodes.GROUP_NAME_CONFLICT.code){

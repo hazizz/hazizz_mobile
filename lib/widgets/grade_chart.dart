@@ -4,7 +4,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/communication/pojos/PojoGrade.dart';
 
-
 class GradesChart extends StatefulWidget {
 
   String subjectName;
@@ -16,10 +15,9 @@ class GradesChart extends StatefulWidget {
   _GradesChart createState() => _GradesChart();
 }
 
-class _GradesChart extends State<GradesChart> with TickerProviderStateMixin , AutomaticKeepAliveClientMixin {
+class _GradesChart extends State<GradesChart> with TickerProviderStateMixin {
 
   StreamController<LineTouchResponse> controller;
-
 
   @override
   void initState() {
@@ -279,10 +277,6 @@ class _GradesChart extends State<GradesChart> with TickerProviderStateMixin , Au
       ),
     );
   }
-
-  @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
 }
 
 

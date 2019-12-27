@@ -85,11 +85,7 @@ class JoinGroupBloc extends Bloc<JoinGroupEvent, JoinGroupState> {
       HazizzResponse hazizzResponse = await RequestSender().getResponse(RetrieveGroup.details());
 
       if(hazizzResponse.isSuccessful){
-
-        //    PojoTokens tokens = hazizzResponseLogin.convertedData;
-
         yield JoinGroupSuccessfulState();
-        // proceed to the app
       }else{
         if(hazizzResponse.hasPojoError){
           if(hazizzResponse.pojoError.errorCode == ErrorCodes.GROUP_NAME_CONFLICT.code){

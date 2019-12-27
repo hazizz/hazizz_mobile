@@ -21,14 +21,11 @@ import 'package:mobile/custom/image_operations.dart';
 import 'package:mobile/services/hazizz_crypt.dart';
 import 'package:steel_crypt/steel_crypt.dart';
 
-import '../../google_drive_manager.dart';
+import '../../managers/google_drive_manager.dart';
 
 
 //region EditTask bloc parts
 //region EditTask events
-
-
-
 abstract class TaskCreateEvent extends TaskMakerEvent {
   TaskCreateEvent([List props = const []]) : super(props);
 }
@@ -40,12 +37,9 @@ class InitializeTaskCreateEvent extends TaskCreateEvent {
   String toString() => 'InitializeTaskCreateState';
   List<Object> get props => [group];
 }
-
 //endregion
 
-//region SubjectItemListStates
-
-
+//region TaskCreate state
 abstract class TaskCreateState extends TaskMakerState {
   TaskCreateState([List props = const []]) : super(props);
 }
@@ -57,17 +51,12 @@ class InitializedTaskCreateState extends TaskCreateState {
   String toString() => 'InitializeTaskEditState';
   List<Object> get props => [group];
 }
-
-
-
-
 //endregion
 
-//region SubjectItemListBloc
+//region TaskCreate bloc
 class TaskCreateBloc extends TaskMakerBloc {
 
   PojoGroup group;
-
 
   TaskCreateBloc({this.group}) : super(){
     taskTagBloc.dispatch(TaskTagAddEvent(PojoTag.defaultTags[0]));
@@ -109,7 +98,7 @@ class TaskCreateBloc extends TaskMakerBloc {
         */
 
 
-        taskTagBloc.pickedTags.forEach((f){tags.add(f.getName());});
+        taskTagBloc.pickedTags.forEach((f){tags.add(f.name);});
 
 
         HazizzLogger.printLog("log: lul11");

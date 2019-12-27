@@ -204,17 +204,7 @@ class MyPermissionBloc extends Bloc<MyPermissionEvent, MyPermissionState> {
 
   GroupPermissionsEnum myPermission;
 
-  MyPermissionBloc(){
-  }
-
   MyPermissionState get initialState => MyPermissionInitialState();
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-
-    super.dispose();
-  }
 
   void reset(){
     this.dispatch(MyPermissionResetEvent());
@@ -233,11 +223,7 @@ class MyPermissionBloc extends Bloc<MyPermissionEvent, MyPermissionState> {
   }
 }
 
-
-
 class GroupBlocs{
- // static int groupId = 0;
-
   MyPermissionBloc myPermissionBloc = MyPermissionBloc();
 
   PojoGroup group;
@@ -263,7 +249,6 @@ class GroupBlocs{
     group = null;
     myPermissionBloc.dispatch(MyPermissionResetEvent());
   }
-
 }
 
 

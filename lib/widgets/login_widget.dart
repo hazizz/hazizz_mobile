@@ -1,8 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:mobile/blocs/auth/google_login_bloc.dart';
-import 'package:mobile/blocs/auth/login_bloc.dart';
 import 'package:mobile/blocs/auth/social_login_bloc.dart';
 import 'package:mobile/controller/hashed_text_controller.dart';
 
@@ -24,9 +22,7 @@ class LoginWidget extends StatefulWidget {
   _LoginWidget createState() => _LoginWidget();
 }
 
-class _LoginWidget extends State<LoginWidget> with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
-
-  final LoginWidgetBlocs loginWidgetBlocs = new LoginWidgetBlocs();
+class _LoginWidget extends State<LoginWidget> with SingleTickerProviderStateMixin {
 
   final TextEditingController _usernameTextEditingController =
   TextEditingController();
@@ -40,7 +36,6 @@ class _LoginWidget extends State<LoginWidget> with SingleTickerProviderStateMixi
 
   @override
   void dispose() {
-    loginWidgetBlocs.dispose();
     _usernameTextEditingController.dispose();
     _passwordTextEditingController.dispose();
     super.dispose();
@@ -159,8 +154,4 @@ class _LoginWidget extends State<LoginWidget> with SingleTickerProviderStateMixi
 
     );
   }
-
-  @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
 }

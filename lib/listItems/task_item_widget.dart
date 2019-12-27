@@ -142,9 +142,11 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
                     widget.onCompletedChanged();
                   }
 
-                  setState(() {
-                    pojoTask = editedTask;
-                  });
+                  if(mounted){
+                    setState(() {
+                      pojoTask = editedTask;
+                    });
+                  }
 
               },
               child: Stack(
@@ -249,25 +251,33 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
                       Padding(
                         padding: const EdgeInsets.only(left: 10, top: 0, bottom: 0),
                        // child: Text(markdownImageRemover(pojoTask.description), style: TextStyle(fontSize: 18),),
-                        child: Markdown(data: pojoTask.description,
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          imageBuilder: (uri){
-                            return Padding(
-                              padding: const EdgeInsets.only(left: 3, right: 3),
-                              child: Icon(FontAwesomeIcons.image),
+                        child: Builder(
+                          builder: (context){
+                            Color textColor = Colors.black;
+                            if(HazizzTheme.currentThemeIsDark){
+                              textColor = Colors.white;
+                            }
+                            return Markdown(data: pojoTask.description,
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              imageBuilder: (uri){
+                                return Padding(
+                                  padding: const EdgeInsets.only(left: 3, right: 3),
+                                  child: Icon(FontAwesomeIcons.image),
+                                );
+                              },
+                              styleSheet: MarkdownStyleSheet(
+                                p:  TextStyle(fontFamily: "Nunito", fontSize: 14, color: textColor),
+                                h1: TextStyle(fontFamily: "Nunito", fontSize: 26, color: textColor),
+                                h2: TextStyle(fontFamily: "Nunito", fontSize: 24, color: textColor),
+                                h3: TextStyle(fontFamily: "Nunito", fontSize: 22, color: textColor),
+                                h4: TextStyle(fontFamily: "Nunito", fontSize: 20, color: textColor),
+                                h5: TextStyle(fontFamily: "Nunito", fontSize: 18, color: textColor),
+                                h6: TextStyle(fontFamily: "Nunito", fontSize: 16, color: textColor),
+                                a:  TextStyle(fontFamily: "Nunito", color: Colors.blue, decoration: TextDecoration.underline),
+                              ),
                             );
                           },
-                          styleSheet: MarkdownStyleSheet(
-                            p:  TextStyle(fontFamily: "Nunito", fontSize: 14, color: Colors.black),
-                            h1: TextStyle(fontFamily: "Nunito", fontSize: 26, color: Colors.black),
-                            h2: TextStyle(fontFamily: "Nunito", fontSize: 24, color: Colors.black),
-                            h3: TextStyle(fontFamily: "Nunito", fontSize: 22, color: Colors.black),
-                            h4: TextStyle(fontFamily: "Nunito", fontSize: 20, color: Colors.black),
-                            h5: TextStyle(fontFamily: "Nunito", fontSize: 18, color: Colors.black),
-                            h6: TextStyle(fontFamily: "Nunito", fontSize: 16, color: Colors.black),
-                            a:  TextStyle(fontFamily: "Nunito", color: Colors.blue, decoration: TextDecoration.underline),
-                          ),
                         )
 
                       ),

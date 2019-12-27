@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mobile/blocs/auth/google_login_bloc.dart';
 import 'package:mobile/blocs/auth/social_login_bloc.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
@@ -17,12 +16,10 @@ import 'package:mobile/navigation/business_navigator.dart';
 import 'package:mobile/widgets/google_sign_in_widget.dart';
 import 'package:mobile/widgets/kreta_login_widget.dart';
 import 'package:mobile/widgets/notebook_background_widget.dart';
-import 'package:mobile/widgets/registration_widget.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/custom/hazizz_tab_bar_view.dart';
 import 'package:mobile/custom/hazizz_tab_controller.dart';
 import 'package:toast/toast.dart';
-import 'package:uni_links/uni_links.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 
 import "dart:math" show pi;
@@ -45,16 +42,6 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
   static const double dy = -86;
 
   HazizzTabController _tabController;
-
-  //List<Widget> slides;
-
-  /*
-  void _handleTabSelection() {
-    setState(() {
-
-    });
-  }
-  */
 
   bool joinLater = false;
 
@@ -99,68 +86,55 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
 
   @override
   void initState() {
-
     DeepLink.initUniLinks(context);
-
     _tabController = new HazizzTabController(length: 4, vsync: this);
-  //  _tabController.addListener(_handleTabSelection);
     super.initState();
   }
 
 
   @override
   void dispose() {
-    // TODO: implement dispose
-
     LoginBlocs().googleLoginBloc.reset();
-
-  //  LoginBlocs().googleLoginBloc().dispose();
     super.dispose();
   }
 
   Widget introPageBuilder(Widget title, Widget description, {int backgroundIndex}){
     return SingleChildScrollView(
-          child: Stack(
-            children: <Widget>[
-              Container(
-                height: MediaQuery.of(context).size.height, //-  MediaQuery.of(context).padding.top,
-              //  width: MediaQuery.of(context).size.width,
-                child: SvgPicture.asset(
-                  "assets/images/hatter-$backgroundIndex.svg",
-                  // semanticsLabel: 'Acme Logo'
-                  fit: BoxFit.fitHeight,
+      child: Stack(
+        children: <Widget>[
+          Container(
+            height: MediaQuery.of(context).size.height,
+            child: SvgPicture.asset(
+              "assets/images/hatter-$backgroundIndex.svg",
+              fit: BoxFit.fitHeight,
 
-                  height: MediaQuery.of(context).size.height -  MediaQuery.of(context).padding.top,
-                  width: MediaQuery.of(context).size.width,
-                ),
-              ),
-              Container(
-                height: MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top,
-            //    width: MediaQuery.of(context).size.width,Transform.rotateTransform.rotate
-                child: Center(
-                  child: Column(
+              height: MediaQuery.of(context).size.height -  MediaQuery.of(context).padding.top,
+              width: MediaQuery.of(context).size.width,
+            ),
+          ),
+          Container(
+            height: MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top,
+            child: Center(
+              child: Column(
+                children: <Widget>[
+                  Stack(
                     children: <Widget>[
-                      Stack(
-                        children: <Widget>[
-                          SafeArea(
-                            child: Container(
-                              // height: 100,
-                                child: NotebookBackgroundWidget()
-                            ),
-                          ),
-                          Center(child: title)
-                        ],
+                      SafeArea(
+                        child: Container(
+                            child: NotebookBackgroundWidget()
+                        ),
                       ),
-                   // description,
-                      Expanded(child: description)
+                      Center(child: title)
                     ],
                   ),
-                ),
+                  Expanded(child: description)
+                ],
               ),
-            ],
+            ),
           ),
-
-      );
+        ],
+      ),
+    );
   }
 
   void exitIntro(){
@@ -175,86 +149,18 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
       _tabController.animateTo(_tabController.index+1,  duration: Duration(milliseconds:  2000));
     }
 
-
-    EdgeInsets padding = MediaQuery.of(context).padding;
-    double height = MediaQuery.of(context).size.height;
-
-    double height1 = height - padding.top - padding.bottom;
-
-    // 5 db
-    List<Color> gradientColor = [HazizzTheme.blue, Colors.green, Colors.yellow,  Colors.red, HazizzTheme.blue];
-
-    int _counter = 0;
-
-    /*
-    Widget pageGenerator(Widget content, {bool withSingleChildScrollView} ){
-
-      Widget decorWidget;
-
-      if(_counter%2 == 0){
-        decorWidget = decorBottomToTop(gradientColor[_counter], gradientColor[_counter+1]);
-      }else{
-        decorWidget = decorTopToBottom(gradientColor[_counter], gradientColor[_counter+1]);
-      }
-      _counter++;
-
-      if(withSingleChildScrollView == true){
-        return Stack(
-          //  fit: StackFit.,
-            children: [
-              SingleChildScrollView(
-                child: Container(
-                  height: height1,//-appBar.preferredSize.height - padding*3,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      decorWidget,
-                    ],
-                  ),
-                ),
-              ),
-              SingleChildScrollView(
-                  child: content
-              )
-            ]
-        );
-      }
-
-      return Stack(
-          children: [
-            SingleChildScrollView(
-              child: Container(
-                height: height1,//-appBar.preferredSize.height - padding*3,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    decorWidget,
-                  ],
-                ),
-              ),
-            ),
-             content
-          ]
-      );
-    }
-    */
-
     slides = [
       Builder(
         builder: (context){
           SocialSignInButtonWidget googleSignInButtonWidget = SocialSignInButtonWidget.google();
           SocialSignInButtonWidget facebookSignInButtonWidget = SocialSignInButtonWidget.facebook();
-
           return BlocBuilder(
             bloc: LoginBlocs().googleLoginBloc,
             builder: (context, state){
-
               return BlocBuilder(
                   bloc: LoginBlocs().facebookLoginBloc,
                   builder: (context, state2){
-
                     bool _isLoading;
-
                     HazizzLogger.printLog("log: ggoogle: $state");
 
                     if(state is SocialLoginSuccessfulState || state2 is SocialLoginSuccessfulState ){
@@ -287,30 +193,31 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
                             ),
                           ),
                         ),
-                      ), Column(children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8.0, right: 8),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 8.0, right: 8),
-                            child: Center(
-                                child: Text(locText(context, key: "hazizz_intro"), style: TextStyle(fontSize: 19), textAlign: TextAlign.center)
-                            ),
-                          ),
-
-                        ),
-
-                        Expanded(
-                          child: Padding(
-                              padding: const EdgeInsets.only(top: 16.0),
-                              child: Column(
-                                children: <Widget>[
-                                  googleSignInButtonWidget,
-                                  facebookSignInButtonWidget
-                                ],
+                      ),
+                        Column(
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8.0, right: 8),
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 8.0, right: 8),
+                                child: Center(
+                                  child: Text(locText(context, key: "hazizz_intro"), style: TextStyle(fontSize: 19), textAlign: TextAlign.center)
+                                ),
                               ),
-                          ),
-                        )
-                      ],),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 16.0),
+                                child: Column(
+                                  children: <Widget>[
+                                    googleSignInButtonWidget,
+                                    facebookSignInButtonWidget
+                                  ],
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
                         backgroundIndex: 1,
                       ),
                       show: _isLoading,
@@ -318,12 +225,12 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
                   }
               );
             }
-
           );
         },
       ),
 
-      introPageBuilder(Padding(
+      introPageBuilder(
+          Padding(
             padding: const EdgeInsets.only(top: 44.0),
             child: Text(locText(context, key: "about_group_title"), style: TextStyle(fontSize: 40, fontWeight: FontWeight.w800), textAlign: TextAlign.center,),
           ),
@@ -332,12 +239,7 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
-
-                    // Text(locText(context, key: "login"), style: TextStyle(fontSize: 40, fontWeight: FontWeight.w800, color: HazizzTheme.blue, ),),
-
                     Text(locText(context, key: "about_group_description1"), style: TextStyle(fontSize: 20), textAlign: TextAlign.center,),
-
-
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: RaisedButton(child: Text(locText(context, key: "create_group").toUpperCase()), onPressed: () async {
@@ -346,19 +248,16 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
                           Toast.show(locText(context, key: "group_created"), context, duration: 2);
                           nextPage();
                         }
-                      },),
+                      },
+                      ),
                     ),
-
                      Text(locText(context, key: "about_group_description2"), style: TextStyle(fontSize: 20), textAlign: TextAlign.center,),
-
                     Spacer(),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 16.0, right: 8),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
-
-
                           FloatingActionButton(child: Icon(FontAwesomeIcons.chevronRight),
                             onPressed: (){
                               nextPage();
@@ -370,7 +269,6 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
                   ],
                 ),
               ),
-
             backgroundIndex: 2
           ),
 
@@ -380,16 +278,13 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
       ),
           Column(
             children: <Widget>[
-
               Padding(
                 padding: const EdgeInsets.only(top: 60, left: 8.0, right: 8),
                 child: Center(
                     child: Text(locText(context, key: "kreta_intro"), style: TextStyle(fontSize: 20, ), textAlign: TextAlign.center,)
                 ),
               ),
-
               Spacer(),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -401,7 +296,6 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
                       }
                     },
                   ),
-
                   Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: FloatingActionButton(child: Icon(FontAwesomeIcons.chevronRight),
@@ -416,67 +310,6 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
           ),
         backgroundIndex: 3
       ),
-
-    /*
-      pageGenerator(
-          SingleChildScrollView(
-            child: Container(
-              height: height1,
-              child: Stack(
-                children: <Widget>[
-                  Center(
-                    child:
-
-                    Column(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(top: 35.0, bottom: 0),
-                          child: Text(locText(context, key: "ekreta"), style: TextStyle(fontSize: 80, fontWeight: FontWeight.w800, color: HazizzTheme.blue, ),),
-                        ),
-
-                        Padding(
-                          padding: const EdgeInsets.only(top: 60, left: 24.0, right: 24),
-                          child: Center(
-                              child: Text(locText(context, key: "kreta_intro"), style: TextStyle(fontSize: 22, ), textAlign: TextAlign.center,)
-                          ),
-                        ),
-                      ],
-                    )
-                  ),
-
-
-                  Positioned(
-                    left: 4,
-                    bottom: 8,
-                    child: FlatButton(child: Text(locText(context, key: "skip").toUpperCase()),
-                      onPressed: () async {
-                        if(await showIntroCancelDialog(context)){
-                          WelcomeManager.haveSeenIntro();
-
-                          Navigator.pushReplacementNamed(context, "/");
-                        }
-                      },
-                    ),
-
-                  ),
-
-                  Positioned(
-                      bottom: 12,
-                      right: 14,
-                      child:
-                      FloatingActionButton(child: Icon(FontAwesomeIcons.chevronRight),
-                        onPressed: (){
-                          nextPage();
-                        },
-                      )
-                  )
-                ],
-              ),
-            ),
-          ),
-      ),
-      */
-
     introPageBuilder(
       Padding(
        padding: const EdgeInsets.only(top: 20.0, bottom: 0),
@@ -494,9 +327,6 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
             child: KretaLoginWidget(
               onSuccess: (){
                 exitIntro();
-
-
-
               },
             ),
           ),
@@ -507,7 +337,6 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
                 onPressed: () async {
                   if(await showIntroCancelDialog(context)){
                     exitIntro();
-
                   }
                 },
               ),
@@ -516,51 +345,12 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
         ],),
       ),
       backgroundIndex: 2,),
-
-    /*
-      pageGenerator(
-
-            Container(
-              height: height1,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 35.0),
-                child: Stack(
-                  children: <Widget>[
-                    KretaLoginWidget(
-                      onSuccess: (){
-                        Navigator.popAndPushNamed(context, "/");
-                      },
-                    ),
-
-                    Positioned(
-                      bottom: 8,
-                      left: 4,
-                      child:
-                      FlatButton(child: Text(locText(context, key:  "skip").toUpperCase()),
-                        onPressed: () async {
-                          if(await showIntroCancelDialog(context)){
-                            WelcomeManager.haveSeenIntro();
-
-                            Navigator.pushReplacementNamed(context, "/");
-                          }
-                        },
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-
-          withSingleChildScrollView: true
-      ),
-      */
     ];
 
     return WillPopScope(
       onWillPop: _onWillPop,
 
       child: Scaffold(
-       //   resizeToAvoidBottomPadding: false,
         body: SafeArea(
           child: HazizzTabBarView(
             physics: NeverScrollableScrollPhysics(),
@@ -574,29 +364,9 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
 
   Future<bool> _onWillPop() async {
     return await false;
-    /*
-    return showDialog(
-      context: context,
-      builder: (context) => new AlertDialog(
-        title: new Text('Are you sure?'),
-        content: new Text('Do you want to exit an App'),
-        actions: <Widget>[
-          new FlatButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: new Text('No'),
-          ),
-          new FlatButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            child: new Text('Yes'),
-          ),
-        ],
-      ),
-    ) ?? false;
-    */
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 }
 

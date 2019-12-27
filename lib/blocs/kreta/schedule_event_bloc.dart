@@ -13,8 +13,6 @@ import 'package:mobile/custom/hazizz_time_of_day.dart';
 
 import 'package:bloc/bloc.dart';
 
-
-
 //region ScheduleEvent events
 abstract class ScheduleEventEvent extends HEvent {
   ScheduleEventEvent([List props = const []]) : super(props);
@@ -99,8 +97,7 @@ class ScheduleEventUpdateClassesEvent extends ScheduleEventEvent {
 
 //endregion
 
-
-
+//region Event item parts
 // Áll: időtartamból és egy event típusból(child class)
 class EventItem{
 
@@ -112,57 +109,67 @@ class EventItem{
   }
 }
 
-
 class BeforeClassesEventItem extends EventItem{
-  BeforeClassesEventItem({@required HazizzDateTime start, @required  HazizzDateTime end}) :
-        super(start: start, end: end){
-
-  }
+  BeforeClassesEventItem({
+    @required HazizzDateTime start,
+    @required  HazizzDateTime end}) :
+    super(start: start, end: end);
 }
 
 class AfterClassesEventItem extends EventItem{
   PojoClass tomorrowClass;
-  AfterClassesEventItem({@required HazizzDateTime start, @required  HazizzDateTime end, this.tomorrowClass}) :
-        super(start: start, end: end){
+  AfterClassesEventItem({
+    @required HazizzDateTime start,
+    @required  HazizzDateTime end,
+    this.tomorrowClass}) :
+    super(start: start, end: end);
 
-  }
-  AfterClassesEventItem.fromClass({@required PojoClass lastClass, @required  PojoClass upcomingClass, this.tomorrowClass}) :
-        super(start: HazizzDateTime.fromTimeOfDay(lastClass.endOfClass), end: HazizzDateTime.fromTimeOfDay(upcomingClass.startOfClass)){
-
-  }
+  AfterClassesEventItem.fromClass({
+    @required PojoClass lastClass,
+    @required  PojoClass upcomingClass,
+    this.tomorrowClass}) :
+    super(
+      start: HazizzDateTime.fromTimeOfDay(lastClass.endOfClass),
+      end: HazizzDateTime.fromTimeOfDay(upcomingClass.startOfClass)
+    );
 }
 
 
 class NoSchoolEventItem extends EventItem{
-
-  NoSchoolEventItem({@required HazizzDateTime start, @required  HazizzDateTime end}) :
-        super(start: start, end: end){
-
-  }
+  NoSchoolEventItem({
+    @required HazizzDateTime start,
+    @required  HazizzDateTime end}) :
+    super(start: start, end: end);
 }
 
 class ClassEventItem extends EventItem{
   PojoClass currentClass;
 
-  ClassEventItem({@required HazizzDateTime start, @required  HazizzDateTime end, @required this.currentClass}) :
-        super(start: start, end: end){
+  ClassEventItem({
+    @required HazizzDateTime start,
+    @required  HazizzDateTime end,
+    @required this.currentClass}) :
+    super(start: start, end: end
+  );
 
-  }
-  ClassEventItem.fromClass({@required this.currentClass}) :
-        super(start: HazizzDateTime.fromTimeOfDay(currentClass.startOfClass), end: HazizzDateTime.fromTimeOfDay(currentClass.endOfClass)){
-
-  }
+  ClassEventItem.fromClass({
+    @required this.currentClass}) :
+    super(
+      start: HazizzDateTime.fromTimeOfDay(currentClass.startOfClass),
+      end: HazizzDateTime.fromTimeOfDay(currentClass.endOfClass)
+    );
 }
 
 class BreakEventItem extends EventItem{
 
-  BreakEventItem({@required HazizzDateTime start, @required  HazizzDateTime end}) :
-        super(start: start, end: end){
-
-  }
+  BreakEventItem({
+    @required HazizzDateTime start,
+    @required  HazizzDateTime end}) :
+    super(start: start, end: end);
 }
+//endregion
 
-
+//region ScheduleEvent bloc
 class ScheduleEventBloc extends Bloc<ScheduleEventEvent, ScheduleEventState> {
 
   int currentEventIndex;
@@ -204,7 +211,7 @@ class ScheduleEventBloc extends Bloc<ScheduleEventEvent, ScheduleEventState> {
     }
   }
 
-  // ez fog szolni hogy mikor kell újra calculálni
+  // ez fog szolni hogy mikor kell újra kalkulálni
   void setTimer(HazizzDateTime nextEventChangeTime2){
 
     void handleTimeout() {  // callback function
@@ -301,23 +308,11 @@ class ScheduleEventBloc extends Bloc<ScheduleEventEvent, ScheduleEventState> {
         }
         HazizzLogger.printLog("log: debugMode ACTIVATED: 4");
       }
-      /*
       // van holnap óra
-      if( MainTabBlocs().schedulesBloc.classes.classes.containsKey((currentDayIndex+1).toString())) {
-        events.add(AfterClassesEventItem.fromClass(lastClass: todayClasses[todayClasses.length - 1], upcomingClass: MainTabBlocs().schedulesBloc.classes.classes[(currentDayIndex+1).toString()][0], tomorrowClass:  MainTabBlocs().schedulesBloc.classes.classes[(currentDayIndex+1)][0]) );
-           // text: null, lastClass: todayClasses[todayClasses.length - 1], tomorrowClass: MainTabBlocs().schedulesBloc.classes.classes[(currentDayIndex+1).toString()][0]),);
-      }else{
-        events.add(AfterClassesEventItem(start:HazizzDateTime.fromTimeOfDay(todayClasses[todayClasses.length - 1].endOfClass), end: HazizzDateTime.fromToday(23, 59) ));
-
-      }
-      */
       HazizzLogger.printLog("log: class state: loop end");
     }
     else{
-
       events.add(NoSchoolEventItem(start: HazizzDateTime.fromToday(0, 0), end: HazizzDateTime.fromToday(23, 59)));
-
-
       HazizzLogger.printLog("log: 998: null or empty;");
     }
   }
@@ -330,9 +325,6 @@ class ScheduleEventBloc extends Bloc<ScheduleEventEvent, ScheduleEventState> {
     HazizzLogger.printLog("log: opsie: 2");
     HazizzTimeOfDay now = HazizzTimeOfDay.now();
     HazizzLogger.printLog("log: opsie: 3");
-
-    HazizzTimeOfDay closestBefore;
-    HazizzTimeOfDay closestAfter;
 
     HazizzLogger.printLog("log: oy1334: todayClssaes.length: ${todayClasses.length}");
 
@@ -396,37 +388,4 @@ class ScheduleEventBloc extends Bloc<ScheduleEventEvent, ScheduleEventState> {
     HazizzLogger.printLog("log: class state: loop end");
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//endregion
