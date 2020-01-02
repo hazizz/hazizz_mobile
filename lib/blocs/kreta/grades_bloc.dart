@@ -26,12 +26,6 @@ abstract class GradesEvent extends HEvent {
 }
 
 class GradesSetSessionEvent extends GradesEvent {
-  /*
-  bool finishedOnly = true;
-  bool unfinishedOnly = false;
-
-  bool expired = false;
-  */
   GradesSetSessionEvent() :  super([DateTime.now()]);
   @override
   String toString() => 'GradesSetSessionEvent';
@@ -40,15 +34,9 @@ class GradesSetSessionEvent extends GradesEvent {
 }
 
 class GradesFetchEvent extends GradesEvent {
-  /*
-  bool finishedOnly = true;
-  bool unfinishedOnly = false;
+  final bool retry;
 
-  bool expired = false;
-  */
-  GradesFetchEvent(/*{this.unfinishedOnly, this.expired}*/) :  super([/*unfinishedOnly*/]){
-
-  }
+  GradesFetchEvent({this.retry = false}) :  super();
   @override
   String toString() => 'GradesFetchEvent';
   List<Object> get props => null;
@@ -105,6 +93,8 @@ class GradesErrorState extends GradesState {
 class GradesBloc extends Bloc<GradesEvent, GradesState> {
   GradesSort currentGradeSort = GradesSort.BYCREATIONDATE;
   GradesBloc();
+
+  int _failedRequestCount = 0;
 
   DateTime lastUpdated = DateTime(0, 0, 0, 0, 0);
 
@@ -248,7 +238,10 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
           grades = dataCache.data;
           yield GradesLoadedCacheState(grades);
         }
-        HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetGrades());
+        HazizzResponse hazizzResponse = await getResponse(
+          KretaGetGrades(),
+          useSecondaryOptions: event.retry
+        );
         print("CHANGE HAPPENDE03");
         if(hazizzResponse.isSuccessful){
           print("CHANGE HAPPENDE02");
@@ -283,8 +276,11 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
             );
           }else if(hazizzResponse.dioError.type == DioErrorType.CONNECT_TIMEOUT
               || hazizzResponse.dioError.type == DioErrorType.RECEIVE_TIMEOUT) {
-            HazizzLogger.printLog("log: noConnectionError22");
-            this.dispatch(GradesFetchEvent());
+            _failedRequestCount++;
+            if(_failedRequestCount <= 1) {
+              this.dispatch(GradesFetchEvent());
+            }
+
           } else if(hazizzResponse.hasPojoError && hazizzResponse.pojoError.errorCode == 138) {
             yield GradesErrorState(hazizzResponse);
           }

@@ -51,8 +51,8 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
   @override
   void dispose() {
     kretaLoginBlocs.dispose();
-    _usernameTextEditingController.dispose();
-    _passwordTextEditingController.dispose();
+    _usernameTextEditingController?.dispose();
+    _passwordTextEditingController?.dispose();
     super.dispose();
   }
 
@@ -72,7 +72,7 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
     pr.setMessage(locText(context, key: "loading"));
 
     if(widget.onSuccess == null){
-      widget.onSuccess = () => Navigator.pop(context);
+      widget.onSuccess = () => Navigator.maybePop(context);
     }
     var usernameWidget = TextField(
 

@@ -46,7 +46,6 @@ abstract class TaskMakerBloc extends Bloc<TaskMakerEvent, TaskMakerState> {
 
     descriptionController.addListener((){
       String text = descriptionController.text;
-      HazizzLogger.printLog("change: $text");
       descriptionBloc.dispatch(TextFormValidate(text: text));
     });
 
@@ -446,10 +445,9 @@ abstract class TaskMakerEvent extends HEvent {
 }
 
 class TaskMakerSendEvent extends TaskMakerEvent {
-  List<EncryptedImageData> imageDatas;
-  TaskMakerSendEvent(this.imageDatas){
-
-  }
+  List<HazizzImageData> imageDatas;
+  String salt;
+  TaskMakerSendEvent({@required this.imageDatas, @required this.salt});
   @override
   String toString() => 'TaskMakerSendEvent';
   List<Object> get props => null;

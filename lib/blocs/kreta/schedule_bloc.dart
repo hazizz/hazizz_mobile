@@ -27,10 +27,12 @@ abstract class ScheduleEvent extends HEvent {
 }
 
 class ScheduleFetchEvent extends ScheduleEvent {
-  int yearNumber;
-  int weekNumber;
+  final int yearNumber;
+  final int weekNumber;
 
-  ScheduleFetchEvent({this.yearNumber, this.weekNumber}) :  super([yearNumber, weekNumber]);
+  final bool retry;
+
+  ScheduleFetchEvent({this.yearNumber, this.weekNumber, this.retry = false}) :  super([yearNumber, weekNumber]);
   @override
   String toString() => 'ScheduleFetchEvent';
   @override
@@ -109,6 +111,9 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
   DateTime currentWeekMonday = HazizzDateTime(0, 0, 0, 0, 0);
   DateTime currentWeekSunday = HazizzDateTime(0, 0, 0, 0, 0);
+
+  int _failedRequestCount = 0;
+//  int _failedRequestLimit = 2;
 
 
   PojoSchedules getScheduleFromSession(){
@@ -218,7 +223,10 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
         }
 
         //HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetSchedulesWithSession(q_year: currentYearNumber, q_weekNumber: currentWeekNumber));
-        HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetSchedules(q_year: currentYearNumber, q_weekNumber: currentWeekNumber));
+        HazizzResponse hazizzResponse = await getResponse(
+          KretaGetSchedules(q_year: currentYearNumber, q_weekNumber: currentWeekNumber),
+          useSecondaryOptions: event.retry
+        );
 
         if(hazizzResponse.isSuccessful){
           classes = hazizzResponse.convertedData;
@@ -269,7 +277,11 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
           }else if(hazizzResponse.dioError.type == DioErrorType.CONNECT_TIMEOUT
               || hazizzResponse.dioError.type == DioErrorType.RECEIVE_TIMEOUT) {
-            this.dispatch(ScheduleFetchEvent());
+            _failedRequestCount++;
+            if(_failedRequestCount <= 1) {
+              this.dispatch(ScheduleFetchEvent());
+            }
+
           }else{
             yield ScheduleErrorState(hazizzResponse);
 

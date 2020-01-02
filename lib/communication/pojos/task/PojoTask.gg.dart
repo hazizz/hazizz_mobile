@@ -21,6 +21,7 @@ PojoTask _$PojoTaskFromJson(Map<String, dynamic> json) {
       dueDate: json['dueDate'] == null
           ? null
           : DateTime.parse(json['dueDate'] as String),
+      salt: json['salt'] as String,
       creator: json['creator'] == null
           ? null
           : PojoCreator.fromJson(json['creator'] as Map<String, dynamic>),
@@ -42,6 +43,7 @@ Map<String, dynamic> _$PojoTaskToJson(PojoTask instance) => <String, dynamic>{
   'title': instance.title,
   'description': instance.description,
   'dueDate': instance.dueDate?.toIso8601String(),
+  'salt': instance.salt,
   'creator': instance.creator,
   'group': instance.group,
   'subject': instance.subject,
@@ -69,6 +71,7 @@ PojoTaskDetailed _$PojoTaskDetailedFromJson(Map<String, dynamic> json) {
       dueDate: json['dueDate'] == null
           ? null
           : DateTime.parse(json['dueDate'] as String),
+      salt: json['salt'] as String,
       creator: json['creator'] == null
           ? null
           : PojoCreator.fromJson(json['creator'] as Map<String, dynamic>),
@@ -96,6 +99,7 @@ Map<String, dynamic> _$PojoTaskDetailedToJson(PojoTaskDetailed instance) =>
       'creationDate': instance.creationDate?.toIso8601String(),
       'lastUpdated': instance.lastUpdated?.toIso8601String(),
       'dueDate': instance.dueDate?.toIso8601String(),
+      'salt': instance.salt,
       'creator': instance.creator,
       'group': instance.group,
       'subject': instance.subject,

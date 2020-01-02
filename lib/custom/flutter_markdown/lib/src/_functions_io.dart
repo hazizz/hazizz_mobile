@@ -45,7 +45,7 @@ final ImageBuilder kDefaultImageBuilder = (
         builder: (context, responseState){
           if(responseState.connectionState == ConnectionState.done){
             String cryptedBase64Img = responseState.data.convertedData;
-            String base64Img = HazizzCrypt.decrypt(cryptedBase64Img, key, "");
+            String base64Img = HazizzCrypt.decrypt(cryptedBase64Img, key);
             Uint8List byteImg = Base64Decoder().convert(base64Img);
             Image img = Image.memory(byteImg);
             return Container(child: img,);

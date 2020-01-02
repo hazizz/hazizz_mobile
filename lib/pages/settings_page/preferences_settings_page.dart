@@ -29,6 +29,8 @@ class _PreferencesSettingsPage extends State<PreferencesSettingsPage> {
 
   int currentStartPageItemIndex = 0;
 
+  bool autoLoad = PreferenceService.imageAutoLoad;
+  bool autoDownload = PreferenceService.imageAutoDownload;
 
   _PreferencesSettingsPage();
 
@@ -74,7 +76,6 @@ class _PreferencesSettingsPage extends State<PreferencesSettingsPage> {
                     title: Text(locText(context, key: "starting_page")),
                     leading: Icon(FontAwesomeIcons.doorOpen),
                     trailing: DropdownButton(
-
                       items: startPageItems,
                       onChanged: (dynamic newStartPageIndex) async {
                         PreferenceService.setStartPageIndex(newStartPageIndex);
@@ -85,6 +86,34 @@ class _PreferencesSettingsPage extends State<PreferencesSettingsPage> {
                       value: currentStartPageItemIndex,
                     ),
                   ),
+                ),
+                Divider(),
+                ListTile(
+                  title: Text(locText(context, key: "auto_load_image")),
+                  leading: Icon(FontAwesomeIcons.spinner),
+                  trailing: Switch(
+                    value: autoLoad,
+                    onChanged: (val){
+                      setState(() {
+                        autoLoad = val;
+                        PreferenceService.setImageAutoLoad(autoLoad);
+                      });
+                    },
+                  )
+                ),
+                Divider(),
+                ListTile(
+                  title: Text(locText(context, key: "auto_download_image")),
+                  leading: Icon(FontAwesomeIcons.download),
+                  trailing: Switch(
+                    value: autoDownload,
+                    onChanged: (val){
+                      setState(() {
+                        autoDownload = val;
+                        PreferenceService.setImageAutoDownload(autoDownload);
+                      });
+                    },
+                  )
                 ),
                 Divider(),
               ],

@@ -271,6 +271,12 @@
     "starting_page"
     : "Starting page",
 
+  "auto_load_image"
+  : "Automatically load images in tasks",
+
+  "auto_download_image"
+  : "Automatically download images in tasks, if opened",
+
   "preferences"
   : "Preferences",
 
@@ -913,6 +919,9 @@
 
     "report_bug"
     : "Report bug",
+
+  "havent_saved_changes"
+  : "You haven't saved the changes",
 
 
     "info_serverUnexpectedResponse"

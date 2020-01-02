@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -21,9 +20,7 @@ import 'package:mobile/custom/hazizz_tab_bar_view.dart';
 import 'package:mobile/custom/hazizz_tab_controller.dart';
 import 'package:toast/toast.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
-
 import "dart:math" show pi;
-
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'package:mobile/communication/request_sender.dart';

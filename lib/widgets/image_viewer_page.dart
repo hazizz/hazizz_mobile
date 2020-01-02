@@ -10,16 +10,32 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:toast/toast.dart';
 import 'hazizz_back_button.dart';
+import 'image_viewer_widget.dart';
 
 class ImageViewerPage extends StatefulWidget {
 
+  ImageType imageType;
+
+
+  Uint8List imageBytes;
   File imageFile;
   String imageUrl;
+
   Object heroTag;
 
   Function onDelete;
-  ImageViewerPage.fromNetwork(this.imageUrl, {Key key, @required this.heroTag, this.onDelete}) : super(key: key);
-  ImageViewerPage.fromFile(this.imageFile, {Key key, @required this.heroTag, this.onDelete}) : super(key: key);
+  ImageViewerPage.fromNetwork(this.imageUrl, {Key key, @required this.heroTag, this.onDelete}) : super(key: key){
+    imageType = ImageType.NETWORK;
+  }
+  ImageViewerPage.fromFile(this.imageFile, {Key key, @required this.heroTag, this.onDelete}) : super(key: key){
+    imageType = ImageType.FILE;
+  }
+  ImageViewerPage.fromBytes(this.imageBytes, {Key key, @required this.heroTag, this.onDelete}) : super(key: key){
+    imageType= ImageType.MEMORY;
+  }
+  ImageViewerPage.fromGoogleDrive(this.imageBytes, {Key key, @required this.heroTag, this.onDelete}) : super(key: key){
+    imageType = ImageType.MEMORY;
+  }
 
   @override
   _ImageViewerPage createState() => _ImageViewerPage();
@@ -43,6 +59,17 @@ class _ImageViewerPage extends State<ImageViewerPage>{
 
   @override
   Widget build(BuildContext context) {
+
+    ImageProvider imageProvider;
+    if(widget.imageType == ImageType.NETWORK){
+      imageProvider = NetworkImage(widget.imageUrl);
+    }else if(widget.imageType == ImageType.FILE){
+      imageProvider = FileImage(widget.imageFile);
+    }else if(widget.imageType == ImageType.MEMORY){
+      imageProvider = MemoryImage(widget.imageBytes);
+    }else if(widget.imageType == ImageType.GOOGLE_DRIVE){
+      imageProvider = MemoryImage(widget.imageBytes);
+    }
     return SafeArea(
       child: Scaffold(
         body: Stack(
@@ -58,9 +85,7 @@ class _ImageViewerPage extends State<ImageViewerPage>{
                 child:  Container(
                   width: MediaQuery.of(context).size.width,
                   child: PhotoView(
-                    imageProvider: widget.imageUrl != null ?
-                      NetworkImage(widget.imageUrl) :
-                      FileImage(widget.imageFile),
+                    imageProvider: imageProvider
                   ),
                 ),
                 )
@@ -96,8 +121,10 @@ class _ImageViewerPage extends State<ImageViewerPage>{
                               }
                             }
 
-                            if(widget.imageFile != null){
+                            if(widget.imageFile != null) {
                               await ImageGallerySaver.saveImage(widget.imageFile.readAsBytesSync());
+                            }else if(widget.imageBytes != null){
+                              await ImageGallerySaver.saveImage(widget.imageBytes);
                             }else{
                               var response = await  Dio().get(widget.imageUrl, options: Options(responseType: ResponseType.bytes));
                               await ImageGallerySaver.saveImage(Uint8List.fromList(response.data));

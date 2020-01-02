@@ -6,7 +6,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'hazizz_logger.dart';
 
-
 const _keyLangCode = "key_langCode";
 
 String locText(BuildContext context, {@required String key, List<String> args}){
@@ -53,8 +52,6 @@ List<Locale> getSupportedLocales() {
 
   return locales;
 }
-
-
 
 class HazizzLocalizationsNoContext{
 
@@ -107,14 +104,10 @@ class HazizzLocalizationsNoContext{
 }
 
 class HazizzLocalizations {
-
-
   Locale locale;
 
   HazizzLocalizations(this.locale);
 
-  // Helper method to keep the code in the widgets concise
-  // Localizations are accessed using an InheritedWidget "of" syntax
   static HazizzLocalizations of(BuildContext context) {
     return Localizations.of<HazizzLocalizations>(context, HazizzLocalizations);
   }
@@ -123,7 +116,6 @@ class HazizzLocalizations {
 
   Future<bool> load(Locale l) async {
     locale = l;
-    // Load the language JSON file from the "lang" folder
     String jsonString = await rootBundle.loadString('assets/langs/${locale.languageCode}.json');
     Map<String, dynamic> jsonMap = json.decode(jsonString);
 
@@ -134,7 +126,6 @@ class HazizzLocalizations {
     return true;
   }
 
-  // This method will be called from every widget which needs a localized text
   String translate(String key, {@required List<String> args }) {
     String nullCheckAndReturn(String text){
       if(text == null){
@@ -158,37 +149,22 @@ class HazizzLocalizations {
     return nullCheckAndReturn(text);
   }
 
-  String translateFromList({@required String key, @required int index}) {
-    Map jsonList = jsonDecode(_localizedStrings[key]);
-   // List asd = jsonList.map((i)=>i).toList();
-    List<String> textList = jsonDecode(_localizedStrings[key]);
-    String text = textList[index];
-    return text;
-  }
-
-  // Static member to have a simple access to the delegate from the MaterialApp
   static const LocalizationsDelegate<HazizzLocalizations> delegate =
   _HazizzLocalizationsDelegate();
 
 }
 
-// LocalizationsDelegate is a factory for a set of localized resources
-// In this case, the localized strings will be gotten in an AppLocalizations object
 class _HazizzLocalizationsDelegate
     extends LocalizationsDelegate<HazizzLocalizations> {
-  // This delegate instance will never change (it doesn't even have fields!)
-  // It can provide a constant constructor.
   const _HazizzLocalizationsDelegate();
 
   @override
   bool isSupported(Locale locale) {
-    // Include all of your supported language codes here
     return ['en', 'hu'].contains(locale.languageCode);
   }
 
   @override
   Future<HazizzLocalizations> load(Locale locale) async {
-    // AppLocalizations class is where the JSON loading actually runs
     HazizzLocalizations localizations = new HazizzLocalizations(locale);
     await localizations.load(locale);
     return localizations;

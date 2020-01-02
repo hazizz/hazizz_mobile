@@ -7,6 +7,7 @@ import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/formats.dart';
 import 'package:mobile/services/hazizz_message_handler.dart';
 import 'package:mobile/storage/cache_manager.dart';
+import 'package:mobile/widgets/flushbars.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 
 import 'package:mobile/custom/hazizz_localizations.dart';
@@ -51,6 +52,9 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage>  {
   bool receive = false;
   String notificationTime = "";
 
+
+  bool notSaved = false;
+
   IconData iconBell;
 
   @override
@@ -91,7 +95,16 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage>  {
   Widget build(BuildContext context) {
     return Hero(
       tag: "notification_settings",
-      child: Scaffold(
+      child: WillPopScope(
+        onWillPop: (){
+          if(notSaved){
+            showHaventSavedFlushBar(context);
+            return Future.value(false);
+          }
+          return Future.value(true);
+
+        },
+        child: Scaffold(
           appBar: AppBar(
             leading: HazizzBackButton(),
             title: Text(widget.getTitle(context)),
@@ -123,7 +136,6 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage>  {
                           });
 
                           HazizzResponse response = await getResponse(RemoveFirebaseTokens(userId: (await InfoCache.getMyUserData()).id, firebaseToken: await HazizzMessageHandler().token));
-                         // HazizzNotification.cancel();
                         }
                       }
                     )
@@ -143,15 +155,6 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage>  {
 
                         newTime = t;
                       });
-                     /* if(newTime != null) {
-                        HazizzNotification.scheduleNotificationAlarmManager(timeOfDay: newTime);
-                        setState(() {
-                          var a = HazizzTimeOfDay(hour: newTime.hour, minute: newTime.minute);
-                          notificationTime = a.toHazizzFormat();
-
-                        });
-                      }
-                      */
                     },
                     leading: Icon(FontAwesomeIcons.clock),
                     title: Text(locText(context, key: "set_time_for_notification")),
@@ -168,27 +171,6 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage>  {
 
                 ),
 
-                /*
-                Divider(),
-                ListTile(
-                    enabled: receive,
-                   // leading: Icon(FontAwesomeIcons.clock),
-                    title: Text(locText(context, key: "set_time_for_notification")),
-                    trailing: Container(
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Text(notificationTime, style: TextStyle(fontSize: 24), ),
-                      ),
-                      decoration: BoxDecoration(
-                          color: HazizzTheme.red,
-                          borderRadius: BorderRadius.all(Radius.circular(30))
-                      ),
-                    )
-
-                ),
-                */
-
-
                 Divider(),
                 ListTile(
                     enabled: receive,
@@ -199,7 +181,7 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage>  {
                         setState(() {
                           mondayEnabled = value;
                         });
-
+                        notSaved = true;
                       }
                     )
                 ),
@@ -213,7 +195,7 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage>  {
                           setState(() {
                             tuesdayEnabled = value;
                           });
-
+                          notSaved = true;
                         }
                     )
                 ),
@@ -227,7 +209,7 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage>  {
                           setState(() {
                             wednesdayEnabled = value;
                           });
-
+                          notSaved = true;
                         }
                     )
                 ),
@@ -241,7 +223,7 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage>  {
                           setState(() {
                             thursdayEnabled = value;
                           });
-
+                          notSaved = true;
                         }
                     )
                 ),
@@ -255,57 +237,63 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage>  {
                           setState(() {
                             fridayEnabled = value;
                           });
-
+                          notSaved = true;
                         }
                     )
                 ),
                // Divider(),
                 ListTile(
-                    enabled: receive,
-                    title: Text(locText(context, key: "days_5")),
-                    trailing: Switch(
-                        value: saturdayEnabled,//!receive ? false : saturdayEnabled,
-                        onChanged: (value){
-                          setState(() {
-                            saturdayEnabled = value;
-                          });
-
-                        }
-                    )
+                  enabled: receive,
+                  title: Text(locText(context, key: "days_5")),
+                  trailing: Switch(
+                    value: saturdayEnabled,//!receive ? false : saturdayEnabled,
+                    onChanged: (value){
+                      setState(() {
+                        saturdayEnabled = value;
+                      });
+                      notSaved = true;
+                    }
+                  )
                 ),
               //  Divider(),
                 ListTile(
-                    enabled: receive,
-                    title: Text(locText(context, key: "days_6")),
-                    trailing: Switch(
-                        value: sundayEnabled, //!receive ? false : sundayEnabled,
-                        onChanged: (value){
-                          setState(() {
-                            sundayEnabled = value;
-                          });
-
-                        }
-                    )
+                  enabled: receive,
+                  title: Text(locText(context, key: "days_6")),
+                  trailing: Switch(
+                    value: sundayEnabled, //!receive ? false : sundayEnabled,
+                    onChanged: (value){
+                      setState(() {
+                        sundayEnabled = value;
+                      });
+                      notSaved = true;
+                    }
+                  )
                 ),
 
-                FlatButton(
-                  child: Text(locText(context, key: "save")),
-                  onPressed: () async {
+                Padding(
+                  padding: const EdgeInsets.only(top: 6, bottom: 12),
+                  child: FloatingActionButton(
+                    heroTag: null,
+                    child: Icon(FontAwesomeIcons.save),//Text(locText(context, key: "save")),
+                    onPressed: () async {
 
 
-                    HazizzResponse response = await RequestSender().getResponse(UpdateAlertSettings(q_userId: (await InfoCache.getMyUserData()).id, b_alarmTime: "${add0(newTime.hour)}:${add0(newTime.minute)}:00+0000", b_mondayEnabled: mondayEnabled,
-                      b_tuesdayEnabled: tuesdayEnabled, b_wednesdayEnabled: wednesdayEnabled, b_thursdayEnabled: thursdayEnabled,
-                      b_fridayEnabled: fridayEnabled, b_saturdayEnabled: saturdayEnabled, b_sundayEnabled: sundayEnabled
-                    ));
-                    if(response.isSuccessful){
-
-                    }
-                  },
+                      HazizzResponse response = await RequestSender().getResponse(UpdateAlertSettings(q_userId: (await InfoCache.getMyUserData()).id, b_alarmTime: "${add0(newTime.hour)}:${add0(newTime.minute)}:00+0000", b_mondayEnabled: mondayEnabled,
+                        b_tuesdayEnabled: tuesdayEnabled, b_wednesdayEnabled: wednesdayEnabled, b_thursdayEnabled: thursdayEnabled,
+                        b_fridayEnabled: fridayEnabled, b_saturdayEnabled: saturdayEnabled, b_sundayEnabled: sundayEnabled
+                      ));
+                      if(response.isSuccessful){
+                        notSaved = false;
+                      }else{
+                        notSaved = true;
+                      }
+                    },
+                  ),
                 )
-
               ],
             ),
           ),
+        ),
       ),
     );
   }

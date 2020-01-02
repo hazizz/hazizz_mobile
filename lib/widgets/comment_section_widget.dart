@@ -37,6 +37,7 @@ class _CommentSectionWidget extends State<CommentSectionWidget>{
   @override
   Widget build(BuildContext context) {
     return Card(
+        margin: EdgeInsets.only(bottom: 8),
         clipBehavior: Clip.antiAliasWithSaveLayer,
         elevation: 120,
         child: Column(
@@ -107,6 +108,7 @@ class _CommentSectionWidget extends State<CommentSectionWidget>{
                   }
 
                   return Card(
+                    margin: EdgeInsets.all( 0),
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 6.0),
                       child: Row(

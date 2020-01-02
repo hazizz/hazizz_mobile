@@ -32,7 +32,6 @@ class _SettingsPage extends State<SettingsPage>  {
 
   int currentStartPageItemIndex = 0;
 
-
   _SettingsPage();
 
 
@@ -94,13 +93,13 @@ class _SettingsPage extends State<SettingsPage>  {
     }
 
     HazizzLogger.printLog("log: $supportedLocaleItems");
-    
-    
+
 
     return Scaffold(
         appBar: AppBar(
           leading: HazizzBackButton(),
-          title: Text(widget.getTitle(context)),
+          title: Text(widget.getTitle(context))
+
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -214,8 +213,9 @@ class _SettingsPage extends State<SettingsPage>  {
                           currentLanguageCode = value;
                           HazizzLocalizations.of(context).load(Locale(currentLanguageCode));
                           setPreferredLocale(Locale(currentLanguageCode));
-                        });
 
+
+                        });
                       },
                       items: supportedLocaleItems
                     ),

@@ -1,14 +1,11 @@
 
 
-import 'dart:io';
 
-import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:image/image.dart';
+import 'package:googleapis/drive/v3.dart' as driveapi;
 import 'package:mobile/blocs/item_list/item_list_picker_bloc.dart';
 import 'package:mobile/blocs/other/date_time_picker_bloc.dart';
 import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
 import 'package:mobile/blocs/other/response_states.dart';
-import 'package:mobile/blocs/other/text_form_bloc.dart';
 import 'package:mobile/blocs/tasks/task_maker_blocs.dart';
 import 'package:mobile/blocs/tasks/tasks_bloc.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
@@ -18,8 +15,6 @@ import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/custom/image_operations.dart';
-import 'package:mobile/services/hazizz_crypt.dart';
-import 'package:steel_crypt/steel_crypt.dart';
 
 import '../../managers/google_drive_manager.dart';
 
@@ -86,6 +81,8 @@ class TaskCreateBloc extends TaskMakerBloc {
         List<String> tags = List();
         DateTime deadline;
         String description;
+
+        String salt = event.salt;
 
         bool missingInfo = false;
 
@@ -157,7 +154,6 @@ class TaskCreateBloc extends TaskMakerBloc {
         }
         HazizzLogger.printLog("log: not missing info");
 
-        List<Future<Uri>> fimageUrls = [];
         List<String> imageUrls = [];
         String imageUrlsDesc = "";
 
@@ -188,9 +184,10 @@ class TaskCreateBloc extends TaskMakerBloc {
           List<Future<HazizzResponse>> requests = [];
           */
 
+      /*
           await GoogleDriveManager().initialize();
           List<Future<HazizzResponse>> responses = [];
-          for(EncryptedImageData d in event.imageDatas){
+          for(HazizzImageData d in event.imageDatas){
             fimageUrls.add(GoogleDriveManager().uploadImageToDrive(d));
            /* responses.add(RequestSender().getResponse(new UploadImage(
                 imageData: d, key: d.key, iv: d.iv
@@ -200,14 +197,31 @@ class TaskCreateBloc extends TaskMakerBloc {
 
           await Future.wait(fimageUrls)
               .then((List<dynamic> responses) {
-            for(Uri uri in responses){
-              imageUrls.add(uri.toString());
+            for(driveapi.File file in responses){
+              imageUrls.add(file.webContentLink);
             }
           }
           );
 
           for(int i = 0; i < imageUrls.length; i++){
-            imageUrlsDesc += "\n![hazizz_image](${imageUrls[i]}~~${event.imageDatas[i].key}~~${event.imageDatas[i].iv})";
+            imageUrlsDesc += "\n![hazizz_image_$i](${imageUrls[i]})";
+          }
+       */
+
+          print("counter0: ${event.imageDatas.length}");
+          int i = 0;
+
+          List<Future> futures = [];
+          for(HazizzImageData d in event.imageDatas){
+            futures.add(d.futureUploadedToDrive);
+          }
+          await Future.wait(futures);
+
+          for(HazizzImageData d in event.imageDatas){
+            i++;
+            print("counter1: ${d.url}");
+
+            imageUrlsDesc += "\n![img_$i](${d.url.split("&")[0]})";
           }
         }
 
@@ -228,13 +242,13 @@ class TaskCreateBloc extends TaskMakerBloc {
           print("leírás hosz: ${(description + imageUrlsDesc).length}");
         }
 
-
         hazizzResponse = await getResponse(new CreateTask(
             groupId: groupId,
             subjectId: subjectId,
             b_tags: tags,
-            b_description: imageUrls.isEmpty ? description : description + imageUrlsDesc,
-            b_deadline: deadline
+            b_description: event.imageDatas.isEmpty ? description : description + imageUrlsDesc,
+            b_deadline: deadline,
+            b_salt: event.imageDatas.isEmpty ? null : salt
         ));
 
         print("majas3: broo");
@@ -256,8 +270,6 @@ class TaskCreateBloc extends TaskMakerBloc {
 
   @override
   TaskCreateState get initialState => InitializedTaskCreateState(group: group);
-
-
 
 }
 //endregion

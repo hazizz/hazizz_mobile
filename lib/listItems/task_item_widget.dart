@@ -249,7 +249,7 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
                       ),
 
                       Padding(
-                        padding: const EdgeInsets.only(left: 10, top: 0, bottom: 0),
+                        padding: const EdgeInsets.only(right: 20, top: 0, bottom: 0),
                        // child: Text(markdownImageRemover(pojoTask.description), style: TextStyle(fontSize: 18),),
                         child: Builder(
                           builder: (context){
@@ -261,6 +261,18 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
                               imageBuilder: (uri){
+
+                                return Padding(
+                                  padding: const EdgeInsets.only(left: 2, right: 2, bottom: 4),
+                                  child: Container(
+                                    height: 60,
+                                    child: ClipRRect(
+                                        child: Image.network("https://drive.google.com/thumbnail?id=${uri.toString().split("?id=")[1]}"),
+                                        borderRadius: BorderRadius.circular(3),
+                                    ),
+                                  ),
+                                );
+
                                 return Padding(
                                   padding: const EdgeInsets.only(left: 3, right: 3),
                                   child: Icon(FontAwesomeIcons.image),

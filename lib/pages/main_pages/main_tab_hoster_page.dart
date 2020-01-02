@@ -86,13 +86,13 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
     DeepLink.initUniLinks(context);
 
     InfoCache.getMyDisplayName().then(
-      (value){
-        HazizzLogger.printLog("getMyDisplayName: $value");
+            (value){
+          HazizzLogger.printLog("getMyDisplayName: $value");
 
-        setState(() {
-          displayName = value;
-        });
-      }
+          setState(() {
+            displayName = value;
+          });
+        }
     );
 
     VersionHandler.getLastRecordedVersion().then((String lastVersion){
@@ -120,7 +120,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
 
 
     WidgetsBinding.instance.addPostFrameCallback((_) async =>
-        await VersionHandler.check()
+    await VersionHandler.check()
     );
 
 
@@ -163,10 +163,10 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
     if (currentBackPressTime == null ||
         now.difference(currentBackPressTime) > Duration(seconds: 2)) {
       currentBackPressTime = now;
-        _scaffoldKey.currentState.showSnackBar(SnackBar(
-          content: Text(locText(context, key: "press_again_to_exit")),
-          duration: Duration(seconds: 3),
-        ));
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text(locText(context, key: "press_again_to_exit")),
+        duration: Duration(seconds: 3),
+      ));
 
       return Future.value(false);
     }
@@ -199,45 +199,45 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                 ),
 
                 bottom: TabBar(
-                  controller: _tabController,
-                  tabs: [
-                    Tab(text: tasksTabPage.getTabName(context), icon: Icon(FontAwesomeIcons.bookOpen),),
-                    Tab(text: schedulesTabPage.getTabName(context), icon: Icon(FontAwesomeIcons.calendarAlt)),
-                    Tab(text: gradesTabPage.getTabName(context), icon:
-                    Stack(
-                      children: <Widget>[
-                        Center(child: Icon(FontAwesomeIcons.listOl)),
+                    controller: _tabController,
+                    tabs: [
+                      Tab(text: tasksTabPage.getTabName(context), icon: Icon(FontAwesomeIcons.bookOpen),),
+                      Tab(text: schedulesTabPage.getTabName(context), icon: Icon(FontAwesomeIcons.calendarAlt)),
+                      Tab(text: gradesTabPage.getTabName(context), icon:
+                      Stack(
+                        children: <Widget>[
+                          Center(child: Icon(FontAwesomeIcons.listOl)),
 
-                        BlocBuilder(
-                          bloc: NewGradesBloc(),
-                          builder: (context, state){
-                            if(state is HasNewGradesState){
-                              return Positioned(
-                                  top: 0, right: 27,
-                                  child: Transform.translate(
-                                    offset: const Offset(0.0, -6.0),
-                                    child: Card(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10.0),
+                          BlocBuilder(
+                            bloc: NewGradesBloc(),
+                            builder: (context, state){
+                              if(state is HasNewGradesState){
+                                return Positioned(
+                                    top: 0, right: 27,
+                                    child: Transform.translate(
+                                      offset: const Offset(0.0, -6.0),
+                                      child: Card(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10.0),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(left: 4, right: 4),
+                                          child: Text(" ", style: TextStyle(fontSize: 8),),
+                                        ),
+
+
+                                        color: Colors.red,
                                       ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(left: 4, right: 4),
-                                        child: Text(" ", style: TextStyle(fontSize: 8),),
-                                      ),
-
-
-                                      color: Colors.red,
-                                    ),
-                                  )
-                              );
-                            }
-                            return Container();
-                          },
-                        )
-                      ],
-                    ),
-                    ),
-                  /*
+                                    )
+                                );
+                              }
+                              return Container();
+                            },
+                          )
+                        ],
+                      ),
+                      ),
+                      /*
             GestureDetector(
                 onLongPress: (){
                   HazizzLogger.printLog("log: long press");
@@ -257,9 +257,9 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                 child: Tab(text: gradesTabPage.getTabName(context), icon: Icon(FontAwesomeIcons.listOl)),
               ),
               */
-                  // Tab(text: SchedulesPage.tabName),//, icon: Icon(Icons.scatter_plot)),
-                  //, icon: Icon(Icons.group))
-                  ]
+                      // Tab(text: SchedulesPage.tabName),//, icon: Icon(Icons.scatter_plot)),
+                      //, icon: Icon(Icons.group))
+                    ]
                 ),
               ),
               body: BlocListener(
@@ -631,12 +631,12 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                           children: <Widget>[
                             //   Divider(),
                             ListTile(
-                              onTap: (){
-                                Navigator.pop(context);
-                                Navigator.pushNamed(context, "/settings");
-                              },
-                              leading: Icon(FontAwesomeIcons.cog),
-                              title: Text(locText(context, key: "settings"))
+                                onTap: (){
+                                  Navigator.pop(context);
+                                  Navigator.pushNamed(context, "/settings");
+                                },
+                                leading: Icon(FontAwesomeIcons.cog),
+                                title: Text(locText(context, key: "settings"))
                             ),
                             Row(
                               children: [
@@ -706,7 +706,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                                 origin: Offset(0, -60),
                                 angle: anim2.value,
                                 child: Animator(
-                               //   tween: Tween<double>(begin: -40, end:  40),
+                                  //   tween: Tween<double>(begin: -40, end:  40),
                                   duration: Duration(milliseconds: 700),
                                   cycles: 20,
                                   builder: (anim3){
@@ -732,6 +732,6 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
             ),
           ],
         )
-      );
+    );
   }
 }

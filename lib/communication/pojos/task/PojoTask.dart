@@ -14,7 +14,7 @@ part 'PojoTask.gg.dart';
 //@JsonSerializable()
 class PojoTask extends Pojo implements Comparable<PojoTask>{
   PojoTask({this.id, this.assignation, this.tags, this.title, this.description,
-    this.dueDate, this.creator, this.group, this.subject, this.completed, this.permission});
+    this.dueDate, this.salt, this.creator, this.group, this.subject, this.completed, this.permission});
 
   int id;
   PojoAssignation assignation;
@@ -22,6 +22,7 @@ class PojoTask extends Pojo implements Comparable<PojoTask>{
   String title;
   String description;
   DateTime dueDate;
+  String salt;
   PojoCreator creator;
   PojoGroup group;
   PojoSubject subject;
@@ -42,7 +43,7 @@ class PojoTask extends Pojo implements Comparable<PojoTask>{
 
   PojoTask copy(){
     return PojoTask(id: this.id, assignation: this.assignation, tags: this.tags, title: this.title, description: this.description,
-       dueDate: this.dueDate, creator: this.creator, group: this.group, subject: this.subject, completed: this.completed, permission: this.permission);
+       dueDate: this.dueDate, salt: this.salt, creator: this.creator, group: this.group, subject: this.subject, completed: this.completed, permission: this.permission);
   }
 
 
@@ -51,7 +52,7 @@ class PojoTask extends Pojo implements Comparable<PojoTask>{
 //@JsonSerializable()
 class PojoTaskDetailed extends PojoTask{// implements Comparable<PojoTaskDetailed>{
   PojoTaskDetailed({this.id, this.assignation, this.tags, this.title, this.description,
-  this.creationDate, this.lastUpdated, this.dueDate, this.creator, this.group, this.subject, this.completed, this.permission});
+  this.creationDate, this.lastUpdated, this.dueDate, this.salt, this.creator, this.group, this.subject, this.completed, this.permission});
 
   int id;
   PojoAssignation assignation;
@@ -61,6 +62,7 @@ class PojoTaskDetailed extends PojoTask{// implements Comparable<PojoTaskDetaile
   DateTime creationDate; //: "2019-05-21T09:23:49+0000",
   DateTime lastUpdated; // "2019-05-21T09:23:49+0000",
   DateTime dueDate;
+  String salt;
   PojoCreator creator;
   PojoGroup group;
   PojoSubject subject;

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,6 +25,7 @@ import 'package:mobile/storage/cache_manager.dart';
 import 'package:mobile/widgets/comment_section_widget.dart';
 import 'package:mobile/widgets/error_proof_widget.dart';
 import 'package:mobile/widgets/flushbars.dart';
+import 'package:mobile/widgets/google_drive_image_widget.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 import 'package:mobile/widgets/image_viewer_widget.dart';
 import 'package:mobile/widgets/tag_chip.dart';
@@ -66,7 +68,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
     title: Text("what's my purpose?"),
   );
 
-  static final double padding = 8;
+  static final double padding = 4;
 
 
   bool completed = true;
@@ -267,7 +269,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                         children: [ConstrainedBox(
                           constraints: BoxConstraints(
                             minHeight: MediaQuery.of(context).size.height-appBar.preferredSize.height - padding*3,
-                            maxHeight: (MediaQuery.of(context).size.height-appBar.preferredSize.height - padding*3)*2,
+                          //  maxHeight: (MediaQuery.of(context).size.height-appBar.preferredSize.height - padding*3)*2,
 
                             minWidth: MediaQuery.of(context).size.width,
                             maxWidth: MediaQuery.of(context).size.width,
@@ -276,6 +278,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                           child: Padding(
                             padding: EdgeInsets.all(padding),
                             child: Card(
+                              margin: EdgeInsets.only(bottom: 20),
                               clipBehavior: Clip.antiAliasWithSaveLayer,
                               elevation: 100,
                               child:new Column(
@@ -526,47 +529,67 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                                                 imageBuilder: (uri){
                                                                   print("mivan?1");
 
-                                                                  if(uri.host == "drive.google.com"){
+                                                                  if(uri.host != "drive.google.com"){
                                                                     return Padding(
                                                                         padding: const EdgeInsets.only(top: 2, bottom: 2),
                                                                         child: ImageViewer.fromNetwork(
-                                                                          uri.toString(),
+                                                                          uri.toString(),key: Key(uri.toString()),
                                                                           heroTag: uri.toString(),
+
                                                                         )
                                                                     );
                                                                   }
-                                                                  List<String> urlList = uri.toString().split("~~");
+                                                                //  List<String> urlList = uri.toString().split("~~");
 
                                                                   print("mivan?2");
-                                                                  String url = urlList[0];
-                                                                  String key = urlList[1];
-                                                                  String iv = urlList[2];
 
                                                                   print("mivan?3");
+
+                                                                  return Padding(
+                                                                    padding: const EdgeInsets.only(bottom: 8.0),
+                                                                    child: GoogleDriveImage(
+                                                                      width: MediaQuery.of(context).size.width,
+                                                                      imageUrl: uri.toString(),
+                                                                      heroTag: uri,
+                                                                      salt: pojoTask.salt,
+                                                                      showThumbnail: true,
+
+                                                                    ),
+                                                                  );
+
                                                                   return ErrorProofWidget(
-                                                                    child: FutureBuilder(
-                                                                      future: img != null ? Future.value(false) : /*RequestSender().getResponse(new GetUploadedImage(
+                                                                    child: Padding(
+                                                                      padding: const EdgeInsets.only(bottom: 8.0),
+                                                                      child: FutureBuilder(
+                                                                        future: img != null ? Future.value(false) : /*RequestSender().getResponse(new GetUploadedImage(
                                                                 url: uri.toString()
                                                             )), */
-                                                                      http.get(url),
-                                                                      builder: (context, responseState){
-                                                                        if(img != null){
-                                                                          return ErrorProofWidget(child: img, onErrorWidget: Text("something wrong"),);
-                                                                        }
-                                                                        else if(responseState.connectionState == ConnectionState.done){
-                                                                          // HazizzResponse g = responseState.data;
-                                                                          // g.response.data
-                                                                          String cryptedBase64Img = responseState.data.body;
+                                                                        http.get(uri),
+                                                                        builder: (context, responseState){
+                                                                          if(img != null){
+                                                                            return ErrorProofWidget(child: img, onErrorWidget: Text("something wrong"),);
+                                                                          }
+                                                                          else if(responseState.connectionState == ConnectionState.done){
+                                                                            // HazizzResponse g = responseState.data;
+                                                                            // g.response.data
+                                                                            String cryptedBase64Img = responseState.data.body;
 
 //                                                                String cryptedBase64Img = responseState.data.response.data;
-                                                                          String base64Img = HazizzCrypt.decrypt(cryptedBase64Img, key, iv);
-                                                                          Uint8List byteImg = Base64Decoder().convert(base64Img);
-                                                                          img = Image.memory(byteImg);
-                                                                          return ErrorProofWidget(child: img, onErrorWidget: Text("something wrong"),);
-                                                                        }else{
-                                                                          return Center(child: CircularProgressIndicator(),);
-                                                                        }
-                                                                      },
+                                                                            String base64Img = HazizzCrypt.decrypt(cryptedBase64Img, pojoTask.salt);
+                                                                            Uint8List byteImg = Base64Decoder().convert(base64Img);
+
+                                                                            return ErrorProofWidget(
+                                                                              child: ImageViewer.fromBytes(
+                                                                                byteImg,
+                                                                                heroTag: uri,
+
+                                                                              )
+                                                                            );
+                                                                          }else{
+                                                                            return Center(child: CircularProgressIndicator(),);
+                                                                          }
+                                                                        },
+                                                                      ),
                                                                     ),
                                                                     onErrorWidget: Text("something wrong")
                                                                     ,
@@ -678,7 +701,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                                       child: Text(locText(context, key: "edit").toUpperCase(), style: theme(context).textTheme.button,),
                                                     ),
                                                     FlatButton(
-                                                      child: Text(locText(context, key: "delete").toUpperCase(), style: theme(context).textTheme.button),
+                                                      child: Text(locText(context, key: "delete").toUpperCase(), style: TextStyle(color: Colors.red),),
                                                       onPressed: () async {
                                                         if(await showDeleteTaskDialog(context, taskId: widget.taskId)){
                                                           HazizzLogger.printLog("showDeleteTaskDialog : success");

@@ -2,6 +2,7 @@ import 'package:googleapis/drive/v3.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/managers/google_drive_manager.dart';
 import 'package:mobile/managers/app_state_manager.dart';
+import 'package:mobile/widgets/google_drive_image_widget.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 
 import 'package:mobile/custom/hazizz_localizations.dart';
@@ -83,9 +84,10 @@ class _GoogleDriveSettingsPage extends State<GoogleDriveSettingsPage> {
         File file = fileList.files[i];
         gDriveImages.add(
           Container(
-            child: ImageViewer.fromNetwork(
-              file.webContentLink,
+            child: GoogleDriveImage(
+              imageUrl: file.webContentLink,
               heroTag: file.webContentLink,
+              salt: "",
               height: 100,
               onSmallDelete: () async {
                 bool deleted = await showSureToDeleteGDriveImageDialog(context, fileId: file.id);

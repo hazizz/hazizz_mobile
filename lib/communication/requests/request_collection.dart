@@ -505,7 +505,7 @@ class UpdateMyDisplayName extends HazizzRequest {
 }
 
 class UploadImage extends Request {
-  UploadImage({ResponseHandler rh, @required EncryptedImageData imageData, @required String key, @required String iv}) : super(rh) {
+  UploadImage({ResponseHandler rh, @required HazizzImageData imageData, @required String key, @required String iv}) : super(rh) {
    // package.Image im = package.decodeImage(image.readAsBytesSync());
     authTokenHeader = false;
     contentTypeHeader = false;
@@ -857,7 +857,7 @@ class GetSubjects extends HazizzRequest {
 class CreateTask extends HazizzRequest {
   CreateTask({ResponseHandler rh,  int groupId, int subjectId,
     @required  List<String> b_tags, @required String b_description,
-    @required DateTime b_deadline }) : super(rh) {
+    @required DateTime b_deadline, String b_salt }) : super(rh) {
     httpMethod = HttpMethod.POST;
     if(subjectId != null && subjectId != 0){
       PATH = "tasks/subjects/${subjectId}";
@@ -872,6 +872,9 @@ class CreateTask extends HazizzRequest {
     body["tags"] = b_tags;
     body["description"] = b_description == null ? "" : b_description;
     body["dueDate"] = hazizzRequestDateFormat(b_deadline);
+    if(b_salt != null && b_salt != ""){
+      body["salt"] = b_salt;
+    }
   }
   @override
   dynamic convertData(Response response) {
@@ -883,7 +886,7 @@ class CreateTask extends HazizzRequest {
 class EditTask extends HazizzRequest {
   EditTask({ResponseHandler rh, @required int taskId,
     @required List<String> b_tags,
-    @required String b_description,@required  DateTime b_deadline }) : super(rh) {
+    @required String b_description,@required  DateTime b_deadline, String b_salt}) : super(rh) {
     httpMethod = HttpMethod.PATCH;
     PATH = "tasks/${taskId}";
 
@@ -893,7 +896,9 @@ class EditTask extends HazizzRequest {
     body["tags"] = b_tags;
     body["description"] = b_description;
     body["dueDate"] = hazizzRequestDateFormat(b_deadline);
-
+    if(b_salt != null && b_salt != ""){
+      body["salt"] = b_salt;
+    }
   }
   @override
   dynamic convertData(Response response) {

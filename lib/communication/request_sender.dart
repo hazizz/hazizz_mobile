@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:dio/dio.dart';
 import 'package:dio_flutter_transformer/dio_flutter_transformer.dart';
+import 'package:flutter/widgets.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/managers/app_state_manager.dart';
@@ -13,8 +14,8 @@ import 'connection.dart';
 import 'custom_response_errors.dart';
 import 'htttp_methods.dart';
 
-Future<HazizzResponse> getResponse(Request request)async{
-  return await RequestSender().getResponse(request);
+Future<HazizzResponse> getResponse(Request request, {bool useSecondaryOptions = false})async{
+  return await RequestSender().getResponse(request, useSecondaryOptions: useSecondaryOptions);
 }
 
 class RequestSender{
@@ -38,7 +39,7 @@ class RequestSender{
   }
 
   addInterceptor(){
-    dio.interceptors.add(InterceptorsWrapper(
+    defaultDio.interceptors.add(InterceptorsWrapper(
         onRequest:(RequestOptions options) async{
           HazizzLogger.printLog("In onRequest function");
           if(DateTime.now().millisecondsSinceEpoch - lastSeconds >= 1000){
@@ -71,23 +72,33 @@ class RequestSender{
     ));
   }
 
-  final Options options = new Options(
-    connectTimeout: 8000,
-    sendTimeout: 8000,
-    receiveTimeout: 8000,
-    responseType: ResponseType.plain,
-    receiveDataWhenStatusError: true,
-    followRedirects: true
+  final Options defaultOptions = new Options(
+      connectTimeout: 8000,
+      sendTimeout: 8000,
+      receiveTimeout: 8000,
+      responseType: ResponseType.plain,
+      receiveDataWhenStatusError: true,
+      followRedirects: true
   );
 
-  Dio dio = new Dio();
+  final Dio defaultDio = new Dio();
+
+  final Options secondaryOptions = new Options(
+      connectTimeout: 12000,
+      sendTimeout: 12000,
+      receiveTimeout: 12000,
+      responseType: ResponseType.plain,
+      receiveDataWhenStatusError: true,
+      followRedirects: true
+  );
+
+  final Dio secondaryDio = new Dio();
 
 
   void initialize(){
-    dio = new Dio();
-    dio.transformer = new FlutterTransformer();
+    defaultDio.transformer = new FlutterTransformer();
     addInterceptor();
-    HazizzLogger.hprint("dio options: ${options.toString()}");
+    HazizzLogger.hprint("dio options: ${defaultOptions.toString()}");
   }
 
   Future<void> waitCooldown() async{
@@ -97,13 +108,13 @@ class RequestSender{
   }
   void lock(){
  //   refreshRequestQueue.clear();
-    dio.lock();
+    defaultDio.lock();
     _isLocked = true;
     HazizzLogger.printLog("dio interceptors: locked");
   }
 
   Future unlock() async {
-    dio.unlock();
+    defaultDio.unlock();
     _isLocked = false;
     HazizzLogger.printLog("dio interceptors: unlocked");
   }
@@ -115,7 +126,7 @@ class RequestSender{
     }
     refreshRequestQueue.clear();
 
-    dio.unlock();
+    defaultDio.unlock();
     _isLocked = false;
     HazizzLogger.printLog("(unlockTokenRefreshRequests) dio interceptors: unlocked");
   }
@@ -127,9 +138,9 @@ class RequestSender{
     HazizzLogger.printLog("about to start sending AUTH request: ${authRequest.toString()}");
     HazizzResponse hazizzResponse;
     try{
-      options.headers = await authRequest.buildHeader();
+      defaultOptions.headers = await authRequest.buildHeader();
       Dio authDio = Dio();
-      Response response = await authDio.post(authRequest.url, queryParameters: authRequest.query, data: authRequest.body, options: options);
+      Response response = await authDio.post(authRequest.url, queryParameters: authRequest.query, data: authRequest.body, options: defaultOptions);
       hazizzResponse = HazizzResponse.onSuccess(response: response, request: authRequest);
 
       HazizzLogger.printLog("hey: sent token request");
@@ -185,7 +196,7 @@ class RequestSender{
   }
 
   Future clearQueue() async {
-    await dio.clear();
+    await defaultDio.clear();
   }
 
   clearAllRequests() async {
@@ -193,7 +204,7 @@ class RequestSender{
     await clearQueue();
   }
 
-  Future<HazizzResponse> getResponse(Request request) async{
+  Future<HazizzResponse> getResponse(Request request, {bool useSecondaryOptions = false}) async{
 
     final DateTime lastUpdate = await TokenManager.getLastTokenUpdateTime();
     if(lastUpdate == null || lastUpdate.difference(DateTime.now()).inHours >= 24){
@@ -215,22 +226,31 @@ class RequestSender{
         HazizzLogger.printLog("request query: ${request.query}");
         HazizzLogger.printLog("request url: ${request.url}");
 
-        if(request.httpMethod == HttpMethod.GET) {
-          options.headers = await request.buildHeader();
-          response = await dio.get(request.url, queryParameters: request.query, options: options);
+        Dio currentDio;
+        Options currentOption;
+        if(!useSecondaryOptions){
+          currentDio = defaultDio;
+          currentOption = defaultOptions;
+        }else{
+          currentDio = secondaryDio;
+          currentOption = secondaryOptions;
+        }
 
+        if(request.httpMethod == HttpMethod.GET) {
+          currentOption.headers = await request.buildHeader();
+          response = await currentDio.get(request.url, queryParameters: request.query, options: currentOption);
         }else if(request.httpMethod == HttpMethod.POST) {
-          options.headers = await request.buildHeader();
-          response = await dio.post(request.url, queryParameters: request.query, data: request.body, options: options);
+          currentOption.headers = await request.buildHeader();
+          response = await currentDio.post(request.url, queryParameters: request.query, data: request.body, options: currentOption);
         }else if(request.httpMethod == HttpMethod.DELETE) {
-          options.headers = await request.buildHeader();
-          response = await dio.delete(request.url, queryParameters: request.query, data: request.body, options: options);
+          currentOption.headers = await request.buildHeader();
+          response = await currentDio.delete(request.url, queryParameters: request.query, data: request.body, options: currentOption);
         }else if(request.httpMethod == HttpMethod.PATCH) {
-          options.headers = await request.buildHeader();
-          response = await dio.patch(request.url, queryParameters: request.query, data: request.body, options: options);
+          currentOption.headers = await request.buildHeader();
+          response = await currentDio.patch(request.url, queryParameters: request.query, data: request.body, options: currentOption);
         }else if(request.httpMethod == HttpMethod.PUT) {
-          options.headers = await request.buildHeader();
-          response = await dio.put(request.url, queryParameters: request.query, data: request.body, options: options);
+          currentOption.headers = await request.buildHeader();
+          response = await currentDio.put(request.url, queryParameters: request.query, data: request.body, options: currentOption);
         }
 
         HazizzLogger.printLog("request was sent successfully: ${request.toString()}");

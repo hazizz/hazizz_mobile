@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:io' as io;
 import 'package:flutter/widgets.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/drive/v3.dart';
 import 'package:mobile/custom/image_operations.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../google_http_client.dart';
 
@@ -57,16 +59,18 @@ class GoogleDriveManager {
 
   Future<FileList> getAllHazizzImages() async {
     File folder = await getHazizzFolder();
-    FileList list = await driveApi.files.list(q: "'${folder.id}' in parents", $fields: "files/webContentLink, files/id");
+    FileList list = await driveApi.files.list(q: "'${folder.id}' in parents and mimeType = 'text/plain'", $fields: "files/webContentLink, files/id");
     return list;
   }
 
   Future<void> deleteAllHazizzImages() async {
     File folder = await getHazizzFolder();
-    FileList list = await driveApi.files.list(q: "'${folder.id}' in parents", $fields: "files/id");
+    FileList list = await driveApi.files.list(
+      q: "'${folder.id}' in parents and mimeType = 'text/plain'",
+      $fields: "files/id"
+    );
 
     for(File f in list.files){
-
       await driveApi.files.delete(f.id);
     }
   }
@@ -115,7 +119,7 @@ class GoogleDriveManager {
     return folder;
   }
 
-  Future<Uri> uploadImageToDrive(EncryptedImageData d) async {
+  Future<File> uploadImageToDrive(HazizzImageData d) async {
 
     print("pesti pip <3: 0");
     String folderId = (await getHazizzFolder()).id;
@@ -126,29 +130,31 @@ class GoogleDriveManager {
       ..role = "reader"
     ;
 
+
+    print("hason1: ${d.encryptedData}");
+
+    final directory = await getTemporaryDirectory();
+    final tempFile = io.File('${directory.path}/img.txt');
+    tempFile.writeAsStringSync(d.encryptedData);
+
     File drivef =  File()
-      ..name = "${DateTime.now()}.jpg"
+      ..name = "${DateTime.now()}.hazizzpic"
       ..parents = [folderId]
+      ..contentHints =
+        (FileContentHints()..thumbnail =
+          (FileContentHintsThumbnail()
+            ..image = await d.getBase64ThumbnailImage()
+            ..mimeType = "image/jpg"
+          )
+        )
     ;
 
-    double q = 100;
 
-    final int imageSizeInBytes = d.originalImage.lengthSync();
-
-    if(imageSizeInBytes > 1000000){
-      q = 1000000 / imageSizeInBytes * 100;
-    }
-
-    io.File image = await FlutterImageCompress.compressAndGetFile(
-      d.originalImage.absolute.path,
-      d.originalImage.absolute.path,
-      minWidth: 2300,
-      minHeight: 1500,
-      quality: q.floor(),
-    );
+    File driveFile = await driveApi.files.create(drivef, uploadMedia: Media(tempFile.openRead(), tempFile.lengthSync()), $fields: "webContentLink, thumbnailLink, id");
 
 
-    File driveFile = await driveApi.files.create(drivef, uploadMedia: Media(image.openRead(), image.lengthSync()));
+
+    tempFile.delete();
 
     permission.allowFileDiscovery = true;
 
@@ -156,18 +162,18 @@ class GoogleDriveManager {
 
     print("brughh001: ${a}, ${a.type}, ${a.role}");
 
-    driveFile = await driveApi.files.get(driveFile.id, $fields: "webContentLink");//"files/webViewLink");
+  //  driveFile = await driveApi.files.get(driveFile.id, $fields: "webContentLink, thumbnailLink, id");//"files/webViewLink");
 
 
     print("brughh000: ${driveFile.permissions.toString()}");
 
-    print("brughh0: ${driveFile.driveId}");
+    print("brughh0: ${driveFile.id}");
 
     print("brughh1: ${driveFile.name}");
     print("brughh2: ${driveFile.webViewLink}");
     print("brughh3: ${driveFile.thumbnailLink}");
     print("brughh4: ${driveFile.webContentLink}");
 
-    return Uri.parse(driveFile.webContentLink);
+    return driveFile;
   }
 }

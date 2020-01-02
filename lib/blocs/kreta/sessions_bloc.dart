@@ -22,7 +22,6 @@ class SelectedSessionInactiveEvent extends SessionsEvent {
 
 //region Sessions bloc
 class SessionsBloc extends Bloc<HEvent, HState> {
-
   static final SessionsBloc _singleton = new SessionsBloc._internal();
   factory SessionsBloc() {
     return _singleton;
@@ -56,7 +55,6 @@ class SessionsBloc extends Bloc<HEvent, HState> {
   @override
   Stream<HState> mapEventToState(HEvent event) async* {
     if (event is FetchData) {
-
       // TODO check currentSession is here
       yield ResponseWaiting();
       sessions = getActiveSessions(await KretaSessionManager.getSessions());
@@ -66,7 +64,7 @@ class SessionsBloc extends Bloc<HEvent, HState> {
       activeSessions = getActiveSessions(sessions);
       yield ResponseDataLoadedFromCache(data: sessions);
 
-      HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetSessions());
+      HazizzResponse hazizzResponse = await getResponse(new KretaGetSessions());
       print("KretaGetSessions request was sent!");
       if(hazizzResponse.isSuccessful){
         sessions = hazizzResponse.convertedData;
@@ -75,7 +73,7 @@ class SessionsBloc extends Bloc<HEvent, HState> {
         activeSessions = getActiveSessions(sessions);
         yield ResponseDataLoaded(data: sessions);
       }else{
-        HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetSessions());
+        HazizzResponse hazizzResponse = await getResponse(new KretaGetSessions());
         print("KretaGetSessions request was sent2!");
         if(hazizzResponse.isSuccessful){
           sessions = hazizzResponse.convertedData;
@@ -87,7 +85,6 @@ class SessionsBloc extends Bloc<HEvent, HState> {
           yield ResponseError(errorResponse: hazizzResponse);
         }
       }
-
     }
   }
 }

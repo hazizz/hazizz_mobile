@@ -270,6 +270,12 @@
   "starting_page"
     : "Kezdő oldal",
 
+  "auto_load_image"
+  : "Automatikus kép betöltés a feladatokban",
+
+  "auto_download_image"
+  : "Automatikus kép letöltés a feladatokban",
+
     "language"
     : "Nyelv",
 
@@ -902,6 +908,8 @@
     "report_bug"
     : "Hiba jelentése",
 
+  "havent_saved_changes"
+  : "A változtatások nincsenek elmentve",
 
     "info_serverUnexpectedResponse"
     : "Nem megszokott válasz a szervertől",

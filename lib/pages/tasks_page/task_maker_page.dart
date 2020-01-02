@@ -20,6 +20,8 @@ import 'package:mobile/defaults/pojo_group_empty.dart';
 import 'package:mobile/defaults/pojo_subject_empty.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/managers/app_state_manager.dart';
+import 'package:mobile/services/hazizz_crypt.dart';
+import 'package:mobile/widgets/google_drive_image_widget.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 import 'package:mobile/widgets/image_viewer_widget.dart';
 import 'package:mobile/widgets/tag_chip.dart';
@@ -40,9 +42,13 @@ class TaskMakerPage extends StatefulWidget {
 
   String title;
 
+  String cryptKey = HazizzCrypt.generateKey();
+
   TaskMakerPage.edit({Key key, this.taskToEdit}) : super(key: key){
     taskId = taskToEdit.id;
     mode = TaskMakerMode.edit;
+
+    cryptKey = taskToEdit.salt;
   }
 
   TaskMakerPage.create({Key key, this.groupId}) : super(key: key){
@@ -55,7 +61,10 @@ class TaskMakerPage extends StatefulWidget {
 
 class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
 
-  List<EncryptedImageData> imageDatas = List();
+  List<HazizzImageData> imageDatas = List();
+
+  List<HazizzImageData> imageDatasToRemove = List();
+
 
   final FocusNode _descriptionFocusNode = FocusNode();
 
@@ -73,11 +82,28 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
 
   final ScrollController scrollController = ScrollController();
 
+
+  int descriptionMaxLength = 500;
+
   AppBar getAppBar(BuildContext context){
     return AppBar(
       leading: HazizzBackButton(),
         title: Text(widget.mode == TaskMakerMode.create ? locText(context, key: "createTask") : locText(context, key: "editTask") )
     );
+  }
+
+  void deleteGDriveImages(){
+    print("deleting google drives images");
+    for(Object imageData in imageDatas){
+      print("deleting google drives images loop");
+      if(imageData is HazizzImageData){
+        if(imageData.driveFileId != null){
+          print("deleting google drives images loop2");
+
+          GoogleDriveManager().deleteHazizzImage(imageData.driveFileId);
+        }
+      }
+    }
   }
 
   @override
@@ -88,6 +114,18 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
 
     }else if(widget.mode == TaskMakerMode.edit){
       blocs = new TaskEditBloc(taskToEdit: widget.taskToEdit);
+
+      List<String> splited = widget.taskToEdit.description.split("\n![img_");
+
+      for(int i = 1; i < splited.length; i++){
+        if(true){
+          final String url = splited[i].substring(4, splited[i].length-1);
+
+          print("url is: $url");
+          imageDatas.add(HazizzImageData.fromGoogleDrive(url, widget.taskToEdit.salt));
+        }
+      }
+
 
     }else{
       HazizzLogger.printLog("this should not be visible: 542311z8");
@@ -388,7 +426,7 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
                 alignLabelWithHint: true,
                 filled: true,
               ),
-              maxLength: 500,
+              maxLength: descriptionMaxLength - 75 * imageDatas.length,
               maxLines: 8,
               minLines: 6,
               expands: false,
@@ -399,240 +437,270 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
           }
       );
 
-    return Center(
+    return WillPopScope(
+      onWillPop: (){
+        deleteGDriveImages();
+       // Navigator.pop(context);
+        return Future.value(true);
+      },
       child: BlocListener(
-        bloc: blocs,
-        listener: (context, state) {
-          if (state is TaskMakerSuccessfulState) {
-            Navigator.pop(context, state.task);
-          }
-        },
-        child: Scaffold(
-          appBar: appBar,
-          body:SingleChildScrollView(
-            child:
-              ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: MediaQuery.of(context).size.height-appBar.preferredSize.height - padding*3,
-                  maxHeight: (MediaQuery.of(context).size.height-appBar.preferredSize.height - padding*3)*2,
+          bloc: blocs,
+          listener: (context, state) {
+            if (state is TaskMakerSuccessfulState) {
+              Navigator.pop(context, state.task);
+            }
+          },
+          child: Scaffold(
+            appBar: appBar,
+            body:SingleChildScrollView(
+              child:
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: MediaQuery.of(context).size.height-appBar.preferredSize.height - padding*3,
+                    maxHeight: (MediaQuery.of(context).size.height-appBar.preferredSize.height - padding*3)*2,
 
-                  minWidth: MediaQuery.of(context).size.width,
-                  maxWidth: MediaQuery.of(context).size.width,
+                    minWidth: MediaQuery.of(context).size.width,
+                    maxWidth: MediaQuery.of(context).size.width,
 
-                ),
-              child: Padding(
-                padding: EdgeInsets.all(padding),
-                child: Card(
-                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                  elevation: 100,
-                  child: BlocBuilder(
-                    bloc: blocs.taskTagBloc,
-                    builder: (BuildContext context, TaskTagState state) {
-                      headerColor = HazizzTheme.blue;
-                      if(state is TaskTagFineState){
-                        if(state.tags.length == 1 && state.tags[0] != null){
-                          headerColor = state.tags[0].getColor();
+                  ),
+                child: Padding(
+                  padding: EdgeInsets.all(padding),
+                  child: Card(
+                    margin: EdgeInsets.all(0),
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    elevation: 100,
+                    child: BlocBuilder(
+                      bloc: blocs.taskTagBloc,
+                      builder: (BuildContext context, TaskTagState state) {
+                        headerColor = HazizzTheme.blue;
+                        if(state is TaskTagFineState){
+                          if(state.tags.length == 1 && state.tags[0] != null){
+                            headerColor = state.tags[0].getColor();
+                          }
+
                         }
+                        return new Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            AnimatedContainer(
+                              duration: Duration(milliseconds: 500),
+                              color: headerColor,
+                              child:
+                              Padding(
+                                padding: EdgeInsets.only(left: 10, top: 10,
+                                    right: 10,
+                                    bottom: 16),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Padding(
+                                        padding: EdgeInsets.only(
+                                            bottom: 10),
+                                        child: taskTypePicker
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(bottom: 4),
+                                      child: groupPicker,
+                                    ),
 
-                      }
-                      return new Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          AnimatedContainer(
-                            duration: Duration(milliseconds: 500),
-                            color: headerColor,
-                            child:
-                            Padding(
-                              padding: EdgeInsets.only(left: 10, top: 10,
-                                  right: 10,
-                                  bottom: 16),
+                                    Padding(
+                                        padding: EdgeInsets.only(
+                                            bottom: 10),
+                                        child: subjectPicker
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          bottom: 4),
+                                      child: deadlinePicker,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Center(
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Padding(
-                                      padding: EdgeInsets.only(
-                                          bottom: 10),
-                                      child: taskTypePicker
+                                    padding: const EdgeInsets.only(left: 12, right: 12, top: 10),
+                                    child: descriptionTextForm
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.only(bottom: 4),
-                                    child: groupPicker,
-                                  ),
+                                    padding: const EdgeInsets.only(left: 6, right: 10),
+                                    child: Card(
+                                      color: Colors.grey,
+                                      child: Padding(
+                                        padding: EdgeInsets.all(4),
+                                        child: ConstrainedBox(
+                                          constraints: new BoxConstraints(
+                                            minHeight: 0,
+                                            maxHeight: 100,
+                                          ),
+                                          child: SingleChildScrollView(
+                                            controller: scrollController,
 
-                                  Padding(
-                                      padding: EdgeInsets.only(
-                                          bottom: 10),
-                                      child: subjectPicker
+                                            scrollDirection: Axis.horizontal,
+                                            child: Row(
+                                              children: <Widget>[
+                                                Container(
+                                                  child: ListView.builder(
+                                                      shrinkWrap: true,
+                                                      scrollDirection: Axis.horizontal,
+                                                      itemCount: imageDatas.length,
+                                                      itemBuilder: (context, index){
+                                                        return Padding(
+                                                          padding: EdgeInsets.only(left: 6, ),
+                                                          child: Container(
+                                                            height: 100,
+                                                            child: Stack(
+                                                              children: <Widget>[
+                                                                Builder(
+                                                                  builder: (context){
+                                                                      Function f = (){};
+                                                                      if(imageDatas[index].imageType == ImageType.GOOGLE_DRIVE){
+                                                                        f = (){
+                                                                          imageDatasToRemove.add(imageDatas[index]);
+                                                                        };
+                                                                      }
+                                                                      return ImageViewer.fromHazizzImageData(
+                                                                        imageDatas[index],
+                                                                        height: 100,
+                                                                        onSmallDelete: (){
+                                                                          f();
+                                                                          setState(() {
+                                                                            imageDatas.removeAt(index);
+                                                                          });
+
+                                                                        },
+                                                                      );
+                                                                  //  }
+                                                                    return null;
+
+                                                                  },
+                                                                ),
+                                                               /* Positioned(
+                                                                  top: 0, left: 0,
+                                                                  child: Transform.translate(
+                                                                    offset: Offset(-1, -1),
+                                                                    child: GestureDetector(
+                                                                      child: Icon(FontAwesomeIcons.solidTimesCircle, size: 20, color: Colors.red,),
+                                                                      onTap: (){
+
+                                                                      },
+                                                                    )
+                                                                  )
+                                                                )
+                                                                */
+                                                              ],
+                                                            ),
+                                                          )
+                                                        );
+                                                      }
+                                                  ),
+                                                ),
+                                                Builder(
+                                                  builder: (context){
+                                                    if(imageDatas.length >= 3) return Container();
+                                                    return Padding(
+                                                      padding: EdgeInsets.only(left: 4),
+                                                      child: IconButton(
+                                                        icon: Icon(imageDatas.isEmpty ? FontAwesomeIcons.image : FontAwesomeIcons.plus),
+                                                        onPressed: () async {
+                                                          print("miva? 1");
+                                                          if(!await AppState.isAllowedGDrive()){
+                                                            print("miva? 2");
+                                                           if(await showGrantAccessToGDRiveDialog(context)){
+
+                                                           }else{
+                                                             return;
+                                                           }
+                                                          }
+                                                          HazizzImageData imageData = await ImageOpeations.pick();
+                                                          if(imageData == null){
+                                                            return;
+                                                          }
+                                                          setState(() {
+                                                            imageDatas.add(imageData);
+                                                          });
+                                                          await GoogleDriveManager().initialize();
+
+                                                          // upload to gdrive
+
+
+
+                                                          imageData.compressEncryptAndUpload(widget.cryptKey);
+
+                                                          Future.delayed(Duration(milliseconds: 400), (){
+                                                            scrollController.animateTo(scrollController.position.maxScrollExtent, duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+                                                          });
+
+
+                                                        },
+                                                      ),
+                                                    );
+                                                  },
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    ),
                                   ),
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        bottom: 4),
-                                    child: deadlinePicker,
+                                  Center(
+                                      child:
+                                      Padding(
+                                        padding: const EdgeInsets.only(bottom: 8.0),
+                                        child: BlocBuilder(
+                                            bloc: blocs,
+                                            builder: (BuildContext context, TaskMakerState state) {
+                                              if(state is TaskMakerWaitingState) {
+                                                return RaisedButton(
+                                                  onPressed: null,
+                                                  child: Transform.scale(
+                                                    scale: 0.8,
+                                                    child: FittedBox(
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.all(1),
+                                                        child: CircularProgressIndicator(),
+                                                      ),
+                                                      fit: BoxFit.scaleDown,
+                                                    ),
+                                                  ),
+                                                );
+                                              }else{
+                                                return RaisedButton(
+                                                    child: Text((widget.mode == TaskMakerMode.create ? locText(context, key: "create") : locText(context, key: "edit")).toUpperCase()),
+                                                    onPressed: () async {
+                                                      if(!(state is TaskMakerWaitingState)) {
+                                                        blocs.dispatch(
+                                                          TaskMakerSendEvent(imageDatas: imageDatas, salt: widget.cryptKey)
+                                                        );
+                                                      }
+                                                    }
+                                                );
+                                              }
+                                            }
+                                        ),
+                                      )
                                   ),
                                 ],
                               ),
                             ),
-                          ),
-                          Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 12, right: 12, top: 10),
-                                  child: descriptionTextForm
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 6, right: 10),
-                                  child: Card(
-                                    color: Colors.grey,
-                                    child: Padding(
-                                      padding: EdgeInsets.all(4),
-                                      child: ConstrainedBox(
-                                        constraints: new BoxConstraints(
-                                          minHeight: 0,
-                                          maxHeight: 100,
-                                        ),
-                                        child: SingleChildScrollView(
-                                          controller: scrollController,
-
-                                          scrollDirection: Axis.horizontal,
-                                          child: Row(
-                                            children: <Widget>[
-                                              Container(
-                                                child: ListView.builder(
-                                                    shrinkWrap: true,
-                                                    scrollDirection: Axis.horizontal,
-                                                    itemCount: imageDatas.length,
-                                                    itemBuilder: (context, index){
-                                                      return Padding(
-                                                        padding: EdgeInsets.only(left: 6, ),
-                                                        child: Container(
-                                                          height: 100,
-                                                          child: Stack(
-                                                            children: <Widget>[
-                                                              Container(
-                                                                height: 100,
-                                                                child: ImageViewer.fromFile(
-                                                                    imageDatas[index].originalImage,
-                                                                    heroTag: imageDatas[index].originalImage.path
-                                                                ),
-                                                              ),
-                                                              Positioned(
-                                                                top: 0, left: 0,
-                                                                child: Transform.translate(
-                                                                  offset: Offset(-1, -1),
-                                                                  child: GestureDetector(
-                                                                    child: Icon(FontAwesomeIcons.solidTimesCircle, size: 20, color: Colors.red,),
-                                                                    onTap: (){
-                                                                      setState(() {
-                                                                        imageDatas.removeAt(index);
-                                                                      });
-                                                                    },
-                                                                  )
-                                                                )
-                                                              )
-                                                            ],
-                                                          ),
-                                                        )
-                                                      );
-                                                    }
-                                                ),
-                                              ),
-                                              Builder(
-                                                builder: (context){
-                                                  if(imageDatas.length >= 3) return Container();
-                                                  return Padding(
-                                                    padding: EdgeInsets.only(left: 4),
-                                                    child: IconButton(
-                                                      icon: Icon(imageDatas.isEmpty ? FontAwesomeIcons.image : FontAwesomeIcons.plus),
-                                                      onPressed: () async {
-                                                        print("miva? 1");
-                                                        if(!await AppState.isAllowedGDrive()){
-                                                          print("miva? 2");
-                                                         if(await showGrantAccessToGDRiveDialog(context)){
-                                                           await GoogleDriveManager().initialize();
-                                                         }else{
-                                                           return;
-                                                         }
-                                                        }
-                                                        EncryptedImageData imageData = await ImageOpeations.pickAndEncrypt();
-                                                        if(imageData == null){
-                                                          return;
-                                                        }
-                                                        setState(() {
-                                                          imageDatas.add(imageData);
-                                                        });
-                                                        Future.delayed(Duration(milliseconds: 400), (){
-                                                          scrollController.animateTo(scrollController.position.maxScrollExtent, duration: Duration(milliseconds: 300), curve: Curves.easeOut);
-
-                                                        });
-
-
-                                                      },
-                                                    ),
-                                                  );
-                                                },
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  ),
-                                ),
-                                Center(
-                                    child:
-                                    Padding(
-                                      padding: const EdgeInsets.only(bottom: 8.0),
-                                      child: BlocBuilder(
-                                          bloc: blocs,
-                                          builder: (BuildContext context, TaskMakerState state) {
-                                            if(state is TaskMakerWaitingState) {
-                                              return RaisedButton(
-                                                onPressed: null,
-                                                child: Transform.scale(
-                                                  scale: 0.8,
-                                                  child: FittedBox(
-                                                    child: Padding(
-                                                      padding: const EdgeInsets.all(1),
-                                                      child: CircularProgressIndicator(),
-                                                    ),
-                                                    fit: BoxFit.scaleDown,
-                                                  ),
-                                                ),
-                                              );
-                                            }else{
-                                              return RaisedButton(
-                                                  child: Text((widget.mode == TaskMakerMode.create ? locText(context, key: "create") : locText(context, key: "edit")).toUpperCase()),
-                                                  onPressed: () async {
-                                                    if(!(state is TaskMakerWaitingState)) {
-                                                      blocs.dispatch(
-                                                          TaskMakerSendEvent(imageDatas));
-                                                    }
-                                                  }
-                                              );
-                                            }
-                                          }
-                                      ),
-                                    )
-                                ),
-                              ],
-                            ),
-                          ),
-                        ]
-                      );
-                    }
+                          ]
+                        );
+                      }
+                    ),
                   ),
-                ),
-              )
+                )
+              ),
             ),
           ),
         ),
-      ),
     );
   }
 

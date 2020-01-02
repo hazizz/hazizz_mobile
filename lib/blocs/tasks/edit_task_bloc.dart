@@ -10,9 +10,11 @@ import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:meta/meta.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
+import 'package:mobile/custom/image_operations.dart';
 import 'package:mobile/defaults/pojo_subject_empty.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/communication/hazizz_response.dart';
+import 'package:mobile/widgets/image_viewer_widget.dart';
 
 //region EditTask bloc parts
 //region EditTask events
@@ -82,8 +84,8 @@ class TaskEditBloc extends TaskMakerBloc {
 
       subjectItemPickerBloc.dispatch(SetSubjectEvent(item: taskToEdit.subject != null ? taskToEdit.subject : PojoSubject(0, "", false, null, false)));
 
-
-    descriptionBloc.dispatch(TextFormSetEvent(text: taskToEdit.description));
+    List<String> splited = taskToEdit.description.split("\n![img_");
+    descriptionBloc.dispatch(TextFormSetEvent(text: splited[0]));
   }
 
   @override
@@ -131,23 +133,40 @@ class TaskEditBloc extends TaskMakerBloc {
         }
         HazizzLogger.printLog("log: not missing info");
 
+        String imageUrlsDesc = "";
+
+        if(event.imageDatas != null && event.imageDatas.isNotEmpty){
+          print("counter0: ${event.imageDatas.length}");
+          int i = 0;
+
+          List<Future> futures = [];
+          for(HazizzImageData d in event.imageDatas){
+            if(d.imageType == ImageType.FILE){
+              futures.add(d.futureUploadedToDrive);
+            }
+          }
+          await Future.wait(futures);
+
+          for(HazizzImageData d in event.imageDatas){
+            if(d.imageType == ImageType.FILE){
+              i++;
+              print("counter1: ${d.url}");
+
+              imageUrlsDesc += "\n![img_$i](${d.url.split("&")[0]})";
+            }
+          }
+        }
+
         HazizzResponse hazizzResponse;
 
-        if(subjectId != null) {
-          hazizzResponse = await RequestSender().getResponse(new EditTask(
-              taskId: taskToEdit.id,
-              b_tags: tags,
-              b_description: description,
-              b_deadline: deadline
-          ));
-        }else {
-          hazizzResponse = await RequestSender().getResponse(new EditTask(
-              taskId: taskToEdit.id,
-              b_tags: tags,
-              b_description: description,
-              b_deadline: deadline
-          ));
-        }
+        hazizzResponse = await getResponse(new EditTask(
+          taskId: taskToEdit.id,
+          b_tags: tags,
+          b_description: description + imageUrlsDesc,
+          b_deadline: deadline,
+          b_salt: event.salt
+        ));
+
 
         if(hazizzResponse.isSuccessful){
           yield TaskMakerSuccessfulState(hazizzResponse.convertedData);
