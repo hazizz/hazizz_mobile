@@ -327,13 +327,13 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
                                                 children: <Widget>[
                                                   Builder(
                                                     builder: (context){
-                                                      if(MainTabBlocs().schedulesBloc.currentCurrentWeekNumber == MainTabBlocs().schedulesBloc.currentWeekNumber){
+                                                      if(MainTabBlocs().schedulesBloc.selectedWeekIsCurrent){
                                                         return Text(locText(context, key: "current_week"), style: TextStyle(fontSize: 16),);
-                                                      }else if(MainTabBlocs().schedulesBloc.currentCurrentWeekNumber-1 == MainTabBlocs().schedulesBloc.currentWeekNumber){
+                                                      }else if(MainTabBlocs().schedulesBloc.selectedWeekIsPrevious){
                                                         return Text(locText(context, key: "previous_week"), style: TextStyle(fontSize: 16));
                                                       }
 
-                                                      else if(MainTabBlocs().schedulesBloc.currentCurrentWeekNumber+1 == MainTabBlocs().schedulesBloc.currentWeekNumber){
+                                                      else if(MainTabBlocs().schedulesBloc.selectedWeekIsNext){
                                                         return Text(locText(context, key: "next_week"), style: TextStyle(fontSize: 16));
                                                       }
                                                       return Container();
@@ -348,7 +348,8 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
                                               IconButton(
                                                 icon: Icon(FontAwesomeIcons.chevronRight),
                                                 onPressed: (){
-                                                  MainTabBlocs().schedulesBloc.nextWeek();                                      },
+                                                  MainTabBlocs().schedulesBloc.nextWeek();
+                                                },
                                               ),
                                             ],
                                           );

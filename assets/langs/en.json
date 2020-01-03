@@ -747,6 +747,9 @@
   "no_images_gdrive"
   : "No Hazizz images in your drive",
 
+  "gdrive_image_deleted"
+  : "This image has been deleted from Google Drive",
+
   "delete_successful"
   : "{} successfully deleted",
 

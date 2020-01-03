@@ -10,6 +10,7 @@ import 'package:mobile/blocs/tasks/task_maker_blocs.dart';
 import 'package:mobile/blocs/tasks/tasks_bloc.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/pojos/PojoTag.dart';
+import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/communication/request_sender.dart';
@@ -253,6 +254,12 @@ class TaskCreateBloc extends TaskMakerBloc {
 
         print("majas3: broo");
         if(hazizzResponse.isSuccessful){
+          if(event.imageDatas != null && event.imageDatas.isNotEmpty){
+            int taskId = (hazizzResponse.convertedData as PojoTask).id;
+            event.imageDatas.forEach((HazizzImageData hazizzImageData){
+              hazizzImageData.renameFile(taskId);
+            });
+          }
           HazizzLogger.printLog("log: task making was succcessful");
           yield TaskMakerSuccessfulState(hazizzResponse.convertedData);
           MainTabBlocs().tasksBloc.dispatch(TasksFetchEvent());

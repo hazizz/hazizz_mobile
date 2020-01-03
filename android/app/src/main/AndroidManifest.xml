@@ -21,7 +21,7 @@
         tools:replace="android:name"
         android:name=".App"
         android:label="Hazizz Mobile"
-        android:icon="@mipmap/ic_launcher"> <!-- launcher_icon  -->
+        android:icon="@mipmap/launcher_icon"> <!-- launcher_icon  -->
 
         <activity
             android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"

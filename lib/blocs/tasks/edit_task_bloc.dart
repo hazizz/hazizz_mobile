@@ -55,6 +55,10 @@ class TaskEditBloc extends TaskMakerBloc {
 
   final PojoTask taskToEdit;
 
+
+ // int imageIndex = 0;
+ // String imageUrls = "";
+
  // GroupItemPickerBloc groupItemPickerBloc;
  // SubjectItemPickerBloc subjectItemPickerBloc;
    PojoGroup group;
@@ -85,6 +89,10 @@ class TaskEditBloc extends TaskMakerBloc {
       subjectItemPickerBloc.dispatch(SetSubjectEvent(item: taskToEdit.subject != null ? taskToEdit.subject : PojoSubject(0, "", false, null, false)));
 
     List<String> splited = taskToEdit.description.split("\n![img_");
+   /* for(int i = 1; i < splited.length; i++){
+      imageUrls += "\n![img_" + splited[i];
+      imageIndex++;
+    }*/
     descriptionBloc.dispatch(TextFormSetEvent(text: splited[0]));
   }
 
@@ -133,11 +141,11 @@ class TaskEditBloc extends TaskMakerBloc {
         }
         HazizzLogger.printLog("log: not missing info");
 
-        String imageUrlsDesc = "";
+        String newImageUrlsDesc = "";
 
         if(event.imageDatas != null && event.imageDatas.isNotEmpty){
           print("counter0: ${event.imageDatas.length}");
-          int i = 0;
+
 
           List<Future> futures = [];
           for(HazizzImageData d in event.imageDatas){
@@ -146,14 +154,14 @@ class TaskEditBloc extends TaskMakerBloc {
             }
           }
           await Future.wait(futures);
-
+          int imageIndex = 0;
           for(HazizzImageData d in event.imageDatas){
-            if(d.imageType == ImageType.FILE){
-              i++;
+          //  if(d.imageType == ImageType.FILE){
+              imageIndex++;
               print("counter1: ${d.url}");
 
-              imageUrlsDesc += "\n![img_$i](${d.url.split("&")[0]})";
-            }
+              newImageUrlsDesc += "\n![img_$imageIndex](${d.url.split("&")[0]})";
+          //  }
           }
         }
 
@@ -162,7 +170,7 @@ class TaskEditBloc extends TaskMakerBloc {
         hazizzResponse = await getResponse(new EditTask(
           taskId: taskToEdit.id,
           b_tags: tags,
-          b_description: description + imageUrlsDesc,
+          b_description: description /*+ imageUrls*/ + newImageUrlsDesc,
           b_deadline: deadline,
           b_salt: event.salt
         ));

@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/drive/v3.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/custom/image_operations.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -56,17 +57,24 @@ class GoogleDriveManager {
     return _googleSignIn?.scopes?.contains(gDriveAccessScope) ?? false;
   }
 
+  Future<void> renameHazizzImage({@required String fileId, @required String oldName, @required int taskId}) async {
+    HazizzLogger.printLog("deleting Hazizz Image: $fileId}");
+
+    File f = File()..name = "${taskId}_" + oldName;
+    await driveApi.files.update(f, fileId);
+  }
+  
 
   Future<FileList> getAllHazizzImages() async {
     File folder = await getHazizzFolder();
-    FileList list = await driveApi.files.list(q: "'${folder.id}' in parents and mimeType = 'text/plain'", $fields: "files/webContentLink, files/id");
+    FileList list = await driveApi.files.list(q: "'${folder.id}' in parents", $fields: "files/webContentLink, files/id, files/thumbnailLink, files/name");
     return list;
   }
 
   Future<void> deleteAllHazizzImages() async {
     File folder = await getHazizzFolder();
     FileList list = await driveApi.files.list(
-      q: "'${folder.id}' in parents and mimeType = 'text/plain'",
+      q: "'${folder.id}' in parents",
       $fields: "files/id"
     );
 
@@ -76,6 +84,7 @@ class GoogleDriveManager {
   }
 
   Future<void> deleteHazizzImage(String fileId) async {
+    HazizzLogger.printLog("deleting Hazizz Image: $fileId}");
     await driveApi.files.delete(fileId);
   }
 
@@ -150,7 +159,7 @@ class GoogleDriveManager {
     ;
 
 
-    File driveFile = await driveApi.files.create(drivef, uploadMedia: Media(tempFile.openRead(), tempFile.lengthSync()), $fields: "webContentLink, thumbnailLink, id");
+    File driveFile = await driveApi.files.create(drivef, uploadMedia: Media(tempFile.openRead(), tempFile.lengthSync()), $fields: "webContentLink, thumbnailLink, id, name");
 
 
 

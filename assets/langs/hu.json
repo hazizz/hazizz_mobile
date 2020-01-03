@@ -747,6 +747,9 @@
   "no_images_gdrive"
   : "Nincs Házizz kép a driveban",
 
+  "gdrive_image_deleted"
+  : "Ez a kép törölve lett a Google Drive-ból",
+
   "delete_successful"
   : "{} sikeresen törölve",
 

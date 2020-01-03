@@ -287,7 +287,7 @@ class _ImageViewer extends State<ImageViewer>{
               if(tapped){
                 return Center(
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 60),
+                    padding: const EdgeInsets.only(top: 60, left: 20, right: 20,),
                     child: CircularProgressIndicator(),
                   ),
                 );

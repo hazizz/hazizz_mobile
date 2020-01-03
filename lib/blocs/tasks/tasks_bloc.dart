@@ -116,7 +116,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
 
   DateTime lastUpdated = DateTime(0, 0, 0, 0, 0);
 
-  List<PojoTask> tasksRaw;
+  List<PojoTask> tasksList;
 
   Map<DateTime, List<PojoTask>> tasks;
 
@@ -168,8 +168,8 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
           DataCache dataCache = await loadTasksCache();
           if(dataCache!= null){
             lastUpdated = dataCache.lastUpdated;
-            tasksRaw = dataCache.data;
-            onLoaded(tasksRaw);
+            tasksList = dataCache.data;
+            onLoaded(tasksList);
             yield TasksLoadedCacheState(tasks);
           }
         }
@@ -205,16 +205,16 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
         if(hazizzResponse.isSuccessful){
 
           HazizzLogger.printLog("tasks.tasks: ${ hazizzResponse.convertedData}");
-          tasksRaw = hazizzResponse.convertedData;
-          HazizzLogger.printLog("off: $tasksRaw");
-          if(tasksRaw != null ){
-            onLoaded(tasksRaw);
+          tasksList = hazizzResponse.convertedData;
+          HazizzLogger.printLog("off: $tasksList");
+          if(tasksList != null ){
+            onLoaded(tasksList);
 
             lastUpdated = DateTime.now();
             if(currentTaskExpiredState == TaskExpiredState.UNEXPIRED
             && currentTaskCompleteState == TaskCompleteState.UNCOMPLETED
             && groupId == null) {
-              saveTasksCache(tasksRaw);
+              saveTasksCache(tasksList);
             }
 
             HazizzLogger.printLog("log: opsie: 0");

@@ -135,6 +135,7 @@ class _SettingsPage extends State<SettingsPage>  {
                 title: Text(locText(context, key: "google_drive_settings")),
                 leading: Icon(FontAwesomeIcons.googleDrive),
               ),
+              /*
               Divider(),
               ListTile(
                 onTap: () async {
@@ -144,6 +145,7 @@ class _SettingsPage extends State<SettingsPage>  {
                 title: Text(locText(context, key: "kreta_settings")),
                 // trailing: Text("time")
               ),
+              */
               Divider(),
               ListTile(
                 onTap: () async {

@@ -18,6 +18,8 @@ class HazizzMessageHandler{
   Future<void> processMessage(Map<String, dynamic> message) async {
     print("Hazizz message: $message");
    // await HazizzNotification.showNotif(message["notification"]["title"], message["notification"]["body"]);
+   // String title = message["data"];
+   // String body;
     await HazizzNotification.showNotif("TEST message", message.toString());
   }
 

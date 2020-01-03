@@ -6,12 +6,15 @@ import 'dart:typed_data';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:googleapis/drive/v3.dart' as driveapi;
+import 'package:image/image.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile/managers/google_drive_manager.dart';
 import 'package:mobile/services/hazizz_crypt.dart';
 import 'package:mobile/widgets/image_viewer_widget.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'package:image/image.dart' as imagePackage;
+import 'dart:io';
 
 
 class HazizzImageData{
@@ -36,6 +39,7 @@ class HazizzImageData{
 
   String url;
   String driveFileId;
+  String driveName;
 
   HazizzImageData(this.imageFile, this.encryptedData, this.key);
 
@@ -60,6 +64,11 @@ class HazizzImageData{
     driveapi.File f = await GoogleDriveManager().uploadImageToDrive(this);
     url = f.webContentLink;
     driveFileId = f.id;
+    driveName = f.name;
+  }
+
+  Future<void> renameFile(int taskId) async {
+    GoogleDriveManager().renameHazizzImage(fileId: driveFileId, oldName: driveName, taskId: taskId);
   }
 
   Future<void> uploadToGDrive() async {
@@ -124,6 +133,24 @@ class HazizzImageData{
   }
 
   Future<String> getBase64ThumbnailImage() async {
+
+    if(imageType != ImageType.GOOGLE_DRIVE){
+
+      imagePackage.Image img = decodeImage(imageFile.readAsBytesSync());
+
+      imagePackage.Image thumbnail;
+
+      if(img.width >= img.height){
+        thumbnail = copyResize(img, width: 120);
+      }else{
+        thumbnail = copyResize(img, height: 120);
+      }
+
+      return base64UrlEncode(encodeJpg(thumbnail));
+    }
+    return null;
+
+
     if(imageType != ImageType.GOOGLE_DRIVE){
       return base64UrlEncode(imageFile.readAsBytesSync());
       Uint8List m = imageFile.readAsBytesSync();

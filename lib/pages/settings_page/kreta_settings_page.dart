@@ -24,16 +24,6 @@ class KretaSettingsPage extends StatefulWidget {
 
 class _KretaSettingsPage extends State<KretaSettingsPage>  {
 
-
-  List<DropdownMenuItem> startPageItems = List();
-  static List<Locale> supportedLocales = getSupportedLocales();
-  List<DropdownMenuItem> supportedLocaleItems = List();
-
-
-  String currentLocale = supportedLocales[0].languageCode;
-
-  int currentStartPageItemIndex = 0;
-
   bool isRemember = true;
   String notificationTime = "";
 

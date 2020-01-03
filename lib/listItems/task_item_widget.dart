@@ -136,9 +136,12 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
                 });
 
                 dynamic editedTask = await Navigator.pushNamed(context, "/viewTask", arguments: pojoTask.copy());
-                HazizzLogger.printLog("edited task: ${editedTask.toJson()}");
-                HazizzLogger.printLog("old task: ${pojoTask.toJson()}");
-                if(pojoTask.completed != editedTask.completed){
+                if(editedTask != null){
+                  HazizzLogger.printLog("old task: ${pojoTask.toJson()}");
+
+                  HazizzLogger.printLog("edited task: ${editedTask.toJson()}");
+
+                  if(pojoTask.completed != editedTask.completed){
                     widget.onCompletedChanged();
                   }
 
@@ -147,6 +150,7 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
                       pojoTask = editedTask;
                     });
                   }
+                }
 
               },
               child: Stack(
@@ -261,7 +265,6 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
                               imageBuilder: (uri){
-
                                 return Padding(
                                   padding: const EdgeInsets.only(left: 2, right: 2, bottom: 4),
                                   child: Container(
@@ -271,11 +274,6 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
                                         borderRadius: BorderRadius.circular(3),
                                     ),
                                   ),
-                                );
-
-                                return Padding(
-                                  padding: const EdgeInsets.only(left: 3, right: 3),
-                                  child: Icon(FontAwesomeIcons.image),
                                 );
                               },
                               styleSheet: MarkdownStyleSheet(

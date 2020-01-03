@@ -42,11 +42,9 @@ class RouteGenerator{
   }
 
   static Route generateRoute(RouteSettings settings) {
-    // Getting arguments passed in while calling Navigator.pushNamed
     final args = settings.arguments;
 
     HazizzLogger.printLog("navigating to ${settings.name} with arguments: ${settings.arguments}");
-
 
     switch (settings.name) {
       case 'login':

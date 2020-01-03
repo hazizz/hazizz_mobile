@@ -96,7 +96,7 @@ class _SureToDeleteAllHazizzImageDialog extends State<SureToDeleteAllHazizzImage
                 setState(() {
                   isLoading = true;
                 });
-                await GoogleDriveManager().deleteAllHazizzImages();
+                GoogleDriveManager().deleteAllHazizzImages();
 
                 Navigator.pop(context, true);
 

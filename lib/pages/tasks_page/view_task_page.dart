@@ -20,6 +20,7 @@ import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/dialogs/report_dialog.dart';
 import 'package:mobile/enums/group_permissions_enum.dart';
 import 'package:mobile/managers/deep_link_receiver.dart';
+import 'package:mobile/managers/google_drive_manager.dart';
 import 'package:mobile/services/hazizz_crypt.dart';
 import 'package:mobile/storage/cache_manager.dart';
 import 'package:mobile/widgets/comment_section_widget.dart';
@@ -706,6 +707,15 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                                         if(await showDeleteTaskDialog(context, taskId: widget.taskId)){
                                                           HazizzLogger.printLog("showDeleteTaskDialog : success");
                                                           MainTabBlocs().tasksBloc.dispatch(TasksFetchEvent());
+                                                          List<String> splited = pojoTask.description.split("\n![img_");
+                                                          if(splited.length > 1){
+                                                            await GoogleDriveManager().initialize();
+                                                            for(int i = 1; i < splited.length; i++){
+                                                              String n = splited[i].split("id=")[1];
+                                                              GoogleDriveManager().deleteHazizzImage(n.substring(0, n.length-1));
+                                                            }
+                                                          }
+
                                                           Navigator.of(context).pop();
 
                                                         }else{

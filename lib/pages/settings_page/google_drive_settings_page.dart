@@ -1,4 +1,6 @@
 import 'package:googleapis/drive/v3.dart';
+import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
+import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/managers/google_drive_manager.dart';
 import 'package:mobile/managers/app_state_manager.dart';
@@ -78,16 +80,39 @@ class _GoogleDriveSettingsPage extends State<GoogleDriveSettingsPage> {
   Widget build(BuildContext context) {
     List<Widget> gDriveImages = [];
 
+
+
     if(fileList != null && fileList.files != null){
+      print("filelist: ${fileList.files}");
      // File file in fileList.files
       for(int i = 0; i < fileList.files.length; i++){
         File file = fileList.files[i];
+
+        int taskId;
+        try{
+          taskId = int.parse(file.name.split("_")[0]);
+        }catch(e){
+
+        }
+
+        String salt;
+
+        if(taskId != null){
+          for(PojoTask task in MainTabBlocs().tasksBloc.tasksList){
+            if(task.id == taskId){
+              salt = task.salt;
+              break;
+            }
+          }
+        }
+
         gDriveImages.add(
           Container(
+            height: 100,
             child: GoogleDriveImage(
               imageUrl: file.webContentLink,
               heroTag: file.webContentLink,
-              salt: "",
+              salt: salt,
               height: 100,
               onSmallDelete: () async {
                 bool deleted = await showSureToDeleteGDriveImageDialog(context, fileId: file.id);
@@ -218,13 +243,21 @@ class _GoogleDriveSettingsPage extends State<GoogleDriveSettingsPage> {
                                     padding: const EdgeInsets.all(20),
                                     child: Center(child: CircularProgressIndicator()),
                                   );
-                                  else if(gDriveImages == null || gDriveImages.isEmpty) return Center(child: Padding(
-                                    padding: const EdgeInsets.all(20),
-                                    child: Text(locText(context, key: "no_images_gdrive")),
-                                  ),);
+                                  else if(gDriveImages == null || gDriveImages.isEmpty) {
+                                    return Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(20),
+                                        child: Text(locText(context, key: "no_images_gdrive")),
+                                      ),
+                                    );
+                                  }
                                   return Padding(
                                     padding: const EdgeInsets.only(left: 6, right: 6, bottom: 10),
                                     child: Wrap(
+                                      runAlignment: WrapAlignment.start,
+                                      crossAxisAlignment: WrapCrossAlignment.start,
+                                      alignment: WrapAlignment.start,
+
                                       runSpacing: 8,
                                       spacing: 8,
                                       children: gDriveImages,

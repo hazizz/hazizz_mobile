@@ -32,10 +32,10 @@ import 'main_schedules_page.dart';
 
 class MainTabHosterPage extends StatefulWidget {
 
-  MainTabBlocs mainTabBlocs;
+ // MainTabBlocs mainTabBlocs;
 
   MainTabHosterPage({Key key}) : super(key: key){
-    mainTabBlocs = MainTabBlocs();
+   // mainTabBlocs = MainTabBlocs();
   }
 
   @override
@@ -108,7 +108,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
     schedulesTabPage = SchedulesPage();
     gradesTabPage = GradesPage();
 
-    _tabController = new TabController(length: 3, vsync: this, initialIndex: widget.mainTabBlocs.initialIndex);
+    _tabController = new TabController(length: 3, vsync: this, initialIndex: MainTabBlocs().initialIndex);
 
     _tabController.addListener(_handleTabSelection);
 

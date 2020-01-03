@@ -115,6 +115,9 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
   int _failedRequestCount = 0;
 //  int _failedRequestLimit = 2;
 
+  DateTime nowDate;
+
+  DateTime selectedDate;
 
   PojoSchedules getScheduleFromSession(){
     Map<String, List<PojoClass>> sessionSchedules = {};
@@ -135,15 +138,20 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
   }
 
 
+
   ScheduleBloc(){
+    nowDate = DateTime.now();
+    nowDate = nowDate.subtract(Duration(days: nowDate.weekday-1));
+
+    selectedDate = nowDate;
+
     currentDayIndex = todayIndex;
     scheduleEventBloc = ScheduleEventBloc();
 
-    DateTime now = DateTime.now();
-    int dayOfYear = int.parse(DateFormat("D").format(now));
-    currentCurrentWeekNumber = ((dayOfYear - now.weekday + 10) / 7).floor();
 
-    currentCurrentYearNumber = now.year;
+    currentCurrentWeekNumber = _getWeekNumber(nowDate);
+
+    currentCurrentYearNumber = nowDate.year;
 
     currentWeekNumber = currentCurrentWeekNumber;
     currentYearNumber = currentCurrentYearNumber;
@@ -159,12 +167,42 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
   int currentDayIndex;
 
+  int fromCurrentWeek = 0;
+
+  int _getYear(DateTime dateTime){
+    return dateTime.year;
+  }
+
+  int _getWeekNumber(DateTime date){
+    int dayOfYear = int.parse(DateFormat("D").format(date));
+    return  ((dayOfYear - date.weekday + 10) / 7).floor();
+  }
+
+
+  bool get selectedWeekIsCurrent => fromCurrentWeek == 0;
+  bool get selectedWeekIsPrevious => fromCurrentWeek == -1;
+  bool get selectedWeekIsNext =>  fromCurrentWeek == 1;
+
+
   void nextWeek(){
-    MainTabBlocs().schedulesBloc.dispatch(ScheduleFetchEvent(yearNumber: MainTabBlocs().schedulesBloc.currentYearNumber, weekNumber: MainTabBlocs().schedulesBloc.currentWeekNumber+1));
+    fromCurrentWeek++;
+    selectedDate = selectedDate.add(Duration(days: 7));
+
+    int year = _getYear(selectedDate);
+    int weekNumber = _getWeekNumber(selectedDate);
+
+    MainTabBlocs().schedulesBloc.dispatch(ScheduleFetchEvent(yearNumber: year, weekNumber: weekNumber));
   }
 
   void previousWeek(){
-    MainTabBlocs().schedulesBloc.dispatch(ScheduleFetchEvent(yearNumber: MainTabBlocs().schedulesBloc.currentYearNumber, weekNumber: MainTabBlocs().schedulesBloc.currentWeekNumber-1));
+    fromCurrentWeek--;
+    selectedDate = selectedDate.subtract(Duration(days: 7));
+    print("slected date: ${selectedDate}");
+
+    int year = _getYear(selectedDate);
+    int weekNumber = _getWeekNumber(selectedDate);
+
+    MainTabBlocs().schedulesBloc.dispatch(ScheduleFetchEvent(yearNumber: year, weekNumber: weekNumber));
   }
 
   @override
@@ -178,6 +216,8 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     else if (event is ScheduleFetchEvent) {
       try {
 
+        yield ScheduleWaitingState();
+
         if(event.weekNumber != null){
           currentWeekNumber = event.weekNumber;
         }
@@ -188,14 +228,8 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
         HazizzLogger.printLog("currentWeekNumber: $currentWeekNumber");
 
-        currentWeekMonday = DateTime(currentYearNumber, 1, 1);
+        currentWeekMonday = DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
         HazizzLogger.printLog("currentWeekMonday: $currentWeekMonday");
-
-        currentWeekMonday = currentWeekMonday.add(Duration(days: 7 * (currentWeekNumber-1)));
-
-        HazizzLogger.printLog("currentWeekMonday2: $currentWeekMonday, ${7 * (currentWeekNumber-1)}");
-
-        currentWeekMonday = currentWeekMonday.subtract(Duration(days: 1));
 
         currentWeekSunday = currentWeekMonday.add(Duration(days: 6));
 
@@ -207,8 +241,6 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
           currentDayIndex = 0;
         }
 
-
-        yield ScheduleWaitingState();
 
         HazizzLogger.printLog("event.yearNumber, event.weekNumber: ${event.yearNumber}, ${event.weekNumber}");
 

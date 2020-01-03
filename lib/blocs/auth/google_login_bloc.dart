@@ -34,8 +34,6 @@ class GoogleLoginBloc extends SocialLoginBloc{
 
     HazizzLogger.printLog("google login: 4");
 
-    debugPrint("access Token 1: ${googleAuth.accessToken}");
-
     final AuthCredential credential = GoogleAuthProvider.getCredential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,

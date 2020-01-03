@@ -119,7 +119,7 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
 
       for(int i = 1; i < splited.length; i++){
         if(true){
-          final String url = splited[i].substring(4, splited[i].length-1);
+          final String url = splited[i].substring(3, splited[i].length-1);
 
           print("url is: $url");
           imageDatas.add(HazizzImageData.fromGoogleDrive(url, widget.taskToEdit.salt));
@@ -141,6 +141,33 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
   void dispose() {
     blocs.dispose();
     super.dispose();
+  }
+
+  void pickImage() async {
+    print("miva? 1");
+    if(!await AppState.isAllowedGDrive()){
+      print("miva? 2");
+      if(await showGrantAccessToGDRiveDialog(context)){
+      }else{
+        return;
+      }
+    }
+    HazizzImageData imageData = await ImageOpeations.pick();
+    print("miauuu?");
+    if(imageData == null){
+      return;
+    }
+    setState(() {
+      imageDatas.add(imageData);
+    });
+    await GoogleDriveManager().initialize();
+
+    // upload to gdrive
+    imageData.compressEncryptAndUpload(widget.cryptKey);
+
+    Future.delayed(Duration(milliseconds: 400), (){
+      scrollController.animateTo(scrollController.position.maxScrollExtent, duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+    });
   }
 
   @override
@@ -451,6 +478,44 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
             }
           },
           child: Scaffold(
+            floatingActionButton: Padding(
+              padding: const EdgeInsets.all(10),
+              child: BlocBuilder(
+                  bloc: blocs,
+                  builder: (BuildContext context, TaskMakerState state) {
+                    if(state is TaskMakerWaitingState) {
+                      return FloatingActionButton(
+                        backgroundColor: Colors.grey,
+                        onPressed: null,
+                        child: Transform.scale(
+                          scale: 0.8,
+                          child: FittedBox(
+                            child: Padding(
+                              padding: const EdgeInsets.all(1),
+                              child: CircularProgressIndicator(),
+                            ),
+                            fit: BoxFit.scaleDown,
+                          ),
+                        ),
+                      );
+                    }else{
+                      return FloatingActionButton(
+                          child: widget.mode == TaskMakerMode.create ?  Icon(FontAwesomeIcons.check) : Padding(
+                            padding: const EdgeInsets.only(bottom: 4),
+                            child: Icon(FontAwesomeIcons.edit),
+                          ),
+                          onPressed: () async {
+                            if(!(state is TaskMakerWaitingState)) {
+                              blocs.dispatch(
+                                  TaskMakerSendEvent(imageDatas: imageDatas, salt: widget.cryptKey)
+                              );
+                            }
+                          }
+                      );
+                    }
+                  }
+              ),
+            ),
             appBar: appBar,
             body:SingleChildScrollView(
               child:
@@ -529,165 +594,155 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
                                     padding: const EdgeInsets.only(left: 12, right: 12, top: 10),
                                     child: descriptionTextForm
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 6, right: 10),
-                                    child: Card(
-                                      color: Colors.grey,
-                                      child: Padding(
-                                        padding: EdgeInsets.all(4),
-                                        child: ConstrainedBox(
-                                          constraints: new BoxConstraints(
-                                            minHeight: 0,
-                                            maxHeight: 100,
-                                          ),
-                                          child: SingleChildScrollView(
-                                            controller: scrollController,
+                                  Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 6, right: 10),
+                                      child: Builder(
+                                        builder: (context){
+                                          if(imageDatas == null || imageDatas.isEmpty){
+                                            return Container(
+                                               width: 62,
+                                                height: 60,
+                                              //color: Colors.blue,
+                                              child: RaisedButton(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(10.0),
+                                                ),
+                                                onPressed: pickImage,
+                                                padding: EdgeInsets.all(0),
+                                                color: Colors.grey,
+                                                child: Stack(
+                                                  children: <Widget>[
 
-                                            scrollDirection: Axis.horizontal,
-                                            child: Row(
-                                              children: <Widget>[
-                                                Container(
-                                                  child: ListView.builder(
-                                                      shrinkWrap: true,
-                                                      scrollDirection: Axis.horizontal,
-                                                      itemCount: imageDatas.length,
-                                                      itemBuilder: (context, index){
-                                                        return Padding(
-                                                          padding: EdgeInsets.only(left: 6, ),
-                                                          child: Container(
-                                                            height: 100,
-                                                            child: Stack(
-                                                              children: <Widget>[
-                                                                Builder(
-                                                                  builder: (context){
-                                                                      Function f = (){};
-                                                                      if(imageDatas[index].imageType == ImageType.GOOGLE_DRIVE){
-                                                                        f = (){
-                                                                          imageDatasToRemove.add(imageDatas[index]);
-                                                                        };
-                                                                      }
-                                                                      return ImageViewer.fromHazizzImageData(
-                                                                        imageDatas[index],
-                                                                        height: 100,
-                                                                        onSmallDelete: (){
-                                                                          f();
-                                                                          setState(() {
-                                                                            imageDatas.removeAt(index);
-                                                                          });
+                                                    Positioned(
+                                                      left: 12, top: 10,
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.all(0.0),
+                                                        child: Icon(FontAwesomeIcons.googleDrive, size: 34,),
+                                                      ),
+                                                    ),
+                                                    Positioned(
+                                                      bottom: 6, right: 0,
+                                                      child: Container(
+                                                        decoration: new BoxDecoration(
+                                                          borderRadius: BorderRadius.all(const Radius.circular(5.0)),
+                                                          color: Colors.grey,
+
+                                                        ),
+                                                        child: Padding(
+                                                          padding: const EdgeInsets.only(left:4, right:4, bottom: 2),
+                                                          child: Icon(FontAwesomeIcons.image),
+                                                        ),
+                                                      )
+                                                    ),
+                                                   /* Positioned(
+                                                      top: 20,
+                                                      child: Icon(FontAwesomeIcons.plus, color: Colors.red, size: 34,),
+                                                    ),*/
+                                                    Positioned(
+                                                      bottom: 2,
+                                                      child: Icon(FontAwesomeIcons.plus),
+                                                    )
+
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                          return Card(
+                                              color: Colors.grey,
+                                              child: Padding(
+                                                padding: EdgeInsets.all(4),
+                                                child: ConstrainedBox(
+                                                  constraints: new BoxConstraints(
+                                                    minHeight: 0,
+                                                    maxHeight: 100,
+                                                  ),
+                                                  child: SingleChildScrollView(
+                                                    controller: scrollController,
+
+                                                    scrollDirection: Axis.horizontal,
+                                                    child: Row(
+                                                      children: <Widget>[
+                                                        Container(
+                                                          child: ListView.builder(
+                                                              shrinkWrap: true,
+                                                              scrollDirection: Axis.horizontal,
+                                                              itemCount: imageDatas.length,
+                                                              itemBuilder: (context, index){
+                                                                return Padding(
+                                                                    padding: EdgeInsets.only(left: 6, ),
+                                                                    child: Container(
+                                                                      height: 100,
+                                                                      child: Stack(
+                                                                        children: <Widget>[
+                                                                          Builder(
+                                                                            builder: (context){
+                                                                              Function f = (){};
+                                                                              if(imageDatas[index].imageType == ImageType.GOOGLE_DRIVE){
+                                                                                f = (){
+                                                                                  imageDatasToRemove.add(imageDatas[index]);
+                                                                                };
+                                                                              }
+                                                                              return ImageViewer.fromHazizzImageData(
+                                                                                imageDatas[index],
+                                                                                height: 100,
+                                                                                onSmallDelete: (){
+                                                                                  f();
+                                                                                  setState(() {
+                                                                                    imageDatas.removeAt(index);
+                                                                                  });
+
+                                                                                },
+                                                                              );
+                                                                              //  }
+                                                                              return null;
+
+                                                                            },
+                                                                          ),
+                                                                          /* Positioned(
+                                                                    top: 0, left: 0,
+                                                                    child: Transform.translate(
+                                                                      offset: Offset(-1, -1),
+                                                                      child: GestureDetector(
+                                                                        child: Icon(FontAwesomeIcons.solidTimesCircle, size: 20, color: Colors.red,),
+                                                                        onTap: (){
 
                                                                         },
-                                                                      );
-                                                                  //  }
-                                                                    return null;
-
-                                                                  },
-                                                                ),
-                                                               /* Positioned(
-                                                                  top: 0, left: 0,
-                                                                  child: Transform.translate(
-                                                                    offset: Offset(-1, -1),
-                                                                    child: GestureDetector(
-                                                                      child: Icon(FontAwesomeIcons.solidTimesCircle, size: 20, color: Colors.red,),
-                                                                      onTap: (){
-
-                                                                      },
+                                                                      )
                                                                     )
                                                                   )
-                                                                )
-                                                                */
-                                                              ],
-                                                            ),
-                                                          )
-                                                        );
-                                                      }
-                                                  ),
-                                                ),
-                                                Builder(
-                                                  builder: (context){
-                                                    if(imageDatas.length >= 3) return Container();
-                                                    return Padding(
-                                                      padding: EdgeInsets.only(left: 4),
-                                                      child: IconButton(
-                                                        icon: Icon(imageDatas.isEmpty ? FontAwesomeIcons.image : FontAwesomeIcons.plus),
-                                                        onPressed: () async {
-                                                          print("miva? 1");
-                                                          if(!await AppState.isAllowedGDrive()){
-                                                            print("miva? 2");
-                                                           if(await showGrantAccessToGDRiveDialog(context)){
-
-                                                           }else{
-                                                             return;
-                                                           }
-                                                          }
-                                                          HazizzImageData imageData = await ImageOpeations.pick();
-                                                          if(imageData == null){
-                                                            return;
-                                                          }
-                                                          setState(() {
-                                                            imageDatas.add(imageData);
-                                                          });
-                                                          await GoogleDriveManager().initialize();
-
-                                                          // upload to gdrive
-
-
-
-                                                          imageData.compressEncryptAndUpload(widget.cryptKey);
-
-                                                          Future.delayed(Duration(milliseconds: 400), (){
-                                                            scrollController.animateTo(scrollController.position.maxScrollExtent, duration: Duration(milliseconds: 300), curve: Curves.easeOut);
-                                                          });
-
-
-                                                        },
-                                                      ),
-                                                    );
-                                                  },
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      )
-                                    ),
-                                  ),
-                                  Center(
-                                      child:
-                                      Padding(
-                                        padding: const EdgeInsets.only(bottom: 8.0),
-                                        child: BlocBuilder(
-                                            bloc: blocs,
-                                            builder: (BuildContext context, TaskMakerState state) {
-                                              if(state is TaskMakerWaitingState) {
-                                                return RaisedButton(
-                                                  onPressed: null,
-                                                  child: Transform.scale(
-                                                    scale: 0.8,
-                                                    child: FittedBox(
-                                                      child: Padding(
-                                                        padding: const EdgeInsets.all(1),
-                                                        child: CircularProgressIndicator(),
-                                                      ),
-                                                      fit: BoxFit.scaleDown,
+                                                                  */
+                                                                        ],
+                                                                      ),
+                                                                    )
+                                                                );
+                                                              }
+                                                          ),
+                                                        ),
+                                                        Builder(
+                                                          builder: (context){
+                                                            if(imageDatas.length >= 3) return Container();
+                                                            return Padding(
+                                                              padding: EdgeInsets.only(left: 4),
+                                                              child: IconButton(
+                                                                icon: Icon(FontAwesomeIcons.plus),
+                                                                onPressed: pickImage
+                                                              ),
+                                                            );
+                                                          },
+                                                        )
+                                                      ],
                                                     ),
                                                   ),
-                                                );
-                                              }else{
-                                                return RaisedButton(
-                                                    child: Text((widget.mode == TaskMakerMode.create ? locText(context, key: "create") : locText(context, key: "edit")).toUpperCase()),
-                                                    onPressed: () async {
-                                                      if(!(state is TaskMakerWaitingState)) {
-                                                        blocs.dispatch(
-                                                          TaskMakerSendEvent(imageDatas: imageDatas, salt: widget.cryptKey)
-                                                        );
-                                                      }
-                                                    }
-                                                );
-                                              }
-                                            }
-                                        ),
-                                      )
+                                                ),
+                                              )
+                                          );
+                                        },
+                                      ),
+                                    ),
                                   ),
+
                                 ],
                               ),
                             ),

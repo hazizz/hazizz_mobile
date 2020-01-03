@@ -47,8 +47,17 @@ class _ImageViewerPage extends State<ImageViewerPage>{
 
   bool downloading = false;
 
+  Uint8List imageBytes;
+  File imageFile;
+  String imageUrl;
+
   @override
   void initState() {
+
+    imageBytes = widget.imageBytes;
+    imageFile = widget.imageFile;
+    imageUrl = widget.imageUrl;
+
     super.initState();
   }
 
@@ -62,13 +71,13 @@ class _ImageViewerPage extends State<ImageViewerPage>{
 
     ImageProvider imageProvider;
     if(widget.imageType == ImageType.NETWORK){
-      imageProvider = NetworkImage(widget.imageUrl);
+      imageProvider = NetworkImage(imageUrl);
     }else if(widget.imageType == ImageType.FILE){
-      imageProvider = FileImage(widget.imageFile);
+      imageProvider = FileImage(imageFile);
     }else if(widget.imageType == ImageType.MEMORY){
-      imageProvider = MemoryImage(widget.imageBytes);
+      imageProvider = MemoryImage(imageBytes);
     }else if(widget.imageType == ImageType.GOOGLE_DRIVE){
-      imageProvider = MemoryImage(widget.imageBytes);
+      imageProvider = MemoryImage(imageBytes);
     }
     return SafeArea(
       child: Scaffold(
@@ -121,12 +130,12 @@ class _ImageViewerPage extends State<ImageViewerPage>{
                               }
                             }
 
-                            if(widget.imageFile != null) {
-                              await ImageGallerySaver.saveImage(widget.imageFile.readAsBytesSync());
-                            }else if(widget.imageBytes != null){
-                              await ImageGallerySaver.saveImage(widget.imageBytes);
+                            if(imageFile != null) {
+                              await ImageGallerySaver.saveImage(imageFile.readAsBytesSync());
+                            }else if(imageBytes != null){
+                              await ImageGallerySaver.saveImage(imageBytes);
                             }else{
-                              var response = await  Dio().get(widget.imageUrl, options: Options(responseType: ResponseType.bytes));
+                              var response = await  Dio().get(imageUrl, options: Options(responseType: ResponseType.bytes));
                               await ImageGallerySaver.saveImage(Uint8List.fromList(response.data));
                             }
                             Toast.show(locText(context, key: "image_saved"), context, duration: 3);
