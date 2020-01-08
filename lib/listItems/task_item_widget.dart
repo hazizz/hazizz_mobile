@@ -13,6 +13,7 @@ import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'package:mobile/communication/request_sender.dart';
+import 'package:mobile/widgets/error_proof_widget.dart';
 
 class TaskItemWidget extends StatefulWidget  {
 
@@ -265,14 +266,34 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
                               imageBuilder: (uri){
+
+                                final List<String> a = uri.toString().split("?id=");
+
+                                final String id = a.length > 1 ? a[1] : null;
+
+                                if(id != null){
+                                  return Padding(
+                                    padding: const EdgeInsets.only(left: 2, right: 2, bottom: 4),
+                                    child: Container(
+                                      height: 60,
+                                      child: ClipRRect(
+                                        child: Image.network( "https://drive.google.com/thumbnail?id=$id",),
+                                        borderRadius: BorderRadius.circular(3),
+                                      ),
+
+                                    ),
+                                  );
+                                }
+
                                 return Padding(
                                   padding: const EdgeInsets.only(left: 2, right: 2, bottom: 4),
                                   child: Container(
                                     height: 60,
                                     child: ClipRRect(
-                                        child: Image.network("https://drive.google.com/thumbnail?id=${uri.toString().split("?id=")[1]}"),
+                                        child: Image.network(uri.toString()),
                                         borderRadius: BorderRadius.circular(3),
                                     ),
+
                                   ),
                                 );
                               },

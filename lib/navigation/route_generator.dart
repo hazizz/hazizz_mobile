@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
+import 'package:mobile/managers/app_state_restorer.dart';
 import 'package:mobile/pages/kreta_pages/kreta_notes_page.dart';
 import 'package:mobile/pages/kreta_pages/kreta_statistics_page.dart';
 import 'package:mobile/pages/settings_page/about_page.dart';
@@ -85,8 +86,14 @@ class RouteGenerator{
       case '/group/groupId/notNewComer': //assert(args != null);
         return MaterialPageRoute(builder: (_) => GroupTabHosterPage(group: args,  visitorEnum: VisitorEnum.notNewComer));
       case '/createTask':
+        if(args is TaskMakerAppState){
+          return MaterialPageRoute(builder: (_) => TaskMakerPage.create(taskMakerAppState: args,));
+        }
         return MaterialPageRoute(builder: (_) => TaskMakerPage.create(groupId: args));
       case '/editTask': assert(args != null);
+      if(args is TaskMakerAppState){
+        return MaterialPageRoute(builder: (_) => TaskMakerPage.edit(taskMakerAppState: args,));
+      }
         return MaterialPageRoute(builder: (_) => TaskMakerPage.edit(taskToEdit: args,));
       case '/viewTask': assert(args != null);
         if(args is PojoTask) {

@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -12,6 +13,7 @@ import 'package:mobile/communication/pojos/PojoSchedules.dart';
 import 'package:mobile/custom/formats.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/main.dart';
+import 'package:mobile/services/selected_session_helper.dart';
 import 'package:mobile/widgets/flushbars.dart';
 
 import 'package:mobile/custom/hazizz_localizations.dart';
@@ -93,17 +95,11 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
       ));
     }
 
-
-
     Map<String, List<PojoClass>> schedule = MainTabBlocs().schedulesBloc.getScheduleFromSession().classes;//pojoSchedule.classes;
 
     Widget body;
 
     DateTime now = DateTime.now();
-
-    DateTime weekStart = DateTime(now.year, now.month, now.day - now.weekday+1);
-
-    DateTime weekEnd = DateTime(now.year, now.month, now.day + 7 - now.weekday);
 
     if(schedule.isEmpty){
       body = Center(child: Text(locText(context, key: "no_schedule_for_week")),);
@@ -384,7 +380,6 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
                                           if (state is ScheduleLoadedState) {
                                             if(MainTabBlocs().schedulesBloc.classes?.classes != null/*state.schedules != null && state.data.isNotEmpty()*/){
                                               return onLoaded();
-
                                             }
                                           }else if (state is ScheduleLoadedCacheState) {
                                             if(MainTabBlocs().schedulesBloc.classes?.classes != null/*state.data != null && state.data.isNotEmpty()*/){
@@ -397,7 +392,13 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
                                                   Center(
                                                     child: Padding(
                                                       padding: const EdgeInsets.only(top: 50.0),
-                                                      child: Text(locText(context, key: "no_schedule")),
+                                                      child:  AutoSizeText(
+                                                        locText(context, key: "no_schedule"),
+                                                        style: TextStyle(fontSize: 17),
+                                                        textAlign: TextAlign.center,
+                                                        maxFontSize: 17,
+                                                        minFontSize: 14,
+                                                      ),
                                                     ),
                                                   )
                                                 ]
@@ -409,10 +410,7 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
                                               });
                                             }
                                             else if(state.hazizzResponse.dioError == noConnectionError){
-                                              WidgetsBinding.instance.addPostFrameCallback((_) {
-                                                print("boi: no internetr");
-                                                showNoConnectionFlushBar(context);
-                                              });
+
                                             }else{
                                               WidgetsBinding.instance.addPostFrameCallback((_) {
                                                 Flushbar(

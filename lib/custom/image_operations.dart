@@ -56,7 +56,6 @@ class HazizzImageData{
 
   Function currentAsyncTask;
 
-  StreamController<bool> uploadSuccessfulStream = StreamController()..add(false);
 
   Future futureUploadedToDrive = Future.delayed(Duration(seconds: 60));
 
@@ -82,14 +81,14 @@ class HazizzImageData{
   void compressEncryptAndUpload(String key){
     compress().then((val){
       encrypt(key);
-      uploadToGDrive().then((val){
-        uploadSuccessfulStream.add(true);
-      });
+      uploadToGDrive();
     });
   }
 
 
   void encrypt(String key) async {
+    assert (imageFile != null);
+    print("encrypt: ${imageFile?.path} ${key}");
     if(imageFile != null){
 
 
@@ -110,25 +109,27 @@ class HazizzImageData{
   }
 
   Future<void> _compress() async {
-
+    assert(imageFile != null);
     if(imageFile != null){
       double q = 100;
-
+      print("asdasda: 1: ${imageFile.absolute.path}");
       final int imageSizeInBytes = imageFile.lengthSync();
-
+      print("asdasda: 2: $imageFile");
       if(imageSizeInBytes > 1000000){
         q = 1000000 / imageSizeInBytes * 100;
       }
 
+
+      final directory = await getTemporaryDirectory();
+      print("asdasda: 3: $q, ${directory.path}");
       File compressedImage = await FlutterImageCompress.compressAndGetFile(
         imageFile.absolute.path,
-        imageFile.absolute.path,
-        minWidth: 2300,
-        minHeight: 1500,
-
+        directory.path + "/ize.jpg",
         quality: q.floor(),
       );
+      print("asdasda: 4");
       imageFile = compressedImage;
+      print("asdasda: 5: ${imageFile}");
     }
   }
 
@@ -204,8 +205,6 @@ class ImageOpeations{
   static Future<HazizzImageData> pick() async {
     try{
       File image = await ImagePicker.pickImage(source: ImageSource.gallery);
-
-
       /*  image = await ImageCropper.cropImage(
       controlWidgetColor: Theme.of(context).primaryColor,
       controlWidgetVisibility: false,
@@ -256,7 +255,7 @@ class ImageOpeations{
   */
   
   
-  Future<HazizzImageData> encrypt(File file, {@required String key}) async {
+  Future<HazizzImageData> encrypt2(File file, {@required String key}) async {
     if(file == null){
       return null;                                                                                
     }                                                                                             

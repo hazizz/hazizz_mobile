@@ -146,6 +146,8 @@ class GoogleDriveManager {
     final tempFile = io.File('${directory.path}/img.txt');
     tempFile.writeAsStringSync(d.encryptedData);
 
+    print("tempFile: ${tempFile.readAsStringSync()}");
+
     File drivef =  File()
       ..name = "${DateTime.now()}.hazizzpic"
       ..parents = [folderId]
@@ -159,8 +161,7 @@ class GoogleDriveManager {
     ;
 
 
-    File driveFile = await driveApi.files.create(drivef, uploadMedia: Media(tempFile.openRead(), tempFile.lengthSync()), $fields: "webContentLink, thumbnailLink, id, name");
-
+    File driveFile = await driveApi.files.create(drivef, uploadMedia: Media(tempFile.openRead(), tempFile.lengthSync()), $fields: "webContentLink, id, name"); // thumbnailLink,
 
 
     tempFile.delete();

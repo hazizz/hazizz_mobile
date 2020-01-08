@@ -4,7 +4,10 @@ import 'package:easy_localization/easy_localization_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:mobile/blocs/auth/social_login_bloc.dart';
+import 'package:mobile/blocs/tasks/task_maker_blocs.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
+import 'package:mobile/managers/app_state_restorer.dart';
+import 'package:mobile/navigation/route_generator.dart';
 import 'package:mobile/pages/settings_page/about_page.dart';
 import 'package:mobile/services/hazizz_message_handler.dart';
 import 'package:native_state/native_state.dart';
@@ -124,11 +127,26 @@ void main() async{
         await TokenManager.createTokenWithRefresh();
       }
       AppState.mainAppPartStartProcedure();
+
     }
   }else{
     isLoggedIn = false;
     newComer = true;
   }
+
+  if(isLoggedIn){
+    if(!isFromNotification){
+      startPage = "/";
+    }else {
+      startPage = "/tasksTomorrow";
+    }
+  }else if(newComer){
+    startPage = "intro";
+  }
+  else{
+    startPage = "login";
+  }
+
 
 
   runApp(SavedState(
@@ -162,6 +180,20 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
   initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+
+
+    /*
+    if(await AppStateRestorer.getShouldReloadTaskMaker()){
+    TaskMakerAppState taskMakerAppState = await AppStateRestorer.loadTaskState();
+    if(taskMakerAppState != null){
+    if(taskMakerAppState.taskMakerMode == TaskMakerMode.create){
+    startPage = "/createTask";
+    }else{
+    startPage = "/editTask";
+    }
+    }
+    }
+    */
   }
 
   @override
@@ -206,18 +238,7 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
 
   @override
   Widget build(BuildContext context) {
-      if(isLoggedIn){
-        if(!isFromNotification){
-          startPage = "/";
-        }else {
-          startPage = "/tasksTomorrow";
-        }
-      }else if(newComer){
-        startPage = "intro";
-      }
-      else{
-        startPage = "login";
-      }
+
 
       print("startpage: ${startPage}");
 
@@ -235,93 +256,7 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
 
                 navigatorObservers: [widget._navigationSaver, SavedStateRouteObserver(savedState: savedState)],
                 onGenerateRoute: (RouteSettings routeSettings) => widget._navigationSaver.onGenerateRoute(
-                  routeSettings, (RouteSettings settings, {NextPageInfo nextPageInfo,}) {
-
-                  Route<dynamic> _errorRoute(String errorLog) {
-                    HazizzLogger.printLog("navigation error: $errorLog");
-                    return MaterialPageRoute(builder: (_) {
-                      return Scaffold(
-                        appBar: AppBar(
-                          title: Text('Error'),
-                        ),
-                        body: Center(
-                          child: Text(errorLog),
-                        ),
-                      );
-                    });
-                  }
-                  final args = settings.arguments;
-
-                  HazizzLogger.printLog("navigating to ${settings.name} with arguments: ${settings.arguments}");
-
-                  switch (settings.name) {
-                    case 'login':
-                      return MaterialPageRoute(builder: (_) => LoginPage());
-                    case 'registration':
-                    //    return MaterialPageRoute(builder: (_) => RegistrationPage());
-                    case 'intro':
-                      return MaterialPageRoute(builder: (_) => IntroPage());
-                    case '/':
-                      return MaterialPageRoute(builder: (_) => MainTabHosterPage());
-                    case '/tasksTomorrow':
-                      return MaterialPageRoute(builder: (_) => TasksTomorrowPage());
-                    case '/about':
-                      return MaterialPageRoute(builder: (_) => AboutPage());
-                    case '/settings':
-                      return MaterialPageRoute(builder: (_) => SettingsPage());
-                    case '/settings/preferences':
-                      return MaterialPageRoute(builder: (_) => PreferencesSettingsPage());
-                    case '/settings/kreta':
-                      return MaterialPageRoute(builder: (_) => KretaSettingsPage());
-                    case '/settings/notification':
-                      return MaterialPageRoute(builder: (_) => NotificationSettingsPage());
-                    case '/settings/profile_editor':
-                      return MaterialPageRoute(builder: (_) => ProfileEditorPage());
-                    case '/settings/developer':
-                      return MaterialPageRoute(builder: (_) => DeveloperSettingsPage());
-                    case '/settings/developer/logs':
-                      return MaterialPageRoute(builder: (_) => LogsPage());
-                    case '/settings/google_drive_settings':
-                      return MaterialPageRoute(builder: (_) => GoogleDriveSettingsPage());
-
-                    case '/groups':
-                      return MaterialPageRoute(builder: (_) => MyGroupsPage());
-                    case '/group/groupId': //assert(args != null);
-                      return MaterialPageRoute(builder: (_) => GroupTabHosterPage(group: args, visitorEnum: VisitorEnum.member));
-                    case '/group/groupId/newComer': //assert(args != null);
-                      return MaterialPageRoute(builder: (_) => GroupTabHosterPage(group: args,  visitorEnum: VisitorEnum.newComer));
-                    case '/group/groupId/notNewComer': //assert(args != null);
-                      return MaterialPageRoute(builder: (_) => GroupTabHosterPage(group: args,  visitorEnum: VisitorEnum.notNewComer));
-                    case '/createTask':
-                      return MaterialPageRoute(builder: (_) => TaskMakerPage.create(groupId: args));
-                    case '/editTask': assert(args != null);
-                    return MaterialPageRoute(builder: (_) => TaskMakerPage.edit(taskToEdit: args,));
-                    case '/viewTask': assert(args != null);
-                    if(args is PojoTask) {
-                      return MaterialPageRoute(builder: (_) => ViewTaskPage.fromPojo(pojoTask: args,));
-                    }else{
-                      return MaterialPageRoute(builder: (_) => ViewTaskPage.fromId(taskId: args,));
-                    }
-                    break;
-                    case '/calendarTasks':
-                      return MaterialPageRoute(builder: (_) => TaskCalendarPage());
-
-
-                    case '/kreta/login':
-                      return MaterialPageRoute(builder: (_) => KretaLoginPage(onSuccess: args));
-                    case '/kreta/login/auth': assert(args != null);
-                    return MaterialPageRoute(builder: (_) => KretaLoginPage.auth(sessionToAuth: args));
-                    case '/kreta/accountSelector':
-                      return MaterialPageRoute(builder: (_) => SessionSelectorPage());
-                    case '/kreta/notes':
-                      return MaterialPageRoute(builder: (_) => KretaNotesPage());
-                    case '/kreta/statistics':
-                      return MaterialPageRoute(builder: (_) => KretaStatisticsPage());
-                    default:
-                      String errorLog = "log: route: ${settings.name}, args: ${settings.arguments}";
-                      return _errorRoute(errorLog);
-                  }
-                  }
+                  routeSettings, (RouteSettings settings, {NextPageInfo nextPageInfo,}) => RouteGenerator.generateRoute(settings)
                   /* todo: generate your application widgets here. use `settings`, not `routeSettings` object */
                   ,
                 ),

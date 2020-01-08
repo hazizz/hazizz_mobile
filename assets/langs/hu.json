@@ -750,6 +750,13 @@
   "gdrive_image_deleted"
   : "Ez a kép törölve lett a Google Drive-ból",
 
+  "gdrive_image_no_salt"
+  : "Nem található só a képhez",
+
+  "gdrive_image_other_error"
+  : "Valami probléma történt a kép betöltésekor",
+
+
   "delete_successful"
   : "{} sikeresen törölve",
 
@@ -1358,6 +1365,8 @@
     "no_kreta_account_added_yet"
     : "Még nincs kréta fiók hozzáadva",
 
+  "failed_session"
+  : "Sikertelen lekérdezés a kiválasztott session-el",
 
     "thera_grades"
     : "Théra jegyek",

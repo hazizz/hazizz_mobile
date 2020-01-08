@@ -80,16 +80,13 @@ class _GoogleDriveImage extends State<GoogleDriveImage>{
         height: widget.height,
       );
       _calculateImageDimension(thumbnailImage).then((Size size){
-
         if(widget.height != null){
           double resizePercent = widget.height / size.height;
-
           setState(() {
             widget.width = size.width * resizePercent;
             width = widget.width;
           });
         }
-
         print("size is: ${size.width}, ${size.height}");
       });
     }
@@ -179,64 +176,53 @@ class _GoogleDriveImage extends State<GoogleDriveImage>{
       height: height,
       child: Builder(
         builder: (context){
-          print("niggas be like :O 1");
+          print("people be like :O 1");
           if(widget.showThumbnail && false){
             return Image.network("https://drive.google.com/thumbnail?id=${widget.imageUrl.split("?id=")[1]}");
 
           }
 
-          print("niggas be like :O 1.1");
+          print("people be like :O 1.1");
           if(!loadImageEnabled || widget.salt == null){
-            print("niggas be like :O 2");
+            print("people be like :O 2");
             return thumbnailWidget(loadImage);
           }
-          print("niggas be like :O 3");
+          print("people be like :O 3");
 
           return FutureBuilder(
-            future: byteImg != null ? Future.value(false) : /*RequestSender().getResponse(new GetUploadedImage(
-                                                                  url: uri.toString()
-                                                          )), */
+            future: byteImg != null ? Future.value(false) :
             http.get(widget.imageUrl),
             builder: (context, responseState){
-              print("niggas be like :O 4");
-
-
+              print("people be like :O 4");
               if(byteImg != null){
-                print("niggas be like :O 6");
-                return ErrorProofWidget(
-                  child: ImageViewer.fromBytes(
+                print("people be like :O 6");
+                return ImageViewer.fromBytes(
                     byteImg,
                     heroTag: widget.imageUrl,
-                  ),
-                  onErrorWidget: Text("something wrong"),
-                );
+                  );
               }
               else if(responseState.connectionState == ConnectionState.done){
-                print("niggas be like :O 7");
+                print("people be like :O 7");
                 if(responseState.data.statusCode == 200){
                   String cryptedBase64Img = responseState.data.body;
                   String base64Img = HazizzCrypt.decrypt(cryptedBase64Img, widget.salt);
                   byteImg = Base64Decoder().convert(base64Img);
 
-                  return ErrorProofWidget(
-                    child: ImageViewer.fromBytes(
+                  return ImageViewer.fromBytes(
                       byteImg,
                       heroTag: widget.heroTag,
                       onDelete: widget.onDelete,
                       onSmallDelete: widget.onSmallDelete,
                       height: widget.height,
-                    ),
-                    onErrorWidget: Text("something wrong"),
-                  );
+                    );
                 }else{
                   deleted = true;
                   return deletedImageWidget();
                 }
-
               }else{
-                print("niggas be like :O 8");
+                print("people be like :O 8");
                 if(widget.showThumbnail && byteImg == null){
-                  print("niggas be like :O 5");
+                  print("people be like :O 5");
                   return thumbnailWidget(null);
                 }
                 return thumbnailWidget(null);

@@ -73,9 +73,9 @@ class RequestSender{
   }
 
   final Options defaultOptions = new Options(
-      connectTimeout: 8000,
-      sendTimeout: 8000,
-      receiveTimeout: 8000,
+      connectTimeout: 10000,
+      sendTimeout: 10000,
+      receiveTimeout: 10000,
       responseType: ResponseType.plain,
       receiveDataWhenStatusError: true,
       followRedirects: true

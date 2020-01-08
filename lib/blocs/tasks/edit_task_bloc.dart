@@ -14,6 +14,7 @@ import 'package:mobile/custom/image_operations.dart';
 import 'package:mobile/defaults/pojo_subject_empty.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/communication/hazizz_response.dart';
+import 'package:mobile/managers/app_state_restorer.dart';
 import 'package:mobile/widgets/image_viewer_widget.dart';
 
 //region EditTask bloc parts
@@ -64,36 +65,49 @@ class TaskEditBloc extends TaskMakerBloc {
    PojoGroup group;
    PojoSubject subject;
 
-  TaskEditBloc({@required this.taskToEdit}) : super(){
-    group = taskToEdit.group;
-    subject = taskToEdit.subject ;//!= null ? taskToEdit.subject : getEmptyPojoSubject(c);
+  TaskMakerAppState taskMakerAppState;
 
 
-    descriptionController.text = taskToEdit.description;
+  TaskEditBloc({this.taskToEdit, this.taskMakerAppState}) : super(){
+    if(taskToEdit != null){
+      group = taskToEdit.group;
+      subject = taskToEdit.subject ;//!= null ? taskToEdit.subject : getEmptyPojoSubject(c);
 
-    descriptionController.selection = TextSelection.fromPosition(TextPosition(offset: descriptionController.text.length));
+      descriptionController.text = taskToEdit.description;
+
+      descriptionController.selection = TextSelection.fromPosition(TextPosition(offset: descriptionController.text.length));
+
+      HazizzLogger.printLog("log: descr: ${descriptionController.text}");
 
 
-    HazizzLogger.printLog("log: descr: ${descriptionController.text}");
-
-
-    deadlineBloc.dispatch(DateTimePickedEvent(dateTime: taskToEdit.dueDate));
-   // taskTagBloc.add(TaskTypePickedEvent(taskToEdit.tags[0]));
-
-    for(PojoTag t in taskToEdit.tags){
-      taskTagBloc.dispatch(TaskTagAddEvent(t));
-    }
+      deadlineBloc.dispatch(DateTimePickedEvent(dateTime: taskToEdit.dueDate));
+      // taskTagBloc.add(TaskTypePickedEvent(taskToEdit.tags[0]));
+      for(PojoTag t in taskToEdit.tags){
+        taskTagBloc.dispatch(TaskTagAddEvent(t));
+      }
 
       groupItemPickerBloc.dispatch(SetGroupEvent(item: taskToEdit.group != null ? taskToEdit.group : PojoGroup(0, "", "", "", 0) ));
 
       subjectItemPickerBloc.dispatch(SetSubjectEvent(item: taskToEdit.subject != null ? taskToEdit.subject : PojoSubject(0, "", false, null, false)));
 
-    List<String> splited = taskToEdit.description.split("\n![img_");
-   /* for(int i = 1; i < splited.length; i++){
+      List<String> splited = taskToEdit.description.split("\n![img_");
+      /* for(int i = 1; i < splited.length; i++){
       imageUrls += "\n![img_" + splited[i];
       imageIndex++;
     }*/
-    descriptionBloc.dispatch(TextFormSetEvent(text: splited[0]));
+      descriptionBloc.dispatch(TextFormSetEvent(text: splited[0]));
+    }else if(taskMakerAppState != null){
+      PojoTask t = taskMakerAppState.pojoTask;
+
+      for(PojoTag t in t.tags){
+        taskTagBloc.dispatch(TaskTagAddEvent(t));
+      }
+
+      subjectItemPickerBloc.dispatch(PickedSubjectEvent(item: t.subject));
+      groupItemPickerBloc.dispatch(PickedGroupEvent(item: t.group));
+      descriptionBloc.dispatch(TextFormSetEvent(text: t.description));
+      deadlineBloc.dispatch(DateTimePickedEvent(dateTime: t.dueDate));
+    }
   }
 
   @override
@@ -177,6 +191,12 @@ class TaskEditBloc extends TaskMakerBloc {
 
 
         if(hazizzResponse.isSuccessful){
+          if(event.imageDatas != null && event.imageDatas.isNotEmpty){
+            int taskId = (hazizzResponse.convertedData as PojoTask).id;
+            event.imageDatas.forEach((HazizzImageData hazizzImageData){
+              hazizzImageData.renameFile(taskId);
+            });
+          }
           yield TaskMakerSuccessfulState(hazizzResponse.convertedData);
         }else{
           yield TaskMakerFailedState();

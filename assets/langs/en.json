@@ -750,6 +750,12 @@
   "gdrive_image_deleted"
   : "This image has been deleted from Google Drive",
 
+  "gdrive_image_no_salt"
+  : "No salt found for image",
+
+  "gdrive_image_other_error"
+  : "Something went wrong while loading image",
+
   "delete_successful"
   : "{} successfully deleted",
 
@@ -1352,6 +1358,10 @@
 
     "no_kreta_account_added_yet"
     : "No Kreta account added yet",
+
+
+  "failed_session"
+  : "Unsuccessful request with the selected session",
 
     "thera_grades"
     : "Thera grades",

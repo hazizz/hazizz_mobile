@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/item_list/item_list_picker_bloc.dart';
 import 'package:mobile/custom/line_break_limit_text_formatter.dart';
+import 'package:mobile/managers/app_state_restorer.dart';
 import 'package:mobile/managers/google_drive_manager.dart';
 import 'package:mobile/blocs/other/text_form_bloc.dart';
 import 'package:mobile/blocs/tasks/create_task_bloc.dart';
@@ -44,14 +45,16 @@ class TaskMakerPage extends StatefulWidget {
 
   String cryptKey = HazizzCrypt.generateKey();
 
-  TaskMakerPage.edit({Key key, this.taskToEdit}) : super(key: key){
+  final TaskMakerAppState taskMakerAppState;
+
+  TaskMakerPage.edit({Key key, this.taskToEdit, this.taskMakerAppState}) : super(key: key){
     taskId = taskToEdit.id;
     mode = TaskMakerMode.edit;
 
     cryptKey = taskToEdit.salt;
   }
 
-  TaskMakerPage.create({Key key, this.groupId}) : super(key: key){
+  TaskMakerPage.create({Key key, this.groupId, this.taskMakerAppState}) : super(key: key){
     mode = TaskMakerMode.create;
   }
 
@@ -110,10 +113,10 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
   void initState() {
 
     if(widget.mode == TaskMakerMode.create){
-      blocs = TaskCreateBloc(group: widget.group);
+      blocs = TaskCreateBloc(group: widget.group, taskMakerAppState: widget.taskMakerAppState);
 
     }else if(widget.mode == TaskMakerMode.edit){
-      blocs = new TaskEditBloc(taskToEdit: widget.taskToEdit);
+      blocs = new TaskEditBloc(taskToEdit: widget.taskToEdit, taskMakerAppState: widget.taskMakerAppState);
 
       List<String> splited = widget.taskToEdit.description.split("\n![img_");
 
@@ -152,7 +155,14 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
         return;
       }
     }
+
+
+    blocs.dispatch(TaskMakerSaveStateEvent(
+      salt: widget.cryptKey,
+      imageDatas: imageDatas
+    ));
     HazizzImageData imageData = await ImageOpeations.pick();
+    AppStateRestorer.setShouldReloadTaskMaker(false);
     print("miauuu?");
     if(imageData == null){
       return;
@@ -441,7 +451,7 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
             }
             return TextFormField(
               inputFormatters:[
-                LineBreakLimitingTextInputFormatter(10)
+                LineBreakLimitingTextInputFormatter(24)
               ],
               focusNode: _descriptionFocusNode,
               controller: blocs.descriptionController,
@@ -454,11 +464,11 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
                 filled: true,
               ),
               maxLength: descriptionMaxLength - 75 * imageDatas.length,
-              maxLines: 8,
+              maxLines: 10,
               minLines: 6,
               expands: false,
               style: TextStyle(
-                  fontSize: 21
+                  fontSize: 19
               ),
             );
           }
@@ -594,151 +604,158 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
                                     padding: const EdgeInsets.only(left: 12, right: 12, top: 10),
                                     child: descriptionTextForm
                                   ),
-                                  Center(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(left: 6, right: 10),
-                                      child: Builder(
-                                        builder: (context){
-                                          if(imageDatas == null || imageDatas.isEmpty){
-                                            return Container(
-                                               width: 62,
-                                                height: 60,
-                                              //color: Colors.blue,
-                                              child: RaisedButton(
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(10.0),
-                                                ),
-                                                onPressed: pickImage,
-                                                padding: EdgeInsets.all(0),
-                                                color: Colors.grey,
-                                                child: Stack(
-                                                  children: <Widget>[
-
-                                                    Positioned(
-                                                      left: 12, top: 10,
-                                                      child: Padding(
-                                                        padding: const EdgeInsets.all(0.0),
-                                                        child: Icon(FontAwesomeIcons.googleDrive, size: 34,),
-                                                      ),
-                                                    ),
-                                                    Positioned(
-                                                      bottom: 6, right: 0,
-                                                      child: Container(
-                                                        decoration: new BoxDecoration(
-                                                          borderRadius: BorderRadius.all(const Radius.circular(5.0)),
-                                                          color: Colors.grey,
-
-                                                        ),
-                                                        child: Padding(
-                                                          padding: const EdgeInsets.only(left:4, right:4, bottom: 2),
-                                                          child: Icon(FontAwesomeIcons.image),
-                                                        ),
-                                                      )
-                                                    ),
-                                                   /* Positioned(
-                                                      top: 20,
-                                                      child: Icon(FontAwesomeIcons.plus, color: Colors.red, size: 34,),
-                                                    ),*/
-                                                    Positioned(
-                                                      bottom: 2,
-                                                      child: Icon(FontAwesomeIcons.plus),
-                                                    )
-
-                                                  ],
-                                                ),
-                                              ),
-                                            );
-                                          }
-                                          return Card(
-                                              color: Colors.grey,
-                                              child: Padding(
-                                                padding: EdgeInsets.all(4),
-                                                child: ConstrainedBox(
-                                                  constraints: new BoxConstraints(
-                                                    minHeight: 0,
-                                                    maxHeight: 100,
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 8, bottom: 20),
+                                    child: Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(left: 6, right: 10),
+                                        child: Builder(
+                                          builder: (context){
+                                            if(imageDatas == null || imageDatas.isEmpty){
+                                              return Container(
+                                                 width: 62,
+                                                  height: 46,
+                                                //color: Colors.blue,
+                                                child: RaisedButton(
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(10.0),
                                                   ),
-                                                  child: SingleChildScrollView(
-                                                    controller: scrollController,
+                                                  onPressed: pickImage,
+                                                  padding: EdgeInsets.all(0),
+                                                  color: Colors.grey,
+                                                  child: Stack(
+                                                    children: <Widget>[
 
-                                                    scrollDirection: Axis.horizontal,
-                                                    child: Row(
-                                                      children: <Widget>[
-                                                        Container(
-                                                          child: ListView.builder(
-                                                              shrinkWrap: true,
-                                                              scrollDirection: Axis.horizontal,
-                                                              itemCount: imageDatas.length,
-                                                              itemBuilder: (context, index){
-                                                                return Padding(
-                                                                    padding: EdgeInsets.only(left: 6, ),
-                                                                    child: Container(
-                                                                      height: 100,
-                                                                      child: Stack(
-                                                                        children: <Widget>[
-                                                                          Builder(
-                                                                            builder: (context){
-                                                                              Function f = (){};
-                                                                              if(imageDatas[index].imageType == ImageType.GOOGLE_DRIVE){
-                                                                                f = (){
-                                                                                  imageDatasToRemove.add(imageDatas[index]);
-                                                                                };
-                                                                              }
-                                                                              return ImageViewer.fromHazizzImageData(
-                                                                                imageDatas[index],
-                                                                                height: 100,
-                                                                                onSmallDelete: (){
-                                                                                  f();
-                                                                                  setState(() {
-                                                                                    imageDatas.removeAt(index);
-                                                                                  });
+                                                      /*
+                                                      Positioned(
+                                                        left: 12, top: 10,
+                                                        child: Padding(
+                                                          padding: const EdgeInsets.all(0.0),
+                                                          child: Icon(FontAwesomeIcons.googleDrive, size: 34,),
+                                                        ),
+                                                      ),
+                                                      */
+                                                      Positioned(
+                                                        bottom: 10, right: 2,
+                                                        child: Container(
+                                                          decoration: new BoxDecoration(
+                                                            borderRadius: BorderRadius.all(const Radius.circular(5.0)),
+                                                            color: Colors.grey,
 
-                                                                                },
-                                                                              );
-                                                                              //  }
-                                                                              return null;
+                                                          ),
+                                                          child: Padding(
+                                                            padding: const EdgeInsets.only(left:4, right:4, bottom: 2),
+                                                            child: Icon(FontAwesomeIcons.image),
+                                                          ),
+                                                        )
+                                                      ),
+                                                     /* Positioned(
+                                                        top: 20,
+                                                        child: Icon(FontAwesomeIcons.plus, color: Colors.red, size: 34,),
+                                                      ),*/
+                                                      Positioned(
+                                                        bottom: 12, left: 4,
+                                                        child: Icon(FontAwesomeIcons.plus),
+                                                      )
 
-                                                                            },
-                                                                          ),
-                                                                          /* Positioned(
-                                                                    top: 0, left: 0,
-                                                                    child: Transform.translate(
-                                                                      offset: Offset(-1, -1),
-                                                                      child: GestureDetector(
-                                                                        child: Icon(FontAwesomeIcons.solidTimesCircle, size: 20, color: Colors.red,),
-                                                                        onTap: (){
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                            return Card(
+                                                color: Colors.grey,
+                                                child: Padding(
+                                                  padding: EdgeInsets.all(4),
+                                                  child: ConstrainedBox(
+                                                    constraints: new BoxConstraints(
+                                                      minHeight: 0,
+                                                      maxHeight: 100,
+                                                    ),
+                                                    child: SingleChildScrollView(
+                                                      controller: scrollController,
 
-                                                                        },
+                                                      scrollDirection: Axis.horizontal,
+                                                      child: Row(
+                                                        children: <Widget>[
+                                                          Container(
+                                                            child: ListView.builder(
+                                                                cacheExtent: 100000000,
+                                                                addAutomaticKeepAlives: true,
+                                                                shrinkWrap: true,
+                                                                scrollDirection: Axis.horizontal,
+                                                                itemCount: imageDatas.length,
+                                                                itemBuilder: (context, index){
+                                                                  return Padding(
+                                                                      padding: EdgeInsets.only(left: 6, ),
+                                                                      child: Container(
+                                                                        height: 100,
+                                                                        child: Stack(
+                                                                          children: <Widget>[
+                                                                            Builder(
+                                                                              builder: (context){
+                                                                                Function f = (){};
+                                                                                if(imageDatas[index].imageType == ImageType.GOOGLE_DRIVE){
+                                                                                  f = (){
+                                                                                    imageDatasToRemove.add(imageDatas[index]);
+                                                                                  };
+                                                                                }
+                                                                                return ImageViewer.fromHazizzImageData(
+                                                                                  imageDatas[index],
+                                                                                  height: 100,
+                                                                                  onSmallDelete: (){
+                                                                                    f();
+                                                                                    setState(() {
+                                                                                      imageDatas.removeAt(index);
+                                                                                    });
+
+                                                                                  },
+                                                                                );
+                                                                                //  }
+                                                                                return null;
+
+                                                                              },
+                                                                            ),
+                                                                            /* Positioned(
+                                                                      top: 0, left: 0,
+                                                                      child: Transform.translate(
+                                                                        offset: Offset(-1, -1),
+                                                                        child: GestureDetector(
+                                                                          child: Icon(FontAwesomeIcons.solidTimesCircle, size: 20, color: Colors.red,),
+                                                                          onTap: (){
+
+                                                                          },
+                                                                        )
                                                                       )
                                                                     )
-                                                                  )
-                                                                  */
-                                                                        ],
-                                                                      ),
-                                                                    )
-                                                                );
-                                                              }
+                                                                    */
+                                                                          ],
+                                                                        ),
+                                                                      )
+                                                                  );
+                                                                }
+                                                            ),
                                                           ),
-                                                        ),
-                                                        Builder(
-                                                          builder: (context){
-                                                            if(imageDatas.length >= 3) return Container();
-                                                            return Padding(
-                                                              padding: EdgeInsets.only(left: 4),
-                                                              child: IconButton(
-                                                                icon: Icon(FontAwesomeIcons.plus),
-                                                                onPressed: pickImage
-                                                              ),
-                                                            );
-                                                          },
-                                                        )
-                                                      ],
+                                                          Builder(
+                                                            builder: (context){
+                                                              if(imageDatas.length >= 5) return Container();
+                                                              return Padding(
+                                                                padding: EdgeInsets.only(left: 4),
+                                                                child: IconButton(
+                                                                  icon: Icon(FontAwesomeIcons.plus),
+                                                                  onPressed: pickImage
+                                                                ),
+                                                              );
+                                                            },
+                                                          )
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                              )
-                                          );
-                                        },
+                                                )
+                                            );
+                                          },
+                                        ),
                                       ),
                                     ),
                                   ),

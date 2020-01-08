@@ -7,8 +7,14 @@ part of 'PojoInviteLink.dart';
 // **************************************************************************
 
 PojoInviteLink _$PojoInviteLinkFromJson(Map<String, dynamic> json) {
-  return PojoInviteLink(json['id'] as int, json['link'] as String);
+  return PojoInviteLink(
+    json['id'] as int,
+    json['link'] as String,
+  );
 }
 
 Map<String, dynamic> _$PojoInviteLinkToJson(PojoInviteLink instance) =>
-    <String, dynamic>{'id': instance.id, 'link': instance.link};
+    <String, dynamic>{
+      'id': instance.id,
+      'link': instance.link,
+    };

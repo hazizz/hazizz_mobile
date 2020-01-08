@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
+import 'package:mobile/blocs/flush_bloc.dart';
 import 'package:mobile/blocs/kreta/selected_session_bloc.dart';
 import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
 import 'package:mobile/blocs/other/request_event.dart';
@@ -11,6 +12,7 @@ import 'package:mobile/communication/connection.dart';
 import 'package:mobile/communication/custom_response_errors.dart';
 import 'package:mobile/communication/pojos/PojoClass.dart';
 import 'package:mobile/communication/pojos/PojoSchedules.dart';
+import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_date_time.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
@@ -18,6 +20,7 @@ import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/blocs/kreta/schedule_event_bloc.dart';
+import 'package:mobile/services/selected_session_helper.dart';
 import 'package:mobile/storage/caches/data_cache.dart';
 
 //region Schedule bloc parts
@@ -67,9 +70,11 @@ class ScheduleWaitingState extends ScheduleState {
 
 
 class ScheduleLoadedState extends ScheduleState {
-  PojoSchedules schedules;
+  final PojoSchedules schedules;
 
-  ScheduleLoadedState(this.schedules) : assert(schedules!= null), super([schedules, SelectedSessionBloc().selectedSession]);
+  final List<PojoSession> failedSessions;
+
+  ScheduleLoadedState(this.schedules, {this.failedSessions}) : assert(schedules!= null), super([schedules, SelectedSessionBloc().selectedSession]);
   @override
   String toString() => 'ScheduleLoadedState';
   List<Object> get props => [schedules, SelectedSessionBloc().selectedSession];
@@ -100,6 +105,9 @@ class ScheduleErrorState extends ScheduleState {
 
 //region Schedule bloc
 class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
+
+  List<PojoSession> failedSessions = [];
+
 
   ScheduleEventBloc scheduleEventBloc;
 
@@ -211,7 +219,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
   @override
   Stream<ScheduleState> mapEventToState(ScheduleEvent event) async* {
     if(event is ScheduleSetSessionEvent){
-      yield ScheduleLoadedState(classes);
+      yield ScheduleLoadedState(classes, failedSessions: failedSessions);
     }
     else if (event is ScheduleFetchEvent) {
       try {
@@ -261,8 +269,27 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
         );
 
         if(hazizzResponse.isSuccessful){
-          classes = hazizzResponse.convertedData;
 
+          failedSessions = getFailedSessionsFromHeader(hazizzResponse.response.headers);
+
+          if(doesContainSelectedSession(failedSessions)){
+            FlushBloc().dispatch(FlushSessionFailEvent());
+          }
+
+          PojoSchedules r = hazizzResponse.convertedData;
+          if(r != null && r.classes.isNotEmpty){
+            classes = hazizzResponse.convertedData;
+
+            if(classes != null ){
+              lastUpdated = DateTime.now();
+              if(currentYearNumber == currentCurrentYearNumber && currentWeekNumber == currentCurrentWeekNumber) {
+                saveScheduleCache(classes, year: currentYearNumber, weekNumber: currentWeekNumber);
+              }
+              yield ScheduleLoadedState(classes, failedSessions: failedSessions);
+            }
+          }else{
+            yield ScheduleLoadedCacheState(classes);
+          }
           /*
           classes = PojoSchedules({"0": [
             PojoClass(date: DateTime(2000), periodNumber: 0, startOfClass: HazizzTimeOfDay(hour: 2, minute: 2), endOfClass: HazizzTimeOfDay(hour: 2, minute: 2), className: "TEST", topic: "TOPIC", subject: "SUBJECT", room: "", cancelled: true, standIn: true, teacher: "PEKÁR LOL"),
@@ -287,14 +314,6 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
             ],
           });
           */
-
-          if(classes != null ){
-            lastUpdated = DateTime.now();
-            if(currentYearNumber == currentCurrentYearNumber && currentWeekNumber == currentCurrentWeekNumber) {
-              saveScheduleCache(classes, year: currentYearNumber, weekNumber: currentWeekNumber);
-            }
-            yield ScheduleLoadedState(classes);
-          }
         }
         else if(hazizzResponse.isError){
 
@@ -308,10 +327,12 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
             );
 
           }else if(hazizzResponse.dioError.type == DioErrorType.CONNECT_TIMEOUT
-              || hazizzResponse.dioError.type == DioErrorType.RECEIVE_TIMEOUT) {
+                || hazizzResponse.dioError.type == DioErrorType.RECEIVE_TIMEOUT) {
             _failedRequestCount++;
             if(_failedRequestCount <= 1) {
               this.dispatch(ScheduleFetchEvent());
+            }else{
+              yield ScheduleLoadedCacheState(classes);
             }
 
           }else{

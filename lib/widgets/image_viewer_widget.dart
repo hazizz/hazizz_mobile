@@ -1,10 +1,13 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/communication/pojos/pojo_comment.dart';
+import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/custom/image_operations.dart';
 import 'package:mobile/managers/preference_services.dart';
 import 'package:mobile/services/hazizz_crypt.dart';
@@ -18,15 +21,16 @@ enum ImageType{
   NETWORK,
   FILE,
   MEMORY,
-  GOOGLE_DRIVE
+  GOOGLE_DRIVE,
+
 }
 
 class ImageViewer extends StatefulWidget {
 
   ImageType imageType;
 
-  double height;
-  double width;
+  final double height;
+  final double width;
 
   File imageFile;
   String imageUrl;
@@ -34,15 +38,14 @@ class ImageViewer extends StatefulWidget {
 
   Object heroTag;
 
-  Function onSmallDelete;
-  Function onDelete;
+  final Function onSmallDelete;
+  final Function onDelete;
 
   Image image;
 
 
 
   String salt;
-  Uint8List byteImg;
 
   bool loadImageEnabled = PreferenceService.imageAutoLoad;
 
@@ -52,17 +55,17 @@ class ImageViewer extends StatefulWidget {
 
   HazizzImageData imageData;
 
-  ImageViewer.fromNetwork(this.imageUrl, {Key key, @required this.heroTag, this.onSmallDelete, this.onDelete, this.height}) : super(key: key){
+  ImageViewer.fromNetwork(this.imageUrl, {Key key, @required this.heroTag, this.onSmallDelete, this.onDelete, this.width, this.height}) : super(key: key){
     //http.get(imageUrl);
     print("recreatedd!!!");
     image = Image.network(imageUrl, key: Key(imageUrl),);
     imageType = ImageType.NETWORK;
   }
-  ImageViewer.fromFile(this.imageFile, {Key key, @required this.heroTag, this.onSmallDelete, this.onDelete, this.height}) : super(key: key){
+  ImageViewer.fromFile(this.imageFile, {Key key, @required this.heroTag, this.onSmallDelete, this.onDelete, this.width, this.height}) : super(key: key){
     image = Image.file(imageFile,);
     imageType = ImageType.FILE;
   }
-  ImageViewer.fromBytes(this.imageBytes, {Key key, @required this.heroTag, this.onSmallDelete, this.onDelete, this.height}) : super(key: key){
+  ImageViewer.fromBytes(this.imageBytes, {Key key, @required this.heroTag, this.onSmallDelete, this.onDelete, this.width, this.height}) : super(key: key){
     image = Image.memory(imageBytes);
     imageType = ImageType.MEMORY;
   }
@@ -78,7 +81,7 @@ class ImageViewer extends StatefulWidget {
     imageType = ImageType.GOOGLE_DRIVE;
   }
 
-  ImageViewer.fromHazizzImageData(this.imageData, {Key key, this.onSmallDelete, this.onDelete, this.height}) : super(key: key){
+  ImageViewer.fromHazizzImageData(this.imageData, {Key key, this.onSmallDelete, this.onDelete, this.width, this.height}) : super(key: key){
     if(imageData.imageType == ImageType.FILE){
       image = Image.file(imageData.imageFile);
       heroTag = imageData.imageFile.path;
@@ -107,14 +110,80 @@ class ImageViewer extends StatefulWidget {
 }
 
 
-class _ImageViewer extends State<ImageViewer>{
+class _ImageViewer extends State<ImageViewer> with AutomaticKeepAliveClientMixin{
 
   List<PojoComment> comments = List();
 
   bool uploading = false;
 
+  bool noSalt = false;
+  bool tapped = false;
+  bool deleted = false;
+
+  File imageFile;
+  String imageUrl;
+  Uint8List imageBytes;
+
+
+  double width, height;
+
+  Image image, thumbnailImage;
+
+  Future request;
+
+  Future<Size> _calculateImageDimension(Image image) {
+    Completer<Size> completer = Completer();
+    image.image.resolve(ImageConfiguration()).addListener(
+      ImageStreamListener(
+            (ImageInfo image, bool synchronousCall) {
+          var myImage = image.image;
+          Size size = Size(myImage.width.toDouble(), myImage.height.toDouble());
+          completer.complete(size);
+        },
+      ),
+    );
+    return completer.future;
+  }
+
   @override
   void initState() {
+    image = widget.image;
+    width = widget.width;
+    height = widget.height;
+    imageFile = widget.imageFile;
+    imageBytes = widget.imageBytes;
+
+    imageUrl = widget.imageUrl;
+    if(widget.imageType == ImageType.GOOGLE_DRIVE ) request = http.get(imageUrl);
+
+    if(widget.imageType == ImageType.GOOGLE_DRIVE){
+      thumbnailImage = Image.network(
+        "https://drive.google.com/thumbnail?id=${imageUrl.split("?id=")[1]}",
+        width: width,
+        fit: BoxFit.fitWidth,
+        height: height,
+      );
+      if( (height != null && width == null) || (width != null && height == null) ){
+        _calculateImageDimension(thumbnailImage).then((Size size){
+          if(height != null){
+            double resizePercent = widget.height / size.height;
+            setState(() {
+              width = size.width * resizePercent;
+
+            });
+          }else{
+            double resizePercent = widget.width / size.width;
+            setState(() {
+              height = size.height * resizePercent;
+            });
+
+          }
+          print("size is: ${size.width}, ${size.height}");
+        });
+      }
+
+    }
+
     if(widget.imageType == ImageType.FILE && widget.imageData != null){
       uploading = true;
 
@@ -130,9 +199,6 @@ class _ImageViewer extends State<ImageViewer>{
     super.initState();
   }
 
-
-  bool tapped = false;
-
   @override
   void dispose() {
     // TODO: implement dispose
@@ -140,31 +206,64 @@ class _ImageViewer extends State<ImageViewer>{
     // commentBlocs.dispose();
   }
 
+  Widget errorImageWidget(String text){
+    return Container(
+      height: height ?? 180,
+      width: width ?? 100,
+      child: Card(
+        color: Colors.grey,
+        child: Center(child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: AutoSizeText(
+            text,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 18),
+            minFontSize: 5,
+            maxFontSize: 18,
+          ),
+        )),
+      ),
+    );
+  }
+
+  Widget deletedImageWidget(){
+    return errorImageWidget(locText(context, key: "gdrive_image_deleted"));
+  }
+
+  Widget noSaltImageWidget(){
+    return errorImageWidget(locText(context, key: "gdrive_image_no_salt"));
+  }
+
+  Widget otherErrorImageWidget(){
+    return errorImageWidget(locText(context, key: "gdrive_image_other_error"));
+  }
+
   @override
   Widget build(BuildContext context) {
-
+    super.build(context);
     print("uploading: $uploading");
     return Container(
-      height: widget.height,
+      height: height,
+      width: width,
       child: GestureDetector(
         onTap: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            if(widget.imageType == ImageType.NETWORK){
-              return ImageViewerPage.fromNetwork(widget.imageUrl,  heroTag: widget.heroTag, onDelete: widget.onDelete,);
-            }else if(widget.imageType == ImageType.MEMORY) {
-              return ImageViewerPage.fromBytes(widget.imageBytes, heroTag: widget.heroTag, onDelete: widget.onDelete,);
-            }else if(widget.imageType == ImageType.FILE){
-              return ImageViewerPage.fromFile(widget.imageFile,  heroTag: widget.heroTag, onDelete: widget.onDelete,);
-            }else if(widget.imageType == ImageType.GOOGLE_DRIVE){
-              return ImageViewerPage.fromBytes(widget.byteImg,  heroTag: widget.heroTag, onDelete: widget.onDelete,);
-            }
-            return null;
-
+          if(!deleted && !noSalt){
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              if(widget.imageType == ImageType.NETWORK){
+                return ImageViewerPage.fromNetwork(imageUrl,  heroTag: widget.heroTag, onDelete: widget.onDelete,);
+              }else if(widget.imageType == ImageType.MEMORY) {
+                return ImageViewerPage.fromBytes(imageBytes, heroTag: widget.heroTag, onDelete: widget.onDelete,);
+              }else if(widget.imageType == ImageType.FILE){
+                return ImageViewerPage.fromFile(imageFile,  heroTag: widget.heroTag, onDelete: widget.onDelete,);
+              }else if(widget.imageType == ImageType.GOOGLE_DRIVE){
+                return ImageViewerPage.fromBytes(imageBytes,  heroTag: widget.heroTag, onDelete: widget.onDelete,);
+              }
+              return null;
+            }));
           }
-          ));
         },
-        child: Hero(
-          tag: widget.heroTag,
+        child: Container(
+         // tag: widget.heroTag,
           child: Stack(
             children: <Widget>[
               ClipRRect(
@@ -172,46 +271,50 @@ class _ImageViewer extends State<ImageViewer>{
                   builder: (context){
                     if(widget.imageType == ImageType.GOOGLE_DRIVE){
                       if(!widget.loadImageEnabled){
-                        print("niggas be like :O 2");
+                        print("people be like :O 2");
                         return thumbnailWidget(loadImage);
                       }
-                      print("niggas be like :O 3");
+                      print("people be like :O 3");
 
                       return FutureBuilder(
-                        future: widget.byteImg != null ? Future.value(false) : /*RequestSender().getResponse(new GetUploadedImage(
-                                                                url: uri.toString()
-                                                        )), */
-                        http.get(widget.imageUrl),
+                        future: imageBytes != null ? Future.value(false) :
+                        request,
                         builder: (context, responseState){
-                          print("niggas be like :O 4");
+                          print("people be like :O 4");
 
 
-                          if(widget.byteImg != null){
-                            print("niggas be like :O 6");
-                            return ErrorProofWidget(
-                              child: Image.memory(
-                                widget.byteImg,
-                              ),
-                              onErrorWidget: Text("something wrong"),
+                          if(imageBytes != null){
+                            print("people be like :O 6");
+                            return Image.memory(
+                              imageBytes,
                             );
                           }
                           else if(responseState.connectionState == ConnectionState.done){
-                            print("niggas be like :O 7");
-                            String cryptedBase64Img = responseState.data.body;
-                            String base64Img = HazizzCrypt.decrypt(cryptedBase64Img, widget.salt);
-                            widget.byteImg = Base64Decoder().convert(base64Img);
+                            print("people be like :O 7");
+                            if(widget.salt == null || widget.salt == "" || widget.salt == "--------------------------------"){
+                              noSalt = true;
+                              return noSaltImageWidget();
+                            }
+                            else if(responseState.data.statusCode == 200 ){
+                              String cryptedBase64Img = responseState.data.body;
+                              String base64Img = HazizzCrypt.decrypt(cryptedBase64Img, widget.salt);
+                              imageBytes = Base64Decoder().convert(base64Img);
 
-                            return ErrorProofWidget(
-                              child: Image.memory(
-                                widget.byteImg,
-                                height: widget.height,
-                              ),
-                              onErrorWidget: Text("something wrong"),
-                            );
+                              return ImageViewer.fromBytes(
+                                  imageBytes,
+                                  heroTag: widget.heroTag,
+                                  onDelete: widget.onDelete,
+                                  onSmallDelete: widget.onSmallDelete,
+                                  height: height,
+                                );
+                            }else{
+                              deleted = true;
+                              return deletedImageWidget();
+                            }
                           }else{
-                            print("niggas be like :O 8");
-                            if(widget.byteImg == null){
-                              print("niggas be like :O 5");
+                            print("people be like :O 8");
+                            if(imageBytes == null){
+                              print("people be like :O 5");
                               return thumbnailWidget(null);
                             }
                             return thumbnailWidget(null);
@@ -219,7 +322,7 @@ class _ImageViewer extends State<ImageViewer>{
                         },
                       );
                     }
-                    return widget.image;
+                    return image;
                   },
                 ),
                 borderRadius: BorderRadius.circular(8),
@@ -268,7 +371,7 @@ class _ImageViewer extends State<ImageViewer>{
 
   Widget thumbnailWidget(Function onTapped){
     return Container(
-      height: widget.height,
+      height: height,
       child: Stack(
         children: <Widget>[
           ClipRRect(
@@ -299,4 +402,7 @@ class _ImageViewer extends State<ImageViewer>{
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -143,6 +143,8 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
 
               return ListView.builder(
               //  physics:  BouncingScrollPhysics(),
+                  cacheExtent: 100000000,
+                  addAutomaticKeepAlives: true,
                   itemCount: map.keys.length+1,
                   itemBuilder: (BuildContext context, int index) {
 
@@ -386,10 +388,7 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
                           }else if (state is TasksErrorState) {
                             //return Center(child: Text("Loading Data"));
                             if(state.hazizzResponse.dioError == noConnectionError){
-                              print("boi: no internetr");
-                              WidgetsBinding.instance.addPostFrameCallback((_) {
-                                showNoConnectionFlushBar(context);
-                              });
+
                             }else{
                               WidgetsBinding.instance.addPostFrameCallback((_) {
                                 Flushbar(

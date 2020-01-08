@@ -203,6 +203,18 @@ dynamic showTheraServerUnavailableFlushBar(BuildContext context){
   )..show(context);
 }
 
+dynamic showSessionFailFlushBar(BuildContext context){
+  return Flushbar(
+    flushbarStyle: FlushbarStyle.FLOATING,
+    shouldIconPulse: true,
+
+    icon: Icon(FontAwesomeIcons.userTimes, color: Colors.red,),
+    message:  locText(context, key: "failed_session"),
+    duration:  Duration(seconds: 4),
+  )..show(context);
+}
+
+
 void showReportSuccessFlushBar(BuildContext context, {@required String what}){
   Flushbar(
     icon: Icon(FontAwesomeIcons.solidFlag, color: Colors.green,),

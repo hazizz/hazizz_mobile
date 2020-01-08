@@ -6,9 +6,11 @@ import 'package:mobile/blocs/item_list/item_list_picker_bloc.dart';
 import 'package:mobile/blocs/other/date_time_picker_bloc.dart';
 import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
 import 'package:mobile/blocs/other/response_states.dart';
+import 'package:mobile/blocs/other/text_form_bloc.dart';
 import 'package:mobile/blocs/tasks/task_maker_blocs.dart';
 import 'package:mobile/blocs/tasks/tasks_bloc.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
+import 'package:mobile/communication/pojos/PojoSubject.dart';
 import 'package:mobile/communication/pojos/PojoTag.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
@@ -16,6 +18,8 @@ import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/custom/image_operations.dart';
+import 'package:mobile/managers/app_state_restorer.dart';
+import 'package:mobile/widgets/image_viewer_widget.dart';
 
 import '../../managers/google_drive_manager.dart';
 
@@ -54,8 +58,24 @@ class TaskCreateBloc extends TaskMakerBloc {
 
   PojoGroup group;
 
-  TaskCreateBloc({this.group}) : super(){
-    taskTagBloc.dispatch(TaskTagAddEvent(PojoTag.defaultTags[0]));
+  TaskMakerAppState taskMakerAppState;
+
+  TaskCreateBloc({this.group, this.taskMakerAppState}) : super(){
+
+    if(taskMakerAppState != null){
+      PojoTask t = taskMakerAppState.pojoTask;
+
+      for(PojoTag t in t.tags){
+        taskTagBloc.dispatch(TaskTagAddEvent(t));
+      }
+
+      if(t.subject != null) subjectItemPickerBloc.dispatch(PickedSubjectEvent(item: t.subject));
+      if(t.group != null) groupItemPickerBloc.dispatch(PickedGroupEvent(item: t.group));
+      if(t.description != null) descriptionBloc.dispatch(TextFormSetEvent(text: t.description));
+      if(t.dueDate != null) deadlineBloc.dispatch(DateTimePickedEvent(dateTime: t.dueDate));
+    }else{
+      taskTagBloc.dispatch(TaskTagAddEvent(PojoTag.defaultTags[0]));
+    }
   }
  
   @override
@@ -70,7 +90,72 @@ class TaskCreateBloc extends TaskMakerBloc {
         groupItemPickerBloc.dispatch(PickedGroupEvent(item: group));
       }
     }
-    if (event is TaskMakerSendEvent) {
+    else if(event is TaskMakerSaveStateEvent){
+      PojoGroup group;
+      PojoSubject subject;
+      List<String> tags = List();
+      DateTime deadline;
+      String description;
+
+      String salt = event.salt;
+
+      taskTagBloc.pickedTags.forEach((f){tags.add(f.name);});
+
+
+      HazizzLogger.printLog("nuno: 1");
+
+
+      ItemListState groupState =  groupItemPickerBloc.currentState;
+
+      if (groupState is PickedGroupState) {
+        group = groupItemPickerBloc.pickedItem;
+        HazizzLogger.printLog("nuno: 2");
+      }
+      HState subjectState = subjectItemPickerBloc.currentState;
+      if(subjectState is PickedSubjectState) {
+        subject = subjectState.item;
+      }
+
+      DateTimePickerState deadlineState = deadlineBloc.currentState;
+      if(deadlineState is DateTimePickedState) {
+        deadline = deadlineState.dateTime;
+      }
+
+
+      description = descriptionBloc.lastText ?? "";
+
+
+      PojoTask pojoTaskToSave = PojoTask(
+        salt: salt,
+        group: group,
+        subject: subject,
+        description: description,
+        tags: taskTagBloc.pickedTags,
+        dueDate: deadline
+      );
+      HazizzLogger.printLog("nuno: 3");
+
+
+      List<String> imagePaths = [];
+      for(HazizzImageData i in event.imageDatas){
+        if(i.imageType == ImageType.FILE){
+          imagePaths.add(i.imageFile.path);
+        }else if(i.imageType == ImageType.GOOGLE_DRIVE){
+          imagePaths.add(i.url);
+        }
+      }
+
+      AppStateRestorer.saveTaskState(TaskMakerAppState(
+        pojoTask: pojoTaskToSave,
+        taskMakerMode: TaskMakerMode.create,
+        imagePaths: imagePaths
+      ));
+      HazizzLogger.printLog("nuno: finished");
+
+
+
+    }
+    else if (event is TaskMakerSendEvent) {
       HazizzLogger.printLog("log: event: TaskMakerSendEvent");
       try {
         yield TaskMakerWaitingState();

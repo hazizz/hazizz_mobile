@@ -8,14 +8,15 @@ part of 'PojoAlertSettings.dart';
 
 PojoAlertSettings _$PojoAlertSettingsFromJson(Map<String, dynamic> json) {
   return PojoAlertSettings(
-      alarmTime: json['alarmTime'] as String,
-      mondayEnabled: json['mondayEnabled'] as bool,
-      tuesdayEnabled: json['tuesdayEnabled'] as bool,
-      wednesdayEnabled: json['wednesdayEnabled'] as bool,
-      thursdayEnabled: json['thursdayEnabled'] as bool,
-      fridayEnabled: json['fridayEnabled'] as bool,
-      saturdayEnabled: json['saturdayEnabled'] as bool,
-      sundayEnabled: json['sundayEnabled'] as bool);
+    alarmTime: json['alarmTime'] as String,
+    mondayEnabled: json['mondayEnabled'] as bool,
+    tuesdayEnabled: json['tuesdayEnabled'] as bool,
+    wednesdayEnabled: json['wednesdayEnabled'] as bool,
+    thursdayEnabled: json['thursdayEnabled'] as bool,
+    fridayEnabled: json['fridayEnabled'] as bool,
+    saturdayEnabled: json['saturdayEnabled'] as bool,
+    sundayEnabled: json['sundayEnabled'] as bool,
+  );
 }
 
 Map<String, dynamic> _$PojoAlertSettingsToJson(PojoAlertSettings instance) =>
@@ -27,5 +28,5 @@ Map<String, dynamic> _$PojoAlertSettingsToJson(PojoAlertSettings instance) =>
       'thursdayEnabled': instance.thursdayEnabled,
       'fridayEnabled': instance.fridayEnabled,
       'saturdayEnabled': instance.saturdayEnabled,
-      'sundayEnabled': instance.sundayEnabled
+      'sundayEnabled': instance.sundayEnabled,
     };

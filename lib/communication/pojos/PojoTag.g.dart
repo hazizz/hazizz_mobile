@@ -7,8 +7,11 @@ part of 'PojoTag.dart';
 // **************************************************************************
 
 PojoTag _$PojoTagFromJson(Map<String, dynamic> json) {
-  return PojoTag(name: json['name'] as String);
+  return PojoTag(
+    name: json['name'] as String,
+  );
 }
 
-Map<String, dynamic> _$PojoTagToJson(PojoTag instance) =>
-    <String, dynamic>{'name': instance.name};
+Map<String, dynamic> _$PojoTagToJson(PojoTag instance) => <String, dynamic>{
+      'name': instance.name,
+    };

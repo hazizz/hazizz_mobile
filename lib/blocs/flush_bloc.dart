@@ -89,7 +89,24 @@ class FlushTheraServerUnavailableState extends FlushState {
   List<Object> get props => null;
 }
 
+class FlushSessionFailEvent extends FlushEvent {
+  @override String toString() => 'FlushSessionFailEvent';
+  @override
+  List<Object> get props => null;
+}
+class FlushSessionFailState extends FlushState {
+  @override String toString() => 'FlushSessionFailState';
+  @override
+  List<Object> get props => null;
+}
 
+
+
+class FlushResetState extends FlushState {
+  @override String toString() => 'FlushResetState';
+  @override
+  List<Object> get props => null;
+}
 
 class FlushInitialEvent extends FlushEvent {
   @override String toString() => 'FlushInitialEvent';
@@ -144,6 +161,10 @@ class FlushBloc extends Bloc<FlushEvent, FlushState> {
 
     else if (event is FlushInitialEvent) {
       yield FlushInitialState();
+    }
+    else if (event is FlushSessionFailEvent) {
+      yield FlushSessionFailState();
+   //   yield FlushResetState();
     }
 
     print("dude2: ${currentState.toString()}");

@@ -8,12 +8,13 @@ part of 'PojoSession.dart';
 
 PojoSession _$PojoSessionFromJson(Map<String, dynamic> json) {
   return PojoSession(
-      json['id'] as int,
-      json['status'] as String,
-      json['username'] as String,
-      json['url'] as String,
-      json['schoolName'] as String,
-      json['password'] as String);
+    json['id'] as int,
+    json['status'] as String,
+    json['username'] as String,
+    json['url'] as String,
+    json['schoolName'] as String,
+    json['password'] as String,
+  );
 }
 
 Map<String, dynamic> _$PojoSessionToJson(PojoSession instance) =>
@@ -23,5 +24,5 @@ Map<String, dynamic> _$PojoSessionToJson(PojoSession instance) =>
       'username': instance.username,
       'url': instance.url,
       'schoolName': instance.schoolName,
-      'password': instance.password
+      'password': instance.password,
     };

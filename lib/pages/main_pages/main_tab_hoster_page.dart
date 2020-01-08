@@ -13,12 +13,14 @@ import 'package:mobile/blocs/kreta/sessions_bloc.dart';
 import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
 import 'package:mobile/blocs/other/user_data_bloc.dart';
 import 'package:mobile/blocs/kreta/selected_session_bloc.dart';
+import 'package:mobile/blocs/tasks/task_maker_blocs.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/custom/hazizz_app_info.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/custom/session_status_converter.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/managers/app_state_manager.dart';
+import 'package:mobile/managers/app_state_restorer.dart';
 import 'package:mobile/storage/cache_manager.dart';
 import 'package:mobile/managers/deep_link_receiver.dart';
 import 'package:mobile/managers/version_handler.dart';
@@ -144,6 +146,28 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
     if(Random().nextInt(5) == 1){
       doEvent = false;
     }
+
+    AppStateRestorer.getShouldReloadTaskMaker().then((bool should){
+      if(should){
+        AppStateRestorer.loadTaskState().then((TaskMakerAppState taskMakerAppState){
+          if(taskMakerAppState != null){
+            if(taskMakerAppState.taskMakerMode == TaskMakerMode.create){
+              WidgetsBinding.instance.addPostFrameCallback((_){
+                setState(() {
+                  Navigator.pushNamed(context, "/createTask", arguments: taskMakerAppState);
+                });
+              });
+            }else{
+              WidgetsBinding.instance.addPostFrameCallback((_){
+                setState(() {
+                  Navigator.pushNamed(context, "/editTask", arguments: taskMakerAppState);
+                });
+              });
+            }
+          }
+        });
+      }
+    });
 
     super.initState();
   }
@@ -295,6 +319,10 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                     WidgetsBinding.instance.addPostFrameCallback((_) =>
                         showTheraServerUnavailableFlushBar(context)
                     );
+                  }else if(state is FlushSessionFailState){
+                    WidgetsBinding.instance.addPostFrameCallback((_) =>
+                        showSessionFailFlushBar(context)
+                    );
                   }
                 },
                 child: TabBarView(
@@ -427,7 +455,6 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
 
 
                               for(PojoSession s in SessionsBloc().sessions){
-
                                 for(int i = 0; i< sessions.length; i++ ){
                                   PojoSession s2 = sessions[i];
                                   if(s2.username == s.username){
@@ -437,14 +464,34 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                                     }
                                   }
                                 }
-
                                 sessions.add(s);
+
+                                /*
+                                bool found = false;
+                                for(int i = 0; i< SessionsBloc().sessions.length; i++ ){
+                                  if(s.username == SessionsBloc().sessions[i].username){
+                                    found = true;
+                                    if(SessionsBloc().sessions[i].status == "ACTIVE"
+                                    && s.status != "ACTIVE "){
+                                      sessions.add(s);
+                                      break;
+                                    }
+                                  }
+                                }
+                                if(!found){
+                                  sessions.add(s);
+                                }
+                                */
+
+
                               }
 
                               List<DropdownMenuItem> items = [];
 
                               for(PojoSession s in sessions){
                                 //  if(selectedKretaAccount == null || s.username != selectedKretaAccount.username){
+                                print("MÓÓÓÓ");
+
                                 if(getSessionStatusRank(s.status) > 0){
                                   items.add(DropdownMenuItem(child: Text(s.username, style: TextStyle(color: Colors.red),), value: s.username,));
                                 }else{
@@ -466,35 +513,34 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                               return Padding(
                                 padding: const EdgeInsets.only(left: 8),
                                 child: DropdownButton(
-                                    value: selectedKretaAccountName,
-                                    onChanged: (item){
-                                      if(item =="add Kréta account"){
-                                        Navigator.of(context).pushNamed("/kreta/login");
-                                      }else{
+                                  value: selectedKretaAccountName,
+                                  onChanged: (item){
+                                    if(item =="add Kréta account"){
+                                      Navigator.of(context).pushNamed("/kreta/login");
+                                    }else{
+                                      setState(() {
+                                        selectedKretaAccountName = item;
+                                        print("uff: ${selectedKretaAccountName}");
+                                        for(PojoSession s in sessions){
+                                          if(s.username == selectedKretaAccountName){
 
-                                        setState(() {
-                                          selectedKretaAccountName = item;
-                                          print("uff: ${selectedKretaAccountName}");
-                                          for(PojoSession s in sessions){
-                                            if(s.username == selectedKretaAccountName){
-
-                                              if(s.status != "ACTIVE"){
-                                                WidgetsBinding.instance.addPostFrameCallback((_) =>
-                                                    Navigator.pushNamed(context, "/kreta/login/auth", arguments: s)
-                                                );
-                                              }
-
-                                              selectedKretaAccount = s;
-                                              print("uff2: ${selectedKretaAccount.username}");
-
-                                              SelectedSessionBloc().dispatch(SelectedSessionSetEvent(s));
-                                              break;
+                                            if(s.status != "ACTIVE"){
+                                              WidgetsBinding.instance.addPostFrameCallback((_) =>
+                                                  Navigator.pushNamed(context, "/kreta/login/auth", arguments: s)
+                                              );
                                             }
+
+                                            selectedKretaAccount = s;
+                                            print("uff2: ${selectedKretaAccount.username}");
+
+                                            SelectedSessionBloc().dispatch(SelectedSessionSetEvent(s));
+                                            break;
                                           }
-                                        });
-                                      }
-                                    },
-                                    items: items
+                                        }
+                                      });
+                                    }
+                                  },
+                                  items: items
                                 ),
                               );
 

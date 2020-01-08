@@ -1,9 +1,8 @@
-
+/*
 import 'package:build_value_navigation_saver/navigation_saver_routes_info.dart';
 import 'package:built_value/serializer.dart';
 import 'package:built_collection/built_collection.dart';
 
-part 'serializers.g.dart';
 
 /// Example of how to use built_value serialization.
 ///
@@ -22,3 +21,4 @@ part 'serializers.g.dart';
  // MyHomePageArguments,
 ])
 final Serializers serializers = (_$serializers.toBuilder()).build();
+*/

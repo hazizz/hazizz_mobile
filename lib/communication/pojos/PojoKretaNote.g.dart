@@ -8,13 +8,14 @@ part of 'PojoKretaNote.dart';
 
 PojoKretaNote _$PojoKretaNoteFromJson(Map<String, dynamic> json) {
   return PojoKretaNote(
-      type: json['type'] as String,
-      title: json['title'] as String,
-      content: json['content'] as String,
-      teacher: json['teacher'] as String,
-      creationDate: json['creationDate'] == null
-          ? null
-          : DateTime.parse(json['creationDate'] as String));
+    type: json['type'] as String,
+    title: json['title'] as String,
+    content: json['content'] as String,
+    teacher: json['teacher'] as String,
+    creationDate: json['creationDate'] == null
+        ? null
+        : DateTime.parse(json['creationDate'] as String),
+  );
 }
 
 Map<String, dynamic> _$PojoKretaNoteToJson(PojoKretaNote instance) =>
@@ -23,5 +24,5 @@ Map<String, dynamic> _$PojoKretaNoteToJson(PojoKretaNote instance) =>
       'title': instance.title,
       'content': instance.content,
       'teacher': instance.teacher,
-      'creationDate': instance.creationDate?.toIso8601String()
+      'creationDate': instance.creationDate?.toIso8601String(),
     };

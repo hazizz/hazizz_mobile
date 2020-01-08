@@ -109,8 +109,8 @@ class _GoogleDriveSettingsPage extends State<GoogleDriveSettingsPage> {
         gDriveImages.add(
           Container(
             height: 100,
-            child: GoogleDriveImage(
-              imageUrl: file.webContentLink,
+            child: ImageViewer.fromGoogleDrive(
+              file.webContentLink,
               heroTag: file.webContentLink,
               salt: salt,
               height: 100,
@@ -212,61 +212,58 @@ class _GoogleDriveSettingsPage extends State<GoogleDriveSettingsPage> {
                   children: <Widget>[
                     Divider(),
                     ListTile(
-                        title: Text("${locText(context, key: "delete_all_gdrive_images")}:"),
-                        trailing: RaisedButton(
-                          child: Text(locText(context, key: "delete").toUpperCase(), style: TextStyle(color: Colors.red)),
-                          onPressed: () async {
-                            print("OHG");
-                            if(await showSureToDeleteAllGDriveImageDialog(context)){
-                               setState(() {
-                                 gDriveImages.clear();
-                               });
-                               print("OH1");
-                            }
-                            print("OHG2");
-                          },
-                        )
+                      title: Text("${locText(context, key: "delete_all_gdrive_images")}:"),
+                      trailing: RaisedButton(
+                        child: Text(locText(context, key: "delete").toUpperCase(), style: TextStyle(color: Colors.red)),
+                        onPressed: () async {
+                          if(await showSureToDeleteAllGDriveImageDialog(context)){
+                             setState(() {
+                               gDriveImages.clear();
+                             });
+                          }
+                        },
+                      )
                     ),
                     Divider(),
                     Container(
                       child: RefreshIndicator(
-                          onRefresh: () async {
-                            return getGDriveImages();
-                          },
-                          child: Stack(
-                            children: <Widget>[
-                              //  ListView(),
-                              Builder(
-                                builder: (context){
-                                  if(!allowed) return Container();
-                                  if(!gotResponse) return Padding(
-                                    padding: const EdgeInsets.all(20),
-                                    child: Center(child: CircularProgressIndicator()),
-                                  );
-                                  else if(gDriveImages == null || gDriveImages.isEmpty) {
-                                    return Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(20),
-                                        child: Text(locText(context, key: "no_images_gdrive")),
-                                      ),
-                                    );
-                                  }
-                                  return Padding(
-                                    padding: const EdgeInsets.only(left: 6, right: 6, bottom: 10),
-                                    child: Wrap(
-                                      runAlignment: WrapAlignment.start,
-                                      crossAxisAlignment: WrapCrossAlignment.start,
-                                      alignment: WrapAlignment.start,
-
-                                      runSpacing: 8,
-                                      spacing: 8,
-                                      children: gDriveImages,
+                        onRefresh: () async {
+                          return getGDriveImages();
+                        },
+                        child: Stack(
+                          children: <Widget>[
+                            //  ListView(),
+                            Builder(
+                              builder: (context){
+                                if(!allowed) return Container();
+                                if(!gotResponse) return Padding(
+                                  padding: const EdgeInsets.all(20),
+                                  child: Center(child: CircularProgressIndicator()),
+                                );
+                                else if(gDriveImages == null || gDriveImages.isEmpty) {
+                                  return Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(20),
+                                      child: Text(locText(context, key: "no_images_gdrive")),
                                     ),
                                   );
-                                },
-                              ),
-                            ],
-                          )
+                                }
+                                return Padding(
+                                  padding: const EdgeInsets.only(left: 6, right: 6, bottom: 10),
+                                  child: Wrap(
+                                    runAlignment: WrapAlignment.start,
+                                    crossAxisAlignment: WrapCrossAlignment.start,
+                                    alignment: WrapAlignment.start,
+
+                                    runSpacing: 8,
+                                    spacing: 8,
+                                    children: gDriveImages,
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        )
                       ),
                     )
                   ],

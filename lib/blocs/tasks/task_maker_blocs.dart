@@ -273,7 +273,7 @@ class SubjectItemPickerBloc extends ItemListPickerBloc {
 }
 
 
-
+/*
 
 class SubjectItemPickerBloc2 extends ItemListPickerBloc {
   List<PojoGroup> dataList;
@@ -319,7 +319,7 @@ class SubjectItemPickerBloc2 extends ItemListPickerBloc {
   }
 }
 
-
+*/
 
 
 
@@ -452,6 +452,16 @@ class TaskMakerSendEvent extends TaskMakerEvent {
   String toString() => 'TaskMakerSendEvent';
   List<Object> get props => null;
 }
+
+class TaskMakerSaveStateEvent extends TaskMakerEvent {
+  List<HazizzImageData> imageDatas;
+  String salt;
+  TaskMakerSaveStateEvent({@required this.imageDatas, @required this.salt});
+  @override
+  String toString() => 'TaskMakerSendEvent';
+  List<Object> get props => null;
+}
+
 class TaskMakerFailedEvent extends TaskMakerEvent {
   @override
   String toString() => 'TaskMakerFailedEvent';

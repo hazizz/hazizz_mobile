@@ -8,12 +8,13 @@ part of 'PojoCreator.dart';
 
 PojoCreator _$PojoCreatorFromJson(Map<String, dynamic> json) {
   return PojoCreator(
-      json['id'] as int,
-      json['username'] as String,
-      json['displayName'] as String,
-      json['registrationDate'] == null
-          ? null
-          : DateTime.parse(json['registrationDate'] as String));
+    json['id'] as int,
+    json['username'] as String,
+    json['displayName'] as String,
+    json['registrationDate'] == null
+        ? null
+        : DateTime.parse(json['registrationDate'] as String),
+  );
 }
 
 Map<String, dynamic> _$PojoCreatorToJson(PojoCreator instance) =>
@@ -21,5 +22,5 @@ Map<String, dynamic> _$PojoCreatorToJson(PojoCreator instance) =>
       'id': instance.id,
       'username': instance.username,
       'displayName': instance.displayName,
-      'registrationDate': instance.registrationDate?.toIso8601String()
+      'registrationDate': instance.registrationDate?.toIso8601String(),
     };

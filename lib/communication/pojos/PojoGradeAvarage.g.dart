@@ -8,10 +8,11 @@ part of 'PojoGradeAvarage.dart';
 
 PojoGradeAvarage _$PojoGradeAvarageFromJson(Map<String, dynamic> json) {
   return PojoGradeAvarage(
-      subject: json['subject'] as String,
-      grade: (json['grade'] as num)?.toDouble(),
-      classGrade: (json['classGrade'] as num)?.toDouble(),
-      difference: (json['difference'] as num)?.toDouble());
+    subject: json['subject'] as String,
+    grade: (json['grade'] as num)?.toDouble(),
+    classGrade: (json['classGrade'] as num)?.toDouble(),
+    difference: (json['difference'] as num)?.toDouble(),
+  );
 }
 
 Map<String, dynamic> _$PojoGradeAvarageToJson(PojoGradeAvarage instance) =>
@@ -19,5 +20,5 @@ Map<String, dynamic> _$PojoGradeAvarageToJson(PojoGradeAvarage instance) =>
       'subject': instance.subject,
       'grade': instance.grade,
       'classGrade': instance.classGrade,
-      'difference': instance.difference
+      'difference': instance.difference,
     };

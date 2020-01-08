@@ -8,13 +8,14 @@ part of 'PojoKretaProfile.dart';
 
 PojoKretaProfile _$PojoKretaProfileFromJson(Map<String, dynamic> json) {
   return PojoKretaProfile(
-      id: json['id'] as int,
-      name: json['name'] as String,
-      schoolName: json['schoolName'] as String,
-      formTeacher: json['formTeacher'] == null
-          ? null
-          : PojoKretaTeacherProfile.fromJson(
-              json['formTeacher'] as Map<String, dynamic>));
+    id: json['id'] as int,
+    name: json['name'] as String,
+    schoolName: json['schoolName'] as String,
+    formTeacher: json['formTeacher'] == null
+        ? null
+        : PojoKretaTeacherProfile.fromJson(
+            json['formTeacher'] as Map<String, dynamic>),
+  );
 }
 
 Map<String, dynamic> _$PojoKretaProfileToJson(PojoKretaProfile instance) =>
@@ -22,5 +23,5 @@ Map<String, dynamic> _$PojoKretaProfileToJson(PojoKretaProfile instance) =>
       'id': instance.id,
       'name': instance.name,
       'schoolName': instance.schoolName,
-      'formTeacher': instance.formTeacher
+      'formTeacher': instance.formTeacher,
     };

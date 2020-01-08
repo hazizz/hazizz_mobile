@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ import 'package:mobile/enums/grades_sort_enum.dart';
 import 'package:mobile/listItems/grade_header_item_widget.dart';
 import 'package:mobile/listItems/grade_item_widget.dart';
 import 'package:mobile/managers/preference_services.dart';
+import 'package:mobile/services/selected_session_helper.dart';
 import 'package:mobile/widgets/flushbars.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
@@ -77,7 +79,18 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
         return Stack(
           children: <Widget>[
             Align(alignment: Alignment.topCenter, child: Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().gradesBloc.lastUpdated))),
-            Center(child: Text(locText(context, key: "no_grades_yet")))
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8.0, right: 8),
+                child: AutoSizeText(
+                  locText(context, key: "no_grades_yet"),
+                  style: TextStyle(fontSize: 17),
+                  textAlign: TextAlign.center,
+                  maxFontSize: 17,
+                  minFontSize: 14,
+                ),
+              ),
+            )
           ],
         );
       }
@@ -330,8 +343,6 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
                                 builder: (_, GradesState state) {
                                   if (state is GradesLoadedState) {
                                     return onLoaded(state.data);
-
-
                                   }else if (state is GradesLoadedCacheState) {
                                     return onLoaded(state.data);
                                   } else if (state is GradesWaitingState) {
@@ -345,10 +356,7 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
                                     }
 
                                     else if(state.hazizzResponse.dioError == noConnectionError){
-                                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                                        print("boi: no internetr");
-                                        showNoConnectionFlushBar(context);
-                                      });
+
                                     }else{
                                       WidgetsBinding.instance.addPostFrameCallback((_) {
                                         Flushbar(
