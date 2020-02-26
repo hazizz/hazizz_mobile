@@ -258,9 +258,20 @@
   "thera_server"
   : "Théra server",
 
+  "kreta_requests_in_last_hour"
+  : "Kréta requests in last hour",
+
+  "kreta_success_rate"
+  : "Kréta success rate",
 
   "logs"
   : "Logs",
+
+  "server_url"
+  : "Server url",
+
+  "reset"
+  : "Reset",
 
   "tell_us_what_happened"
   : "Tell us what happened",
@@ -276,6 +287,12 @@
 
   "auto_download_image"
   : "Automatically download images in tasks, if opened",
+
+  "enable_ads"
+  : "Enable ads",
+
+  "ad"
+  : "Ad",
 
   "preferences"
   : "Preferences",
@@ -503,6 +520,12 @@
     "write_comment"
     : "Write a comment!",
 
+
+  "schedule_creator"
+  : "Schedule creator",
+
+  "schedule_editor"
+  : "Schedule editor",
 
     "schedule"
     : "Schedule",

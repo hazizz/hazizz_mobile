@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +20,7 @@ import 'package:mobile/widgets/flushbars.dart';
 
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/pages/kreta_pages/kreta_service_holder.dart';
+import 'package:mobile/widgets/selected_session_fail_widget.dart';
 import 'main_schedules_tab_page.dart';
 
 class SchedulesPage extends StatefulWidget {
@@ -48,6 +51,7 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
 
   bool canBuildBottomNavBar = false;
 
+  int r = Random().nextInt(7)+1;
 
   @override
   void initState() {
@@ -97,6 +101,7 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
 
     Map<String, List<PojoClass>> schedule = MainTabBlocs().schedulesBloc.getScheduleFromSession().classes;//pojoSchedule.classes;
 
+
     Widget body;
 
     DateTime now = DateTime.now();
@@ -111,7 +116,10 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
 
       _tabList.clear();
       bottomNavBarItems.clear();
-      for(int day = 0; day <= 6; day++){ // String dayIndex in schedule.keys
+
+
+
+      for(int day = 0; day <  7; day++){ // String dayIndex in schedule.keys
 
         HazizzLogger.printLog("current weekday: ${now.weekday}");
 
@@ -129,7 +137,6 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
               if(now.weekday == 6){
                 break;
               }
-             // break;
             }
           }
         }
@@ -139,34 +146,17 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
           String dayIndex = day.toString();
 
           if( schedule[dayIndex].isNotEmpty) {
-            Color currentDayColor = Colors.transparent;
 
             String dayName = locText(context, key: "days_$dayIndex");
             String dayMName = locText(context, key: "days_m_$dayIndex");
             _tabList.add(SchedulesTabPage(classes: schedule[dayIndex], isToday:  MainTabBlocs().schedulesBloc.todayIndex == int.parse(dayIndex)
-                      && MainTabBlocs().schedulesBloc.currentCurrentWeekNumber ==  MainTabBlocs().schedulesBloc.currentWeekNumber,));
-            bottomNavBarItems.add(
-                BottomNavigationBarItem(
+                      && MainTabBlocs().schedulesBloc.currentCurrentWeekNumber ==  MainTabBlocs().schedulesBloc.currentWeekNumber, dayIndex: day + r,));
+            bottomNavBarItems.add(BottomNavigationBarItem(
               title: Container(),
               icon: Padding(
                 padding: const EdgeInsets.only(bottom: 4.0),
                 child: Column(
                   children: <Widget>[
-                   /* Builder(
-                      builder: (context){
-
-                        if(MainTabBlocs().schedulesBloc.currentWeekNumber == MainTabBlocs().schedulesBloc.currentCurrentWeekNumber
-                            && MainTabBlocs().schedulesBloc.todayIndex == MainTabBlocs().schedulesBloc.currentDayIndex
-                            && (MainTabBlocs().schedulesBloc.currentDayIndex).toString() == dayIndex
-                        ){
-                          return  Text("Ma");
-                        }
-                        return  Container();
-
-                      },
-                    ),
-                    */
-
                     Text(dayMName,
                       overflow: TextOverflow.fade,
                       maxLines: 1,
@@ -281,9 +271,19 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
             BlocBuilder(
               bloc: MainTabBlocs().schedulesBloc,
               builder: (context, state){
+                if(state is ScheduleLoadedState){
+                  if(doesContainSelectedSession(state.failedSessions)){
+                    return SelectedSessionFailWidget();
+                  }
+                }
+                else if(state is ScheduleLoadedCacheState){
+                  if(doesContainSelectedSession(state.failedSessions)){
+                    return SelectedSessionFailWidget();
+                  }
+                }
+
                 if(state is ScheduleWaitingState || state is ScheduleLoadedCacheState){
                   return LinearProgressIndicator(
-
                     value: null,
                   );
                 }
@@ -292,14 +292,16 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
             ),
             Expanded(
               child: KretaServiceHolder(
-                  child: BlocBuilder(
-                      bloc: MainTabBlocs().schedulesBloc,
-                      builder: (context, state){
-                        return RefreshIndicator(
+                child: BlocBuilder(
+                    bloc: MainTabBlocs().schedulesBloc,
+                    builder: (context, state){
+                      return GestureDetector (
+                        onTap: () { /* do nothing*/ },
+                        child: RefreshIndicator(
                           onRefresh: () async{
                             MainTabBlocs().schedulesBloc.dispatch(ScheduleFetchEvent());
 
-                          },
+                          }, 
                           child: Stack(
                             children: <Widget>[
                               ListView(),
@@ -328,12 +330,10 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
                                                       }else if(MainTabBlocs().schedulesBloc.selectedWeekIsPrevious){
                                                         return Text(locText(context, key: "previous_week"), style: TextStyle(fontSize: 16));
                                                       }
-
                                                       else if(MainTabBlocs().schedulesBloc.selectedWeekIsNext){
                                                         return Text(locText(context, key: "next_week"), style: TextStyle(fontSize: 16));
                                                       }
                                                       return Container();
-
                                                     },
                                                   ),
                                                   Text("${dateTimeToMonthDay(MainTabBlocs().schedulesBloc.currentWeekMonday)} - ${dateTimeToMonthDay(MainTabBlocs().schedulesBloc.currentWeekSunday)}", style: TextStyle(fontSize: 18),),
@@ -359,13 +359,9 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
                                           //  HazizzLogger.printLog("current state is: ${currentState}");
                                           //  HazizzLogger.printLog("last state is: ${beforeState}");
 
-
                                           if(beforeState is ScheduleLoadedState && currentState is ScheduleLoadedState){
                                             //return false;
-
                                           }
-
-
                                           return true;
                                         },
                                         builder: (_, ScheduleState state) {
@@ -379,29 +375,36 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
 
                                           if (state is ScheduleLoadedState) {
                                             if(MainTabBlocs().schedulesBloc.classes?.classes != null/*state.schedules != null && state.data.isNotEmpty()*/){
+                                              if (doesContainSelectedSession(state.failedSessions)) {
+                                                return Container();
+                                              }
                                               return onLoaded();
                                             }
                                           }else if (state is ScheduleLoadedCacheState) {
                                             if(MainTabBlocs().schedulesBloc.classes?.classes != null/*state.data != null && state.data.isNotEmpty()*/){
+                                              if (doesContainSelectedSession(state.failedSessions)) {
+                                                return Container();
+                                              }
                                               return onLoaded();
 
-                                            }                          }
+                                            }
+                                          }
                                           else if (state is ResponseEmpty) {
                                             return Column(
-                                                children: [
-                                                  Center(
-                                                    child: Padding(
-                                                      padding: const EdgeInsets.only(top: 50.0),
-                                                      child:  AutoSizeText(
-                                                        locText(context, key: "no_schedule"),
-                                                        style: TextStyle(fontSize: 17),
-                                                        textAlign: TextAlign.center,
-                                                        maxFontSize: 17,
-                                                        minFontSize: 14,
-                                                      ),
+                                              children: [
+                                                Center(
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.only(top: 50.0),
+                                                    child:  AutoSizeText(
+                                                      locText(context, key: "no_schedule"),
+                                                      style: TextStyle(fontSize: 17),
+                                                      textAlign: TextAlign.center,
+                                                      maxFontSize: 17,
+                                                      minFontSize: 14,
                                                     ),
-                                                  )
-                                                ]
+                                                  ),
+                                                )
+                                              ]
                                             );
                                           }else if(state is ScheduleErrorState ){
                                             if(state.hazizzResponse.pojoError != null && state.hazizzResponse.pojoError.errorCode == 138){
@@ -429,18 +432,17 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
                                                 child: Text(locText(context, key: "info_something_went_wrong")));
                                           }
                                           return Center(child: Text(locText(context, key: "info_something_went_wrong")),);
-
                                         }
                                     ),
                                   ),
                                 ],
                               ),
-
                             ],
                           ),
-                        );
-                      }
-                  )
+                        ),
+                      );
+                    }
+                )
               ),
             )
           ],

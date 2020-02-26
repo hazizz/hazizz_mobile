@@ -36,6 +36,9 @@ class _PreferencesSettingsPage extends State<PreferencesSettingsPage> {
   bool autoLoad = PreferenceService.imageAutoLoad;
   bool autoDownload = PreferenceService.imageAutoDownload;
 
+  bool enabledAd = PreferenceService.enabledAd;
+
+
   bool isRemember = true;
 
   IconData iconBell;
@@ -78,9 +81,22 @@ class _PreferencesSettingsPage extends State<PreferencesSettingsPage> {
           body: Container(
             child: Column(
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: ListTile(
+                SizedBox(height: 10),
+                ListTile(
+                    title: Text(locText(context, key: "enable_ads")),
+                    leading: Icon(FontAwesomeIcons.ad),
+                    trailing: Switch(
+                      value: enabledAd,
+                      onChanged: (val){
+                        setState(() {
+                          enabledAd = val;
+                          PreferenceService.setEnabledAd(enabledAd);
+                        });
+                      },
+                    )
+                ),
+                Divider(),
+                ListTile(
                     title: Text(locText(context, key: "starting_page")),
                     leading: Icon(FontAwesomeIcons.doorOpen),
                     trailing: DropdownButton(
@@ -94,7 +110,6 @@ class _PreferencesSettingsPage extends State<PreferencesSettingsPage> {
                       value: currentStartPageItemIndex,
                     ),
                   ),
-                ),
                 Divider(),
                 ListTile(
                   title: Text(locText(context, key: "remember_kreta_password")),

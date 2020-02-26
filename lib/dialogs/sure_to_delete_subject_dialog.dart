@@ -9,11 +9,9 @@ import 'dialogs.dart';
 
 class SureToDeleteSubjectDialog extends StatefulWidget {
 
-  int groupId;
-
   PojoSubject subject;
 
-  SureToDeleteSubjectDialog({@required this.groupId, @required this.subject});
+  SureToDeleteSubjectDialog({@required this.subject});
 
   @override
   _SureToDeleteSubjectDialog createState() => new _SureToDeleteSubjectDialog();
@@ -99,7 +97,7 @@ class _SureToDeleteSubjectDialog extends State<SureToDeleteSubjectDialog> {
                 setState(() {
                   isLoading = true;
                 });
-                HazizzResponse hazizzResponse = await RequestSender().getResponse(DeleteSubject(p_groupId: widget.groupId, p_subjectId: widget.subject.id));
+                HazizzResponse hazizzResponse = await RequestSender().getResponse(DeleteSubject(p_subjectId: widget.subject.id));
 
                 if(hazizzResponse.isSuccessful){
                   Navigator.pop(context, true);

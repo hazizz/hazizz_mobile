@@ -6,6 +6,7 @@ import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:googleapis/dfareporting/v3_3.dart';
 import 'package:mobile/blocs/kreta/grades_bloc.dart';
 import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
 import 'package:mobile/communication/custom_response_errors.dart';
@@ -17,7 +18,9 @@ import 'package:mobile/listItems/grade_header_item_widget.dart';
 import 'package:mobile/listItems/grade_item_widget.dart';
 import 'package:mobile/managers/preference_services.dart';
 import 'package:mobile/services/selected_session_helper.dart';
+import 'package:mobile/widgets/ad_widget.dart';
 import 'package:mobile/widgets/flushbars.dart';
+import 'package:mobile/widgets/selected_session_fail_widget.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/pages/kreta_pages/kreta_service_holder.dart';
@@ -43,6 +46,7 @@ class GradesPage extends StatefulWidget  {
 class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin , AutomaticKeepAliveClientMixin {
 
   StreamController<LineTouchResponse> controller;
+
 
   @override
   void initState() {
@@ -73,7 +77,8 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
                   */
     if(MainTabBlocs().gradesBloc.currentGradeSort == GradesSort.BYSUBJECT){
       Map<String, List<PojoGrade>> grades = MainTabBlocs().gradesBloc.getGradesFromSession().grades;// pojoGrades.grades;
-      int itemCount = grades.keys.length;
+
+      int itemCount = grades.keys.length+1;
 
       if(grades.isEmpty){
         return Stack(
@@ -94,8 +99,11 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
           ],
         );
       }
-      return new ListView.builder(
-          itemCount: itemCount +1,
+      return new ListView.separated(
+          itemCount: itemCount,
+          separatorBuilder: (context, index) {
+            return showAd(context, show: (itemCount<3 && index == itemCount-1) || (index!=0 && index%3==0), showHeader: true);
+          },
           itemBuilder: (BuildContext context, int index) {
 
             if(index == 0){
@@ -112,18 +120,6 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
 
                 children: <Widget>[
                   GradeHeaderItemWidget.bySubject(subjectName: key, gradesAvarage: gradesAvarage),
-
-                  /*
-                  Container(
-                    color: Theme.of(context).backgroundColor,
-                    height: 260,
-                    width: MediaQuery.of(context).size.width,
-                    child: GradesChart(subjectName: key, grades: grades[key] ),
-                  ),
-                  */
-
-
-
                 ],
               ),
               content: Builder(
@@ -134,18 +130,24 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
                       for(int i = grades[key].length-1; i >= 0; i--){
                         widgetList.add(GradeItemWidget.bySubject(pojoGrade: grades[key][i], rectForm: true,));
                       }
-                      return Wrap(
-                        direction: Axis.horizontal,
-                        runSpacing: 0,
-                        spacing: 0,
-                        //runAlignment: WrapAlignment.end,
-                        children: widgetList
+                      return Column(
+                        children: <Widget>[
+                          Wrap(
+                              direction: Axis.horizontal,
+                              runSpacing: 0,
+                              spacing: 0,
+                              //runAlignment: WrapAlignment.end,
+                              children: widgetList
+                          ),
+                          showAd(context)
+                        ],
                       );
                     }
 
                     for(int i = grades[key].length-1; i >= 0; i--){
                       widgetList.add(GradeItemWidget.bySubject(pojoGrade: grades[key][i],));
                     }
+                    widgetList.add(showAd(context, showHeader: true));
                     return Column(
                         children: widgetList
                     );
@@ -273,6 +275,19 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
             BlocBuilder(
               bloc: MainTabBlocs().gradesBloc,
               builder: (context, state){
+                print("mystate: ${state}");
+                if(state is GradesLoadedState){
+                  if(doesContainSelectedSession(state.failedSessions)){
+                    return SelectedSessionFailWidget();
+                  }
+                }
+                else if(state is GradesLoadedCacheState){
+                  if(doesContainSelectedSession(state.failedSessions)){
+                    return SelectedSessionFailWidget();
+
+                  }
+                }
+
                 if(state is GradesWaitingState || state is GradesLoadedCacheState){
                   return LinearProgressIndicator(
                     value: null,
@@ -345,7 +360,7 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
                                     return onLoaded(state.data);
                                   }else if (state is GradesLoadedCacheState) {
                                     return onLoaded(state.data);
-                                  } else if (state is GradesWaitingState) {
+                                  }else if (state is GradesWaitingState) {
                                     //return Center(child: Text("Loading Data"));
                                     return Center(child: CircularProgressIndicator(),);
                                   }else if(state is GradesErrorState ){

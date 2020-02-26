@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/communication/request_sender.dart';
+import 'package:mobile/communication/requests/request_collection.dart';
+import 'package:mobile/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:mobile/custom/hazizz_localizations.dart';
@@ -19,6 +22,11 @@ class PreferenceService{
 
   static const String _key_gradeRectForm = "_key_gradeRectForm";
 
+  static const String _key_enableAd = "_key_enableAd";
+
+
+  static const String _key_serverUrl = "_key_serverUrl";
+
   static const int tasksPage = 0;
   static const int schedulePage = 1;
   static const int gradesPage = 2;
@@ -29,11 +37,19 @@ class PreferenceService{
   static bool imageAutoLoad = true;
   static bool imageAutoDownload = false;
 
+  static bool enabledAd = false;
+
+  static String serverUrl = Constants.BASE_URL;
+
+
+
   static Future<void> loadAllPreferences() async {
+    serverUrl = await getServerUrl();
     startPageIndex = await getStartPageIndex();
     gradeRectForm = await getGradeRectForm();
     imageAutoLoad = await getImageAutoLoad();
     imageAutoDownload = await getImageAutoDownload();
+    enabledAd = await getEnabledAd();
   }
 
 
@@ -79,6 +95,17 @@ class PreferenceService{
     imageAutoLoad = autoLoadImages;
   }
 
+  static Future<bool> getEnabledAd()async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool y = prefs.get(_key_enableAd);
+    enabledAd = y == null ? false : y;
+    return enabledAd;
+  }
+  static Future<void> setEnabledAd(bool enable)async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool(_key_enableAd, enable);
+    enabledAd = enable;
+  }
 
   static Future<bool> getImageAutoDownload()async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -90,4 +117,22 @@ class PreferenceService{
     prefs.setBool(_key_imageAutoDownload, autoDownloadImages);
     imageAutoDownload = autoDownloadImages;
   }
+
+
+  static Future<String> getServerUrl()async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String str = prefs.get(_key_serverUrl);
+    if(str != null){
+      serverUrl = str;
+      return str;
+    }
+    serverUrl = Constants.BASE_URL;
+    return Constants.BASE_URL;
+  }
+  static Future<String> setServerUrl(String url)async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    serverUrl = url;
+    prefs.setString(_key_serverUrl, url);
+  }
+
 }

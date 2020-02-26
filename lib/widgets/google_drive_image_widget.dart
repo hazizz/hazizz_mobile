@@ -78,6 +78,11 @@ class _GoogleDriveImage extends State<GoogleDriveImage>{
         width: widget.width,
         fit: BoxFit.fitWidth,
         height: widget.height,
+        loadingBuilder: (context, child, progress){
+          return progress == null
+              ? child
+              : CircularProgressIndicator();
+        },
       );
       _calculateImageDimension(thumbnailImage).then((Size size){
         if(widget.height != null){
@@ -178,7 +183,13 @@ class _GoogleDriveImage extends State<GoogleDriveImage>{
         builder: (context){
           print("people be like :O 1");
           if(widget.showThumbnail && false){
-            return Image.network("https://drive.google.com/thumbnail?id=${widget.imageUrl.split("?id=")[1]}");
+            return Image.network("https://drive.google.com/thumbnail?id=${widget.imageUrl.split("?id=")[1]}",
+              loadingBuilder: (context, child, progress){
+                return progress == null
+                    ? child
+                    : CircularProgressIndicator();
+              },
+            );
 
           }
 

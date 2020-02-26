@@ -1,14 +1,10 @@
-//import 'dart:convert';
 import 'dart:convert';
 import 'dart:io';
 
-import 'dart:convert' show base64;
 import 'dart:math';
-import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:image/image.dart' as package;
 import 'package:intl/intl.dart';
 import 'package:mobile/blocs/kreta/selected_session_bloc.dart';
 import 'package:mobile/communication/pojos/PojoAlertSettings.dart';
@@ -26,23 +22,25 @@ import 'package:mobile/communication/pojos/PojoMeInfo.dart';
 import 'package:mobile/communication/pojos/PojoSchedules.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
+import 'package:mobile/communication/pojos/PojoTheraHealth.dart';
 import 'package:mobile/communication/pojos/PojoTokens.dart';
 import 'package:mobile/communication/pojos/PojoUser.dart';
 import 'package:mobile/communication/pojos/pojo_comment.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
+import 'package:mobile/constants.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/custom/image_operations.dart';
 import 'package:mobile/enums/group_types_enum.dart';
 import 'package:mobile/managers/kreta_session_manager.dart';
+import 'package:mobile/managers/preference_services.dart';
 import 'package:mobile/managers/token_manager.dart';
 import 'package:meta/meta.dart';
-import 'package:mobile/services/hazizz_crypt.dart';
+import 'package:mobile/pojo_converter_helper.dart';
+import 'package:mobile/storage/cache_manager.dart';
 import 'package:package_info/package_info.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:mobile/converters/PojoConverter.dart';
 
 import 'package:mobile/custom/hazizz_date.dart';
-import 'package:steel_crypt/steel_crypt.dart';
 import '../ResponseHandler.dart';
 import '../htttp_methods.dart';
 
@@ -61,7 +59,7 @@ class Request {
   bool authTokenHeader = false;
   bool contentTypeHeader = false;
 
-  String BASE_URL = "https://hazizz.duckdns.org:9000/";
+  String BASE_URL = PreferenceService.serverUrl;
   String SERVER_PATH = "";
   String PATH = "";
   ResponseHandler rh;
@@ -196,14 +194,16 @@ class PingHazizzServer extends HazizzRequest{
   }
 }
 class PingTheraServer extends TheraRequest{
+
   PingTheraServer({ResponseHandler rh}) : super(rh){
     httpMethod = HttpMethod.GET;
     PATH = "actuator/health";
+    authTokenHeader = true;
   }
 
   @override
   dynamic convertData(Response response) {
-    return response.data;
+    return PojoTheraHealth.fromJson(jsonDecode(response.data));
   }
 }
 
@@ -577,7 +577,7 @@ class Report extends HazizzRequest {
   }
 
   Report.comment({ResponseHandler rh, @required int p_commentId, @required int p_taskId, @required String b_description}) : super(rh) {
-    PATH = "tasks/$p_taskId/comments/$p_commentId/report";
+    PATH = "comments/$p_commentId/report";
     hardCodeReducer(b_description);
   }
 
@@ -708,7 +708,7 @@ class PromoteMember extends HazizzRequest {
 
   void hardCodeReducer(int g, int u){
     httpMethod = HttpMethod.POST;
-    PATH = "groups/$g/permission/$u";
+    PATH = "groups/$g/permissions/$u";
     authTokenHeader = true;
   }
 
@@ -753,9 +753,9 @@ class GetMyGroups extends HazizzRequest {
 //region Subject requests
 
 class DeleteSubject extends HazizzRequest {
-  DeleteSubject({ResponseHandler rh, @required int p_groupId, @required int p_subjectId}) : super(rh) {
+  DeleteSubject({ResponseHandler rh, @required int p_subjectId}) : super(rh) {
     httpMethod = HttpMethod.DELETE;
-    PATH = "subjects/group/$p_groupId/$p_subjectId";
+    PATH = "subjects/$p_subjectId";
     authTokenHeader = true;
   }
 
@@ -1010,7 +1010,7 @@ class GetTasksFromMe extends HazizzRequest {
                   int q_subjectId, q_wholeGroup = false
   }) : super(rh) {
     httpMethod = HttpMethod.GET;
-    PATH = "v2/me/tasks";
+    PATH = "users/${InfoCache.meInfo.id}/tasks";
     authTokenHeader = true;
 
     if(q_showThera != null)    query["showThera"] = q_showThera;
@@ -1180,6 +1180,20 @@ class GetGroupInviteLinks extends HazizzRequest {
   }
 }
 
+class RemoveGroupInviteLink extends HazizzRequest {
+  RemoveGroupInviteLink({ResponseHandler rh, @required int groupId, @required int inviteId}) : super(rh) {
+    httpMethod = HttpMethod.DELETE;
+    PATH = "groups/${groupId}/invitelinks/${inviteId}";
+    authTokenHeader = true;
+  }
+
+  @override
+  dynamic convertData(Response response) {
+    return response;
+  }
+}
+
+/*
 class GetGroupInviteLink extends HazizzRequest {
   GetGroupInviteLink({ResponseHandler rh, @required int groupId}) : super(rh) {
     httpMethod = HttpMethod.GET;
@@ -1193,6 +1207,7 @@ class GetGroupInviteLink extends HazizzRequest {
     return link;
   }
 }
+*/
 
 //endregion
 

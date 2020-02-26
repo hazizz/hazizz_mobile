@@ -21,7 +21,6 @@ class DeepLink{
         if(str_groupId == null || str_groupId == ""){
           str_groupId = deepLink.pathSegments[deepLink.pathSegments.length-1];
         }
-
         int groupId = int.parse(str_groupId);
         if(groupId != null){
           await showSureToJoinGroupDialog(context, groupId: groupId);
@@ -33,14 +32,11 @@ class DeepLink{
         if(str_taskId == null || str_taskId == "") {
           str_taskId = deepLink.pathSegments[deepLink.pathSegments.length - 1];
         }
-
         int taskId = int.parse(str_taskId);
         if(taskId != null) {
           Navigator.pushNamed(context, "/viewTask", arguments: taskId);
         }
       }
-
-
     }
   }
 
@@ -49,16 +45,12 @@ class DeepLink{
   static Future<Null> initUniLinks(BuildContext context) async {
     Uri initialUri = await getInitialUri();
 
-
     onLinkReceived(context, initialUri);
-    // Attach a listener to the stream
     _sub = getUriLinksStream().listen((Uri uri) {
       onLinkReceived(context, uri);
     }, onError: (err) {
       // Handle exception by warning the user their action did not succeed
     });
-
-    // NOTE: Don't forget to call _sub.cancel() in dispose()
   }
 
   static dispose(){

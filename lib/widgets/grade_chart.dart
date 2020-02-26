@@ -59,9 +59,7 @@ class _GradesChart extends State<GradesChart> with TickerProviderStateMixin {
       }
     }
 
-    return FlChart(
-
-      chart: PieChart(
+    return PieChart(
 
         PieChartData(
 
@@ -104,15 +102,13 @@ class _GradesChart extends State<GradesChart> with TickerProviderStateMixin {
             )
           ]
         )
-      ),
-    );
+      );
 
-    return FlChart(
-      chart: LineChart(
+    /*
+    return LineChart(
         LineChartData(
           lineTouchData: LineTouchData(
 
-              touchResponseSink: controller.sink,
               touchTooltipData: TouchTooltipData (
                 tooltipBgColor: Colors.blueGrey.withOpacity(0.8),
               )
@@ -274,8 +270,8 @@ class _GradesChart extends State<GradesChart> with TickerProviderStateMixin {
             ),
           ],
         ),
-      ),
-    );
+      );
+    */
   }
 }
 

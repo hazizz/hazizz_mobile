@@ -1,5 +1,6 @@
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
+import 'package:mobile/widgets/ad_widget.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 
 import 'package:mobile/custom/hazizz_localizations.dart';
@@ -102,6 +103,7 @@ class _SettingsPage extends State<SettingsPage>  {
 
         ),
         body: SingleChildScrollView(
+          padding: EdgeInsets.only(bottom: 40),
           child: Column(
             children: <Widget>[
 
@@ -146,6 +148,7 @@ class _SettingsPage extends State<SettingsPage>  {
                 // trailing: Text("time")
               ),
               */
+              /*
               Divider(),
               ListTile(
                 onTap: () async {
@@ -155,6 +158,7 @@ class _SettingsPage extends State<SettingsPage>  {
                 title: Text(locText(context, key: "notification_settings")),
                // trailing: Text("time")
               ),
+              */
               Divider(),
 
               /*
@@ -226,6 +230,7 @@ class _SettingsPage extends State<SettingsPage>  {
                 },
               ),
               Divider(),
+              showAd(context),
             ],
           ),
         )

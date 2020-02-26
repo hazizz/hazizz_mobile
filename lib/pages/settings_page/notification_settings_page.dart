@@ -277,8 +277,16 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage>  {
                     child: Icon(FontAwesomeIcons.save),//Text(locText(context, key: "save")),
                     onPressed: () async {
 
+                      DateTime now = DateTime.now();
+                      String timeZoneOffset = "" ;
+                      int timeZoneOffsetHour = now.timeZoneOffset.inHours;
+                      if(timeZoneOffsetHour > 9){
+                        timeZoneOffset += timeZoneOffsetHour.toString() + "00";
+                      }else{
+                        timeZoneOffset += "0" + timeZoneOffsetHour.toString() + "00";
 
-                      HazizzResponse response = await RequestSender().getResponse(UpdateAlertSettings(q_userId: (await InfoCache.getMyUserData()).id, b_alarmTime: "${add0(newTime.hour)}:${add0(newTime.minute)}:00+0000", b_mondayEnabled: mondayEnabled,
+                      }
+                      HazizzResponse response = await RequestSender().getResponse(UpdateAlertSettings(q_userId: (await InfoCache.getMyUserData()).id, b_alarmTime: "${add0(newTime.hour)}:${add0(newTime.minute)}:00+$timeZoneOffset", b_mondayEnabled: mondayEnabled,
                         b_tuesdayEnabled: tuesdayEnabled, b_wednesdayEnabled: wednesdayEnabled, b_thursdayEnabled: thursdayEnabled,
                         b_fridayEnabled: fridayEnabled, b_saturdayEnabled: saturdayEnabled, b_sundayEnabled: sundayEnabled
                       ));

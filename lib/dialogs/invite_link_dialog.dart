@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:mobile/communication/pojos/PojoGroup.dart';
+import 'package:mobile/communication/pojos/PojoInviteLink.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/enums/group_types_enum.dart';
@@ -30,10 +31,13 @@ class _InviteLinkDialog extends State<InviteLinkDialog> {
   @override
   void initState() {
 
-    RequestSender().getResponse(GetGroupInviteLink(groupId: widget.group.id)).then((hazizzResponse){
+    RequestSender().getResponse(GetGroupInviteLinks(groupId: widget.group.id)).then((hazizzResponse){
       setState(() {
         if(hazizzResponse.isSuccessful){
-          inviteLink = hazizzResponse.convertedData;
+
+          List<PojoInviteLink> links = hazizzResponse.convertedData;
+          inviteLink = links[0].link;
+
         }else{
           inviteLink = errorText;
         }

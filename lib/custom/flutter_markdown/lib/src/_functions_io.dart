@@ -64,7 +64,13 @@ final ImageBuilder kDefaultImageBuilder = (
   } else {
     Uri fileUri = imageDirectory != null ? Uri.parse(imageDirectory + uri.toString()) : uri;
     if (fileUri.scheme == 'http' || fileUri.scheme == 'https') {
-      return Image.network(fileUri.toString(), width: width, height: height);
+      return Image.network(fileUri.toString(), width: width, height: height,
+        loadingBuilder: (context, child, progress){
+          return progress == null
+              ? child
+              : CircularProgressIndicator();
+        },
+      );
     } else {
       return Image.file(File.fromUri(fileUri), width: width, height: height);
     }

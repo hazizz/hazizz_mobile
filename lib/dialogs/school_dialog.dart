@@ -53,6 +53,7 @@ class _SchoolDialog extends State<SchoolDialog> {
         height: searchBarHeight, width: width,
         child:
           TextField(
+            autofocus: true,
             style: TextStyle(fontSize: 20),
               onChanged: (String searchText){
                 //   List<String> searchKeys = keys;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:mobile/custom/hazizz_date.dart';
+import 'package:mobile/widgets/card_header_widget.dart';
 
 class GradeHeaderItemWidget extends StatelessWidget{
   String subjectName;
@@ -15,6 +16,16 @@ class GradeHeaderItemWidget extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    if(date == null){
+      return CardHeaderWidget(
+        text: subjectName[0].toUpperCase() + subjectName.substring(1),
+        secondText: gradesAvarage,
+      );
+    }
+    return CardHeaderWidget(
+      text: hazizzShowDateFormat(date),
+    );
+
     return Card(
       margin: EdgeInsets.only(left: 2, top: 2, bottom: 2, right: 2),
       clipBehavior: Clip.antiAliasWithSaveLayer,

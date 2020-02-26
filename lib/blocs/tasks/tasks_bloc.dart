@@ -219,10 +219,16 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
 
             HazizzLogger.printLog("log: opsie: 0");
 
-            // tasks = tasksDummy;
+            if(currentTaskExpiredState == TaskExpiredState.EXPIRED){
+              Map<DateTime, List<PojoTask>> b = {};
+              for(int i = tasks.keys.length-1; i >= 0; i--)
+              {
+                final DateTime key = tasks.keys.elementAt(i);
+                b[key] = tasks[key];
+              }
+              tasks = b;
 
-
-            HazizzLogger.printLog("log: opsie: 0");
+            }
 
             yield TasksLoadedState(tasks);
 

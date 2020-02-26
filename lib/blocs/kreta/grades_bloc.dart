@@ -64,11 +64,13 @@ class GradesWaitingState extends GradesState {
 }
 
 class GradesLoadedState extends GradesState {
-  final PojoGrades data;
+  PojoGrades data;
 
   final List<PojoSession> failedSessions;
 
-  GradesLoadedState(this.data, { this.failedSessions }) : assert(data!= null), super([data, SelectedSessionBloc().selectedSession]);
+  GradesLoadedState(this.data, { this.failedSessions }) : assert(data!= null), super([data, SelectedSessionBloc().selectedSession]){
+    data ??= PojoGrades({});
+  }
   @override
   String toString() => 'GradesLoadedState';
   List<Object> get props => [data, SelectedSessionBloc().selectedSession];
@@ -76,11 +78,27 @@ class GradesLoadedState extends GradesState {
 
 class GradesLoadedCacheState extends GradesState {
   PojoGrades data;
-  GradesLoadedCacheState(this.data) : assert(data!= null), super([data, SelectedSessionBloc().selectedSession]);
+
+  final List<PojoSession> failedSessions;
+
+  GradesLoadedCacheState(this.data,  { this.failedSessions }) : assert(data!= null), super([data, SelectedSessionBloc().selectedSession]){
+    data ??= PojoGrades({});
+  }
   @override
   String toString() => 'GradesLoadedCacheState';
   List<Object> get props => [data, SelectedSessionBloc().selectedSession];
 }
+/*
+class GradesSessionFailedState extends GradesState {
+  PojoGrades data;
+  GradesSessionFailedState(this.data) : assert(data!= null), super([data, SelectedSessionBloc().selectedSession]){
+    data ??= PojoGrades({});
+  }
+  @override
+  String toString() => 'GradesLoadedCacheState';
+  List<Object> get props => [data, SelectedSessionBloc().selectedSession];
+}
+*/
 
 class GradesErrorState extends GradesState {
   HazizzResponse hazizzResponse;
@@ -110,7 +128,6 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
   List<PojoGrade> gradesByDate = List();
 
   PojoGrades getGradesFromSession(){
-
     Map<String, List<PojoGrade>> sessionGrades = {};
     for(String key in grades.grades.keys){
       int newI = 0;
@@ -144,18 +161,21 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
 
   List<PojoGrade> getGradesByDate(){
     gradesByDate.clear();
-    HazizzLogger.printLog("Grades sub1: ${grades.grades.values.length}");
 
-    for(int i = 0; i < grades.grades.values.length; i++){
-      HazizzLogger.printLog("Grades sub2: ${grades.grades.values.toList()[i]}");
-      gradesByDate.addAll(grades.grades.values.toList()[i]);
-    }
-    HazizzLogger.printLog("Grades sub LENGTH: ${gradesByDate.length}");
 
-    if(currentGradeSort == GradesSort.BYCREATIONDATE) {
-      gradesByDate.sort((a, b) => a.compareToByCreationDate(b));
-    }else{
-      gradesByDate.sort((a, b) => a.compareToByDate(b));
+    if(grades != null && grades.grades != null){
+      HazizzLogger.printLog("Grades sub1: ${grades.grades.values.length}");
+      for(int i = 0; i < grades.grades.values.length; i++){
+        HazizzLogger.printLog("Grades sub2: ${grades.grades.values.toList()[i]}");
+        gradesByDate.addAll(grades.grades.values.toList()[i]);
+      }
+      HazizzLogger.printLog("Grades sub LENGTH: ${gradesByDate.length}");
+
+      if(currentGradeSort == GradesSort.BYCREATIONDATE) {
+        gradesByDate.sort((a, b) => a.compareToByCreationDate(b));
+      }else{
+        gradesByDate.sort((a, b) => a.compareToByDate(b));
+      }
     }
     return gradesByDate;
   }
@@ -243,7 +263,7 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
         DataCache dataCache = await loadGradesCache();
         if(dataCache!= null){
           lastUpdated = dataCache.lastUpdated;
-          grades = dataCache.data;
+          grades = dataCache.data ?? PojoGrades({});
           yield GradesLoadedCacheState(grades);
         }
         HazizzResponse hazizzResponse = await getResponse(
@@ -254,13 +274,24 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
         if(hazizzResponse.isSuccessful){
           failedSessions = getFailedSessionsFromHeader(hazizzResponse.response.headers);
 
+          /*
           if(doesContainSelectedSession(failedSessions)){
+            print("doesContainSelectedSession");
             FlushBloc().dispatch(FlushSessionFailEvent());
+            print("doesContainSelectedSession0");
+
+           // yield GradesSessionFailedState(grades ?? PojoGrades({}));
+            print("doesContainSelectedSession1");
+
+          //  yield GradesLoadedState(grades, failedSessions: failedSessions);
+          //  print("doesContainSelectedSession2");
+
           }
+          */
+          print("testgst:0");
 
-          print("CHANGE HAPPENDE02");
           if(hazizzResponse.convertedData != null){
-
+            print("testgst:1");
             PojoGrades r = hazizzResponse.convertedData;
             if(r.grades.isNotEmpty){
               grades = r;
@@ -278,14 +309,23 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
               saveGradesCache(grades);
               yield GradesLoadedState(grades, failedSessions: failedSessions);
             }else{
-              yield GradesLoadedCacheState(grades);
+              print("testgst:2");
+
+              yield GradesLoadedCacheState(grades ?? PojoGrades({}), failedSessions: failedSessions);
             }
+            print("testgst:3");
 
 
           }else{
+            print("testgst:4");
+
             yield GradesErrorState(hazizzResponse);
           }
+          print("testgst:5");
+
         }
+        print("testgst:6");
+
 
         if(hazizzResponse.isError){
           if(hazizzResponse.dioError == noConnectionError){

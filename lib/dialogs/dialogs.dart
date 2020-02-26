@@ -577,8 +577,9 @@ Future<PojoTag> showDialogTaskTag(BuildContext context, {List<PojoTag> except}) 
     if(!foundDuplicate){
       tagsToShow.add(defaultTag);
     }
-
   }
+
+  bool autoFocus = tagsToShow.isEmpty;
 
   double height = 130.0 +  tagsToShow.length * 38;
   double width = 290;
@@ -608,7 +609,7 @@ Future<PojoTag> showDialogTaskTag(BuildContext context, {List<PojoTag> except}) 
           Container(
             height: 64,
             child: TextField(
-
+              autofocus: autoFocus,
               inputFormatters:[
                 LengthLimitingTextInputFormatter(20),
               ],
@@ -793,7 +794,7 @@ Future<bool> showDeleteTaskDialog(context, {@required int taskId}) async {
 
 Future<bool> showDeleteSubjectDialog(context, {@required int groupId, @required PojoSubject subject}) {
   return showDialog(context: context, barrierDismissible: true, builder: (context){
-    return SureToDeleteSubjectDialog(groupId: groupId, subject: subject,);
+    return SureToDeleteSubjectDialog(subject: subject,);
   });
 }
 

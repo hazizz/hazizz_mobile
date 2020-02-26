@@ -72,27 +72,39 @@ class RequestSender{
     ));
   }
 
-  final Options defaultOptions = new Options(
+  static final BaseOptions defaultOptions = new BaseOptions(
       connectTimeout: 10000,
       sendTimeout: 10000,
       receiveTimeout: 10000,
       responseType: ResponseType.plain,
       receiveDataWhenStatusError: true,
-      followRedirects: true
+      followRedirects: true,
+
   );
+  final Dio defaultDio = new Dio(defaultOptions);
 
-  final Dio defaultDio = new Dio();
 
-  final Options secondaryOptions = new Options(
-      connectTimeout: 12000,
-      sendTimeout: 12000,
-      receiveTimeout: 12000,
+  static final BaseOptions secondaryOptions = new BaseOptions(
+      connectTimeout: 20000,
+      sendTimeout: 20000,
+      receiveTimeout: 20000,
       responseType: ResponseType.plain,
       receiveDataWhenStatusError: true,
       followRedirects: true
   );
+  final Dio secondaryDio = new Dio(secondaryOptions);
 
-  final Dio secondaryDio = new Dio();
+
+  static final BaseOptions theraOptions = new BaseOptions(
+      connectTimeout: 16000,
+      sendTimeout: 16000,
+      receiveTimeout: 16000,
+      responseType: ResponseType.plain,
+      receiveDataWhenStatusError: true,
+      followRedirects: true
+  );
+  final Dio theraDio = new Dio(theraOptions);
+
 
 
   void initialize(){
@@ -138,9 +150,8 @@ class RequestSender{
     HazizzLogger.printLog("about to start sending AUTH request: ${authRequest.toString()}");
     HazizzResponse hazizzResponse;
     try{
-      defaultOptions.headers = await authRequest.buildHeader();
-      Dio authDio = Dio();
-      Response response = await authDio.post(authRequest.url, queryParameters: authRequest.query, data: authRequest.body, options: defaultOptions);
+      final Dio authDio = Dio(defaultOptions);
+      Response response = await authDio.post(authRequest.url, queryParameters: authRequest.query, data: authRequest.body, options: Options(headers: await authRequest.buildHeader()));
       hazizzResponse = HazizzResponse.onSuccess(response: response, request: authRequest);
 
       HazizzLogger.printLog("hey: sent token request");
@@ -227,30 +238,32 @@ class RequestSender{
         HazizzLogger.printLog("request url: ${request.url}");
 
         Dio currentDio;
-        Options currentOption;
-        if(!useSecondaryOptions){
-          currentDio = defaultDio;
-          currentOption = defaultOptions;
-        }else{
+      //  BaseOptions currentOption;
+
+        if(useSecondaryOptions){
           currentDio = secondaryDio;
-          currentOption = secondaryOptions;
+        }else if(request is TheraRequest){
+          currentDio = theraDio;
+        }else{
+          currentDio = defaultDio;
         }
+        print("öiaö: 0");
+
+        final Options option = Options(headers: await request.buildHeader());
+        print("öiaö: 1");
 
         if(request.httpMethod == HttpMethod.GET) {
-          currentOption.headers = await request.buildHeader();
-          response = await currentDio.get(request.url, queryParameters: request.query, options: currentOption);
+          print("öiaö: 2");
+          response = await currentDio.get(request.url, queryParameters: request.query, options: option);
         }else if(request.httpMethod == HttpMethod.POST) {
-          currentOption.headers = await request.buildHeader();
-          response = await currentDio.post(request.url, queryParameters: request.query, data: request.body, options: currentOption);
+          print("öiaö: 3");
+          response = await currentDio.post(request.url, queryParameters: request.query, data: request.body, options: option);
         }else if(request.httpMethod == HttpMethod.DELETE) {
-          currentOption.headers = await request.buildHeader();
-          response = await currentDio.delete(request.url, queryParameters: request.query, data: request.body, options: currentOption);
+          response = await currentDio.delete(request.url, queryParameters: request.query, data: request.body, options: option);
         }else if(request.httpMethod == HttpMethod.PATCH) {
-          currentOption.headers = await request.buildHeader();
-          response = await currentDio.patch(request.url, queryParameters: request.query, data: request.body, options: currentOption);
+          response = await currentDio.patch(request.url, queryParameters: request.query, data: request.body, options: option);
         }else if(request.httpMethod == HttpMethod.PUT) {
-          currentOption.headers = await request.buildHeader();
-          response = await currentDio.put(request.url, queryParameters: request.query, data: request.body, options: currentOption);
+          response = await currentDio.put(request.url, queryParameters: request.query, data: request.body, options: option);
         }
 
         HazizzLogger.printLog("request was sent successfully: ${request.toString()}");

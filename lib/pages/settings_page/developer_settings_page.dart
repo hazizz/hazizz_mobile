@@ -1,7 +1,9 @@
 
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mobile/constants.dart';
 import 'package:mobile/dialogs/dialogs.dart';
+import 'package:mobile/managers/preference_services.dart';
 import 'package:mobile/services/hazizz_message_handler.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 
@@ -25,6 +27,9 @@ class _DeveloperSettingsPage extends State<DeveloperSettingsPage> {
 
   String token = "semmi";
 
+  final TextEditingController server_url_controller = TextEditingController();
+
+
   @override
   void initState() {
     // widget.myGroupsBloc.add(FetchData());
@@ -34,6 +39,8 @@ class _DeveloperSettingsPage extends State<DeveloperSettingsPage> {
         this.token = token;
       });
     });
+
+    server_url_controller.text = PreferenceService.serverUrl;
 
     super.initState();
   }
@@ -53,16 +60,56 @@ class _DeveloperSettingsPage extends State<DeveloperSettingsPage> {
           body: Container(
             child: Column(
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: ListTile(
-                    leading: Icon(FontAwesomeIcons.fileAlt),
+                SizedBox(height: 10,),
 
-                    title: Text(locText(context, key: "logs")),
-                    onTap: (){
-                      Navigator.pushNamed(context, "/settings/developer/logs");
-                    },
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0, right:8, top: 8, bottom:8),
+                  child: TextField(
+                    maxLines: 1,
+                    controller: server_url_controller,
+                    decoration: InputDecoration(labelText: locText(context, key: "server_url"),// helperText: "Oktatási azonositó",
+                      alignLabelWithHint: true,
+                      labelStyle: TextStyle(
+
+                      ),
+                      filled: true,
+                      fillColor: Colors.grey.withAlpha(120),
+
+                    ),
                   ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom:8.0, right: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      RaisedButton(
+                        child: Text(locText(context, key: "apply")),
+                        onPressed: (){
+                          PreferenceService.setServerUrl(server_url_controller.text);
+                        },
+                      ),
+
+                      SizedBox(width: 6,),
+
+                      RaisedButton(
+                        child: Text(locText(context, key: "reset")),
+                        onPressed: (){
+                          server_url_controller.text = Constants.BASE_URL;
+                          PreferenceService.setServerUrl(Constants.BASE_URL);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+
+                ListTile(
+                  leading: Icon(FontAwesomeIcons.fileAlt),
+
+                  title: Text(locText(context, key: "logs")),
+                  onTap: (){
+                    Navigator.pushNamed(context, "/settings/developer/logs");
+                  },
                 ),
                 Divider(),
                 ListTile(
@@ -86,6 +133,14 @@ class _DeveloperSettingsPage extends State<DeveloperSettingsPage> {
                 ),
                 Divider(),
 
+                ListTile(
+                  onTap: () async {
+                    Navigator.pushNamed(context, "/settings/notification");
+                  },
+                  leading: Icon(FontAwesomeIcons.solidBell),
+                  title: Text(locText(context, key: "notification_settings")),
+                  // trailing: Text("time")
+                ),
               ],
             ),
           )

@@ -1,14 +1,10 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
-
 import 'package:mobile/blocs/kreta/schedule_event_bloc.dart';
 import 'package:mobile/custom/hazizz_date_time.dart';
-
 import 'package:mobile/custom/logger.dart';
-
 
 class ScheduleEventWidget extends StatefulWidget {
   ScheduleEventWidget({Key key}) : super(key: key);
@@ -18,8 +14,6 @@ class ScheduleEventWidget extends StatefulWidget {
 }
 
 class _ScheduleEventWidget extends State<ScheduleEventWidget> with SingleTickerProviderStateMixin {
-
-
   Duration countdownToEventEnd;
   HazizzDateTime eventEnd;
 
@@ -30,7 +24,6 @@ class _ScheduleEventWidget extends State<ScheduleEventWidget> with SingleTickerP
       countdownToEventEnd = now.difference(eventEnd);
     }));
   }
-
 
   @override
   void initState() {
@@ -87,26 +80,27 @@ class _ScheduleEventWidget extends State<ScheduleEventWidget> with SingleTickerP
           text = "log: state is ScheduleEventInitializeState";
         }
         return Card(
+          margin: EdgeInsets.only(left: 3, right: 3, bottom: 2.1, top: 2.1),
           color: Colors.red,
           clipBehavior: Clip.antiAliasWithSaveLayer,
           elevation: 5,
           child: InkWell(
-              onTap: () {
+            onTap: () {
 
-              },
+            },
+            child:
+            Align(
+              alignment: Alignment.centerLeft,
               child:
-              Align(
-                  alignment: Alignment.centerLeft,
-                  child:
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8, top: 5, bottom: 5),
-                    child: Text("${countdownToEventEnd.inMinutes}:${countdownToEventEnd.inSeconds}:" + text, // "8 perc maradt a szünetből" "25 perc a szünetig"
-                      style: TextStyle(
-                          fontSize: 24
-                      ),
-                    ),
-                  )
+              Padding(
+                padding: const EdgeInsets.only(left: 8, top: 2, bottom: 2),
+                child: Text("${countdownToEventEnd.inMinutes}:${countdownToEventEnd.inSeconds}:" + text, // "8 perc maradt a szünetből" "25 perc a szünetig"
+                  style: TextStyle(
+                    fontSize: 24
+                  ),
+                ),
               )
+            )
           )
         );
       },

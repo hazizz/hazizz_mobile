@@ -37,16 +37,9 @@ Future<SharedPreferences> getSp()async {
 class KretaAccount{
   String kretaSession;
 
-  static const String _keyKretaUsername = "key_KretaUsername_";
-
-
   KretaAccount({@required this.kretaSession}){
 
   }
-
-
-
-
 }
 
 
@@ -111,10 +104,6 @@ class TokenManager {
     }
     return hazizzResponse;
   }
-
-
-
-
 
 
   static Future<bool> hasToken() async{
@@ -206,21 +195,6 @@ class TokenManager {
     }
     return false;
   }
-
-  /*
-  static Future fetchToken() async {
-    await fetchRefreshTokens(username: await InfoCache.getMyUsername(), refreshToken: await getRefreshToken());
-  }
-  */
-
-  /*
-  static Future setTokenRefreshTime() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    String lastTokenRefreshTime = DateFormat(_timeFormat).format(DateTime.now());
-    prefs.setString(_keyLastTokenRefreshTime, lastTokenRefreshTime);
-  }
-  */
-
 
   static void invalidateTokens() {
     setRefreshToken("");

@@ -1,11 +1,11 @@
 import 'dart:math';
 
-import 'package:expandable/expandable.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_widgets/flutter_widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';import 'package:mobile/blocs/other/request_event.dart';
+import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
 import 'package:mobile/blocs/other/response_states.dart';
 import 'package:mobile/blocs/tasks/tasks_bloc.dart';
 import 'package:mobile/communication/custom_response_errors.dart';
@@ -16,7 +16,7 @@ import 'package:mobile/enums/task_complete_state_enum.dart';
 import 'package:mobile/enums/task_expired_state_enum.dart';
 import 'package:mobile/listItems/task_header_item_widget.dart';
 import 'package:mobile/listItems/task_item_widget.dart';
-import 'package:mobile/widgets/flushbars.dart';
+import 'package:mobile/widgets/ad_widget.dart';
 import 'package:mobile/widgets/scroll_space_widget.dart';
 
 import 'package:sticky_headers/sticky_headers.dart';
@@ -46,6 +46,19 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
   TaskExpiredState currentExpiredTaskState;
 
 
+  final ItemScrollController itemScrollController = ItemScrollController();
+  final ItemPositionsListener itemPositionListener = ItemPositionsListener.create();
+
+
+  void scrollTo(int index){
+
+    WidgetsBinding.instance.addPostFrameCallback((_) =>
+      itemScrollController.jumpTo(
+        index: index,
+      )
+    );
+  }
+
   @override
   void initState() {
 
@@ -64,10 +77,12 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
   @override
   void dispose() {
     // tasksBloc.dispose();
+  //  itemScrollController.dispose();
+  //  itemPositionListener.dispose()
     super.dispose();
   }
 
-  Map<DateTime, List<PojoTask>> map = null;
+  Map<DateTime, List<PojoTask>> map;
 
 
   Widget onLoaded(Map<DateTime, List<PojoTask>> m){
@@ -141,14 +156,17 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
 
             }else{
 
-              return ListView.builder(
-              //  physics:  BouncingScrollPhysics(),
-                  cacheExtent: 100000000,
-                  addAutomaticKeepAlives: true,
-                  itemCount: map.keys.length+1,
+              int itemCount = map.keys.length+1;
+              return ScrollablePositionedList.separated(
+
+              //  addAutomaticKeepAlives: true,
+                itemScrollController: itemScrollController,
+                itemPositionsListener: itemPositionListener,
+                itemCount: itemCount,
+                  separatorBuilder: (context, index ){
+                    return showAd(context, show: (itemCount<3 && index == itemCount-1) || (index!=0 && index%3==0), showHeader: true);
+                  },
                   itemBuilder: (BuildContext context, int index) {
-
-
 
                     if(index == 0){
                       return Center(child: Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().tasksBloc.lastUpdated)));
@@ -171,128 +189,125 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
                       header: TaskHeaderItemWidget(key: Key(Random().nextInt(2000000).toString()), dateTime: key),
                       content: Builder(
                           builder: (context) {
-                            //  List<Widget> tasksList = new List();
+                            return Column(
+                              children: <Widget>[
+                                AnimatedList(
+                                  key: listKeyList[index-1],
+                                  //   key: Key(Random().nextInt(2000000).toString()),
+                                  shrinkWrap: true,
+                                  initialItemCount: map[key].length,
 
-                            /*
-                        List<Widget> tasksList = new List();
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemBuilder: (context, index2, animation) => buildItem(context, index2, animation, map[key][index2], (){
 
-                        for(PojoTask pojoTask in map[key]){
-                         // tasksList.add( pojoTask
-                          //  buildItem(context, index, animation, pojoTask)
-                              tasksList.add(TaskItemWidget(originalPojoTask: pojoTask, key: Key(pojoTask.toJson().toString())),
-                          );
-                        }
-                        */
+                                    HazizzLogger.printLog("bro: me: ${currentCompletedTaskState}");
 
-                            // return Column(children: tasksList,);
+                                    if(currentCompletedTaskState != TaskCompleteState.BOTH){
+                                      HazizzLogger.printLog("bro: im trigered");
 
+                                      // var removedItem = map[key].removeAt(index2);
+                                      var removedItem = map[key][index2];
 
-                            //  Function onCompletedChanged;
-
-                            /*
-                        return ListView.builder(
-                         // itemExtent: ,
-                         // addRepaintBoundaries: false,
-                       //   cacheExtent: 2,
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: map[key].length,
-                          itemBuilder: (context, index){
-                            return TaskItemWidget(originalPojoTask: map[key][index], onCompletedChanged: (){
-                              var removedItem = map[key][index];
-
-
-                              setState(() {
-                                map[key].remove(removedItem);
-                                MainTabBlocs().tasksBloc.tasks[key].remove(removedItem);
-                                MainTabBlocs().tasksBloc.tasksRaw.remove(removedItem);
-
-                                if(map[key].isEmpty){
-
-                                  setState(() {
-                                    HazizzLogger.printLog("oof22: ${map}");
-                                    map.remove(key);
-                                    MainTabBlocs().tasksBloc.tasks.remove(key);
-                                    HazizzLogger.printLog("oof32: ${map}");
-                                  });
-                                }
-                              });
-
-                              //MainTabBlocs().tasksBloc.add(TasksFetchEvent());
-                            },key: Key(map[key][index].toJson().toString()),);
-                          },
-                        );
-                        */
-
-                            return AnimatedList(
-                              key: listKeyList[index-1],
-                              //   key: Key(Random().nextInt(2000000).toString()),
-                              shrinkWrap: true,
-                              initialItemCount: map[key].length,
-
-                              physics: NeverScrollableScrollPhysics(),
-                              itemBuilder: (context, index2, animation) => buildItem(context, index2, animation, map[key][index2], (){
-
-                                HazizzLogger.printLog("bro: me: ${currentCompletedTaskState}");
-
-                                if(currentCompletedTaskState != TaskCompleteState.BOTH){
-                                  HazizzLogger.printLog("bro: im trigered");
-
-                                  // var removedItem = map[key].removeAt(index2);
-                                  var removedItem = map[key][index2];
-
-                                  listKeyList[index-1].currentState.removeItem(index2, (context2, animation2){
-                                    animation2.addStatusListener((AnimationStatus animationStatus){
-                                      HazizzLogger.printLog("oof22: anim: ${animationStatus.toString()}");
-                                      if(animationStatus == AnimationStatus.dismissed){
-                                        HazizzLogger.printLog("oof: ${map[key]}");
-                                        MainTabBlocs().tasksBloc.dispatch(TasksRemoveItemEvent( mapKey: key, index: index2));
-
-                                        /*
-                                    setState(() {
-                                      map[key].remove(removedItem);
-                                      MainTabBlocs().tasksBloc.tasks[key].remove(removedItem);
-                                      MainTabBlocs().tasksBloc.tasksRaw.remove(removedItem);
-                                      MainTabBlocs().tasksBloc.add(TasksRemoveItemEvent());
-                                    });
-                                    */
-
-                                        /*
-                                    if(map[key].isEmpty){
-
-                                      setState(() {
-                                        HazizzLogger.printLog("oof22: ${map}");
-                                        map.remove(key);
-                                        MainTabBlocs().tasksBloc.tasks.remove(key);
-                                        HazizzLogger.printLog("oof32: ${map}");
-                                      });
+                                      listKeyList[index-1].currentState.removeItem(index2, (context2, animation2){
+                                        animation2.addStatusListener((AnimationStatus animationStatus){
+                                          HazizzLogger.printLog("oof22: anim: ${animationStatus.toString()}");
+                                          if(animationStatus == AnimationStatus.dismissed){
+                                            HazizzLogger.printLog("oof: ${map[key]}");
+                                            MainTabBlocs().tasksBloc.dispatch(TasksRemoveItemEvent( mapKey: key, index: index2));
+                                          }
+                                        });
+                                        return buildItem(context2, index2, animation2, removedItem, (){});
+                                      },
+                                          duration:  Duration(milliseconds: 500)
+                                      );
                                     }
-                                    */
-                                      }
-                                    });
-                                    return buildItem(context2, index2, animation2, removedItem, (){});
-                                  },
-                                      duration:  Duration(milliseconds: 500)
-                                  );
-                                  /*
-                                HazizzLogger.printLog("oof: ${map[key]}");
-                                if(map[key].isEmpty){
-
-                                  setState(() {
-                                    HazizzLogger.printLog("oof22: ${map}");
-                                    map.remove(key);
-                                    HazizzLogger.printLog("oof32: ${map}");
-                                  });
-                                }
-                                */
-                                }
-                              }),
+                                  }),
+                                ),
+                              ],
                             );
                           }
                       ),
                     );
 
-                    if(index >= (map.keys.length) /*|| true*/){
+                    if(index == itemCount-1 /*|| true*/){
+                      return addScrollSpace(s);
+                    }
+
+                    return s;
+                  }
+              );
+              return ListView.separated(
+              //  physics:  BouncingScrollPhysics(),
+                  cacheExtent: 100000000,
+                  addAutomaticKeepAlives: true,
+                  itemCount: itemCount,
+                  separatorBuilder: (context, index ){
+                    return showAd(context, show: (itemCount<3 && index == itemCount-1) || (index!=0 && index%3==0), showHeader: true);
+                  },
+                  itemBuilder: (BuildContext context, int index) {
+
+                    if(index == 0){
+                      return Center(child: Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().tasksBloc.lastUpdated)));
+                    }
+
+                    List<GlobalKey<AnimatedListState>> listKeyList = new List(map.keys.length);
+                    for(int i = 0; i < listKeyList.length; i++){
+                      listKeyList[i] =  GlobalKey();
+                    }
+
+
+                    DateTime key = map.keys.elementAt(index-1);
+                    HazizzLogger.printLog("new key: ${key.toString()}");
+
+
+                    Widget s = StickyHeader(
+
+                      //  key: Key(DateTime.now().microsecondsSinceEpoch.toString()),
+                      //key: Key(Random().nextInt(2000000).toString()),
+                      header: TaskHeaderItemWidget(key: Key(Random().nextInt(2000000).toString()), dateTime: key),
+                      content: Builder(
+                          builder: (context) {
+                            return Column(
+                              children: <Widget>[
+                                AnimatedList(
+                                  key: listKeyList[index-1],
+                                  //   key: Key(Random().nextInt(2000000).toString()),
+                                  shrinkWrap: true,
+                                  initialItemCount: map[key].length,
+
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemBuilder: (context, index2, animation) => buildItem(context, index2, animation, map[key][index2], (){
+
+                                    HazizzLogger.printLog("bro: me: ${currentCompletedTaskState}");
+
+                                    if(currentCompletedTaskState != TaskCompleteState.BOTH){
+                                      HazizzLogger.printLog("bro: im trigered");
+
+                                      // var removedItem = map[key].removeAt(index2);
+                                      var removedItem = map[key][index2];
+
+                                      listKeyList[index-1].currentState.removeItem(index2, (context2, animation2){
+                                        animation2.addStatusListener((AnimationStatus animationStatus){
+                                          HazizzLogger.printLog("oof22: anim: ${animationStatus.toString()}");
+                                          if(animationStatus == AnimationStatus.dismissed){
+                                            HazizzLogger.printLog("oof: ${map[key]}");
+                                            MainTabBlocs().tasksBloc.dispatch(TasksRemoveItemEvent( mapKey: key, index: index2));
+                                          }
+                                        });
+                                        return buildItem(context2, index2, animation2, removedItem, (){});
+                                      },
+                                          duration:  Duration(milliseconds: 500)
+                                      );
+                                    }
+                                  }),
+                                ),
+                            ],
+                            );
+                          }
+                      ),
+                    );
+
+                    if(index == itemCount-1 /*|| true*/){
                       return addScrollSpace(s);
                     }
 
@@ -301,7 +316,9 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
               );
             }
           }),
-        )
+        ),
+
+
       ],
     );
   }
@@ -428,11 +445,9 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
       floatingActionButton:FloatingActionButton(
         // heroTag: "hero_fab_tasks_main",
         onPressed: (){
-
           Navigator.pushNamed(context, "/createTask");
           //   Navigator.push(context,MaterialPageRoute(builder: (context) => EditTaskPage.createMode()));
         },
-        tooltip: 'Increment',
         child: Icon(FontAwesomeIcons.plus),
       ),
     );

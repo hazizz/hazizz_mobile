@@ -9,8 +9,6 @@ import 'package:mobile/communication/pojos/PojoUser.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/enums/group_permissions_enum.dart';
 import 'package:mobile/listItems/member_item_widget.dart';
-import 'package:mobile/storage/cache_manager.dart';
-import 'package:mobile/managers/welcome_manager.dart';
 import 'package:mobile/widgets/scroll_space_widget.dart';
 
 
@@ -18,8 +16,6 @@ import 'package:mobile/custom/hazizz_localizations.dart';
 
 
 class GroupMembersPage extends StatefulWidget {
-  // This widget is the root of your application.
-
   String getTabName(BuildContext context){
     return locText(context, key: "groupMembers").toUpperCase();
   }
@@ -44,91 +40,73 @@ class _GroupMembersPage extends State<GroupMembersPage> with AutomaticKeepAliveC
       groupMembersBloc.dispatch(FetchData());
     }
 
-    /*
-    WelcomeManager.getMembers().then((isNewComer){
-      if(isNewComer){
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          FeatureDiscovery.discoverFeatures(
-            context,
-            ['featureId1'],
-          );
-        });
-      }
-    });
-    */
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: FloatingActionButton(
-          child: Icon(FontAwesomeIcons.userPlus),
-          heroTag: "hero_fab_members",
-          onPressed: (){
-            showInviteDialog(context, group: groupMembersBloc.group);
-          },
-        ),
-        body: new RefreshIndicator(
-            child: Stack(
-              children: <Widget>[
-                ListView(),
-                BlocBuilder(
-                    bloc: groupMembersBloc,
-                    builder: (_, HState state) {
-                      if (state is ResponseDataLoaded) {
+      floatingActionButton: FloatingActionButton(
+        child: Icon(FontAwesomeIcons.userPlus),
+        heroTag: "hero_fab_members",
+        onPressed: (){
+          showInviteDialog(context, group: groupMembersBloc.group);
+        },
+      ),
+      body: new RefreshIndicator(
+        child: Stack(
+          children: <Widget>[
+            ListView(),
+            BlocBuilder(
+              bloc: groupMembersBloc,
+              builder: (_, HState state) {
+                if (state is ResponseDataLoaded) {
 
-                        PojoGroupPermissions memberPermissions = state.data;
-                        List<MemberItemWidget> membersWidget = List();
+                  PojoGroupPermissions memberPermissions = state.data;
+                  List<MemberItemWidget> membersWidget = List();
 
-                        Function onKicked = (){
-                          groupMembersBloc.dispatch(FetchData());
-                        };
+                  Function onKicked = (){
+                    groupMembersBloc.dispatch(FetchData());
+                  };
 
+                  for(PojoUser member in memberPermissions.OWNER){
+                    membersWidget.add(MemberItemWidget(member: member, permission: GroupPermissionsEnum.OWNER, onKicked: onKicked,));
+                  }
+                  for(PojoUser member in memberPermissions.MODERATOR){
+                    membersWidget.add(MemberItemWidget(member: member, permission: GroupPermissionsEnum.MODERATOR, onKicked: onKicked));
+                  }
+                  for(PojoUser member in memberPermissions.USER){
+                    membersWidget.add(MemberItemWidget(member: member, permission: GroupPermissionsEnum.USER, onKicked: onKicked));
+                  }
+                  for(PojoUser member in memberPermissions.NULL){
+                    membersWidget.add(MemberItemWidget(member: member, permission: GroupPermissionsEnum.NULL, onKicked: onKicked));
+                  }
 
-
-                        for(PojoUser member in memberPermissions.OWNER){
-                          membersWidget.add(MemberItemWidget(member: member, permission: GroupPermissionsEnum.OWNER, onKicked: onKicked,));
-                        }
-                        for(PojoUser member in memberPermissions.MODERATOR){
-                          membersWidget.add(MemberItemWidget(member: member, permission: GroupPermissionsEnum.MODERATOR, onKicked: onKicked));
-                        }
-                        for(PojoUser member in memberPermissions.USER){
-                          membersWidget.add(MemberItemWidget(member: member, permission: GroupPermissionsEnum.USER, onKicked: onKicked));
-                        }
-                        for(PojoUser member in memberPermissions.NULL){
-                          membersWidget.add(MemberItemWidget(member: member, permission: GroupPermissionsEnum.NULL, onKicked: onKicked));
-                        }
-
-                        return new ListView.builder(
-                         //   physics: BouncingScrollPhysics(),
-                            itemCount: membersWidget.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              if(index >= membersWidget.length-1){
-                                return addScrollSpace(membersWidget[index]);
-                              }
-                              return membersWidget[index];
-                            }
-                        );
-                      } else if (state is ResponseEmpty) {
-                        return Container();
-                      } else if (state is ResponseWaiting) {
-                        return Center(child: CircularProgressIndicator(),);
+                  return new ListView.builder(
+                    itemCount: membersWidget.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      if(index >= membersWidget.length-1){
+                        return addScrollSpace(membersWidget[index]);
                       }
-                      return Center(
-                          child: Text(locText(context, key: "info_something_went_wrong")));
+                      return membersWidget[index];
                     }
-                ),
-              ],
+                  );
+                } else if (state is ResponseEmpty) {
+                  return Container();
+                } else if (state is ResponseWaiting) {
+                  return Center(child: CircularProgressIndicator(),);
+                }
+                return Center(child: Text(locText(context, key: "info_something_went_wrong")));
+              }
             ),
-            onRefresh: () async => groupMembersBloc.dispatch(FetchData()) //await getData()
-        )
+          ],
+        ),
+        onRefresh: () async => groupMembersBloc.dispatch(FetchData()) //await getData()
+      )
     );
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 }
 

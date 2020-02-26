@@ -434,191 +434,97 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                         ],
                       ),
 
-                      Row(
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(left: 2),
-                            child: IconButton(
-                              icon: Icon(FontAwesomeIcons.userEdit),
-                              onPressed: (){
-                                // SessionsBloc().add(FetchData());
-                                Navigator.popAndPushNamed(context, "/kreta/accountSelector");
-                              },
-                            ),
-                          ),
-                          BlocBuilder(
-                            bloc: SessionsBloc(),
-                            builder: (context, state){
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 4),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
 
-                              List<PojoSession> sessions = [];
+                            Padding(
+                              padding: const EdgeInsets.only(left: 14),
+                              child: BlocBuilder(
+                                bloc: SessionsBloc(),
+                                builder: (context, state){
 
+                                  List<PojoSession> sessions = [];
 
-
-                              for(PojoSession s in SessionsBloc().sessions){
-                                for(int i = 0; i< sessions.length; i++ ){
-                                  PojoSession s2 = sessions[i];
-                                  if(s2.username == s.username){
-                                    if(getSessionStatusRank(s.status) < getSessionStatusRank(s2.status)){
-                                      sessions[i] = s2;
-                                      break;
-                                    }
-                                  }
-                                }
-                                sessions.add(s);
-
-                                /*
-                                bool found = false;
-                                for(int i = 0; i< SessionsBloc().sessions.length; i++ ){
-                                  if(s.username == SessionsBloc().sessions[i].username){
-                                    found = true;
-                                    if(SessionsBloc().sessions[i].status == "ACTIVE"
-                                    && s.status != "ACTIVE "){
-                                      sessions.add(s);
-                                      break;
-                                    }
-                                  }
-                                }
-                                if(!found){
-                                  sessions.add(s);
-                                }
-                                */
-
-
-                              }
-
-                              List<DropdownMenuItem> items = [];
-
-                              for(PojoSession s in sessions){
-                                //  if(selectedKretaAccount == null || s.username != selectedKretaAccount.username){
-                                print("MÓÓÓÓ");
-
-                                if(getSessionStatusRank(s.status) > 0){
-                                  items.add(DropdownMenuItem(child: Text(s.username, style: TextStyle(color: Colors.red),), value: s.username,));
-                                }else{
-                                  items.add(DropdownMenuItem(child: Text(s.username), value: s.username,));
-                                }
-                                if(selectedKretaAccount?.username == s.username){
-
-                                  selectedKretaAccount = s;
-                                  selectedKretaAccountName = s.username;
-                                }
-                                //  }
-                              }
-
-                              items.forEach((item) => print("opo111: ${item.value}"));
-                              print("opo222: ${selectedKretaAccount?.username}");
-                              print("opo333: ${items.where((item) => item.value == selectedKretaAccountName).length == 1}");
-
-
-                              return Padding(
-                                padding: const EdgeInsets.only(left: 8),
-                                child: DropdownButton(
-                                  value: selectedKretaAccountName,
-                                  onChanged: (item){
-                                    if(item =="add Kréta account"){
-                                      Navigator.of(context).pushNamed("/kreta/login");
-                                    }else{
-                                      setState(() {
-                                        selectedKretaAccountName = item;
-                                        print("uff: ${selectedKretaAccountName}");
-                                        for(PojoSession s in sessions){
-                                          if(s.username == selectedKretaAccountName){
-
-                                            if(s.status != "ACTIVE"){
-                                              WidgetsBinding.instance.addPostFrameCallback((_) =>
-                                                  Navigator.pushNamed(context, "/kreta/login/auth", arguments: s)
-                                              );
-                                            }
-
-                                            selectedKretaAccount = s;
-                                            print("uff2: ${selectedKretaAccount.username}");
-
-                                            SelectedSessionBloc().dispatch(SelectedSessionSetEvent(s));
-                                            break;
-                                          }
+                                  for(PojoSession s in SessionsBloc().sessions){
+                                    print("öö99: ${s.id}: ${s.username}");
+                                    for(int i = 0; i< sessions.length; i++ ){
+                                      PojoSession s2 = sessions[i];
+                                      if(s2.username == s.username){
+                                        if(getSessionStatusRank(s.status) < getSessionStatusRank(s2.status)){
+                                          sessions[i] = s2;
+                                          break;
                                         }
-                                      });
+                                      }
                                     }
-                                  },
-                                  items: items
-                                ),
-                              );
+                                    sessions.add(s);
 
-
-                              /*
-                              for(PojoSession s in SessionsBloc().sessions){
-                                String username = s.username;
-
-                                if(sessions.every((element) => element.username == s.username)){
-                                  continue;
-                                }
-
-                                if(s.status == "ACTIVE" ){
-                                  sessions.add(s);
-                                }else{
-                                  for(PojoSession s2 in SessionsBloc().sessions){
-                                    if(){
-
+                                    /*
+                                    bool found = false;
+                                    for(int i = 0; i< SessionsBloc().sessions.length; i++ ){
+                                      if(s.username == SessionsBloc().sessions[i].username){
+                                        found = true;
+                                        if(SessionsBloc().sessions[i].status == "ACTIVE"
+                                        && s.status != "ACTIVE "){
+                                          sessions.add(s);
+                                          break;
+                                        }
+                                      }
                                     }
+                                    if(!found){
+                                      sessions.add(s);
+                                    }
+                                    */
+
+
                                   }
-                                }
-                              }*/
 
+                                  List<DropdownMenuItem> items = [];
 
-                              if(SessionsBloc().activeSessions != null && SessionsBloc().activeSessions.isNotEmpty){
+                                  for(PojoSession s in sessions){
+                                    //  if(selectedKretaAccount == null || s.username != selectedKretaAccount.username){
+                                    print("MÓÓÓÓ");
 
-                                List<DropdownMenuItem> items = [];
+                                    if(getSessionStatusRank(s.status) > 0){
+                                      items.add(DropdownMenuItem(child: Text(s.username, style: TextStyle(color: Colors.red),), value: s.username,));
+                                    }else{
+                                      items.add(DropdownMenuItem(child: Text(s.username), value: s.username,));
+                                    }
+                                    if(selectedKretaAccount?.username == s.username){
 
-                                bool found = false;
-
-                                for(PojoSession s in SessionsBloc().activeSessions){
-                                  //  if(selectedKretaAccount == null || s.username != selectedKretaAccount.username){
-                                  items.add(DropdownMenuItem(child: Text(s.username), value: s.username,));
-                                  if(selectedKretaAccount?.username == s.username){
-                                    found = true;
-                                    selectedKretaAccount = s;
-                                    selectedKretaAccountName = s.username;
+                                      selectedKretaAccount = s;
+                                      selectedKretaAccountName = s.username;
+                                    }
+                                    //  }
                                   }
-                                  //  }
-                                }
 
-                                if(selectedKretaAccount == null){
-                                  print("uffi pufi");
-                                  selectedKretaAccount = SessionsBloc().activeSessions[0];
-                                  selectedKretaAccountName = selectedKretaAccount.username;
-                                }
-
-                                if(items.isEmpty){
-                                  items.add(DropdownMenuItem(child: Text("add Kréta account"), value: "add Kréta account",));
-                                }
-                                items.forEach((item) => print("opo111: ${item.value}"));
-                                print("opo222: ${selectedKretaAccount?.username}");
-                                print("opo333: ${items.where((item) => item.value == selectedKretaAccountName).length == 1}");
+                                  items.forEach((item) => print("opo111: ${item.value}"));
+                                  print("opo222: ${selectedKretaAccount?.username}");
+                                  print("opo333: ${items.where((item) => item.value == selectedKretaAccountName).length == 1}");
 
 
-                                /*
-                                if(!items.contains(selectedKretaAccountName)){
-                                  print("uff this");
-                                  selectedKretaAccountName = null;
-                                }
-                                */
-
-
-
-                                return Padding(
-                                  padding: const EdgeInsets.only(left: 8),
-                                  child: DropdownButton(
+                                  return Padding(
+                                    padding: const EdgeInsets.only(left: 8),
+                                    child: DropdownButton(
                                       value: selectedKretaAccountName,
                                       onChanged: (item){
                                         if(item =="add Kréta account"){
                                           Navigator.of(context).pushNamed("/kreta/login");
                                         }else{
-
                                           setState(() {
                                             selectedKretaAccountName = item;
                                             print("uff: ${selectedKretaAccountName}");
-                                            for(PojoSession s in SessionsBloc().activeSessions){
+                                            for(PojoSession s in sessions){
                                               if(s.username == selectedKretaAccountName){
+
+                                                if(s.status != "ACTIVE"){
+                                                  WidgetsBinding.instance.addPostFrameCallback((_) =>
+                                                      Navigator.pushNamed(context, "/kreta/login/auth", arguments: s)
+                                                  );
+                                                }
+
                                                 selectedKretaAccount = s;
                                                 print("uff2: ${selectedKretaAccount.username}");
 
@@ -630,15 +536,116 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                                         }
                                       },
                                       items: items
-                                  ),
-                                );
-                              }
-                              return Container();
-                            },
-                          ),
+                                    ),
+                                  );
 
 
-                        ],
+                                  /*
+                                  for(PojoSession s in SessionsBloc().sessions){
+                                    String username = s.username;
+
+                                    if(sessions.every((element) => element.username == s.username)){
+                                      continue;
+                                    }
+
+                                    if(s.status == "ACTIVE" ){
+                                      sessions.add(s);
+                                    }else{
+                                      for(PojoSession s2 in SessionsBloc().sessions){
+                                        if(){
+
+                                        }
+                                      }
+                                    }
+                                  }*/
+
+
+                                  if(SessionsBloc().activeSessions != null && SessionsBloc().activeSessions.isNotEmpty){
+
+                                    List<DropdownMenuItem> items = [];
+
+                                    bool found = false;
+
+                                    for(PojoSession s in SessionsBloc().activeSessions){
+                                      //  if(selectedKretaAccount == null || s.username != selectedKretaAccount.username){
+                                      items.add(DropdownMenuItem(child: Text(s.username), value: s.username,));
+                                      if(selectedKretaAccount?.username == s.username){
+                                        found = true;
+                                        selectedKretaAccount = s;
+                                        selectedKretaAccountName = s.username;
+                                      }
+                                      //  }
+                                    }
+
+                                    if(selectedKretaAccount == null){
+                                      print("uffi pufi");
+                                      selectedKretaAccount = SessionsBloc().activeSessions[0];
+                                      selectedKretaAccountName = selectedKretaAccount.username;
+                                    }
+
+                                    if(items.isEmpty){
+                                      items.add(DropdownMenuItem(child: Text("add Kréta account"), value: "add Kréta account",));
+                                    }
+                                    items.forEach((item) => print("opo111: ${item.value}"));
+                                    print("opo222: ${selectedKretaAccount?.username}");
+                                    print("opo333: ${items.where((item) => item.value == selectedKretaAccountName).length == 1}");
+
+
+                                    /*
+                                    if(!items.contains(selectedKretaAccountName)){
+                                      print("uff this");
+                                      selectedKretaAccountName = null;
+                                    }
+                                    */
+
+
+
+                                    return Padding(
+                                      padding: const EdgeInsets.only(left: 8),
+                                      child: DropdownButton(
+                                          value: selectedKretaAccountName,
+                                          onChanged: (item){
+                                            if(item =="add Kréta account"){
+                                              Navigator.of(context).pushNamed("/kreta/login");
+                                            }else{
+
+                                              setState(() {
+                                                selectedKretaAccountName = item;
+                                                print("uff: ${selectedKretaAccountName}");
+                                                for(PojoSession s in SessionsBloc().activeSessions){
+                                                  if(s.username == selectedKretaAccountName){
+                                                    selectedKretaAccount = s;
+                                                    print("uff2: ${selectedKretaAccount.username}");
+
+                                                    SelectedSessionBloc().dispatch(SelectedSessionSetEvent(s));
+                                                    break;
+                                                  }
+                                                }
+                                              });
+                                            }
+                                          },
+                                          items: items
+                                      ),
+                                    );
+                                  }
+                                  return Container();
+                                },
+                              ),
+                            ),
+
+                            Padding(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: IconButton(
+                                icon: Icon(FontAwesomeIcons.userEdit),
+                                onPressed: (){
+                                  // SessionsBloc().add(FetchData());
+                                  Navigator.popAndPushNamed(context, "/kreta/accountSelector");
+                                },
+                              ),
+                            ),
+
+                          ],
+                        ),
                       ),
 
 

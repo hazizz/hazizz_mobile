@@ -162,10 +162,11 @@ class FlushBloc extends Bloc<FlushEvent, FlushState> {
     else if (event is FlushInitialEvent) {
       yield FlushInitialState();
     }
-    else if (event is FlushSessionFailEvent) {
+   /* else if (event is FlushSessionFailEvent) {
       yield FlushSessionFailState();
    //   yield FlushResetState();
     }
+    */
 
     print("dude2: ${currentState.toString()}");
   }

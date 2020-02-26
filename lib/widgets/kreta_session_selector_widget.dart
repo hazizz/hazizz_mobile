@@ -36,14 +36,7 @@ class _SessionSelectorWidget extends State<SessionSelectorWidget> with Automatic
 
   List<PojoSession> sessions = List();
   SessionItemWidget selectedSessionWidget;
-
-  void selectSession(int index){
-    PojoSession selectedSession = sessions[index];
-    sessions.removeAt(index);
-    selectedSessionWidget = SessionItemWidget(session: selectedSession,);
-  }
-
-  void initalizeSelectedSession(){
+   void initalizeSelectedSession(){
     SelectedSessionState currentState = SelectedSessionBloc().currentState;
 
     HazizzLogger.printLog("initalize SelectedSessionState: ${currentState.toString()}");
@@ -95,9 +88,12 @@ class _SessionSelectorWidget extends State<SessionSelectorWidget> with Automatic
         FloatingActionButton(
           heroTag: null,
           child: Icon(FontAwesomeIcons.userPlus),
-          onPressed: (){
-            Navigator.pushNamed(context, "/kreta/login", /* arguments: (){
+          onPressed: () async {
+            var doRefresh = await Navigator.pushNamed(context, "/kreta/login", /* arguments: (){
             }*/);
+            if(doRefresh != null && doRefresh is bool && doRefresh){
+              SessionsBloc().dispatch(FetchData());
+            }
           },
         ) : Container(),
 

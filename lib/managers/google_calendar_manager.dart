@@ -1,12 +1,10 @@
 import 'package:flutter/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/calendar/v3.dart';
-import 'package:mobile/communication/pojos/PojoTag.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/managers/deep_link_receiver.dart';
 
 import '../google_http_client.dart';
-
 
 class GoogleCalendarColorIds{
   static const String blue = "1",
@@ -22,7 +20,6 @@ class GoogleCalendarColorIds{
       bold_red = "11"
   ;
 }
-
 
 class GoogleCalendarManager {
   static final GoogleCalendarManager _singleton = GoogleCalendarManager._internal();

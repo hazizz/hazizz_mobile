@@ -1,10 +1,12 @@
 import 'package:googleapis/drive/v3.dart';
-import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
+import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
+import 'package:mobile/communication/request_sender.dart';
+import 'package:mobile/communication/requests/request_collection.dart';
+import 'package:mobile/custom/hazizz_date.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/managers/google_drive_manager.dart';
 import 'package:mobile/managers/app_state_manager.dart';
-import 'package:mobile/widgets/google_drive_image_widget.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 
 import 'package:mobile/custom/hazizz_localizations.dart';
@@ -40,14 +42,37 @@ class _GoogleDriveSettingsPage extends State<GoogleDriveSettingsPage> {
 
   FileList fileList;
 
-  bool gotResponse = false;
+  int gotResponse = 0;
+
+  bool gotAllResponse = false;
+
+  void checkIfGotAllResponse(){
+    gotResponse++;
+    if(gotResponse >= 2){
+      setState(() {
+        gotAllResponse = true;
+      });
+    }
+  }
 
   bool allowed = false;
+
+  List<PojoTask> tasks = [];
 
   _GoogleDriveSettingsPage();
 
   @override
   void initState() {
+    final DateTime now = DateTime.now();
+    getResponse(GetTasksFromMe(
+      q_startingDate: hazizzRequestDateFormat(now.subtract(Duration(days: 365))),
+      q_endDate: hazizzRequestDateFormat(now.add(Duration(days: 365)))
+    )).then((HazizzResponse h){
+      tasks = h.convertedData;
+      checkIfGotAllResponse();
+      print("tasksss 1: ${tasks}");
+      print("tasksss 2: ${tasks.length}");
+    });
     AppState.isAllowedGDrive().then((isAllowed){
       if(isAllowed){
         GoogleDriveManager().initialize().then((val){
@@ -68,10 +93,12 @@ class _GoogleDriveSettingsPage extends State<GoogleDriveSettingsPage> {
   Future<void> getGDriveImages() async{
     GoogleDriveManager().getAllHazizzImages().then((list){
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        setState(() {
-          fileList = list;
-          gotResponse = true;
-        });
+        if(mounted){
+          setState(() {
+            fileList = list;
+            checkIfGotAllResponse();
+          });
+        }
       });
     });
   }
@@ -89,8 +116,10 @@ class _GoogleDriveSettingsPage extends State<GoogleDriveSettingsPage> {
         File file = fileList.files[i];
 
         int taskId;
+        print("task: 0: ${file.name.split("_")[0]}");
         try{
           taskId = int.parse(file.name.split("_")[0]);
+          print("task: 1: ${taskId}");
         }catch(e){
 
         }
@@ -98,8 +127,11 @@ class _GoogleDriveSettingsPage extends State<GoogleDriveSettingsPage> {
         String salt;
 
         if(taskId != null){
-          for(PojoTask task in MainTabBlocs().tasksBloc.tasksList){
+          for(PojoTask task in tasks){
+            print("task: 2: ${task.id}");
+
             if(task.id == taskId){
+              print("task: 3 found: ${task.id}");
               salt = task.salt;
               break;
             }
@@ -236,7 +268,7 @@ class _GoogleDriveSettingsPage extends State<GoogleDriveSettingsPage> {
                             Builder(
                               builder: (context){
                                 if(!allowed) return Container();
-                                if(!gotResponse) return Padding(
+                                if(!gotAllResponse) return Padding(
                                   padding: const EdgeInsets.all(20),
                                   child: Center(child: CircularProgressIndicator()),
                                 );

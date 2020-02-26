@@ -14,7 +14,6 @@ class KretaSessionManager {
   static const String _keySession = "key_session";
   static const String _keySessions = "key_sessions";
 
-
   static const String _key_rememberPassword= "key_remember_session_password";
 
   static PojoSession selectedSession;
@@ -80,8 +79,6 @@ class KretaSessionManager {
       selectedSession = session;
     }
   }
-
-
 
   static Future<List<PojoSession>> getSessions() async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();

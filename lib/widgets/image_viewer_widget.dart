@@ -14,15 +14,11 @@ import 'package:mobile/services/hazizz_crypt.dart';
 import 'package:mobile/widgets/image_viewer_page.dart';
 import 'package:http/http.dart' as http;
 
-import 'error_proof_widget.dart';
-
-
 enum ImageType{
   NETWORK,
   FILE,
   MEMORY,
   GOOGLE_DRIVE,
-
 }
 
 class ImageViewer extends StatefulWidget {
@@ -42,23 +38,21 @@ class ImageViewer extends StatefulWidget {
   final Function onDelete;
 
   Image image;
-
-
-
   String salt;
-
   bool loadImageEnabled = PreferenceService.imageAutoLoad;
-
   Image thumbnailImage;
-
   bool tapped = false;
 
   HazizzImageData imageData;
 
   ImageViewer.fromNetwork(this.imageUrl, {Key key, @required this.heroTag, this.onSmallDelete, this.onDelete, this.width, this.height}) : super(key: key){
-    //http.get(imageUrl);
-    print("recreatedd!!!");
-    image = Image.network(imageUrl, key: Key(imageUrl),);
+    image = Image.network(imageUrl, key: Key(imageUrl),
+      loadingBuilder: (context, child, progress){
+        return progress == null
+          ? child
+          : CircularProgressIndicator();
+      },
+    );
     imageType = ImageType.NETWORK;
   }
   ImageViewer.fromFile(this.imageFile, {Key key, @required this.heroTag, this.onSmallDelete, this.onDelete, this.width, this.height}) : super(key: key){
@@ -77,6 +71,11 @@ class ImageViewer extends StatefulWidget {
       width: width,
       fit: BoxFit.fitWidth,
       height: height,
+      loadingBuilder: (context, child, progress){
+        return progress == null
+          ? child
+          : CircularProgressIndicator();
+      },
     );
     imageType = ImageType.GOOGLE_DRIVE;
   }
@@ -88,7 +87,13 @@ class ImageViewer extends StatefulWidget {
       imageType = ImageType.FILE;
       imageFile = imageData.imageFile;
     }else if(imageData.imageType == ImageType.NETWORK){
-      image = Image.network(imageData.url);
+      image = Image.network(imageData.url,
+        loadingBuilder: (context, child, progress){
+          return progress == null
+              ? child
+              : CircularProgressIndicator();
+        },
+      );
       heroTag = imageData.url;
       imageType = ImageType.NETWORK;
     }else if(imageData.imageType == ImageType.GOOGLE_DRIVE){
@@ -99,6 +104,11 @@ class ImageViewer extends StatefulWidget {
         width: width,
         fit: BoxFit.fitWidth,
         height: height,
+        loadingBuilder: (context, child, progress){
+          return progress == null
+              ? child
+              : CircularProgressIndicator();
+        },
       );
       imageType = ImageType.GOOGLE_DRIVE;
       heroTag = imageData.url ;//+ HeroHelper.uniqueTag;
@@ -118,7 +128,7 @@ class _ImageViewer extends State<ImageViewer> with AutomaticKeepAliveClientMixin
 
   bool noSalt = false;
   bool tapped = false;
-  bool deleted = false;
+  bool untouchable = false;
 
   File imageFile;
   String imageUrl;
@@ -154,14 +164,19 @@ class _ImageViewer extends State<ImageViewer> with AutomaticKeepAliveClientMixin
     imageBytes = widget.imageBytes;
 
     imageUrl = widget.imageUrl;
-    if(widget.imageType == ImageType.GOOGLE_DRIVE ) request = http.get(imageUrl);
 
     if(widget.imageType == ImageType.GOOGLE_DRIVE){
+      request = http.get(imageUrl);
       thumbnailImage = Image.network(
         "https://drive.google.com/thumbnail?id=${imageUrl.split("?id=")[1]}",
         width: width,
         fit: BoxFit.fitWidth,
         height: height,
+        loadingBuilder: (context, child, progress){
+          return progress == null
+              ? child
+              : CircularProgressIndicator();
+        },
       );
       if( (height != null && width == null) || (width != null && height == null) ){
         _calculateImageDimension(thumbnailImage).then((Size size){
@@ -201,9 +216,7 @@ class _ImageViewer extends State<ImageViewer> with AutomaticKeepAliveClientMixin
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
-    // commentBlocs.dispose();
   }
 
   Widget errorImageWidget(String text){
@@ -247,7 +260,7 @@ class _ImageViewer extends State<ImageViewer> with AutomaticKeepAliveClientMixin
       width: width,
       child: GestureDetector(
         onTap: (){
-          if(!deleted && !noSalt){
+          if(!untouchable && !noSalt){
             Navigator.push(context, MaterialPageRoute(builder: (context) {
               if(widget.imageType == ImageType.NETWORK){
                 return ImageViewerPage.fromNetwork(imageUrl,  heroTag: widget.heroTag, onDelete: widget.onDelete,);
@@ -294,7 +307,7 @@ class _ImageViewer extends State<ImageViewer> with AutomaticKeepAliveClientMixin
                             if(widget.salt == null || widget.salt == "" || widget.salt == "--------------------------------"){
                               noSalt = true;
                               return noSaltImageWidget();
-                            }
+                            }else if(responseState.data == null) return otherErrorImageWidget();
                             else if(responseState.data.statusCode == 200 ){
                               String cryptedBase64Img = responseState.data.body;
                               String base64Img = HazizzCrypt.decrypt(cryptedBase64Img, widget.salt);
@@ -307,10 +320,16 @@ class _ImageViewer extends State<ImageViewer> with AutomaticKeepAliveClientMixin
                                   onSmallDelete: widget.onSmallDelete,
                                   height: height,
                                 );
-                            }else{
-                              deleted = true;
+                            }else if(responseState.data.statusCode == 404 ){
+                              print("sadsd: 1 ${responseState.data.statusCode}");
+                              print("asd: ${imageUrl}");
+                              untouchable = true;
                               return deletedImageWidget();
                             }
+                            print("sadsd: 1 ${responseState.data.statusCode}");
+                            print("asd: ${imageUrl}");
+                            untouchable = true;
+                            return otherErrorImageWidget();
                           }else{
                             print("people be like :O 8");
                             if(imageBytes == null){
@@ -376,11 +395,11 @@ class _ImageViewer extends State<ImageViewer> with AutomaticKeepAliveClientMixin
         children: <Widget>[
           ClipRRect(
             child: GestureDetector(
-                onTap: (){
-                  if(onTapped != null) onTapped();
-                  tapped = true;
-                },
-                child: widget.thumbnailImage
+              onTap: (){
+                if(onTapped != null) onTapped();
+                tapped = true;
+              },
+              child: widget.thumbnailImage
             ),
             borderRadius: BorderRadius.circular(4),
           ),

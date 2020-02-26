@@ -62,7 +62,7 @@ class AppState{
 
     HazizzLogger.printLog("logInProcedure: 3");
 
-    HazizzNotification.scheduleNotificationAlarmManager();
+  //  HazizzNotification.scheduleNotificationAlarmManager();
 
     HazizzResponse hazizzResponse = await RequestSender().getResponse(GetMyInfo.private());
     if(hazizzResponse.isSuccessful){
@@ -88,13 +88,14 @@ class AppState{
   }
 
   static Future<void> appStartProcedure() async {
+    PreferenceService.loadAllPreferences();
     RequestSender().initialize();
     await HazizzAppInfo().initalize();
     await Connection.listener();
     Crashlytics.instance.enableInDevMode = false;
     FlutterError.onError = Crashlytics.instance.recordFlutterError;
     await AndroidAlarmManager.initialize();
-    PreferenceService.loadAllPreferences();
+
   }
 
   static Future<void> mainAppPartStartProcedure() async {

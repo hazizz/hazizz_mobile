@@ -74,6 +74,7 @@ class ScheduleLoadedState extends ScheduleState {
 
   final List<PojoSession> failedSessions;
 
+
   ScheduleLoadedState(this.schedules, {this.failedSessions}) : assert(schedules!= null), super([schedules, SelectedSessionBloc().selectedSession]);
   @override
   String toString() => 'ScheduleLoadedState';
@@ -82,8 +83,9 @@ class ScheduleLoadedState extends ScheduleState {
 
 class ScheduleLoadedCacheState extends ScheduleState {
   PojoSchedules data;
+  final List<PojoSession> failedSessions;
 
-  ScheduleLoadedCacheState(this.data) : assert(data!= null), super([data, SelectedSessionBloc().selectedSession]);
+  ScheduleLoadedCacheState(this.data, {this.failedSessions}) : assert(data!= null), super([data, SelectedSessionBloc().selectedSession]);
   @override
   String toString() => 'ScheduleLoadedCacheState';
   List<Object> get props => [data, SelectedSessionBloc().selectedSession];
@@ -133,6 +135,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     for(String key in classes.classes.keys){
       int newI = 0;
       for(int i = 0; i < classes.classes[key].length; i++){
+        print("selected session username: ${SelectedSessionBloc().selectedSession?.username}");
         if(classes.classes[key][i].accountId?.split("_")[2] == SelectedSessionBloc().selectedSession?.username){
           if(!sessionSchedules.containsKey(key) ){
             sessionSchedules[key] = [];
@@ -219,6 +222,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
   @override
   Stream<ScheduleState> mapEventToState(ScheduleEvent event) async* {
     if(event is ScheduleSetSessionEvent){
+      print("change: 10101");
       yield ScheduleLoadedState(classes, failedSessions: failedSessions);
     }
     else if (event is ScheduleFetchEvent) {
@@ -272,9 +276,11 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
           failedSessions = getFailedSessionsFromHeader(hazizzResponse.response.headers);
 
+          /*
           if(doesContainSelectedSession(failedSessions)){
             FlushBloc().dispatch(FlushSessionFailEvent());
           }
+          */
 
           PojoSchedules r = hazizzResponse.convertedData;
           if(r != null && r.classes.isNotEmpty){
@@ -288,7 +294,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
               yield ScheduleLoadedState(classes, failedSessions: failedSessions);
             }
           }else{
-            yield ScheduleLoadedCacheState(classes);
+            yield ScheduleLoadedCacheState(classes, failedSessions: failedSessions);
           }
           /*
           classes = PojoSchedules({"0": [

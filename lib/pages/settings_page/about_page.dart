@@ -1,4 +1,5 @@
 import 'package:flutter_svg/svg.dart';
+import 'package:googleapis/drive/v2.dart';
 import 'package:mobile/managers/server_checker.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 import 'package:mobile/widgets/hyper_link.dart';
@@ -10,6 +11,13 @@ import 'package:flutter/material.dart';
 
 
 class AboutPage extends StatefulWidget {
+
+  static final String version = HazizzAppInfo().getInfo.version;
+  static const String website = "https://hazizz.hu";
+  static const String fb_site = "https://www.facebook.com/hazizzvelunk/";
+  static const String tw_site = "https://twitter.com/hazizzvelunk";
+  static const String dc_site = "https://discord.gg/TABMV3M";
+  static const String gh_site = "https://github.com/hazizz";
 
   String getTitle(BuildContext context){
     return locText(context, key: "about");
@@ -24,19 +32,14 @@ class AboutPage extends StatefulWidget {
 
 class _AboutPage extends State<AboutPage> {
 
-  static final String version = HazizzAppInfo().getInfo.version;
-
-  static const String website = "https://hazizz.github.io/";
-
   bool gatewayServerIsOnline = true;
   bool authServerIsOnline = true;
   bool hazizzServerIsOnline = true;
   bool theraServerIsOnline = true;
 
-  static const String fb_site = "https://www.facebook.com/hazizzvelunk/";
-  static const String tw_site = "https://twitter.com/Hzizz1";
-  static const String dc_site = "https://discord.gg/TABMV3M";
-  static const String gh_site = "https://github.com/hazizz";
+  int kretaRequestsInLastHour;
+  double kretaSuccessRate;
+
 
   _AboutPage();
 
@@ -45,15 +48,20 @@ class _AboutPage extends State<AboutPage> {
     authServerIsOnline = ServerChecker.authOnline;
     hazizzServerIsOnline = ServerChecker.hazizzOnline;
     theraServerIsOnline = ServerChecker.theraOnline;
+
+    kretaRequestsInLastHour = ServerChecker.kretaRequestsInLastHour;
+    kretaSuccessRate = ServerChecker.kretaSuccessRate;
   }
 
   @override
   void initState() {
     _map();
     ServerChecker.checkAll(notifyFlush: false).then((val){
-      setState(() {
-        _map();
-      });
+      if(mounted){
+        setState(() {
+          _map();
+        });
+      }
     });
 
     super.initState();
@@ -86,7 +94,7 @@ class _AboutPage extends State<AboutPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text("${locText(context, key: "version")}:", style: TextStyle(fontSize: 17),),
-                      Text(version, style: TextStyle(fontSize: 17))
+                      Text(AboutPage.version, style: TextStyle(fontSize: 17))
                     ],
                   )
                 ),
@@ -149,21 +157,47 @@ class _AboutPage extends State<AboutPage> {
                 ),
                 Divider(),
                 Padding(
-                    padding: const EdgeInsets.only(top: 8.0, bottom: 8, left: 15, right: 15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text("${locText(context, key: "thera_server")}:", style: TextStyle(fontSize: 17),),
-                        Builder(
-                          builder: (context){
-                            if(theraServerIsOnline){
-                              return isOnlineWidget();
-                            }
-                            return isOfflineWidget();
-                          },
-                        )
-                      ],
-                    )
+                  padding: const EdgeInsets.only(top: 8.0, bottom: 8, left: 15, right: 15),
+                  child: Column(
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text("${locText(context, key: "thera_server")}:", style: TextStyle(fontSize: 17),),
+                          Builder(
+                            builder: (context){
+                              if(theraServerIsOnline){
+                                return isOnlineWidget();
+                              }
+                              return isOfflineWidget();
+                            },
+                          )
+                        ],
+                      ),
+                      if(kretaRequestsInLastHour != null || kretaSuccessRate != null) SizedBox(height: 8,),
+                      kretaRequestsInLastHour != null ? Padding(
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                          children: <Widget>[
+                            Text("${locText(context, key: "kreta_requests_in_last_hour")}: ", style: TextStyle(fontSize: 17),),
+                            Text(kretaRequestsInLastHour.toString(), style: TextStyle(fontSize: 17))
+                          ],
+                        ),
+                      ) : Container(),
+                      kretaSuccessRate != null ?Padding(
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text("${locText(context, key: "kreta_success_rate")}: ", style: TextStyle(fontSize: 17),),
+                            Text("${(kretaSuccessRate * 100).toStringAsFixed(2)}%" , style: TextStyle(fontSize: 17))
+                          ],
+                        ),
+                      ) : Container()
+                    ],
+                  )
                 ),
                 Divider(),
 
@@ -173,7 +207,7 @@ class _AboutPage extends State<AboutPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text("${locText(context, key: "website")}:", style: TextStyle(fontSize: 17),),
-                        Hyperlink(website, Text(website, style: TextStyle(color: Colors.blueAccent, fontSize: 17, decoration: TextDecoration.underline),))
+                        Hyperlink(AboutPage.website, Text(AboutPage.website, style: TextStyle(color: Colors.blueAccent, fontSize: 17, decoration: TextDecoration.underline),))
                       ],
                     )
                 ),
@@ -186,8 +220,8 @@ class _AboutPage extends State<AboutPage> {
                     children: <Widget>[
                       GestureDetector(
                         onTap: () async {
-                          if (await canLaunch(fb_site)) {
-                            await launch(fb_site);
+                          if (await canLaunch(AboutPage.fb_site)) {
+                            await launch(AboutPage.fb_site);
                           }
                         },
                         child: Container(
@@ -200,8 +234,8 @@ class _AboutPage extends State<AboutPage> {
                       ),
                       GestureDetector(
                         onTap: () async {
-                          if (await canLaunch(tw_site)) {
-                            await launch(tw_site);
+                          if (await canLaunch(AboutPage.tw_site)) {
+                            await launch(AboutPage.tw_site);
                           }
                         },
                         child: Container(
@@ -218,8 +252,8 @@ class _AboutPage extends State<AboutPage> {
                       ),
                       GestureDetector(
                         onTap: () async {
-                          if (await canLaunch(dc_site)) {
-                            await launch(dc_site);
+                          if (await canLaunch(AboutPage.dc_site)) {
+                            await launch(AboutPage.dc_site);
                           }
                         },
                         child: Container(
@@ -236,8 +270,8 @@ class _AboutPage extends State<AboutPage> {
                       ),
                       GestureDetector(
                         onTap: () async {
-                          if (await canLaunch(gh_site)) {
-                            await launch(gh_site);
+                          if (await canLaunch(AboutPage.gh_site)) {
+                            await launch(AboutPage.gh_site);
                           }
                         },
                         child: Container(

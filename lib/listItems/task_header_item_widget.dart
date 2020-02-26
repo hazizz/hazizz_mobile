@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/custom/hazizz_date.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
+import 'package:mobile/widgets/card_header_widget.dart';
 
 class TaskHeaderItemWidget extends StatelessWidget{
  // String days;
@@ -34,7 +35,7 @@ class TaskHeaderItemWidget extends StatelessWidget{
 
     int days = daysTask - daysNow;
 
-    Color backColor = Theme.of(context).primaryColorDark;
+    Color backColor;
 
     String title;
     if(days == 0){
@@ -51,23 +52,10 @@ class TaskHeaderItemWidget extends StatelessWidget{
     else{
       title = locText(context, key: "days_later", args: [days.toString()]);
     }
-    return Card(
-      margin: EdgeInsets.only(left: 2, top: 2, bottom: 2, right: 2),
-        elevation: 5,
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        color: backColor,
-        child: Padding(
-          padding: const EdgeInsets.only(top: 1.5, bottom: 1.5, left: 4),
-          child: InkWell(
-              child: Row(
-                children: <Widget>[
-                  Text(title, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),),
-                  SizedBox(width: 20),
-                  Text("${hazizzShowDateFormat(dateTime)}", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
-                ],
-              )
-          ),
-        )
+    return CardHeaderWidget(
+      text: title,
+      secondText: hazizzShowDateFormat(dateTime),
+      backgroundColor: backColor,
     );
   }
 }

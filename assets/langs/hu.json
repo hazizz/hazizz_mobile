@@ -254,12 +254,24 @@
   "thera_server"
   : "Théra szerver",
 
+  "kreta_requests_in_last_hour"
+  : "Kréta lekérdezés az elmúlt órában",
+
+  "kreta_success_rate"
+  : "Kréta lekérdezés siker",
+
 
   "send_log_via_email"
   : "Log elküldése emailben",
 
   "logs"
   : "Logok",
+
+  "server_url"
+  : "Szerver cím",
+
+  "reset"
+  : "Visszaállítás",
 
   "tell_us_what_happened"
   : "Mondd el mi történt",
@@ -275,6 +287,12 @@
 
   "auto_download_image"
   : "Automatikus kép letöltés a feladatokban",
+
+  "enable_ads"
+  : "Reklámok engedélyezése",
+
+  "ad"
+  : "Reklám",
 
     "language"
     : "Nyelv",
@@ -497,6 +515,11 @@
     "write_comment"
     : "Írj egy megyjegyzést!",
 
+  "schedule_creator"
+  : "Órarend létrehozás",
+
+  "schedule_editor"
+  : "Órarend szerkesztése",
 
     "schedule"
     : "Órarend",
@@ -1367,6 +1390,7 @@
 
   "failed_session"
   : "Sikertelen lekérdezés a kiválasztott session-el",
+
 
     "thera_grades"
     : "Théra jegyek",

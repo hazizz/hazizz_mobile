@@ -1,5 +1,6 @@
 import 'package:mobile/blocs/flush_bloc.dart';
 import 'package:mobile/communication/hazizz_response.dart';
+import 'package:mobile/communication/pojos/PojoTheraHealth.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 
@@ -9,6 +10,9 @@ class ServerChecker{
   static bool authOnline = false;
   static bool hazizzOnline = false;
   static bool theraOnline = false;
+
+  static int kretaRequestsInLastHour;
+  static double kretaSuccessRate;
 
   static Future<void> checkAll({bool notifyFlush = true}) async {
     if(await checkGateway(notifyFlush: notifyFlush)){
@@ -58,7 +62,18 @@ class ServerChecker{
   static Future<bool> checkThera({bool notifyFlush = true}) async {
     HazizzResponse hazizzResponse = await getResponse(PingTheraServer());
     if(hazizzResponse != null && hazizzResponse.isSuccessful){
-      theraOnline = true;
+      PojoTheraHealth theraHealth = hazizzResponse.convertedData;
+
+      if(theraHealth.status == "UP"){
+        theraOnline = true;
+        print("asdds1: ${theraHealth.details.theraHealthManager.details.kretaSuccessRate}");
+        print("asdds2: ${theraHealth.details.theraHealthManager.details.kretaRequestsInLastHour}");
+
+        kretaSuccessRate = theraHealth.details.theraHealthManager.details.kretaSuccessRate;
+        kretaRequestsInLastHour = theraHealth.details.theraHealthManager.details.kretaRequestsInLastHour;
+
+      }
+
 
     }else{
       if(notifyFlush) FlushBloc().dispatch(FlushTheraServerUnavailableEvent());
