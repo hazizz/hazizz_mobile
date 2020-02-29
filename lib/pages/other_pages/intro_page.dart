@@ -1,5 +1,8 @@
 import 'dart:async';
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -95,42 +98,52 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
     super.dispose();
   }
 
-  Widget introPageBuilder(Widget title, Widget description, {int backgroundIndex}){
-    return SingleChildScrollView(
-      child: Stack(
-        children: <Widget>[
-          Container(
-            height: MediaQuery.of(context).size.height,
-            child: SvgPicture.asset(
-              "assets/images/hatter-$backgroundIndex.svg",
-              fit: BoxFit.fitHeight,
+  Widget introPageBuilder(Widget title, Widget description, {int backgroundIndex, bool scrollMode = false}){
+    Widget child = Stack(
+      children: <Widget>[
+        Container(
+          height: MediaQuery.of(context).size.height,
+          child: SvgPicture.asset(
+            "assets/images/hatter-$backgroundIndex.svg",
+            fit: BoxFit.fitHeight,
 
-              height: MediaQuery.of(context).size.height -  MediaQuery.of(context).padding.top,
-              width: MediaQuery.of(context).size.width,
-            ),
+            height: MediaQuery.of(context).size.height -  MediaQuery.of(context).padding.top,
+            width: MediaQuery.of(context).size.width,
           ),
-          Container(
-            height: MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top,
-            child: Center(
-              child: Column(
-                children: <Widget>[
-                  Stack(
-                    children: <Widget>[
-                      SafeArea(
-                        child: Container(
-                            child: NotebookBackgroundWidget()
-                        ),
+        ),
+        Container(
+          height: MediaQuery.of(context).size.height,
+
+          child: Column(
+            children: <Widget>[
+              Container(
+                //  height: MediaQuery.of(context).size.height,
+
+                child: Stack(
+                  children: <Widget>[
+                    SafeArea(
+                      child: Container(
+                          child: NotebookBackgroundWidget()
                       ),
-                      Center(child: title)
-                    ],
-                  ),
-                  Expanded(child: description)
-                ],
+                    ),
+                    Center(child: title)
+                  ],
+                ),
               ),
-            ),
+              Expanded(child: description)
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
+    );
+
+    return scrollMode ?
+    SingleChildScrollView(
+        child: child
+    ) :
+    Container(
+    //  height: MediaQuery.of(context).size.height,
+      child: child
     );
   }
 
@@ -141,6 +154,8 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
 
   @override
   Widget build(BuildContext context) {
+
+    final autoSizeGroup = AutoSizeGroup();
 
     void nextPage(){
       _tabController.animateTo(_tabController.index+1,  duration: Duration(milliseconds:  2000));
@@ -191,29 +206,38 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
                           ),
                         ),
                       ),
-                        Column(
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(left: 8.0, right: 8),
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 8.0, right: 8),
-                                child: Center(
-                                  child: Text(locText(context, key: "hazizz_intro"), style: TextStyle(fontSize: 19), textAlign: TextAlign.center)
+                        Container(
+                         height: MediaQuery.of(context).size.height,
+
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisSize: MainAxisSize.max,
+
+                            children: <Widget>[
+                              Container(
+                                height: MediaQuery.of(context).size.height * 0.4 ,
+
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 8, right: 8),
+                                  child: AutoSizeText(
+                                    locText(context, key: "hazizz_intro"),
+                                      style: TextStyle(fontSize: 22),
+                                   //   maxLines: 10,
+                                      maxFontSize: 22,
+                                      minFontSize: 8,
+                                      textAlign: TextAlign.center,
+                                  ),
                                 ),
                               ),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 16.0),
-                                child: Column(
-                                  children: <Widget>[
-                                    googleSignInButtonWidget,
-                                    facebookSignInButtonWidget
-                                  ],
-                                ),
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  googleSignInButtonWidget,
+                                  facebookSignInButtonWidget
+                                ],
                               ),
-                            )
-                          ],
+                            ],
+                          ),
                         ),
                         backgroundIndex: 1,
                       ),
@@ -228,15 +252,31 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
 
       introPageBuilder(
           Padding(
-            padding: const EdgeInsets.only(top: 44.0),
-            child: Text(locText(context, key: "about_group_title"), style: TextStyle(fontSize: 40, fontWeight: FontWeight.w800), textAlign: TextAlign.center,),
+            padding: const EdgeInsets.only(top: 42, left: 6, right: 6),
+            child: AutoSizeText(
+              locText(context, key: "about_group_title"),
+              style: TextStyle(fontSize: 50, fontWeight: FontWeight.w800),
+              minFontSize: 20,
+              maxFontSize: 50,
+              maxLines: 1,
+              textAlign: TextAlign.center,),
+
+
           ),
             Padding(
-                padding: const EdgeInsets.only(top: 60.0, left: 8, right:8),
+                padding: const EdgeInsets.only(top: 48, left: 8, right:8),
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
-                    Text(locText(context, key: "about_group_description1"), style: TextStyle(fontSize: 20), textAlign: TextAlign.center,),
+                    AutoSizeText(
+                      locText(context, key: "about_group_description1"),
+                      group: autoSizeGroup,
+                      style: TextStyle(fontSize: 22),
+                      minFontSize: 10,
+                      maxFontSize: 22,
+                      maxLines: 2,
+                      textAlign: TextAlign.center,
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: RaisedButton(child: Text(locText(context, key: "create_group").toUpperCase()), onPressed: () async {
@@ -248,7 +288,15 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
                       },
                       ),
                     ),
-                     Text(locText(context, key: "about_group_description2"), style: TextStyle(fontSize: 20), textAlign: TextAlign.center,),
+                    AutoSizeText(
+                      locText(context, key: "about_group_description2"),
+                      group: autoSizeGroup,
+                      style: TextStyle(fontSize: 22),
+                      minFontSize: 10,
+                      maxFontSize: 22,
+                      maxLines: 5,
+                      textAlign: TextAlign.center,
+                    ),
                     Spacer(),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 16.0, right: 8),
@@ -341,7 +389,8 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
           )
         ],),
       ),
-      backgroundIndex: 2,),
+      backgroundIndex: 2, scrollMode: true
+    ),
     ];
 
     return WillPopScope(
