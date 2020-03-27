@@ -17,10 +17,35 @@ PojoGrade _$PojoGradeFromJson(Map<String, dynamic> json) {
           : DateTime(creationDate.year, creationDate.month, creationDate.day),
       subject: json['subject'] as String,
       topic: json['topic'] as String,
-      gradeType: json['gradeType'] as String,
+      gradeType: json['gradeType'] == null ? null : toGradeTypeEnum(json['gradeType']),
       grade: json['grade'] as String,
-      weight: json['weight'] as int);
+      weight: json['weight'] as int
+  );
    // ..color = json['color'];
+}
+
+GradeTypeEnum toGradeTypeEnum(String s){
+  switch(s){
+    case "HalfYear":
+      return GradeTypeEnum.HALFYEAR;
+    case "EndYear":
+      return GradeTypeEnum.ENDYEAR;
+    case "MidYear":
+    default:
+      return GradeTypeEnum.MIDYEAR;
+  }
+}
+
+String fromGradeTypeEnum(GradeTypeEnum e){
+  switch(e){
+    case GradeTypeEnum.HALFYEAR:
+      return "HalfYear";
+    case GradeTypeEnum.ENDYEAR:
+      return "EndYear";
+    case GradeTypeEnum.MIDYEAR:
+    default:
+      return "MidYear";
+  }
 }
 
 Map<String, dynamic> _$PojoGradeToJson(PojoGrade instance) => <String, dynamic>{
@@ -29,7 +54,7 @@ Map<String, dynamic> _$PojoGradeToJson(PojoGrade instance) => <String, dynamic>{
       'creationDate': instance.creationDate?.toIso8601String(),
       'subject': instance.subject,
       'topic': instance.topic,
-      'gradeType': instance.gradeType,
+      'gradeType': fromGradeTypeEnum(instance.gradeType),
       'grade': instance.grade,
       'weight': instance.weight,
      // 'color': instance.color

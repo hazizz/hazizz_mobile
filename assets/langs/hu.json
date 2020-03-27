@@ -944,6 +944,28 @@
   "havent_saved_changes"
   : "A változtatások nincsenek elmentve",
 
+  "markdown_info":
+  "Markdown információk",
+
+  "markdown_info_h1":
+  "# Header_1",
+  "markdown_info_h2":
+  "## Header2",
+  "markdown_info_h3":
+  "### Header3",
+  "markdown_info_h4":
+  "#### Header4",
+  "markdown_info_h5":
+  "##### Header5",
+  "markdown_info_h6":
+  "###### Header6",
+  "markdown_info_a":
+  "[Hazizz link](https://www.hazizz.hu)",
+  "markdown_info_ul":
+  "- unordered list item",
+  "markdown_info_ol":
+  "1. ordered list item",
+
     "info_serverUnexpectedResponse"
     : "Nem megszokott válasz a szervertől",
 
@@ -1063,6 +1085,10 @@
 
   "error_signing_in_with_facebook_no_email"
   : "Facebook bejelentkezés sikertelen, mert nincs email cím rendelve a Facebook fiókhoz.",
+
+  "add_email"
+  : "Email hozzáadása",
+
 
     "error_conditionsNotAccepted"
     : "El kell fogadnod az ÁSZF-t, adatvédelmi szabályzatunkat és a házirendet!",
@@ -1480,6 +1506,15 @@
 
   "new_feature_notifications"
   : "Mostantól a szerver fogja a holnapi feladat értesítést küldeni. Ezt bekapcsolhatod az értesítés menüpontban",
+
+
+  "giveaway_title" :
+  "Nyereményjáték",
+  "giveaway_description":
+  "Szeretnéd hogy megírjuk a házidat? \uD83D\uDCDD\nNézz rá nyereményjátékunkra a Facebook oldalunkon, és ha szerencséd van elkészítjük neked!",
+
+  "view":
+  "Megnézem",
 
   "days_0" : "Hétfő",
     "days_1" : "Kedd",

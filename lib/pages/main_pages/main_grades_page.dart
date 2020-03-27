@@ -13,6 +13,8 @@ import 'package:mobile/communication/custom_response_errors.dart';
 import 'package:mobile/communication/pojos/PojoGrade.dart';
 import 'package:mobile/communication/pojos/PojoGrades.dart';
 import 'package:mobile/custom/formats.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
+import 'package:mobile/enums/grade_type_enum.dart';
 import 'package:mobile/enums/grades_sort_enum.dart';
 import 'package:mobile/listItems/grade_header_item_widget.dart';
 import 'package:mobile/listItems/grade_item_widget.dart';
@@ -43,14 +45,30 @@ class GradesPage extends StatefulWidget  {
   bool rectForm = false;
 }
 
-class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin , AutomaticKeepAliveClientMixin {
+class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , AutomaticKeepAliveClientMixin {
 
   StreamController<LineTouchResponse> controller;
 
+  final List<Widget> _tabList = [];
+
+  TabController _tabController;
+
+//  Map<String, List<PojoGrade>> grades;
+
+  int currentPage = 0;
 
   @override
   void initState() {
-    /*PreferenceService.getGradeRectForm().then((bool rectFrom){
+
+    _tabController  = TabController(vsync: this, length: _tabList.length, initialIndex: currentPage);
+  /*  _tabController.addListener((){
+      setState(() {
+        currentPage = _tabController.index;
+        HazizzLogger.printLog("Burhhh" + currentPage.toString());
+      });
+    });
+    */
+        /*PreferenceService.getGradeRectForm().then((bool rectFrom){
       WidgetsBinding.instance.addPostFrameCallback((_) {
         setState(() {
           widget.rectForm = rectFrom;
@@ -67,16 +85,109 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
     super.dispose();
   }
 
+  Map<String, List<PojoGrade>> copyMap( Map<String, List<PojoGrade>> map){
+    Map<String, List<PojoGrade>> m = {};
+    map.forEach((s, l){
+      m[s] = List.from(l);
+    });
+    return m;
+  }
+
+  Widget onLoaded(Map<String, List<PojoGrade>> g){
+    print('kék100');
+
+    g.forEach((s, l){
+      l.forEach((g){
+        print("kék: ${g.grade}");
+      });
+    });
+
+    print('kék111');
+
+    if(currentPage == 1){
+      Map<String, List<PojoGrade>> grades = copyMap(MainTabBlocs().gradesBloc.grades.grades);
+
+      for(String key in grades.keys){
+        grades[key].removeWhere(
+                (item) => item.gradeType != GradeTypeEnum.HALFYEAR
+        );
+      }
+      int itemCount = grades.keys.length+1;
+      print('kék144');
 
 
-  Widget onLoaded(PojoGrades pojoGrades){
-    /*
-                  grades.forEach((String key, List<PojoGrade> value){
-                    itemCount += value.length;
-                  });
-                  */
+
+
+
+      if(grades.isNotEmpty){
+        return ListView.builder(
+          itemCount: itemCount,
+          itemBuilder: (BuildContext context, int index) {
+            if(index == 0){
+              return Center(child: Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().tasksBloc.lastUpdated)));
+            }
+            if(grades.values.toList()[index-1].isNotEmpty){
+              return GradeItemWidget.bySubject(
+                pojoGrade: grades.values.toList()[index-1][0],
+                alt_subject: grades.keys.toList()[index-1],
+                rectForm: false
+              );
+            }
+            return Container();
+          }
+        );
+      }
+      return Text("empty");
+
+    }else if(currentPage == 2){
+      Map<String, List<PojoGrade>> grades = copyMap(MainTabBlocs().gradesBloc.grades.grades);
+      for(String key in grades.keys){
+        grades[key].removeWhere(
+          (item) => item.gradeType != GradeTypeEnum.ENDYEAR
+        );
+      }
+
+      int itemCount = grades.keys.length+1;
+      print('kék144');
+
+      if(grades.isNotEmpty){
+        return ListView.builder(
+            itemCount: itemCount,
+            itemBuilder: (BuildContext context, int index) {
+              if(index == 0){
+                return Center(child: Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().tasksBloc.lastUpdated)));
+              }
+              if(grades.values.toList()[index-1].isNotEmpty){
+                return GradeItemWidget.bySubject(
+                  pojoGrade: grades.values.toList()[index-1][0],
+                  alt_subject: grades.keys.toList()[index-1],
+                  rectForm: false
+                );
+              }
+              return Container();
+            }
+        );
+      }
+      return Text("empty");
+
+    }
+
+    print('kék155');
+
+
     if(MainTabBlocs().gradesBloc.currentGradeSort == GradesSort.BYSUBJECT){
       Map<String, List<PojoGrade>> grades = MainTabBlocs().gradesBloc.getGradesFromSession().grades;// pojoGrades.grades;
+
+      if(currentPage == 0){
+        for(String key in grades.keys){
+          grades[key].removeWhere(
+            (item) =>
+              item.gradeType == GradeTypeEnum.HALFYEAR ||
+              item.gradeType == GradeTypeEnum.ENDYEAR
+          );
+        }
+        print('kék122');
+      }
 
       int itemCount = grades.keys.length+1;
 
@@ -160,111 +271,57 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
 
     else{// if(MainTabBlocs().gradesBloc.currentGradeSort == GradesSort.BYDATE){
       List<PojoGrade> gradesByDate =  MainTabBlocs().gradesBloc.getGradesByDateFromSession();
+
+      if(currentPage == 0){
+        gradesByDate.removeWhere(
+                (item) =>
+            item.gradeType == GradeTypeEnum.HALFYEAR ||
+            item.gradeType == GradeTypeEnum.ENDYEAR
+        );
+        print('kék122');
+      }
+
       gradesByDate = gradesByDate.reversed.toList();
 
       print("Grades page length: ${gradesByDate.length}");
 
       for(PojoGrade g in gradesByDate){
         print("Grades page grade date: ${g.creationDate}");
-
       }
 
-      Map<DateTime, List<PojoGrade>> map = Map();
+      print("Grades page map: ${gradesByDate}");
 
-      int i = 0;
-      for(PojoGrade grade in gradesByDate){
-        // print("Grades page index: ${i}");
-
-        if(MainTabBlocs().gradesBloc.currentGradeSort == GradesSort.BYCREATIONDATE){
-          if (i == 0
-              || gradesByDate[i].creationDate
-                  .difference(gradesByDate[i - 1].creationDate).inDays.abs() >= 1
-          ) { // || map[gradesByDate[i].creationDate] == null
-            if(map[gradesByDate[i].creationDate] == null){
-              map[gradesByDate[i].creationDate] = List();
-            }
-            map[gradesByDate[i].creationDate].add(grade);
-
-
-          }else{
-            if(map[gradesByDate[i].creationDate] == null){
-              map[gradesByDate[i].creationDate] = List();
-            }
-            map[gradesByDate[i].creationDate].add(grade);
-          }
-        }else{
-          if (i == 0
-              || gradesByDate[i].date
-                 .difference(gradesByDate[i - 1].date).inDays.abs() >= 1
-          ) { // || map[gradesByDate[i].creationDate] == null
-            if(map[gradesByDate[i].date] == null){
-              map[gradesByDate[i].date] = List();
-            }
-            map[gradesByDate[i].date].add(grade);
-
-          }else{
-            if(map[gradesByDate[i].date] == null){
-              map[gradesByDate[i].date] = List();
-            }
-            map[gradesByDate[i].date].add(grade);
-          }
+      if(widget.rectForm){
+        List<Widget> widgetList = [];
+        for(PojoGrade gs in gradesByDate){
+          widgetList.add(GradeItemWidget.byDate(pojoGrade: gs, rectForm: true,));
         }
-        i++;
-      }
 
-      print("Grades page map: ${map}");
+        return Column(
+          children: <Widget>[
+            Center(child: Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().tasksBloc.lastUpdated))),
+            Wrap(
+                direction: Axis.horizontal,
+                //runAlignment: WrapAlignment.end,
+                spacing: 0,
+                runSpacing: 0,
+                children: widgetList
+            )
+          ],
+        );
+      }
 
       return new ListView.builder(
-        //  physics: BouncingScrollPhysics(),
-          itemCount: map.keys.length+1,
+          itemCount: gradesByDate.length+1,
           itemBuilder: (BuildContext context, int index) {
             if(index == 0){
               return Center(child: Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().tasksBloc.lastUpdated)));
             }
-
-            DateTime key = map.keys.elementAt(index-1);
-            print("Grades page asd: ${map[key]}");
-
-            return StickyHeader(
-              header: GradeHeaderItemWidget.byDate(date: key),
-              content: Builder(
-                  builder: (context) {
-                    List<Widget> widgetList = List();
-
-                    int i = 0;
-                    if(widget.rectForm){
-                      for(PojoGrade gs in map[key]){
-                        print("Grades page index: ${i}");
-                        widgetList.add(GradeItemWidget.byDate(pojoGrade: gs, rectForm: true,));
-                        i++;
-                      }
-                      return Wrap(
-                          direction: Axis.horizontal,
-                          //runAlignment: WrapAlignment.end,
-                          spacing: 0,
-                          runSpacing: 0,
-                          children: widgetList
-                      );
-                    }
-
-
-                    for(PojoGrade gs in map[key]){
-                      print("Grades page index: ${i}");
-                      widgetList.add(GradeItemWidget.byDate(pojoGrade: gs,));
-                      i++;
-                    }
-                    return Column(
-                      children: widgetList
-                    );
-                  }
-              ),
-            );
+            return GradeItemWidget.byDate(pojoGrade: gradesByDate[index-1],);
           }
       );
     }
   }
-
-  GlobalKey<ScaffoldState> scaffoldState = new GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -275,7 +332,6 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
             BlocBuilder(
               bloc: MainTabBlocs().gradesBloc,
               builder: (context, state){
-                print("mystate: ${state}");
                 if(state is GradesLoadedState){
                   if(doesContainSelectedSession(state.failedSessions)){
                     return SelectedSessionFailWidget();
@@ -303,7 +359,7 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
                       children: <Widget>[
                         ListView(),
                         Column(children: <Widget>[
-                          Card(
+                          if (currentPage == 0) Card(
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 4.0),
                                 child: Row(
@@ -311,15 +367,17 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
                                   children: <Widget>[
                                     Padding(
                                       padding: const EdgeInsets.only(right: 6.0),
-                                      child: Text("${locText(context, key: "sort_by")}:", style: TextStyle(fontSize: 16),),
+                                      child: Text("${locText(context, key: "sort_by")}:",
+                                        style: TextStyle(fontSize: 16, color: currentPage != 0 ? Colors.grey : null ),
+                                      ),
                                     ),
                                     DropdownButton(
                                       value: MainTabBlocs().gradesBloc.currentGradeSort,
-                                      onChanged: (value){
+                                      onChanged: currentPage == 0 ? (value){
                                         setState(() {
                                           MainTabBlocs().gradesBloc.currentGradeSort = value;
                                         });
-                                      },
+                                      } : null,
                                       items: [
                                         DropdownMenuItem(child: Text(locText(context, key: "creation_date")), value: GradesSort.BYCREATIONDATE, ),
                                         DropdownMenuItem(child: Text(locText(context, key: "date")), value: GradesSort.BYDATE, ),
@@ -356,10 +414,14 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
                                 bloc: MainTabBlocs().gradesBloc,
                                 //  stream: gradesBloc.subject.stream,
                                 builder: (_, GradesState state) {
+                                  print("mystate: ${state}");
+
                                   if (state is GradesLoadedState) {
-                                    return onLoaded(state.data);
+                                    print("mystate2: ${state.data.grades.values.toList()[0]}");
+
+                                    return onLoaded(state.data.grades);
                                   }else if (state is GradesLoadedCacheState) {
-                                    return onLoaded(state.data);
+                                    return onLoaded(state.data.grades);
                                   }else if (state is GradesWaitingState) {
                                     //return Center(child: Text("Loading Data"));
                                     return Center(child: CircularProgressIndicator(),);
@@ -384,7 +446,7 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
                                     }
 
                                     if(MainTabBlocs().gradesBloc.grades != null){
-                                      return onLoaded(MainTabBlocs().gradesBloc.grades);
+                                      return onLoaded(MainTabBlocs().gradesBloc.grades.grades);
                                     }
                                     return Center(
                                         child: Text(locText(context, key: "info_something_went_wrong")));
@@ -405,6 +467,47 @@ class _GradesPage extends State<GradesPage> with SingleTickerProviderStateMixin 
                 ),
               ),
             ),
+            BottomNavigationBar(
+
+                currentIndex: currentPage,
+                onTap: (int index){
+                  setState(() {
+                    currentPage = index;
+                    HazizzLogger.printLog("yeahh: ${currentPage}");
+                  });
+                },
+                items: [
+                  BottomNavigationBarItem(
+                    title: Container(),
+                    icon:  Text(locText(context, key: "gradeType_midYear"), style: TextStyle(fontSize: 19)),
+                    activeIcon: Text(locText(context, key: "gradeType_midYear"),
+                      // overflow: TextOverflow.fade,
+                      maxLines: 1,
+                      style: TextStyle(color: Colors.red, fontSize: 26, fontWeight: FontWeight.bold, /*backgroundColor: currentDayColor*/),
+                    ),
+                  ),
+                  BottomNavigationBarItem(
+                    title: Container(),
+
+                    icon:  Text(locText(context, key: "gradeType_halfYear"),style: TextStyle(fontSize: 19)),
+                    activeIcon: Text(locText(context, key: "gradeType_halfYear"),
+                      //  overflow: TextOverflow.fade,
+                      maxLines: 1,
+                      style: TextStyle(color: Colors.red, fontSize: 26, fontWeight: FontWeight.bold, /*backgroundColor: currentDayColor*/),
+                    ),
+                  ),
+                  BottomNavigationBarItem(
+                    title: Container(),
+
+                    icon:  Text(locText(context, key: "gradeType_endYear"),style: TextStyle(fontSize: 19)),
+                    activeIcon: Text(locText(context, key: "gradeType_endYear"),
+                      //  overflow: TextOverflow.fade,
+                      maxLines: 1,
+                      style: TextStyle(color: Colors.red, fontSize: 26, fontWeight: FontWeight.bold, /*backgroundColor: currentDayColor*/),
+                    ),
+                  )
+                ]
+            )
           ],
         )
     );

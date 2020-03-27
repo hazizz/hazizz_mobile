@@ -565,6 +565,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                                                     h5: TextStyle(fontFamily: "Nunito", fontSize: 24, color: textColor),
                                                                     h6: TextStyle(fontFamily: "Nunito", fontSize: 22, color: textColor),
                                                                     a:  TextStyle(fontFamily: "Nunito", color: Colors.blue, decoration: TextDecoration.underline),
+
                                                                   ),
                                                                   onTapLink: (String url) async {
                                                                     if (await canLaunch(url)) {

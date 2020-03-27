@@ -442,37 +442,50 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
         );
       }
     );
-    var descriptionTextForm = BlocBuilder(
-          bloc: blocs.descriptionBloc,
-          builder: (BuildContext context, HFormState state) {
+    var descriptionTextForm = Stack(
+      children: <Widget>[
+        BlocBuilder(
+            bloc: blocs.descriptionBloc,
+            builder: (BuildContext context, HFormState state) {
 
-            if(state is TextFormSetState){
-              blocs.descriptionController.text = state.text;
+              if(state is TextFormSetState){
+                blocs.descriptionController.text = state.text;
+              }
+              return TextFormField(
+                inputFormatters:[
+                  LineBreakLimitingTextInputFormatter(24)
+                ],
+                focusNode: _descriptionFocusNode,
+                controller: blocs.descriptionController,
+                textInputAction: TextInputAction.newline,
+                onFieldSubmitted: (String value){
+                  FocusScope.of(context).requestFocus(new FocusNode());
+                },
+                decoration: InputDecoration(labelText: locText(context, key: "description"), errorText: null,
+                  alignLabelWithHint: true,
+                  filled: true,
+                ),
+                maxLength: descriptionMaxLength - 75 * imageDatas.length,
+                maxLines: 10,
+                minLines: 6,
+                expands: false,
+                style: TextStyle(
+                    fontSize: 19
+                ),
+              );
             }
-            return TextFormField(
-              inputFormatters:[
-                LineBreakLimitingTextInputFormatter(24)
-              ],
-              focusNode: _descriptionFocusNode,
-              controller: blocs.descriptionController,
-              textInputAction: TextInputAction.newline,
-              onFieldSubmitted: (String value){
-                FocusScope.of(context).requestFocus(new FocusNode());
-              },
-              decoration: InputDecoration(labelText: locText(context, key: "description"), errorText: null,
-                alignLabelWithHint: true,
-                filled: true,
-              ),
-              maxLength: descriptionMaxLength - 75 * imageDatas.length,
-              maxLines: 10,
-              minLines: 6,
-              expands: false,
-              style: TextStyle(
-                  fontSize: 19
-              ),
-            );
-          }
-      );
+        ),
+      /*  Positioned(top: 0, right: 0,
+          child: IconButton(
+            icon: Icon(FontAwesomeIcons.infoCircle),
+            onPressed: (){
+              showMarkdownInfo(context);
+            },
+          ),
+        )
+        */
+      ],
+    );
 
     return WillPopScope(
       onWillPop: (){

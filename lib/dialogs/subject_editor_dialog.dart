@@ -3,21 +3,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
-import 'package:mobile/enums/group_types_enum.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/hazizz_response.dart';
+import 'package:mobile/enums/action_type_enum.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'dialogs.dart';
 
+
+
 class SubjectEditorDialog extends StatefulWidget {
+
+  ActionTypeEnum actionType;
 
   int groupId;
   PojoSubject subject;
 
-  SubjectEditorDialog.create({Key key, @required this.groupId}) : super(key: key);
+  SubjectEditorDialog.create({Key key, @required this.groupId}) : super(key: key){
+    actionType = ActionTypeEnum.CREATE;
+  }
 
-  SubjectEditorDialog.edit({Key key, @required this.subject}) : super(key: key);
+  SubjectEditorDialog.edit({Key key, @required this.subject}) : super(key: key){
+    actionType = ActionTypeEnum.EDIT;
+  }
 
   @override
   _SubjectEditorDialog createState() => new _SubjectEditorDialog();
@@ -38,8 +46,14 @@ class _SubjectEditorDialog extends State<SubjectEditorDialog> {
 
   @override
   void initState() {
-    _subjectTextEditingController.text = widget.subject != null ? widget.subject.name : "";
-    isSubscriberOnly = widget.subject != null ? widget.subject.subscriberOnly : false;
+    _subjectTextEditingController.text =
+      widget.actionType == ActionTypeEnum.CREATE
+        ? widget.subject.name
+        : "";
+    isSubscriberOnly =
+      widget.actionType == ActionTypeEnum.CREATE
+        ? widget.subject.subscriberOnly
+        : false;
     super.initState();
   }
 
@@ -165,7 +179,16 @@ class _SubjectEditorDialog extends State<SubjectEditorDialog> {
 
                   });
 
-                  HazizzResponse response = await RequestSender().getResponse(CreateSubject(p_groupId: widget.groupId, b_subjectName: _subjectTextEditingController.text, b_subscriberOnly: isSubscriberOnly));
+                  HazizzResponse response = await getResponse(
+                    widget.actionType == ActionTypeEnum.CREATE ?
+                      CreateSubject(p_groupId: widget.groupId,
+                          b_subjectName: _subjectTextEditingController.text,
+                          b_subscriberOnly: isSubscriberOnly)
+                    : UpdateSubject(p_subjectId: widget.subject.id,
+                        b_subjectName: _subjectTextEditingController.text,
+                        b_subscriberOnly: isSubscriberOnly)
+                  );
+
                   setState(() {
                     isLoading = false;
                   });

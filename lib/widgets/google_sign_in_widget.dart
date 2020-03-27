@@ -4,6 +4,7 @@ import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/blocs/auth/google_login_bloc.dart';
 import 'package:mobile/blocs/auth/social_login_bloc.dart';
+import 'package:mobile/communication/errorcode_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -82,63 +83,75 @@ class _SocialSignInButtonWidget extends State<SocialSignInButtonWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder(
-      bloc: widget.socialSignInMode == SocialSignInMode.google ? LoginBlocs().googleLoginBloc :  LoginBlocs().facebookLoginBloc,
-      builder: (context, state){
-        String errorText = "";
-        if(state is SocialLoginWaitingState) {
+    return BlocListener(
+      bloc: widget.socialSignInMode == SocialSignInMode.google
+          ? LoginBlocs().googleLoginBloc
+          : LoginBlocs().facebookLoginBloc,
+      listener: (context, state){
+        if(state.error != null && state.error.errorCode == ErrorCodes.NO_ASSOCIATED_EMAIL.code){
+          showNoAssociatedEmail(context);
+        }
+      },
+      child: BlocBuilder(
+        bloc: widget.socialSignInMode == SocialSignInMode.google
+            ? LoginBlocs().googleLoginBloc
+            : LoginBlocs().facebookLoginBloc,
+        builder: (context, state){
+          String errorText = "";
+          if(state is SocialLoginWaitingState) {
 
-        }else{
+          }else{
 
 
-          if(state is SocialLoginFailedState){
+            if(state is SocialLoginFailedState){
 
-            if(state.error != null && state.error.errorCode == 26){
-              errorText = locText(context, key: "error_signing_in_with_facebook_no_email");
-            }else{
-              errorText = widget.socialSignInMode == SocialSignInMode.google
-                  ? locText(context, key: "error_signing_in_with_google")
-                  : locText(context, key: "error_signing_in_with_facebook");
+              if(state.error != null && state.error.errorCode == ErrorCodes.NO_ASSOCIATED_EMAIL.code){
+                errorText = locText(context, key: "error_signing_in_with_facebook_no_email");
+              }else{
+                errorText = widget.socialSignInMode == SocialSignInMode.google
+                    ? locText(context, key: "error_signing_in_with_google")
+                    : locText(context, key: "error_signing_in_with_facebook");
+              }
+
+
+
+            }
+            else if(state is SocialLoginHaveToAcceptConditionsState){
+              WidgetsBinding.instance.addPostFrameCallback((_) =>
+                  showRegistrationDialog(context).then((accepted){
+                    HazizzLogger.printLog("showRegistrationDialog has accepted: $accepted");
+                    if(accepted != null && accepted){
+                      widget.socialSignInMode == SocialSignInMode.google
+                      ? LoginBlocs().googleLoginBloc.dispatch(SocialLoginAcceptedConditionsEvent())
+                      : LoginBlocs().facebookLoginBloc.dispatch(SocialLoginAcceptedConditionsEvent());
+
+                    }else{
+                      widget.socialSignInMode == SocialSignInMode.google
+                          ? LoginBlocs().googleLoginBloc.dispatch(SocialLoginRejectConditionsEvent())
+                          : LoginBlocs().facebookLoginBloc.dispatch(SocialLoginRejectConditionsEvent());
+
+                    }
+                  })
+              );
+
+            }else if(state is SocialLoginRejectedConditionsState){
+              HazizzLogger.printLog("google signin: rejected and signing out");
+
+              errorText = locText(context, key: "error_conditionsNotAccepted");
             }
 
-
-
-          }
-          else if(state is SocialLoginHaveToAcceptConditionsState){
-            WidgetsBinding.instance.addPostFrameCallback((_) =>
-                showRegistrationDialog(context).then((accepted){
-                  HazizzLogger.printLog("showRegistrationDialog has accepted: $accepted");
-                  if(accepted != null && accepted){
-                    widget.socialSignInMode == SocialSignInMode.google
-                    ? LoginBlocs().googleLoginBloc.dispatch(SocialLoginAcceptedConditionsEvent())
-                    : LoginBlocs().facebookLoginBloc.dispatch(SocialLoginAcceptedConditionsEvent());
-
-                  }else{
-                    widget.socialSignInMode == SocialSignInMode.google
-                        ? LoginBlocs().googleLoginBloc.dispatch(SocialLoginRejectConditionsEvent())
-                        : LoginBlocs().facebookLoginBloc.dispatch(SocialLoginRejectConditionsEvent());
-
-                  }
-                })
-            );
-
-          }else if(state is SocialLoginRejectedConditionsState){
-            HazizzLogger.printLog("google signin: rejected and signing out");
-
-            errorText = locText(context, key: "error_conditionsNotAccepted");
           }
 
-        }
-
-         return Column(
-          children: <Widget>[
-            widget.socialSignInMode == SocialSignInMode.google
-            ? googleSignInButton()
-            : facebookSignInButton(),
-            Container(width: MediaQuery.of(context).size.width, child: Text(errorText, style: TextStyle(), textAlign: TextAlign.center,))
-          ],
-        );
-      },
+           return Column(
+            children: <Widget>[
+              widget.socialSignInMode == SocialSignInMode.google
+              ? googleSignInButton()
+              : facebookSignInButton(),
+              Container(width: MediaQuery.of(context).size.width, child: Text(errorText, style: TextStyle(), textAlign: TextAlign.center,))
+            ],
+          );
+        },
+      ),
     );
   }
 

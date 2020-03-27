@@ -153,16 +153,11 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
                         HazizzLogger.printLog("IM PRESSED HELLP!!!");
                         setState(() {
                           isCompleted = !isCompleted;
+                          if(isCompleted){
+                            widget.onCompletedChanged();
+                          }
                         });
                         HazizzResponse hazizzResponse = await RequestSender().getResponse(SetTaskCompleted(p_taskId: widget.originalPojoTask.id, setCompleted: isCompleted));
-                        if(hazizzResponse.isSuccessful){
-                          widget.onCompletedChanged();
-                        }else{
-                          setState(() {
-                            isCompleted = !isCompleted;
-                          });
-                        }
-
                       }
 
                   );

@@ -39,6 +39,8 @@ String dateTimeToLastUpdatedFormat(BuildContext context, DateTime dateTime){
   return locText(context, key: "last_updated") + ": " + "${dateTime.year.toString()}.$str_month.$str_day $str_hour:$str_minute";
 }
 
+
+
 String toHazizzFormat(TimeOfDay timeOfDay){
   String str_h = timeOfDay.hour >= 10 ? timeOfDay.hour.toString() : "0${timeOfDay.hour}";
   String str_m = timeOfDay.minute >= 10 ? timeOfDay.minute.toString() : "0${timeOfDay.minute}";

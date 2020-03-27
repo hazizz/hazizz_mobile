@@ -17,7 +17,7 @@ class ErrorCode{
 
   bool operator == (dynamic other) {
     if (other is ErrorCode ){
-      return this == other;
+      return this.code == other.code;
     }
     if( other is int){
       return this.code == other;
@@ -54,6 +54,8 @@ class ErrorCodes {
   ELEVATION_TOKEN_INVALID = ErrorCode(22, "Elevation token invalid!"),
   AUTH_TOKEN_INVALID = ErrorCode(23, "Authentication token invalid!"),
   AUTH_SERVER_UNAVAILABLE = ErrorCode(24, "Authentication server not available right now!"),
+  INVALID_OPENID_TOKEN = ErrorCode(25, "Nem megfelelő az openID token a Google library szerint, próbáld kiolvasni jwt.io oldalon"),
+  NO_ASSOCIATED_EMAIL = ErrorCode(26, "No associated email address"),
   //endregion
   //region User errors
   GENERAL_USER_ERROR = ErrorCode(30, "Unidentified user error! Please report it."),
@@ -114,7 +116,7 @@ class ErrorCodes {
   ANNOUNCEMENT_LIMIT = ErrorCode(152, "The group has reached it's announcement limit");
   //endregion
 
-  //region wraping the errrors into a list
+  //region Wrapping the errors into a list
   static final List<ErrorCode> list = [
     UNKNOWN_ERROR,
     INVALID_DATA,

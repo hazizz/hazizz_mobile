@@ -770,7 +770,7 @@ class DeleteSubject extends HazizzRequest {
 class CreateSubject extends HazizzRequest {
   CreateSubject({ResponseHandler rh, @required int p_groupId, @required String b_subjectName, @required bool b_subscriberOnly = false}) : super(rh) {
     httpMethod = HttpMethod.POST;
-    PATH = "subjects/group/${p_groupId}";
+    PATH = "subjects/groups/${p_groupId}";
     authTokenHeader = true;
     contentTypeHeader = true;
     body["name"] = b_subjectName;
@@ -787,7 +787,7 @@ class CreateSubject extends HazizzRequest {
 
 class UpdateSubject extends HazizzRequest {
   UpdateSubject({ResponseHandler rh, @required int p_subjectId, @required String b_subjectName, @required bool b_subscriberOnly = false}) : super(rh) {
-    httpMethod = HttpMethod.POST;
+    httpMethod = HttpMethod.PATCH;
     PATH = "subjects/${p_subjectId}";
     authTokenHeader = true;
     contentTypeHeader = true;

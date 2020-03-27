@@ -69,6 +69,9 @@ class GradesLoadedState extends GradesState {
   final List<PojoSession> failedSessions;
 
   GradesLoadedState(this.data, { this.failedSessions }) : assert(data!= null), super([data, SelectedSessionBloc().selectedSession]){
+    if(data == null){
+      print("WRONG!!!");
+    }
     data ??= PojoGrades({});
   }
   @override
@@ -214,6 +217,7 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
   @override
   Stream<GradesState> mapEventToState(GradesEvent event) async* {
     if(event is GradesSetSessionEvent){
+      print("happended12");
       yield GradesLoadedState(grades, failedSessions: failedSessions);
     }
     else if (event is GradesFetchEvent) {
@@ -301,12 +305,26 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
               if(oldGrades == null || grades.grades.toString() != oldGrades.grades.toString()){
                 print("CHANGE HAPPENDE1");
                 NewGradesBloc().dispatch(HasNewGradesEvent());
+
+                for(String key in oldGrades.grades.keys){
+                  for(PojoGrade g1 in oldGrades.grades[key]){
+                    for(PojoGrade g2 in grades.grades[key]){
+                      if(g1 == g2){
+                        g2.isNew = true;
+                        break;
+                      }
+                    }
+                  }
+                }
+
               }else{
                 print("CHANGE HAPPENDE2");
               }
 
               lastUpdated = DateTime.now();
               saveGradesCache(grades);
+              print("happended122");
+
               yield GradesLoadedState(grades, failedSessions: failedSessions);
             }else{
               print("testgst:2");
@@ -319,7 +337,7 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
           }else{
             print("testgst:4");
 
-            yield GradesErrorState(hazizzResponse);
+           // yield GradesErrorState(hazizzResponse);
           }
           print("testgst:5");
 
@@ -350,7 +368,7 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
           }
 
           else{
-            yield GradesErrorState(hazizzResponse);
+           // yield GradesErrorState(hazizzResponse);
           }
         }
       } on Exception catch(e){

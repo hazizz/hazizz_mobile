@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/communication/pojos/PojoClass.dart';
 import 'package:mobile/communication/pojos/PojoCreator.dart';
@@ -23,7 +24,9 @@ import 'package:mobile/dialogs/sure_to_delete_subject_dialog.dart';
 import 'package:mobile/dialogs/sure_to_join_group_dialog.dart';
 import 'package:mobile/dialogs/sure_to_leave_group_dialog.dart';
 import 'package:mobile/dialogs/user_dialog.dart';
+import 'package:mobile/enums/grade_type_enum.dart';
 import 'package:mobile/enums/group_permissions_enum.dart';
+import 'package:mobile/services/facebook_opener.dart';
 import 'package:mobile/widgets/hero_dialog.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
@@ -32,6 +35,7 @@ import 'package:mobile/custom/hazizz_date.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'choose_subject_dialog.dart';
 import 'create_group_dialog.dart';
 import 'grant_access_to_gdrive_dialog.dart';
@@ -40,6 +44,7 @@ import 'subject_editor_dialog.dart';
 import 'invite_link_dialog.dart';
 import 'join_group_dialog.dart';
 import 'kick_group_member_dialog.dart';
+import "package:mobile/extension_methods/extension_first_upper.dart";
 
 
 // 280 min width
@@ -880,14 +885,16 @@ Future<Widget> showGradeDialog(context, {@required PojoGrade grade}) {
           child: Column(
               children:
               [
-                Center(child: Text(grade.subject[0].toUpperCase() + grade.subject.substring(1), style: TextStyle(fontSize: 22), textAlign: TextAlign.center,) ),
+                Center(child: Text(grade.subject.toUpperFirst(), style: TextStyle(fontSize: 22, height: 0.95), textAlign: TextAlign.center,) ),
                 Spacer(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(locText(context, key: "topic") + ":", style: TextStyle(fontSize: 18)),
-                    Expanded(child: Text(grade.topic == null ? "" : (grade.topic), style: TextStyle(fontSize: 18), textAlign: TextAlign.end,)),
+                    Expanded(child: Text(grade.topic == null ? "" : (grade.topic),
+                      style: TextStyle(fontSize: 18, height: 0.95), textAlign: TextAlign.end,)
+                    ),
                   ],
                 ),
                 Spacer(),
@@ -900,15 +907,16 @@ Future<Widget> showGradeDialog(context, {@required PojoGrade grade}) {
                     Text(locText(context, key: "grade_type") + ":", style: TextStyle(fontSize: 18)),
                     Builder(
                       builder: (context){
-                        String gradeType = grade.gradeType;
-                        if(gradeType.toLowerCase() == "midyear"){
-                          gradeType = locText(context, key: "gradeType_midYear");
-                        }else if(gradeType.toLowerCase() == "halfyear"){
-                          gradeType = locText(context, key: "gradeType_halfYear");
-                        }else if(gradeType.toLowerCase() == "endyear"){
-                          gradeType = locText(context, key: "gradeType_endYear");
+                        GradeTypeEnum gradeType = grade.gradeType;
+                        String gradeTypeShow;
+                        if(gradeType == GradeTypeEnum.MIDYEAR){
+                          gradeTypeShow = locText(context, key: "gradeType_midYear");
+                        }else if(gradeType == GradeTypeEnum.HALFYEAR){
+                          gradeTypeShow = locText(context, key: "gradeType_halfYear");
+                        }else if(gradeType == GradeTypeEnum.ENDYEAR){
+                          gradeTypeShow = locText(context, key: "gradeType_endYear");
                         }
-                        return Expanded(child: Text(gradeType, style: TextStyle(fontSize: 18), textAlign: TextAlign.end,));
+                        return Expanded(child: Text(gradeTypeShow, style: TextStyle(fontSize: 18), textAlign: TextAlign.end,));
                       },
                     ),
                   ],
@@ -1018,7 +1026,7 @@ void showSchoolsDialog(BuildContext context, {@required Function({String key, St
 }
 
 Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
-  pojoClass.subject = pojoClass.subject[0].toUpperCase() + pojoClass.subject.substring(1);
+  pojoClass.subject = pojoClass.subject.toUpperFirst();
 
   double headerHeight = 50;
   double contentHeight = 220;
@@ -1145,8 +1153,8 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(locText(context, key: "teacher") + ":", style: TextStyle(fontSize: 18)),
-                Expanded(child: Text(pojoClass.teacher == null ? "" : pojoClass.teacher, style: TextStyle(fontSize: 18), textAlign:TextAlign.end,),),
+                Text(locText(context, key: "teacher") + ":", style: TextStyle(fontSize: 18, height: 0.94)),
+                Expanded(child: Text(pojoClass.teacher == null ? "" : pojoClass.teacher, style: TextStyle(fontSize: 18, height: 0.94), textAlign:TextAlign.end,),),
               ],
             ),);
           }
@@ -1167,8 +1175,8 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
               crossAxisAlignment: CrossAxisAlignment.start,
 
               children: <Widget>[
-                Text(locText(context, key: "topic") + ":", style: TextStyle(fontSize: 18)),
-                Expanded(child: Text(pojoClass.topic, style: TextStyle(fontSize: 18), textAlign: TextAlign.end,)),
+                Text(locText(context, key: "topic") + ":", style: TextStyle(fontSize: 18, height: 0.94)),
+                Expanded(child: Text(pojoClass.topic, style: TextStyle(fontSize: 18, height: 0.94), textAlign: TextAlign.end)),
               ],
             ));
           }
@@ -1419,3 +1427,359 @@ Future<void> showNewFeatureDialog(context) async {
 }
 
 
+Future<bool> showMarkdownInfo(context,) async {
+  double width = MediaQuery.of(context).size.width * 0.8;
+  double height = MediaQuery.of(context).size.height * 0.8;
+
+
+  Markdown getMark(String text){
+    Color textColor = Colors.black;
+    if(HazizzTheme.currentThemeIsDark){
+      textColor = Colors.white;
+    }
+    return Markdown(data: text,
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      styleSheet: MarkdownStyleSheet(
+        p:  TextStyle(fontFamily: "Nunito", fontSize: 20, color: textColor, ),
+        h1: TextStyle(fontFamily: "Nunito", fontSize: 30, color: textColor),
+        h2: TextStyle(fontFamily: "Nunito", fontSize: 28, color: textColor),
+        h3: TextStyle(fontFamily: "Nunito", fontSize: 26, color: textColor),
+        h4: TextStyle(fontFamily: "Nunito", fontSize: 24, color: textColor),
+        h5: TextStyle(fontFamily: "Nunito", fontSize: 22, color: textColor),
+        h6: TextStyle(fontFamily: "Nunito", fontSize: 20, color: textColor),
+        a:  TextStyle(fontFamily: "Nunito", color: Colors.blue, decoration: TextDecoration.underline),
+
+      ),
+      onTapLink: (String url) async {
+        if (await canLaunch(url)) {
+          await launch(url);
+        }
+      },
+    );
+  }
+
+  HazizzDialog h = HazizzDialog(
+      header:
+      Container(
+          width: width,
+          color: Theme.of(context).primaryColor,
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Text(locText(context, key: "markdown_info"), style: TextStyle(fontSize: 22),),
+          )
+      ),
+      content: Container(
+        child: ListView(
+          children: <Widget>[
+              Container(
+              //  height: 40,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Text(locText(context, key: "markdown_info_h1")),
+                    Spacer(),
+                  //  Flexible(child: getMark(locText(context, key: "markdown_info_h1")))
+                    Container(width: 100,child: getMark(locText(context, key: "markdown_info_h1")))
+                  ],
+                ),
+              ),
+
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                  children: <Widget>[
+                    Text(locText(context, key: "markdown_info_h2")),
+                    Spacer(),
+                    Flexible(child: getMark(locText(context, key: "markdown_info_h2")))
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                  children: <Widget>[
+                    Text(locText(context, key: "markdown_info_h3")),
+                    Spacer(),
+                    Flexible(child: getMark(locText(context, key: "markdown_info_h3")))
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                  children: <Widget>[
+                    Text(locText(context, key: "markdown_info_h4")),
+                    Spacer(),
+                    Flexible(child: getMark(locText(context, key: "markdown_info_h4")))
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                  children: <Widget>[
+                    Text(locText(context, key: "markdown_info_h5")),
+                    Spacer(),
+                    Flexible(child: getMark(locText(context, key: "markdown_info_h5")))
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                  children: <Widget>[
+                    Text(locText(context, key: "markdown_info_h6")),
+                    Spacer(),
+                    Flexible(child: getMark(locText(context, key: "markdown_info_h6")))
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(locText(context, key: "markdown_info_a")),
+                    Spacer(),
+                    Flexible(child: getMark(locText(context, key: "markdown_info_a"))
+                  )                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(locText(context, key: "markdown_info_ul")),
+                    Spacer(),
+                    Flexible(child: getMark(locText(context, key: "markdown_info_ul")))
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(locText(context, key: "markdown_info_ol")),
+                    Spacer(),
+                    Flexible(child: getMark(locText(context, key: "markdown_info_ol")))
+                  ],
+                ),
+
+          ],
+        ),
+      ),
+      actionButtons:
+      Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          FlatButton(
+              child: Center(
+                child: Text(
+                  locText(context, key: "close").toUpperCase(),
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              color: Colors.transparent
+          ),
+        ],
+      ) ,height: height,width: width);
+
+  return showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: MaterialLocalizations.of(context)
+          .modalBarrierDismissLabel,
+      barrierColor: Colors.black45,
+      transitionDuration: const Duration(milliseconds: 200),
+      pageBuilder: (BuildContext buildContext,
+          Animation animation,
+          Animation secondaryAnimation) {
+        return h;
+      });
+
+}
+
+Future<bool> showGiveawayDialog(context) async {
+  const String fb_link = "https://www.facebook.com/hazizzvelunk";
+
+  HazizzDialog d = HazizzDialog(
+    width: 350, height: 260,
+    header: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Container(
+          width: 280,
+          child: AutoSizeText(locText(context, key: "giveaway_title",).toUpperCase(),
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.w800,
+            ),
+
+            maxFontSize: 28,
+            minFontSize: 20,
+            maxLines: 1,
+          ),
+        )
+      ],
+    ),
+    content: Padding(
+      padding: const EdgeInsets.only(left: 4, right: 4, top: 4),
+      child: Column(
+        children: <Widget>[
+          AutoSizeText(locText(context, key: "giveaway_description",),
+            style: TextStyle(fontSize: 18),
+            maxFontSize: 18,
+            minFontSize: 16,
+            maxLines: 6,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              RaisedButton(
+                child: Text(locText(context, key: "view").toUpperCase()),
+                onPressed: () async {
+                  await openFacebookPage();
+                  Navigator.pop(context);
+                 /* if (await canLaunch(fb_link)) {
+                    await launch(fb_link);
+                  }
+                  */
+                },
+              )
+            ],
+          )
+        ],
+      )
+    ),
+    actionButtons: Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        FlatButton(
+          child: Text(locText(context, key: "close").toUpperCase()),
+          onPressed: (){
+            Navigator.pop(context);
+          },
+        ),
+      ],
+    )
+
+
+  );
+
+  Widget dialogWidget = Container(
+    width: 300, height: 260,
+    child: Card(
+      child: Column(
+        children: <Widget>[
+
+          AutoSizeText(locText(context, key: "giveaway_description",),
+            style: TextStyle(fontSize: 20),
+            maxFontSize: 20,
+            minFontSize: 16,
+            maxLines: 2,
+          ),
+
+         // Spacer(),
+          Row(
+            children: <Widget>[
+              RaisedButton(
+                onPressed: (){
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          )
+        ],
+      ),
+    ),
+  );
+
+
+  return await showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return d;
+      }
+  );
+
+
+
+
+  return showGeneralDialog(
+    context: context,
+    barrierDismissible: true,
+    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+    barrierColor: Colors.black45,
+    transitionDuration: const Duration(milliseconds: 200),
+    pageBuilder: (BuildContext buildContext,
+        Animation animation,
+        Animation secondaryAnimation) {
+      return dialogWidget;
+    }
+  );
+
+
+
+}
+
+
+Future<bool> showNoAssociatedEmail(context,) async {
+  double width = 300;
+  double height = 200;
+
+
+  HazizzDialog h = HazizzDialog(
+      header:
+      Container(
+          width: width,
+          color: Theme.of(context).primaryColor,
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: AutoSizeText(locText(context, key: "markdown_info"),
+              maxLines: 2,
+              maxFontSize: 24,
+              minFontSize: 16,
+              style: TextStyle(fontSize: 24),
+            ),
+          )
+      ),
+      content: Container(),
+      actionButtons:
+      Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          FlatButton(
+              child: Center(
+                child: Text(
+                  locText(context, key: "close").toUpperCase(),
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              color: Colors.transparent
+          ),
+          FlatButton(
+              child: Center(
+                child: Text(
+                  locText(context, key: "add_email").toUpperCase(),
+                ),
+              ),
+              onPressed: () async {
+                const String url = "https://www.facebook.com/help/162801153783275";
+                if (await canLaunch(url)) {
+                  await launch(url);
+                } else {
+                  throw 'Could not launch $url';
+                }
+
+                Navigator.of(context).pop();
+              },
+              color: Colors.transparent
+          ),
+        ],
+      ) ,height: height,width: width);
+
+  return await showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return h;
+      }
+  );
+
+}

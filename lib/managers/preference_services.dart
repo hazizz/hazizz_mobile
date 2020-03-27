@@ -98,7 +98,7 @@ class PreferenceService{
   static Future<bool> getEnabledAd()async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool y = prefs.get(_key_enableAd);
-    enabledAd = y == null ? false : y;
+    enabledAd = y == null ? true : y;
     return enabledAd;
   }
   static Future<void> setEnabledAd(bool enable)async {

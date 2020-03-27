@@ -105,7 +105,14 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
       }
       VersionHandler.setLastRecordedVersion();
     });
-
+    
+    DateTime now = DateTime.now();
+    
+    if(now.isBefore(DateTime(2020, 04, 17, 23, 59))){
+      WidgetsBinding.instance.addPostFrameCallback((_) =>
+          showGiveawayDialog(context)
+      );
+    }
     tasksTabPage = TasksPage();
     schedulesTabPage = SchedulesPage();
     gradesTabPage = GradesPage();
@@ -362,14 +369,14 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                         accountEmail: BlocBuilder(
                           bloc: SelectedSessionBloc(),
                           builder: (_, state){
-                            Text hardCodeless(String text){
+                            Text unHardCodeify(String text){
                               return Text(text, style: TextStyle(fontSize: 16, fontFamily: "Nunito", fontWeight: FontWeight.w600), );
                             }
                             if(state is SelectedSessionFineState){
-                              return hardCodeless("${locText(context, key: "kreta_account")}: ${state.session.username}");
+                              return unHardCodeify("${locText(context, key: "kreta_account")}: ${state.session.username}");
 
                             }
-                            return hardCodeless(locText(context, key: "not_logged_in_to_kreta_account"));
+                            return unHardCodeify(locText(context, key: "not_logged_in_to_kreta_account"));
                           },
                         ),
 

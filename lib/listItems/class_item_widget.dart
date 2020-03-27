@@ -5,6 +5,8 @@ import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/custom/hazizz_date.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
+import "package:mobile/extension_methods/extension_first_upper.dart";
+
 
 class ClassItemWidget extends StatelessWidget{
 
@@ -89,7 +91,7 @@ class ClassItemWidget extends StatelessWidget{
                                       children: [
 
                                   //  Text(pojoClass.subject == null ? "subject" : pojoClass.subject, style: TextStyle(fontSize: 20)),
-                                        Text(pojoClass.subject == null ? "className" : pojoClass.subject[0].toUpperCase() + pojoClass.subject.substring(1),
+                                        Text(pojoClass.subject == null ? "className" : pojoClass.subject.toUpperFirst(),
                                           style: TextStyle(fontSize: 19),
                                         ),
                                       ]
@@ -101,7 +103,10 @@ class ClassItemWidget extends StatelessWidget{
                                 padding: const EdgeInsets.only(left: 4.0),
                                 child: Builder(builder: (context){
                                   if(pojoClass.topic != null && pojoClass.topic != ""){
-                                    return Text(pojoClass.topic, style: TextStyle(fontSize: 16, color: Colors.grey));
+                                    return Padding(
+                                      padding: const EdgeInsets.only(top: 2.4, bottom: 4),
+                                      child: Text(pojoClass.topic, style: TextStyle(fontSize: 16, color: Colors.grey, height:1)),
+                                    );
                                   }
                                   return Container();
                                 }),
@@ -123,9 +128,9 @@ class ClassItemWidget extends StatelessWidget{
                               padding: const EdgeInsets.only(left: 4),
                               child: Row(
                                 children: <Widget>[
-                                  Text(pojoClass.startOfClass.toHazizzFormat(), style: TextStyle(fontSize: 18),),
-                                  Text("-", style: TextStyle(fontSize: 19),),
-                                  Text(pojoClass.endOfClass.toHazizzFormat(), style: TextStyle(fontSize: 18),),
+                                  Text(pojoClass.startOfClass.toHazizzFormat(), style: TextStyle(fontSize: 18, height: 0.85),),
+                                  Text("-", style: TextStyle(fontSize: 18, height: 0.85),),
+                                  Text(pojoClass.endOfClass.toHazizzFormat(), style: TextStyle(fontSize: 18, height: 0.85),),
                                  // Spacer(),
                                 //  Text(pojoClass.room == null ? " " : pojoClass.room, style: TextStyle(fontSize: 20),)
                                 ],

@@ -1,6 +1,7 @@
 import 'package:flutter_svg/svg.dart';
 import 'package:googleapis/drive/v2.dart';
 import 'package:mobile/managers/server_checker.dart';
+import 'package:mobile/services/facebook_opener.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 import 'package:mobile/widgets/hyper_link.dart';
 
@@ -220,9 +221,7 @@ class _AboutPage extends State<AboutPage> {
                     children: <Widget>[
                       GestureDetector(
                         onTap: () async {
-                          if (await canLaunch(AboutPage.fb_site)) {
-                            await launch(AboutPage.fb_site);
-                          }
+                          openFacebookPage();
                         },
                         child: Container(
                           child: SvgPicture.asset(

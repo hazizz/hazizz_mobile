@@ -332,7 +332,7 @@ class TaskCreateBloc extends TaskMakerBloc {
             groupId: groupId,
             subjectId: subjectId,
             b_tags: tags,
-            b_description: event.imageDatas.isEmpty ? description : description + imageUrlsDesc,
+            b_description: event.imageDatas.isEmpty ? description : description + "\n" + imageUrlsDesc,
             b_deadline: deadline,
             b_salt: event.imageDatas.isEmpty ? null : salt
         ));

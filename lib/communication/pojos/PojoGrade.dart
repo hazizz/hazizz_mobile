@@ -4,6 +4,7 @@ import 'dart:core';
 
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:mobile/enums/grade_type_enum.dart';
 
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'Pojo.dart';
@@ -18,9 +19,11 @@ class PojoGrade extends Pojo implements Comparable {
   DateTime creationDate;
   String subject;
   String topic;
-  String gradeType;
+  GradeTypeEnum gradeType;
   String grade;
   int weight;
+
+  bool isNew = false;
 
   /*
   DateTime creationDate;
@@ -84,5 +87,21 @@ class PojoGrade extends Pojo implements Comparable {
     }
     return null;
   }
+
+  bool operator == (dynamic other){
+    if(other is PojoGrade) {
+      return (other.gradeType == gradeType &&
+          other.grade == grade &&
+          other.subject == subject &&
+          other.accountId == accountId &&
+          other.date == date &&
+          other.topic == topic &&
+          other.weight == weight &&
+          other.creationDate == creationDate
+      );
+    }
+    return false;
+  }
+
 
 }

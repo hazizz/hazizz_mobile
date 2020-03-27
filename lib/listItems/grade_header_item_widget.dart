@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:mobile/custom/hazizz_date.dart';
 import 'package:mobile/widgets/card_header_widget.dart';
+import "package:mobile/extension_methods/extension_first_upper.dart";
 
 class GradeHeaderItemWidget extends StatelessWidget{
   String subjectName;
@@ -18,7 +19,7 @@ class GradeHeaderItemWidget extends StatelessWidget{
   Widget build(BuildContext context) {
     if(date == null){
       return CardHeaderWidget(
-        text: subjectName[0].toUpperCase() + subjectName.substring(1),
+        text: subjectName.toUpperFirst(),
         secondText: gradesAvarage,
       );
     }

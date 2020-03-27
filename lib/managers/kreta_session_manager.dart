@@ -62,6 +62,7 @@ class KretaSessionManager {
       if(jsonSession != null) {
 
         PojoSession s = PojoSession.fromJson(jsonSession);
+        selectedSession = s;
         HazizzLogger.printLog("cached session3 status, id: ${s.status}, ${s.id}");
 
         return s;
