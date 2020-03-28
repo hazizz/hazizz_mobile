@@ -119,7 +119,7 @@ class ProfilePictureBloc extends Bloc<ProfilePictureEvent, ProfilePictureState> 
 
     if(event is ProfilePictureGetEvent) {
       yield ProfilePictureWaitingState();
-      String str_profilePicture = await InfoCache.getMyProfilePicture();
+      String str_profilePicture = await CacheManager.getMyProfilePicture();
       if(str_profilePicture == null){
         HazizzResponse hazizzResponse = await RequestSender().getResponse(GetMyProfilePicture.full());
 
@@ -140,7 +140,7 @@ class ProfilePictureBloc extends Bloc<ProfilePictureEvent, ProfilePictureState> 
           new UpdateMyProfilePicture(
               encodedImage: fromBytesImageToBase64(event.imageBytes)));
       if(hazizzResponse.isSuccessful) {
-        InfoCache.setMyProfilePicture(hazizzResponse.convertedData);
+        CacheManager.setMyProfilePicture(hazizzResponse.convertedData);
         profilePictureBytes = event.imageBytes;
         yield ProfilePictureLoadedState();
       }
@@ -150,7 +150,7 @@ class ProfilePictureBloc extends Bloc<ProfilePictureEvent, ProfilePictureState> 
       HazizzResponse hazizzResponse = await RequestSender().getResponse(
           new GetMyProfilePicture.full());
       if(hazizzResponse.isSuccessful) {
-        InfoCache.setMyProfilePicture(hazizzResponse.convertedData);
+        CacheManager.setMyProfilePicture(hazizzResponse.convertedData);
         profilePictureBytes = hazizzResponse.convertedData;
         yield ProfilePictureLoadedState();
       }
@@ -423,7 +423,7 @@ class DisplayNameBloc extends Bloc<DisplayNameEvent, DisplayNameState> {
 
         PojoMeInfo meInfo = hazizzResponse.convertedData;
 
-        InfoCache.setMyDisplayName(meInfo.displayName);
+        CacheManager.setMyDisplayName(meInfo.displayName);
         displayName = meInfo.displayName;
         yield DisplayNameLoadedState();
       }
@@ -433,7 +433,7 @@ class DisplayNameBloc extends Bloc<DisplayNameEvent, DisplayNameState> {
       HazizzResponse hazizzResponse = await RequestSender().getResponse(
           new GetMyProfilePicture.full());
       if(hazizzResponse.isSuccessful) {
-        InfoCache.setMyProfilePicture(hazizzResponse.convertedData);
+        CacheManager.setMyProfilePicture(hazizzResponse.convertedData);
       //  profilePictureBytes = event.imageBytes;
         yield DisplayNameLoadedState();
       }
@@ -554,7 +554,7 @@ class MyUserDataBloc extends Bloc<MyUserDataEvent, MyUserDataState> {
     if(event is MyUserDataGetEvent) {
       yield MyUserDataWaitingState();
 
-      PojoMeInfoPrivate meInfoCached = await InfoCache.getMyUserData();
+      PojoMeInfoPrivate meInfoCached = await CacheManager.getMyUserData();
 
       if(meInfoCached == null){
 
@@ -563,7 +563,7 @@ class MyUserDataBloc extends Bloc<MyUserDataEvent, MyUserDataState> {
         if(hazizzResponse.isSuccessful){
           PojoMeInfoPrivate meInfoRefreshed = hazizzResponse.convertedData;
           myUserData = meInfoRefreshed;
-          InfoCache.setMyUserData(meInfoRefreshed);
+          CacheManager.setMyUserData(meInfoRefreshed);
 
         }
       }else{
@@ -589,11 +589,11 @@ class MyUserDataBloc extends Bloc<MyUserDataEvent, MyUserDataState> {
     }
     */
     else if(event is MyUserDataChangeDisplaynameEvent){
-      PojoMeInfo meInfo = await InfoCache.getMyUserData();
+      PojoMeInfo meInfo = await CacheManager.getMyUserData();
       HazizzLogger.printLog("debuglol: 3 ${meInfo.displayName}");
       meInfo.displayName = event.displayName;
       HazizzLogger.printLog("debuglol: 4 ${meInfo.displayName}");
-      InfoCache.setMyUserData(meInfo);
+      CacheManager.setMyUserData(meInfo);
       myUserData = meInfo;
       yield MyUserDataLoadedState(meInfo: meInfo);
     }

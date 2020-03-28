@@ -38,9 +38,9 @@ class AppState{
   static bool logInProcedureDone = true;
 
   static Future setUserData({@required PojoMeInfo meInfo}) async {
-    InfoCache.setMyId(meInfo.id);
-    InfoCache.setMyUsername(meInfo.username);
-    InfoCache.setMyDisplayName(meInfo.displayName);
+    CacheManager.setMyId(meInfo.id);
+    CacheManager.setMyUsername(meInfo.username);
+    CacheManager.setMyDisplayName(meInfo.displayName);
 
     if(meInfo is PojoMeInfoPrivate){
 
@@ -81,7 +81,7 @@ class AppState{
     hazizzResponse = await RequestSender().getResponse(GetMyProfilePicture.full());
     if(hazizzResponse.isSuccessful){
       String base64Image = hazizzResponse.convertedData;
-      InfoCache.setMyProfilePicture(base64Image);
+      CacheManager.setMyProfilePicture(base64Image);
     }
 
     logInProcedureDone = true;
@@ -128,7 +128,7 @@ class AppState{
     TokenManager.invalidateTokens();
     var sh = await SharedPreferences.getInstance();
     sh.setBool(key_isLoggedIn, false);
-    InfoCache.forgetMyUser();
+    CacheManager.forgetMyUser();
     forgetTasksCache();
     forgetScheduleCache();
     forgetGradesCache();

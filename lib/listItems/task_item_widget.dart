@@ -10,6 +10,7 @@ import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'package:mobile/communication/request_sender.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class TaskItemWidget extends StatefulWidget  {
 
@@ -290,6 +291,11 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
 
                                             ),
                                           );
+                                        },
+                                        onTapLink: (String url) async {
+                                          if (await canLaunch(url)) {
+                                            await launch(url);
+                                          }
                                         },
                                         styleSheet: MarkdownStyleSheet(
                                           p:  TextStyle(fontFamily: "Nunito", fontSize: 14, color: textColor),

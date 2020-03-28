@@ -105,7 +105,7 @@ class GroupMembersBloc extends Bloc<HEvent, HState> {
         if(hazizzResponse.isSuccessful){
           membersPermissions = hazizzResponse.convertedData;
 
-          int myId = (await InfoCache.getMyUserData()).id;
+          int myId = (await CacheManager.getMyUserData()).id;
           bool found = false;
           
           for(PojoUser member in membersPermissions.OWNER){

@@ -1290,6 +1290,9 @@
     "taskType_4"
     : "Felelés",
 
+    "taskType_5"
+    : "Kréta házi feladat",
+
 
     "crop_image_activity_header_item_intitle"
     : " ",
@@ -1509,7 +1512,8 @@
 
 
   "giveaway_title" :
-  "Nyereményjáték",
+  "\uD83C\uDF89 Nyereményjáték \uD83C\uDF89",
+
   "giveaway_description":
   "Szeretnéd hogy megírjuk a házidat? \uD83D\uDCDD\nNézz rá nyereményjátékunkra a Facebook oldalunkon, és ha szerencséd van elkészítjük neked!",
 

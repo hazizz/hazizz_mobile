@@ -21,13 +21,16 @@ import 'package:mobile/widgets/flushbars.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/pages/kreta_pages/kreta_service_holder.dart';
 import 'package:mobile/widgets/selected_session_fail_widget.dart';
+import 'package:mobile/widgets/tab_widget.dart';
 import 'main_schedules_tab_page.dart';
 
-class SchedulesPage extends StatefulWidget {
+class SchedulesPage extends TabWidget {
 
-  SchedulesPage({Key key}) : super(key: key);
+  SchedulesPage({Key key}) : super(key: key){
+    tabName = "SchedulesTab";
+  }
 
-  getTabName(BuildContext context){
+  getUIName(BuildContext context){
     return locText(context, key: "schedule").toUpperCase();
   }
 

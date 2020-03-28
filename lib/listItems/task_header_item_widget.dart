@@ -14,26 +14,17 @@ class TaskHeaderItemWidget extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-
+    /*
     final diffTask = dateTime.difference(new DateTime(dateTime.year, 1, 1, 0, 0));
     final int daysTask = diffTask.inDays;
 
     final diffNow = DateTime.now().difference(new DateTime(dateTime.year, 1, 1, 0, 0));
     final int daysNow = diffNow.inDays;
-
-
-    /*
-
-
-    int daysMonth = dateTime.month;
-    int days = dateTime.difference(DateTime.now()).inDays;
-
-    dateTime.difference(DateTime.now()).inMicroseconds
-
-    dateTime.microsecondsSinceEpoch;
     */
+    Duration d = dateTime.difference(DateTime.now().subtract(Duration(days: 1)));
+    int days = d.inDays;
 
-    int days = daysTask - daysNow;
+   // int days = daysTask - daysNow;
 
     Color backColor;
 
@@ -41,8 +32,7 @@ class TaskHeaderItemWidget extends StatelessWidget{
     if(days == 0){
       backColor = HazizzTheme.yellow;
       title = locText(context, key: "today");
-    }
-    else if(days == 1){
+    }else if(days == 1){
       title = locText(context, key: "tomorrow");
     }else if(days < 0){
       title = locText(context, key: "days_ago", args: [days.abs().toString()]);

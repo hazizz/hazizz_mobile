@@ -23,19 +23,21 @@ import 'package:mobile/services/selected_session_helper.dart';
 import 'package:mobile/widgets/ad_widget.dart';
 import 'package:mobile/widgets/flushbars.dart';
 import 'package:mobile/widgets/selected_session_fail_widget.dart';
+import 'package:mobile/widgets/tab_widget.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/pages/kreta_pages/kreta_service_holder.dart';
 
-class GradesPage extends StatefulWidget  {
+class GradesPage extends TabWidget  {
 
   GradesPage({Key key}) : super(key: key){
+    tabName = "GradesTab";
     PreferenceService.getGradeRectForm().then((bool r){
       rectForm = r;
     });
   }
 
-  getTabName(BuildContext context){
+  getUIName(BuildContext context){
     return locText(context, key: "grades").toUpperCase();
   }
 
@@ -213,7 +215,8 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
       return new ListView.separated(
           itemCount: itemCount,
           separatorBuilder: (context, index) {
-            return showAd(context, show: (itemCount<3 && index == itemCount-1) || (index!=0 && index%3==0), showHeader: true);
+            return Container();
+            return showAd(context, show:  (itemCount<3 && index == itemCount-1) || (index!=0 && index%3==0), showHeader: true);
           },
           itemBuilder: (BuildContext context, int index) {
 
@@ -250,7 +253,7 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
                               //runAlignment: WrapAlignment.end,
                               children: widgetList
                           ),
-                          showAd(context)
+                          showAd(context, show: (itemCount<4 && index == itemCount-1) || (index!=0 && index%4==0))
                         ],
                       );
                     }
@@ -258,7 +261,7 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
                     for(int i = grades[key].length-1; i >= 0; i--){
                       widgetList.add(GradeItemWidget.bySubject(pojoGrade: grades[key][i],));
                     }
-                    widgetList.add(showAd(context, showHeader: true));
+                    widgetList.add(showAd(context, show: (itemCount<3 && index == itemCount-1) || (index!=0 && index%3==0), showHeader: true));
                     return Column(
                         children: widgetList
                     );
@@ -297,27 +300,39 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
           widgetList.add(GradeItemWidget.byDate(pojoGrade: gs, rectForm: true,));
         }
 
-        return Column(
-          children: <Widget>[
-            Center(child: Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().tasksBloc.lastUpdated))),
-            Wrap(
-                direction: Axis.horizontal,
-                //runAlignment: WrapAlignment.end,
-                spacing: 0,
-                runSpacing: 0,
-                children: widgetList
-            )
-          ],
+        return SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Center(child: Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().tasksBloc.lastUpdated))),
+              Wrap(
+                  direction: Axis.horizontal,
+                  runAlignment: WrapAlignment.start,
+                  alignment: WrapAlignment.start,
+                  crossAxisAlignment: WrapCrossAlignment.start,
+                  spacing: 0,
+                  runSpacing: 0,
+                  children: widgetList
+              ),
+              showAd(context, show: widgetList.isNotEmpty)
+            ],
+          ),
         );
       }
-
+      int itemCount = gradesByDate.length+1;
       return new ListView.builder(
-          itemCount: gradesByDate.length+1,
+          itemCount: itemCount,
           itemBuilder: (BuildContext context, int index) {
             if(index == 0){
               return Center(child: Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().tasksBloc.lastUpdated)));
             }
-            return GradeItemWidget.byDate(pojoGrade: gradesByDate[index-1],);
+            Widget gradeItemWidget = GradeItemWidget.byDate(pojoGrade: gradesByDate[index-1],);
+
+            return Column(
+              children: <Widget>[
+                gradeItemWidget,
+                showAd(context, show: (itemCount<15 && index == itemCount-1) || (index!=0 && index%15==0), showHeader: true)
+              ],
+            );
           }
       );
     }

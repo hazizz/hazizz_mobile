@@ -1010,7 +1010,7 @@ class GetTasksFromMe extends HazizzRequest {
                   int q_subjectId, q_wholeGroup = false
   }) : super(rh) {
     httpMethod = HttpMethod.GET;
-    PATH = "users/${InfoCache.meInfo.id}/tasks";
+    PATH = "users/${CacheManager.meInfo.id}/tasks";
     authTokenHeader = true;
 
     if(q_showThera != null)    query["showThera"] = q_showThera;

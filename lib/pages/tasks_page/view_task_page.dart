@@ -154,7 +154,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
     Future<void> _init(PojoTask pTask){
       pojoTask = pTask;
 
-      InfoCache.getMyId().then((int result){
+      CacheManager.getMyId().then((int result){
         if(pojoTask.creator.id == result){
           setState(() {
             canModify = true;

@@ -1,7 +1,7 @@
 name: mobile
 description: Hazizz Mobile application.
 
-version: 1.4.10+52
+version: 1.4.11+54
 
 environment:
   sdk: ">=2.3.0 <3.0.0"
@@ -110,7 +110,7 @@ flutter:
   uses-material-design: true
   assets:
    # - assets/
-   # - assets/images/
+    - assets/images/
     - assets/icons/discord.svg
     - assets/icons/facebook.svg
     - assets/icons/github.svg
@@ -125,6 +125,8 @@ flutter:
   #  - assets/images/notebook_background1.png
     - assets/images/facebook_ad_banner.png
     - assets/images/fel_elek_ad_banner.png
+    - assets/images/giveaway_ad_banner.png
+    - assets/images/hazizz_meet_ad_banner.png
     -
     - assets/langs/en.json
     - assets/langs/hu.json

@@ -126,6 +126,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
       tasks = Map();
       int i = 0;
       for(PojoTask task in t){
+
         if (i == 0 || t[i].dueDate
             .difference(t[i - 1].dueDate)
             .inDays >= 1) {
@@ -133,6 +134,9 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
           tasks[t[i].dueDate].add(task);
 
         }else{
+          if(tasks[t[i].dueDate] == null){
+            tasks[t[i].dueDate] = List();
+          }
           tasks[t[i].dueDate].add(task);
         }
         i++;
@@ -209,13 +213,15 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
           HazizzLogger.printLog("off: $tasksList");
           if(tasksList != null ){
             onLoaded(tasksList);
-
+            HazizzLogger.printLog("juhuhuuu: 1");
             lastUpdated = DateTime.now();
             if(currentTaskExpiredState == TaskExpiredState.UNEXPIRED
             && currentTaskCompleteState == TaskCompleteState.UNCOMPLETED
             && groupId == null) {
               saveTasksCache(tasksList);
             }
+
+            HazizzLogger.printLog("juhuhuuu: 2");
 
             HazizzLogger.printLog("log: opsie: 0");
 

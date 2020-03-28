@@ -58,7 +58,7 @@ class TokenManager {
     if(hazizzResponse.isSuccessful){
       PojoTokens tokens = hazizzResponse.convertedData;
 
-      InfoCache.setMyUsername(username);
+      CacheManager.setMyUsername(username);
       setTokens(tokens.access_token, tokens.refresh_token);
 
     }else if(hazizzResponse.isError){
@@ -69,7 +69,7 @@ class TokenManager {
 
   static Future<HazizzResponse> createTokenWithRefresh() async{
     HazizzLogger.printLog("In createTokenWithRefresh function");
-    HazizzResponse hazizzResponse = await RequestSender().getAuthResponse(new CreateToken.withRefresh(q_username: await InfoCache.getMyUsername(), q_refreshToken: await getRefreshToken()));
+    HazizzResponse hazizzResponse = await RequestSender().getAuthResponse(new CreateToken.withRefresh(q_username: await CacheManager.getMyUsername(), q_refreshToken: await getRefreshToken()));
     if(hazizzResponse.isSuccessful){
       HazizzLogger.printLog("In createTokenWithRefresh function: token response successful");
       PojoTokens tokens = hazizzResponse.convertedData;

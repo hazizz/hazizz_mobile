@@ -36,7 +36,7 @@ class _CommentItemWidget extends State<CommentItemWidget>{
   @override
   void initState() {
     // TODO: implement initState
-    InfoCache.getMyId().then((int result){
+    CacheManager.getMyId().then((int result){
       HazizzLogger.printLog("user is the author: $result");
 
       if(widget.comment.creator.id == result){

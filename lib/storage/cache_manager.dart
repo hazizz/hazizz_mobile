@@ -1,15 +1,9 @@
-
 import 'dart:convert';
-
-import 'package:mobile/communication/hazizz_response.dart';
-import 'package:mobile/communication/pojos/PojoMeInfo.dart';
 import 'package:mobile/communication/pojos/PojoMeInfoPrivate.dart';
-import 'package:mobile/communication/request_sender.dart';
-import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class InfoCache{
+class CacheManager{
 
   static const String _keyMe = "key_me";
   static const String _username = "username";
@@ -17,6 +11,8 @@ class InfoCache{
   static const String _id = "id";
   static const String _profilePicture = "profilePicture";
   static const String _userData = "userData";
+
+  static const String _seen_giveaway = "seen_giveaway";
 
   static PojoMeInfoPrivate meInfo;
 
@@ -99,7 +95,15 @@ class InfoCache{
     meInfo = me;
   }
 
+  static Future<bool> seenGiveaway() async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_keyMe + _seen_giveaway) == null ? false : true;
+  }
 
+  static Future<bool> setSeenGiveaway() async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool(_keyMe + _seen_giveaway, true);
+  }
 
 
 }

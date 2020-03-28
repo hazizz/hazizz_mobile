@@ -21,7 +21,7 @@ class HazizzTheme{
   blue = Color.fromRGBO(54, 177, 191, 1),
   purple = Color.fromRGBO(126, 1, 255, 1),
 
-
+  kreta_blue = Color.fromRGBO(47, 168, 202, 1),
 
 
   grade5Color = Colors.green,
@@ -36,7 +36,8 @@ class HazizzTheme{
   homeworkColor = Colors.green,
   testColor = red,
   oralTestColor = purple,
-  assignmentColor = yellow
+  assignmentColor = yellow,
+  kreta_homeworkColor = kreta_blue
   ;
 
   static final Color formColor = Colors.grey.withAlpha(120);

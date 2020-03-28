@@ -27,6 +27,7 @@ import 'package:mobile/dialogs/user_dialog.dart';
 import 'package:mobile/enums/grade_type_enum.dart';
 import 'package:mobile/enums/group_permissions_enum.dart';
 import 'package:mobile/services/facebook_opener.dart';
+import 'package:mobile/storage/cache_manager.dart';
 import 'package:mobile/widgets/hero_dialog.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
@@ -1593,24 +1594,31 @@ Future<bool> showMarkdownInfo(context,) async {
 }
 
 Future<bool> showGiveawayDialog(context) async {
-  const String fb_link = "https://www.facebook.com/hazizzvelunk";
+
+  void quit(){
+    CacheManager.setSeenGiveaway();
+    Navigator.pop(context);
+  }
 
   HazizzDialog d = HazizzDialog(
-    width: 350, height: 260,
+    width: 350, height: 270,
     header: Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Container(
-          width: 280,
-          child: AutoSizeText(locText(context, key: "giveaway_title",).toUpperCase(),
-            style: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.w800,
+          width: 270,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: AutoSizeText(locText(context, key: "giveaway_title",).toUpperCase(),
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.w800,
+              ),
+              maxFontSize: 30,
+              minFontSize: 20,
+              maxLines: 1,
+              textAlign: TextAlign.center,
             ),
-
-            maxFontSize: 28,
-            minFontSize: 20,
-            maxLines: 1,
           ),
         )
       ],
@@ -1623,16 +1631,20 @@ Future<bool> showGiveawayDialog(context) async {
             style: TextStyle(fontSize: 18),
             maxFontSize: 18,
             minFontSize: 16,
-            maxLines: 6,
+            maxLines: 7,
+            textAlign: TextAlign.center,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               RaisedButton(
-                child: Text(locText(context, key: "view").toUpperCase()),
+                child: Text("Megnézem".toUpperCase()),
                 onPressed: () async {
-                  await openFacebookPage();
-                  Navigator.pop(context);
+                  String url = "https://www.facebook.com/notes/h%C3%A1zizz/h%C3%A1zizz-nyerem%C3%A9nyj%C3%A1t%C3%A9k/489579875054324/";
+                  if (await canLaunch(url)) {
+                    await launch(url);
+                  }
+                  quit();
                  /* if (await canLaunch(fb_link)) {
                     await launch(fb_link);
                   }
@@ -1648,9 +1660,10 @@ Future<bool> showGiveawayDialog(context) async {
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
         FlatButton(
-          child: Text(locText(context, key: "close").toUpperCase()),
+
+          child: Text("bezárás".toUpperCase(), style: TextStyle(color: Colors.grey, fontSize: 12),),
           onPressed: (){
-            Navigator.pop(context);
+            quit();
           },
         ),
       ],
@@ -1658,62 +1671,13 @@ Future<bool> showGiveawayDialog(context) async {
 
 
   );
-
-  Widget dialogWidget = Container(
-    width: 300, height: 260,
-    child: Card(
-      child: Column(
-        children: <Widget>[
-
-          AutoSizeText(locText(context, key: "giveaway_description",),
-            style: TextStyle(fontSize: 20),
-            maxFontSize: 20,
-            minFontSize: 16,
-            maxLines: 2,
-          ),
-
-         // Spacer(),
-          Row(
-            children: <Widget>[
-              RaisedButton(
-                onPressed: (){
-                  Navigator.pop(context);
-                },
-              )
-            ],
-          )
-        ],
-      ),
-    ),
-  );
-
-
   return await showDialog(
       context: context,
-      barrierDismissible: true,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return d;
       }
   );
-
-
-
-
-  return showGeneralDialog(
-    context: context,
-    barrierDismissible: true,
-    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-    barrierColor: Colors.black45,
-    transitionDuration: const Duration(milliseconds: 200),
-    pageBuilder: (BuildContext buildContext,
-        Animation animation,
-        Animation secondaryAnimation) {
-      return dialogWidget;
-    }
-  );
-
-
-
 }
 
 

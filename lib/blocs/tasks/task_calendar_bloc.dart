@@ -99,6 +99,9 @@ class TasksCalendarBloc extends Bloc<TasksCalendarEvent, TasksCalendarState> {
           tasks[t[i].dueDate].add(task);
 
         }else{
+          if(tasks[t[i].dueDate] == null){
+            tasks[t[i].dueDate] = List();
+          }
           tasks[t[i].dueDate].add(task);
         }
         i++;

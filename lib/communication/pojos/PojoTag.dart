@@ -29,6 +29,8 @@ class PojoTag implements Pojo{
       return HazizzTheme.testColor;
     } else if(name == defaultTags[3].name){
       return HazizzTheme.oralTestColor;
+    } else if(name == defaultTags[4].name){
+      return HazizzTheme.kreta_homeworkColor;
     }
     return HazizzTheme.blue;
   }
@@ -42,6 +44,8 @@ class PojoTag implements Pojo{
       return locText(context, key: "taskType_3");
     } else if(name == defaultTags[3].name){
       return locText(context, key: "taskType_4");
+    }else if(name == defaultTags[4].name){
+      return locText(context, key: "taskType_5");
     }
     return name;
   }
@@ -55,6 +59,8 @@ class PojoTag implements Pojo{
       return await locTextContextless(key: "taskType_3");
     } else if(name == defaultTags[3].name){
       return await locTextContextless( key: "taskType_4");
+    }else if(name == defaultTags[4].name){
+      return await locTextContextless( key: "taskType_5");
     }
     return name;
   }
@@ -64,6 +70,7 @@ class PojoTag implements Pojo{
     PojoTag(name: "_ASSIGNMENT"),
     PojoTag(name: "_TEST"),
     PojoTag(name: "_ORAL_TEST"),
+    PojoTag(name: "_KRETA_HOMEWORK"),
   ];
 
   factory PojoTag.fromJson(Map<String, dynamic> json) =>

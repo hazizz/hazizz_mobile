@@ -16,18 +16,21 @@ import 'package:mobile/enums/task_complete_state_enum.dart';
 import 'package:mobile/enums/task_expired_state_enum.dart';
 import 'package:mobile/listItems/task_header_item_widget.dart';
 import 'package:mobile/listItems/task_item_widget.dart';
+import 'package:mobile/mixins/tab_mixin.dart';
 import 'package:mobile/widgets/ad_widget.dart';
 import 'package:mobile/widgets/scroll_space_widget.dart';
+import 'package:mobile/widgets/tab_widget.dart';
 
 import 'package:sticky_headers/sticky_headers.dart';
 
 import 'package:mobile/custom/hazizz_localizations.dart';
 
-class TasksPage extends StatefulWidget {
+class TasksPage extends TabWidget {
+  TasksPage({Key key}) : super(key: key){
+    tabName = "TasksTab";
+  }
 
-  TasksPage({Key key}) : super(key: key);
-
-  String getTabName(BuildContext context){
+  getUIName(BuildContext context){
     return locText(context, key: "tasks").toUpperCase();
   }
 
@@ -37,9 +40,9 @@ class TasksPage extends StatefulWidget {
 
 
 
-class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , AutomaticKeepAliveClientMixin {
-
-  final GlobalKey<AnimatedListState> _listKey = GlobalKey();
+class _TasksPage extends State<TasksPage>
+    with SingleTickerProviderStateMixin,
+        AutomaticKeepAliveClientMixin{
 
   TaskCompleteState currentCompletedTaskState;
 
@@ -183,127 +186,45 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
 
 
                     Widget s = StickyHeader(
-
-                      //  key: Key(DateTime.now().microsecondsSinceEpoch.toString()),
-                      //key: Key(Random().nextInt(2000000).toString()),
                       header: TaskHeaderItemWidget(key: Key(Random().nextInt(2000000).toString()), dateTime: key),
                       content: Builder(
-                          builder: (context) {
-                            return Column(
-                              children: <Widget>[
-                                AnimatedList(
-                                  key: listKeyList[index-1],
-                                  //   key: Key(Random().nextInt(2000000).toString()),
-                                  shrinkWrap: true,
-                                  initialItemCount: map[key].length,
+                        builder: (context) {
+                          return Column(
+                            children: <Widget>[
+                              AnimatedList(
+                                key: listKeyList[index-1],
+                                //   key: Key(Random().nextInt(2000000).toString()),
+                                shrinkWrap: true,
+                                initialItemCount: map[key].length,
 
-                                  physics: NeverScrollableScrollPhysics(),
-                                  itemBuilder: (context, index2, animation) => buildItem(context, index2, animation, map[key][index2], (){
+                                physics: NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, index2, animation) => buildItem(context, index2, animation, map[key][index2], (){
 
-                                    HazizzLogger.printLog("bro: me: ${currentCompletedTaskState}");
+                                  HazizzLogger.printLog("bro: me: ${currentCompletedTaskState}");
 
-                                    if(currentCompletedTaskState != TaskCompleteState.BOTH){
-                                      HazizzLogger.printLog("bro: im trigered");
+                                  if(currentCompletedTaskState != TaskCompleteState.BOTH){
+                                    HazizzLogger.printLog("bro: im trigered");
 
-                                      // var removedItem = map[key].removeAt(index2);
-                                      var removedItem = map[key][index2];
+                                    var removedItem = map[key][index2];
 
-                                      listKeyList[index-1].currentState.removeItem(index2, (context2, animation2){
-                                        animation2.addStatusListener((AnimationStatus animationStatus){
-                                          HazizzLogger.printLog("oof22: anim: ${animationStatus.toString()}");
-                                          if(animationStatus == AnimationStatus.dismissed){
-                                            HazizzLogger.printLog("oof: ${map[key]}");
-                                            MainTabBlocs().tasksBloc.dispatch(TasksRemoveItemEvent( mapKey: key, index: index2));
-                                          }
-                                        });
-                                        return buildItem(context2, index2, animation2, removedItem, (){});
-                                      },
-                                          duration:  Duration(milliseconds: 500)
-                                      );
-                                    }
-                                  }),
-                                ),
-                              ],
-                            );
-                          }
-                      ),
-                    );
-
-                    if(index == itemCount-1 /*|| true*/){
-                      return addScrollSpace(s);
-                    }
-
-                    return s;
-                  }
-              );
-              return ListView.separated(
-              //  physics:  BouncingScrollPhysics(),
-                  cacheExtent: 100000000,
-                  addAutomaticKeepAlives: true,
-                  itemCount: itemCount,
-                  separatorBuilder: (context, index ){
-                    return showAd(context, show: (itemCount<3 && index == itemCount-1) || (index!=0 && index%3==0), showHeader: true);
-                  },
-                  itemBuilder: (BuildContext context, int index) {
-
-                    if(index == 0){
-                      return Center(child: Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().tasksBloc.lastUpdated)));
-                    }
-
-                    List<GlobalKey<AnimatedListState>> listKeyList = new List(map.keys.length);
-                    for(int i = 0; i < listKeyList.length; i++){
-                      listKeyList[i] =  GlobalKey();
-                    }
-
-
-                    DateTime key = map.keys.elementAt(index-1);
-                    HazizzLogger.printLog("new key: ${key.toString()}");
-
-
-                    Widget s = StickyHeader(
-
-                      //  key: Key(DateTime.now().microsecondsSinceEpoch.toString()),
-                      //key: Key(Random().nextInt(2000000).toString()),
-                      header: TaskHeaderItemWidget(key: Key(Random().nextInt(2000000).toString()), dateTime: key),
-                      content: Builder(
-                          builder: (context) {
-                            return Column(
-                              children: <Widget>[
-                                AnimatedList(
-                                  key: listKeyList[index-1],
-                                  //   key: Key(Random().nextInt(2000000).toString()),
-                                  shrinkWrap: true,
-                                  initialItemCount: map[key].length,
-
-                                  physics: NeverScrollableScrollPhysics(),
-                                  itemBuilder: (context, index2, animation) => buildItem(context, index2, animation, map[key][index2], (){
-
-                                    HazizzLogger.printLog("bro: me: ${currentCompletedTaskState}");
-
-                                    if(currentCompletedTaskState != TaskCompleteState.BOTH){
-                                      HazizzLogger.printLog("bro: im trigered");
-
-                                      // var removedItem = map[key].removeAt(index2);
-                                      var removedItem = map[key][index2];
-
-                                      listKeyList[index-1].currentState.removeItem(index2, (context2, animation2){
-                                        animation2.addStatusListener((AnimationStatus animationStatus){
-                                          HazizzLogger.printLog("oof22: anim: ${animationStatus.toString()}");
-                                          if(animationStatus == AnimationStatus.dismissed){
-                                            HazizzLogger.printLog("oof: ${map[key]}");
-                                            MainTabBlocs().tasksBloc.dispatch(TasksRemoveItemEvent( mapKey: key, index: index2));
-                                          }
-                                        });
-                                        return buildItem(context2, index2, animation2, removedItem, (){});
-                                      },
-                                          duration:  Duration(milliseconds: 500)
-                                      );
-                                    }
-                                  }),
-                                ),
+                                    listKeyList[index-1].currentState.removeItem(index2, (context2, animation2){
+                                      animation2.addStatusListener((AnimationStatus animationStatus){
+                                        HazizzLogger.printLog("oof22: anim: ${animationStatus.toString()}");
+                                        if(animationStatus == AnimationStatus.dismissed){
+                                          HazizzLogger.printLog("oof: ${map[key]}");
+                                          MainTabBlocs().tasksBloc.dispatch(TasksRemoveItemEvent( mapKey: key, index: index2));
+                                        }
+                                      });
+                                      return buildItem(context2, index2, animation2, removedItem, (){});
+                                    },
+                                        duration:  Duration(milliseconds: 500)
+                                    );
+                                  }
+                                }),
+                              ),
                             ],
-                            );
-                          }
+                          );
+                        }
                       ),
                     );
 
@@ -317,7 +238,6 @@ class _TasksPage extends State<TasksPage> with SingleTickerProviderStateMixin , 
             }
           }),
         ),
-
 
       ],
     );

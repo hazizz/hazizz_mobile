@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'dart:math';
 import 'package:animator/animator.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -21,6 +22,8 @@ import 'package:mobile/custom/session_status_converter.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/managers/app_state_manager.dart';
 import 'package:mobile/managers/app_state_restorer.dart';
+import 'package:mobile/managers/preference_services.dart';
+import 'package:mobile/services/firebase_analytics.dart';
 import 'package:mobile/storage/cache_manager.dart';
 import 'package:mobile/managers/deep_link_receiver.dart';
 import 'package:mobile/managers/version_handler.dart';
@@ -30,6 +33,7 @@ import 'package:mobile/pages/main_pages/main_tasks_page.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'package:mobile/widgets/flushbars.dart';
+import 'package:mobile/widgets/tab_widget.dart';
 import 'main_schedules_page.dart';
 
 class MainTabHosterPage extends StatefulWidget {
@@ -45,15 +49,15 @@ class MainTabHosterPage extends StatefulWidget {
 
 }
 
-class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderStateMixin{
+class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderStateMixin, RouteAware{
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   TabController _tabController;
 
-  TasksPage tasksTabPage;
-  SchedulesPage schedulesTabPage;
-  GradesPage gradesTabPage;
+  TabWidget tasksTabPage;
+  TabWidget schedulesTabPage;
+  TabWidget gradesTabPage;
 
   String displayName = "name";
 
@@ -67,7 +71,25 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
 
   String selectedKretaAccountName = null;
 
+  static String currentTabName;
+
+  String mapTabIndexToTabName(int index){
+    switch(index){
+      case 0:
+        currentTabName = tasksTabPage.tabName;
+        break;
+      case 1:
+        currentTabName = schedulesTabPage.tabName;
+        break;
+      case 2:
+        currentTabName = gradesTabPage.tabName;
+        break;
+    }
+  }
+
   void _handleTabSelection() {
+    mapTabIndexToTabName(_tabController.index);
+    _sendCurrentTabToAnalytics();
     if(_tabController.index == 2){
       NewGradesBloc().dispatch(DoesntHaveNewGradesEvent());
     }
@@ -82,12 +104,20 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
 
   @override
   void initState() {
+
+    if(currentTabName == null){
+      PreferenceService.getStartPageIndex().then(
+      (int pageIndex){
+        currentTabName = mapTabIndexToTabName(pageIndex);
+      });
+    }
+
     selectedKretaAccount = SelectedSessionBloc().selectedSession;
     selectedKretaAccountName = selectedKretaAccount?.username;
 
     DeepLink.initUniLinks(context);
 
-    InfoCache.getMyDisplayName().then(
+    CacheManager.getMyDisplayName().then(
             (value){
           HazizzLogger.printLog("getMyDisplayName: $value");
 
@@ -108,11 +138,14 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
     
     DateTime now = DateTime.now();
     
-    if(now.isBefore(DateTime(2020, 04, 17, 23, 59))){
-      WidgetsBinding.instance.addPostFrameCallback((_) =>
-          showGiveawayDialog(context)
-      );
-    }
+    CacheManager.seenGiveaway().then((bool haveSeen){
+      if(!haveSeen && now.isBefore(DateTime(2020, 04, 17, 23, 59))){
+        WidgetsBinding.instance.addPostFrameCallback((_) =>
+            showGiveawayDialog(context)
+        );
+      }
+    });
+
     tasksTabPage = TasksPage();
     schedulesTabPage = SchedulesPage();
     gradesTabPage = GradesPage();
@@ -179,9 +212,16 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
     super.initState();
   }
 
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    FirebaseAnalyticsManager.observer.subscribe(this, ModalRoute.of(context));
+  }
+
   @override
   void dispose() {
-
+    FirebaseAnalyticsManager.observer.unsubscribe(this);
     DeepLink.dispose();
     _tabController.dispose();
     super.dispose();
@@ -202,6 +242,22 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
       return Future.value(false);
     }
     return Future.value(true);
+  }
+
+  @override
+  void didPush() {
+    _sendCurrentTabToAnalytics();
+  }
+
+  @override
+  void didPopNext() {
+    _sendCurrentTabToAnalytics();
+  }
+
+  void _sendCurrentTabToAnalytics() {
+    FirebaseAnalyticsManager.observer.analytics.setCurrentScreen(
+      screenName: currentTabName ?? "tab name not set",
+    );
   }
 
 
@@ -232,9 +288,9 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                 bottom: TabBar(
                     controller: _tabController,
                     tabs: [
-                      Tab(text: tasksTabPage.getTabName(context), icon: Icon(FontAwesomeIcons.bookOpen),),
-                      Tab(text: schedulesTabPage.getTabName(context), icon: Icon(FontAwesomeIcons.calendarAlt)),
-                      Tab(text: gradesTabPage.getTabName(context), icon:
+                      Tab(text: tasksTabPage.getUIName(context), icon: Icon(FontAwesomeIcons.bookOpen),),
+                      Tab(text: schedulesTabPage.getUIName(context), icon: Icon(FontAwesomeIcons.calendarAlt)),
+                      Tab(text: gradesTabPage.getUIName(context), icon:
                       Stack(
                         children: <Widget>[
                           Center(child: Icon(FontAwesomeIcons.listOl)),

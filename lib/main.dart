@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:easy_localization/easy_localization_provider.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:mobile/blocs/auth/social_login_bloc.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/navigation/route_generator.dart';
+import 'package:mobile/services/firebase_analytics.dart';
 import 'package:mobile/services/hazizz_message_handler.dart';
 import 'package:native_state/native_state.dart';
 import 'package:shared_pref_navigation_saver/shared_pref_navigation_saver.dart';
@@ -203,7 +205,12 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
           initialRoute: startPage ??  NavigationSaver?.restoreRouteName, //?? startPage,
         //  onGenerateRoute: RouteGenerator.generateRoute,
 
-          navigatorObservers: [widget._navigationSaver, SavedStateRouteObserver(savedState: savedState)],
+          navigatorObservers: [
+            widget._navigationSaver,
+            SavedStateRouteObserver(savedState: savedState),
+          //  FirebaseAnalyticsObserver(analytics: FirebaseAnalyticsManager.analytics),
+            FirebaseAnalyticsManager.observer
+          ],
           onGenerateRoute: (RouteSettings routeSettings) => widget._navigationSaver.onGenerateRoute(
             routeSettings, (RouteSettings settings, {NextPageInfo nextPageInfo,}) => RouteGenerator.generateRoute(settings),
           ),

@@ -59,7 +59,7 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage>  {
 
   @override
   void initState() {
-    InfoCache.getMyUserData().then((PojoMeInfoPrivate me){
+    CacheManager.getMyUserData().then((PojoMeInfoPrivate me){
       RequestSender().getResponse(GetAlertSettings(q_userId: me.id)).then((HazizzResponse response){
         if(response.isSuccessful){
           PojoAlertSettings alertSetting = response.convertedData;
@@ -127,7 +127,7 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage>  {
                             receive = value;
                           });
 
-                          HazizzResponse response = await getResponse(AddFirebaseToken(userId: (await InfoCache.getMyUserData()).id, firebaseToken: await HazizzMessageHandler().token));
+                          HazizzResponse response = await getResponse(AddFirebaseToken(userId: (await CacheManager.getMyUserData()).id, firebaseToken: await HazizzMessageHandler().token));
                         //  HazizzNotification.scheduleNotificationAlarmManager();
                         }else{
                           setState(() {
@@ -135,7 +135,7 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage>  {
                             receive = value;
                           });
 
-                          HazizzResponse response = await getResponse(RemoveFirebaseTokens(userId: (await InfoCache.getMyUserData()).id, firebaseToken: await HazizzMessageHandler().token));
+                          HazizzResponse response = await getResponse(RemoveFirebaseTokens(userId: (await CacheManager.getMyUserData()).id, firebaseToken: await HazizzMessageHandler().token));
                         }
                       }
                     )
@@ -286,7 +286,7 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage>  {
                         timeZoneOffset += "0" + timeZoneOffsetHour.toString() + "00";
 
                       }
-                      HazizzResponse response = await RequestSender().getResponse(UpdateAlertSettings(q_userId: (await InfoCache.getMyUserData()).id, b_alarmTime: "${add0(newTime.hour)}:${add0(newTime.minute)}:00+$timeZoneOffset", b_mondayEnabled: mondayEnabled,
+                      HazizzResponse response = await RequestSender().getResponse(UpdateAlertSettings(q_userId: (await CacheManager.getMyUserData()).id, b_alarmTime: "${add0(newTime.hour)}:${add0(newTime.minute)}:00+$timeZoneOffset", b_mondayEnabled: mondayEnabled,
                         b_tuesdayEnabled: tuesdayEnabled, b_wednesdayEnabled: wednesdayEnabled, b_thursdayEnabled: thursdayEnabled,
                         b_fridayEnabled: fridayEnabled, b_saturdayEnabled: saturdayEnabled, b_sundayEnabled: sundayEnabled
                       ));
