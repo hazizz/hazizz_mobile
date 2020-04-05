@@ -54,17 +54,21 @@ class _AboutPage extends State<AboutPage> {
     kretaSuccessRate = ServerChecker.kretaSuccessRate;
   }
 
-  @override
-  void initState() {
+  Future<void> fetch() async {
     _map();
-    ServerChecker.checkAll(notifyFlush: false).then((val){
+    await ServerChecker.checkAll(notifyFlush: false).then((val){
       if(mounted){
         setState(() {
           _map();
         });
       }
     });
+  }
 
+  @override
+  void initState() {
+
+    fetch();
     super.initState();
   }
 
@@ -76,7 +80,6 @@ class _AboutPage extends State<AboutPage> {
     return Text(locText(context, key: "offline"), style: TextStyle(color: Colors.red, fontSize: 17),);
   }
 
-
   @override
   Widget build(BuildContext context) {
    return Hero(
@@ -86,18 +89,19 @@ class _AboutPage extends State<AboutPage> {
             leading: HazizzBackButton(),
             title: Text(widget.getTitle(context)),
           ),
-          body: Container(
-            child: Column(
+          body: RefreshIndicator(
+            onRefresh: () => fetch(),
+            child: ListView(
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.only(top: 18.0, bottom: 8, left: 15, right: 15),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text("${locText(context, key: "version")}:", style: TextStyle(fontSize: 17),),
-                      Text(AboutPage.version, style: TextStyle(fontSize: 17))
-                    ],
-                  )
+                    padding: const EdgeInsets.only(top: 18.0, bottom: 8, left: 15, right: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text("${locText(context, key: "version")}:", style: TextStyle(fontSize: 17),),
+                        Text(AboutPage.version, style: TextStyle(fontSize: 17))
+                      ],
+                    )
                 ),
                 Divider(),
 
@@ -118,7 +122,6 @@ class _AboutPage extends State<AboutPage> {
                       ],
                     )
                 ),
-
                 Divider(),
 
                 Padding(
@@ -139,6 +142,7 @@ class _AboutPage extends State<AboutPage> {
                     )
                 ),
                 Divider(),
+
                 Padding(
                     padding: const EdgeInsets.only(top: 8.0, bottom: 8, left: 15, right: 15),
                     child: Row(
@@ -157,48 +161,49 @@ class _AboutPage extends State<AboutPage> {
                     )
                 ),
                 Divider(),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0, bottom: 8, left: 15, right: 15),
-                  child: Column(
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text("${locText(context, key: "thera_server")}:", style: TextStyle(fontSize: 17),),
-                          Builder(
-                            builder: (context){
-                              if(theraServerIsOnline){
-                                return isOnlineWidget();
-                              }
-                              return isOfflineWidget();
-                            },
-                          )
-                        ],
-                      ),
-                      if(kretaRequestsInLastHour != null || kretaSuccessRate != null) SizedBox(height: 8,),
-                      kretaRequestsInLastHour != null ? Padding(
-                        padding: const EdgeInsets.only(left: 10, right: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
-                          children: <Widget>[
-                            Text("${locText(context, key: "kreta_requests_in_last_hour")}: ", style: TextStyle(fontSize: 17),),
-                            Text(kretaRequestsInLastHour.toString(), style: TextStyle(fontSize: 17))
-                          ],
-                        ),
-                      ) : Container(),
-                      kretaSuccessRate != null ?Padding(
-                        padding: const EdgeInsets.only(left: 10, right: 10),
-                        child: Row(
+                Padding(
+                    padding: const EdgeInsets.only(top: 8.0, bottom: 8, left: 15, right: 15),
+                    child: Column(
+                      children: <Widget>[
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Text("${locText(context, key: "kreta_success_rate")}: ", style: TextStyle(fontSize: 17),),
-                            Text("${(kretaSuccessRate * 100).toStringAsFixed(2)}%" , style: TextStyle(fontSize: 17))
+                            Text("${locText(context, key: "thera_server")}:", style: TextStyle(fontSize: 17),),
+                            Builder(
+                              builder: (context){
+                                if(theraServerIsOnline){
+                                  return isOnlineWidget();
+                                }
+                                return isOfflineWidget();
+                              },
+                            )
                           ],
                         ),
-                      ) : Container()
-                    ],
-                  )
+                        if(kretaRequestsInLastHour != null || kretaSuccessRate != null) SizedBox(height: 8,),
+                        kretaRequestsInLastHour != null ? Padding(
+                          padding: const EdgeInsets.only(left: 10, right: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                            children: <Widget>[
+                              Text("${locText(context, key: "kreta_requests_in_last_hour")}: ", style: TextStyle(fontSize: 15),),
+                              Text(kretaRequestsInLastHour.toString(), style: TextStyle(fontSize: 15))
+                            ],
+                          ),
+                        ) : Container(),
+                        kretaSuccessRate != null ?Padding(
+                          padding: const EdgeInsets.only(left: 10, right: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text("${locText(context, key: "kreta_success_rate")}: ", style: TextStyle(fontSize: 15),),
+                              Text("${(kretaSuccessRate * 100).round()}%" , style: TextStyle(fontSize: 15))
+                            ],
+                          ),
+                        ) : Container()
+                      ],
+                    )
                 ),
                 Divider(),
 
@@ -212,8 +217,7 @@ class _AboutPage extends State<AboutPage> {
                       ],
                     )
                 ),
-
-
+                Divider(),
                 Padding(
                   padding: const EdgeInsets.only(top: 24.0),
                   child: Row(
@@ -288,8 +292,8 @@ class _AboutPage extends State<AboutPage> {
                     ],
                   ),
                 )
-              ]
-            ),
+              ],
+            )
           )
       ),
     );

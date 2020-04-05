@@ -470,7 +470,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                         child: ListTile(
                           leading: Icon(FontAwesomeIcons.users),
 
-                          title: Text(locText(context, key: "my_groups")),
+                          title: Text("my_groups".locText(context)),
                           onTap: () {
                             //Navigator.pop(context);
                             // Navigator.push(context,MaterialPageRoute(builder: (context) => GroupTabHosterPage(groupId: 2)));

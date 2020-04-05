@@ -78,11 +78,13 @@ class AppState{
     HazizzLogger.printLog("logInProcedure: 4");
 
 
-    hazizzResponse = await RequestSender().getResponse(GetMyProfilePicture.full());
-    if(hazizzResponse.isSuccessful){
-      String base64Image = hazizzResponse.convertedData;
-      CacheManager.setMyProfilePicture(base64Image);
-    }
+    RequestSender().getResponse(GetMyProfilePicture.full()).then((HazizzResponse hazizzResponse){
+      if(hazizzResponse.isSuccessful){
+        String base64Image = hazizzResponse.convertedData;
+        CacheManager.setMyProfilePicture(base64Image);
+      }
+    });
+
 
     logInProcedureDone = true;
   }

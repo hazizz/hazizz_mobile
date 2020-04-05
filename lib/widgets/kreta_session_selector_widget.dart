@@ -8,8 +8,9 @@ import 'package:mobile/blocs/kreta/sessions_bloc.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
-import 'package:mobile/listItems/session_item_widget.dart';
 import 'package:mobile/widgets/scroll_space_widget.dart';
+
+import 'listItems/session_item_widget.dart';
 
 class SessionSelectorWidget extends StatefulWidget {
 

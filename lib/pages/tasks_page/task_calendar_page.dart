@@ -7,14 +7,12 @@ import 'package:mobile/blocs/other/response_states.dart';
 import 'package:mobile/blocs/tasks/task_calendar_bloc.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
-import 'package:mobile/listItems/task_item_widget.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
+import 'package:mobile/widgets/listItems/task_item_widget.dart';
 
 import 'package:table_calendar/table_calendar.dart';
 
 import 'package:mobile/custom/hazizz_localizations.dart';
-import 'package:mobile/theme/hazizz_theme.dart';
-
 
 class TaskCalendarPage extends StatefulWidget {
   // This widget is the root of your application.

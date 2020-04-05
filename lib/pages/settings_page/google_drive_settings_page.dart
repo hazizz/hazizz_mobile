@@ -211,9 +211,13 @@ class _GoogleDriveSettingsPage extends State<GoogleDriveSettingsPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Padding(
+              padding: const EdgeInsets.all(4),
+              child: Text(locText(context, key: "gdrive_info")),
+            ),
+            Padding(
               padding: const EdgeInsets.only(top: 12),
               child: ListTile(
-                title: Text(locText(context, key: "gdrive_info")),
+                title: Text(locText(context, key: "gdrive_enable")),
                 trailing: Switch(
                   value: allowed,
                   onChanged: (value) async {

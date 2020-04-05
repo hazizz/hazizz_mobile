@@ -88,8 +88,10 @@ class _SocialSignInButtonWidget extends State<SocialSignInButtonWidget> {
           ? LoginBlocs().googleLoginBloc
           : LoginBlocs().facebookLoginBloc,
       listener: (context, state){
-        if(state.error != null && state.error.errorCode == ErrorCodes.NO_ASSOCIATED_EMAIL.code){
-          showNoAssociatedEmail(context);
+        if(state is SocialLoginFailedState){
+          if(state.error != null && state.error.errorCode == ErrorCodes.NO_ASSOCIATED_EMAIL.code){
+            showNoAssociatedEmail(context);
+          }
         }
       },
       child: BlocBuilder(
@@ -97,44 +99,43 @@ class _SocialSignInButtonWidget extends State<SocialSignInButtonWidget> {
             ? LoginBlocs().googleLoginBloc
             : LoginBlocs().facebookLoginBloc,
         builder: (context, state){
+          HazizzLogger.printLog("bruh you better wor2k: 0 ");
           String errorText = "";
           if(state is SocialLoginWaitingState) {
 
           }else{
-
-
-            if(state is SocialLoginFailedState){
-
-              if(state.error != null && state.error.errorCode == ErrorCodes.NO_ASSOCIATED_EMAIL.code){
-                errorText = locText(context, key: "error_signing_in_with_facebook_no_email");
-              }else{
-                errorText = widget.socialSignInMode == SocialSignInMode.google
-                    ? locText(context, key: "error_signing_in_with_google")
-                    : locText(context, key: "error_signing_in_with_facebook");
-              }
-
-
-
-            }
-            else if(state is SocialLoginHaveToAcceptConditionsState){
+            if(state is SocialLoginHaveToAcceptConditionsState){
+              HazizzLogger.printLog("bruh you better wor2k: 1 ");
               WidgetsBinding.instance.addPostFrameCallback((_) =>
                   showRegistrationDialog(context).then((accepted){
                     HazizzLogger.printLog("showRegistrationDialog has accepted: $accepted");
                     if(accepted != null && accepted){
                       widget.socialSignInMode == SocialSignInMode.google
-                      ? LoginBlocs().googleLoginBloc.dispatch(SocialLoginAcceptedConditionsEvent())
-                      : LoginBlocs().facebookLoginBloc.dispatch(SocialLoginAcceptedConditionsEvent());
+                          ? LoginBlocs().googleLoginBloc.dispatch(SocialLoginAcceptedConditionsEvent())
+                          : LoginBlocs().facebookLoginBloc.dispatch(SocialLoginAcceptedConditionsEvent());
 
                     }else{
                       widget.socialSignInMode == SocialSignInMode.google
                           ? LoginBlocs().googleLoginBloc.dispatch(SocialLoginRejectConditionsEvent())
                           : LoginBlocs().facebookLoginBloc.dispatch(SocialLoginRejectConditionsEvent());
-
                     }
                   })
               );
-
-            }else if(state is SocialLoginRejectedConditionsState){
+              HazizzLogger.printLog("bruh you better wor2k: 2 ");
+            }
+            else if(state is SocialLoginFailedState){
+              HazizzLogger.printLog("bruh you better wor2k: 3 ");
+              if(state.error != null && state.error.errorCode == ErrorCodes.NO_ASSOCIATED_EMAIL.code){
+                errorText = locText(context, key: "error_signing_in_with_facebook_no_email");
+              }else{
+                HazizzLogger.printLog("bruh you better wor2k: 4");
+                errorText = widget.socialSignInMode == SocialSignInMode.google
+                    ? locText(context, key: "error_signing_in_with_google")
+                    : locText(context, key: "error_signing_in_with_facebook");
+              }
+              HazizzLogger.printLog("bruh you better wor2k: 5");
+            }
+            else if(state is SocialLoginRejectedConditionsState){
               HazizzLogger.printLog("google signin: rejected and signing out");
 
               errorText = locText(context, key: "error_conditionsNotAccepted");

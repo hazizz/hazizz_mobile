@@ -8,6 +8,12 @@ import 'hazizz_logger.dart';
 
 const _keyLangCode = "key_langCode";
 
+extension LocTextExtension on String{
+  String locText(BuildContext context, {List<String> args}){
+    return HazizzLocalizations.of(context)?.translate(this, args: args);
+  }
+}
+
 String locText(BuildContext context, {@required String key, List<String> args}){
   return HazizzLocalizations.of(context)?.translate(key, args: args);
 }

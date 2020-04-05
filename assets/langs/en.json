@@ -760,6 +760,9 @@
   "gdrive_info"
   : "To upload images to tasks, we store the image in your Google Drive's folder.",
 
+  "gdrive_enable"
+  : "Enable storing Hazizz images on Google Drive",
+
   "gdrive_grant_permission"
   : "By pressing \"allow\", you allow us to store task images in your Google Drive",
 
@@ -931,7 +934,7 @@
     : "I accept the ",
 
     "have_to_accept_privacy"
-    : "privacy policy ",
+    : "privacy policy",
 
     "have_to_accept_privacy_tos2"
     : ", ",

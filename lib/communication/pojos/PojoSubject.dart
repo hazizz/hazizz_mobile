@@ -21,4 +21,12 @@ class  PojoSubject implements Pojo {
 
   Map<String, dynamic> toJson() => _$PojoSubjectToJson(this);
 
+  bool operator ==(dynamic other) {
+    if(other is PojoSubject){
+      return this.id == other.id;
+    }
+    return false;
+
+  }
+
 }

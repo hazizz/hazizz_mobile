@@ -5,8 +5,8 @@ import 'package:mobile/blocs/group/group_bloc.dart';
 import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/response_states.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
-import 'package:mobile/listItems/subject_item_widget.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
+import 'package:mobile/widgets/listItems/subject_item_widget.dart';
 import 'dialogs.dart';
 
 class SubscribeToSubjectDialog extends StatefulWidget {

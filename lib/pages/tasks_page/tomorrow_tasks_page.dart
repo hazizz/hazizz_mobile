@@ -4,9 +4,9 @@ import 'package:mobile/blocs/other/response_states.dart';
 import 'package:mobile/blocs/tasks/tasks_tomorrow_bloc.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
-import 'package:mobile/listItems/task_header_item_widget.dart';
-import 'package:mobile/listItems/task_item_widget.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
+import 'package:mobile/widgets/listItems/task_header_item_widget.dart';
+import 'package:mobile/widgets/listItems/task_item_widget.dart';
 
 
 import 'package:sticky_headers/sticky_headers.dart';

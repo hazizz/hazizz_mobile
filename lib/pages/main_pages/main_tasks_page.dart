@@ -14,10 +14,9 @@ import 'package:mobile/custom/formats.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/enums/task_complete_state_enum.dart';
 import 'package:mobile/enums/task_expired_state_enum.dart';
-import 'package:mobile/listItems/task_header_item_widget.dart';
-import 'package:mobile/listItems/task_item_widget.dart';
-import 'package:mobile/mixins/tab_mixin.dart';
 import 'package:mobile/widgets/ad_widget.dart';
+import 'package:mobile/widgets/listItems/task_header_item_widget.dart';
+import 'package:mobile/widgets/listItems/task_item_widget.dart';
 import 'package:mobile/widgets/scroll_space_widget.dart';
 import 'package:mobile/widgets/tab_widget.dart';
 

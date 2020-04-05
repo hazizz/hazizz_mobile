@@ -22,9 +22,9 @@ import 'package:mobile/defaults/pojo_subject_empty.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/managers/app_state_manager.dart';
 import 'package:mobile/services/hazizz_crypt.dart';
-import 'package:mobile/widgets/google_drive_image_widget.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 import 'package:mobile/widgets/image_viewer_widget.dart';
+import 'package:mobile/widgets/similar_tasks_widget.dart';
 import 'package:mobile/widgets/tag_chip.dart';
 
 import 'package:mobile/custom/hazizz_date.dart';
@@ -495,9 +495,28 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
       },
       child: BlocListener(
           bloc: blocs,
-          listener: (context, state) {
+          listener: (context, state) async {
             if (state is TaskMakerSuccessfulState) {
               Navigator.pop(context, state.task);
+            }
+            if(state is SimilarTasksTaskCreateState) {
+              bool result = await showGeneralDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  barrierLabel: MaterialLocalizations.of(context)
+                      .modalBarrierDismissLabel,
+                  barrierColor: Colors.black45,
+                  transitionDuration: const Duration(milliseconds: 200),
+                  pageBuilder: (BuildContext buildContext,
+                      Animation animation,
+                      Animation secondaryAnimation) {
+                    return SimilarTasksWidget(similarTasks: state.similarTasks,);
+              });
+              if(result){
+                blocs.dispatch(TaskMakerProceedToSendEvent());
+              }else{
+                Navigator.pop(context);
+              }
             }
           },
           child: Scaffold(

@@ -15,6 +15,14 @@ class CacheManager{
   static const String _seen_giveaway = "seen_giveaway";
 
   static PojoMeInfoPrivate meInfo;
+  static int myId;
+
+  static get getMyIdSafely{
+    if(meInfo != null){
+      return meInfo.id;
+    }
+    return myId;
+  }
 
   SharedPreferences prefs;
 
@@ -25,6 +33,8 @@ class CacheManager{
 
   static void forgetMyUser() async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+    meInfo = null;
+    myId = null;
     prefs.setString(_keyMe + _username, null);
     prefs.setString(_keyMe + _displayName, null);
     prefs.setInt(_keyMe + _id, null);
@@ -57,6 +67,7 @@ class CacheManager{
 
   static void setMyId(int userId) async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+    myId = userId;
     prefs.setInt(_keyMe + _id, userId);
   }
 

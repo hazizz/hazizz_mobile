@@ -174,11 +174,17 @@ class SocialLoginBloc extends Bloc<SocialLoginEvent, SocialLoginState> {
         // proceed to the app
 
       }else if(hazizzResponseLogin.hasPojoError){
+        HazizzLogger.printLog("bruh you better work: 1");
         if(hazizzResponseLogin.pojoError.errorCode == ErrorCodes.AUTH_TOKEN_INVALID.code){
+          HazizzLogger.printLog("bruh you better work: 2");
           yield SocialLoginHaveToAcceptConditionsState();
+          return;
+          HazizzLogger.printLog("bruh you better work: 3");
         }else if(hazizzResponseLogin.pojoError.errorCode == ErrorCodes.NO_ASSOCIATED_EMAIL.code){
+          HazizzLogger.printLog("bruh you better work: 4");
           yield SocialLoginFailedState(error: hazizzResponseLogin.pojoError);
         }
+        HazizzLogger.printLog("bruh you better work: 5");
         yield SocialLoginFailedState(error: hazizzResponseLogin.pojoError);
       }else{
 

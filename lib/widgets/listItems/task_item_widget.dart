@@ -20,10 +20,6 @@ class TaskItemWidget extends StatefulWidget  {
 
   TaskItemWidget({Key key, this.originalPojoTask, this.onCompletedChanged}) : super(key: key);
 
-  getTabName(BuildContext context){
-    return locText(context, key: "grades");
-  }
-
   @override
   _TaskItemWidget createState() => _TaskItemWidget();
 }
@@ -99,7 +95,7 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(20)),
-              color: Colors.grey,
+              color: t.name == "Thera" ? HazizzTheme.kreta_homeworkColor : Colors.grey,
             ),
             child: Padding(
               padding: const EdgeInsets.only(top: 2.0, bottom: 2, left: 6, right: 6),

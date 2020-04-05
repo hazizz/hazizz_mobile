@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-//import 'package:logger_flutter/logger_flutter.dart';
 import 'package:mobile/blocs/group/my_groups_bloc.dart';
 import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/response_states.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
-import 'package:mobile/listItems/group_item_widget.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
+import 'package:mobile/widgets/listItems/group_item_widget.dart';
 
 class MyGroupsPage extends StatefulWidget {
 

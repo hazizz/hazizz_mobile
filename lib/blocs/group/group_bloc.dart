@@ -239,7 +239,7 @@ class GroupBlocs{
 
   void newGroup(PojoGroup group){
     this.group = group;
-    groupTasksBloc = new TasksBloc.group(group.id);
+    groupTasksBloc = new TasksBloc.group(group.id, theraEnabled: false);
     groupTasksBloc.dispatch(TasksFetchEvent());
     groupSubjectsBloc.dispatch(FetchData());
     groupMembersBloc.dispatch(FetchData());

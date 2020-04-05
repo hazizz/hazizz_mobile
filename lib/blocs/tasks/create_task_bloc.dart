@@ -1,6 +1,7 @@
 
-
-
+import 'package:flutter/material.dart';
+import 'package:mobile/extension_methods/datetime_extension.dart';
+import 'package:mobile/extension_methods/duration_extension.dart';
 import 'package:googleapis/drive/v3.dart' as driveapi;
 import 'package:mobile/blocs/item_list/item_list_picker_bloc.dart';
 import 'package:mobile/blocs/other/date_time_picker_bloc.dart';
@@ -19,6 +20,7 @@ import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/custom/image_operations.dart';
 import 'package:mobile/managers/app_state_restorer.dart';
+import 'package:mobile/services/task_similarity_checker.dart';
 import 'package:mobile/widgets/image_viewer_widget.dart';
 
 import '../../managers/google_drive_manager.dart';
@@ -37,6 +39,14 @@ class InitializeTaskCreateEvent extends TaskCreateEvent {
   String toString() => 'InitializeTaskCreateState';
   List<Object> get props => [group];
 }
+
+class TaskMakerProceedToSendEvent extends TaskMakerEvent {
+  TaskMakerProceedToSendEvent();
+  @override
+  String toString() => 'TaskMakerProceedToSendEvent';
+  List<Object> get props => null;
+}
+
 //endregion
 
 //region TaskCreate state
@@ -51,10 +61,30 @@ class InitializedTaskCreateState extends TaskCreateState {
   String toString() => 'InitializeTaskEditState';
   List<Object> get props => [group];
 }
+
+class SimilarTasksTaskCreateState extends TaskCreateState {
+  final List<TaskSimilarity> similarTasks;
+  SimilarTasksTaskCreateState({this.similarTasks}) : super([similarTasks]);
+
+  String toString() => 'SimilarTasksTaskCreateState';
+  List<Object> get props => [similarTasks];
+}
 //endregion
 
 //region TaskCreate bloc
 class TaskCreateBloc extends TaskMakerBloc {
+
+  int groupId, subjectId;
+  List<String> tags = List();
+  DateTime deadline;
+  String description;
+
+  String salt;
+
+  List<HazizzImageData> imageDatas;
+
+  List<String> imageUrls = [];
+  String imageUrlsDesc;
 
   PojoGroup group;
 
@@ -77,9 +107,76 @@ class TaskCreateBloc extends TaskMakerBloc {
       taskTagBloc.dispatch(TaskTagAddEvent(PojoTag.defaultTags[0]));
     }
   }
+
+
  
   @override
   Stream<TaskMakerState> mapEventToState(TaskMakerEvent event) async*{
+
+    Future<TaskMakerState> sendTaskPart2() async {
+      List<String> imageUrls = [];
+      String imageUrlsDesc = "";
+
+      if(imageDatas != null && imageDatas.isNotEmpty){
+        print("counter0: ${imageDatas.length}");
+        int i = 0;
+
+        List<Future> futures = [];
+        for(HazizzImageData d in imageDatas){
+          futures.add(d.futureUploadedToDrive);
+        }
+        await Future.wait(futures);
+
+        for(HazizzImageData d in imageDatas){
+          i++;
+          print("counter1: ${d.url}");
+
+          imageUrlsDesc += "\n![img_$i](${d.url.split("&")[0]})";
+        }
+      }
+
+      HazizzLogger.printLog("BEFORE POIOP: ${groupId}, ${subjectId},");
+
+
+
+      if(imageDatas != null && imageDatas.isNotEmpty){
+        print("majas1: ${imageDatas[0]}");
+
+        print("majas2: ${imageDatas[0]?.key}");
+
+        print("majas3: ${imageUrls}");
+        print("majas4: ${description}");
+
+        print("majas5: ${imageUrlsDesc}");
+
+        print("leírás hosz: ${(description + imageUrlsDesc).length}");
+      }
+
+      HazizzResponse hazizzResponse = await getResponse(new CreateTask(
+          groupId: groupId,
+          subjectId: subjectId,
+          b_tags: tags,
+          b_description: imageDatas.isEmpty ? description : description + "\n" + imageUrlsDesc,
+          b_deadline: deadline,
+          b_salt: imageDatas.isEmpty ? null : salt
+      ));
+
+      print("majas3: broo");
+      if(hazizzResponse.isSuccessful){
+        if(imageDatas != null && imageDatas.isNotEmpty){
+          int taskId = (hazizzResponse.convertedData as PojoTask).id;
+          imageDatas.forEach((HazizzImageData hazizzImageData){
+            hazizzImageData.renameFile(taskId);
+          });
+        }
+        HazizzLogger.printLog("log: task making was succcessful");
+        return TaskMakerSuccessfulState(hazizzResponse.convertedData);
+        MainTabBlocs().tasksBloc.dispatch(TasksFetchEvent());
+      }else{
+        return TaskMakerFailedState();
+      }
+    }
+
     if(event is TaskMakerFailedEvent){
       yield TaskMakerFailedState();
     }
@@ -89,6 +186,11 @@ class TaskCreateBloc extends TaskMakerBloc {
       if(group != null) {
         groupItemPickerBloc.dispatch(PickedGroupEvent(item: group));
       }
+    }
+
+    if(event is TaskMakerProceedToSendEvent ){
+      yield TaskMakerWaitingState();
+      yield await sendTaskPart2();
     }
     else if(event is TaskMakerSaveStateEvent){
       PojoGroup group;
@@ -160,32 +262,14 @@ class TaskCreateBloc extends TaskMakerBloc {
       try {
         yield TaskMakerWaitingState();
 
+        bool missingInfo = false;
         HazizzLogger.printLog("log: lul1");
 
         //region send
-        int groupId, subjectId;
-        List<String> tags = List();
-        DateTime deadline;
-        String description;
 
-        String salt = event.salt;
-
-        bool missingInfo = false;
-
-
-        /*
-        TaskTypePickerState typeState = taskTypePickerBloc.currentState;
-        if(typeState is TaskTypePickedState){
-          tags[0] = typeState.tag.getName();
-        }
-        */
-
+        salt = event.salt;
 
         taskTagBloc.pickedTags.forEach((f){tags.add(f.name);});
-
-
-        HazizzLogger.printLog("log: lul11");
-
 
         ItemListState groupState =  groupItemPickerBloc.currentState;
 
@@ -198,8 +282,6 @@ class TaskCreateBloc extends TaskMakerBloc {
           HazizzLogger.printLog("log: lulu2");
           missingInfo = true;
         }
-
-
 
 
         HState subjectState = subjectItemPickerBloc.currentState;
@@ -226,131 +308,48 @@ class TaskCreateBloc extends TaskMakerBloc {
           missingInfo = true;
         }
 
-
-        description = descriptionBloc.lastText ?? "";
-
-
-        HazizzLogger.printLog("log: lul3");
-
+        imageDatas = event.imageDatas;
 
         if(missingInfo){
           HazizzLogger.printLog("log: missing info");
           this.dispatch(TaskMakerFailedEvent());
           return;
         }
+
+        description = descriptionBloc.lastText ?? "";
+
+        // Check task similarity
+
+        if(false){
+          HazizzResponse hazizzResponse = await getResponse(
+              GetTasksFromMe(
+                q_showThera:false,
+                q_startingDate: (deadline - 7.days).hazizzRequestDateFormat,
+                q_endDate: (deadline + 7.days).hazizzRequestDateFormat,
+                q_groupId: groupId,
+                q_subjectId: subjectId,
+                q_wholeGroup: true
+              )
+          );
+          if(hazizzResponse.isSuccessful){
+            List<PojoTask> tasks = hazizzResponse.convertedData;
+            if(tasks.isNotEmpty) {
+              List<TaskSimilarity> similarTasks = checkTaskSimilarity(description, subjectId, deadline, tasks);
+              if(similarTasks.isNotEmpty){
+                yield SimilarTasksTaskCreateState(similarTasks: similarTasks);
+                return;
+              }
+            }
+          }
+        }
+
+        HazizzLogger.printLog("log: lul3");
+
+
+
         HazizzLogger.printLog("log: not missing info");
 
-        List<String> imageUrls = [];
-        String imageUrlsDesc = "";
-
-        if(event.imageDatas != null && event.imageDatas.isNotEmpty){
-        /*  List<List<int>> compressedImages = List();
-
-          for(File file in event.images){
-              List<int> result = await FlutterImageCompress.compressWithFile(
-                file.absolute.path,
-                minWidth: 2300,
-                minHeight: 1500,
-                quality: 94,
-                rotate: 90,
-              );
-              compressedImages.add(result);
-          }
-          */
-        //  ivsalt = CryptKey().genDart(8);
-        //  key = HazizzCrypt.generateKey();
-      /*    for(EncryptedImageData d in event.imageDatas){
-            HazizzResponse imgUploadResponse = await RequestSender().getResponse(new UploadImage(
-                imageData: d, key: d.key, iv: d.iv
-            ));
-            if(imgUploadResponse.isSuccessful){
-              imgUrl = imgUploadResponse.convertedData;
-            }
-          }
-          List<Future<HazizzResponse>> requests = [];
-          */
-
-      /*
-          await GoogleDriveManager().initialize();
-          List<Future<HazizzResponse>> responses = [];
-          for(HazizzImageData d in event.imageDatas){
-            fimageUrls.add(GoogleDriveManager().uploadImageToDrive(d));
-           /* responses.add(RequestSender().getResponse(new UploadImage(
-                imageData: d, key: d.key, iv: d.iv
-            )));
-            */
-          }
-
-          await Future.wait(fimageUrls)
-              .then((List<dynamic> responses) {
-            for(driveapi.File file in responses){
-              imageUrls.add(file.webContentLink);
-            }
-          }
-          );
-
-          for(int i = 0; i < imageUrls.length; i++){
-            imageUrlsDesc += "\n![hazizz_image_$i](${imageUrls[i]})";
-          }
-       */
-
-          print("counter0: ${event.imageDatas.length}");
-          int i = 0;
-
-          List<Future> futures = [];
-          for(HazizzImageData d in event.imageDatas){
-            futures.add(d.futureUploadedToDrive);
-          }
-          await Future.wait(futures);
-
-          for(HazizzImageData d in event.imageDatas){
-            i++;
-            print("counter1: ${d.url}");
-
-            imageUrlsDesc += "\n![img_$i](${d.url.split("&")[0]})";
-          }
-        }
-
-        HazizzResponse hazizzResponse;
-
-        HazizzLogger.printLog("BEFORE POIOP: ${groupId}, ${subjectId},");
-
-        if(event.imageDatas != null && event.imageDatas.isNotEmpty){
-          print("majas1: ${event?.imageDatas[0]}");
-
-          print("majas2: ${event?.imageDatas[0]?.key}");
-
-          print("majas3: ${imageUrls}");
-          print("majas4: ${description}");
-
-          print("majas5: ${imageUrlsDesc}");
-
-          print("leírás hosz: ${(description + imageUrlsDesc).length}");
-        }
-
-        hazizzResponse = await getResponse(new CreateTask(
-            groupId: groupId,
-            subjectId: subjectId,
-            b_tags: tags,
-            b_description: event.imageDatas.isEmpty ? description : description + "\n" + imageUrlsDesc,
-            b_deadline: deadline,
-            b_salt: event.imageDatas.isEmpty ? null : salt
-        ));
-
-        print("majas3: broo");
-        if(hazizzResponse.isSuccessful){
-          if(event.imageDatas != null && event.imageDatas.isNotEmpty){
-            int taskId = (hazizzResponse.convertedData as PojoTask).id;
-            event.imageDatas.forEach((HazizzImageData hazizzImageData){
-              hazizzImageData.renameFile(taskId);
-            });
-          }
-          HazizzLogger.printLog("log: task making was succcessful");
-          yield TaskMakerSuccessfulState(hazizzResponse.convertedData);
-          MainTabBlocs().tasksBloc.dispatch(TasksFetchEvent());
-        }else{
-          yield TaskMakerFailedState();
-        }
+        yield await sendTaskPart2();
 
         //endregion
 

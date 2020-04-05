@@ -6,8 +6,7 @@ import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/response_states.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
 import 'package:mobile/dialogs/dialogs.dart';
-import 'package:mobile/listItems/subject_item_widget.dart';
-import 'package:mobile/managers/welcome_manager.dart';
+import 'package:mobile/widgets/listItems/subject_item_widget.dart';
 import 'package:mobile/widgets/scroll_space_widget.dart';
 
 import 'package:mobile/custom/hazizz_localizations.dart';

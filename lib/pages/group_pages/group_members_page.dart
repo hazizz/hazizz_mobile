@@ -8,7 +8,7 @@ import 'package:mobile/communication/pojos/PojoGroupPermissions.dart';
 import 'package:mobile/communication/pojos/PojoUser.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/enums/group_permissions_enum.dart';
-import 'package:mobile/listItems/member_item_widget.dart';
+import 'package:mobile/widgets/listItems/member_item_widget.dart';
 import 'package:mobile/widgets/scroll_space_widget.dart';
 
 

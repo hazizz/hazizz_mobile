@@ -6,9 +6,10 @@ import 'package:mobile/blocs/other/comment_section_bloc.dart';
 import 'package:mobile/blocs/other/view_task_bloc.dart';
 import 'package:mobile/communication/pojos/pojo_comment.dart';
 import 'package:mobile/custom/line_break_limit_text_formatter.dart';
-import 'package:mobile/listItems/comment_item_widget.dart';
 
 import 'package:mobile/custom/hazizz_localizations.dart';
+
+import 'listItems/comment_item_widget.dart';
 
 class CommentSectionWidget extends StatefulWidget {
 

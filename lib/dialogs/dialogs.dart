@@ -1341,7 +1341,7 @@ Future<bool> showDialogSessionReauth(BuildContext context) async{
 
 Future<bool> showRegistrationDialog(context) async {
   return showDialog(context: context,
-    barrierDismissible: true,
+    barrierDismissible: false,
     builder: (context){
       return RegistrationDialog();
     }

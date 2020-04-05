@@ -99,13 +99,15 @@ class TasksErrorState extends TasksState {
 class TasksBloc extends Bloc<TasksEvent, TasksState> {
 
   bool wholeGroup = false;
-  int groupId = null;
+  int groupId;
 
-  TasksBloc(){
+  bool theraEnabled;
+
+  TasksBloc({theraEnabled = true}){
 
   }
 
-  TasksBloc.group(int groupId){
+  TasksBloc.group(int groupId, {theraEnabled = true}){
     wholeGroup = true;
     this.groupId = groupId;
   }
@@ -203,7 +205,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
        // HazizzResponse hazizzResponse2 = await RequestSender().getResponse(new GetRecentEvents());
 
 
-        HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetTasksFromMe(q_unfinishedOnly: unfinishedOnly, q_finishedOnly: finishedOnly, q_showThera: true, q_startingDate: startDate, q_endDate: endDate, q_groupId: groupId, q_wholeGroup: wholeGroup));
+        HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetTasksFromMe(q_unfinishedOnly: unfinishedOnly, q_finishedOnly: finishedOnly, q_showThera: theraEnabled, q_startingDate: startDate, q_endDate: endDate, q_groupId: groupId, q_wholeGroup: wholeGroup));
 
         //  HazizzLogger.printLog("tasks.: ${tasks}");
         if(hazizzResponse.isSuccessful){

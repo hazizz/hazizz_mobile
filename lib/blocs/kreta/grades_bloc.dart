@@ -21,6 +21,7 @@ import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/services/selected_session_helper.dart';
 import 'package:mobile/storage/caches/data_cache.dart';
+import 'package:mobile/extension_methods/round_double_extension.dart';
 
 //region Grades bloc parts
 //region Grades events
@@ -203,12 +204,8 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
       }
     }
     if(gradeSum != 0 && gradeAmount != 0){
+      return (gradeSum/gradeAmount).round2(decimals: 2).toString();
 
-      int decimals = 2;
-      int fac = pow(10, decimals);
-      double d = gradeSum/gradeAmount;
-      d = (d * fac).round() / fac;
-      return d.toString();
     }
     return "";
   }

@@ -6,22 +6,20 @@ import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:googleapis/dfareporting/v3_3.dart';
 import 'package:mobile/blocs/kreta/grades_bloc.dart';
 import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
 import 'package:mobile/communication/custom_response_errors.dart';
 import 'package:mobile/communication/pojos/PojoGrade.dart';
-import 'package:mobile/communication/pojos/PojoGrades.dart';
 import 'package:mobile/custom/formats.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/enums/grade_type_enum.dart';
 import 'package:mobile/enums/grades_sort_enum.dart';
-import 'package:mobile/listItems/grade_header_item_widget.dart';
-import 'package:mobile/listItems/grade_item_widget.dart';
 import 'package:mobile/managers/preference_services.dart';
 import 'package:mobile/services/selected_session_helper.dart';
 import 'package:mobile/widgets/ad_widget.dart';
 import 'package:mobile/widgets/flushbars.dart';
+import 'package:mobile/widgets/listItems/grade_header_item_widget.dart';
+import 'package:mobile/widgets/listItems/grade_item_widget.dart';
 import 'package:mobile/widgets/selected_session_fail_widget.dart';
 import 'package:mobile/widgets/tab_widget.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
@@ -61,23 +59,7 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
 
   @override
   void initState() {
-
     _tabController  = TabController(vsync: this, length: _tabList.length, initialIndex: currentPage);
-  /*  _tabController.addListener((){
-      setState(() {
-        currentPage = _tabController.index;
-        HazizzLogger.printLog("Burhhh" + currentPage.toString());
-      });
-    });
-    */
-        /*PreferenceService.getGradeRectForm().then((bool rectFrom){
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        setState(() {
-          widget.rectForm = rectFrom;
-        });
-      }
-      );
-    });*/
     super.initState();
   }
 
@@ -116,10 +98,6 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
       }
       int itemCount = grades.keys.length+1;
       print('kék144');
-
-
-
-
 
       if(grades.isNotEmpty){
         return ListView.builder(

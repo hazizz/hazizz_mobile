@@ -22,3 +22,4 @@ import 'package:built_collection/built_collection.dart';
 ])
 final Serializers serializers = (_$serializers.toBuilder()).build();
 */
+

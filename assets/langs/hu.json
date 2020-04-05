@@ -758,8 +758,10 @@
 
 
   "gdrive_info"
-  : "Hogy képeket tudj feltölteni a feladatokhoz, a Google Drive-odban létrehozott mappában tároljuk.",
+  : "Hogy képeket tudj feltölteni a feladatokhoz, a Google Drive-odban létrehozott mappában tároljuk azokat.",
 
+  "gdrive_enable"
+  : "Engedélyezem hogy a Házizz képeket mentsen Google Drive-ra",
 
   "gdrive_grant_permission"
   : "Az \"engedélyezem\" gombra nyomva, engedélyezed hogy a Google Drive-odban tároljuk a feladat képeket.",
@@ -1563,3 +1565,5 @@
         "Vasárnap"
     ]
 }
+
+

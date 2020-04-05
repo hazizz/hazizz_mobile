@@ -86,7 +86,7 @@ class TokenManager {
     if(hazizzResponse.isSuccessful){
       PojoTokens tokens = hazizzResponse.convertedData;
       await setTokens(tokens.access_token, tokens.refresh_token);
-      AppState.logInProcedure(tokens: tokens);
+      await AppState.logInProcedure(tokens: tokens);
     }else if(hazizzResponse.hasPojoError){
 
     }
@@ -98,7 +98,7 @@ class TokenManager {
     if(hazizzResponse.isSuccessful){
       PojoTokens tokens = hazizzResponse.convertedData;
       await setTokens(tokens.access_token, tokens.refresh_token);
-      AppState.logInProcedure(tokens: tokens);
+      await AppState.logInProcedure(tokens: tokens);
     }else if(hazizzResponse.hasPojoError){
 
     }

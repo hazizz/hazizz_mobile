@@ -5,10 +5,8 @@ import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/response_states.dart';
 import 'package:mobile/communication/pojos/PojoKretaNote.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
-
-import 'package:mobile/listItems/note_item_widget.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
-import 'package:mobile/widgets/hazizz_drawer.dart';
+import 'package:mobile/widgets/listItems/note_item_widget.dart';
 
 class KretaNotesPage extends StatefulWidget {
   @override

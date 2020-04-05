@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/blocs/kreta/grades_bloc.dart';
-import 'package:mobile/blocs/kreta/kreta_notes_bloc.dart';
 import 'package:mobile/blocs/kreta/kreta_statistics_bloc.dart';
 import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
-import 'package:mobile/blocs/other/request_event.dart';
-import 'package:mobile/blocs/other/response_states.dart';
 import 'package:mobile/communication/pojos/PojoGrade.dart';
 import 'package:mobile/communication/pojos/PojoGradeAvarage.dart';
-import 'package:mobile/communication/pojos/PojoKretaNote.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
-import 'package:mobile/listItems/grade_item_widget.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
-
-import 'package:mobile/listItems/note_item_widget.dart';
+import 'package:mobile/widgets/listItems/grade_item_widget.dart';
 
 class KretaStatisticsPage extends StatefulWidget {
 

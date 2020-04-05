@@ -6,8 +6,8 @@ import 'package:mobile/blocs/kreta/schedule_bloc.dart';
 import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
 import 'package:mobile/communication/pojos/PojoClass.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
-import 'package:mobile/listItems/class_item_widget.dart';
 import 'package:mobile/widgets/ad_widget.dart';
+import 'package:mobile/widgets/listItems/class_item_widget.dart';
 import 'package:mobile/widgets/schedule_event_widget.dart';
 import 'package:mobile/widgets/scroll_space_widget.dart';
 
