@@ -82,8 +82,9 @@ class CommentSectionBloc extends Bloc<CommentSectionEvent, CommentSectionState> 
   List<PojoComment> comments;
 
   int taskId;
+  bool enabled;
 
-  CommentSectionBloc({@required this.taskId});
+  CommentSectionBloc({@required this.taskId, @required enabled = true});
 
   @override
   CommentSectionState get initialState => CommentSectionInitialState();
@@ -91,30 +92,32 @@ class CommentSectionBloc extends Bloc<CommentSectionEvent, CommentSectionState> 
   @override
   Stream<CommentSectionState> mapEventToState(CommentSectionEvent event) async* {
     HazizzLogger.printLog("log: Event2: ${event.toString()}");
-    if (event is CommentSectionFetchEvent) {
-      try {
-        yield CommentSectionWaitingState();
-        HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetTaskComments(p_taskId: taskId));
-        if(hazizzResponse.isSuccessful){
-          comments = hazizzResponse.convertedData;
-          HazizzLogger.printLog("comments: $comments");
-          if(comments.isEmpty) {
-            yield CommentSectionLoadedState(items: comments);
-          }else {
-            yield CommentSectionLoadedState(items: comments);
+    if(enabled){
+      if (event is CommentSectionFetchEvent) {
+        try {
+          yield CommentSectionWaitingState();
+          HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetTaskComments(p_taskId: taskId));
+          if(hazizzResponse.isSuccessful){
+            comments = hazizzResponse.convertedData;
+            HazizzLogger.printLog("comments: $comments");
+            if(comments.isEmpty) {
+              yield CommentSectionLoadedState(items: comments);
+            }else {
+              yield CommentSectionLoadedState(items: comments);
+            }
           }
+          else if(hazizzResponse.isError){
+            yield CommentSectionFailState(error: hazizzResponse.pojoError);
+          }
+        } on Exception catch(e){
         }
-        else if(hazizzResponse.isError){
-          yield CommentSectionFailState(error: hazizzResponse.pojoError);
-        }
-      } on Exception catch(e){
+      }else if(event is CommentSectionLoadedEvent){
+        yield CommentSectionLoadedState(items: event.items);
       }
-    }else if(event is CommentSectionLoadedEvent){
-      yield CommentSectionLoadedState(items: event.items);
-    }
 
-    else if(state is CommentSectionAddCommentEvent){
+      else if(state is CommentSectionAddCommentEvent){
 
+      }
     }
   }
 }
@@ -126,9 +129,11 @@ class CommentBlocs{
   CommentSectionBloc commentSectionBloc;
   CommentWriterBloc commentWriterBloc;
 
-  CommentBlocs({@required this.taskId}){
-    commentSectionBloc = CommentSectionBloc(taskId: taskId);
-    commentWriterBloc = CommentWriterBloc(taskId: taskId, commentSectionBloc: commentSectionBloc );
+  bool hasCommentSection;
+
+  CommentBlocs({@required this.taskId, hasCommentSection = true}){
+    commentSectionBloc = CommentSectionBloc(taskId: taskId, enabled: hasCommentSection);
+    commentWriterBloc = CommentWriterBloc(taskId: taskId, commentSectionBloc: commentSectionBloc, enabled: hasCommentSection);
     commentSectionBloc.dispatch(CommentSectionFetchEvent());
   }
 
@@ -191,7 +196,9 @@ class CommentWriterBloc extends Bloc<CommentWriterEvent,  CommentWriterState> {
 
   String content;
 
-  CommentWriterBloc({@required this.taskId, @required this.commentSectionBloc}){
+  bool enabled;
+
+  CommentWriterBloc({@required this.taskId, @required this.commentSectionBloc, @required enabled = true}){
     commentController.addListener((){
       content = commentController.text;
       if(content.length > 0 && this.currentState is CommentWriterEmptyState){
@@ -211,25 +218,27 @@ class CommentWriterBloc extends Bloc<CommentWriterEvent,  CommentWriterState> {
 
   @override
   Stream<CommentWriterState> mapEventToState(CommentWriterEvent event) async* {
-    HazizzLogger.printLog("log: Event2: ${event.toString()}");
-    if(event is CommentWriterFineEvent){
-      yield CommentWriterFineState();
-    }
-    if(event is CommentWriterUpdateContentEvent){
-      content = event.content;
-    }
-    if (event is CommentWriterSendEvent) {
-      if(content == null || content == "") {
-        yield CommentWriterEmptyState();
-      }else {
-        HazizzResponse hazizzResponse = await RequestSender().getResponse(
-            CreateTaskComment(p_taskId: taskId, b_content: content));
-        if(hazizzResponse.isSuccessful) {
-          commentController.clear();
-          commentSectionBloc.dispatch(CommentSectionFetchEvent());
-          yield CommentWriterSentState();
+    if(enabled){
+      HazizzLogger.printLog("log: Event2: ${event.toString()}");
+      if(event is CommentWriterFineEvent){
+        yield CommentWriterFineState();
+      }
+      if(event is CommentWriterUpdateContentEvent){
+        content = event.content;
+      }
+      if (event is CommentWriterSendEvent) {
+        if(content == null || content == "") {
+          yield CommentWriterEmptyState();
         }else {
-          yield CommentWriterErrorState();
+          HazizzResponse hazizzResponse = await RequestSender().getResponse(
+              CreateTaskComment(p_taskId: taskId, b_content: content));
+          if(hazizzResponse.isSuccessful) {
+            commentController.clear();
+            commentSectionBloc.dispatch(CommentSectionFetchEvent());
+            yield CommentWriterSentState();
+          }else {
+            yield CommentWriterErrorState();
+          }
         }
       }
     }

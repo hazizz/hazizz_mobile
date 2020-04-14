@@ -81,7 +81,7 @@ class KretaSessionManager {
     }
   }
 
-  static Future<List<PojoSession>> getSessions() async{
+  static Future<List<PojoSession>> getCachedSessions() async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String encodedSessions = prefs.getString(_keySessions);
     if(encodedSessions == null) return null;

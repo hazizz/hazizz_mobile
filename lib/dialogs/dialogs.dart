@@ -285,67 +285,6 @@ Future<bool> showInviteDialog(context, {@required PojoGroup group}) async {
         return dialog;
       }
   );
-  /*
-  HazizzResponse hazizzResponse = await RequestSender().getResponse(GetGroupInviteLink(groupId: group.id));
-  String inviteLink = "Waiting...";
-  if(hazizzResponse.isSuccessful){
-    inviteLink = hazizzResponse.convertedData;
-  }else{
-    return false;
-  }
-
-  HazizzDialog h = HazizzDialog(
-      header:
-      Container(
-          color: Theme.of(context).primaryColor,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(locText(context, key: "invite_link_info", args: [group.name]), style: TextStyle(fontSize: 19),),
-          )
-      ),
-      content: Container(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(inviteLink, style: TextStyle(fontSize: 15),),
-          )
-      ),
-      actionButtons:
-      Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          FlatButton(
-              child: Center(
-                child: Text(
-                  locText(context, key: "cancel").toUpperCase(),
-                ),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              color: Colors.transparent
-          ),
-          FlatButton(
-              child: Center(
-                child: Text(locText(context, key: "share").toUpperCase(),),
-              ),
-              onPressed: () {
-                HazizzLogger.printLog("share");
-
-                Share.share(locText(context, key: "invite_to_group_text_title", args: [group.name, inviteLink]));
-                // Navigator.of(context).pop();
-                // Navigator.of(context).pop();
-              },
-              color: Colors.transparent
-          ),
-        ],
-      ) ,height: 190,width: 200);
-
-  return showDialog(context: context, barrierDismissible: true,
-      builder: (BuildContext context) {
-        return h;
-      }
-  );
-  */
 }
 
 

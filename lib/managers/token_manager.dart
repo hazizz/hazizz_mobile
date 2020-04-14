@@ -3,6 +3,7 @@ import 'package:mobile/communication/pojos/PojoTokens.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:meta/meta.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
+import 'package:mobile/services/firebase_analytics.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:mobile/communication/request_sender.dart';
@@ -84,6 +85,7 @@ class TokenManager {
   static Future<HazizzResponse> createTokenWithGoolgeOpenId(String openIdToken) async{
     HazizzResponse hazizzResponse = await RequestSender().getAuthResponse(new CreateToken.withGoogleAccount(q_openIdToken: openIdToken));
     if(hazizzResponse.isSuccessful){
+      FirebaseAnalyticsManager.logLogin("google");
       PojoTokens tokens = hazizzResponse.convertedData;
       await setTokens(tokens.access_token, tokens.refresh_token);
       await AppState.logInProcedure(tokens: tokens);
@@ -96,6 +98,7 @@ class TokenManager {
   static Future<HazizzResponse> createTokenWithFacebookAccount(String facebookToken) async{
     HazizzResponse hazizzResponse = await RequestSender().getAuthResponse(new CreateToken.withFacebookAccount(q_facebookToken: facebookToken));
     if(hazizzResponse.isSuccessful){
+      FirebaseAnalyticsManager.logLogin("facebook");
       PojoTokens tokens = hazizzResponse.convertedData;
       await setTokens(tokens.access_token, tokens.refresh_token);
       await AppState.logInProcedure(tokens: tokens);

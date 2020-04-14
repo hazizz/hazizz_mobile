@@ -5,6 +5,7 @@ import 'package:mobile/communication/pojos/PojoInviteLink.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/enums/group_types_enum.dart';
+import 'package:mobile/services/firebase_analytics.dart';
 import 'package:share/share.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/request_sender.dart';
@@ -106,11 +107,8 @@ class _InviteLinkDialog extends State<InviteLinkDialog> {
                   child: Text(locText(context, key: "share").toUpperCase(),),
                 ),
                 onPressed: () {
-                  HazizzLogger.printLog("pressed share button");
-
+                  FirebaseAnalyticsManager.logGroupInviteLinkShare(widget.group.id);
                   Share.share(locText(context, key: "invite_to_group_text_title", args: [widget.group.name, inviteLink]));
-                  // Navigator.of(context).pop();
-                  // Navigator.of(context).pop();
                 },
                 color: Colors.transparent
             ),

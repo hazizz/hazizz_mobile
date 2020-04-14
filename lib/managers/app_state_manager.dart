@@ -1,6 +1,7 @@
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mobile/blocs/auth/facebook_login_bloc.dart';
 import 'package:mobile/blocs/auth/google_login_bloc.dart';
 import 'package:mobile/blocs/auth/social_login_bloc.dart';
 import 'package:mobile/blocs/kreta/sessions_bloc.dart';
@@ -11,6 +12,7 @@ import 'package:mobile/blocs/kreta/selected_session_bloc.dart';
 import 'package:mobile/communication/connection.dart';
 import 'package:mobile/communication/pojos/PojoMeInfo.dart';
 import 'package:mobile/communication/pojos/PojoMeInfoPrivate.dart';
+import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/communication/pojos/PojoTokens.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
@@ -18,7 +20,7 @@ import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/managers/preference_services.dart';
 import 'package:mobile/managers/server_checker.dart';
 import 'package:mobile/navigation/business_navigator.dart';
-import 'package:mobile/notification/notification.dart';
+import 'package:mobile/services/firebase_analytics.dart';
 import 'package:mobile/storage/caches/data_cache.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -77,7 +79,6 @@ class AppState{
     }
     HazizzLogger.printLog("logInProcedure: 4");
 
-
     RequestSender().getResponse(GetMyProfilePicture.full()).then((HazizzResponse hazizzResponse){
       if(hazizzResponse.isSuccessful){
         String base64Image = hazizzResponse.convertedData;
@@ -103,7 +104,7 @@ class AppState{
   static Future<void> mainAppPartStartProcedure() async {
 
    // await TokenManager.fetchRefreshTokens(username: (await InfoCache.getMyUserData()).username, refreshToken: await TokenManager.getRefreshToken());
-    ServerChecker.checkAll();
+    Future.delayed(Duration(seconds: 2)).then((_) => ServerChecker.checkAll());
   //  RequestSender._internal();
     HazizzLogger.printLog("mainAppPartStartProcedure 1");
     await KretaSessionManager.loadSelectedSession();
@@ -120,12 +121,16 @@ class AppState{
     UserDataBlocs().initialize();
     HazizzLogger.printLog("mainAppPartStartProcedure 7");
 
+    KretaSessionManager.getCachedSessions().then((List<PojoSession> sessions){
+      FirebaseAnalyticsManager.logNumberOfKretaSessionsAdded(sessions.length);
+    });
   }
 
   static Future logoutProcedure() async {
     RequestSender().lock();
 
     await GoogleLoginBloc().logout();
+    await FacebookLoginBloc().logout();
 
     TokenManager.invalidateTokens();
     var sh = await SharedPreferences.getInstance();
@@ -137,6 +142,8 @@ class AppState{
     setDisallowedGDrive();
     RequestSender().clearAllRequests();
     RequestSender().unlock();
+
+
   }
 
   static Future logout() async {

@@ -9,6 +9,7 @@ import 'package:mobile/enums/group_types_enum.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/hazizz_response.dart';
+import 'package:mobile/services/firebase_analytics.dart';
 import 'dialogs.dart';
 
 class SureToJoinGroupDialog extends StatefulWidget {
@@ -144,6 +145,7 @@ class _SureToJoinGroupDialog extends State<SureToJoinGroupDialog> {
                 HazizzResponse hazizzResponse = await RequestSender().getResponse(JoinGroup(p_groupId: group.id));
 
                 if(hazizzResponse.isSuccessful){
+                  FirebaseAnalyticsManager.logJoinGroup(widget.groupId);
                   Navigator.pop(context);
                   Navigator.pushNamed(context, "/group/groupId/newComer", arguments: group);
                 }else{

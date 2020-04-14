@@ -229,15 +229,18 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
             print("prCode1: ${preferredLocale.toString()}");
             if(preferredLocale != null){
               print("prCode: ${preferredLocale.languageCode}, ${preferredLocale.countryCode}");
+              FirebaseAnalyticsManager.logUsedLanguage(preferredLocale.languageCode);
               return preferredLocale;
             }
             for(var supportedLocale in supportedLocales) {
               if(supportedLocale.languageCode == locale?.languageCode &&
                   supportedLocale.countryCode == locale.countryCode) {
                 setPreferredLocale(supportedLocale);
+                FirebaseAnalyticsManager.logUsedLanguage(preferredLocale.languageCode);
                 return supportedLocale;
               }
             }
+            FirebaseAnalyticsManager.logUsedLanguage(preferredLocale.languageCode);
             return supportedLocales.first;
           },
         );

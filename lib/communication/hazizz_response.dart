@@ -14,6 +14,7 @@ import 'package:mobile/custom/custom_exception.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/managers/app_state_manager.dart';
 import 'package:mobile/managers/token_manager.dart';
+import 'package:mobile/services/firebase_analytics.dart';
 
 import 'custom_response_errors.dart';
 
@@ -84,6 +85,7 @@ class HazizzResponse{
       if(pojoError != null){
         hasPojoError = true;
         if(pojoError.errorCode == 1){
+          FirebaseAnalyticsManager.logUnknownErrorResponse();
           Crashlytics().recordError(CustomException(pojoError.toJson().toString()), StackTrace.current);
         }
         else if(pojoError.errorCode == 138){
@@ -92,6 +94,7 @@ class HazizzResponse{
         }
         else if(pojoError.errorCode == 19) { // to many requests
           HazizzLogger.printLog("Too many requests");
+          FirebaseAnalyticsManager.logRateLimitReached();
           await RequestSender().waitCooldown();
 
         }

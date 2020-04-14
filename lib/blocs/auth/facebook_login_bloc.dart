@@ -58,5 +58,6 @@ class FacebookLoginBloc extends SocialLoginBloc{
   @override
   Future<void> logout() async {
     await facebookLogin.logOut();
+
   }
 }

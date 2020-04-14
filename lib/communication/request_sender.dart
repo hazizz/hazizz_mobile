@@ -231,7 +231,7 @@ class RequestSender{
     if(isLocked()) HazizzLogger.printLog("Dio interceptor is locked: ${request.toString()}");
 
     bool isConnected = await Connection.isOnline();
-    print("isConnexcted: $isConnected");
+    if(!isConnected) print("No internet connection. Can not send request");
     try {
       if(isConnected) {
         HazizzLogger.printLog("request query: ${request.query}");
@@ -247,16 +247,12 @@ class RequestSender{
         }else{
           currentDio = defaultDio;
         }
-        print("öiaö: 0");
 
         final Options option = Options(headers: await request.buildHeader());
-        print("öiaö: 1");
 
         if(request.httpMethod == HttpMethod.GET) {
-          print("öiaö: 2");
           response = await currentDio.get(request.url, queryParameters: request.query, options: option);
         }else if(request.httpMethod == HttpMethod.POST) {
-          print("öiaö: 3");
           response = await currentDio.post(request.url, queryParameters: request.query, data: request.body, options: option);
         }else if(request.httpMethod == HttpMethod.DELETE) {
           response = await currentDio.delete(request.url, queryParameters: request.query, data: request.body, options: option);
@@ -272,7 +268,7 @@ class RequestSender{
         HazizzLogger.printLog("HazizzResponse.onSuccess ran: ${request.toString()}");
 
       }else{
-        HazizzLogger.printLog("No network connection, can't send request: ${request.toString()}");
+        HazizzLogger.printLog("No network connection. Can't send request: ${request.toString()}");
         throw noConnectionError;
       }
     }on DioError catch(error) {

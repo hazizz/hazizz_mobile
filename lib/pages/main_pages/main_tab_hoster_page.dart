@@ -93,6 +93,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
     if(_tabController.index == 2){
       NewGradesBloc().dispatch(DoesntHaveNewGradesEvent());
     }
+    FirebaseAnalyticsManager.logMainTabSelected(_tabController.index);
     setState(() {
 
     });
