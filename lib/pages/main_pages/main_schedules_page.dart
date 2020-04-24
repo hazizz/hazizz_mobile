@@ -62,7 +62,7 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
    // _currentIndex = currentDayIndex;
 
     /*
-    if(schedulesBloc.currentState is ResponseError) {
+    if(schedulesBloc.state is ResponseError) {
       HazizzLogger.printLog("log: here233");
       schedulesBloc.add(FetchData());
     }
@@ -260,7 +260,7 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
 
     });
 
-    MainTabBlocs().schedulesBloc.dispatch(ScheduleFetchEvent(yearNumber: MainTabBlocs().schedulesBloc.currentYearNumber, weekNumber: MainTabBlocs().schedulesBloc.currentWeekNumber-1));
+    MainTabBlocs().schedulesBloc.add(ScheduleFetchEvent(yearNumber: MainTabBlocs().schedulesBloc.currentYearNumber, weekNumber: MainTabBlocs().schedulesBloc.currentWeekNumber-1));
   }
 
 
@@ -302,7 +302,7 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
                         onTap: () { /* do nothing*/ },
                         child: RefreshIndicator(
                           onRefresh: () async{
-                            MainTabBlocs().schedulesBloc.dispatch(ScheduleFetchEvent());
+                            MainTabBlocs().schedulesBloc.add(ScheduleFetchEvent());
 
                           }, 
                           child: Stack(
@@ -358,11 +358,11 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
                                   Expanded(
                                     child: BlocBuilder(
                                         bloc:  MainTabBlocs().schedulesBloc,
-                                        condition: (ScheduleState beforeState, ScheduleState currentState){
-                                          //  HazizzLogger.printLog("current state is: ${currentState}");
+                                        condition: (ScheduleState beforeState, ScheduleState state){
+                                          //  HazizzLogger.printLog("current state is: ${state}");
                                           //  HazizzLogger.printLog("last state is: ${beforeState}");
 
-                                          if(beforeState is ScheduleLoadedState && currentState is ScheduleLoadedState){
+                                          if(beforeState is ScheduleLoadedState && state is ScheduleLoadedState){
                                             //return false;
                                           }
                                           return true;

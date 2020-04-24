@@ -138,14 +138,14 @@ class TasksCalendarBloc extends Bloc<TasksCalendarEvent, TasksCalendarState> {
             yield TasksCalendarErrorState(hazizzResponse);
 
             Connection.addConnectionOnlineListener((){
-              this.dispatch(TasksCalendarFetchEvent());
+              this.add(TasksCalendarFetchEvent());
             },
                 "Tasks_fetch"
             );
 
           }else if(hazizzResponse.dioError.type == DioErrorType.CONNECT_TIMEOUT
               || hazizzResponse.dioError.type == DioErrorType.RECEIVE_TIMEOUT) {
-            this.dispatch(TasksCalendarFetchEvent());
+            this.add(TasksCalendarFetchEvent());
           }else{
             yield TasksCalendarErrorState(hazizzResponse);
 

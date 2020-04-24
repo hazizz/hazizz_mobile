@@ -188,7 +188,7 @@ Future setSession(PojoSession newSession, {String password}) async {
   if(await KretaSessionManager.isRememberPassword()){
     newSession.password = password;
   }
-  SelectedSessionBloc().dispatch(SelectedSessionSetEvent(newSession));
+  SelectedSessionBloc().add(SelectedSessionSetEvent(newSession));
 }
 
 
@@ -208,22 +208,22 @@ class KretaLoginBloc extends Bloc<KretaLoginEvent, KretaLoginState> {
     passwordController = TextEditingController();
     usernameController.addListener((){
       HazizzLogger.printLog("change");
-      dispatch(KretaLoginDataChanged());
+      add(KretaLoginDataChanged());
     });
     passwordController.addListener((){
       HazizzLogger.printLog("change");
-      dispatch(KretaLoginDataChanged());
+      add(KretaLoginDataChanged());
     });
   }
 
   KretaLoginBloc.auth(this.usernameController, this.passwordController, this.schoolBloc, this.session){
     usernameController.addListener((){
       HazizzLogger.printLog("change");
-      dispatch(KretaLoginDataChanged());
+      add(KretaLoginDataChanged());
     });
     passwordController.addListener((){
       HazizzLogger.printLog("change");
-      dispatch(KretaLoginDataChanged());
+      add(KretaLoginDataChanged());
     });
     isAuth = true;
 
@@ -232,11 +232,11 @@ class KretaLoginBloc extends Bloc<KretaLoginEvent, KretaLoginState> {
   KretaLoginState get initialState => KretaLoginInitial();
 
   @override
-  void dispose() {
+  Future<void> close() {
     usernameController?.dispose();
     passwordController?.dispose();
-    schoolBloc?.dispose();
-    super.dispose();
+    schoolBloc?.close();
+    return super.close();
   }
 
   @override
@@ -303,7 +303,7 @@ class KretaLoginBloc extends Bloc<KretaLoginEvent, KretaLoginState> {
             && passwordController.text != null && passwordController.text != ""
             && schoolBloc.pickedItem != null
         ) {
-          schoolBloc.dispatch(ItemListCheckPickedEvent());
+          schoolBloc.add(ItemListCheckPickedEvent());
 
           HazizzLogger.printLog("sentaa22");
           yield KretaLoginWaiting();
@@ -373,20 +373,20 @@ class KretaLoginPageBlocs{
   KretaLoginBloc kretaLoginBloc;
 
   KretaLoginPageBlocs(){
-    schoolBloc.dispatch(ItemListLoadData());
+    schoolBloc.add(ItemListLoadData());
     kretaLoginBloc = new KretaLoginBloc(schoolBloc);
   }
 
   KretaLoginPageBlocs.auth({@required PojoSession session}){
-    schoolBloc.dispatch(PickedEvent(item: SchoolItem(session.url, session.url) ));
+    schoolBloc.add(PickedEvent(item: SchoolItem(session.url, session.url) ));
     usernameController.text = session.username;
 
     kretaLoginBloc = new KretaLoginBloc.auth(usernameController, TextEditingController(), schoolBloc, session);
   }
 
-  void dispose(){
-    kretaLoginBloc?.dispose();
+  Future<void> close(){
+    kretaLoginBloc?.close();
     usernameController?.dispose();
-    schoolBloc?.dispose();
+    return schoolBloc?.close();
   }
 }

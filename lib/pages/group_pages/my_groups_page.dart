@@ -33,7 +33,7 @@ class _MyGroupsPage extends State<MyGroupsPage> {
 
   @override
   void initState() {
-    myGroupsBloc.dispatch(FetchData());
+    myGroupsBloc.add(FetchData());
     super.initState();
   }
 
@@ -48,7 +48,7 @@ class _MyGroupsPage extends State<MyGroupsPage> {
               onPressed: () async {
                 bool result = await showCreateGroupDialog(context);
                 if(result != null && result == true){
-                  myGroupsBloc.dispatch(FetchData());
+                  myGroupsBloc.add(FetchData());
                 }
               })
           ],
@@ -85,7 +85,7 @@ class _MyGroupsPage extends State<MyGroupsPage> {
                       child: Text(locText(context, key: "info_something_went_wrong")));
                 }
             ),
-            onRefresh: () async => myGroupsBloc.dispatch(FetchData()) //await getData()
+            onRefresh: () async => myGroupsBloc.add(FetchData()) //await getData()
         )
       ),
     );

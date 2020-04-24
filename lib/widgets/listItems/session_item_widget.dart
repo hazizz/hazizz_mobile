@@ -129,7 +129,7 @@ class _SessionItemWidget extends State<SessionItemWidget>{
                                 if(value == value_remove){
                                   HazizzResponse hazizzResponse = await RequestSender().getResponse(KretaRemoveSessions(p_session: widget.session.id));
                                   if(hazizzResponse.isSuccessful){
-                                    SessionsBloc().dispatch(FetchData());
+                                    SessionsBloc().add(FetchData());
                                   }
                                   // ViewTaskBloc().commentBlocs.commentSectionBloc.add(CommentSectionFetchEvent());
                                 }

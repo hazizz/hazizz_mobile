@@ -16,7 +16,7 @@ class _ToggleSessionsWidget extends State<ToggleSessionsWidget> {
 
   @override
   void initState() {
-    notesBloc.dispatch(FetchData());
+    notesBloc.add(FetchData());
     super.initState();
   }
 

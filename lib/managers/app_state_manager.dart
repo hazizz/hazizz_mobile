@@ -109,14 +109,14 @@ class AppState{
     HazizzLogger.printLog("mainAppPartStartProcedure 1");
     await KretaSessionManager.loadSelectedSession();
     HazizzLogger.printLog("mainAppPartStartProcedure 2");
-    SelectedSessionBloc().dispatch(SelectedSessionInitalizeEvent());
+    SelectedSessionBloc().add(SelectedSessionInitalizeEvent());
     HazizzLogger.printLog("mainAppPartStartProcedure 3");
-    LoginBlocs().googleLoginBloc.dispatch(SocialLoginResetEvent());
+    LoginBlocs().googleLoginBloc.add(SocialLoginResetEvent());
     HazizzLogger.printLog("mainAppPartStartProcedure 4");
     MainTabBlocs().initialize();
     HazizzLogger.printLog("mainAppPartStartProcedure 5");
    // await Future.delayed(const Duration(milliseconds: 50));
-    SessionsBloc().dispatch(FetchData());
+    SessionsBloc().add(FetchData());
     HazizzLogger.printLog("mainAppPartStartProcedure 6");
     UserDataBlocs().initialize();
     HazizzLogger.printLog("mainAppPartStartProcedure 7");
@@ -151,7 +151,7 @@ class AppState{
     var sh = await SharedPreferences.getInstance();
     bool isLoggedIn = sh.getBool(key_isLoggedIn);
     if(!isLoggedIn){
-      BusinessNavigator().currentState().pushNamedAndRemoveUntil('login', (Route<dynamic> route) => false);
+      BusinessNavigator().state().pushNamedAndRemoveUntil('login', (Route<dynamic> route) => false);
     }
   }
 

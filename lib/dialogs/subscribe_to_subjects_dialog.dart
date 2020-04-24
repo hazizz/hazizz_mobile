@@ -25,7 +25,7 @@ class _SubscribeToSubjectDialog extends State<SubscribeToSubjectDialog> {
   }
 
   void pop(BuildContext context){
-    GroupBlocs().groupSubjectsBloc.dispatch(FetchData());
+    GroupBlocs().groupSubjectsBloc.add(FetchData());
     Navigator.pop(context, null);
   }
 

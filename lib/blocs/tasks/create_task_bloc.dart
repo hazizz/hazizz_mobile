@@ -97,15 +97,15 @@ class TaskCreateBloc extends TaskMakerBloc {
       PojoTask t = taskMakerAppState.pojoTask;
 
       for(PojoTag t in t.tags){
-        taskTagBloc.dispatch(TaskTagAddEvent(t));
+        taskTagBloc.add(TaskTagAddEvent(t));
       }
 
-      if(t.subject != null) subjectItemPickerBloc.dispatch(PickedSubjectEvent(item: t.subject));
-      if(t.group != null) groupItemPickerBloc.dispatch(PickedGroupEvent(item: t.group));
-      if(t.description != null) descriptionBloc.dispatch(TextFormSetEvent(text: t.description));
-      if(t.dueDate != null) deadlineBloc.dispatch(DateTimePickedEvent(dateTime: t.dueDate));
+      if(t.subject != null) subjectItemPickerBloc.add(PickedSubjectEvent(item: t.subject));
+      if(t.group != null) groupItemPickerBloc.add(PickedGroupEvent(item: t.group));
+      if(t.description != null) descriptionBloc.add(TextFormSetEvent(text: t.description));
+      if(t.dueDate != null) deadlineBloc.add(DateTimePickedEvent(dateTime: t.dueDate));
     }else{
-      taskTagBloc.dispatch(TaskTagAddEvent(PojoTag.defaultTags[0]));
+      taskTagBloc.add(TaskTagAddEvent(PojoTag.defaultTags[0]));
     }
   }
 
@@ -173,7 +173,7 @@ class TaskCreateBloc extends TaskMakerBloc {
         }
         HazizzLogger.printLog("log: task making was succcessful");
         return TaskMakerSuccessfulState(hazizzResponse.convertedData);
-        MainTabBlocs().tasksBloc.dispatch(TasksFetchEvent());
+        MainTabBlocs().tasksBloc.add(TasksFetchEvent());
       }else{
         return TaskMakerFailedState();
       }
@@ -186,7 +186,7 @@ class TaskCreateBloc extends TaskMakerBloc {
       yield InitializedTaskCreateState(group: event.group);
 
       if(group != null) {
-        groupItemPickerBloc.dispatch(PickedGroupEvent(item: group));
+        groupItemPickerBloc.add(PickedGroupEvent(item: group));
       }
     }
 
@@ -209,18 +209,18 @@ class TaskCreateBloc extends TaskMakerBloc {
       HazizzLogger.printLog("nuno: 1");
 
 
-      ItemListState groupState =  groupItemPickerBloc.currentState;
+      ItemListState groupState =  groupItemPickerBloc.state;
 
       if (groupState is PickedGroupState) {
         group = groupItemPickerBloc.pickedItem;
         HazizzLogger.printLog("nuno: 2");
       }
-      HState subjectState = subjectItemPickerBloc.currentState;
+      HState subjectState = subjectItemPickerBloc.state;
       if(subjectState is PickedSubjectState) {
         subject = subjectState.item;
       }
 
-      DateTimePickerState deadlineState = deadlineBloc.currentState;
+      DateTimePickerState deadlineState = deadlineBloc.state;
       if(deadlineState is DateTimePickedState) {
         deadline = deadlineState.dateTime;
       }
@@ -273,27 +273,27 @@ class TaskCreateBloc extends TaskMakerBloc {
 
         taskTagBloc.pickedTags.forEach((f){tags.add(f.name);});
 
-        ItemListState groupState =  groupItemPickerBloc.currentState;
+        ItemListState groupState =  groupItemPickerBloc.state;
 
         if (groupState is PickedGroupState) {
           groupId = groupItemPickerBloc.pickedItem.id;
           HazizzLogger.printLog("log: lulu0");
         } else {
           HazizzLogger.printLog("log: lulu1");
-          groupItemPickerBloc.dispatch(NotPickedEvent());
+          groupItemPickerBloc.add(NotPickedEvent());
           HazizzLogger.printLog("log: lulu2");
           missingInfo = true;
         }
 
 
-        HState subjectState = subjectItemPickerBloc.currentState;
+        HState subjectState = subjectItemPickerBloc.state;
         if(subjectState is PickedSubjectState) {
           subjectId = subjectState.item.id;
         }else{
           if(groupId != 0){
             HazizzLogger.printLog("log: subjectItemPickerBloc.add(NotPickedEvent());");
 
-            subjectItemPickerBloc.dispatch(NotPickedEvent());
+            subjectItemPickerBloc.add(NotPickedEvent());
             missingInfo = true;
           }
         }
@@ -302,11 +302,11 @@ class TaskCreateBloc extends TaskMakerBloc {
         HazizzLogger.printLog("log: lul2");
 
 
-        DateTimePickerState deadlineState = deadlineBloc.currentState;
+        DateTimePickerState deadlineState = deadlineBloc.state;
         if(deadlineState is DateTimePickedState) {
           deadline = deadlineState.dateTime;
         }else{
-          deadlineBloc.dispatch(DateTimeNotPickedEvent());
+          deadlineBloc.add(DateTimeNotPickedEvent());
           missingInfo = true;
         }
 
@@ -314,7 +314,7 @@ class TaskCreateBloc extends TaskMakerBloc {
 
         if(missingInfo){
           HazizzLogger.printLog("log: missing info");
-          this.dispatch(TaskMakerFailedEvent());
+          this.add(TaskMakerFailedEvent());
           return;
         }
 

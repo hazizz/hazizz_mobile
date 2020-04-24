@@ -24,11 +24,11 @@ class TasksTomorrowPage extends StatefulWidget {
 
   TasksTomorrowPage({Key key, this.tasksTomorrow}) : super(key: key){
     if(tasksTomorrow != null){
-      tasksBloc.dispatch(TasksTomorrowLoadedEvent(items: tasksTomorrow));
+      tasksBloc.add(TasksTomorrowLoadedEvent(items: tasksTomorrow));
     }else if(tasksForTomorrow != null){
-      tasksBloc.dispatch(TasksTomorrowLoadedEvent(items: tasksTomorrow));
+      tasksBloc.add(TasksTomorrowLoadedEvent(items: tasksTomorrow));
     }else{
-      tasksBloc.dispatch(TasksTomorrowFetchEvent());
+      tasksBloc.add(TasksTomorrowFetchEvent());
     }
   }
 
@@ -47,7 +47,7 @@ class _TasksTomorrowPage extends State<TasksTomorrowPage> with SingleTickerProvi
     // getData();
     HazizzLogger.printLog("in tomorrow task page");
 
-    if(widget.tasksBloc.currentState is ResponseError) {
+    if(widget.tasksBloc.state is ResponseError) {
     //  widget.tasksBloc.add(FetchData());
     }
     //   widget.tasksBloc.fetchMyTasks();
@@ -56,7 +56,7 @@ class _TasksTomorrowPage extends State<TasksTomorrowPage> with SingleTickerProvi
 
   @override
   void dispose() {
-    widget.tasksBloc.dispose();
+    widget.tasksBloc.close();
     super.dispose();
   }
 
@@ -118,7 +118,7 @@ class _TasksTomorrowPage extends State<TasksTomorrowPage> with SingleTickerProvi
 
           ),
           onRefresh: () async =>
-              widget.tasksBloc.dispatch(TasksTomorrowFetchEvent()) //await getData()
+              widget.tasksBloc.add(TasksTomorrowFetchEvent()) //await getData()
       ),
     );
   }

@@ -83,7 +83,7 @@ class _KretaSettingsPage extends State<KretaSettingsPage>  {
                           if(selectedSession != null){
                             selectedSession.password = null;
                           }
-                          SelectedSessionBloc().dispatch(SelectedSessionSetEvent(selectedSession));
+                          SelectedSessionBloc().add(SelectedSessionSetEvent(selectedSession));
                           setState(() {
                             iconBell = FontAwesomeIcons.solidBellSlash;
                             isRemember = value;

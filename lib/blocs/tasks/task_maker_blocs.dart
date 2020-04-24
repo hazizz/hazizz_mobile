@@ -46,21 +46,21 @@ abstract class TaskMakerBloc extends Bloc<TaskMakerEvent, TaskMakerState> {
 
     descriptionController.addListener((){
       String text = descriptionController.text;
-      descriptionBloc.dispatch(TextFormValidate(text: text));
+      descriptionBloc.add(TextFormValidate(text: text));
     });
 
-    groupItemPickerBloc.dispatch(ItemListLoadData());
+    groupItemPickerBloc.add(ItemListLoadData());
   }
 
   @override
-  void dispose() {
-    groupItemPickerBloc.dispose();
-    subjectItemPickerBloc.dispose();
-    deadlineBloc.dispose();
-    taskTagBloc.dispose();
-    descriptionBloc.dispose();
+  Future<void> close() {
+    groupItemPickerBloc.close();
+    subjectItemPickerBloc.close();
+    deadlineBloc.close();
+    taskTagBloc.close();
+    descriptionBloc.close();
   
-    super.dispose();
+    return super.close();
   }
 }
 
@@ -113,11 +113,11 @@ class GroupItemPickerBloc extends ItemListPickerBloc {
   ItemListState get initialState => InitialState();
 
   GroupItemPickerBloc(this.subjectItemPickerBloc) {
-    subjectItemPickerBlocSubscription = this.state.listen((state) {
+    subjectItemPickerBlocSubscription = this.listen((state) {
       if (state is PickedGroupState) {
         HazizzLogger.printLog("log: picked Group listen");
         if(state.item.id != 0) {
-          subjectItemPickerBloc.dispatch(SubjectLoadData(state.item.id));
+          subjectItemPickerBloc.add(SubjectLoadData(state.item.id));
         }
       }
     });

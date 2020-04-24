@@ -80,33 +80,33 @@ class TaskEditBloc extends TaskMakerBloc {
       HazizzLogger.printLog("log: descr: ${descriptionController.text}");
 
 
-      deadlineBloc.dispatch(DateTimePickedEvent(dateTime: taskToEdit.dueDate));
+      deadlineBloc.add(DateTimePickedEvent(dateTime: taskToEdit.dueDate));
       // taskTagBloc.add(TaskTypePickedEvent(taskToEdit.tags[0]));
       for(PojoTag t in taskToEdit.tags){
-        taskTagBloc.dispatch(TaskTagAddEvent(t));
+        taskTagBloc.add(TaskTagAddEvent(t));
       }
 
-      groupItemPickerBloc.dispatch(SetGroupEvent(item: taskToEdit.group != null ? taskToEdit.group : PojoGroup(0, "", "", "", 0) ));
+      groupItemPickerBloc.add(SetGroupEvent(item: taskToEdit.group != null ? taskToEdit.group : PojoGroup(0, "", "", "", 0) ));
 
-      subjectItemPickerBloc.dispatch(SetSubjectEvent(item: taskToEdit.subject != null ? taskToEdit.subject : PojoSubject(0, "", false, null, false)));
+      subjectItemPickerBloc.add(SetSubjectEvent(item: taskToEdit.subject != null ? taskToEdit.subject : PojoSubject(0, "", false, null, false)));
 
       List<String> splited = taskToEdit.description.split("\n![img_");
       /* for(int i = 1; i < splited.length; i++){
       imageUrls += "\n![img_" + splited[i];
       imageIndex++;
     }*/
-      descriptionBloc.dispatch(TextFormSetEvent(text: splited[0]));
+      descriptionBloc.add(TextFormSetEvent(text: splited[0]));
     }else if(taskMakerAppState != null){
       PojoTask t = taskMakerAppState.pojoTask;
 
       for(PojoTag t in t.tags){
-        taskTagBloc.dispatch(TaskTagAddEvent(t));
+        taskTagBloc.add(TaskTagAddEvent(t));
       }
 
-      subjectItemPickerBloc.dispatch(PickedSubjectEvent(item: t.subject));
-      groupItemPickerBloc.dispatch(PickedGroupEvent(item: t.group));
-      descriptionBloc.dispatch(TextFormSetEvent(text: t.description));
-      deadlineBloc.dispatch(DateTimePickedEvent(dateTime: t.dueDate));
+      subjectItemPickerBloc.add(PickedSubjectEvent(item: t.subject));
+      groupItemPickerBloc.add(PickedGroupEvent(item: t.group));
+      descriptionBloc.add(TextFormSetEvent(text: t.description));
+      deadlineBloc.add(DateTimePickedEvent(dateTime: t.dueDate));
     }
   }
 
@@ -137,12 +137,12 @@ class TaskEditBloc extends TaskMakerBloc {
           subjectId = subject.id;
         }
 
-        DateTimePickerState deadlineState = deadlineBloc.currentState;
+        DateTimePickerState deadlineState = deadlineBloc.state;
         if(deadlineState is DateTimePickedState) {
           deadline = deadlineState.dateTime;
         }else{
           HazizzLogger.printLog("log: missing: deadline");
-          deadlineBloc.dispatch(DateTimeNotPickedEvent());
+          deadlineBloc.add(DateTimeNotPickedEvent());
           missingInfo = true;
         }
 
@@ -150,7 +150,7 @@ class TaskEditBloc extends TaskMakerBloc {
 
         if(missingInfo){
           HazizzLogger.printLog("log: missing info");
-          this.dispatch(TaskMakerFailedEvent());
+          this.add(TaskMakerFailedEvent());
           return;
         }
         HazizzLogger.printLog("log: not missing info");

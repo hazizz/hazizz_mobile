@@ -1,9 +1,7 @@
 import 'dart:math';
-
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_widgets/flutter_widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
 import 'package:mobile/blocs/other/response_states.dart';
@@ -19,9 +17,8 @@ import 'package:mobile/widgets/listItems/task_header_item_widget.dart';
 import 'package:mobile/widgets/listItems/task_item_widget.dart';
 import 'package:mobile/widgets/scroll_space_widget.dart';
 import 'package:mobile/widgets/tab_widget.dart';
-
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:sticky_headers/sticky_headers.dart';
-
 import 'package:mobile/custom/hazizz_localizations.dart';
 
 class TasksPage extends TabWidget {
@@ -60,6 +57,21 @@ class _TasksPage extends State<TasksPage>
       )
     );
   }
+  /*
+  void scrollTo2({int index}){
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      if(index != null) currentEventIndex = index;
+      print("scrolling: $currentEventIndex");
+      itemScrollController?.scrollTo(
+          index: currentEventIndex,
+          duration: Duration(milliseconds: 600),
+          curve: Curves.easeInOutCubic
+      );
+      print("scrolling: $currentEventIndex yes");
+
+    });
+  }
+  */
 
   @override
   void initState() {
@@ -78,11 +90,10 @@ class _TasksPage extends State<TasksPage>
 
   @override
   void dispose() {
-    // tasksBloc.dispose();
-  //  itemScrollController.dispose();
-  //  itemPositionListener.dispose()
     super.dispose();
   }
+
+
 
   Map<DateTime, List<PojoTask>> map;
 
@@ -142,7 +153,7 @@ class _TasksPage extends State<TasksPage>
 
                       applyFilters();
 
-                      MainTabBlocs().tasksBloc.dispatch(TasksFetchEvent());
+                      MainTabBlocs().tasksBloc.add(TasksFetchEvent());
                     },
                   )
                 ],
@@ -211,7 +222,7 @@ class _TasksPage extends State<TasksPage>
                                         HazizzLogger.printLog("oof22: anim: ${animationStatus.toString()}");
                                         if(animationStatus == AnimationStatus.dismissed){
                                           HazizzLogger.printLog("oof: ${map[key]}");
-                                          MainTabBlocs().tasksBloc.dispatch(TasksRemoveItemEvent( mapKey: key, index: index2));
+                                          MainTabBlocs().tasksBloc.add(TasksRemoveItemEvent( mapKey: key, index: index2));
                                         }
                                       });
                                       return buildItem(context2, index2, animation2, removedItem, (){});
@@ -352,7 +363,7 @@ class _TasksPage extends State<TasksPage>
                 ),
                 onRefresh: () async{
                   applyFilters();
-                  MainTabBlocs().tasksBloc.dispatch(TasksFetchEvent()); //await getData()
+                  MainTabBlocs().tasksBloc.add(TasksFetchEvent()); //await getData()
                   HazizzLogger.printLog("log: refreshing tasks");
                   return;
                 }

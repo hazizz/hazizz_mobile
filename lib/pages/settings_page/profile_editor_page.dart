@@ -71,16 +71,14 @@ class _ProfileEditorPage extends State<ProfileEditorPage> with TickerProviderSta
       return false;
     }
 
-    profileEditorBlocs.pictureEditorBloc.dispatch(ProfilePictureEditorChangedEvent(imageBytes: image.readAsBytesSync()));
+    profileEditorBlocs.pictureEditorBloc.add(ProfilePictureEditorChangedEvent(imageBytes: image.readAsBytesSync()));
 
     return true;
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
-
-    profileEditorBlocs.dispose();
+    profileEditorBlocs.close();
     super.dispose();
   }
 
@@ -227,7 +225,7 @@ class _ProfileEditorPage extends State<ProfileEditorPage> with TickerProviderSta
                             heroTag: "hero_fab_profile_editor_name",
                             child: Icon(iconData),
                             onPressed: (){
-                              profileEditorBlocs.displayNameEditorBloc.dispatch(DisplayNameSendEvent());
+                              profileEditorBlocs.displayNameEditorBloc.add(DisplayNameSendEvent());
                             },
                           )
                         ],

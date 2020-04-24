@@ -133,14 +133,14 @@ class SocialLoginBloc extends Bloc<SocialLoginEvent, SocialLoginState> {
   SocialLoginState get initialState => SocialLoginFineState();
 
   @override
-  void dispose() {
+  Future<void> close() {
     // TODO: implement dispose
-    HazizzLogger.printLog("google login bloc DISPOSED");
-    super.dispose();
+    HazizzLogger.printLog("google login bloc CLOSED");
+    return super.close();
   }
 
   void reset(){
-    this.dispatch(SocialLoginResetEvent());
+    this.add(SocialLoginResetEvent());
   }
 
   Future<void> logout() async{}

@@ -10,7 +10,7 @@ class BusinessNavigator{
 
    final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
 
-   NavigatorState currentState() {
+   NavigatorState state() {
     return navigatorKey.currentState;
   }
 

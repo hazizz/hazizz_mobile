@@ -29,15 +29,15 @@ class UserDataBlocs{
   UserDataBlocs._internal();
 
   void initialize(){
-    userDataBloc.dispatch(MyUserDataGetEvent());
-    pictureBloc.dispatch(ProfilePictureGetEvent());
+    userDataBloc.add(MyUserDataGetEvent());
+    pictureBloc.add(ProfilePictureGetEvent());
 
   }
 
 
 
-  dispose(){
-    pictureBloc.dispose();
+  Future<void> close(){
+    return pictureBloc.close();
   }
 }
 
@@ -280,7 +280,7 @@ class DisplayNameBloc extends Bloc<DisplayNameEvent, DisplayNameState> {
 
   DisplayNameBloc() {
     displayNameController.addListener((){
-      if(this.currentState is! DisplayNameInitialState && displayNameController.text != lastText){
+      if(this.state is! DisplayNameInitialState && displayNameController.text != lastText){
         lastText = displayNameController.text;
         this.add(DisplayNameChangedEvent(displayName: displayNameController.text));
       }
@@ -301,7 +301,7 @@ class DisplayNameBloc extends Bloc<DisplayNameEvent, DisplayNameState> {
       lastText = event.displayName;
       yield DisplayNameLoadedFromCacheState(displayName: event.displayName);
     }else if (event is DisplayNameSendEvent){
-      if(this.currentState is DisplayNameChangedState){
+      if(this.state is DisplayNameChangedState){
         HazizzResponse hazizzResponse = await getResponse(UpdateMyDisplayName(b_displayName: displayNameController.text));
 
         if(hazizzResponse.isSuccessful){

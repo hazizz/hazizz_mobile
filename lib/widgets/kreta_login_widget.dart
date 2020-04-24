@@ -76,7 +76,7 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
 
   @override
   void dispose() {
-    kretaLoginBlocs.dispose();
+    kretaLoginBlocs.close();
     _usernameTextEditingController?.dispose();
     _passwordTextEditingController?.dispose();
     super.dispose();
@@ -198,13 +198,13 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
           onTap: () {
 
             if (widget.sessionToAuth == null) {
-              if(kretaLoginBlocs.schoolBloc.currentState is ItemListLoaded
-                  || kretaLoginBlocs.schoolBloc.currentState is ItemListPickedState
+              if(kretaLoginBlocs.schoolBloc.state is ItemListLoaded
+                  || kretaLoginBlocs.schoolBloc.state is ItemListPickedState
               ){
                 showSchoolsDialog(context, data: kretaLoginBlocs.schoolBloc.data,
                     onPicked: ({String key, String value}){
                       HazizzLogger.printLog("school picked: key: $key, value: $value");
-                      kretaLoginBlocs.schoolBloc.dispatch(PickedEvent(item: SchoolItem(key, value)));
+                      kretaLoginBlocs.schoolBloc.add(PickedEvent(item: SchoolItem(key, value)));
                     }
                 );
               }
@@ -310,10 +310,10 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
                       child: RaisedButton(
                           child: Text(locText(context, key: "login").toUpperCase()),
                           onPressed: () async {
-                            if(kretaLoginBlocs.schoolBloc.currentState is ItemListPickedState) {
+                            if(kretaLoginBlocs.schoolBloc.state is ItemListPickedState) {
                               FocusScope.of(context).requestFocus(new FocusNode());
 
-                              kretaLoginBlocs.kretaLoginBloc.dispatch(
+                              kretaLoginBlocs.kretaLoginBloc.add(
                                 KretaLoginButtonPressed(
                                   password: _passwordTextEditingController.text,
                                   username: _usernameTextEditingController.text,

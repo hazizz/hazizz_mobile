@@ -132,8 +132,8 @@ class FlushBloc extends Bloc<FlushEvent, FlushState> {
   FlushState get initialState => FlushInitialState();
 
   @override
-  void dispose() {
-    super.dispose();
+  Future<void> close() {
+    return super.close();
   }
 
   @override
@@ -168,7 +168,8 @@ class FlushBloc extends Bloc<FlushEvent, FlushState> {
     }
     */
 
-    print("dude2: ${currentState.toString()}");
+
+    print("dude2: ${state.toString()}");
   }
 }
 //endregion

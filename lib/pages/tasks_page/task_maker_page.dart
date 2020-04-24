@@ -142,7 +142,7 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
 
   @override
   void dispose() {
-    blocs.dispose();
+    blocs.close();
     super.dispose();
   }
 
@@ -157,7 +157,7 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
     }
 
 
-    blocs.dispatch(TaskMakerSaveStateEvent(
+    blocs.add(TaskMakerSaveStateEvent(
       salt: widget.cryptKey,
       imageDatas: imageDatas
     ));
@@ -198,7 +198,7 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
                 hasCloseButton: true,
                 onCloseClick: (){
                   HazizzLogger.printLog("locsing");
-                  blocs.taskTagBloc.dispatch(TaskTagRemoveEvent(tag: t));
+                  blocs.taskTagBloc.add(TaskTagRemoveEvent(tag: t));
                 },
               )
             );
@@ -216,7 +216,7 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
                 PojoTag result = await showDialogTaskTag(context, except: blocs.taskTagBloc.pickedTags);
                 HazizzLogger.printLog("showDialogTaskTag dialog result: ${result?.name}");
                 if(result != null){
-                  blocs.taskTagBloc.dispatch(TaskTagAddEvent(result));
+                  blocs.taskTagBloc.add(TaskTagAddEvent(result));
                 }
               },
             ));
@@ -288,7 +288,7 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
                 if(state is ItemListLoaded || state is PickedGroupState) {
                   PojoGroup result = await showDialogGroup(context, data: dataList);
                   if(result != null) {
-                    blocs.groupItemPickerBloc.dispatch(
+                    blocs.groupItemPickerBloc.add(
                         PickedGroupEvent(item: result));
                   }
                 }
@@ -372,7 +372,7 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
                     if (state is! Waiting && state is! InitialState && state is! ItemListFail) {
                       PojoSubject result = await showDialogSubject(context, data: dataList, group: blocs.groupItemPickerBloc.pickedItem);
                       if(result != null){
-                        blocs.subjectItemPickerBloc.dispatch(PickedSubjectEvent(item: result));
+                        blocs.subjectItemPickerBloc.add(PickedSubjectEvent(item: result));
                       }
                     }
                   }
@@ -436,7 +436,7 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
               lastDate: DateTime.now().add(Duration(days: 364))
             );
             if(picked != null) {
-              blocs.deadlineBloc.dispatch(DateTimePickedEvent(dateTime: picked));
+              blocs.deadlineBloc.add(DateTimePickedEvent(dateTime: picked));
             }
           },
         );
@@ -513,7 +513,7 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
                     return SimilarTasksWidget(similarTasks: state.similarTasks,);
               });
               if(result){
-                blocs.dispatch(TaskMakerProceedToSendEvent());
+                blocs.add(TaskMakerProceedToSendEvent());
               }else{
                 Navigator.pop(context);
               }
@@ -548,7 +548,7 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
                           ),
                           onPressed: () async {
                             if(!(state is TaskMakerWaitingState)) {
-                              blocs.dispatch(
+                              blocs.add(
                                   TaskMakerSendEvent(imageDatas: imageDatas, salt: widget.cryptKey)
                               );
                             }

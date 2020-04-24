@@ -31,24 +31,24 @@ class _SessionSelectorWidget extends State<SessionSelectorWidget> with Automatic
   @override
   void initState() {
     initalizeSelectedSession();
-    SessionsBloc().dispatch(FetchData());
+    SessionsBloc().add(FetchData());
     super.initState();
   }
 
   List<PojoSession> sessions = List();
   SessionItemWidget selectedSessionWidget;
    void initalizeSelectedSession(){
-    SelectedSessionState currentState = SelectedSessionBloc().currentState;
+    SelectedSessionState state = SelectedSessionBloc().state;
 
-    HazizzLogger.printLog("initalize SelectedSessionState: ${currentState.toString()}");
+    HazizzLogger.printLog("initalize SelectedSessionState: ${state.toString()}");
 
-    if(currentState is SelectedSessionEmptyState){
+    if(state is SelectedSessionEmptyState){
 
-    }else if(currentState is SelectedSessionInactiveState){
+    }else if(state is SelectedSessionInactiveState){
 
-    }else if(currentState is SelectedSessionFineState){
+    }else if(state is SelectedSessionFineState){
 
-      PojoSession selectedSession = currentState.session;
+      PojoSession selectedSession = state.session;
       sessions.remove(selectedSession);
       selectedSessionWidget = SessionItemWidget(session: selectedSession,);
     }
@@ -93,7 +93,7 @@ class _SessionSelectorWidget extends State<SessionSelectorWidget> with Automatic
             var doRefresh = await Navigator.pushNamed(context, "/kreta/login", /* arguments: (){
             }*/);
             if(doRefresh != null && doRefresh is bool && doRefresh){
-              SessionsBloc().dispatch(FetchData());
+              SessionsBloc().add(FetchData());
             }
           },
         ) : Container(),
@@ -132,7 +132,7 @@ class _SessionSelectorWidget extends State<SessionSelectorWidget> with Automatic
             )
           ],
         ),
-        onRefresh: () async => SessionsBloc().dispatch(FetchData()) //await getData()
+        onRefresh: () async => SessionsBloc().add(FetchData()) //await getData()
       ),
     );
   }

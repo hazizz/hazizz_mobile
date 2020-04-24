@@ -62,7 +62,7 @@ class GoogleLoginBloc extends SocialLoginBloc{
   }
 
   void reset(){
-    this.dispatch(SocialLoginResetEvent());
+    this.add(SocialLoginResetEvent());
   }
 
   @override

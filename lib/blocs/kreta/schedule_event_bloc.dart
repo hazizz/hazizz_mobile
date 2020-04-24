@@ -201,7 +201,7 @@ class ScheduleEventBloc extends Bloc<ScheduleEventEvent, ScheduleEventState> {
 
       HazizzLogger.printLog("log: this is a debug: 1");
 
-      this.dispatch(ScheduleEventUpdateEvent());
+      this.add(ScheduleEventUpdateEvent());
       HazizzLogger.printLog("log: this is a debug: 2");
 
     }else if (event is ScheduleEventUpdateEvent) {
@@ -217,7 +217,7 @@ class ScheduleEventBloc extends Bloc<ScheduleEventEvent, ScheduleEventState> {
     void handleTimeout() {  // callback function
       // time to update the event widget
       HazizzLogger.printLog("TIMER FIRED !!!");
-      this.dispatch(ScheduleEventNextEvent());
+      this.add(ScheduleEventNextEvent());
     }
 
     startTimeout() {

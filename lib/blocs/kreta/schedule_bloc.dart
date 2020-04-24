@@ -202,7 +202,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     int year = _getYear(selectedDate);
     int weekNumber = _getWeekNumber(selectedDate);
 
-    MainTabBlocs().schedulesBloc.dispatch(ScheduleFetchEvent(yearNumber: year, weekNumber: weekNumber));
+    MainTabBlocs().schedulesBloc.add(ScheduleFetchEvent(yearNumber: year, weekNumber: weekNumber));
   }
 
   void previousWeek(){
@@ -213,7 +213,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     int year = _getYear(selectedDate);
     int weekNumber = _getWeekNumber(selectedDate);
 
-    MainTabBlocs().schedulesBloc.dispatch(ScheduleFetchEvent(yearNumber: year, weekNumber: weekNumber));
+    MainTabBlocs().schedulesBloc.add(ScheduleFetchEvent(yearNumber: year, weekNumber: weekNumber));
   }
 
   @override
@@ -278,7 +278,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
           /*
           if(doesContainSelectedSession(failedSessions)){
-            FlushBloc().dispatch(FlushSessionFailEvent());
+            FlushBloc().add(FlushSessionFailEvent());
           }
           */
 
@@ -327,7 +327,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
             yield ScheduleErrorState(hazizzResponse);
 
             Connection.addConnectionOnlineListener((){
-              this.dispatch(ScheduleFetchEvent());
+              this.add(ScheduleFetchEvent());
             },
                 "schedule_fetch"
             );
@@ -336,7 +336,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
                 || hazizzResponse.dioError.type == DioErrorType.RECEIVE_TIMEOUT) {
             _failedRequestCount++;
             if(_failedRequestCount <= 1) {
-              this.dispatch(ScheduleFetchEvent());
+              this.add(ScheduleFetchEvent());
             }else{
               yield ScheduleLoadedCacheState(classes);
             }

@@ -19,7 +19,7 @@ class _KretaNotesPage extends State<KretaNotesPage> {
 
   @override
   void initState() {
-    notesBloc.dispatch(FetchData());
+    notesBloc.add(FetchData());
     super.initState();
   }
 
@@ -32,7 +32,7 @@ class _KretaNotesPage extends State<KretaNotesPage> {
         ),
         body: RefreshIndicator(
           onRefresh: () async{
-            notesBloc.dispatch(FetchData());
+            notesBloc.add(FetchData());
           },
           child: Stack(
             children: <Widget>[

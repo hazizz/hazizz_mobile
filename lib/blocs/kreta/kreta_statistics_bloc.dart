@@ -108,14 +108,14 @@ class KretaGradeStatisticsBloc extends Bloc<KretaGradeStatisticsEvent, KretaGrad
           if(hazizzResponse.dioError == noConnectionError){
             yield KretaGradeStatisticsErrorState(hazizzResponse);
             Connection.addConnectionOnlineListener((){
-              this.dispatch(KretaGradeStatisticsFetchEvent());
+              this.add(KretaGradeStatisticsFetchEvent());
             },
                 "KretaGradeStatistics_fetch"
             );
           }else if(hazizzResponse.dioError.type == DioErrorType.CONNECT_TIMEOUT
               || hazizzResponse.dioError.type == DioErrorType.RECEIVE_TIMEOUT) {
             HazizzLogger.printLog("log: noConnectionError22");
-            this.dispatch(KretaGradeStatisticsFetchEvent());
+            this.add(KretaGradeStatisticsFetchEvent());
           } else if(hazizzResponse.hasPojoError && hazizzResponse.pojoError.errorCode == 138) {
             yield KretaGradeStatisticsErrorState(hazizzResponse);
           }

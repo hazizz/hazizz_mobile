@@ -205,7 +205,7 @@ class TextFormBloc extends Bloc<HFormEvent, HFormState> {
         if(lastText != event.text || lastText == null){
          // HazizzLogger.printLog("VALIDITATION: ${event.text}: ${validate(event.text)}");
           yield validate(event.text);
-       //   HazizzLogger.printLog("ajksiofdcoji: ${currentState}");
+       //   HazizzLogger.printLog("ajksiofdcoji: ${state}");
           lastText = event.text;
         }
       }else if(event is TextFormIllegalCharacterEvent){

@@ -141,7 +141,7 @@ class _CommentItemWidget extends State<CommentItemWidget>{
                       onSelected: (value) async {
                         if(value == value_delete){
                           await RequestSender().getResponse(DeleteComment(p_commentId: widget.comment.id));
-                          ViewTaskBloc().commentBlocs.commentSectionBloc.dispatch(CommentSectionFetchEvent());
+                          ViewTaskBloc().commentBlocs.commentSectionBloc.add(CommentSectionFetchEvent());
                         }else if(value == "report"){
                           bool success = await showReportDialog(context, reportType: ReportTypeEnum.COMMENT, id: widget.comment.id, secondId: widget.taskId, name: widget.comment.creator.displayName);
                           if(success != null && success){

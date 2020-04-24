@@ -111,14 +111,14 @@ class GroupMembersBloc extends Bloc<HEvent, HState> {
           for(PojoUser member in membersPermissions.OWNER){
             if (myId == member.id){
 
-              GroupBlocs().myPermissionBloc.dispatch(MyPermissionSetEvent(permission: GroupPermissionsEnum.OWNER));
+              GroupBlocs().myPermissionBloc.add(MyPermissionSetEvent(permission: GroupPermissionsEnum.OWNER));
               found = true;
             }
           }
           if(!found){
             for(PojoUser member in membersPermissions.MODERATOR){
               if (myId == member.id){
-                GroupBlocs().myPermissionBloc.dispatch(MyPermissionSetEvent(permission: GroupPermissionsEnum.MODERATOR));
+                GroupBlocs().myPermissionBloc.add(MyPermissionSetEvent(permission: GroupPermissionsEnum.MODERATOR));
                 found = true;
               }
             }
@@ -126,7 +126,7 @@ class GroupMembersBloc extends Bloc<HEvent, HState> {
           if(!found){
             for(PojoUser member in membersPermissions.USER){
               if (myId == member.id){
-                GroupBlocs().myPermissionBloc.dispatch(MyPermissionSetEvent(permission: GroupPermissionsEnum.USER));
+                GroupBlocs().myPermissionBloc.add(MyPermissionSetEvent(permission: GroupPermissionsEnum.USER));
                 found = true;
               }
             }
@@ -134,7 +134,7 @@ class GroupMembersBloc extends Bloc<HEvent, HState> {
           if(!found){
             for(PojoUser member in membersPermissions.NULL){
               if (myId == member.id){
-                GroupBlocs().myPermissionBloc.dispatch(MyPermissionSetEvent(permission: GroupPermissionsEnum.NULL));
+                GroupBlocs().myPermissionBloc.add(MyPermissionSetEvent(permission: GroupPermissionsEnum.NULL));
                 found = true;
               }
             }
@@ -207,7 +207,7 @@ class MyPermissionBloc extends Bloc<MyPermissionEvent, MyPermissionState> {
   MyPermissionState get initialState => MyPermissionInitialState();
 
   void reset(){
-    this.dispatch(MyPermissionResetEvent());
+    this.add(MyPermissionResetEvent());
   }
 
   @override
@@ -240,14 +240,14 @@ class GroupBlocs{
   void newGroup(PojoGroup group){
     this.group = group;
     groupTasksBloc = new TasksBloc.group(group.id, theraEnabled: false);
-    groupTasksBloc.dispatch(TasksFetchEvent());
-    groupSubjectsBloc.dispatch(FetchData());
-    groupMembersBloc.dispatch(FetchData());
+    groupTasksBloc.add(TasksFetchEvent());
+    groupSubjectsBloc.add(FetchData());
+    groupMembersBloc.add(FetchData());
   }
 
   void reset(){
     group = null;
-    myPermissionBloc.dispatch(MyPermissionResetEvent());
+    myPermissionBloc.add(MyPermissionResetEvent());
   }
 }
 

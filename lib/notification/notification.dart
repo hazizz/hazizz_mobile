@@ -11,13 +11,13 @@ import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 
-Future callbackDispatcher2() async {
+Future callbackadder2() async {
   HazizzLogger.printLog("ALARM MANAGER FIRED");
   await HazizzNotification.showHazizzNotification();
 
 }
 /*
-void callbackDispatcher() {
+void callbackadder() {
   Workmanager.executeTask((backgroundTask)  async {
     HazizzLogger.printLog("work manager: fired");
     await HazizzNotification.showHazizzNotification();
@@ -145,7 +145,7 @@ class HazizzNotification{
   }
 
   /*
-  static void callbackDispatcher() {
+  static void callbackadder() {
     Workmanager.executeTask((backgroundTask)  {
       HazizzLogger.printLog("log: work manager: fired");
       showHazizzNotification();
@@ -171,7 +171,7 @@ class HazizzNotification{
 
 
    // await AndroidAlarmManager.cancel(alarmID);
-   // await AndroidAlarmManager.periodic(const Duration(hours: 24), alarmID, callbackDispatcher2, wakeup: true, exact: true, rescheduleOnReboot: true,  startAt: dateTime);
+   // await AndroidAlarmManager.periodic(const Duration(hours: 24), alarmID, callbackadder2, wakeup: true, exact: true, rescheduleOnReboot: true,  startAt: dateTime);
 
 
     String tasksTomorrowChannelName = await locTextContextless(key: "notification_tasksTomorrow_channel_name");

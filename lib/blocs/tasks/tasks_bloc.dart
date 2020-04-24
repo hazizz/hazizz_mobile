@@ -250,7 +250,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
             yield TasksErrorState(hazizzResponse);
 
             Connection.addConnectionOnlineListener((){
-              this.dispatch(TasksFetchEvent());
+              this.add(TasksFetchEvent());
             },
                 "Tasks_fetch"
             );
@@ -258,7 +258,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
           }else if(hazizzResponse.dioError.type == DioErrorType.CONNECT_TIMEOUT
               || hazizzResponse.dioError.type == DioErrorType.RECEIVE_TIMEOUT) {
             HazizzLogger.printLog("log: noConnectionError22");
-            this.dispatch(TasksFetchEvent());
+            this.add(TasksFetchEvent());
           }else{
             yield TasksErrorState(hazizzResponse);
 

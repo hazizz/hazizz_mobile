@@ -278,7 +278,7 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
           /*
           if(doesContainSelectedSession(failedSessions)){
             print("doesContainSelectedSession");
-            FlushBloc().dispatch(FlushSessionFailEvent());
+            FlushBloc().add(FlushSessionFailEvent());
             print("doesContainSelectedSession0");
 
            // yield GradesSessionFailedState(grades ?? PojoGrades({}));
@@ -301,7 +301,7 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
 
               if(oldGrades == null || grades.grades.toString() != oldGrades.grades.toString()){
                 print("CHANGE HAPPENDE1");
-                NewGradesBloc().dispatch(HasNewGradesEvent());
+                NewGradesBloc().add(HasNewGradesEvent());
 
                 for(String key in oldGrades.grades.keys){
                   for(PojoGrade g1 in oldGrades.grades[key]){
@@ -346,7 +346,7 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
           if(hazizzResponse.dioError == noConnectionError){
             yield GradesErrorState(hazizzResponse);
             Connection.addConnectionOnlineListener((){
-              this.dispatch(GradesFetchEvent());
+              this.add(GradesFetchEvent());
             },
                 "grades_fetch"
             );
@@ -355,7 +355,7 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
             print("here i am and im here to ");
             _failedRequestCount++;
             if(_failedRequestCount == 1) {
-              this.dispatch(GradesFetchEvent());
+              this.add(GradesFetchEvent());
             }else{
               yield GradesLoadedCacheState(grades);
             }

@@ -205,7 +205,7 @@ class _UserDialog extends State<UserDialog> {
                     else if(value == "kick"){
                       bool success = await showSureToKickFromGroupDialog(context, groupId: GroupBlocs().group.id, pojoUser: PojoUser(id: widget.id, displayName: widget.displayName, username: widget.username, registrationDate: DateTime(2000)));
                       if(success != null && success){
-                        GroupBlocs().groupMembersBloc.dispatch(FetchData());
+                        GroupBlocs().groupMembersBloc.add(FetchData());
                       }
                     }
                     

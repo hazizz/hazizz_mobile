@@ -387,7 +387,6 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
                                 ),
                               )
                           ),
-
                           Expanded(
                             child: BlocBuilder(
                                 bloc: MainTabBlocs().gradesBloc,
@@ -438,7 +437,7 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
                       ],
                     ),
                     onRefresh: () async{
-                      MainTabBlocs().gradesBloc.dispatch(GradesFetchEvent()); //await getData()
+                      MainTabBlocs().gradesBloc.add(GradesFetchEvent()); //await getData()
                       return;
                     }
                 ),

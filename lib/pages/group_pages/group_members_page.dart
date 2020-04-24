@@ -36,8 +36,8 @@ class _GroupMembersPage extends State<GroupMembersPage> with AutomaticKeepAliveC
 
   @override
   void initState() {
-    if(groupMembersBloc.currentState is ResponseError) {
-      groupMembersBloc.dispatch(FetchData());
+    if(groupMembersBloc.state is ResponseError) {
+      groupMembersBloc.add(FetchData());
     }
 
     super.initState();
@@ -66,7 +66,7 @@ class _GroupMembersPage extends State<GroupMembersPage> with AutomaticKeepAliveC
                   List<MemberItemWidget> membersWidget = List();
 
                   Function onKicked = (){
-                    groupMembersBloc.dispatch(FetchData());
+                    groupMembersBloc.add(FetchData());
                   };
 
                   for(PojoUser member in memberPermissions.OWNER){
@@ -101,7 +101,7 @@ class _GroupMembersPage extends State<GroupMembersPage> with AutomaticKeepAliveC
             ),
           ],
         ),
-        onRefresh: () async => groupMembersBloc.dispatch(FetchData()) //await getData()
+        onRefresh: () async => groupMembersBloc.add(FetchData()) //await getData()
       )
     );
   }

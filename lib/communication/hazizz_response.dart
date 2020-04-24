@@ -50,8 +50,8 @@ class HazizzResponse{
       HazizzLogger.printLog("successful response raw body: ${response.data}");
     }
 
-    if(request is TheraRequest && KretaStatusBloc().currentState is KretaStatusUnavailableState){
-      KretaStatusBloc().dispatch(KretaStatusAvailableEvent());
+    if(request is TheraRequest && KretaStatusBloc().state is KretaStatusUnavailableState){
+      KretaStatusBloc().add(KretaStatusAvailableEvent());
     }
 
     return hazizzResponse;
@@ -89,8 +89,8 @@ class HazizzResponse{
           Crashlytics().recordError(CustomException(pojoError.toJson().toString()), StackTrace.current);
         }
         else if(pojoError.errorCode == 138){
-          KretaStatusBloc().dispatch(KretaStatusUnavailableEvent());
-          FlushBloc().dispatch(FlushKretaUnavailableEvent());
+          KretaStatusBloc().add(KretaStatusUnavailableEvent());
+          FlushBloc().add(FlushKretaUnavailableEvent());
         }
         else if(pojoError.errorCode == 19) { // to many requests
           HazizzLogger.printLog("Too many requests");
@@ -134,21 +134,21 @@ class HazizzResponse{
             pojoError.errorCode == 15) {
           // navigate to login/register page
         }else if(pojoError.errorCode == 132 && !(request is KretaAuthenticateSession)){
-         // SelectedSessionBloc().dispatch(SelectedSessionSetEvent(null));
+         // SelectedSessionBloc().add(SelectedSessionSetEvent(null));
           Crashlytics().recordError(CustomException("Tried authenticating a non existing session"), StackTrace.current, context: "Session is null");
           // TODO handle this
           HazizzResponse hazizzResponse = await RequestSender().getResponse(KretaCreateSession(b_username: SelectedSessionBloc().selectedSession.username, b_password: SelectedSessionBloc().selectedSession.password, b_url: SelectedSessionBloc().selectedSession.url));
           if(hazizzResponse.isSuccessful){
             PojoSession newSession = hazizzResponse.convertedData;
-            SelectedSessionBloc().dispatch(SelectedSessionSetEvent(newSession));
+            SelectedSessionBloc().add(SelectedSessionSetEvent(newSession));
           }else{
             Crashlytics().recordError(CustomException("Session creation failed. ErrorCode: ${pojoError?.errorCode}"), StackTrace.current, context: "Session creation failed");
-            SelectedSessionBloc().dispatch(SelectedSessionInactiveEvent());
+            SelectedSessionBloc().add(SelectedSessionInactiveEvent());
           }
         }
         // TODO ^ massive rework needed
         else if(pojoError.errorCode == 136 || pojoError.errorCode == 132 || pojoError.errorCode == 130){
-          SelectedSessionBloc().dispatch(SelectedSessionInactiveEvent());
+          SelectedSessionBloc().add(SelectedSessionInactiveEvent());
         }
 
 
@@ -159,13 +159,13 @@ class HazizzResponse{
         || dioError.type == DioErrorType.RECEIVE_TIMEOUT
         || dioError?.response?.statusCode == 503
         ){
-          FlushBloc().dispatch(FlushServerUnavailableEvent());
+          FlushBloc().add(FlushServerUnavailableEvent());
         }
       }
     }else{
       if(dioError == noConnectionError){
         print("No connection error fired");
-        FlushBloc().dispatch(FlushNoConnectionEvent());
+        FlushBloc().add(FlushNoConnectionEvent());
       }
     }
   }

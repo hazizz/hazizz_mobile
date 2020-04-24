@@ -4,7 +4,6 @@ import 'dart:math' as math;
 import 'dart:math';
 import 'package:animator/animator.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
-import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -91,7 +90,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
     mapTabIndexToTabName(_tabController.index);
     _sendCurrentTabToAnalytics();
     if(_tabController.index == 2){
-      NewGradesBloc().dispatch(DoesntHaveNewGradesEvent());
+      NewGradesBloc().add(DoesntHaveNewGradesEvent());
     }
     FirebaseAnalyticsManager.logMainTabSelected(_tabController.index);
     setState(() {
@@ -592,7 +591,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                                                 selectedKretaAccount = s;
                                                 print("uff2: ${selectedKretaAccount.username}");
 
-                                                SelectedSessionBloc().dispatch(SelectedSessionSetEvent(s));
+                                                SelectedSessionBloc().add(SelectedSessionSetEvent(s));
                                                 break;
                                               }
                                             }
@@ -681,7 +680,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                                                     selectedKretaAccount = s;
                                                     print("uff2: ${selectedKretaAccount.username}");
 
-                                                    SelectedSessionBloc().dispatch(SelectedSessionSetEvent(s));
+                                                    SelectedSessionBloc().add(SelectedSessionSetEvent(s));
                                                     break;
                                                   }
                                                 }

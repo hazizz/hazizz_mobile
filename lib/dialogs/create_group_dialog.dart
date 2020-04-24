@@ -255,7 +255,7 @@ class _CreateGroupDialog extends State<CreateGroupDialog> {
                     FlatButton(
                       child: Text(locText(context, key: "create").toUpperCase()),
                       onPressed: (){
-                        createGroupBloc.dispatch(CreateGroupCreateEvent(groupType: groupValue, groupName: groupNameController.text, password: groupValue == GroupType.PASSWORD ? groupPasswordController.text : null));
+                        createGroupBloc.add(CreateGroupCreateEvent(groupType: groupValue, groupName: groupNameController.text, password: groupValue == GroupType.PASSWORD ? groupPasswordController.text : null));
                       }
                   )],
                 )

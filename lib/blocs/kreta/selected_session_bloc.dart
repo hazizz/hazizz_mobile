@@ -111,11 +111,11 @@ class SelectedSessionBloc extends Bloc<SelectedSessionEvent, SelectedSessionStat
 
       if(selectedSession == null){
         StreamSubscription sub;
-        sub = SessionsBloc().state.listen((state){
+        sub = SessionsBloc().listen((state){
           if(state is ResponseDataLoaded){
             print("haz: ${state.data}");
             if(state.data != null && state.data.isNotEmpty && state.data[0] != null){
-              dispatch(SelectedSessionSetEvent(state.data[0]));
+              add(SelectedSessionSetEvent(state.data[0]));
               sub.cancel();
             }
           }
@@ -127,8 +127,8 @@ class SelectedSessionBloc extends Bloc<SelectedSessionEvent, SelectedSessionStat
      // MainTabBlocs().schedulesBloc.add(ScheduleFetchEvent());
      // MainTabBlocs().gradesBloc.add(GradesFetchEvent());
       yield SelectedSessionFineState(selectedSession);
-      MainTabBlocs().schedulesBloc.dispatch(ScheduleSetSessionEvent());
-      MainTabBlocs().gradesBloc.dispatch(GradesSetSessionEvent());
+      MainTabBlocs().schedulesBloc.add(ScheduleSetSessionEvent());
+      MainTabBlocs().gradesBloc.add(GradesSetSessionEvent());
     }
     else if (event is SelectedSessionInactiveEvent) {
       if(await KretaSessionManager.isRememberPassword()){

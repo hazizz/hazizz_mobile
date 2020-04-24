@@ -134,12 +134,12 @@ class CommentBlocs{
   CommentBlocs({@required this.taskId, hasCommentSection = true}){
     commentSectionBloc = CommentSectionBloc(taskId: taskId, enabled: hasCommentSection);
     commentWriterBloc = CommentWriterBloc(taskId: taskId, commentSectionBloc: commentSectionBloc, enabled: hasCommentSection);
-    commentSectionBloc.dispatch(CommentSectionFetchEvent());
+    commentSectionBloc.add(CommentSectionFetchEvent());
   }
 
-  dispose(){
-    commentSectionBloc.dispose();
-    commentWriterBloc.dispose();
+  Future<void> close(){
+    commentSectionBloc.close();
+    return commentWriterBloc.close();
   }
 }
 
@@ -201,16 +201,16 @@ class CommentWriterBloc extends Bloc<CommentWriterEvent,  CommentWriterState> {
   CommentWriterBloc({@required this.taskId, @required this.commentSectionBloc, @required enabled = true}){
     commentController.addListener((){
       content = commentController.text;
-      if(content.length > 0 && this.currentState is CommentWriterEmptyState){
-        this.dispatch(CommentWriterFineEvent());
+      if(content.length > 0 && this.state is CommentWriterEmptyState){
+        this.add(CommentWriterFineEvent());
       }
     });
   }
 
   @override
-  void dispose() {
-    commentSectionBloc.dispose();
-    super.dispose();
+  Future<void> close() {
+    commentSectionBloc.close();
+    return super.close();
   }
 
   @override
@@ -234,7 +234,7 @@ class CommentWriterBloc extends Bloc<CommentWriterEvent,  CommentWriterState> {
               CreateTaskComment(p_taskId: taskId, b_content: content));
           if(hazizzResponse.isSuccessful) {
             commentController.clear();
-            commentSectionBloc.dispatch(CommentSectionFetchEvent());
+            commentSectionBloc.add(CommentSectionFetchEvent());
             yield CommentWriterSentState();
           }else {
             yield CommentWriterErrorState();

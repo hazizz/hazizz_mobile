@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -48,8 +47,8 @@ class _GroupTasksPage extends State<GroupTasksPage> with AutomaticKeepAliveClien
 
   @override
   void initState() {
-    if(GroupBlocs().groupTasksBloc.currentState is TasksErrorState) {
-      GroupBlocs().groupTasksBloc.dispatch(TasksFetchEvent());
+    if(GroupBlocs().groupTasksBloc.state is TasksErrorState) {
+      GroupBlocs().groupTasksBloc.add(TasksFetchEvent());
     }
 
     currentCompletedTaskState = GroupBlocs().groupTasksBloc.currentTaskCompleteState;
@@ -144,7 +143,7 @@ class _GroupTasksPage extends State<GroupTasksPage> with AutomaticKeepAliveClien
 
                       applyFilters();
 
-                      GroupBlocs().groupTasksBloc.dispatch(TasksFetchEvent());
+                      GroupBlocs().groupTasksBloc.add(TasksFetchEvent());
                     },
                   )
                 ],
@@ -211,7 +210,7 @@ class _GroupTasksPage extends State<GroupTasksPage> with AutomaticKeepAliveClien
                                       HazizzLogger.printLog("oof22: anim: ${animationStatus.toString()}");
                                       if(animationStatus == AnimationStatus.dismissed){
                                         HazizzLogger.printLog("oof: ${map[key]}");
-                                        GroupBlocs().groupTasksBloc.dispatch(TasksRemoveItemEvent( mapKey: key, index: index2));
+                                        GroupBlocs().groupTasksBloc.add(TasksRemoveItemEvent( mapKey: key, index: index2));
                                       }
                                     });
                                     return buildItem(context2, index2, animation2, removedItem, (){});
@@ -322,7 +321,7 @@ class _GroupTasksPage extends State<GroupTasksPage> with AutomaticKeepAliveClien
           ),
           onRefresh: () async{
             applyFilters();
-            GroupBlocs().groupTasksBloc.dispatch(TasksFetchEvent()); //await getData()
+            GroupBlocs().groupTasksBloc.add(TasksFetchEvent()); //await getData()
             HazizzLogger.printLog("log: refreshing tasks");
             return;
           }

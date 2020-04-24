@@ -248,7 +248,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
             child: RefreshIndicator(
               onRefresh: () async{
                // widget.commentSectionWidget.commentBlocs.commentSectionBloc.add(CommentSectionFetchEvent());
-                ViewTaskBloc().commentBlocs.commentSectionBloc.dispatch(CommentSectionFetchEvent());
+                ViewTaskBloc().commentBlocs.commentSectionBloc.add(CommentSectionFetchEvent());
 
               },
               child: Builder(
@@ -651,7 +651,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                                               pojoTask = editedTask;
                                                               _processData(context, pojoTask);
                                                             });
-                                                            MainTabBlocs().tasksBloc.dispatch(TasksFetchEvent());
+                                                            MainTabBlocs().tasksBloc.add(TasksFetchEvent());
                                                           }
                                                         },
                                                         child: Text(locText(context, key: "edit").toUpperCase(), style: theme(context).textTheme.button,),
@@ -661,7 +661,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                                         onPressed: () async {
                                                           if(await showDeleteTaskDialog(context, taskId: widget.taskId)){
                                                             HazizzLogger.printLog("showDeleteTaskDialog : success");
-                                                            MainTabBlocs().tasksBloc.dispatch(TasksFetchEvent());
+                                                            MainTabBlocs().tasksBloc.add(TasksFetchEvent());
                                                             List<String> splited = pojoTask.description.split("\n![img_");
                                                             if(splited.length > 1){
                                                               await GoogleDriveManager().initialize();

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:flutter_widgets/flutter_widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/kreta/schedule_bloc.dart';
 import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
@@ -15,6 +14,7 @@ import 'package:mobile/widgets/scroll_space_widget.dart';
 
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/custom/hazizz_time_of_day.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class SchedulesTabPage extends StatefulWidget {
 
@@ -153,7 +153,7 @@ class _SchedulesTabPage extends State<SchedulesTabPage> with TickerProviderState
                       ],
                     ),
                     onPressed: () {
-                      MainTabBlocs().schedulesBloc.dispatch(
+                      MainTabBlocs().schedulesBloc.add(
                         ScheduleFetchEvent(
                           yearNumber: MainTabBlocs().schedulesBloc.currentYearNumber,
                           weekNumber: MainTabBlocs().schedulesBloc.currentWeekNumber + 1

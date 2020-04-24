@@ -229,7 +229,7 @@ class ImageOpeations{
     print(package.encodeNamedImage(im, a[a.length-1]));
     */
 
-      // profileEditorBlocs.pictureEditorBloc.dispatch(ProfilePictureEditorChangedEvent(imageBytes: image.readAsBytesSync()));
+      // profileEditorBlocs.pictureEditorBloc.add(ProfilePictureEditorChangedEvent(imageBytes: image.readAsBytesSync()));
 
       //  Clipboard.setData(new ClipboardData(text: image.readAsBytesSync().toString()));
       return HazizzImageData.fromFile(image);

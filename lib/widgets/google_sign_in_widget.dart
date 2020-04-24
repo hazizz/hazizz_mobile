@@ -51,8 +51,8 @@ class _SocialSignInButtonWidget extends State<SocialSignInButtonWidget> {
   void onPressedSocialButton(){
 
     return widget.socialSignInMode == SocialSignInMode.google
-        ? LoginBlocs().googleLoginBloc.dispatch(SocialLoginButtonPressedEvent())
-        : LoginBlocs().facebookLoginBloc.dispatch(SocialLoginButtonPressedEvent());
+        ? LoginBlocs().googleLoginBloc.add(SocialLoginButtonPressedEvent())
+        : LoginBlocs().facebookLoginBloc.add(SocialLoginButtonPressedEvent());
   }
 
   Widget googleSignInButton(){
@@ -75,9 +75,8 @@ class _SocialSignInButtonWidget extends State<SocialSignInButtonWidget> {
 
   @override
   void dispose() {
-    HazizzLogger.printLog("google bloc disposed");
     LoginBlocs().reset();
-   // LoginBlocs().SocialLoginBloc().dispose();
+    HazizzLogger.printLog("google bloc reseted");
     super.dispose();
   }
 
@@ -111,13 +110,13 @@ class _SocialSignInButtonWidget extends State<SocialSignInButtonWidget> {
                     HazizzLogger.printLog("showRegistrationDialog has accepted: $accepted");
                     if(accepted != null && accepted){
                       widget.socialSignInMode == SocialSignInMode.google
-                          ? LoginBlocs().googleLoginBloc.dispatch(SocialLoginAcceptedConditionsEvent())
-                          : LoginBlocs().facebookLoginBloc.dispatch(SocialLoginAcceptedConditionsEvent());
+                          ? LoginBlocs().googleLoginBloc.add(SocialLoginAcceptedConditionsEvent())
+                          : LoginBlocs().facebookLoginBloc.add(SocialLoginAcceptedConditionsEvent());
 
                     }else{
                       widget.socialSignInMode == SocialSignInMode.google
-                          ? LoginBlocs().googleLoginBloc.dispatch(SocialLoginRejectConditionsEvent())
-                          : LoginBlocs().facebookLoginBloc.dispatch(SocialLoginRejectConditionsEvent());
+                          ? LoginBlocs().googleLoginBloc.add(SocialLoginRejectConditionsEvent())
+                          : LoginBlocs().facebookLoginBloc.add(SocialLoginRejectConditionsEvent());
                     }
                   })
               );

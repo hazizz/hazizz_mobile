@@ -30,9 +30,7 @@ class _CommentSectionWidget extends State<CommentSectionWidget>{
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
-   // commentBlocs.dispose();
   }
 
   @override
@@ -45,8 +43,8 @@ class _CommentSectionWidget extends State<CommentSectionWidget>{
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             BlocBuilder(
-              condition: (CommentSectionState beforeState, CommentSectionState currentState){
-                if(beforeState is CommentSectionLoadedState && currentState is CommentSectionWaitingState){
+              condition: (CommentSectionState beforeState, CommentSectionState state){
+                if(beforeState is CommentSectionLoadedState && state is CommentSectionWaitingState){
                   return false;
                 }
                 return true;
@@ -152,7 +150,7 @@ class _CommentSectionWidget extends State<CommentSectionWidget>{
                                     .accentColor,
                                 icon: Icon(FontAwesomeIcons.solidPaperPlane, size: 30,),
                                 onPressed: () async {
-                                  ViewTaskBloc().commentBlocs.commentWriterBloc.dispatch(CommentWriterSendEvent());
+                                  ViewTaskBloc().commentBlocs.commentWriterBloc.add(CommentWriterSendEvent());
                                   FocusScope.of(context).requestFocus(new FocusNode());
                                 },
                               ),

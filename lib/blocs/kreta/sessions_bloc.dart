@@ -60,14 +60,14 @@ class SessionsBloc extends Bloc<HEvent, HState> {
       if(!found){
         print("bruh moment XD 11");
 
-        SelectedSessionBloc().dispatch(SelectedSessionSetEvent(sessions[0]));
+        SelectedSessionBloc().add(SelectedSessionSetEvent(sessions[0]));
       }
 
       /*
       if( !sessions.any((element) => element.username == SelectedSessionBloc().selectedSession.username)){
         print("bruh moment XD 11");
 
-        SelectedSessionBloc().dispatch(SelectedSessionSetEvent(sessions[0]));
+        SelectedSessionBloc().add(SelectedSessionSetEvent(sessions[0]));
       }
       */
     }

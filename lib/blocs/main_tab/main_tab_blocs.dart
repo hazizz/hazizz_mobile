@@ -26,9 +26,9 @@ class MainTabBlocs{
    final GradesBloc gradesBloc = new GradesBloc();
 
   void fetchAll(){
-    tasksBloc.dispatch(TasksFetchEvent());
-    schedulesBloc.dispatch(ScheduleFetchEvent());
-    gradesBloc.dispatch(GradesFetchEvent());
+    tasksBloc.add(TasksFetchEvent());
+    schedulesBloc.add(ScheduleFetchEvent());
+    gradesBloc.add(GradesFetchEvent());
   }
 
   void initialize()async{

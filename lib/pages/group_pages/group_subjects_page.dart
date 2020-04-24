@@ -37,8 +37,8 @@ class _GroupSubjectsPage extends State<GroupSubjectsPage> with AutomaticKeepAliv
 
   @override
   void initState() {
-    if(groupSubjectsBloc.currentState is ResponseError) {
-      groupSubjectsBloc.dispatch(FetchData());
+    if(groupSubjectsBloc.state is ResponseError) {
+      groupSubjectsBloc.add(FetchData());
     }
 
 
@@ -53,7 +53,7 @@ class _GroupSubjectsPage extends State<GroupSubjectsPage> with AutomaticKeepAliv
           onPressed: () async {
             PojoSubject success = await showAddSubjectDialog(context, groupId: groupSubjectsBloc.groupId);
             if(success != null){
-              groupSubjectsBloc.dispatch(FetchData());
+              groupSubjectsBloc.add(FetchData());
             }
           },
           child: Icon(FontAwesomeIcons.plus),
@@ -98,7 +98,7 @@ class _GroupSubjectsPage extends State<GroupSubjectsPage> with AutomaticKeepAliv
                 ),
               ],
             ),
-            onRefresh: () async => groupSubjectsBloc.dispatch(FetchData()) //await getData()
+            onRefresh: () async => groupSubjectsBloc.add(FetchData()) //await getData()
         )
     );
   }

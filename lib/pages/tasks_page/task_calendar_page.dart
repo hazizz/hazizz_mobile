@@ -46,7 +46,7 @@ class _TaskCalendarPage extends State<TaskCalendarPage> {
 
   @override
   void initState() {
-    tasksCalendarBloc.dispatch(TasksCalendarFetchEvent());
+    tasksCalendarBloc.add(TasksCalendarFetchEvent());
 
     final _selectedDay = DateTime.now();
     currentDay = DateTime.now();
@@ -59,7 +59,7 @@ class _TaskCalendarPage extends State<TaskCalendarPage> {
   @override
   void dispose() {
     calendarController?.dispose();
-    tasksCalendarBloc.dispose();
+    tasksCalendarBloc.close();
     super.dispose();
   }
 
@@ -305,7 +305,7 @@ class _TaskCalendarPage extends State<TaskCalendarPage> {
               ),
             ],
           ),
-          onRefresh: () async => tasksCalendarBloc.dispatch(TasksCalendarFetchEvent()) //await getData()
+          onRefresh: () async => tasksCalendarBloc.add(TasksCalendarFetchEvent()) //await getData()
       ),
     );
   }

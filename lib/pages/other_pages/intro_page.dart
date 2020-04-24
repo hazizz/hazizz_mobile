@@ -151,7 +151,7 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
 
   void exitIntro(){
     WelcomeManager.haveSeenIntro();
-    BusinessNavigator().currentState().pushReplacementNamed('/',);
+    BusinessNavigator().state().pushReplacementNamed('/',);
   }
 
   @override

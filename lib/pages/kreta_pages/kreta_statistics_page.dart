@@ -21,7 +21,7 @@ class _KretaStatisticsPage extends State<KretaStatisticsPage> {
 
   @override
   void initState() {
-    gradeAvaragesBloc.dispatch(KretaGradeStatisticsFetchEvent());
+    gradeAvaragesBloc.add(KretaGradeStatisticsFetchEvent());
     super.initState();
   }
 
@@ -37,7 +37,7 @@ class _KretaStatisticsPage extends State<KretaStatisticsPage> {
         ),
         body: RefreshIndicator(
           onRefresh: () async{
-            gradeAvaragesBloc.dispatch(KretaGradeStatisticsFetchEvent());
+            gradeAvaragesBloc.add(KretaGradeStatisticsFetchEvent());
           },
           child: Stack(
             children: <Widget>[

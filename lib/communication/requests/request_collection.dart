@@ -27,7 +27,6 @@ import 'package:mobile/communication/pojos/PojoTokens.dart';
 import 'package:mobile/communication/pojos/PojoUser.dart';
 import 'package:mobile/communication/pojos/pojo_comment.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
-import 'package:mobile/constants.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/custom/image_operations.dart';
 import 'package:mobile/enums/group_types_enum.dart';
@@ -38,7 +37,6 @@ import 'package:meta/meta.dart';
 import 'package:mobile/services/pojo_converter_helper.dart';
 import 'package:mobile/storage/cache_manager.dart';
 import 'package:package_info/package_info.dart';
-import 'package:rxdart/rxdart.dart';
 
 import 'package:mobile/custom/hazizz_date.dart';
 import '../ResponseHandler.dart';
@@ -54,8 +52,6 @@ Future<Request> refreshTokenInRequest(Request request) async {
 class Request {
   dynamic responseData;
 
-  BehaviorSubject subject;
-
   bool authTokenHeader = false;
   bool contentTypeHeader = false;
 
@@ -66,10 +62,6 @@ class Request {
 
   Request(ResponseHandler rh){
     this.rh = rh;
-  }
-
-  Request.bloc(dynamic subject){
-    this.subject = subject;
   }
 
   HttpMethod httpMethod = HttpMethod.GET;

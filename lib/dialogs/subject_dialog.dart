@@ -134,7 +134,7 @@ class _SubjectDialog extends State<SubjectDialog> {
                           bool success = await showDeleteSubjectDialog(context, groupId: GroupBlocs().group.id, subject: widget.subject);
                           if(success != null && success){
                             showDeleteWasSuccessfulFlushBar(context, what: "${widget.subject.name} ${locText(context, key: "subject")}");
-                            GroupBlocs().groupSubjectsBloc.dispatch(FetchData());
+                            GroupBlocs().groupSubjectsBloc.add(FetchData());
                             Navigator.pop(context);
                           }
                         }else if(value == "edit"){

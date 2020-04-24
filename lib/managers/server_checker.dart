@@ -31,7 +31,7 @@ class ServerChecker{
     if(hazizzResponse != null && hazizzResponse.isSuccessful){
       gatewayOnline = true;
     }else{
-      if(notifyFlush) FlushBloc().dispatch(FlushGatewayServerUnavailableEvent());
+      if(notifyFlush) FlushBloc().add(FlushGatewayServerUnavailableEvent());
       gatewayOnline = false;
     }
     return gatewayOnline;
@@ -43,7 +43,7 @@ class ServerChecker{
       authOnline = true;
 
     }else{
-      if(notifyFlush) FlushBloc().dispatch(FlushAuthServerUnavailableEvent());
+      if(notifyFlush) FlushBloc().add(FlushAuthServerUnavailableEvent());
       authOnline =  false;
     }
     return authOnline;
@@ -54,7 +54,7 @@ class ServerChecker{
       hazizzOnline = true;
 
     }else{
-      if(notifyFlush) FlushBloc().dispatch(FlushHazizzServerUnavailableEvent());
+      if(notifyFlush) FlushBloc().add(FlushHazizzServerUnavailableEvent());
       hazizzOnline = false;
     }
     return hazizzOnline;
@@ -76,7 +76,7 @@ class ServerChecker{
 
 
     }else{
-      if(notifyFlush) FlushBloc().dispatch(FlushTheraServerUnavailableEvent());
+      if(notifyFlush) FlushBloc().add(FlushTheraServerUnavailableEvent());
       theraOnline = false;
     }
     return theraOnline;

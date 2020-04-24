@@ -22,18 +22,18 @@ class ProfileEditorBlocs{
   ProfileEditorBlocs(){
     pictureEditorBloc = new ProfilePictureEditorBloc();
 
-    pictureEditorBloc.dispatch(ProfilePictureEditorLoadFromCacheEvent());
+    pictureEditorBloc.add(ProfilePictureEditorLoadFromCacheEvent());
 
 
     displayNameEditorBloc = new DisplayNameEditorBloc();
 
-    displayNameEditorBloc.dispatch(DisplayNameLoadFromCacheEvent());
+    displayNameEditorBloc.add(DisplayNameLoadFromCacheEvent());
 
   }
 
-  dispose(){
-    pictureEditorBloc.dispose();
-    displayNameEditorBloc.dispose();
+  Future<void> close(){
+    pictureEditorBloc.close();
+    return displayNameEditorBloc.close();
 
   }
 }
@@ -154,7 +154,7 @@ class ProfilePictureEditorBloc extends Bloc<ProfilePictureEditorEvent, ProfilePi
 
       if (hazizzResponse.isSuccessful) {
 
-        UserDataBlocs().pictureBloc.dispatch(ProfilePictureSetEvent(imageBytes: profilePictureBytes));
+        UserDataBlocs().pictureBloc.add(ProfilePictureSetEvent(imageBytes: profilePictureBytes));
 
         yield ProfilePictureEditorFineState(imageBytes: profilePictureBytes);
 
@@ -169,7 +169,7 @@ class ProfilePictureEditorBloc extends Bloc<ProfilePictureEditorEvent, ProfilePi
 
       if (hazizzResponse.isSuccessful) {
 
-        UserDataBlocs().pictureBloc.dispatch(ProfilePictureSetEvent(imageBytes: profilePictureBytes));
+        UserDataBlocs().pictureBloc.add(ProfilePictureSetEvent(imageBytes: profilePictureBytes));
 
         yield ProfilePictureEditorFineState(imageBytes: profilePictureBytes);
 
@@ -284,9 +284,9 @@ class DisplayNameEditorBloc extends Bloc<DisplayNameEvent, DisplayNameState> {
 
   DisplayNameEditorBloc() {
     displayNameController.addListener((){
-      if(this.currentState is! DisplayNameInitialState && displayNameController.text != lastText){
+      if(this.state is! DisplayNameInitialState && displayNameController.text != lastText){
         lastText = displayNameController.text;
-        this.dispatch(DisplayNameChangedEvent(displayName: displayNameController.text));
+        this.add(DisplayNameChangedEvent(displayName: displayNameController.text));
       }
     });
   }
@@ -311,7 +311,7 @@ class DisplayNameEditorBloc extends Bloc<DisplayNameEvent, DisplayNameState> {
 
       yield DisplayNameLoadedFromCacheState(displayName: displayNameFromCache);
     }else if (event is DisplayNameSendEvent){
-      if(this.currentState is DisplayNameChangedState){
+      if(this.state is DisplayNameChangedState){
         HazizzResponse hazizzResponse = await getResponse(UpdateMyDisplayName(b_displayName: displayNameController.text));
 
         if(hazizzResponse.isSuccessful){
@@ -321,7 +321,7 @@ class DisplayNameEditorBloc extends Bloc<DisplayNameEvent, DisplayNameState> {
           displayNameController.text = meInfo.displayName;
 
           HazizzLogger.printLog("debuglol: 1");
-          UserDataBlocs().userDataBloc.dispatch(MyUserDataChangeDisplaynameEvent(displayName: displayNameController.text));
+          UserDataBlocs().userDataBloc.add(MyUserDataChangeDisplaynameEvent(displayName: displayNameController.text));
           HazizzLogger.printLog("debuglol: 2");
           yield DisplayNameSavedState();
         }

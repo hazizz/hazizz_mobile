@@ -69,9 +69,9 @@ class JoinGroupBloc extends Bloc<JoinGroupEvent, JoinGroupState> {
   JoinGroupState get initialState => JoinGroupFineState();
 
   @override
-  void dispose() {
+  Future<void> close() {
     // TODO: implement dispose
-    super.dispose();
+    return super.close();
   }
 
 
