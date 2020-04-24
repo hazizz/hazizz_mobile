@@ -1,7 +1,7 @@
 name: mobile
 description: Hazizz Mobile application.
 
-version: 1.4.12+55
+version: 1.4.13+56
 
 environment:
   sdk: ">=2.6.0 <3.0.0"
@@ -24,8 +24,8 @@ dependencies:
   flutter_image_compress: 0.6.5+1
   steel_crypt: 1.6.1
   image: 2.1.4 # 2.1.12
-  flutter_markdown:
-    path: ./lib/custom/flutter_markdown
+  flutter_markdown: 0.3.5
+   # path: ./lib/custom/flutter_markdown
 
   firebase_messaging: 6.0.12
   animator: 1.0.0+5
@@ -48,7 +48,8 @@ dependencies:
 
   font_awesome_flutter: 8.7.0
 
-  toast: ^0.1.5
+  flutter_styled_toast: 1.2.1
+ # toast: ^0.1.5
   image_picker: 0.6.3+4 #image_picker: ^0.4.12
  # image_cropper:
  #   git:
@@ -129,7 +130,8 @@ flutter:
     - assets/images/fel_elek_ad_banner.png
     - assets/images/giveaway_ad_banner.png
     - assets/images/hazizz_meet_ad_banner.png
-    -
+    - assets/images/elek_sleep.svg
+
     - assets/langs/en.json
     - assets/langs/hu.json
   fonts:

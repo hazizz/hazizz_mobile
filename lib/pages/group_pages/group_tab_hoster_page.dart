@@ -4,12 +4,8 @@ import 'package:mobile/blocs/group/group_bloc.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/dialogs/report_dialog.dart';
-import 'package:mobile/managers/welcome_manager.dart';
 import 'package:mobile/widgets/flushbars.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
-import 'package:toast/toast.dart';
-
-
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'group_members_page.dart';

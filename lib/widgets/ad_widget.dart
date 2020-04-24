@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/managers/preference_services.dart';
 import 'package:mobile/pages/settings_page/about_page.dart';
@@ -8,7 +7,6 @@ import 'package:mobile/services/facebook_opener.dart';
 import 'package:mobile/widgets/card_header_widget.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 
 enum AdType{
   fel_elek,
@@ -65,27 +63,22 @@ class AdWidget extends StatefulWidget {
   static const String ad_giveaway = "assets/images/giveaway_ad_banner.png";
   static const String ad_hazizz_meet = "assets/images/hazizz_meet_ad_banner.png";
 
-
   double chance;
-
   int index;
 
   AdWidget.byChance({Key key, chance = 5}) : super(key: key){
     bool _show = false;
 
-    print("bánat: 0: $chance");
     int r = Random().nextInt(chance);
-    print("bánat: 01: ${r}");
+
     if(r == 0){
-      print("bánat: 0");
       _show = true;
     }
     AdManager.allowed.add(_show);
     index = AdManager.allowed.length-1;
   }
 
-  AdWidget({Key key, chance}) : super(key: key){
-  }
+  AdWidget({Key key, chance}) : super(key: key);
 
   @override
   _AdWidgetState createState() => _AdWidgetState();
@@ -97,7 +90,6 @@ class _AdWidgetState extends State<AdWidget> {
 
   void chooseType(){
     int r = Random().nextInt(4);
-    print("asdasdasdw3rtu: $r");
     if(r == 0){
       adType = AdType.fel_elek;
     }else if(r == 1){
@@ -119,7 +111,6 @@ class _AdWidgetState extends State<AdWidget> {
           adType = AdType.facebook;
         }
       }
-
     }
   }
 
@@ -139,7 +130,6 @@ class _AdWidgetState extends State<AdWidget> {
     if(adType == AdType.facebook){
       return AboutPage.fb_site;
     }
-
     else{
       return "https://play.google.com/store/apps/details?id=com.hazizz.dusza2019";
     }
@@ -165,16 +155,11 @@ class _AdWidgetState extends State<AdWidget> {
               chooseImage(),
               fit: BoxFit.fitWidth,
             ),
-           /* Container(
-              color: Colors.grey,
-              child: Text("AD"),
-            ),*/
             Positioned.fill(
               child: Material(
                 color: Colors.transparent,
                 child: InkWell(
                   onTap: () async {
-                    print("awe1");
                     if(adType == AdType.facebook
                     || adType == AdType.hazizz_meet
                     ){

@@ -266,10 +266,6 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
 
       print("Grades page length: ${gradesByDate.length}");
 
-      for(PojoGrade g in gradesByDate){
-        print("Grades page grade date: ${g.creationDate}");
-      }
-
       print("Grades page map: ${gradesByDate}");
 
       if(widget.rectForm){
@@ -318,7 +314,6 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
         body: Column(
           children: <Widget>[
@@ -372,9 +367,9 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
                                         });
                                       } : null,
                                       items: [
-                                        DropdownMenuItem(child: Text(locText(context, key: "creation_date")), value: GradesSort.BYCREATIONDATE, ),
-                                        DropdownMenuItem(child: Text(locText(context, key: "date")), value: GradesSort.BYDATE, ),
-                                        DropdownMenuItem(child: Text(locText(context, key: "kreta_subject")), value: GradesSort.BYSUBJECT, ),
+                                        DropdownMenuItem(child: Text(locText(context, key: "creation_date")), value: GradesSort.BYCREATIONDATE),
+                                        DropdownMenuItem(child: Text(locText(context, key: "date")), value: GradesSort.BYDATE),
+                                        DropdownMenuItem(child: Text(locText(context, key: "kreta_subject")), value: GradesSort.BYSUBJECT),
                                       ],
                                     ),
                                     Spacer(),
@@ -388,15 +383,6 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
                                         PreferenceService.setGradeRectForm(widget.rectForm);
                                       },
                                     ),
-
-                                    /*
-                              FlatButton(child: Text(locText(context, key: "apply").toUpperCase(), style: TextStyle(fontSize: 13),),
-                                onPressed: (){
-                                  applyFilters();
-                                  MainTabBlocs().tasksBloc.add(TasksFetchEvent());
-                                },
-                              )
-                              */
                                   ],
                                 ),
                               )
@@ -405,7 +391,6 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
                           Expanded(
                             child: BlocBuilder(
                                 bloc: MainTabBlocs().gradesBloc,
-                                //  stream: gradesBloc.subject.stream,
                                 builder: (_, GradesState state) {
                                   print("mystate: ${state}");
 
@@ -450,7 +435,6 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
                             ),
                           ),
                         ],)
-
                       ],
                     ),
                     onRefresh: () async{
@@ -461,7 +445,6 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
               ),
             ),
             BottomNavigationBar(
-
                 currentIndex: currentPage,
                 onTap: (int index){
                   setState(() {
@@ -474,7 +457,6 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
                     title: Container(),
                     icon:  Text(locText(context, key: "gradeType_midYear"), style: TextStyle(fontSize: 19)),
                     activeIcon: Text(locText(context, key: "gradeType_midYear"),
-                      // overflow: TextOverflow.fade,
                       maxLines: 1,
                       style: TextStyle(color: Colors.red, fontSize: 26, fontWeight: FontWeight.bold, /*backgroundColor: currentDayColor*/),
                     ),
@@ -484,7 +466,6 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
 
                     icon:  Text(locText(context, key: "gradeType_halfYear"),style: TextStyle(fontSize: 19)),
                     activeIcon: Text(locText(context, key: "gradeType_halfYear"),
-                      //  overflow: TextOverflow.fade,
                       maxLines: 1,
                       style: TextStyle(color: Colors.red, fontSize: 26, fontWeight: FontWeight.bold, /*backgroundColor: currentDayColor*/),
                     ),
@@ -494,7 +475,6 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
 
                     icon:  Text(locText(context, key: "gradeType_endYear"),style: TextStyle(fontSize: 19)),
                     activeIcon: Text(locText(context, key: "gradeType_endYear"),
-                      //  overflow: TextOverflow.fade,
                       maxLines: 1,
                       style: TextStyle(color: Colors.red, fontSize: 26, fontWeight: FontWeight.bold, /*backgroundColor: currentDayColor*/),
                     ),
@@ -507,6 +487,5 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 }

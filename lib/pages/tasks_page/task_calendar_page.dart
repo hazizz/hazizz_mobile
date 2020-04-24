@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -7,16 +5,13 @@ import 'package:mobile/blocs/other/response_states.dart';
 import 'package:mobile/blocs/tasks/task_calendar_bloc.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
+import 'package:mobile/theme/hazizz_theme.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 import 'package:mobile/widgets/listItems/task_item_widget.dart';
-
 import 'package:table_calendar/table_calendar.dart';
-
 import 'package:mobile/custom/hazizz_localizations.dart';
 
 class TaskCalendarPage extends StatefulWidget {
-  // This widget is the root of your application.
-
   String getTabName(BuildContext context){
     return locText(context, key: "tasks").toUpperCase();
   }
@@ -82,7 +77,10 @@ class _TaskCalendarPage extends State<TaskCalendarPage> {
       Color innerColor;
       Color externalColor;
 
-      if(t.completed != null && t.completed){
+      if(t.assignation.name == "THERA"){
+        innerColor = HazizzTheme.kreta_blue;
+      }
+      else if(t.completed != null && t.completed){
         innerColor = Colors.green;
       }else{
         innerColor = Colors.red;
@@ -98,22 +96,6 @@ class _TaskCalendarPage extends State<TaskCalendarPage> {
           Padding(
             padding: const EdgeInsets.only(left: 0.5, right: 0.5),
             child: Container(
-              decoration: new BoxDecoration(
-                boxShadow: [
-                 /* BoxShadow(
-                    color: externalColor,
-                    blurRadius: 1, // has the effect of softening the shadow
-                    spreadRadius: 0.7, // has the effect of extending the shadow
-                    offset: Offset(
-                      0.0, // horizontal, move right 10
-                      1.6, // vertical, move down 10
-                    ),
-                  )
-                  */
-                ],
-               // borderRadius: new BorderRadius.all(...),
-              //  gradient: new LinearGradient(...),
-              ),
               child: Stack(
                 children: <Widget>[
                   Container(
@@ -121,12 +103,9 @@ class _TaskCalendarPage extends State<TaskCalendarPage> {
                     height: 10.0,
                     padding: const EdgeInsets.all(20.0),//I used some padding without fixed width and height
                     decoration: new BoxDecoration(
-                      shape: BoxShape.circle,// You can use like this way or like the below line
-                      //borderRadius: new BorderRadius.circular(30.0),
+                      shape: BoxShape.circle,
                       color: externalColor,
                     ),
-                    // child: new Text(_count.toString(), style: new TextStyle(color: Colors.white, fontSize: 50.0)),// You can add a Icon instead of text also, like below.
-                    //child: new Icon(Icons.arrow_forward, size: 50.0, color: Colors.black38)),
                   ),
                   Positioned(
                     left: 2.5, top: 2.5,
@@ -135,24 +114,17 @@ class _TaskCalendarPage extends State<TaskCalendarPage> {
                       height: 5.0,
                       padding: const EdgeInsets.all(20.0),//I used some padding without fixed width and height
                       decoration: new BoxDecoration(
-                        shape: BoxShape.circle,// You can use like this way or like the below line
-                        //borderRadius: new BorderRadius.circular(30.0),
+                        shape: BoxShape.circle,
                         color: innerColor,
                       ),
-                      // child: new Text(_count.toString(), style: new TextStyle(color: Colors.white, fontSize: 50.0)),// You can add a Icon instead of text also, like below.
-                      //child: new Icon(Icons.arrow_forward, size: 50.0, color: Colors.black38)),
                     ),
                   ),
-
                 ],
               ),
             ),
           )
       );
-
-     // externalColor  = null;
     }
-
 
     return Row(
       children: eventTasks,
@@ -175,12 +147,9 @@ class _TaskCalendarPage extends State<TaskCalendarPage> {
 
     print("szolga: ${date}, ${tasks.toString()}");
 
-
     String day = date.day >= 10 ? date.day.toString() : "0${date.day}";
     String month = date.month >= 10 ? date.month.toString() : "0${date.month}";
     currentDay = DateTime.parse("${date.year}-$month-$day 00:00:00.000");
-
-
 
     if(DateTime.now().isBefore(date)){
       setState(() {
@@ -206,12 +175,8 @@ class _TaskCalendarPage extends State<TaskCalendarPage> {
   }
 
   Widget _buildTableCalendar(Map<DateTime, List<PojoTask>> ev) {
-  //  setState(() {
-     // currentTasksList = pojoToWidget(ev[DateTime.now().subtract(Duration(days: 2))]);
-   // });
     return TableCalendar(
       availableCalendarFormats: {CalendarFormat.month: ""},
-      //initialCalendarFormat: CalendarFormat.month,
       headerVisible: true,
 
       onDaySelected: (DateTime date, List<dynamic> tasks){
@@ -258,8 +223,6 @@ class _TaskCalendarPage extends State<TaskCalendarPage> {
           borderRadius: BorderRadius.circular(16.0),
         ),
       ),
-     // onDaySelected: _onDaySelected,
-    //  onVisibleDaysChanged: _onVisibleDaysChanged,
     );
   }
 
@@ -274,9 +237,6 @@ class _TaskCalendarPage extends State<TaskCalendarPage> {
         opacity: !fabIsInactive ? 0.0 : 1.0,
         duration: Duration(milliseconds: 500),
         child: FloatingActionButton(
-          // heroTag: "hero_fab_tasks_main",
-         // backgroundColor: fabIsInactive ? Theme.of(context).accentColor : Colors.grey,
-
           onPressed: fabIsInactive ? (){
             Navigator.pushNamed(context, "/createTask");
           } : null,
@@ -299,30 +259,16 @@ class _TaskCalendarPage extends State<TaskCalendarPage> {
                       print("szolgas0: ${events}");
                       print("szolgas: ${events[currentDay].toString()}");
 
-                    //  calendarController.
                       if(firstTime){
                         _buildTableCalendar(events);
-
-                       // "${currentDay.year}-${currentDay.month}, currentDay.day}"
-
                         WidgetsBinding.instance.addPostFrameCallback((_) =>
                             setState(() async {
-                             // onDaySelected(/*DateTime(currentDay.year, currentDay.month, currentDay.day, 12)*/
-                            //      DateTime.parse("${DateTime.now().year}-0${DateTime.now().month}-${DateTime.now().day} 00:00:00.000"), events[/*DateTime.now()*/ DateTime.parse("${DateTime.now().year}-0${DateTime.now().month}-${DateTime.now().day} 00:00:00.000")]);
-                              onDaySelected(/*DateTime(currentDay.year, currentDay.month, currentDay.day, 12)*/
+                               onDaySelected(
                                   DateTime.now(), events[DateTime.now()]);
-
-                              // currentTasksList = pojoToWidget(state.tasks[DateTime.now()]);
-
-                            //  calendarController.setSelectedDay(DateTime.now().subtract(Duration(days: 1)));
-                             // calendarController.setFocusedDay(DateTime.now().subtract(Duration(days: 1)));
-
                             })
                         );
-
                         firstTime = false;
                       }
-
 
                       return ListView(
                         children: <Widget>[
@@ -363,7 +309,6 @@ class _TaskCalendarPage extends State<TaskCalendarPage> {
       ),
     );
   }
-
 }
 
 

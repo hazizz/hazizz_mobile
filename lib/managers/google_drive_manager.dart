@@ -8,7 +8,7 @@ import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/custom/image_operations.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../google_http_client.dart';
+import '../services/google_http_client.dart';
 
 class GoogleDriveManager {
   static final GoogleDriveManager _singleton = GoogleDriveManager._internal();

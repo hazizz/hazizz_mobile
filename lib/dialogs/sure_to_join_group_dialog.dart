@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mobile/blocs/group/create_group_bloc.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
-import 'package:mobile/enums/group_types_enum.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/hazizz_response.dart';
@@ -25,13 +20,9 @@ class SureToJoinGroupDialog extends StatefulWidget {
 class _SureToJoinGroupDialog extends State<SureToJoinGroupDialog> {
 
   PojoGroupWithoutMe group;
-
   String groupName;
-
   bool isLoading = false;
-
   bool isMember = false;
-
   bool someThingWentWrong = false;
 
   @override
@@ -63,12 +54,10 @@ class _SureToJoinGroupDialog extends State<SureToJoinGroupDialog> {
     super.initState();
   }
 
-
   final double width = 300;
   final double height = 90;
 
   final double searchBarHeight = 50;
-
 
   @override
   Widget build(BuildContext context) {
@@ -156,13 +145,11 @@ class _SureToJoinGroupDialog extends State<SureToJoinGroupDialog> {
                 setState(() {
                   isLoading = false;
                 });
-
               },
             )
           ],);
         }
         return Container();
-
       })
     );
     return dialog;

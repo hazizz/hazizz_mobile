@@ -7,6 +7,7 @@ import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/managers/token_manager.dart';
+import 'package:mobile/services/firebase_analytics.dart';
 
 class GoogleLoginBloc extends SocialLoginBloc{
   GoogleSignIn _googleSignIn;
@@ -66,7 +67,20 @@ class GoogleLoginBloc extends SocialLoginBloc{
 
   @override
   Future<void> logout() async {
-    await _auth.signOut();
-    await _googleSignIn.disconnect();
+   // await _auth.signOut();
+   // await _googleSignIn.disconnect();
+    /*
+    await _googleSignIn.disconnect().whenComplete(() async {
+      await _auth.signOut();
+    });
+    */
+
+    String error = "no error";
+    await _auth.signOut().catchError((e){
+      error = e;
+      print(error.toString());
+    });
+    await _googleSignIn.signOut();
+    FirebaseAnalyticsManager.logLogout(error: error);
   }
 }

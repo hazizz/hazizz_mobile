@@ -21,7 +21,6 @@ import 'package:mobile/pages/kreta_pages/kreta_login_page.dart';
 import 'package:mobile/pages/main_pages/main_tab_hoster_page.dart';
 import 'package:mobile/pages/group_pages/my_groups_page.dart';
 import 'package:mobile/pages/settings_page/profile_editor_page.dart';
-import 'package:mobile/pages/auth_pages/registration_page.dart';
 import 'package:mobile/pages/settings_page/settings_page.dart';
 import 'package:mobile/pages/tasks_page/task_maker_page.dart';
 import 'package:mobile/pages/tasks_page/tomorrow_tasks_page.dart';

@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:flutter_widgets/flutter_widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/kreta/schedule_bloc.dart';
@@ -35,6 +37,8 @@ class SchedulesTabPage extends StatefulWidget {
 
 class _SchedulesTabPage extends State<SchedulesTabPage> with TickerProviderStateMixin {
 
+  int elek_tap_count = 0;
+
   HazizzTimeOfDay now = HazizzTimeOfDay.now();
 
 
@@ -58,12 +62,11 @@ class _SchedulesTabPage extends State<SchedulesTabPage> with TickerProviderState
     });
   }
 
-
   void scrollTo({int index}){
     WidgetsBinding.instance.addPostFrameCallback((_){
       if(index != null) currentEventIndex = index;
       print("scrolling: $currentEventIndex");
-      itemScrollController.scrollTo(
+      itemScrollController?.scrollTo(
         index: currentEventIndex,
         duration: Duration(milliseconds: 600),
         curve: Curves.easeInOutCubic
@@ -75,9 +78,6 @@ class _SchedulesTabPage extends State<SchedulesTabPage> with TickerProviderState
 
   @override
   void initState() {
-
-
-
     WidgetsBinding.instance.addPostFrameCallback((_){
       if(mounted){
         setState(() {
@@ -86,7 +86,6 @@ class _SchedulesTabPage extends State<SchedulesTabPage> with TickerProviderState
       }
       scrollTo();
     });
-
     super.initState();
   }
 
@@ -100,7 +99,46 @@ class _SchedulesTabPage extends State<SchedulesTabPage> with TickerProviderState
     if(widget.noClasses){
       return Stack(
         children: <Widget>[
-          Center(child: Text(locText(context, key: "no_classes_today"))),
+          Positioned(
+            left: MediaQuery.of(context).size.width/2 - 100,
+            top: MediaQuery.of(context).size.height/5,
+            child: Container(
+             // color: Colors.red,
+              child: Column(
+                children: <Widget>[
+                  Text(locText(context, key: "no_classes_today")),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 0),
+                    child: Container(
+                     // color: Colors.red,
+                      height: 140,
+                      width: 200,
+                      child: InkWell(
+                        onTap: (){
+                          elek_tap_count++;
+                          if(elek_tap_count >= 4){
+                            showToast(
+                              locText(context, key: "elek_woken_up"),
+                              duration: Duration(seconds: 4),
+                              animation: StyledToastAnimation.slideFromTopFade,
+                              reverseAnimation: StyledToastAnimation.slideToBottomFade,
+                            );
+                            elek_tap_count = 0;
+                          }
+                        },
+                        child: SvgPicture.asset(
+                          "assets/images/elek_sleep.svg",
+                          fit: BoxFit.scaleDown,
+                       //   height: 140,
+                        //  width: 200,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
           Builder(
             builder: (context){
               if(MainTabBlocs().schedulesBloc.currentDayIndex >= 5) {
@@ -139,9 +177,8 @@ class _SchedulesTabPage extends State<SchedulesTabPage> with TickerProviderState
       listItems.add(ClassItemWidget(pojoClass: c));
     }
 
-
     if(widget.isToday){
-      // megnézi az időt
+      /// megnézi az időt
       for(int i = 0; i < widget.classes.length; i++){
 
         PojoClass previousClass = i-1 >= 0 ? widget.classes[i-1]:  null;
@@ -194,17 +231,10 @@ class _SchedulesTabPage extends State<SchedulesTabPage> with TickerProviderState
         return Container();
       },
       itemBuilder: (context, index){
-
-        bool a = widget.dayIndex % 2  == 0 && index == itemCount-1;
-      /*  if(index == itemCount-1){
-          return addScrollSpace(showAd(context, show: widget.dayIndex % 2  == 0), space: widget.isToday ? (currentEventIndex+1) * 46.0 : 70);
-        }else if(index == itemCount-1){
-          return addScrollSpace(c, space: widget.isToday ? (currentEventIndex+1) * 46.0 : 70);
-        }
-        */
-
         if(index == itemCount-1){
-          return addScrollSpace(showAd(context, show: widget.dayIndex % 2  == 0), space: widget.isToday ? (currentEventIndex+1) * 46.0 : 70);
+          return addScrollSpace(showAd(context, show: widget.dayIndex % 2  == 0),
+              space: widget.isToday ? (currentEventIndex+1) * 46.0 : 70
+          );
         }
         return listItems[index];
     });

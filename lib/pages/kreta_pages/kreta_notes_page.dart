@@ -26,7 +26,6 @@ class _KretaNotesPage extends State<KretaNotesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     //   drawer: HazizzDrawer(),
         appBar: AppBar(
           leading: HazizzBackButton(),
           title: Text(locText(context, key: "kreta_notes")),

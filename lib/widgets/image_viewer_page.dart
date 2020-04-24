@@ -2,21 +2,19 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:mobile/communication/pojos/pojo_comment.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:photo_view/photo_view.dart';
-import 'package:toast/toast.dart';
 import 'hazizz_back_button.dart';
 import 'image_viewer_widget.dart';
 
 class ImageViewerPage extends StatefulWidget {
 
   ImageType imageType;
-
-
   Uint8List imageBytes;
   File imageFile;
   String imageUrl;
@@ -68,7 +66,6 @@ class _ImageViewerPage extends State<ImageViewerPage>{
 
   @override
   Widget build(BuildContext context) {
-
     ImageProvider imageProvider;
     if(widget.imageType == ImageType.NETWORK){
       imageProvider = NetworkImage(imageUrl);
@@ -138,7 +135,7 @@ class _ImageViewerPage extends State<ImageViewerPage>{
                               var response = await  Dio().get(imageUrl, options: Options(responseType: ResponseType.bytes));
                               await ImageGallerySaver.saveImage(Uint8List.fromList(response.data));
                             }
-                            Toast.show(locText(context, key: "image_saved"), context, duration: 3);
+                            showToast(locText(context, key: "image_saved"), duration: Duration(seconds: 3));
                             setState(() {
                               downloading = false;
                             });

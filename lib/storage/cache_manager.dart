@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'package:intl/intl.dart';
 import 'package:mobile/communication/pojos/PojoMeInfoPrivate.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
+import 'package:mobile/services/firebase_analytics.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CacheManager{
@@ -17,7 +19,7 @@ class CacheManager{
   static PojoMeInfoPrivate meInfo;
   static int myId;
 
-  static get getMyIdSafely{
+  static int get getMyIdSafely{
     if(meInfo != null){
       return meInfo.id;
     }
@@ -89,21 +91,19 @@ class CacheManager{
     HazizzLogger.printLog("str_myUserData: $str_myUserData");
     if(str_myUserData != null) {
       meInfo = PojoMeInfoPrivate.fromJson(jsonDecode(str_myUserData));
+      FirebaseAnalyticsManager.setUserId(meInfo);
     }else{
-    //  HazizzResponse hazizzResponse = await RequestSender().getResponse(GetMyInfo.private());
-    //  if(hazizzResponse.convertedData is PojoMeInfo){
-    //    meInfo = hazizzResponse.convertedData;
-    //  }
+
     }
     return meInfo;
   }
 
   static void setMyUserData(PojoMeInfoPrivate me) async{
+
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-
     prefs.setString(_keyMe + _userData, jsonEncode(me));
     meInfo = me;
+    FirebaseAnalyticsManager.setUserId(meInfo);
   }
 
   static Future<bool> seenGiveaway() async{
@@ -115,7 +115,5 @@ class CacheManager{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool(_keyMe + _seen_giveaway, true);
   }
-
-
 }
 

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/auth/social_login_bloc.dart';
@@ -21,7 +22,6 @@ import 'package:mobile/widgets/notebook_background_widget.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/custom/hazizz_tab_bar_view.dart';
 import 'package:mobile/custom/hazizz_tab_controller.dart';
-import 'package:toast/toast.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import "dart:math" show pi;
 import 'package:mobile/communication/hazizz_response.dart';
@@ -62,7 +62,9 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
 
         }else{
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            Toast.show(locText(context, key: "already_in_group"), context, duration: Toast.LENGTH_LONG, gravity:  Toast.BOTTOM);
+            showToast(locText(context, key: "already_in_group"), duration: Duration(seconds: 3));
+
+           // Toast.show(locText(context, key: ""), context, duration: Toast.LENGTH_LONG, gravity:  Toast.BOTTOM);
           });
         }
         setState(() {
@@ -282,7 +284,9 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
                       child: RaisedButton(child: Text(locText(context, key: "create_group").toUpperCase()), onPressed: () async {
                         bool success = await showCreateGroupDialog(context);
                         if(success != null && success){
-                          Toast.show(locText(context, key: "group_created"), context, duration: 2);
+                          showToast(locText(context, key: "group_created"), duration: Duration(seconds: 3));
+
+                        //  Toast.show(locText(context, key: ""), context, duration: 2);
                           nextPage();
                         }
                       },

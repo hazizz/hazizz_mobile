@@ -244,6 +244,7 @@ class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixi
                                     return Transform.translate(
                                       offset: const Offset(-6, -9),
                                       child: Markdown(data: pojoTask.description,
+                                        padding:  const EdgeInsets.only(left: 20, top: 12),
                                         shrinkWrap: true,
                                         physics: NeverScrollableScrollPhysics(),
                                         imageBuilder: (uri){

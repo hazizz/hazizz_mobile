@@ -89,7 +89,7 @@ class _SureToDeleteMeDialog extends State<SureToDeleteMeDialog> {
                 setState(() {
                   isLoading = true;
                 });
-                HazizzResponse hazizzResponse = await RequestSender().getResponse(DeleteMe(userId: (await CacheManager.getMyUserData()).id));
+                HazizzResponse hazizzResponse = await RequestSender().getResponse(DeleteMe(userId: CacheManager.getMyIdSafely));
 
                 if(hazizzResponse.isSuccessful){
                   AppState.logout();

@@ -35,7 +35,7 @@ import 'package:mobile/managers/kreta_session_manager.dart';
 import 'package:mobile/managers/preference_services.dart';
 import 'package:mobile/managers/token_manager.dart';
 import 'package:meta/meta.dart';
-import 'package:mobile/pojo_converter_helper.dart';
+import 'package:mobile/services/pojo_converter_helper.dart';
 import 'package:mobile/storage/cache_manager.dart';
 import 'package:package_info/package_info.dart';
 import 'package:rxdart/rxdart.dart';

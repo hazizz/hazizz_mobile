@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
-
 ThemeData theme(BuildContext context){
-
   return Theme.of(context);
 }
 
@@ -48,21 +46,6 @@ class HazizzTheme{
 
 
   static final ThemeData lightThemeData = new ThemeData(
-
-    /*
-    hoverColor: lightblue,
-    indicatorColor: lightblue,
-  //  pageTransitionsTheme: lightblue,
-    primarySwatch: lightblue,
-    splashColor: lightblue,
-  */
-
-  // sliderTheme: lightblue,
-
-  //  buttonTheme: ButtonThemeData(te),
-   // splashColor: HazizzTheme.blue,
-
-
     textTheme: TextTheme(
       body1: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600,),
       body2: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
@@ -81,34 +64,14 @@ class HazizzTheme{
 
     ),
 
-  //  textTheme: TextTheme(body1: TextStyle(backgroundColor: Colors.red))
-
-
     brightness: Brightness.light,
     accentColor: red,
-    // primaryColorLight: lightblue,
     primaryColorDark: blue,
     primaryColor: lightblue,
     errorColor: red,
- //   textTheme: Colors.black,
-    /*
-    appBarTheme: AppBarTheme(
-      color: lightblue
-    ),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
-      backgroundColor: red
-    )
-      */
   );
 
   static final ThemeData darkThemeData = new ThemeData(
-    /*
-    hoverColor: lightblue,
-    indicatorColor: lightblue,
-    //  pageTransitionsTheme: lightblue,
-   // primarySwatch: lightblue,
-    splashColor: lightblue,
-*/
     textTheme: TextTheme(
       body1: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600, ),
       body2: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
@@ -127,32 +90,11 @@ class HazizzTheme{
     ),
     brightness: Brightness.dark,
     accentColor: red,
-    // primaryColorLight: lightblue,
-
-
     primaryColorDark: Color.fromRGBO(70, 105, 140, 1),
     primaryColor: Color.fromRGBO(14, 105, 138, 1),
 
-    /*
-    primaryColorDark: blue,
-    primaryColor: lightblue,
-    */
-
     errorColor: red,
- //   textSelectionHandleColor: Colors.black,
-    //   textTheme: Colors.black,
-    /*
-    appBarTheme: AppBarTheme(
-      color: lightblue
-    ),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
-      backgroundColor: red
-    )
-      */
   );
-
-
-
 
 
   static const String _key_theme = "_key_theme";
@@ -185,7 +127,6 @@ class HazizzTheme{
     sharedPreferences.setString(_key_theme, _value_light);
   }
 
-
   static Future<ThemeData> getCurrentTheme() async {
     if(await isDark()) {
       currentThemeIsDark = true;
@@ -198,12 +139,4 @@ class HazizzTheme{
       return currentTheme;
     }
   }
-
-
-
-
-
-
-
-
 }

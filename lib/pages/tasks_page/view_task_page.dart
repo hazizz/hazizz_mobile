@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:typed_data';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -9,8 +6,6 @@ import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
 import 'package:mobile/blocs/other/view_task_bloc.dart';
 import 'package:mobile/blocs/tasks/tasks_bloc.dart';
 import 'package:mobile/communication/pojos/PojoTag.dart';
-
-
 import 'package:flutter/material.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
@@ -21,17 +16,14 @@ import 'package:mobile/enums/group_permissions_enum.dart';
 import 'package:mobile/managers/deep_link_receiver.dart';
 import 'package:mobile/managers/google_drive_manager.dart';
 import 'package:mobile/services/firebase_analytics.dart';
-import 'package:mobile/services/hazizz_crypt.dart';
 import 'package:mobile/storage/cache_manager.dart';
 import 'package:mobile/widgets/comment_section_widget.dart';
-import 'package:mobile/widgets/error_proof_widget.dart';
 import 'package:mobile/widgets/flushbars.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 import 'package:mobile/widgets/image_viewer_widget.dart';
 import 'package:mobile/widgets/tag_chip.dart';
 import 'package:share/share.dart';
 import 'package:snappable/snappable.dart';
-
 import 'package:mobile/custom/hazizz_date.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/hazizz_response.dart';
@@ -525,6 +517,8 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                                                   textColor = Colors.white;
                                                                 }
                                                                 return Markdown(data: _description,
+                                                                  selectable: true,
+                                                                  padding:  const EdgeInsets.only(left: 10, top: 10),
                                                                   shrinkWrap: true,
                                                                   physics: NeverScrollableScrollPhysics(),
                                                                   imageBuilder: (uri){

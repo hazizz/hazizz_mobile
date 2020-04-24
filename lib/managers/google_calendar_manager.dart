@@ -4,7 +4,7 @@ import 'package:googleapis/calendar/v3.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/managers/deep_link_receiver.dart';
 
-import '../google_http_client.dart';
+import '../services/google_http_client.dart';
 
 class GoogleCalendarColorIds{
   static const String blue = "1",

@@ -36,13 +36,10 @@ List<TaskSimilarity> checkTaskSimilarity(String description, int subjectId, Date
 
     HazizzLogger.printLog("log: lull2265: .${t.description}.");
 
-
-
     final intRegex = RegExp(r'\s+(\d+)\s+', multiLine: true);
     List<RegExpMatch> matches = intRegex.allMatches(newDescription).toList();
 
     matches[0].toString();
-
 
 
     List<String> charsToReplace = ["#", "*", "_", "!", "\n", ];

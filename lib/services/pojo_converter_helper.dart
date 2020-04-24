@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-
 Iterable getIterable(dynamic data) =>
     PojoConverter.getIterable(data);
 

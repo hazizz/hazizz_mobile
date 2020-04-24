@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization_provider.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:mobile/blocs/auth/social_login_bloc.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/navigation/route_generator.dart';
@@ -192,6 +193,7 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     print("startpage: ${startPage}");
@@ -200,49 +202,61 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
     return DynamicTheme(
       data: (brightness) => themeData,
       themedWidgetBuilder: (context, theme) {
-        return MaterialApp(
-          navigatorKey: BusinessNavigator().navigatorKey,
-          initialRoute: startPage ??  NavigationSaver?.restoreRouteName, //?? startPage,
-        //  onGenerateRoute: RouteGenerator.generateRoute,
+        return StyledToast(
+          textStyle: TextStyle(fontSize: 16.0, color: Colors.white),
+          backgroundColor: Color(0x99000000),
+          borderRadius: BorderRadius.circular(5.0),
+          textPadding: EdgeInsets.symmetric(horizontal: 17.0, vertical: 10.0),
+          toastAnimation: StyledToastAnimation.fade,
+          reverseAnimation: StyledToastAnimation.fade,
+          curve: Curves.fastOutSlowIn,
+          reverseCurve: Curves.fastLinearToSlowEaseIn,
+          dismissOtherOnShow: true,
+          movingOnWindowChange: true,
+          child: MaterialApp(
+            navigatorKey: BusinessNavigator().navigatorKey,
+            initialRoute: startPage ??  NavigationSaver?.restoreRouteName, //?? startPage,
+          //  onGenerateRoute: RouteGenerator.generateRoute,
 
-          navigatorObservers: [
-            widget._navigationSaver,
-            SavedStateRouteObserver(savedState: savedState),
-          //  FirebaseAnalyticsObserver(analytics: FirebaseAnalyticsManager.analytics),
-            FirebaseAnalyticsManager.observer
-          ],
-          onGenerateRoute: (RouteSettings routeSettings) => widget._navigationSaver.onGenerateRoute(
-            routeSettings, (RouteSettings settings, {NextPageInfo nextPageInfo,}) => RouteGenerator.generateRoute(settings),
-          ),
+            navigatorObservers: [
+              widget._navigationSaver,
+              SavedStateRouteObserver(savedState: savedState),
+            //  FirebaseAnalyticsObserver(analytics: FirebaseAnalyticsManager.analytics),
+              FirebaseAnalyticsManager.observer
+            ],
+            onGenerateRoute: (RouteSettings routeSettings) => widget._navigationSaver.onGenerateRoute(
+              routeSettings, (RouteSettings settings, {NextPageInfo nextPageInfo,}) => RouteGenerator.generateRoute(settings),
+            ),
 
-          title: locText(context, key: "hazizz_appname") ?? "Hazizz Mobile",
-          showPerformanceOverlay: false,
-          theme: theme,
-          localizationsDelegates: [
-            HazizzLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-          ],
-          supportedLocales: getSupportedLocales(),
+            title: locText(context, key: "hazizz_appname") ?? "Hazizz Mobile",
+            showPerformanceOverlay: false,
+            theme: theme,
+            localizationsDelegates: [
+              HazizzLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+            ],
+            supportedLocales: getSupportedLocales(),
 
-          localeResolutionCallback: (locale, supportedLocales) {
-            print("prCode1: ${preferredLocale.toString()}");
-            if(preferredLocale != null){
-              print("prCode: ${preferredLocale.languageCode}, ${preferredLocale.countryCode}");
-              FirebaseAnalyticsManager.logUsedLanguage(preferredLocale.languageCode);
-              return preferredLocale;
-            }
-            for(var supportedLocale in supportedLocales) {
-              if(supportedLocale.languageCode == locale?.languageCode &&
-                  supportedLocale.countryCode == locale.countryCode) {
-                setPreferredLocale(supportedLocale);
-                FirebaseAnalyticsManager.logUsedLanguage(preferredLocale.languageCode);
-                return supportedLocale;
+            localeResolutionCallback: (locale, supportedLocales) {
+              print("prCode1: ${preferredLocale.toString()}");
+              if(preferredLocale != null){
+                print("prCode: ${preferredLocale.languageCode}, ${preferredLocale.countryCode}");
+                FirebaseAnalyticsManager.setUsedLanguage(preferredLocale.languageCode);
+                return preferredLocale;
               }
-            }
-            FirebaseAnalyticsManager.logUsedLanguage(preferredLocale.languageCode);
-            return supportedLocales.first;
-          },
+              for(var supportedLocale in supportedLocales) {
+                if(supportedLocale.languageCode == locale?.languageCode &&
+                    supportedLocale.countryCode == locale.countryCode) {
+                  setPreferredLocale(supportedLocale);
+                  FirebaseAnalyticsManager.setUsedLanguage(preferredLocale.languageCode);
+                  return supportedLocale;
+                }
+              }
+              FirebaseAnalyticsManager.setUsedLanguage(preferredLocale.languageCode);
+              return supportedLocales.first;
+            },
+          ),
         );
       }
     );

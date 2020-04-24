@@ -1,8 +1,6 @@
-
-
-
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
+import 'package:mobile/communication/pojos/PojoMeInfo.dart';
 import 'package:mobile/communication/pojos/PojoTag.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
@@ -11,7 +9,33 @@ import 'package:mobile/storage/cache_manager.dart';
 class FirebaseAnalyticsManager{
   static final FirebaseAnalytics analytics = FirebaseAnalytics();
   static final FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
-  
+
+  static Future<void> setUserId(PojoMeInfo meInfo) async {
+    HazizzLogger.printLog("log user property to analytics: " "id: " + meInfo.id.toString());
+
+    await analytics.setUserProperty(name: "user_id", value: meInfo.id.toString());
+    await analytics.setUserId(meInfo.id.toString());
+    HazizzLogger.printLog("log event to analytics: " "user_id: " + meInfo.id.toString());
+    Map<String, dynamic> parameters = {
+      "user_id": CacheManager.getMyIdSafely,
+    };
+    await analytics.logEvent(name: "user_id", parameters: parameters);
+  }
+
+  static Future<void> setUsedLanguage(String language_code) async {
+    HazizzLogger.printLog("log user property to analytics: " "language_code: " +language_code);
+
+    await analytics.setUserProperty(name: "language_code", value: language_code);
+    HazizzLogger.printLog("log event to analytics: " "language_code: " +language_code);
+    Map<String, dynamic> parameters = {
+      "user_id": CacheManager.getMyIdSafely,
+      "language_code": language_code
+    };
+    await analytics.logEvent(name: "used_language", parameters: parameters);
+  }
+
+
+
   static Future<void> logEvent(String name, Map<String, dynamic> parameters) async {
     HazizzLogger.printLog("log event to analytics: " + name + ": " + parameters.toString());
     await analytics.logEvent(name: name, parameters: parameters);
@@ -20,6 +44,15 @@ class FirebaseAnalyticsManager{
   static Future<void> logLogin(String method) async {
     HazizzLogger.printLog("log event to analytics: " + "login" + ": method: " + method);
     await analytics.logLogin(loginMethod: method);
+  }
+
+  static Future<void> logLogout({String error = "no error"}) async {
+    HazizzLogger.printLog("log event to analytics: " + "logout");
+    Map<String, dynamic> parameters = {
+      "user_id": CacheManager.getMyIdSafely,
+      "error": error
+    };
+    await analytics.logEvent(name: "logout", parameters: parameters);
   }
 
   static Future<void> logJoinGroup(int groupId) async {
@@ -38,13 +71,13 @@ class FirebaseAnalyticsManager{
     }
     Map<String, dynamic> parameters = {
       "task_id": task.id,
-      "is_thera": isThera,
+      "is_thera": isThera.toString(),
       "is_completed": task.completed == null ? "Thera" : task.completed.toString(),
-      "has_subject": task.subject != null,
-      "contains_image": task.description.contains("![img"),
-      "has_link": task.description.contains("(http"),
+      "has_group": (task.group != null).toString(),
+      "has_subject": (task.subject != null).toString(),
+      "contains_image": task.description.contains("![img").toString(),
+      "has_link": task.description.contains("(http").toString(),
     };
-
     await analytics.logEvent(name: "opened_view_task_page", parameters: parameters);
   }
 
@@ -56,9 +89,9 @@ class FirebaseAnalyticsManager{
     }
     Map<String, dynamic> parameters = {
       "task_id": taskId,
-      "has_subject": subjectId != null,
+      "has_subject": (subjectId != null).toString(),
       "tags": tags_string,
-      "contains_image": contains_image
+      "contains_image": contains_image.toString()
     };
     await analytics.logEvent(name: "opened_view_task_page", parameters: parameters);
   }
@@ -107,6 +140,7 @@ class FirebaseAnalyticsManager{
     Map<String, dynamic> parameters = {};
     await analytics.logEvent(name: "opened_grade_statistics", parameters: parameters);
   }
+  /*
 
   static Future<void> logUsedLanguage(String language_code) async {
     HazizzLogger.printLog("log event to analytics: " + "used_language: " + language_code);
@@ -116,6 +150,7 @@ class FirebaseAnalyticsManager{
     };
     await analytics.logEvent(name: "used_language", parameters: parameters);
   }
+  */
 
   static Future<void> logNumberOfKretaSessionsAdded(int count) async {
     HazizzLogger.printLog("log event to analytics: " + "number_of_kreta_sessions_added: " + count.toString());
@@ -158,7 +193,7 @@ class FirebaseAnalyticsManager{
     HazizzLogger.printLog("log event to analytics: " + "rate_limit_reached");
 
     Map<String, dynamic> parameters = {
-      "user_id": CacheManager.getMyIdSafely()
+      "user_id": CacheManager.getMyIdSafely
     };
     await analytics.logEvent(name: "rate_limit_reached", parameters: parameters);
   }
@@ -167,11 +202,8 @@ class FirebaseAnalyticsManager{
     HazizzLogger.printLog("log event to analytics: " + "unknown_error_response");
 
     Map<String, dynamic> parameters = {
-      "user_id": CacheManager.getMyIdSafely()
+      "user_id": CacheManager.getMyIdSafely
     };
     await analytics.logEvent(name: "unknown_error_response", parameters: parameters);
   }
-
-
-
 }

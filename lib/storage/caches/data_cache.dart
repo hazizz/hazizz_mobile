@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:mobile/communication/pojos/PojoGrades.dart';
 import 'package:mobile/communication/pojos/PojoSchedules.dart';
@@ -106,7 +105,6 @@ Future<DataCache> loadTasksCache() async {
 }
 
 void saveScheduleCache(PojoSchedules schedule, {@required int year, @required int weekNumber}){
- // List<String> asd = tasks[0].tags.map((e) => e == null ? null : e.name)?.toList();
   _save("${year}_${weekNumber}_scheduleCache", schedule.toJson());// tasks.map((e) => e == null ? null : e.toJson())?.toList());
 }
 
