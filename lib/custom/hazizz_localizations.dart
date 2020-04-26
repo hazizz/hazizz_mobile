@@ -53,6 +53,19 @@ Future<void> setPreferredLangCode(String langCode) async {
   return;
 }
 
+Future<String> getPreferredCountryCode() async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  String langCode = prefs.getString(_keyLangCode);
+  if(langCode == null) {
+    if(langCode == "en"){
+      return "EN";
+    }else if(langCode == "hu"){
+      return "HU";
+    }
+  }
+  return null;
+}
+
 List<Locale> getSupportedLocales() {
   List<Locale> locales = [Locale('en', "EN"), Locale('hu', "HU")];
 
@@ -66,8 +79,9 @@ class HazizzLocalizationsNoContext{
   static Future<bool> load() async {
     // Load the language JSON file from the "lang" folder
     String preferredLangCode = await getPreferredLangCode();
+    String preferredCountryCode = await getPreferredCountryCode();
     String jsonString =
-    await rootBundle.loadString('assets/langs/${preferredLangCode}.json');
+    await rootBundle.loadString('assets/langs/${preferredLangCode}-${preferredCountryCode}.json');
 
     Map<String, dynamic> jsonMap = json.decode(jsonString);
 

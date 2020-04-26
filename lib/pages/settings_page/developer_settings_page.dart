@@ -1,14 +1,16 @@
-
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mobile/blocs/other/show_framerate_bloc.dart';
 import 'package:mobile/constants.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/managers/preference_services.dart';
 import 'package:mobile/services/hazizz_message_handler.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
-
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:flutter/material.dart';
+
+import '../../main.dart';
 
 class DeveloperSettingsPage extends StatefulWidget {
 
@@ -29,6 +31,8 @@ class _DeveloperSettingsPage extends State<DeveloperSettingsPage> {
 
   final TextEditingController server_url_controller = TextEditingController();
 
+  bool _enable_framerate = false;
+
 
   @override
   void initState() {
@@ -41,6 +45,8 @@ class _DeveloperSettingsPage extends State<DeveloperSettingsPage> {
     });
 
     server_url_controller.text = PreferenceService.serverUrl;
+
+    _enable_framerate = PreferenceService.enabledShowFramerate;
 
     super.initState();
   }
@@ -140,6 +146,28 @@ class _DeveloperSettingsPage extends State<DeveloperSettingsPage> {
                   leading: Icon(FontAwesomeIcons.solidBell),
                   title: Text(locText(context, key: "notification_settings")),
                   // trailing: Text("time")
+                ),
+
+                Divider(),
+                ListTile(
+                    leading: Icon(FontAwesomeIcons.chartBar),
+                    title: Text("enable_show_framerate".locText(context)),
+                    trailing: Switch(
+                      value: _enable_framerate,
+                      onChanged: (val){
+                        setState(() {
+                          _enable_framerate = val;
+                        });
+                        ShowFramerateEvent event;
+                        if(_enable_framerate){
+                          event = ShowFramerateEnableEvent();
+                        }else{
+                          event = ShowFramerateDisableEvent();
+                        }
+                        BlocProvider.of<ShowFramerateBloc>(context).add(event);
+                        PreferenceService.setEnabledShowFramerate(_enable_framerate);
+                      },
+                    )
                 ),
               ],
             ),

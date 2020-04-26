@@ -78,11 +78,9 @@
 
         <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
 
-
         <service
             android:name="com.mythichelm.localnotifications.services.LocalNotificationsService"
             android:exported="false" />
-
 
         <service
             android:name="io.flutter.plugins.androidalarmmanager.AlarmService"
@@ -98,7 +96,6 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED"></action>
             </intent-filter>
         </receiver>
-
 
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
@@ -121,7 +118,7 @@
 
         <meta-data android:name="com.facebook.sdk.AutoLogAppEventsEnabled"
             android:value="false"
-        />
+            />
 
     </application>
 </manifest>

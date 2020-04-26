@@ -66,11 +66,11 @@ class ServerChecker{
 
       if(theraHealth.status == "UP"){
         theraOnline = true;
-        print("asdds1: ${theraHealth.details.theraHealthManager.details.kretaSuccessRate}");
-        print("asdds2: ${theraHealth.details.theraHealthManager.details.kretaRequestsInLastHour}");
+        print("asdds1: ${theraHealth.components.theraHealthManager.details.kretaSuccessRate}");
+        print("asdds2: ${theraHealth.components.theraHealthManager.details.kretaRequestsInLastHour}");
 
-        kretaSuccessRate = theraHealth.details.theraHealthManager.details.kretaSuccessRate;
-        kretaRequestsInLastHour = theraHealth.details.theraHealthManager.details.kretaRequestsInLastHour;
+        kretaSuccessRate = theraHealth.components.theraHealthManager.details.kretaSuccessRate;
+        kretaRequestsInLastHour = theraHealth.components.theraHealthManager.details.kretaRequestsInLastHour;
 
       }
 

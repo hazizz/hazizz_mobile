@@ -8,7 +8,7 @@ import io.flutter.plugins.GeneratedPluginRegistrant;
 import io.flutter.plugins.androidalarmmanager.AlarmService;
 
 import io.flutter.plugins.firebasemessaging.FlutterFirebaseMessagingService;
-
+/*
 public class Application extends FlutterApplication implements PluginRegistrantCallback {
     @Override
     public void onCreate() {
@@ -43,3 +43,4 @@ public class Application extends FlutterApplication implements PluginRegistrantC
 
     }
 }
+*/

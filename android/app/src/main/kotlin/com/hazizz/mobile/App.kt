@@ -12,6 +12,8 @@ import io.flutter.plugin.common.PluginRegistry.PluginRegistrantCallback;
 import io.flutter.plugins.firebasemessaging.FlutterFirebaseMessagingService;
 import nl.littlerobots.flutter.native_state.StateRegistry
 
+
+
 class App : FlutterApplication(), PluginRegistry.PluginRegistrantCallback {
     override fun onCreate() {
         super.onCreate()
@@ -47,3 +49,4 @@ class App : FlutterApplication(), PluginRegistry.PluginRegistrantCallback {
     }
     */
 }
+

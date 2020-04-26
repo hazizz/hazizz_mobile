@@ -27,6 +27,8 @@ class PreferenceService{
 
   static const String _key_serverUrl = "_key_serverUrl";
 
+  static const String _key_enable_show_framerate = "_key_enable_show_framerate";
+
   static const int tasksPage = 0;
   static const int schedulePage = 1;
   static const int gradesPage = 2;
@@ -41,6 +43,8 @@ class PreferenceService{
 
   static String serverUrl = Constants.BASE_URL;
 
+  static bool enabledShowFramerate = false;
+
 
 
   static Future<void> loadAllPreferences() async {
@@ -50,6 +54,7 @@ class PreferenceService{
     imageAutoLoad = await getImageAutoLoad();
     imageAutoDownload = await getImageAutoDownload();
     enabledAd = await getEnabledAd();
+    enabledShowFramerate = await getEnabledShowFramerate();
   }
 
 
@@ -133,6 +138,18 @@ class PreferenceService{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     serverUrl = url;
     prefs.setString(_key_serverUrl, url);
+  }
+
+  static Future<bool> getEnabledShowFramerate()async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool enable = prefs.getBool(_key_enable_show_framerate);
+    enabledShowFramerate = enable == null ? false : enable;
+    return enabledShowFramerate;
+  }
+  static Future setEnabledShowFramerate(bool enable)async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    enabledShowFramerate = enable;
+    prefs.setBool(_key_enable_show_framerate, enable);
   }
 
 }

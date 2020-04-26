@@ -1,5 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-
+/*
 part of 'PojoTheraHealth.dart';
 
 // **************************************************************************
@@ -28,3 +28,6 @@ Map<String, dynamic> _$PojoTheraHealthToJson(PojoTheraHealth instance) =>
       'kretaRequestsInLastHour': instance.kretaRequestsInLastHour,
       'kretaSuccessRate': instance.kretaSuccessRate,
     };
+
+
+*/

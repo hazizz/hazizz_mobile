@@ -412,6 +412,7 @@ class _TasksPage extends State<TasksPage>
             opacity: _scrollToTopVisible ? 1.0 : 0.0,
             duration: Duration(milliseconds: 300),
             child: FloatingActionButton(
+              heroTag: "2",
               onPressed: scrollToTop,
               child: Icon(FontAwesomeIcons.longArrowAltUp),
             ),
@@ -420,6 +421,7 @@ class _TasksPage extends State<TasksPage>
             height: 10,
           ),
           FloatingActionButton(
+            heroTag: "1",
             onPressed: (){
               Navigator.pushNamed(context, "/createTask");
             },

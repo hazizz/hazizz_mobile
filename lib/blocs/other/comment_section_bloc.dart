@@ -82,7 +82,7 @@ class CommentSectionBloc extends Bloc<CommentSectionEvent, CommentSectionState> 
   List<PojoComment> comments;
 
   int taskId;
-  bool enabled;
+  bool enabled = true;
 
   CommentSectionBloc({@required this.taskId, @required enabled = true});
 
@@ -129,7 +129,7 @@ class CommentBlocs{
   CommentSectionBloc commentSectionBloc;
   CommentWriterBloc commentWriterBloc;
 
-  bool hasCommentSection;
+  bool hasCommentSection = true;
 
   CommentBlocs({@required this.taskId, hasCommentSection = true}){
     commentSectionBloc = CommentSectionBloc(taskId: taskId, enabled: hasCommentSection);
@@ -196,7 +196,7 @@ class CommentWriterBloc extends Bloc<CommentWriterEvent,  CommentWriterState> {
 
   String content;
 
-  bool enabled;
+  bool enabled = true;
 
   CommentWriterBloc({@required this.taskId, @required this.commentSectionBloc, @required enabled = true}){
     commentController.addListener((){

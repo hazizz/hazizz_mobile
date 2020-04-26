@@ -87,6 +87,7 @@
   "auto_load_image":"Automatikus kép betöltés a feladatokban",
   "auto_download_image":"Automatikus kép letöltés a feladatokban",
   "enable_ads":"Reklámok engedélyezése",
+  "enable_show_framerate":"FPS kiírása",
   "ad":"Reklám",
   "language":"Nyelv",
   "profile_editor":"Profil szerkesztő",

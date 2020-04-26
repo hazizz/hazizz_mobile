@@ -224,6 +224,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
     FirebaseAnalyticsManager.observer.unsubscribe(this);
     DeepLink.dispose();
     _tabController.dispose();
+    animationController.dispose();
     super.dispose();
   }
 

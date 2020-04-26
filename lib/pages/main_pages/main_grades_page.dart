@@ -78,6 +78,7 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
   }
 
   Widget onLoaded(Map<String, List<PojoGrade>> g){
+    /*
     print('kék100');
 
     g.forEach((s, l){
@@ -87,6 +88,7 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
     });
 
     print('kék111');
+    */
 
     if(currentPage == 1){
       Map<String, List<PojoGrade>> grades = copyMap(MainTabBlocs().gradesBloc.grades.grades);

@@ -86,6 +86,7 @@
   "auto_load_image":"Automatically load images in tasks",
   "auto_download_image":"Automatically download images in tasks, if opened",
   "enable_ads":"Enable ads",
+  "enable_show_framerate":"show FPS",
   "ad":"Ad",
   "preferences":"Preferences",
   "language":"Language",

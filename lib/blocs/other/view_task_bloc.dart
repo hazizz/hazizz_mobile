@@ -33,6 +33,8 @@ class ViewTaskBloc extends Bloc<HEvent, HState> {
     HazizzLogger.printLog("assign: " + pojoTask.assignation.name );
     if(pojoTask.assignation.name == "THERA"){
       hasCommentSection = false;
+    }else{
+      hasCommentSection = true;
     }
     commentBlocs = CommentBlocs(taskId: pojoTask.id, hasCommentSection: hasCommentSection);
   }

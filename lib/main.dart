@@ -1,17 +1,20 @@
 import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:easy_localization/easy_localization_provider.dart';
-import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:mobile/blocs/auth/social_login_bloc.dart';
+import 'package:mobile/blocs/other/show_framerate_bloc.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
+import 'package:mobile/managers/preference_services.dart';
 import 'package:mobile/navigation/route_generator.dart';
 import 'package:mobile/services/firebase_analytics.dart';
 import 'package:mobile/services/hazizz_message_handler.dart';
 import 'package:native_state/native_state.dart';
 import 'package:shared_pref_navigation_saver/shared_pref_navigation_saver.dart';
+import 'package:statsfl/statsfl.dart';
 import 'blocs/main_tab/main_tab_blocs.dart';
 import 'communication/pojos/task/PojoTask.dart';
 import 'custom/hazizz_logger.dart';
@@ -52,7 +55,7 @@ Future<bool> fromNotification() async {
   var notificationAppLaunchDetails =
   await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
 
- // var notificationAppLaunchDetails = await HazizzNotification.flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+  // var notificationAppLaunchDetails = await HazizzNotification.flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
   print("from notif1: ${notificationAppLaunchDetails.didNotificationLaunchApp}");
   print("from notif2: ${notificationAppLaunchDetails.payload}");
   if(notificationAppLaunchDetails.didNotificationLaunchApp) {
@@ -66,10 +69,15 @@ Future<bool> fromNotification() async {
   return isFromNotification;
 }
 
+
+
 void main() async{
+
+
+
   final NavigationSaver _navigatorSaver = SharedPrefNavigationSaver(
-    (Iterable<RouteSettings> routes) async => json.encode(serializeRoutes(routes)),
-    (String routesAsString) async => deserializeRoutes(json.decode(routesAsString)),
+        (Iterable<RouteSettings> routes) async => json.encode(serializeRoutes(routes)),
+        (String routesAsString) async => deserializeRoutes(json.decode(routesAsString)),
   );
 
   print("navigationrem: ${NavigationSaver.restoreRouteName}");
@@ -117,7 +125,12 @@ void main() async{
   runApp(SavedState(
     name: "Main State",
     child: EasyLocalization(
+      child: Container(
+       // isEnabled: true,//PreferenceService.enabledShowFramerate,
+      //  showText: true,
+
         child: HazizzApp(_navigatorSaver)
+      )
     ),
   ));
 }
@@ -125,6 +138,9 @@ void main() async{
 class HazizzApp extends StatefulWidget{
 
   final NavigationSaver _navigationSaver;
+
+
+
 
   const HazizzApp(this._navigationSaver, {Key key}) : super(key: key);
 
@@ -137,6 +153,17 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
 
   DateTime lastActive;
 
+
+
+
+  /*
+  void enableShowFramerate(bool enabled){
+    setState(() {
+      showFramerate = enabled;
+    });
+    PreferenceService.setEnabledShowFramerate(enabled);
+  }
+  */
   @override
   initState() {
     super.initState();
@@ -160,7 +187,7 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
-  
+
   @override
   Future didChangeAppLifecycleState(AppLifecycleState state) async {
     HazizzLogger.printLog('App lifecycle state is $state');
@@ -176,13 +203,13 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
         }
       }
       var notificationAppLaunchDetails = await HazizzNotification.flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
-        String payload = notificationAppLaunchDetails.payload;
-        if(payload != null) {
-          HazizzLogger.printLog("payload: $payload");
-          Navigator.pushNamed(context, "/tasksTomorrow");
+      String payload = notificationAppLaunchDetails.payload;
+      if(payload != null) {
+        HazizzLogger.printLog("payload: $payload");
+        Navigator.pushNamed(context, "/tasksTomorrow");
 
-          tasksTomorrowSerialzed = payload;
-        }else  HazizzLogger.printLog("no payload");
+        tasksTomorrowSerialzed = payload;
+      }else  HazizzLogger.printLog("no payload");
       if(await fromNotification()) {
         Navigator.pushNamed(context, "/tasksTomorrow");
       }
@@ -199,66 +226,88 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
     print("startpage: ${startPage}");
     var savedState = SavedState.of(context);
     print("restore route: ${SavedStateRouteObserver.restoreRoute(savedState)}");
-    return DynamicTheme(
-      data: (brightness) => themeData,
-      themedWidgetBuilder: (context, theme) {
-        return StyledToast(
-          textStyle: TextStyle(fontSize: 16.0, color: Colors.white),
-          backgroundColor: Color(0x99000000),
-          borderRadius: BorderRadius.circular(5.0),
-          textPadding: EdgeInsets.symmetric(horizontal: 17.0, vertical: 10.0),
-          toastAnimation: StyledToastAnimation.fade,
-          reverseAnimation: StyledToastAnimation.fade,
-          curve: Curves.fastOutSlowIn,
-          reverseCurve: Curves.fastLinearToSlowEaseIn,
-          dismissOtherOnShow: true,
-          movingOnWindowChange: true,
-          child: MaterialApp(
-            navigatorKey: BusinessNavigator().navigatorKey,
-            initialRoute: startPage ??  NavigationSaver?.restoreRouteName, //?? startPage,
-          //  onGenerateRoute: RouteGenerator.generateRoute,
+    return BlocProvider(
+      create: (context) => ShowFramerateBloc(),
+      child: DynamicTheme(
+          data: (brightness) => themeData,
+          themedWidgetBuilder: (context, theme) {
+            return StyledToast(
+              textStyle: TextStyle(fontSize: 16.0, color: Colors.white),
+              backgroundColor: Color(0x99000000),
+              borderRadius: BorderRadius.circular(5.0),
+              textPadding: EdgeInsets.symmetric(horizontal: 17.0, vertical: 10.0),
+              toastAnimation: StyledToastAnimation.fade,
+              reverseAnimation: StyledToastAnimation.fade,
+              curve: Curves.fastOutSlowIn,
+              reverseCurve: Curves.fastLinearToSlowEaseIn,
+              dismissOtherOnShow: true,
+              movingOnWindowChange: true,
+              child: BlocBuilder(
+                bloc: context.bloc<ShowFramerateBloc>(),
+                builder: (context, state){
+                  bool showFramerate = false;
+                  HazizzLogger.printLog("huhuhasd " + state.toString());
+                  if(state is ShowFramerateEnabledState){
+                    showFramerate = true;
+                  }
+                  return StatsFl(
+                    width: 200,
+                    isEnabled: showFramerate,
+                    align: Alignment(1.0, -0.92),
+                    showText: true,
+                    height: 50,
+                    //   width: 300, height:1000,
+                    child: MaterialApp(
 
-            navigatorObservers: [
-              widget._navigationSaver,
-              SavedStateRouteObserver(savedState: savedState),
-            //  FirebaseAnalyticsObserver(analytics: FirebaseAnalyticsManager.analytics),
-              FirebaseAnalyticsManager.observer
-            ],
-            onGenerateRoute: (RouteSettings routeSettings) => widget._navigationSaver.onGenerateRoute(
-              routeSettings, (RouteSettings settings, {NextPageInfo nextPageInfo,}) => RouteGenerator.generateRoute(settings),
-            ),
+                      navigatorKey: BusinessNavigator().navigatorKey,
+                      initialRoute: startPage ??  NavigationSaver?.restoreRouteName, //?? startPage,
+                      //  onGenerateRoute: RouteGenerator.generateRoute,
 
-            title: locText(context, key: "hazizz_appname") ?? "Hazizz Mobile",
-            showPerformanceOverlay: false,
-            theme: theme,
-            localizationsDelegates: [
-              HazizzLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-            ],
-            supportedLocales: getSupportedLocales(),
+                      navigatorObservers: [
+                        widget._navigationSaver,
+                        SavedStateRouteObserver(savedState: savedState),
+                        //  FirebaseAnalyticsObserver(analytics: FirebaseAnalyticsManager.analytics),
+                        FirebaseAnalyticsManager.observer
+                      ],
+                      onGenerateRoute: (RouteSettings routeSettings) => widget._navigationSaver.onGenerateRoute(
+                        routeSettings, (RouteSettings settings, {NextPageInfo nextPageInfo,}) => RouteGenerator.generateRoute(settings),
+                      ),
 
-            localeResolutionCallback: (locale, supportedLocales) {
-              print("prCode1: ${preferredLocale.toString()}");
-              if(preferredLocale != null){
-                print("prCode: ${preferredLocale.languageCode}, ${preferredLocale.countryCode}");
-                FirebaseAnalyticsManager.setUsedLanguage(preferredLocale.languageCode);
-                return preferredLocale;
-              }
-              for(var supportedLocale in supportedLocales) {
-                if(supportedLocale.languageCode == locale?.languageCode &&
-                    supportedLocale.countryCode == locale.countryCode) {
-                  setPreferredLocale(supportedLocale);
-                  FirebaseAnalyticsManager.setUsedLanguage(preferredLocale.languageCode);
-                  return supportedLocale;
-                }
-              }
-              FirebaseAnalyticsManager.setUsedLanguage(preferredLocale.languageCode);
-              return supportedLocales.first;
-            },
-          ),
-        );
-      }
+                      title: locText(context, key: "hazizz_appname") ?? "Hazizz Mobile",
+                      showPerformanceOverlay: false,
+                      theme: theme,
+                      localizationsDelegates: [
+                        HazizzLocalizations.delegate,
+                        GlobalMaterialLocalizations.delegate,
+                        GlobalWidgetsLocalizations.delegate,
+                      ],
+                      supportedLocales: getSupportedLocales(),
+
+                      localeResolutionCallback: (locale, supportedLocales) {
+                        print("prCode1: ${preferredLocale.toString()}");
+                        if(preferredLocale != null){
+                          print("prCode: ${preferredLocale.languageCode}, ${preferredLocale.countryCode}");
+                          FirebaseAnalyticsManager.setUsedLanguage(preferredLocale.languageCode);
+                          return preferredLocale;
+                        }
+                        for(var supportedLocale in supportedLocales) {
+                          if(supportedLocale.languageCode == locale?.languageCode &&
+                              supportedLocale.countryCode == locale.countryCode) {
+                            setPreferredLocale(supportedLocale);
+                            FirebaseAnalyticsManager.setUsedLanguage(preferredLocale.languageCode);
+                            return supportedLocale;
+                          }
+                        }
+                        FirebaseAnalyticsManager.setUsedLanguage(preferredLocale.languageCode);
+                        return supportedLocales.first;
+                      },
+                    ),
+                  );
+                },
+              ),
+            );
+          }
+      ),
     );
   }
 }
