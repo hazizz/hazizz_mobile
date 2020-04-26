@@ -24,7 +24,7 @@ class TaskItemWidget extends StatefulWidget  {
   _TaskItemWidget createState() => _TaskItemWidget();
 }
 
-class _TaskItemWidget extends State<TaskItemWidget> with TickerProviderStateMixin  {
+class _TaskItemWidget extends State<TaskItemWidget>  {
 
   PojoTask pojoTask;
 

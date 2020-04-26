@@ -1,11 +1,9 @@
-
 import 'dart:io';
-
 import 'package:flutter_mailer/flutter_mailer.dart';
-import 'package:mobile/custom/logcat/logcat-master/lib/logcat.dart';
+import 'package:logcat/logcat.dart';
+//import 'package:mobile/custom/logcat/logcat-master/lib/logcat.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 import 'package:path_provider/path_provider.dart';
-
 import 'package:mobile/custom/hazizz_app_info.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:flutter/material.dart';

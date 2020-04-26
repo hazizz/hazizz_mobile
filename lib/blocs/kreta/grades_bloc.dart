@@ -299,7 +299,7 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
               print("CHANGE HAPPENDE01");
               PojoGrades oldGrades = dataCache?.data;
 
-              if(oldGrades == null || grades.grades.toString() != oldGrades.grades.toString()){
+              if(oldGrades != null && grades.grades.toString() != oldGrades.grades.toString()){
                 print("CHANGE HAPPENDE1");
                 NewGradesBloc().add(HasNewGradesEvent());
 

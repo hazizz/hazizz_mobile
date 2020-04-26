@@ -100,37 +100,36 @@ class _SchedulesTabPage extends State<SchedulesTabPage> with TickerProviderState
       return Stack(
         children: <Widget>[
           Positioned(
-            left: MediaQuery.of(context).size.width/2 - 100,
+            left: MediaQuery.of(context).size.width/2 - 110,
             top: MediaQuery.of(context).size.height/5,
             child: Container(
              // color: Colors.red,
               child: Column(
                 children: <Widget>[
                   Text(locText(context, key: "no_classes_today")),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 0),
-                    child: Container(
-                     // color: Colors.red,
-                      height: 140,
-                      width: 200,
-                      child: InkWell(
-                        onTap: (){
-                          elek_tap_count++;
-                          if(elek_tap_count >= 4){
-                            showToast(
-                              locText(context, key: "elek_woken_up"),
-                              duration: Duration(seconds: 4),
-                              animation: StyledToastAnimation.slideFromTopFade,
-                              reverseAnimation: StyledToastAnimation.slideToBottomFade,
-                            );
-                            elek_tap_count = 0;
-                          }
-                        },
+                  Container(
+                    height: 150,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(30),
+                      onTap: (){
+                        elek_tap_count++;
+                        if(elek_tap_count >= 4){
+                          showToast(
+                            "elek_woken_up".locText(context),
+                            duration: Duration(seconds: 4),
+                            animation: StyledToastAnimation.slideFromTopFade,
+                            reverseAnimation: StyledToastAnimation.slideToBottomFade,
+                          );
+                          elek_tap_count = 0;
+                        }
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10, right: 10),
                         child: SvgPicture.asset(
                           "assets/images/elek_sleep.svg",
                           fit: BoxFit.scaleDown,
-                       //   height: 140,
-                        //  width: 200,
+                          height: 120,
+                          width: 200,
                         ),
                       ),
                     ),

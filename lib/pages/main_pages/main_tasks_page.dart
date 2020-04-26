@@ -17,7 +17,7 @@ import 'package:mobile/widgets/listItems/task_header_item_widget.dart';
 import 'package:mobile/widgets/listItems/task_item_widget.dart';
 import 'package:mobile/widgets/scroll_space_widget.dart';
 import 'package:mobile/widgets/tab_widget.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:mobile/extension_methods/duration_extension.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 
@@ -37,7 +37,7 @@ class TasksPage extends TabWidget {
 
 
 class _TasksPage extends State<TasksPage>
-    with SingleTickerProviderStateMixin,
+    with TickerProviderStateMixin,
         AutomaticKeepAliveClientMixin{
 
   TaskCompleteState currentCompletedTaskState;
@@ -45,17 +45,29 @@ class _TasksPage extends State<TasksPage>
   TaskExpiredState currentExpiredTaskState;
 
 
-  final ItemScrollController itemScrollController = ItemScrollController();
-  final ItemPositionsListener itemPositionListener = ItemPositionsListener.create();
+ // final ItemScrollController itemScrollController = ItemScrollController();
+ // final ItemPositionsListener itemPositionListener = ItemPositionsListener.create();
 
+  final ScrollController scrollController = ScrollController();
 
-  void scrollTo(int index){
+  bool _scrollToTopVisible = false;
 
-    WidgetsBinding.instance.addPostFrameCallback((_) =>
-      itemScrollController.jumpTo(
-        index: index,
-      )
-    );
+  void scrollToTop(){
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+
+      scrollController.animateTo(0, duration: 400.milliseconds, curve: Curves.ease);
+
+      /*
+      itemScrollController.scrollTo(
+        duration: Duration(milliseconds: 400),
+        index: 0,
+      );
+      */
+      setState(() {
+        _scrollToTopVisible = false;
+      });
+    });
+
   }
   /*
   void scrollTo2({int index}){
@@ -75,7 +87,43 @@ class _TasksPage extends State<TasksPage>
 
   @override
   void initState() {
+    scrollController.addListener((){
+      if(scrollController.offset > MediaQuery.of(context).size.height * 1.2){
+        setState(() {
+          _scrollToTopVisible = true;
+        });
+      }else{
+        setState(() {
+          _scrollToTopVisible = false;
+        });
+      }
+    });
 
+    /*
+    itemPositionListener.itemPositions.addListener((){
+      List<ItemPosition> positions =  itemPositionListener.itemPositions.value.toList();
+     /* for(ItemPosition p in positions){
+        HazizzLogger.printLog("yad79: " + p.index.toString());
+        if(p.index > 12){
+          setState(() {
+            _scrollToTopVisible = true;
+          });
+          break;
+        }
+      }*/
+      HazizzLogger.printLog("yad79: " + positions[positions.length-1].index.toString());
+      if(positions[positions.length-1].index >= 4){
+        setState(() {
+          _scrollToTopVisible = true;
+        });
+      }else{
+        setState(() {
+          _scrollToTopVisible = false;
+        });
+      }
+
+    });
+    */
     currentCompletedTaskState = MainTabBlocs().tasksBloc.currentTaskCompleteState;
     currentExpiredTaskState = MainTabBlocs().tasksBloc.currentTaskExpiredState;
 
@@ -170,11 +218,11 @@ class _TasksPage extends State<TasksPage>
             }else{
 
               int itemCount = map.keys.length+1;
-              return ScrollablePositionedList.separated(
-
-              //  addAutomaticKeepAlives: true,
-                itemScrollController: itemScrollController,
-                itemPositionsListener: itemPositionListener,
+              return ListView.separated(
+                addAutomaticKeepAlives: true,
+                controller: scrollController,
+                //itemScrollController: itemScrollController,
+               // itemPositionsListener: itemPositionListener,
                 itemCount: itemCount,
                   separatorBuilder: (context, index ){
                     return showAd(context, show: (itemCount<3 && index == itemCount-1) || (index!=0 && index%3==0), showHeader: true);
@@ -190,10 +238,8 @@ class _TasksPage extends State<TasksPage>
                       listKeyList[i] =  GlobalKey();
                     }
 
-
                     DateTime key = map.keys.elementAt(index-1);
                     HazizzLogger.printLog("new key: ${key.toString()}");
-
 
                     Widget s = StickyHeader(
                       header: TaskHeaderItemWidget(key: Key(Random().nextInt(2000000).toString()), dateTime: key),
@@ -241,7 +287,6 @@ class _TasksPage extends State<TasksPage>
                     if(index == itemCount-1 /*|| true*/){
                       return addScrollSpace(s);
                     }
-
                     return s;
                   }
               );
@@ -253,32 +298,24 @@ class _TasksPage extends State<TasksPage>
     );
   }
 
-
   Widget buildItem(BuildContext context, int index, Animation animation, PojoTask pojoTask, Function onCompletedChanged){
     Animation<Offset> a = Tween<Offset>(begin: Offset(-1, 0.0), end: Offset(0, 0)).animate(
-        CurvedAnimation(
-          parent: animation,
-          curve: //Curves.easeOutSine
-
-          Interval(
-            0.1,
-            1.0,
-            curve: Curves.easeOutSine,
-
-           ),
-
-        )
+      CurvedAnimation(
+        parent: animation,
+        curve: Interval(
+          0.1,
+          1.0,
+          curve: Curves.easeOutSine,
+         ),
+      )
     );
     return SlideTransition(
-
       position: a,
-    //  axis: Axis.vertical,
       child: TaskItemWidget(originalPojoTask: pojoTask, onCompletedChanged: onCompletedChanged, key: Key(pojoTask.toJson().toString()),)
     );
   }
 
   GlobalKey<ScaffoldState> scaffoldState = new GlobalKey();
-
 
   @override
   Widget build(BuildContext context) {
@@ -299,86 +336,96 @@ class _TasksPage extends State<TasksPage>
           ),
           Expanded(
             child: new RefreshIndicator(
+              child: Stack(
+                children: <Widget>[
+                  ListView(),
+                  BlocBuilder(
+                      bloc: MainTabBlocs().tasksBloc,
+                      //  stream: tasksBloc.subject.stream,
+                      builder: (_, TasksState state) {
+                        if (state is TasksLoadedState) {
+                          Map<DateTime, List<PojoTask>> tasks = state.tasks;
 
-                child: Stack(
-                  children: <Widget>[
-                    ListView(),
-                    BlocBuilder(
-                        bloc: MainTabBlocs().tasksBloc,
-                        //  stream: tasksBloc.subject.stream,
-                        builder: (_, TasksState state) {
-                          if (state is TasksLoadedState) {
-                            Map<DateTime, List<PojoTask>> tasks = state.tasks;
+                          HazizzLogger.printLog("onLoaded asdasd");
+                          return onLoaded(tasks);
 
-                            HazizzLogger.printLog("onLoaded asdasd");
-                            return onLoaded(tasks);
+                        }if (state is TasksLoadedCacheState) {
+                          Map<DateTime, List<PojoTask>> tasks = state.tasks;
 
-                          }if (state is TasksLoadedCacheState) {
-                            Map<DateTime, List<PojoTask>> tasks = state.tasks;
+                          return onLoaded(tasks);
 
-                            return onLoaded(tasks);
+                        } else if (state is ResponseEmpty) {
+                          return Column(
+                              children: [
+                                Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 50.0),
+                                    child: Text(locText(context, key: "no_tasks_yet")),
+                                  ),
+                                )
+                              ]
+                          );
+                        } else if (state is TasksWaitingState) {
+                          //return Center(child: Text("Loading Data"));
+                          return Center(child: CircularProgressIndicator(),);
+                        }else if (state is TasksErrorState) {
+                          //return Center(child: Text("Loading Data"));
+                          if(state.hazizzResponse.dioError == noConnectionError){
 
-                          } else if (state is ResponseEmpty) {
-                            return Column(
-                                children: [
-                                  Center(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(top: 50.0),
-                                      child: Text(locText(context, key: "no_tasks_yet")),
-                                    ),
-                                  )
-                                ]
-                            );
-                          } else if (state is TasksWaitingState) {
-                            //return Center(child: Text("Loading Data"));
-                            return Center(child: CircularProgressIndicator(),);
-                          }else if (state is TasksErrorState) {
-                            //return Center(child: Text("Loading Data"));
-                            if(state.hazizzResponse.dioError == noConnectionError){
+                          }else{
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              Flushbar(
+                                icon: Icon(FontAwesomeIcons.exclamation, color: Colors.red,),
 
-                            }else{
-                              WidgetsBinding.instance.addPostFrameCallback((_) {
-                                Flushbar(
-                                  icon: Icon(FontAwesomeIcons.exclamation, color: Colors.red,),
-
-                                  message: "${locText(context, key: "tasks")}: ${locText(context, key: "info_something_went_wrong")}",
-                                  duration: Duration(seconds: 3),
-                                );
-                              });
-                            }
-
-                            if(MainTabBlocs().tasksBloc.tasks!= null){
-                              return onLoaded(MainTabBlocs().tasksBloc.tasks);
-                            }
-                            return Center(
-                                child: Text(locText(context, key: "info_something_went_wrong")));
+                                message: "${locText(context, key: "tasks")}: ${locText(context, key: "info_something_went_wrong")}",
+                                duration: Duration(seconds: 3),
+                              );
+                            });
+                          }
+                          if(MainTabBlocs().tasksBloc.tasks!= null){
+                            return onLoaded(MainTabBlocs().tasksBloc.tasks);
                           }
                           return Center(
                               child: Text(locText(context, key: "info_something_went_wrong")));
                         }
-
-                    ),
-
-                  ],
-                ),
-                onRefresh: () async{
-                  applyFilters();
-                  MainTabBlocs().tasksBloc.add(TasksFetchEvent()); //await getData()
-                  HazizzLogger.printLog("log: refreshing tasks");
-                  return;
-                }
+                        return Center(
+                            child: Text(locText(context, key: "info_something_went_wrong")));
+                      }
+                  ),
+                ],
+              ),
+              onRefresh: () async{
+                applyFilters();
+                MainTabBlocs().tasksBloc.add(TasksFetchEvent()); //await getData()
+                HazizzLogger.printLog("log: refreshing tasks");
+                return;
+              }
             ),
           ),
         ],
 
       ),
-      floatingActionButton:FloatingActionButton(
-        // heroTag: "hero_fab_tasks_main",
-        onPressed: (){
-          Navigator.pushNamed(context, "/createTask");
-          //   Navigator.push(context,MaterialPageRoute(builder: (context) => EditTaskPage.createMode()));
-        },
-        child: Icon(FontAwesomeIcons.plus),
+      floatingActionButton: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          AnimatedOpacity(
+            opacity: _scrollToTopVisible ? 1.0 : 0.0,
+            duration: Duration(milliseconds: 300),
+            child: FloatingActionButton(
+              onPressed: scrollToTop,
+              child: Icon(FontAwesomeIcons.longArrowAltUp),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          FloatingActionButton(
+            onPressed: (){
+              Navigator.pushNamed(context, "/createTask");
+            },
+            child: Icon(FontAwesomeIcons.plus),
+          ),
+        ],
       ),
     );
   }
