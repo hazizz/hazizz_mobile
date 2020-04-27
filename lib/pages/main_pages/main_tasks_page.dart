@@ -34,8 +34,6 @@ class TasksPage extends TabWidget {
   _TasksPage createState() => _TasksPage();
 }
 
-
-
 class _TasksPage extends State<TasksPage>
     with TickerProviderStateMixin,
         AutomaticKeepAliveClientMixin{
@@ -54,9 +52,7 @@ class _TasksPage extends State<TasksPage>
 
   void scrollToTop(){
     WidgetsBinding.instance.addPostFrameCallback((_) {
-
       scrollController.animateTo(0, duration: 400.milliseconds, curve: Curves.ease);
-
       /*
       itemScrollController.scrollTo(
         duration: Duration(milliseconds: 400),
@@ -319,6 +315,7 @@ class _TasksPage extends State<TasksPage>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       key: scaffoldState,
       body: Column(

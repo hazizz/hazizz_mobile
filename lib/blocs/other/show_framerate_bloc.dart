@@ -3,7 +3,7 @@ import 'package:mobile/blocs/other/response_states.dart';
 import 'package:bloc/bloc.dart';
 import 'package:mobile/managers/preference_services.dart';
 
-//region Flush event and state parts
+//region ShowFramerate event and state parts
 abstract class ShowFramerateEvent extends HEvent {
   ShowFramerateEvent([List props = const []]) : super(props);
 }
@@ -37,7 +37,7 @@ class ShowFramerateDisabledState extends ShowFramerateState {
 }
 //endregion
 
-//region Flush bloc
+//region ShowFramerate bloc
 class ShowFramerateBloc extends Bloc<ShowFramerateEvent, ShowFramerateState> {
 
   ShowFramerateState get initialState => PreferenceService.enabledShowFramerate ?
@@ -51,7 +51,6 @@ class ShowFramerateBloc extends Bloc<ShowFramerateEvent, ShowFramerateState> {
 
   @override
   Stream<ShowFramerateState> mapEventToState(ShowFramerateEvent event) async* {
-    print("dude1: ${event.toString()}");
     if (event is ShowFramerateEnableEvent) {
       yield ShowFramerateEnabledState();
     }else if (event is ShowFramerateDisableEvent) {

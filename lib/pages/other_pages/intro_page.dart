@@ -156,7 +156,7 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
 
   @override
   Widget build(BuildContext context) {
-
+    super.build(context);
     final autoSizeGroup = AutoSizeGroup();
 
     void nextPage(){

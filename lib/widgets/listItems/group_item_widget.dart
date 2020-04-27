@@ -10,7 +10,7 @@ import 'package:mobile/theme/hazizz_theme.dart';
 
 class GroupItemWidget extends StatelessWidget{
 
-  PojoGroup group;
+  final PojoGroup group;
 
   GroupItemWidget({this.group});
 
@@ -28,7 +28,7 @@ class GroupItemWidget extends StatelessWidget{
                 alignment: Alignment.centerLeft,
                 child:
                 Padding(
-                  padding: const EdgeInsets.only(left: 8, /*top: 4, bottom: 4*/),
+                  padding: const EdgeInsets.only(left: 8,),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
@@ -70,8 +70,6 @@ class GroupItemWidget extends StatelessWidget{
                           ];
                         },
                       )
-
-
                     ],
                   )
                 )

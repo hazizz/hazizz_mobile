@@ -6,11 +6,10 @@ import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/services/task_similarity_checker.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:mobile/extension_methods/round_double_extension.dart';
 
 class SimilarTaskItemWidget extends StatefulWidget  {
 
-  TaskSimilarity taskSimilarity;
+  final TaskSimilarity taskSimilarity;
 
 
   SimilarTaskItemWidget({Key key, this.taskSimilarity}) : super(key: key);

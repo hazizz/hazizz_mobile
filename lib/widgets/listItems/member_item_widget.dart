@@ -1,17 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mobile/blocs/group/group_bloc.dart';
 import 'package:mobile/communication/pojos/PojoUser.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/dialogs/dialogs.dart';
-import 'package:mobile/dialogs/report_dialog.dart';
 import 'package:mobile/enums/group_permissions_enum.dart';
-import 'package:mobile/widgets/flushbars.dart';
 import 'package:mobile/widgets/permission_chip.dart';
-
-import 'package:mobile/custom/hazizz_localizations.dart';
-import 'package:mobile/theme/hazizz_theme.dart';
 
 
 class MemberItemWidget extends StatefulWidget{
@@ -44,9 +36,6 @@ class _MemberItemWidget extends State<MemberItemWidget>{
 
   @override
   Widget build(BuildContext context) {
-
-
-
     return Hero(
         tag: "hero_user${widget.member.id}",
         child:
@@ -68,7 +57,6 @@ class _MemberItemWidget extends State<MemberItemWidget>{
                         permission = result;
                       });
                     }
-                    //   Navigator.push(context,MaterialPageRoute(builder: (context) => ViewTaskPage.fromPojo(pojoTask: pojoTask)));
                   },
                   child:
                   Padding(
@@ -86,61 +74,6 @@ class _MemberItemWidget extends State<MemberItemWidget>{
                       padding: const EdgeInsets.only(left: 8.0),
                       child: PermissionChip(permission: permission,),
                     ),
-
-                      /*
-                      Spacer(),
-
-                      BlocBuilder(
-                        bloc: GroupBlocs().myPermissionBloc,
-                        builder: (context, state){
-
-                          if(widget.isMe){
-                            return Container();
-                          }
-
-                          List<PopupMenuEntry> entries = [
-                            PopupMenuItem(
-                              value: "report",
-                              child: Text(locText(context, key: "report"),
-                                style: TextStyle(color: HazizzTheme.red),
-                              ),
-                            ),
-                          ];
-                          if(state is MyPermissionSetState){
-                            if((state.permission == GroupPermissionsEnum.MODERATOR || state.permission == GroupPermissionsEnum.OWNER)
-                                && permission != GroupPermissionsEnum.OWNER){
-                              entries.add(PopupMenuItem(
-                                value: "kick",
-                                child: Text(locText(context, key: "kick"),
-                                  style: TextStyle(color: HazizzTheme.red),
-                                ),
-                              ),
-                              );
-                            }
-                          }
-                          return PopupMenuButton(
-                            icon: Icon(FontAwesomeIcons.ellipsisV, size: 20,),
-                            onSelected: (value) async {
-                              if(value == "report"){
-                                bool success = await showReportDialog(context, reportType: ReportTypeEnum.USER, id: widget.member.id, name: widget.member.displayName);
-                                if(success != null && success){
-                                  showReportSuccessFlushBar(context, what: locText(context, key: "user"));
-
-                                }
-                              }else if(value == "kick"){
-                                bool success = await showSureToKickFromGroupDialog(context, groupId: GroupBlocs().group.id, pojoUser: widget.member);
-                                if(success != null && success){
-                                  widget.onKicked();
-                                }
-                              }
-                            },
-                            itemBuilder: (BuildContext context) {
-                              return entries;
-                            },
-                          );
-                        },
-                      )
-                        */
                     ],)
                   )
               )

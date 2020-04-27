@@ -218,30 +218,7 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
       body = Column(
         children: <Widget>[
           Expanded(child: _tabList[MainTabBlocs().schedulesBloc.currentDayIndex]),
-          Builder(
-            builder: (context){
-              if(canBuildBottomNavBar){
-                return Container(
-                    color: Theme.of(context).primaryColorDark,
-                    child: BottomNavigationBar(
 
-                      currentIndex: MainTabBlocs().schedulesBloc.currentDayIndex,
-                      onTap: (int index){
-                        setState(() {
-                          MainTabBlocs().schedulesBloc.currentDayIndex = index;
-                          HazizzLogger.printLog("currentDayIndex: ${MainTabBlocs().schedulesBloc.currentDayIndex}");
-                          _tabController.animateTo(index);
-                          HazizzLogger.printLog("_tabController.index: ${_tabController.index}");
-
-                        });
-                      },
-                      items: bottomNavBarItems
-                    )
-                );
-              }
-              return Container();
-            },
-          )
         ],
       );
     }
@@ -268,7 +245,32 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
+        bottomNavigationBar: Builder(
+          builder: (context){
+            if(canBuildBottomNavBar){
+              return Container(
+                  color: Theme.of(context).primaryColorDark,
+                  child: BottomNavigationBar(
+
+                      currentIndex: MainTabBlocs().schedulesBloc.currentDayIndex,
+                      onTap: (int index){
+                        setState(() {
+                          MainTabBlocs().schedulesBloc.currentDayIndex = index;
+                          HazizzLogger.printLog("currentDayIndex: ${MainTabBlocs().schedulesBloc.currentDayIndex}");
+                          _tabController.animateTo(index);
+                          HazizzLogger.printLog("_tabController.index: ${_tabController.index}");
+
+                        });
+                      },
+                      items: bottomNavBarItems
+                  )
+              );
+            }
+            return Container();
+          },
+        ),
         body: Column(
           children: <Widget>[
             BlocBuilder(

@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:mobile/extension_methods/duration_extension.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flushbar/flushbar.dart';
@@ -53,19 +53,32 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
 
   TabController _tabController;
 
-//  Map<String, List<PojoGrade>> grades;
-
   int currentPage = 0;
+
+  bool _scrollToTopVisible = false;
+
+  final ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
+    scrollController.addListener((){
+      if(scrollController.offset > MediaQuery.of(context).size.height * 1.2){
+        setState(() {
+          _scrollToTopVisible = true;
+        });
+      }else{
+        setState(() {
+          _scrollToTopVisible = false;
+        });
+      }
+    });
+
     _tabController  = TabController(vsync: this, length: _tabList.length, initialIndex: currentPage);
     super.initState();
   }
 
   @override
   void dispose() {
-    // gradesBloc.dispose();
     super.dispose();
   }
 
@@ -78,18 +91,6 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
   }
 
   Widget onLoaded(Map<String, List<PojoGrade>> g){
-    /*
-    print('kék100');
-
-    g.forEach((s, l){
-      l.forEach((g){
-        print("kék: ${g.grade}");
-      });
-    });
-
-    print('kék111');
-    */
-
     if(currentPage == 1){
       Map<String, List<PojoGrade>> grades = copyMap(MainTabBlocs().gradesBloc.grades.grades);
 
@@ -103,6 +104,7 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
 
       if(grades.isNotEmpty){
         return ListView.builder(
+          controller: scrollController,
           itemCount: itemCount,
           itemBuilder: (BuildContext context, int index) {
             if(index == 0){
@@ -111,7 +113,7 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
             if(grades.values.toList()[index-1].isNotEmpty){
               return GradeItemWidget.bySubject(
                 pojoGrade: grades.values.toList()[index-1][0],
-                alt_subject: grades.keys.toList()[index-1],
+                altSubject: grades.keys.toList()[index-1],
                 rectForm: false
               );
             }
@@ -134,6 +136,7 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
 
       if(grades.isNotEmpty){
         return ListView.builder(
+            controller: scrollController,
             itemCount: itemCount,
             itemBuilder: (BuildContext context, int index) {
               if(index == 0){
@@ -142,7 +145,7 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
               if(grades.values.toList()[index-1].isNotEmpty){
                 return GradeItemWidget.bySubject(
                   pojoGrade: grades.values.toList()[index-1][0],
-                  alt_subject: grades.keys.toList()[index-1],
+                  altSubject: grades.keys.toList()[index-1],
                   rectForm: false
                 );
               }
@@ -153,9 +156,6 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
       return Text("empty");
 
     }
-
-    print('kék155');
-
 
     if(MainTabBlocs().gradesBloc.currentGradeSort == GradesSort.BYSUBJECT){
       Map<String, List<PojoGrade>> grades = MainTabBlocs().gradesBloc.getGradesFromSession().grades;// pojoGrades.grades;
@@ -168,7 +168,6 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
               item.gradeType == GradeTypeEnum.ENDYEAR
           );
         }
-        print('kék122');
       }
 
       int itemCount = grades.keys.length+1;
@@ -193,10 +192,10 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
         );
       }
       return new ListView.separated(
+        controller: scrollController,
           itemCount: itemCount,
           separatorBuilder: (context, index) {
             return Container();
-            return showAd(context, show:  (itemCount<3 && index == itemCount-1) || (index!=0 && index%3==0), showHeader: true);
           },
           itemBuilder: (BuildContext context, int index) {
 
@@ -230,7 +229,6 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
                               direction: Axis.horizontal,
                               runSpacing: 0,
                               spacing: 0,
-                              //runAlignment: WrapAlignment.end,
                               children: widgetList
                           ),
                           showAd(context, show: (itemCount<4 && index == itemCount-1) || (index!=0 && index%4==0))
@@ -296,26 +294,28 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
       }
       int itemCount = gradesByDate.length+1;
       return new ListView.builder(
-          itemCount: itemCount,
-          itemBuilder: (BuildContext context, int index) {
-            if(index == 0){
-              return Center(child: Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().tasksBloc.lastUpdated)));
-            }
-            Widget gradeItemWidget = GradeItemWidget.byDate(pojoGrade: gradesByDate[index-1],);
-
-            return Column(
-              children: <Widget>[
-                gradeItemWidget,
-                showAd(context, show: (itemCount<15 && index == itemCount-1) || (index!=0 && index%15==0), showHeader: true)
-              ],
-            );
+        controller: scrollController,
+        itemCount: itemCount,
+        itemBuilder: (BuildContext context, int index) {
+          if(index == 0){
+            return Center(child: Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().tasksBloc.lastUpdated)));
           }
+          Widget gradeItemWidget = GradeItemWidget.byDate(pojoGrade: gradesByDate[index-1],);
+
+          return Column(
+            children: <Widget>[
+              gradeItemWidget,
+              showAd(context, show: (itemCount<15 && index == itemCount-1) || (index!=0 && index%15==0), showHeader: true)
+            ],
+          );
+        }
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
         body: Column(
           children: <Widget>[
@@ -445,45 +445,59 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
                 ),
               ),
             ),
-            BottomNavigationBar(
-                currentIndex: currentPage,
-                onTap: (int index){
-                  setState(() {
-                    currentPage = index;
-                    HazizzLogger.printLog("yeahh: ${currentPage}");
-                  });
-                },
-                items: [
-                  BottomNavigationBarItem(
-                    title: Container(),
-                    icon:  Text(locText(context, key: "gradeType_midYear"), style: TextStyle(fontSize: 19)),
-                    activeIcon: Text(locText(context, key: "gradeType_midYear"),
-                      maxLines: 1,
-                      style: TextStyle(color: Colors.red, fontSize: 26, fontWeight: FontWeight.bold, /*backgroundColor: currentDayColor*/),
-                    ),
-                  ),
-                  BottomNavigationBarItem(
-                    title: Container(),
-
-                    icon:  Text(locText(context, key: "gradeType_halfYear"),style: TextStyle(fontSize: 19)),
-                    activeIcon: Text(locText(context, key: "gradeType_halfYear"),
-                      maxLines: 1,
-                      style: TextStyle(color: Colors.red, fontSize: 26, fontWeight: FontWeight.bold, /*backgroundColor: currentDayColor*/),
-                    ),
-                  ),
-                  BottomNavigationBarItem(
-                    title: Container(),
-
-                    icon:  Text(locText(context, key: "gradeType_endYear"),style: TextStyle(fontSize: 19)),
-                    activeIcon: Text(locText(context, key: "gradeType_endYear"),
-                      maxLines: 1,
-                      style: TextStyle(color: Colors.red, fontSize: 26, fontWeight: FontWeight.bold, /*backgroundColor: currentDayColor*/),
-                    ),
-                  )
-                ]
-            )
           ],
-        )
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+            currentIndex: currentPage,
+            onTap: (int index){
+              setState(() {
+                currentPage = index;
+                HazizzLogger.printLog("yeahh: ${currentPage}");
+              });
+            },
+            items: [
+              BottomNavigationBarItem(
+                title: Container(),
+                icon:  Text(locText(context, key: "gradeType_midYear"), style: TextStyle(fontSize: 19)),
+                activeIcon: Text(locText(context, key: "gradeType_midYear"),
+                  maxLines: 1,
+                  style: TextStyle(color: Colors.red, fontSize: 26, fontWeight: FontWeight.bold, /*backgroundColor: currentDayColor*/),
+                ),
+              ),
+              BottomNavigationBarItem(
+                title: Container(),
+
+                icon:  Text(locText(context, key: "gradeType_halfYear"),style: TextStyle(fontSize: 19)),
+                activeIcon: Text(locText(context, key: "gradeType_halfYear"),
+                  maxLines: 1,
+                  style: TextStyle(color: Colors.red, fontSize: 26, fontWeight: FontWeight.bold, /*backgroundColor: currentDayColor*/),
+                ),
+              ),
+              BottomNavigationBarItem(
+                title: Container(),
+
+                icon:  Text(locText(context, key: "gradeType_endYear"),style: TextStyle(fontSize: 19)),
+                activeIcon: Text(locText(context, key: "gradeType_endYear"),
+                  maxLines: 1,
+                  style: TextStyle(color: Colors.red, fontSize: 26, fontWeight: FontWeight.bold, /*backgroundColor: currentDayColor*/),
+                ),
+              )
+            ]
+        ),
+        floatingActionButton: AnimatedOpacity(
+          opacity: _scrollToTopVisible ? 1.0 : 0.0,
+          duration: Duration(milliseconds: 300),
+          child: FloatingActionButton(
+            heroTag: "3",
+            onPressed: () => WidgetsBinding.instance.addPostFrameCallback((_) {
+              scrollController.animateTo(0, duration: 400.milliseconds, curve: Curves.ease);
+              setState(() {
+                _scrollToTopVisible = false;
+              });
+            }),
+            child: Icon(FontAwesomeIcons.longArrowAltUp),
+          ),
+        ),
     );
   }
 

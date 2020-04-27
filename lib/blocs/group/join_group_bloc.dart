@@ -10,6 +10,8 @@ import 'package:bloc/bloc.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/communication/request_sender.dart';
 
+
+
 abstract class JoinGroupEvent extends HEvent {
   JoinGroupEvent([List props = const []]) : super(props);
 }
@@ -82,7 +84,7 @@ class JoinGroupBloc extends Bloc<JoinGroupEvent, JoinGroupState> {
     if (event is JoinGroupCreateEvent) {
       yield JoinGroupWaitingState();
 
-      HazizzResponse hazizzResponse = await RequestSender().getResponse(RetrieveGroup.details());
+      HazizzResponse hazizzResponse = await RequestSender().getResponse(RetrieveGroup.details( ));
 
       if(hazizzResponse.isSuccessful){
         yield JoinGroupSuccessfulState();

@@ -8,9 +8,7 @@ import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/dialogs/dialogs.dart';
 import 'package:mobile/dialogs/report_dialog.dart';
 import 'package:mobile/storage/cache_manager.dart';
-import 'package:mobile/widgets/comment_section_widget.dart';
 import 'package:mobile/widgets/flushbars.dart';
-
 import 'package:mobile/custom/hazizz_date.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
@@ -18,11 +16,10 @@ import 'package:mobile/communication/request_sender.dart';
 
 class CommentItemWidget extends StatefulWidget  {
 
-  PojoComment comment;
-  int taskId;
+  final PojoComment comment;
+  final int taskId;
 
-  CommentItemWidget({@required this.comment, @required this.taskId}) {
-  }
+  CommentItemWidget({@required this.comment, @required this.taskId});
 
   @override
   _CommentItemWidget createState() => _CommentItemWidget();
@@ -35,7 +32,6 @@ class _CommentItemWidget extends State<CommentItemWidget>{
 
   @override
   void initState() {
-    // TODO: implement initState
     CacheManager.getMyId().then((int result){
       HazizzLogger.printLog("user is the author: $result");
 
@@ -52,7 +48,6 @@ class _CommentItemWidget extends State<CommentItemWidget>{
   @override
   Widget build(BuildContext context) {
     return Card(
-     // borderOnForeground: true,
       clipBehavior: Clip.antiAliasWithSaveLayer,
       elevation: 30,
       child: InkWell(
@@ -60,7 +55,6 @@ class _CommentItemWidget extends State<CommentItemWidget>{
         },
         child: Column(
           children: [
-
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -75,7 +69,6 @@ class _CommentItemWidget extends State<CommentItemWidget>{
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            //  Text(pojoClass.subject == null ? "subject" : pojoClass.subject, style: TextStyle(fontSize: 20)),
                             Text(widget.comment.creator.displayName == null ? "displayName" : widget.comment.creator.displayName , style: TextStyle(fontSize: 20),),
                           ]
                       ),
@@ -100,9 +93,6 @@ class _CommentItemWidget extends State<CommentItemWidget>{
                         padding: const EdgeInsets.only(left: 8, right: 6, bottom: 4),
                           child: Text(widget.comment.content == null ? "Content" : widget.comment.content ,
                             style: TextStyle(fontSize: 19),
-                           // textAlign: TextAlign.justify,
-                           // overflow: TextOverflow.ellipsis,
-                           // softWrap: false,
                           ),
                       ),
                     ]
@@ -152,9 +142,6 @@ class _CommentItemWidget extends State<CommentItemWidget>{
                         }
                       },
                       itemBuilder: (BuildContext context) {
-
-
-
                         return  menuItems;
                       },
 

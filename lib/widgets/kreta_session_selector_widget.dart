@@ -84,6 +84,7 @@ class _SessionSelectorWidget extends State<SessionSelectorWidget> with Automatic
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       floatingActionButton: SessionsBloc().sessions.length <= 10 ?
         FloatingActionButton(

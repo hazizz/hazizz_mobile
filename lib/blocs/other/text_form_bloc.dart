@@ -158,7 +158,7 @@ class TextFormBloc extends Bloc<HFormEvent, HFormState> {
 
   bool isLocked = false;
 
-  String lastText = null;
+  String lastText;
 
   HFormState Function(String text) validate;
 

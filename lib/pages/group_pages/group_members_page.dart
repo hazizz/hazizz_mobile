@@ -45,6 +45,7 @@ class _GroupMembersPage extends State<GroupMembersPage> with AutomaticKeepAliveC
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         child: Icon(FontAwesomeIcons.userPlus),

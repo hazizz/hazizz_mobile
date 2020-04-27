@@ -34,6 +34,7 @@ class _KretaServiceHolder extends State<KretaServiceHolder> with TickerProviderS
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return BlocBuilder(
       bloc: SelectedSessionBloc(),
       builder: (context, state){

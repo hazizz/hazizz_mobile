@@ -178,7 +178,7 @@ class ProfilePictureEditorBloc extends Bloc<ProfilePictureEditorEvent, ProfilePi
         yield ProfilePictureEditorChangedState(imageBytes: profilePictureBytes);
       }
     }else if(event is ProfilePictureEditorFetchEvent){
-      HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetMyGroups());
+      RequestSender().getResponse(new GetMyGroups());
     }
   }
 

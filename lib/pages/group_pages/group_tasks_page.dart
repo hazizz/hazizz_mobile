@@ -251,7 +251,7 @@ class _GroupTasksPage extends State<GroupTasksPage> with AutomaticKeepAliveClien
 
   @override
   Widget build(BuildContext context) {
-
+    super.build(context);
     return Scaffold(
       body: new RefreshIndicator(
 

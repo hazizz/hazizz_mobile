@@ -10,7 +10,7 @@ import "package:mobile/extension_methods/extension_first_upper.dart";
 
 class ClassItemWidget extends StatelessWidget{
 
-  PojoClass pojoClass;
+  final PojoClass pojoClass;
 
   bool isCurrentEvent = false;
 
@@ -27,7 +27,7 @@ class ClassItemWidget extends StatelessWidget{
 
     DateTime currentDateTime = DateTime.now();
 
-    Color bgColor = null;
+    Color bgColor;
 
     if(hazizzIsAfterHHMMSS(mainTime: currentDateTime, compareTime: pojoClass.startOfClass) &&
        hazizzIsBeforeHHMMSS(mainTime: currentDateTime, compareTime: pojoClass.endOfClass)

@@ -47,6 +47,7 @@ class _GroupSubjectsPage extends State<GroupSubjectsPage> with AutomaticKeepAliv
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           heroTag: "hero_fab_subjects",

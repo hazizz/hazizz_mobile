@@ -322,7 +322,7 @@ class _ImageViewer extends State<ImageViewer> with AutomaticKeepAliveClientMixin
                                 );
                             }else if(responseState.data.statusCode == 404 ){
                               print("sadsd: 1 ${responseState.data.statusCode}");
-                              print("asd: ${imageUrl}");
+                              print("asd: $imageUrl");
                               untouchable = true;
                               return deletedImageWidget();
                             }
