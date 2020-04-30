@@ -272,6 +272,12 @@ class RequestSender{
         throw noConnectionError;
       }
     }on DioError catch(error) {
+      if(error.response.statusCode == 308){
+        if(request is GetGroupInviteLinks){
+          return HazizzResponse.onSuccess(response: error.response, request: request);
+        }
+      }
+
       HazizzLogger.printLog("response is error: ${request.toString()}");
 
       hazizzResponse = await HazizzResponse.onError(dioError: error, request: request);

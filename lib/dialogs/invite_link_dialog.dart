@@ -32,12 +32,15 @@ class _InviteLinkDialog extends State<InviteLinkDialog> {
   @override
   void initState() {
 
-    RequestSender().getResponse(GetGroupInviteLinks(groupId: widget.group.id)).then((hazizzResponse){
+    RequestSender().getResponse(GetGroupInviteLinks.open(groupId: widget.group.id)).then((hazizzResponse){
       setState(() {
         if(hazizzResponse.isSuccessful){
 
+          /*
           List<PojoInviteLink> links = hazizzResponse.convertedData;
           inviteLink = links[0].link;
+          */
+          inviteLink = hazizzResponse.response.headers.value("Location");
 
         }else{
           inviteLink = errorText;

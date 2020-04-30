@@ -14,7 +14,6 @@ import 'package:mobile/communication/pojos/PojoGrades.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/pojos/PojoGroupDetailed.dart';
 import 'package:mobile/communication/pojos/PojoGroupPermissions.dart';
-import 'package:mobile/communication/pojos/PojoInviteLink.dart';
 import 'package:mobile/communication/pojos/PojoKretaNote.dart';
 import 'package:mobile/communication/pojos/PojoKretaProfile.dart';
 import 'package:mobile/communication/pojos/PojoMeInfoPrivate.dart';
@@ -39,7 +38,6 @@ import 'package:mobile/storage/cache_manager.dart';
 import 'package:package_info/package_info.dart';
 
 import 'package:mobile/custom/hazizz_date.dart';
-import '../ResponseHandler.dart';
 import '../htttp_methods.dart';
 
 Future<Request> refreshTokenInRequest(Request request) async {
@@ -58,11 +56,7 @@ class Request {
   String BASE_URL = PreferenceService.serverUrl;
   String SERVER_PATH = "";
   String PATH = "";
-  ResponseHandler rh;
 
-  Request(ResponseHandler rh){
-    this.rh = rh;
-  }
 
   HttpMethod httpMethod = HttpMethod.GET;
 
@@ -75,14 +69,7 @@ class Request {
     PackageInfo p = await PackageInfo.fromPlatform();
     HazizzLogger.printLog("Building header: 2");
     header["User-Agent"] = "HM-${p.version}";
-  /*
-    if(HazizzAppInfo().getInfo == null){
-      PackageInfo p = await PackageInfo.fromPlatform();
-      header["User-Agent"] = "HM-${p.version}";
-    }else {
-      header["User-Agent"] = "HM-${HazizzAppInfo().getInfo.version}";
-    }
-    */
+
     HazizzLogger.printLog("Building header: 3");
     if(authTokenHeader){
       header[HttpHeaders.authorizationHeader] = "Bearer ${await TokenManager.getToken()}";
@@ -98,25 +85,8 @@ class Request {
   dynamic body = {};
   Map<String, dynamic> query = {};
 
-  void onSuccessful(Response response){
-    if(this.rh.onSuccessful != null) {
-      responseData = convertData(response.data);
-      processData(responseData);
-
-      // rh.onSuccessful(response);
-      rh.addToBloc(responseData);
-      rh.onReceivedData(responseData);
-    }
-  }
-
-  void onError(PojoError pojoError){
-    responseData = pojoError;
-    rh?.onError(pojoError);
-  }
-
   dynamic convertData(Response response){
     HazizzLogger.printLog("log: WARNING: convertData function not implemented");
-   // throw new ConverterNotImplementedException();
     return null;
   }
 
@@ -126,21 +96,21 @@ class Request {
 }
 //endregion
 
-//region Second generation parent requests
+//region Second gen parent requests
 class HazizzRequest extends Request{
-  HazizzRequest(ResponseHandler rh) : super(rh){
+  HazizzRequest() {
     super.SERVER_PATH = "hazizz-server/";
     SERVER_PATH = "hazizz-server/";
   }
 }
 class TheraRequest extends Request{
-  TheraRequest(ResponseHandler rh) : super(rh){
+  TheraRequest() {
     super.SERVER_PATH = "thera-server/";
     SERVER_PATH = "thera-server/";
   }
 }
 class AuthRequest extends Request{
-  AuthRequest(ResponseHandler rh) : super(rh){
+  AuthRequest() {
     super.SERVER_PATH = "auth-server/";
     SERVER_PATH = "auth-server/";
     query["client_id"] = "H_MOBILE";
@@ -152,7 +122,7 @@ class AuthRequest extends Request{
 //region Token requests
 
 class PingGatewayServer extends Request{
-  PingGatewayServer({ResponseHandler rh}) : super(rh){
+  PingGatewayServer(){
     httpMethod = HttpMethod.GET;
     PATH = "actuator/health";
   }
@@ -164,7 +134,7 @@ class PingGatewayServer extends Request{
 }
 
 class PingAuthServer extends AuthRequest{
-  PingAuthServer({ResponseHandler rh}) : super(rh){
+  PingAuthServer(){
     httpMethod = HttpMethod.GET;
     PATH = "actuator/health";
   }
@@ -175,7 +145,7 @@ class PingAuthServer extends AuthRequest{
   }
 }
 class PingHazizzServer extends HazizzRequest{
-  PingHazizzServer({ResponseHandler rh}) : super(rh){
+  PingHazizzServer(){
     httpMethod = HttpMethod.GET;
     PATH = "actuator/health";
   }
@@ -187,7 +157,7 @@ class PingHazizzServer extends HazizzRequest{
 }
 class PingTheraServer extends TheraRequest{
 
-  PingTheraServer({ResponseHandler rh}) : super(rh){
+  PingTheraServer(){
     httpMethod = HttpMethod.GET;
     PATH = "actuator/health";
     authTokenHeader = true;
@@ -205,7 +175,7 @@ class CreateToken extends AuthRequest{
     httpMethod = HttpMethod.POST;
     PATH = "auth";
   }
-  CreateToken.withPassword({String q_username, String q_password, ResponseHandler rh}) : super(rh){
+  CreateToken.withPassword({String q_username, String q_password, }) {
 
     hardCodeReducer();
     query["grant_type"] = "password";
@@ -213,7 +183,7 @@ class CreateToken extends AuthRequest{
     query["password"] = q_password;
   }
 
-  CreateToken.withRefresh({@required String q_username, @required  String q_refreshToken, ResponseHandler rh}) : super(rh){
+  CreateToken.withRefresh({@required String q_username, @required  String q_refreshToken, }) {
     hardCodeReducer();
 
     query["grant_type"] = "refresh_token";
@@ -221,14 +191,14 @@ class CreateToken extends AuthRequest{
     query["refresh_token"] = q_refreshToken;
   }
 
-  CreateToken.withGoogleAccount({@required String q_openIdToken}) : super(null){
+  CreateToken.withGoogleAccount({@required String q_openIdToken}) {
     hardCodeReducer();
 
     query["grant_type"] = "google_openid";
     query["openid_token"] = q_openIdToken;
   }
 
-  CreateToken.withFacebookAccount({@required String q_facebookToken}) : super(null){
+  CreateToken.withFacebookAccount({@required String q_facebookToken}) {
     hardCodeReducer();
 
     query["grant_type"] = "facebook_token";
@@ -242,19 +212,17 @@ class CreateToken extends AuthRequest{
     return tokens;
   }
 
-
   @override
   String toString() {
     return "Instance of 'CreateToken': $PATH";
   }
-
 }
 
 
 //endregion
 
 class RegisterUser extends AuthRequest{
-  RegisterUser({@required String b_username,@required String b_password, @required String b_emailAddress, ResponseHandler rh}) : super(rh){
+  RegisterUser({@required String b_username,@required String b_password, @required String b_emailAddress, }) {
     httpMethod = HttpMethod.POST;
     PATH = "/account/register";
     body["username"] = b_username;
@@ -271,7 +239,7 @@ class RegisterUser extends AuthRequest{
 }
 
 class RegisterWithGoogleAccount extends AuthRequest{
-  RegisterWithGoogleAccount({@required String b_openIdToken}) : super(null){
+  RegisterWithGoogleAccount({@required String b_openIdToken}) {
     httpMethod = HttpMethod.POST;
     PATH = "account/googleregister";
     body["openIdToken"] = b_openIdToken;
@@ -286,14 +254,13 @@ class RegisterWithGoogleAccount extends AuthRequest{
 }
 
 class RegisterWithFacebookAccount extends AuthRequest{
-  RegisterWithFacebookAccount({@required String b_facebookToken}) : super(null){
+  RegisterWithFacebookAccount({@required String b_facebookToken}) {
 
     httpMethod = HttpMethod.POST;
     PATH = "account/facebookregister";
     body["facebookToken"] = b_facebookToken;
     body["consent"] = true;
     contentTypeHeader = true;
-
   }
 
   @override
@@ -304,7 +271,7 @@ class RegisterWithFacebookAccount extends AuthRequest{
 }
 
 class Information extends AuthRequest{
-  Information() : super(null){
+  Information(){
     httpMethod = HttpMethod.GET;
     PATH = "information/detailed";
     authTokenHeader = true;
@@ -317,7 +284,7 @@ class Information extends AuthRequest{
 }
 
 class DeleteMe extends AuthRequest{
-  DeleteMe({@required int userId}) : super(null){
+  DeleteMe({@required int userId}) {
     httpMethod = HttpMethod.DELETE;
     PATH = "users/${userId}";
     authTokenHeader = true;
@@ -330,7 +297,7 @@ class DeleteMe extends AuthRequest{
 }
 
 class GetFirebaseTokens extends AuthRequest{
-  GetFirebaseTokens({@required int userId}) : super(null){
+  GetFirebaseTokens({@required int userId}){
     httpMethod = HttpMethod.GET;
     PATH = "users/$userId/firebasetokens";
     authTokenHeader = true;
@@ -343,7 +310,7 @@ class GetFirebaseTokens extends AuthRequest{
 }
 
 class AddFirebaseToken extends AuthRequest{
-  AddFirebaseToken({@required int userId, @required String firebaseToken}) : super(null){
+  AddFirebaseToken({@required int userId, @required String firebaseToken}){
     httpMethod = HttpMethod.POST;
     PATH = "users/$userId/firebasetokens";
     authTokenHeader = true;
@@ -358,7 +325,7 @@ class AddFirebaseToken extends AuthRequest{
 }
 
 class RemoveFirebaseTokens extends AuthRequest{
-  RemoveFirebaseTokens({@required int userId, @required String firebaseToken}) : super(null){
+  RemoveFirebaseTokens({@required int userId, @required String firebaseToken}){
     httpMethod = HttpMethod.DELETE;
     PATH = "users/$userId/firebasetokens";
     authTokenHeader = true;
@@ -379,7 +346,7 @@ class RemoveFirebaseTokens extends AuthRequest{
 
 class GetMyInfo extends HazizzRequest {
   bool isPublic;
-  GetMyInfo.public({ResponseHandler rh}) : super(rh) {
+  GetMyInfo.public()  {
     PATH = "me";
     httpMethod = HttpMethod.GET;
     authTokenHeader = true;
@@ -387,7 +354,7 @@ class GetMyInfo extends HazizzRequest {
     isPublic = true;
   }
 
-  GetMyInfo.private({ResponseHandler rh}) : super(rh) {
+  GetMyInfo.private()  {
     PATH = "me/details";
     httpMethod = HttpMethod.GET;
     authTokenHeader = true;
@@ -397,28 +364,18 @@ class GetMyInfo extends HazizzRequest {
 
   @override
   convertData(Response response) {
-
-    PojoMeInfoPrivate privat = PojoMeInfoPrivate.fromJson(jsonDecode(response.data));
-    return privat;
-
-    if(isPublic){
-    //  PojoMeInfoPublic public = PojoMeInfoPublic.fromJson(jsonDecode(response.data));
-    //  return public;
-    }else{
-      PojoMeInfoPrivate privat = PojoMeInfoPrivate.fromJson(jsonDecode(response.data));
-      return privat;
-    }
+    return PojoMeInfoPrivate.fromJson(jsonDecode(response.data));
   }
 }
 
 
 class GetUserProfilePicture extends HazizzRequest {
-  GetUserProfilePicture.mini({ResponseHandler rh, @required int userId}) : super(rh) {
+  GetUserProfilePicture.mini({ @required int userId})  {
     PATH = "users/$userId/picture";
     hardCodeReducer();
   }
 
-  GetUserProfilePicture.full({ResponseHandler rh, @required int userId}) : super(rh) {
+  GetUserProfilePicture.full({ @required int userId})  {
     PATH = "users/$userId/picture/full";
     hardCodeReducer();
   }
@@ -437,12 +394,12 @@ class GetUserProfilePicture extends HazizzRequest {
 }
 
 class GetMyProfilePicture extends HazizzRequest {
-  GetMyProfilePicture.mini({ResponseHandler rh}) : super(rh) {
+  GetMyProfilePicture.mini()  {
     PATH = "me/picture";
     hardCodeReducer();
   }
 
-  GetMyProfilePicture.full({ResponseHandler rh}) : super(rh) {
+  GetMyProfilePicture.full()  {
     PATH = "me/picture/full";
     hardCodeReducer();
   }
@@ -461,7 +418,7 @@ class GetMyProfilePicture extends HazizzRequest {
 }
 
 class UpdateMyProfilePicture extends HazizzRequest {
-  UpdateMyProfilePicture({ResponseHandler rh, @required String encodedImage}) : super(rh) {
+  UpdateMyProfilePicture({ @required String encodedImage})  {
     PATH = "me/picture";
     httpMethod = HttpMethod.POST;
     authTokenHeader = true;
@@ -481,7 +438,7 @@ class UpdateMyProfilePicture extends HazizzRequest {
 
 
 class UpdateMyDisplayName extends HazizzRequest {
-  UpdateMyDisplayName({ResponseHandler rh, @required String b_displayName}) : super(rh) {
+  UpdateMyDisplayName({ @required String b_displayName})  {
     PATH = "me/displayname";
     httpMethod = HttpMethod.POST;
     authTokenHeader = true;
@@ -497,7 +454,7 @@ class UpdateMyDisplayName extends HazizzRequest {
 }
 
 class UploadImage extends Request {
-  UploadImage({ResponseHandler rh, @required HazizzImageData imageData, @required String key, @required String iv}) : super(rh) {
+  UploadImage({ @required HazizzImageData imageData, @required String key, @required String iv})  {
    // package.Image im = package.decodeImage(image.readAsBytesSync());
     authTokenHeader = false;
     contentTypeHeader = false;
@@ -529,7 +486,7 @@ class UploadImage extends Request {
 }
 
 class GetUploadedImage extends Request {
-  GetUploadedImage({ResponseHandler rh, @required String url}) : super(rh) {
+  GetUploadedImage({ @required String url})  {
     BASE_URL = url;
     httpMethod = HttpMethod.GET;
     authTokenHeader = false;
@@ -553,27 +510,27 @@ class Report extends HazizzRequest {
     body = description;
   }
 
-  Report.group({ResponseHandler rh, @required int p_groupId, @required String b_description}) : super(rh) {
+  Report.group({ @required int p_groupId, @required String b_description})  {
     PATH = "groups/$p_groupId/report";
     hardCodeReducer( b_description);
   }
 
-  Report.subject({ResponseHandler rh,@required int p_groupId, @required int p_subjectId, @required String b_description}) : super(rh) {
-    PATH = "subjects/group/$p_groupId/$p_subjectId/report";
+  Report.subject({@required int p_groupId, @required int p_subjectId, @required String b_description})  {
+    PATH = "subjects/$p_subjectId/report";
     hardCodeReducer( b_description);
   }
 
-  Report.task({ResponseHandler rh, @required int p_taskId, @required String b_description}) : super(rh) {
+  Report.task({ @required int p_taskId, @required String b_description})  {
     PATH = "tasks/$p_taskId/report";
     hardCodeReducer( b_description);
   }
 
-  Report.comment({ResponseHandler rh, @required int p_commentId, @required int p_taskId, @required String b_description}) : super(rh) {
+  Report.comment({ @required int p_commentId, @required int p_taskId, @required String b_description})  {
     PATH = "comments/$p_commentId/report";
     hardCodeReducer(b_description);
   }
 
-  Report.user({ResponseHandler rh, @required int p_userId, @required String b_description}) : super(rh) {
+  Report.user({ @required int p_userId, @required String b_description})  {
     PATH = "users/$p_userId/report";
     hardCodeReducer(b_description);
   }
@@ -585,11 +542,9 @@ class Report extends HazizzRequest {
 }
 
 
-
-
 class CreateGroup extends HazizzRequest {
 
-  CreateGroup({ResponseHandler rh, @required String b_groupName, @required GroupType type, String b_password}) : super(rh) {
+  CreateGroup({ @required String b_groupName, @required GroupType type, String b_password})  {
     httpMethod = HttpMethod.POST;
     PATH = "groups";
     authTokenHeader = true;
@@ -615,20 +570,20 @@ class RetrieveGroup extends HazizzRequest {
   bool isWithoutMe = false;
 
 
-  RetrieveGroup({ResponseHandler rh, @required int p_groupId,}) : super(rh) {
+  RetrieveGroup({ @required int p_groupId,})  {
     httpMethod = HttpMethod.GET;
     PATH = "groups/${p_groupId}";
     authTokenHeader = true;
   }
 
-  RetrieveGroup.details({ResponseHandler rh, @required int p_groupId,}) : super(rh) {
+  RetrieveGroup.details({ @required int p_groupId,})  {
     httpMethod = HttpMethod.GET;
     PATH = "groups/${p_groupId}/details";
     authTokenHeader = true;
     isDetailed = true;
   }
 
-  RetrieveGroup.withoutMe({ResponseHandler rh, @required int p_groupId,}) : super(rh) {
+  RetrieveGroup.withoutMe({ @required int p_groupId,})  {
     httpMethod = HttpMethod.GET;
     PATH = "groups/${p_groupId}/withoutme";
     authTokenHeader = true;
@@ -652,12 +607,11 @@ class RetrieveGroup extends HazizzRequest {
 
 class LeaveGroup extends HazizzRequest {
 
-  LeaveGroup({ResponseHandler rh, @required int p_groupId,}) : super(rh) {
+  LeaveGroup({@required int p_groupId})  {
     httpMethod = HttpMethod.GET;
     PATH = "me/leavegroup/$p_groupId";
     authTokenHeader = true;
   }
-
 
   @override
   convertData(Response response) {
@@ -665,33 +619,26 @@ class LeaveGroup extends HazizzRequest {
   }
 }
 
-
 class JoinGroup extends HazizzRequest {
 
   bool isDetailed = false;
   bool isWithoutMe = false;
 
-
-  JoinGroup({ResponseHandler rh, @required int p_groupId,}) : super(rh) {
+  JoinGroup({ @required int p_groupId,})  {
     httpMethod = HttpMethod.GET;
     PATH = "me/joingroup/$p_groupId";
     authTokenHeader = true;
   }
 
-  JoinGroup.withPassword({ResponseHandler rh, @required int p_groupId, @required String p_password}) : super(rh) {
+  JoinGroup.withPassword({ @required int p_groupId, @required String p_password})  {
     httpMethod = HttpMethod.GET;
     PATH = "me/joingroup/$p_groupId/$p_password";
     authTokenHeader = true;
   }
 
-
-
   @override
   convertData(Response response) {
-    Iterable iter = getIterable(response.data);
-    List<PojoGroup> groups = iter.map<PojoGroup>((json) => PojoGroup.fromJson(json)).toList();
-
-    return groups;
+    return getIterable(response.data).map<PojoGroup>((json) => PojoGroup.fromJson(json)).toList();
   }
 }
 
@@ -704,12 +651,12 @@ class PromoteMember extends HazizzRequest {
     authTokenHeader = true;
   }
 
-  PromoteMember.toModerator({ResponseHandler rh, @required int p_groupId, @required int p_userId,}) : super(rh) {
+  PromoteMember.toModerator({ @required int p_groupId, @required int p_userId,})  {
     hardCodeReducer(p_groupId, p_userId);
     body["permission"] = "MODERATOR";
   }
 
-  PromoteMember.toUser({ResponseHandler rh, @required int p_groupId, @required int p_userId}) : super(rh) {
+  PromoteMember.toUser({ @required int p_groupId, @required int p_userId})  {
     hardCodeReducer(p_groupId, p_userId);
     body["permission"] = "USER";
   }
@@ -721,31 +668,21 @@ class PromoteMember extends HazizzRequest {
 }
 
 class GetMyGroups extends HazizzRequest {
-  GetMyGroups({ResponseHandler rh}) : super(rh) {
+  GetMyGroups()  {
     httpMethod = HttpMethod.GET;
     PATH = "me/groups";
     authTokenHeader = true;
   }
 
   @override
-  void onSuccessful(Response response) {
-    Iterable iter = getIterable(response.data);
-    List<PojoGroup> myGroups = iter.map<PojoGroup>((json) => PojoGroup.fromJson(json)).toList();
-    rh.onSuccessful(myGroups);
-  }
-
-  @override
   convertData(Response response) {
-    Iterable iter = getIterable(response.data);
-    List<PojoGroup> myGroups = iter.map<PojoGroup>((json) => PojoGroup.fromJson(json)).toList();
-    return myGroups;
+    return getIterable(response.data).map<PojoGroup>((json) => PojoGroup.fromJson(json)).toList();
   }
 }
 
 //region Subject requests
-
 class DeleteSubject extends HazizzRequest {
-  DeleteSubject({ResponseHandler rh, @required int p_subjectId}) : super(rh) {
+  DeleteSubject({ @required int p_subjectId})  {
     httpMethod = HttpMethod.DELETE;
     PATH = "subjects/$p_subjectId";
     authTokenHeader = true;
@@ -757,10 +694,8 @@ class DeleteSubject extends HazizzRequest {
   }
 }
 
-
-
 class CreateSubject extends HazizzRequest {
-  CreateSubject({ResponseHandler rh, @required int p_groupId, @required String b_subjectName, @required bool b_subscriberOnly = false}) : super(rh) {
+  CreateSubject({ @required int p_groupId, @required String b_subjectName, @required bool b_subscriberOnly = false})  {
     httpMethod = HttpMethod.POST;
     PATH = "subjects/groups/${p_groupId}";
     authTokenHeader = true;
@@ -778,7 +713,7 @@ class CreateSubject extends HazizzRequest {
 }
 
 class UpdateSubject extends HazizzRequest {
-  UpdateSubject({ResponseHandler rh, @required int p_subjectId, @required String b_subjectName, @required bool b_subscriberOnly = false}) : super(rh) {
+  UpdateSubject({ @required int p_subjectId, @required String b_subjectName, @required bool b_subscriberOnly = false})  {
     httpMethod = HttpMethod.PATCH;
     PATH = "subjects/${p_subjectId}";
     authTokenHeader = true;
@@ -795,7 +730,7 @@ class UpdateSubject extends HazizzRequest {
 }
 
 class SubscribeToSubject extends HazizzRequest {
-  SubscribeToSubject({ResponseHandler rh, @required int p_subjectId,}) : super(rh) {
+  SubscribeToSubject({ @required int p_subjectId,})  {
     httpMethod = HttpMethod.POST;
     PATH = "subjects/$p_subjectId/subscribed";
     authTokenHeader = true;
@@ -808,7 +743,7 @@ class SubscribeToSubject extends HazizzRequest {
 }
 
 class UnsubscribeFromSubject extends HazizzRequest {
-  UnsubscribeFromSubject({ResponseHandler rh, @required int p_subjectId,}) : super(rh) {
+  UnsubscribeFromSubject({ @required int p_subjectId,})  {
     httpMethod = HttpMethod.DELETE;
     PATH = "subjects/$p_subjectId/subscribed";
     authTokenHeader = true;
@@ -821,9 +756,9 @@ class UnsubscribeFromSubject extends HazizzRequest {
 }
 
 class GetSubjects extends HazizzRequest {
-  GetSubjects({ResponseHandler rh, int groupId}) : super(rh) {
+  GetSubjects({ int groupId})  {
     httpMethod = HttpMethod.GET;
-    PATH = "subjects/group/${groupId}";
+    PATH = "subjects/groups/${groupId}";
     authTokenHeader = true;
   }
 
@@ -834,22 +769,14 @@ class GetSubjects extends HazizzRequest {
 
     return subjects;
   }
-
-  @override
-  void onSuccessful(Response response) {
-    Iterable iter = getIterable(response.data);
-    List<PojoSubject> subjects =  iter.map<PojoSubject>((json) => PojoSubject.fromJson(json)).toList();
-
-    rh?.onSuccessful(subjects);
-  }
 }
 //endregion
 
 //region Task requests
 class CreateTask extends HazizzRequest {
-  CreateTask({ResponseHandler rh,  int groupId, int subjectId,
+  CreateTask({  int groupId, int subjectId,
     @required  List<String> b_tags, @required String b_description,
-    @required DateTime b_deadline, String b_salt }) : super(rh) {
+    @required DateTime b_deadline, String b_salt })  {
     httpMethod = HttpMethod.POST;
     if(subjectId != null && subjectId != 0){
       PATH = "tasks/subjects/${subjectId}";
@@ -876,9 +803,9 @@ class CreateTask extends HazizzRequest {
 }
 
 class EditTask extends HazizzRequest {
-  EditTask({ResponseHandler rh, @required int taskId,
+  EditTask({ @required int taskId,
     @required List<String> b_tags,
-    @required String b_description,@required  DateTime b_deadline, String b_salt}) : super(rh) {
+    @required String b_description,@required  DateTime b_deadline, String b_salt})  {
     httpMethod = HttpMethod.PATCH;
     PATH = "tasks/${taskId}";
 
@@ -900,17 +827,8 @@ class EditTask extends HazizzRequest {
 }
 
 class DeleteTask extends HazizzRequest {
-  DeleteTask({ResponseHandler rh, int groupId, int subjectId, @required int taskId}) : super(rh) {
+  DeleteTask({ int groupId, int subjectId, @required int taskId})  {
     httpMethod = HttpMethod.DELETE;
-    /*
-    if(groupId != null && groupId != 0) {
-      PATH = "tasks/groups/${groupId}/${taskId}";
-    }else if(subjectId != null && subjectId != 0){
-      PATH = "tasks/subjects/${subjectId}/${taskId}";
-    } else{
-      PATH = "tasks/me/${taskId}";
-    }
-    */
     PATH = "tasks/${taskId}";
     authTokenHeader = true;
     contentTypeHeader = true;
@@ -922,7 +840,7 @@ class DeleteTask extends HazizzRequest {
 }
 
 class GetTaskByTaskId extends HazizzRequest {
-  GetTaskByTaskId({ResponseHandler rh, int p_taskId}) : super(rh) {
+  GetTaskByTaskId({ int p_taskId})  {
     httpMethod = HttpMethod.GET;
     PATH = "tasks/${p_taskId}";
     authTokenHeader = true;
@@ -936,7 +854,7 @@ class GetTaskByTaskId extends HazizzRequest {
 }
 
 class GetAlertSettings extends HazizzRequest {
-  GetAlertSettings({ResponseHandler rh, @required int q_userId}) : super(rh) {
+  GetAlertSettings({ @required int q_userId})  {
     httpMethod = HttpMethod.GET;
     PATH = "users/$q_userId/alertsettings";
     authTokenHeader = true;
@@ -950,10 +868,10 @@ class GetAlertSettings extends HazizzRequest {
 }
 
 class UpdateAlertSettings extends HazizzRequest {
-  UpdateAlertSettings({ResponseHandler rh, @required int q_userId, @required String b_alarmTime,
+  UpdateAlertSettings({ @required int q_userId, @required String b_alarmTime,
   @required bool b_mondayEnabled, @required bool b_tuesdayEnabled, @required bool b_wednesdayEnabled,
   @required bool b_thursdayEnabled, @required bool b_fridayEnabled, @required bool b_saturdayEnabled,
-  @required bool b_sundayEnabled}) : super(rh) {
+  @required bool b_sundayEnabled})  {
     httpMethod = HttpMethod.POST;
     PATH = "users/$q_userId/alertsettings";
     authTokenHeader = true;
@@ -977,7 +895,7 @@ class UpdateAlertSettings extends HazizzRequest {
 
 
 class GetRecentEvents extends HazizzRequest {
-  GetRecentEvents({ResponseHandler rh}) : super(rh) {
+  GetRecentEvents()  {
     httpMethod = HttpMethod.GET;
     PATH = "me/notifications";
     authTokenHeader = true;
@@ -985,7 +903,6 @@ class GetRecentEvents extends HazizzRequest {
 
   @override
   dynamic convertData(Response response) {
-
     return response;
   }
 }
@@ -995,12 +912,12 @@ class GetRecentEvents extends HazizzRequest {
 //ha groupId != 0 és subject = 0
 //akkor csak a csoporthoz rendeltet küldi vissza
 class GetTasksFromMe extends HazizzRequest {
-  GetTasksFromMe({ResponseHandler rh, bool q_showThera = true,
+  GetTasksFromMe({ bool q_showThera = true,
                   bool q_unfinishedOnly, bool q_finishedOnly,
                   List<String> q_tags, String q_startingDate,
                   String q_endDate, int q_groupId,
                   int q_subjectId, q_wholeGroup = false
-  }) : super(rh) {
+  })  {
     httpMethod = HttpMethod.GET;
     PATH = "users/${CacheManager.getMyIdSafely}/tasks";
     authTokenHeader = true;
@@ -1014,7 +931,6 @@ class GetTasksFromMe extends HazizzRequest {
     if(q_groupId != null )query["groupId"] = q_groupId;
     if(q_subjectId != null )query["subjectId"] = q_subjectId;
     if(q_wholeGroup != null )query["wholeGroup"] = q_wholeGroup;
-
   }
 
   @override
@@ -1027,7 +943,7 @@ class GetTasksFromMe extends HazizzRequest {
 }
 
 class SetTaskCompleted extends HazizzRequest {
-  SetTaskCompleted({ResponseHandler rh, @required int p_taskId, @required bool setCompleted}) : super(rh) {
+  SetTaskCompleted({ @required int p_taskId, @required bool setCompleted})  {
     authTokenHeader = true;
     PATH = "tasks/$p_taskId/completed";
 
@@ -1052,7 +968,7 @@ class SetTaskCompleted extends HazizzRequest {
 
 
 class GetTasksFromGroup extends HazizzRequest {
-  GetTasksFromGroup({ResponseHandler rh, int groupId}) : super(rh) {
+  GetTasksFromGroup({ int groupId})  {
     httpMethod = HttpMethod.GET;
     PATH = "tasks/groups/${groupId}";
     authTokenHeader = true;
@@ -1070,7 +986,7 @@ class GetTasksFromGroup extends HazizzRequest {
 
 
 class GetTaskComments extends HazizzRequest {
-  GetTaskComments({ResponseHandler rh, int p_taskId}) : super(rh) {
+  GetTaskComments({ int p_taskId})  {
     httpMethod = HttpMethod.GET;
     PATH = "comments/tasks/$p_taskId/chat";
     authTokenHeader = true;
@@ -1085,7 +1001,7 @@ class GetTaskComments extends HazizzRequest {
 }
 
 class CreateTaskComment extends HazizzRequest {
-  CreateTaskComment({ResponseHandler rh, @required int p_taskId, @required String b_content}) : super(rh) {
+  CreateTaskComment({ @required int p_taskId, @required String b_content})  {
     httpMethod = HttpMethod.POST;
     PATH = "comments/tasks/$p_taskId/chat";
     authTokenHeader = true;
@@ -1099,7 +1015,7 @@ class CreateTaskComment extends HazizzRequest {
 }
 
 class DeleteComment extends HazizzRequest {
-  DeleteComment({ResponseHandler rh, @required int p_commentId}) : super(rh) {
+  DeleteComment({ @required int p_commentId})  {
     httpMethod = HttpMethod.DELETE;
     PATH = "comments/$p_commentId";
     authTokenHeader = true;
@@ -1112,7 +1028,7 @@ class DeleteComment extends HazizzRequest {
 }
 
 class GetGroupMembers extends HazizzRequest {
-  GetGroupMembers({ResponseHandler rh, int groupId}) : super(rh) {
+  GetGroupMembers({ int groupId})  {
     httpMethod = HttpMethod.GET;
     PATH = "groups/${groupId}/users";
     authTokenHeader = true;
@@ -1128,7 +1044,7 @@ class GetGroupMembers extends HazizzRequest {
 
 
 class GetGroupMemberPermissions extends HazizzRequest {
-  GetGroupMemberPermissions({ResponseHandler rh, int groupId}) : super(rh) {
+  GetGroupMemberPermissions({ int groupId})  {
     httpMethod = HttpMethod.GET;
     PATH = "groups/${groupId}/permissions";
     authTokenHeader = true;
@@ -1142,7 +1058,7 @@ class GetGroupMemberPermissions extends HazizzRequest {
 }
 
 class KickGroupMember extends HazizzRequest {
-  KickGroupMember({ResponseHandler rh, @required int p_groupId, @required int p_userId}) : super(rh) {
+  KickGroupMember({ @required int p_groupId, @required int p_userId})  {
     httpMethod = HttpMethod.DELETE;
     PATH = "groups/$p_groupId/users/$p_userId";
     authTokenHeader = true;
@@ -1156,24 +1072,31 @@ class KickGroupMember extends HazizzRequest {
 
 
 
-class GetGroupInviteLinks extends HazizzRequest {
-  GetGroupInviteLinks({ResponseHandler rh, @required int groupId}) : super(rh) {
+class GetGroupInviteLinks extends Request {
+  GetGroupInviteLinks.open({ @required int groupId})  {
     httpMethod = HttpMethod.GET;
-    PATH = "groups/${groupId}/invitelinks";
+    PATH = "s/groups/$groupId";
+    authTokenHeader = true;
+  }
+  GetGroupInviteLinks.closed({ @required int groupId,  @required int groupPassword})  {
+    httpMethod = HttpMethod.GET;
+    PATH = "s/groups/$groupId/$groupPassword";
     authTokenHeader = true;
   }
 
   @override
   dynamic convertData(Response response) {
+    return response;//response.headers.value("Location");
+    /*
     Iterable iter = getIterable(response.data);
     List<PojoInviteLink> links = iter.map<PojoInviteLink>((json) => PojoInviteLink.fromJson(json)).toList();
-
     return links;
+    */
   }
 }
 
 class RemoveGroupInviteLink extends HazizzRequest {
-  RemoveGroupInviteLink({ResponseHandler rh, @required int groupId, @required int inviteId}) : super(rh) {
+  RemoveGroupInviteLink({ @required int groupId, @required int inviteId})  {
     httpMethod = HttpMethod.DELETE;
     PATH = "groups/${groupId}/invitelinks/${inviteId}";
     authTokenHeader = true;
@@ -1187,7 +1110,7 @@ class RemoveGroupInviteLink extends HazizzRequest {
 
 /*
 class GetGroupInviteLink extends HazizzRequest {
-  GetGroupInviteLink({ResponseHandler rh, @required int groupId}) : super(rh) {
+  GetGroupInviteLink({ @required int groupId})  {
     httpMethod = HttpMethod.GET;
     PATH = "groups/${groupId}/invitelink";
     authTokenHeader = true;
@@ -1208,7 +1131,7 @@ class GetGroupInviteLink extends HazizzRequest {
 //region Kreta session requests
 
 class KretaGetSessions extends TheraRequest {
-  KretaGetSessions({ResponseHandler rh}) : super(rh) {
+  KretaGetSessions()  {
     httpMethod = HttpMethod.GET;
     PATH = "kreta/sessions";
     authTokenHeader = true;
@@ -1223,7 +1146,7 @@ class KretaGetSessions extends TheraRequest {
 }
 
 class KretaGetProfile extends TheraRequest {
-  KretaGetProfile({ResponseHandler rh, @required PojoSession session}) : super(rh) {
+  KretaGetProfile({ @required PojoSession session})  {
   httpMethod = HttpMethod.GET;
   PATH = "kreta/sessions/${session.id}/profile";
   authTokenHeader = true;
@@ -1237,7 +1160,7 @@ class KretaGetProfile extends TheraRequest {
 }
 
 class KretaCreateSession extends TheraRequest {
-  KretaCreateSession({ResponseHandler rh, @required String b_username, @required String b_password, @required String b_url}) : super(rh) {
+  KretaCreateSession({ @required String b_username, @required String b_password, @required String b_url})  {
     httpMethod = HttpMethod.POST;
     PATH = "kreta/sessions";
     authTokenHeader = true;
@@ -1258,7 +1181,7 @@ class KretaCreateSession extends TheraRequest {
 }
 
 class KretaRemoveSessions extends TheraRequest {
-  KretaRemoveSessions({ResponseHandler rh, @required int p_session}) : super(rh) {
+  KretaRemoveSessions({ @required int p_session})  {
     httpMethod = HttpMethod.DELETE;
     PATH = "kreta/sessions/${p_session.toString()}";
     authTokenHeader = true;
@@ -1271,7 +1194,7 @@ class KretaRemoveSessions extends TheraRequest {
 }
 
 class KretaAuthenticateSession extends TheraRequest {
-  KretaAuthenticateSession({ResponseHandler rh, @required int p_session, @required String b_password}) : super(rh) {
+  KretaAuthenticateSession({ @required int p_session, @required String b_password})  {
     httpMethod = HttpMethod.POST;
     PATH = "kreta/sessions/${p_session}/auth";
     authTokenHeader = true;
@@ -1293,7 +1216,7 @@ class KretaAuthenticateSession extends TheraRequest {
 
 
 class KretaGetNotes extends TheraRequest {
-  KretaGetNotes({ResponseHandler rh}) : super(rh) {
+  KretaGetNotes()  {
     httpMethod = HttpMethod.GET;
     PATH = "kreta/sessions/${KretaSessionManager.selectedSession.id}/notes";
     authTokenHeader = true;
@@ -1310,7 +1233,7 @@ class KretaGetNotes extends TheraRequest {
 }
 
 class KretaGetGrades extends TheraRequest {
-  KretaGetGrades({ResponseHandler rh,}) : super(rh) {
+  KretaGetGrades()  {
     httpMethod = HttpMethod.GET;
     PATH = "grades";
     authTokenHeader = true;
@@ -1324,7 +1247,7 @@ class KretaGetGrades extends TheraRequest {
 }
 
 class KretaGetGradesWithSession extends TheraRequest {
-  KretaGetGradesWithSession({ResponseHandler rh,}) : super(rh) {
+  KretaGetGradesWithSession()  {
     httpMethod = HttpMethod.GET;
     PATH = "kreta/sessions/${KretaSessionManager.selectedSession.id}/grades";
     authTokenHeader = true;
@@ -1342,7 +1265,7 @@ class KretaGetGradesWithSession extends TheraRequest {
 }
 
 class KretaGetGradeAvarages extends TheraRequest {
-  KretaGetGradeAvarages({ResponseHandler rh,}) : super(rh) {
+  KretaGetGradeAvarages()  {
     httpMethod = HttpMethod.GET;
     PATH = "kreta/sessions/${SelectedSessionBloc().selectedSession.id}/averages";
     authTokenHeader = true;
@@ -1357,7 +1280,7 @@ class KretaGetGradeAvarages extends TheraRequest {
 }
 
 class KretaGetSchedules extends TheraRequest {
-  KretaGetSchedules({ResponseHandler rh, int q_weekNumber, int q_year}) : super(rh) {
+  KretaGetSchedules({ int q_weekNumber, int q_year})  {
     httpMethod = HttpMethod.GET;
     PATH = "schedules";
     authTokenHeader = true;
@@ -1387,7 +1310,7 @@ class KretaGetSchedules extends TheraRequest {
 }
 
 class KretaGetSchedulesWithSession extends TheraRequest {
-  KretaGetSchedulesWithSession({ResponseHandler rh, int q_weekNumber, int q_year}) : super(rh) {
+  KretaGetSchedulesWithSession({ int q_weekNumber, int q_year})  {
     httpMethod = HttpMethod.GET;
     PATH = "v2/kreta/sessions/${KretaSessionManager.selectedSession.id}/schedule";
     authTokenHeader = true;
@@ -1417,7 +1340,7 @@ class KretaGetSchedulesWithSession extends TheraRequest {
 }
 
 class DummyKretaGetGrades extends TheraRequest {
-  DummyKretaGetGrades({ResponseHandler rh}) : super(rh) {
+  DummyKretaGetGrades()  {
     httpMethod = HttpMethod.GET;
     PATH = "dummy/grades";
     authTokenHeader = true;
@@ -1431,7 +1354,7 @@ class DummyKretaGetGrades extends TheraRequest {
 }
 
 class DummyKretaGetSchedules extends TheraRequest {
-  DummyKretaGetSchedules({ResponseHandler rh}) : super(rh) {
+  DummyKretaGetSchedules()  {
     httpMethod = HttpMethod.GET;
     PATH = "dummy/schedule";
     authTokenHeader = true;
@@ -1447,7 +1370,7 @@ class DummyKretaGetSchedules extends TheraRequest {
 
 
 class KretaGetSchools extends TheraRequest {
-  KretaGetSchools({ResponseHandler rh}) : super(rh) {
+  KretaGetSchools()  {
     httpMethod = HttpMethod.GET;
     PATH = "kreta/schools";
     authTokenHeader = true;

@@ -6,8 +6,6 @@ import 'package:mobile/communication/pojos/PojoTag.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
-import 'package:mobile/custom/hazizz_localizations.dart';
-import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -142,21 +140,20 @@ class _TaskItemWidget extends State<TaskItemWidget>  {
                   }
                   pojoTask.completed = isCompleted;
 
-
-
-                  return IconButton(
-                      icon: Icon(iconData),
-                      onPressed: () async {
-                        HazizzLogger.printLog("IM PRESSED HELLP!!!");
-                        setState(() {
-                          isCompleted = !isCompleted;
-                          if(isCompleted){
-                            widget.onCompletedChanged();
-                          }
-                        });
-                        HazizzResponse hazizzResponse = await RequestSender().getResponse(SetTaskCompleted(p_taskId: widget.originalPojoTask.id, setCompleted: isCompleted));
-                      }
-
+                  return Transform.scale(
+                    scale: 1.2,
+                    child: Checkbox(
+                      activeColor: Colors.green,
+                      value: isCompleted,
+                      onChanged: (val) async {
+                      setState(() {
+                        isCompleted = val;
+                        if(isCompleted){
+                          widget.onCompletedChanged();
+                        }
+                      });
+                      await RequestSender().getResponse(SetTaskCompleted(p_taskId: widget.originalPojoTask.id, setCompleted: isCompleted));
+                    }),
                   );
                 },
               ),
@@ -309,24 +306,6 @@ class _TaskItemWidget extends State<TaskItemWidget>  {
                                   },
                                 ),
                               ),
-                              /*
-                        Positioned(
-                          bottom: 0,
-                          left: 0,
-                          width: MediaQuery.of(context).size.width,
-                          height: 40,
-                          // Note: without ClipRect, the blur region will be expanded to full
-                          // size of the Image instead of custom size
-                          child: ClipRect(
-                            child: BackdropFilter(
-                              filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-                              child: Container(
-                                color: Colors.black.withOpacity(0),
-                              ),
-                            ),
-                          ),
-                        )
-                        */
                             ]
                         );
                       },

@@ -15,8 +15,10 @@ class DeepLink{
     HazizzLogger.printLog("DEEP LINK RECEIVED: ${deepLink.toString()}");
     if (deepLink != null) {
 
-      if(deepLink.queryParameters.containsKey("group")){
-        String str_groupId = deepLink.queryParameters["group"];
+      HazizzLogger.printLog("sadsadasd " + deepLink.pathSegments[1]);
+      if(deepLink.pathSegments[0] == "groups" /*||  deepLink.queryParameters.containsKey("group") || deepLink.queryParameters.containsKey("groups")*/){
+       // String str_groupId = deepLink.queryParameters["groups"];
+        String str_groupId = deepLink.pathSegments[1];
 
         if(str_groupId == null || str_groupId == ""){
           str_groupId = deepLink.pathSegments[deepLink.pathSegments.length-1];

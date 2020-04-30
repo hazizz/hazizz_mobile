@@ -47,11 +47,11 @@ class _SubjectEditorDialog extends State<SubjectEditorDialog> {
   @override
   void initState() {
     _subjectTextEditingController.text =
-      widget.actionType == ActionTypeEnum.CREATE
+      widget.actionType == ActionTypeEnum.EDIT
         ? widget.subject.name
         : "";
     isSubscriberOnly =
-      widget.actionType == ActionTypeEnum.CREATE
+      widget.actionType == ActionTypeEnum.EDIT
         ? widget.subject.subscriberOnly
         : false;
     super.initState();

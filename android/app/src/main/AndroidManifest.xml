@@ -63,62 +63,67 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="https" android:host="hazizz.github.io" android:pathPrefix="/hazizz-webclient"/>
-                <data android:scheme="https" android:host="hazizz.duckdns.org"/>
 
-            </intent-filter>
+                <!--  <data android:scheme="https" android:host="hazizz.github.io" android:pathPrefix="/hazizz-webclient"/> -->
+                  <data android:scheme="https" android:host="client.hazizz.hu"/>
 
-        </activity>
+                <!--  <data android:scheme="https" android:host="hazizz.page.link"/> -->
 
-        <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
-            </intent-filter>
-        </receiver>
+                <!--  <data android:scheme="https" android:host="hazizz.duckdns.org" /> -->
 
-        <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
+              </intent-filter>
 
-        <service
-            android:name="com.mythichelm.localnotifications.services.LocalNotificationsService"
-            android:exported="false" />
+          </activity>
 
-        <service
-            android:name="io.flutter.plugins.androidalarmmanager.AlarmService"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:exported="false"/>
-        <receiver
-            android:name="io.flutter.plugins.androidalarmmanager.AlarmBroadcastReceiver"
-            android:exported="false"/>
-        <receiver
-            android:name="io.flutter.plugins.androidalarmmanager.RebootBroadcastReceiver"
-            android:enabled="false">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
-            </intent-filter>
-        </receiver>
+          <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
+              <intent-filter>
+                  <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+              </intent-filter>
+          </receiver>
 
-        <meta-data android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
+          <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
 
-        <activity android:name="com.facebook.FacebookActivity"
-            android:configChanges=
-                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/app_name" />
+          <service
+              android:name="com.mythichelm.localnotifications.services.LocalNotificationsService"
+              android:exported="false" />
 
-        <activity
-            android:name="com.facebook.CustomTabActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="@string/fb_login_protocol_scheme" />
-            </intent-filter>
-        </activity>
+          <service
+              android:name="io.flutter.plugins.androidalarmmanager.AlarmService"
+              android:permission="android.permission.BIND_JOB_SERVICE"
+              android:exported="false"/>
+          <receiver
+              android:name="io.flutter.plugins.androidalarmmanager.AlarmBroadcastReceiver"
+              android:exported="false"/>
+          <receiver
+              android:name="io.flutter.plugins.androidalarmmanager.RebootBroadcastReceiver"
+              android:enabled="false">
+              <intent-filter>
+                  <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+              </intent-filter>
+          </receiver>
 
-        <meta-data android:name="com.facebook.sdk.AutoLogAppEventsEnabled"
-            android:value="false"
-            />
+          <meta-data android:name="com.facebook.sdk.ApplicationId"
+              android:value="@string/facebook_app_id"/>
 
-    </application>
-</manifest>
+          <activity android:name="com.facebook.FacebookActivity"
+              android:configChanges=
+                  "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+              android:label="@string/app_name" />
+
+          <activity
+              android:name="com.facebook.CustomTabActivity"
+              android:exported="true">
+              <intent-filter>
+                  <action android:name="android.intent.action.VIEW" />
+                  <category android:name="android.intent.category.DEFAULT" />
+                  <category android:name="android.intent.category.BROWSABLE" />
+                  <data android:scheme="@string/fb_login_protocol_scheme" />
+              </intent-filter>
+          </activity>
+
+          <meta-data android:name="com.facebook.sdk.AutoLogAppEventsEnabled"
+              android:value="false"
+              />
+
+      </application>
+  </manifest>

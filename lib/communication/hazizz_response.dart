@@ -47,7 +47,7 @@ class HazizzResponse{
     if(request is AuthRequest){
       HazizzLogger.printLog("successful token response");
     }else {
-      HazizzLogger.printLog("successful response raw body: ${response.data}");
+      HazizzLogger.printLog("successful response raw body: ${response?.data}");
     }
 
     if(request is TheraRequest && KretaStatusBloc().state is KretaStatusUnavailableState){

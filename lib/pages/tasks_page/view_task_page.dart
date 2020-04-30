@@ -295,44 +295,26 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                                       child: Builder(builder: (context){
                                                         HazizzLogger.printLog("redrawing coz completed: $completed");
                                                         if(completed == null) return Container();
-                                                        IconData iconData;
-                                                        if(completed){
-                                                          return IconButton(
-                                                              icon: Icon(FontAwesomeIcons.checkSquare, size: 32,),
-                                                              onPressed: () async {
-                                                                setState(() {
-                                                                  completed = false;
-                                                                  pojoTask.completed = false;
 
-                                                                });
-                                                                HazizzResponse hazizzResponse = await RequestSender().getResponse(SetTaskCompleted(p_taskId: pojoTask.id, setCompleted: false));
-                                                                if(hazizzResponse.isError){
-                                                                  setState(() {
-                                                                    completed = true;
-                                                                    pojoTask.completed = true;
-
-                                                                  });
-                                                                }
-                                                              }
-                                                          );
-                                                        }
-                                                        return IconButton(
-                                                            icon: Icon(FontAwesomeIcons.square, size: 32,),
-                                                            onPressed: () async {
+                                                        return Transform.scale(
+                                                          scale: 1.36,
+                                                          child: Checkbox(
+                                                            activeColor: mainTag.name != "_HOMEWORK" ? Colors.green : Colors.black54,
+                                                            value: completed,
+                                                            onChanged: (val) async {
                                                               setState(() {
-                                                                completed = true;
-                                                                pojoTask.completed = true;
-
+                                                                completed = val;
+                                                                pojoTask.completed = false;
                                                               });
-                                                              HazizzResponse hazizzResponse = await RequestSender().getResponse(SetTaskCompleted(p_taskId: pojoTask.id, setCompleted: true));
+                                                              HazizzResponse hazizzResponse = await RequestSender().getResponse(SetTaskCompleted(p_taskId: pojoTask.id, setCompleted: completed));
                                                               if(hazizzResponse.isError){
                                                                 setState(() {
-                                                                  completed = false;
-                                                                  pojoTask.completed = false;
+                                                                  completed = !completed;
+                                                                  pojoTask.completed = !completed;
 
                                                                 });
                                                               }
-                                                            }
+                                                            }),
                                                         );
                                                       }),
                                                     ),
