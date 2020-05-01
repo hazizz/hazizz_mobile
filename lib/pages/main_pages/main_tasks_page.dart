@@ -147,10 +147,9 @@ class _TasksPage extends State<TasksPage>
     map = m;
 
     HazizzLogger.printLog("REBUILD, BIIP BOOp");
-
+    int itemCount2 = map.keys.length+1;
     return new Column(
       children: <Widget>[
-
         Card(
             child: Padding(
               padding: const EdgeInsets.only(left: 4.0),
@@ -207,6 +206,16 @@ class _TasksPage extends State<TasksPage>
 
         Expanded(
           child: Builder(builder: (context){
+            /*
+            return ListView.builder(
+              itemCount: itemCount2,
+              itemBuilder: (BuildContext context, int index) {
+                return Text("hey! no");
+              },);
+             */
+
+
+
             if(map.keys == null || map.keys.isEmpty){
               return Center(child: Text(locText(context, key: "no_tasks")),);
 
@@ -221,6 +230,7 @@ class _TasksPage extends State<TasksPage>
                // itemPositionsListener: itemPositionListener,
                 itemCount: itemCount,
                   separatorBuilder: (context, index ){
+                  //  return Text("REKLÁM! HALÓÓÓ");
                     return showAd(context, show: (itemCount<3 && index == itemCount-1) || (index!=0 && index%3==0), showHeader: true);
                   },
                   itemBuilder: (BuildContext context, int index) {
@@ -289,7 +299,6 @@ class _TasksPage extends State<TasksPage>
             }
           }),
         ),
-
       ],
     );
   }

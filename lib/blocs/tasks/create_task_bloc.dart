@@ -173,7 +173,6 @@ class TaskCreateBloc extends TaskMakerBloc {
         }
         HazizzLogger.printLog("log: task making was succcessful");
         return TaskMakerSuccessfulState(hazizzResponse.convertedData);
-        MainTabBlocs().tasksBloc.add(TasksFetchEvent());
       }else{
         return TaskMakerFailedState();
       }

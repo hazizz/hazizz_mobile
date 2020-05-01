@@ -108,7 +108,7 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
           itemCount: itemCount,
           itemBuilder: (BuildContext context, int index) {
             if(index == 0){
-              return Center(child: Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().tasksBloc.lastUpdated)));
+              return Center(child: Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().gradesBloc.lastUpdated)));
             }
             if(grades.values.toList()[index-1].isNotEmpty){
               return GradeItemWidget.bySubject(
@@ -140,7 +140,7 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
             itemCount: itemCount,
             itemBuilder: (BuildContext context, int index) {
               if(index == 0){
-                return Center(child: Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().tasksBloc.lastUpdated)));
+                return Center(child: Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().gradesBloc.lastUpdated)));
               }
               if(grades.values.toList()[index-1].isNotEmpty){
                 return GradeItemWidget.bySubject(
@@ -277,7 +277,7 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
         return SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              Center(child: Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().tasksBloc.lastUpdated))),
+              Center(child: Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().gradesBloc.lastUpdated))),
               Wrap(
                   direction: Axis.horizontal,
                   runAlignment: WrapAlignment.start,
@@ -298,7 +298,7 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
         itemCount: itemCount,
         itemBuilder: (BuildContext context, int index) {
           if(index == 0){
-            return Center(child: Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().tasksBloc.lastUpdated)));
+            return Center(child: Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().gradesBloc.lastUpdated)));
           }
           Widget gradeItemWidget = GradeItemWidget.byDate(pojoGrade: gradesByDate[index-1],);
 
