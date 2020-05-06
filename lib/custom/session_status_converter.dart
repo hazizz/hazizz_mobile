@@ -1,3 +1,4 @@
+// TODO rewrite this mess!
 int getSessionStatusRank(String sessionStatus){
   switch(sessionStatus){
     case "ACTIVE":
@@ -6,5 +7,9 @@ int getSessionStatusRank(String sessionStatus){
       return 1;
     case "ERROR":
       return 2;
+    case "LOADING":
+      return 4;
+    default:
+      return 5;
   }
 }

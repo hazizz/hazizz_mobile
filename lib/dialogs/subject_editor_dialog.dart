@@ -11,21 +11,20 @@ import 'package:mobile/communication/request_sender.dart';
 import 'dialogs.dart';
 
 
-
 class SubjectEditorDialog extends StatefulWidget {
 
-  ActionTypeEnum actionType;
+  final ActionTypeEnum actionType;
 
-  int groupId;
-  PojoSubject subject;
+  final int groupId;
+  final PojoSubject subject;
 
-  SubjectEditorDialog.create({Key key, @required this.groupId}) : super(key: key){
-    actionType = ActionTypeEnum.CREATE;
-  }
+  SubjectEditorDialog.create({Key key, @required this.groupId})
+    : actionType = ActionTypeEnum.CREATE, subject = null,
+      super(key: key);
 
-  SubjectEditorDialog.edit({Key key, @required this.subject}) : super(key: key){
-    actionType = ActionTypeEnum.EDIT;
-  }
+  SubjectEditorDialog.edit({Key key, @required this.subject})
+    : actionType = ActionTypeEnum.EDIT, groupId = null,
+      super(key: key);
 
   @override
   _SubjectEditorDialog createState() => new _SubjectEditorDialog();
@@ -61,11 +60,7 @@ class _SubjectEditorDialog extends State<SubjectEditorDialog> {
   @override
   Widget build(BuildContext context) {
 
-
-    String errorText = null;
-
-    bool isEnabled = true;
-
+    String errorText;
 
     var dialog = HazizzDialog(width: width, height: height,
       header: Container(
@@ -123,8 +118,6 @@ class _SubjectEditorDialog extends State<SubjectEditorDialog> {
                                 checkColor: Colors.white,
                               ),
                             ),
-
-
                           ],
                         ),
                       )
@@ -163,12 +156,10 @@ class _SubjectEditorDialog extends State<SubjectEditorDialog> {
               child: Center(
                 child: Text((widget.subject == null ? locText(context, key: "add") : locText(context, key: "edit")).toUpperCase() ,
                   style: TextStyle(
-                    //  fontFamily: 'Montserrat',
                       color: HazizzTheme.warningColor
                   ),
                 ),
               ),
-
 
               onPressed: !isLoading ? () async {
 
@@ -196,21 +187,7 @@ class _SubjectEditorDialog extends State<SubjectEditorDialog> {
                     Navigator.pop(context, response.convertedData);
                   }
                 }
-
               } : null,
-
-              /*
-                            onPressed: () async {
-
-                              if(_subjectTextEditingController.text.length >= 2 && _subjectTextEditingController.text.length <= 20){
-                                HazizzResponse response = await RequestSender().getResponse(CreateSubject(p_groupId: groupId, b_subjectName: _subjectTextEditingController.text));
-                                if(response.isSuccessful){
-                                  Navigator.pop(context, true);
-                                }
-                              }
-
-                            },
-        */
               color: Colors.transparent
           ),
         ],

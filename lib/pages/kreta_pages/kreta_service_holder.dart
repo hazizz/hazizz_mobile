@@ -76,6 +76,5 @@ class _KretaServiceHolder extends State<KretaServiceHolder> with TickerProviderS
     );
   }
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 }

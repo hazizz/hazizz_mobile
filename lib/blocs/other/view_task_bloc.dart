@@ -44,12 +44,10 @@ class ViewTaskBloc extends Bloc<HEvent, HState> {
   ViewTaskBloc._internal();
 
   @override
-  // TODO: implement initialState
   HState get initialState => null;
 
   @override
   Stream<HState> mapEventToState(HEvent event) {
-    // TODO: implement mapEventToState
     return null;
   }
 

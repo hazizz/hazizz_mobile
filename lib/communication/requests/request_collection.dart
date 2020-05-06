@@ -18,6 +18,7 @@ import 'package:mobile/communication/pojos/PojoKretaNote.dart';
 import 'package:mobile/communication/pojos/PojoKretaProfile.dart';
 import 'package:mobile/communication/pojos/PojoMeInfoPrivate.dart';
 import 'package:mobile/communication/pojos/PojoMeInfo.dart';
+import 'package:mobile/communication/pojos/PojoMyDetailedInfo.dart';
 import 'package:mobile/communication/pojos/PojoSchedules.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
@@ -344,10 +345,10 @@ class RemoveFirebaseTokens extends AuthRequest{
 //region Hazizz server requests
 
 
-class GetMyInfo extends HazizzRequest {
+class GetMyInfo extends AuthRequest {
   bool isPublic;
   GetMyInfo.public()  {
-    PATH = "me";
+    PATH = "information/detailed";
     httpMethod = HttpMethod.GET;
     authTokenHeader = true;
 
@@ -355,7 +356,7 @@ class GetMyInfo extends HazizzRequest {
   }
 
   GetMyInfo.private()  {
-    PATH = "me/details";
+    PATH = "information/detailed";
     httpMethod = HttpMethod.GET;
     authTokenHeader = true;
 
@@ -364,7 +365,7 @@ class GetMyInfo extends HazizzRequest {
 
   @override
   convertData(Response response) {
-    return PojoMeInfoPrivate.fromJson(jsonDecode(response.data));
+    return PojoMyDetailedInfo.fromRawJson(response.data);
   }
 }
 
@@ -395,12 +396,12 @@ class GetUserProfilePicture extends HazizzRequest {
 
 class GetMyProfilePicture extends HazizzRequest {
   GetMyProfilePicture.mini()  {
-    PATH = "me/picture";
+    PATH = "users/${CacheManager.getMyIdSafely}/picture";
     hardCodeReducer();
   }
 
   GetMyProfilePicture.full()  {
-    PATH = "me/picture/full";
+    PATH = "users/${CacheManager.getMyIdSafely}/picture/full";
     hardCodeReducer();
   }
 
@@ -419,7 +420,7 @@ class GetMyProfilePicture extends HazizzRequest {
 
 class UpdateMyProfilePicture extends HazizzRequest {
   UpdateMyProfilePicture({ @required String encodedImage})  {
-    PATH = "me/picture";
+    PATH = "users/${CacheManager.getMyIdSafely}/picture";
     httpMethod = HttpMethod.POST;
     authTokenHeader = true;
     contentTypeHeader = true;
@@ -439,7 +440,7 @@ class UpdateMyProfilePicture extends HazizzRequest {
 
 class UpdateMyDisplayName extends HazizzRequest {
   UpdateMyDisplayName({ @required String b_displayName})  {
-    PATH = "me/displayname";
+    PATH = "users/${CacheManager.getMyIdSafely}/displayname";
     httpMethod = HttpMethod.POST;
     authTokenHeader = true;
     contentTypeHeader = true;
@@ -544,17 +545,22 @@ class Report extends HazizzRequest {
 
 class CreateGroup extends HazizzRequest {
 
-  CreateGroup({ @required String b_groupName, @required GroupType type, String b_password})  {
+  CreateGroup.open({ @required String b_groupName})  {
     httpMethod = HttpMethod.POST;
     PATH = "groups";
     authTokenHeader = true;
     contentTypeHeader = true;
     body["groupName"] = b_groupName;
-    body["type"] = valueOfGroupType(type);
-    if(type == GroupType.PASSWORD){
-      assert(b_password != null);
-      body["password"] = b_password;
-    }
+    body["type"] = "OPEN";
+  }
+
+  CreateGroup.closed({ @required String b_groupName})  {
+    httpMethod = HttpMethod.POST;
+    PATH = "groups";
+    authTokenHeader = true;
+    contentTypeHeader = true;
+    body["groupName"] = b_groupName;
+    body["type"] = "CLOSED";
   }
 
   @override
@@ -609,7 +615,7 @@ class LeaveGroup extends HazizzRequest {
 
   LeaveGroup({@required int p_groupId})  {
     httpMethod = HttpMethod.GET;
-    PATH = "me/leavegroup/$p_groupId";
+    PATH = "users/${CacheManager.getMyIdSafely}/leavegroup/$p_groupId";
     authTokenHeader = true;
   }
 
@@ -626,13 +632,13 @@ class JoinGroup extends HazizzRequest {
 
   JoinGroup({ @required int p_groupId,})  {
     httpMethod = HttpMethod.GET;
-    PATH = "me/joingroup/$p_groupId";
+    PATH = "users/${CacheManager.getMyIdSafely}/joingroup/$p_groupId";
     authTokenHeader = true;
   }
 
   JoinGroup.withPassword({ @required int p_groupId, @required String p_password})  {
     httpMethod = HttpMethod.GET;
-    PATH = "me/joingroup/$p_groupId/$p_password";
+    PATH = "users/${CacheManager.getMyIdSafely}/joingroup/$p_groupId/$p_password";
     authTokenHeader = true;
   }
 
@@ -670,7 +676,7 @@ class PromoteMember extends HazizzRequest {
 class GetMyGroups extends HazizzRequest {
   GetMyGroups()  {
     httpMethod = HttpMethod.GET;
-    PATH = "me/groups";
+    PATH = "users/${CacheManager.getMyIdSafely}/groups";
     authTokenHeader = true;
   }
 
@@ -897,7 +903,7 @@ class UpdateAlertSettings extends HazizzRequest {
 class GetRecentEvents extends HazizzRequest {
   GetRecentEvents()  {
     httpMethod = HttpMethod.GET;
-    PATH = "me/notifications";
+    PATH = "users/${CacheManager.getMyIdSafely}/notifications";
     authTokenHeader = true;
   }
 
@@ -1235,7 +1241,7 @@ class KretaGetNotes extends TheraRequest {
 class KretaGetGrades extends TheraRequest {
   KretaGetGrades()  {
     httpMethod = HttpMethod.GET;
-    PATH = "grades";
+    PATH = "users/${CacheManager.getMyIdSafely}/grades";
     authTokenHeader = true;
   }
 
@@ -1282,7 +1288,7 @@ class KretaGetGradeAvarages extends TheraRequest {
 class KretaGetSchedules extends TheraRequest {
   KretaGetSchedules({ int q_weekNumber, int q_year})  {
     httpMethod = HttpMethod.GET;
-    PATH = "schedules";
+    PATH = "users/${CacheManager.getMyIdSafely}/schedules";
     authTokenHeader = true;
 
     if(q_weekNumber != null && q_year != null) {

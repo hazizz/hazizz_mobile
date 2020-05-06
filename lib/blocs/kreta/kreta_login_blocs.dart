@@ -275,9 +275,15 @@ class KretaLoginBloc extends Bloc<KretaLoginEvent, KretaLoginState> {
           PojoSession newSession = hazizzResponse.convertedData;
           HazizzLogger.printLog("debuglol222");
 
-          setSession(newSession, password: passwordController.text);
-          HazizzLogger.printLog("debuglol1");
-          yield KretaLoginSuccessState();
+          if(newSession.status == "ACTIVE"){
+            setSession(newSession, password: passwordController.text);
+            HazizzLogger.printLog("debuglol1");
+            yield KretaLoginSuccessState();
+          }
+          else{
+            yield KretaLoginSomethingWentWrong();
+          }
+
         }else if(hazizzResponse.pojoError != null) {
           HazizzLogger.printLog("assdad: ${hazizzResponse.pojoError.errorCode}");
           if(hazizzResponse.pojoError.errorCode ==
@@ -315,8 +321,17 @@ class KretaLoginBloc extends Bloc<KretaLoginEvent, KretaLoginState> {
           );
           if(hazizzResponse.isSuccessful) {
             PojoSession newSession = hazizzResponse.convertedData;
-            setSession(newSession, password: passwordController.text);
-            yield KretaLoginSuccessState();
+
+
+            if(newSession.status == "ACTIVE"){
+              setSession(newSession, password: passwordController.text);
+              HazizzLogger.printLog("debuglol1");
+              yield KretaLoginSuccessState();
+            }
+            else{
+              yield KretaLoginSomethingWentWrong();
+            }
+
           }else if(hazizzResponse.pojoError != null) {
             HazizzLogger.printLog(
                 "assdad: ${hazizzResponse.pojoError.errorCode}");

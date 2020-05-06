@@ -1,16 +1,22 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:mobile/communication/pojos/PojoMeInfo.dart';
+import 'package:mobile/communication/pojos/PojoMyDetailedInfo.dart';
 import 'package:mobile/communication/pojos/PojoTag.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
+import 'package:mobile/managers/app_state_manager.dart';
 import 'package:mobile/storage/cache_manager.dart';
 
 class FirebaseAnalyticsManager{
   static final FirebaseAnalytics analytics = FirebaseAnalytics();
   static final FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
 
-  static Future<void> setUserId(PojoMeInfo meInfo) async {
+  static Future<void> setUserId(PojoMyDetailedInfo meInfo) async {
+    if(!(await AppState.isLoggedIn())){
+      HazizzLogger.printLog("Wasn't able to log due to not being logged in");
+      return;
+    }
     HazizzLogger.printLog("log user property to analytics: " "id: " + meInfo.id.toString());
 
     await analytics.setUserProperty(name: "user_id", value: meInfo.id.toString());
@@ -23,30 +29,46 @@ class FirebaseAnalyticsManager{
   }
 
   static Future<void> setUsedLanguage(String language_code) async {
+    if(!(await AppState.isLoggedIn())){
+      HazizzLogger.printLog("Wasn't able to log due to not being logged in");
+      return;
+    }
     HazizzLogger.printLog("log user property to analytics: " "language_code: " +language_code);
 
-    await analytics.setUserProperty(name: "language_code", value: language_code);
+    await analytics?.setUserProperty(name: "language_code", value: language_code);
     HazizzLogger.printLog("log event to analytics: " "language_code: " +language_code);
     Map<String, dynamic> parameters = {
       "user_id": CacheManager.getMyIdSafely,
       "language_code": language_code
     };
-    await analytics.logEvent(name: "used_language", parameters: parameters);
+  //  await analytics?.logEvent(name: "used_language", parameters: parameters);
   }
 
 
 
   static Future<void> logEvent(String name, Map<String, dynamic> parameters) async {
+    if(!(await AppState.isLoggedIn())){
+      HazizzLogger.printLog("Wasn't able to log due to not being logged in");
+      return;
+    }
     HazizzLogger.printLog("log event to analytics: " + name + ": " + parameters.toString());
     await analytics.logEvent(name: name, parameters: parameters);
   }
 
   static Future<void> logLogin(String method) async {
+    if(!(await AppState.isLoggedIn())){
+      HazizzLogger.printLog("Wasn't able to log due to not being logged in");
+      return;
+    }
     HazizzLogger.printLog("log event to analytics: " + "login" + ": method: " + method);
     await analytics.logLogin(loginMethod: method);
   }
 
   static Future<void> logLogout({String error = "no error"}) async {
+    if(!(await AppState.isLoggedIn())){
+      HazizzLogger.printLog("Wasn't able to log due to not being logged in");
+      return;
+    }
     HazizzLogger.printLog("log event to analytics: " + "logout");
     Map<String, dynamic> parameters = {
       "user_id": CacheManager.getMyIdSafely,
@@ -56,11 +78,19 @@ class FirebaseAnalyticsManager{
   }
 
   static Future<void> logJoinGroup(int groupId) async {
+    if(!(await AppState.isLoggedIn())){
+      HazizzLogger.printLog("Wasn't able to log due to not being logged in");
+      return;
+    }
     HazizzLogger.printLog("log event to analytics: " + "join_group" + ": groupId: " + groupId.toString());
     await analytics.logJoinGroup(groupId: groupId.toString());
   }
 
   static Future<void> logOpenedViewTaskPage(PojoTask task) async {
+    if(!(await AppState.isLoggedIn())){
+      HazizzLogger.printLog("Wasn't able to log due to not being logged in");
+      return;
+    }
     HazizzLogger.printLog("log event to analytics: " + "opened_view_task_page: " + task.id.toString());
     bool isThera = false;
     for(PojoTag tag in task.tags){
@@ -82,6 +112,10 @@ class FirebaseAnalyticsManager{
   }
 
   static Future<void> logCreatedTask(int taskId, int subjectId, List<String> tags, bool contains_image) async {
+    if(!(await AppState.isLoggedIn())){
+      HazizzLogger.printLog("Wasn't able to log due to not being logged in");
+      return;
+    }
     HazizzLogger.printLog("log event to analytics: " + "created_task_page: " + taskId.toString());
     String tags_string = "";
     for(String tag in tags){
@@ -97,6 +131,10 @@ class FirebaseAnalyticsManager{
   }
 
   static Future<void> logTheme(bool isDark) async {
+    if(!(await AppState.isLoggedIn())){
+      HazizzLogger.printLog("Wasn't able to log due to not being logged in");
+      return;
+    }
     String theme = isDark ? "dark" : "light";
     HazizzLogger.printLog("log event to analytics: " + "theme" + ": " + theme);
 
@@ -107,6 +145,10 @@ class FirebaseAnalyticsManager{
   }
 
   static Future<void> logOpenedGroupsPage() async {
+    if(!(await AppState.isLoggedIn())){
+      HazizzLogger.printLog("Wasn't able to log due to not being logged in");
+      return;
+    }
     HazizzLogger.printLog("log event to analytics: " + "opened_groups_page");
 
     Map<String, dynamic> parameters = {};
@@ -114,6 +156,10 @@ class FirebaseAnalyticsManager{
   }
 
   static Future<void> logOpenedTaskCalendarPage() async {
+    if(!(await AppState.isLoggedIn())){
+      HazizzLogger.printLog("Wasn't able to log due to not being logged in");
+      return;
+    }
     HazizzLogger.printLog("log event to analytics: " + "opened_task_calendar_page");
 
     Map<String, dynamic> parameters = {};
@@ -121,6 +167,10 @@ class FirebaseAnalyticsManager{
   }
 
   static Future<void> logOpenedGradeStatisticsPage() async {
+    if(!(await AppState.isLoggedIn())){
+      HazizzLogger.printLog("Wasn't able to log due to not being logged in");
+      return;
+    }
     HazizzLogger.printLog("log event to analytics: " + "opened_grade_statistics_page");
 
     Map<String, dynamic> parameters = {};
@@ -128,6 +178,10 @@ class FirebaseAnalyticsManager{
   }
 
   static Future<void> logOpenedKretaNotesPage() async {
+    if(!(await AppState.isLoggedIn())){
+      HazizzLogger.printLog("Wasn't able to log due to not being logged in");
+      return;
+    }
     HazizzLogger.printLog("log event to analytics: " + "opened_kreta_notes_page");
 
     Map<String, dynamic> parameters = {};
@@ -135,6 +189,10 @@ class FirebaseAnalyticsManager{
   }
 
   static Future<void> logOpenedGradeStatistics() async {
+    if(!(await AppState.isLoggedIn())){
+      HazizzLogger.printLog("Wasn't able to log due to not being logged in");
+      return;
+    }
     HazizzLogger.printLog("log event to analytics: " + "opened_grade_statistics");
 
     Map<String, dynamic> parameters = {};
@@ -153,6 +211,10 @@ class FirebaseAnalyticsManager{
   */
 
   static Future<void> logNumberOfKretaSessionsAdded(int count) async {
+    if(!(await AppState.isLoggedIn())){
+      HazizzLogger.printLog("Wasn't able to log due to not being logged in");
+      return;
+    }
     HazizzLogger.printLog("log event to analytics: " + "number_of_kreta_sessions_added: " + count.toString());
 
     Map<String, dynamic> parameters = {
@@ -162,6 +224,10 @@ class FirebaseAnalyticsManager{
   }
 
   static Future<void> logGroupInviteLinkShare(int groupId) async {
+    if(!(await AppState.isLoggedIn())){
+      HazizzLogger.printLog("Wasn't able to log due to not being logged in");
+      return;
+    }
     HazizzLogger.printLog("log event to analytics: " + "group_invite_link_share: " + groupId.toString());
 
     Map<String, dynamic> parameters = {
@@ -171,6 +237,10 @@ class FirebaseAnalyticsManager{
   }
 
   static Future<void> logMainTabSelected(int pageIndex) async {
+    if(!(await AppState.isLoggedIn())){
+      HazizzLogger.printLog("Wasn't able to log due to not being logged in");
+      return;
+    }
     Map<String, dynamic> parameters = {};
     switch(pageIndex){
       case 0:
@@ -190,6 +260,10 @@ class FirebaseAnalyticsManager{
   }
 
   static Future<void> logRateLimitReached() async {
+    if(!(await AppState.isLoggedIn())){
+      HazizzLogger.printLog("Wasn't able to log due to not being logged in");
+      return;
+    }
     HazizzLogger.printLog("log event to analytics: " + "rate_limit_reached");
 
     Map<String, dynamic> parameters = {
@@ -199,6 +273,10 @@ class FirebaseAnalyticsManager{
   }
 
   static Future<void> logUnknownErrorResponse() async {
+    if(!(await AppState.isLoggedIn())){
+      HazizzLogger.printLog("Wasn't able to log due to not being logged in");
+      return;
+    }
     HazizzLogger.printLog("log event to analytics: " + "unknown_error_response");
 
     Map<String, dynamic> parameters = {

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:mobile/extension_methods/duration_extension.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -61,24 +62,13 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
 
   @override
   void initState() {
-    scrollController.addListener((){
-      if(scrollController.offset > MediaQuery.of(context).size.height * 1.2){
-        setState(() {
-          _scrollToTopVisible = true;
-        });
-      }else{
-        setState(() {
-          _scrollToTopVisible = false;
-        });
-      }
-    });
-
     _tabController  = TabController(vsync: this, length: _tabList.length, initialIndex: currentPage);
     super.initState();
   }
 
   @override
   void dispose() {
+    scrollController.dispose();
     super.dispose();
   }
 
@@ -104,7 +94,7 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
 
       if(grades.isNotEmpty){
         return ListView.builder(
-          controller: scrollController,
+         // controller: scrollController,
           itemCount: itemCount,
           itemBuilder: (BuildContext context, int index) {
             if(index == 0){
@@ -136,7 +126,7 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
 
       if(grades.isNotEmpty){
         return ListView.builder(
-            controller: scrollController,
+          //  controller: scrollController,
             itemCount: itemCount,
             itemBuilder: (BuildContext context, int index) {
               if(index == 0){
@@ -192,7 +182,7 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
         );
       }
       return new ListView.separated(
-        controller: scrollController,
+      //  controller: scrollController,
           itemCount: itemCount,
           separatorBuilder: (context, index) {
             return Container();
@@ -219,17 +209,24 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
                   builder: (context) {
                     List<Widget> widgetList = List();
 
+                    final int itemInRow = ((MediaQuery.of(context).size.width) / 72).round();
+                    final double rectWidth = (MediaQuery.of(context).size.width - 2*itemInRow * 3) / itemInRow;
+
                     if(widget.rectForm){
                       for(int i = grades[key].length-1; i >= 0; i--){
-                        widgetList.add(GradeItemWidget.bySubject(pojoGrade: grades[key][i], rectForm: true,));
+                        widgetList.add(GradeItemWidget.bySubject(pojoGrade: grades[key][i], rectForm: true, width: rectWidth,));
                       }
                       return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Wrap(
-                              direction: Axis.horizontal,
-                              runSpacing: 0,
-                              spacing: 0,
-                              children: widgetList
+                          Padding(
+                            padding: const EdgeInsets.only(left: 2.5, top: 3, bottom: 5),
+                            child: Wrap(
+                                direction: Axis.horizontal,
+                                runSpacing: 5,
+                                spacing: 5,
+                                children: widgetList
+                            ),
                           ),
                           showAd(context, show: (itemCount<4 && index == itemCount-1) || (index!=0 && index%4==0))
                         ],
@@ -270,22 +267,29 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
 
       if(widget.rectForm){
         List<Widget> widgetList = [];
+        final int itemInRow = ((MediaQuery.of(context).size.width) / 72).round();
+        final double rectWidth = (MediaQuery.of(context).size.width - 2*itemInRow * 3) / itemInRow;
+
         for(PojoGrade gs in gradesByDate){
-          widgetList.add(GradeItemWidget.byDate(pojoGrade: gs, rectForm: true,));
+          widgetList.add(GradeItemWidget.byDate(pojoGrade: gs, rectForm: true, width: rectWidth,));
         }
 
         return SingleChildScrollView(
           child: Column(
             children: <Widget>[
               Center(child: Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().gradesBloc.lastUpdated))),
-              Wrap(
-                  direction: Axis.horizontal,
-                  runAlignment: WrapAlignment.start,
-                  alignment: WrapAlignment.start,
-                  crossAxisAlignment: WrapCrossAlignment.start,
-                  spacing: 0,
-                  runSpacing: 0,
-                  children: widgetList
+              Padding(
+                padding: const EdgeInsets.only(bottom: 5),
+                child: Wrap(
+                    direction: Axis.horizontal,
+                    runAlignment: WrapAlignment.start,
+                    alignment: WrapAlignment.start,
+                    crossAxisAlignment: WrapCrossAlignment.start,
+                    spacing: 5,
+                    runSpacing: 5,
+
+                    children: widgetList
+                ),
               ),
               showAd(context, show: widgetList.isNotEmpty)
             ],
@@ -294,7 +298,7 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
       }
       int itemCount = gradesByDate.length+1;
       return new ListView.builder(
-        controller: scrollController,
+       // controller: scrollController,
         itemCount: itemCount,
         itemBuilder: (BuildContext context, int index) {
           if(index == 0){
@@ -315,7 +319,7 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
+  //  super.build(context);
     return Scaffold(
         body: Column(
           children: <Widget>[

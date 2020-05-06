@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:mobile/communication/pojos/PojoMeInfoPrivate.dart';
+import 'package:mobile/communication/pojos/PojoMyDetailedInfo.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/services/firebase_analytics.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,11 +13,16 @@ class CacheManager{
   static const String _displayName = "displayName";
   static const String _id = "id";
   static const String _profilePicture = "profilePicture";
-  static const String _userData = "userData";
+  static const String _userData = "userInformation";
+
+  static const String _userDataOld = "userData";
 
   static const String _seen_giveaway = "seen_giveaway";
 
-  static PojoMeInfoPrivate meInfo;
+  static PojoMeInfoPrivate meInfoOld;
+
+
+  static PojoMyDetailedInfo meInfo;
   static int myId;
 
   static int get getMyIdSafely{
@@ -85,24 +91,48 @@ class CacheManager{
     prefs.setString(_keyMe + _profilePicture, base64Pic);
   }
 
-  static Future<PojoMeInfoPrivate> getMyUserData() async{
+  static Future<PojoMyDetailedInfo> getMyUserData() async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String str_myUserData = prefs.getString(_keyMe + _userData);
     HazizzLogger.printLog("str_myUserData: $str_myUserData");
     if(str_myUserData != null) {
-      meInfo = PojoMeInfoPrivate.fromJson(jsonDecode(str_myUserData));
+      meInfo = PojoMyDetailedInfo.fromJson(jsonDecode(str_myUserData));
       FirebaseAnalyticsManager.setUserId(meInfo);
     }else{
-
+      return null;
     }
     return meInfo;
   }
 
-  static void setMyUserData(PojoMeInfoPrivate me) async{
+  static void setMyUserData(PojoMyDetailedInfo me) async{
 
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(_keyMe + _userData, jsonEncode(me));
     meInfo = me;
+    myId = meInfo.id;
+    FirebaseAnalyticsManager.setUserId(meInfo);
+  }
+
+
+  static Future<PojoMeInfoPrivate> getMyUserDataOld() async{
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String str_myUserData = prefs.getString(_keyMe + _userDataOld);
+    HazizzLogger.printLog("str_myUserDataOld: $str_myUserData");
+    if(str_myUserData != null) {
+      meInfoOld = PojoMeInfoPrivate.fromJson(jsonDecode(str_myUserData));
+      FirebaseAnalyticsManager.setUserId(meInfo);
+    }else{
+      return null;
+    }
+    return meInfoOld;
+  }
+
+  static void setMyUserDataOld(PojoMeInfoPrivate me) async{
+
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(_keyMe + _userDataOld, jsonEncode(me));
+    meInfoOld = me;
+    myId = meInfo.id;
     FirebaseAnalyticsManager.setUserId(meInfo);
   }
 

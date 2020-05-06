@@ -60,7 +60,7 @@ class TokenManager {
       PojoTokens tokens = hazizzResponse.convertedData;
 
       CacheManager.setMyUsername(username);
-      setTokens(tokens.access_token, tokens.refresh_token);
+      setTokens(tokens.token, tokens.refresh);
 
     }else if(hazizzResponse.isError){
     }
@@ -74,7 +74,7 @@ class TokenManager {
     if(hazizzResponse.isSuccessful){
       HazizzLogger.printLog("In createTokenWithRefresh function: token response successful");
       PojoTokens tokens = hazizzResponse.convertedData;
-      setTokens(tokens.access_token, tokens.refresh_token);
+      setTokens(tokens.token, tokens.refresh);
       HazizzLogger.printLog("In createTokenWithRefresh function: token is set and should be working");
     }else if(hazizzResponse.hasPojoError){
       await AppState.logout();
@@ -82,13 +82,13 @@ class TokenManager {
     return hazizzResponse;
   }
 
-  static Future<HazizzResponse> createTokenWithGoolgeOpenId(String openIdToken) async{
+  static Future<HazizzResponse> createTokenWithGoogleOpenId(String openIdToken) async{
     HazizzResponse hazizzResponse = await RequestSender().getAuthResponse(new CreateToken.withGoogleAccount(q_openIdToken: openIdToken));
     if(hazizzResponse.isSuccessful){
-      FirebaseAnalyticsManager.logLogin("google");
       PojoTokens tokens = hazizzResponse.convertedData;
-      await setTokens(tokens.access_token, tokens.refresh_token);
+      setTokens(tokens.token, tokens.refresh);
       await AppState.logInProcedure(tokens: tokens);
+      FirebaseAnalyticsManager.logLogin("google");
     }else if(hazizzResponse.hasPojoError){
 
     }
@@ -98,10 +98,10 @@ class TokenManager {
   static Future<HazizzResponse> createTokenWithFacebookAccount(String facebookToken) async{
     HazizzResponse hazizzResponse = await RequestSender().getAuthResponse(new CreateToken.withFacebookAccount(q_facebookToken: facebookToken));
     if(hazizzResponse.isSuccessful){
-      FirebaseAnalyticsManager.logLogin("facebook");
       PojoTokens tokens = hazizzResponse.convertedData;
-      await setTokens(tokens.access_token, tokens.refresh_token);
+      setTokens(tokens.token, tokens.refresh);
       await AppState.logInProcedure(tokens: tokens);
+      FirebaseAnalyticsManager.logLogin("facebook");
     }else if(hazizzResponse.hasPojoError){
 
     }

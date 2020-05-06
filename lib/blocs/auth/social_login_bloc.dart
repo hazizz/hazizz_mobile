@@ -134,7 +134,6 @@ class SocialLoginBloc extends Bloc<SocialLoginEvent, SocialLoginState> {
 
   @override
   Future<void> close() {
-    // TODO: implement dispose
     HazizzLogger.printLog("google login bloc CLOSED");
     return super.close();
   }

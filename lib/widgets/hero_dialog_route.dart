@@ -2,18 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class HeroDialogRoute<T> extends PageRoute<T> {
-  HeroDialogRoute({ this.builder }) : super();
+  HeroDialogRoute({ @required this.builder, this.duration = const Duration(milliseconds: 400), this.dismissible = true }) : super();
 
   final WidgetBuilder builder;
+  final Duration duration;
+
+  final bool dismissible;
 
   @override
   bool get opaque => false;
 
   @override
-  bool get barrierDismissible => true;
+  bool get barrierDismissible => dismissible;
 
   @override
-  Duration get transitionDuration => const Duration(milliseconds: 300);
+  Duration get transitionDuration => duration;
 
   @override
   bool get maintainState => true;
@@ -21,10 +24,12 @@ class HeroDialogRoute<T> extends PageRoute<T> {
   @override
   Color get barrierColor => Colors.black54;
 
+
+
   @override
   Widget buildTransitions(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
-    return new FadeTransition(
-      opacity: new CurvedAnimation(
+    return FadeTransition(
+      opacity: CurvedAnimation(
         parent: animation,
         curve: Curves.easeOut
       ),

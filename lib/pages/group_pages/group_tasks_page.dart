@@ -404,7 +404,6 @@ class _GroupTasksPage extends State<GroupTasksPage> with AutomaticKeepAliveClien
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 }
 

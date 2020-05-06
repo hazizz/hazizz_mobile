@@ -24,8 +24,7 @@ class _SchoolDialog extends State<SchoolDialog> {
 
   Map searchData;
 
-  _SchoolDialog(){
-  }
+  _SchoolDialog();
 
   @override
   void initState() {
@@ -51,6 +50,7 @@ class _SchoolDialog extends State<SchoolDialog> {
     var dialog = HazizzDialog(width: width, height: height,
       header: Container(
         height: searchBarHeight, width: width,
+        color: Color.fromRGBO(230, 230, 230, 1),
         child:
           TextField(
             autofocus: true,
@@ -83,6 +83,7 @@ class _SchoolDialog extends State<SchoolDialog> {
           builder: (BuildContext context1) {
             if(searchKeys.isNotEmpty){
               return ListView.builder(
+                physics: BouncingScrollPhysics(),
                 itemCount: searchKeys.length,
                 itemBuilder: (BuildContext context2, int index) {
                   return GestureDetector(
@@ -96,14 +97,14 @@ class _SchoolDialog extends State<SchoolDialog> {
                       },
                       child: Padding(
                         padding: EdgeInsets.only(
-                            left: 4, top: 4, bottom: 4),
+                            left: 4, top: 0),
                         child: InkWell(
                           child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(searchKeys[index],
                                   style: TextStyle(
-                                      fontSize: 18
+                                      fontSize: 16
                                   ),
                                 ),
                                 Divider()
@@ -115,13 +116,25 @@ class _SchoolDialog extends State<SchoolDialog> {
                 },
               );
             }else{
-              return Center(child: Text(locText(context, key: "no_school_with_that_name"), style: TextStyle(fontSize: 20),));
-
+              return Center(
+                child: Text("no_school_with_that_name".locText(context),
+                  style: TextStyle(fontSize: 20),
+                  textAlign: TextAlign.center,
+                )
+              );
           }
           }
       ),
     ),
-    actionButtons: Row(children:[ FlatButton(child: Text(locText(context, key: "close").toUpperCase()), onPressed: (){Navigator.pop(context);},)]),
+    actionButtons: Row(
+      children:[ 
+        FlatButton(
+          child: Text("close".locText(context).toUpperCase()), 
+          onPressed: () => Navigator.pop(context),
+          padding: EdgeInsets.all(0),
+        )
+      ]
+    ),
     );
     return dialog;
   }

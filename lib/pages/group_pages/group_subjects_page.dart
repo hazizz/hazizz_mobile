@@ -105,7 +105,6 @@ class _GroupSubjectsPage extends State<GroupSubjectsPage> with AutomaticKeepAliv
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 }
 

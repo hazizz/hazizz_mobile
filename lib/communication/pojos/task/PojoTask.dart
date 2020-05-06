@@ -36,7 +36,6 @@ class PojoTask extends Pojo implements Comparable<PojoTask>{
 
   @override
   int compareTo(PojoTask other) {
-    // TODO: implement compareTo
     int order = dueDate.compareTo(other.dueDate);
     return order;
   }
@@ -76,7 +75,6 @@ class PojoTaskDetailed extends PojoTask{// implements Comparable<PojoTaskDetaile
 
   @override
   int compareTo(PojoTask other) {
-    // TODO: implement compareTo
     int order = dueDate.compareTo(other.dueDate);
     return order;
   }

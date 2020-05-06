@@ -72,7 +72,6 @@ class JoinGroupBloc extends Bloc<JoinGroupEvent, JoinGroupState> {
 
   @override
   Future<void> close() {
-    // TODO: implement dispose
     return super.close();
   }
 

@@ -267,62 +267,9 @@ class SubjectItemPickerBloc extends ItemListPickerBloc {
 
 
   @override
-  // TODO: implement initialState
   ItemListState get initialState => InitialState();
 
 }
-
-
-/*
-
-class SubjectItemPickerBloc2 extends ItemListPickerBloc {
-  List<PojoGroup> dataList;
-
-  bool isLocked = false;
-
-  @override
-  Stream<ItemListState> mapEventToState(ItemListEvent event) async* {
-    if(event is SetSubjectEvent){
-      isLocked = true;
-      yield PickedSubjectState(item: event.item);
-    }
-    if(!isLocked) {
-      if(event is PickedGroupEvent) {
-        HazizzLogger.printLog("log: PickedState is played");
-        yield PickedGroupState(item: event.item);
-      }
-      if(event is ItemListLoadData) {
-        try {
-          yield Waiting();
-          HazizzResponse hazizzResponse = await RequestSender().getResponse(
-              new GetMyGroups());
-          HazizzLogger.printLog("log: responseData: ${hazizzResponse.convertedData}");
-          HazizzLogger.printLog(
-              "log: responseData type:  ${hazizzResponse.convertedData
-                  .runtimeType.toString()}");
-
-          if(hazizzResponse.isSuccessful) {
-            dataList = hazizzResponse.convertedData;
-            if(dataList.isNotEmpty) {
-              HazizzLogger.printLog("log: response is List");
-              yield ItemListLoaded(data: dataList);
-            }else {
-              yield Empty();
-            }
-          }
-        }on Exception catch(e) {
-          HazizzLogger.printLog("log: Exception: ${e.toString()}");
-        }
-      }
-    }
-    super.mapEventToState(event);
-  }
-}
-
-*/
-
-
-
 
 //endregion
 //endregion

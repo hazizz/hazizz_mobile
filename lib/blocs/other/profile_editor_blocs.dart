@@ -131,7 +131,6 @@ class ProfilePictureEditorBloc extends Bloc<ProfilePictureEditorEvent, ProfilePi
   ProfilePictureEditorBloc();
 
   @override
-  // TODO: implement initialState
   ProfilePictureEditorState get initialState => ProfilePictureEditorInitialState();
 
   @override
@@ -292,7 +291,6 @@ class DisplayNameEditorBloc extends Bloc<DisplayNameEvent, DisplayNameState> {
   }
 
   @override
-  // TODO: implement initialState
   DisplayNameState get initialState => DisplayNameInitialState();
 
   @override
@@ -301,7 +299,7 @@ class DisplayNameEditorBloc extends Bloc<DisplayNameEvent, DisplayNameState> {
     HazizzLogger.printLog("log: displayNameEvnet:  $event");
 
     if(event is DisplayNameLoadFromCacheEvent){
-      String displayNameFromCache = UserDataBlocs().userDataBloc.myUserData.displayName;
+      String displayNameFromCache = UserDataBlocs().userDataBloc.myUserData.username;
 
       HazizzLogger.printLog("log: userdata dname: $displayNameFromCache");
 

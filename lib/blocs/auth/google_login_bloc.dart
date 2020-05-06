@@ -53,7 +53,7 @@ class GoogleLoginBloc extends SocialLoginBloc{
 
   @override
   Future<HazizzResponse> loginRequest(String socialToken) async {
-    return await TokenManager.createTokenWithGoolgeOpenId(socialToken);
+    return await TokenManager.createTokenWithGoogleOpenId(socialToken);
   }
 
   @override

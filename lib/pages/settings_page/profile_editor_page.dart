@@ -222,11 +222,12 @@ class _ProfileEditorPage extends State<ProfileEditorPage> with TickerProviderSta
                             ),
                           ),
                           FloatingActionButton(
+
                             heroTag: "hero_fab_profile_editor_name",
                             child: Icon(iconData),
-                            onPressed: (){
+                            onPressed: false ? (){
                               profileEditorBlocs.displayNameEditorBloc.add(DisplayNameSendEvent());
-                            },
+                            } : null,
                           )
                         ],
                       ),

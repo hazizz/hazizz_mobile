@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/group/create_group_bloc.dart';
 import 'package:mobile/enums/group_types_enum.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'dialogs.dart';
-import 'package:mobile/custom/hazizz_logger.dart';
 
 class CreateGroupDialog extends StatefulWidget {
 
@@ -24,6 +22,8 @@ class _CreateGroupDialog extends State<CreateGroupDialog> {
 
   TextEditingController groupPasswordController;
 
+  GroupType groupType;
+
 
   @override
   void initState() {
@@ -39,7 +39,7 @@ class _CreateGroupDialog extends State<CreateGroupDialog> {
 
 
   final double width = 300;
-  final double height = 175;
+  final double height = 240;
 
   final double searchBarHeight = 50;
 
@@ -100,7 +100,11 @@ class _CreateGroupDialog extends State<CreateGroupDialog> {
                   },
                 ),
                 Text(locText(context, key: "group_name_suggestion")),
-                /*
+
+
+
+
+        /*
                 Builder(
                     builder: (context){
                       var color = null;
@@ -154,93 +158,57 @@ class _CreateGroupDialog extends State<CreateGroupDialog> {
                       );
                     }
                 ),
-
-
-                Container(
-                  height: 100,
-                  child: Stack(
-                    children: <Widget>[
-                      Positioned(
-                        left: 90,
-                        top:0,
-                        child: GestureDetector(
-                          onTap: (){
-                            setState(() {
-                              setGroupTypeValue(GroupType.OPEN);
-                            });
-                          },
-                          child: Row(
-                            children: <Widget>[
-                              Radio(
-                                groupValue: groupValue,
-                                value: GroupType.OPEN,
-                                onChanged: (GroupType value) {
-                                  setState(() {
-                                    setGroupTypeValue(GroupType.OPEN);
-                                  });
-                                },
-                              ),
-                              Text("OPEN")
-                            ],
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        left: 90,
-                        top:28,
-                        child: GestureDetector(
-                          onTap: (){
-                            setState(() {
-                              setGroupTypeValue(GroupType.INVITE_ONLY);
-                            });
-                          },
-                          child: Row(
-                            children: <Widget>[
-                              Radio(
-                                groupValue: groupValue,
-                                value: GroupType.INVITE_ONLY,
-                                onChanged: (GroupType value) {
-                                  setState(() {
-                                    setGroupTypeValue(GroupType.INVITE_ONLY);
-
-                                  });
-                                },
-                              ),
-                              Text("Invite")
-                            ],
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        left: 90,
-                        top:56,
-                        child: GestureDetector(
-                          onTap: (){
-                            setState(() {
-                              setGroupTypeValue(GroupType.PASSWORD);
-                            });
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Radio(
-                                groupValue: groupValue,
-                                value: GroupType.PASSWORD,
-                                onChanged: (GroupType value) {
-                                  setState(() {
-                                    setGroupTypeValue(GroupType.PASSWORD);
-                                  });
-                                },
-                              ),
-                              Text("password"),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
                 */
+
+
+                Column(
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          setGroupTypeValue(GroupType.OPEN);
+                        });
+                      },
+                      child: Row(
+                        children: <Widget>[
+                          Radio(
+                            groupValue: groupValue,
+                            value: GroupType.OPEN,
+                            onChanged: (GroupType value) {
+                              setState(() {
+                                setGroupTypeValue(GroupType.OPEN);
+                              });
+                            },
+                          ),
+                          Text("OPEN")
+                        ],
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          setGroupTypeValue(GroupType.CLOSED);
+                        });
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Radio(
+                            groupValue: groupValue,
+                            value: GroupType.CLOSED,
+                            onChanged: (GroupType value) {
+                              setState(() {
+                                setGroupTypeValue(GroupType.CLOSED);
+                              });
+                            },
+                          ),
+                          Text("CLOSED"),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+
                 Spacer(),
 
                 Row(
@@ -255,7 +223,7 @@ class _CreateGroupDialog extends State<CreateGroupDialog> {
                     FlatButton(
                       child: Text(locText(context, key: "create").toUpperCase()),
                       onPressed: (){
-                        createGroupBloc.add(CreateGroupCreateEvent(groupType: groupValue, groupName: groupNameController.text, password: groupValue == GroupType.PASSWORD ? groupPasswordController.text : null));
+                        createGroupBloc.add(CreateGroupCreateEvent(groupType: groupValue, groupName: groupNameController.text));
                       }
                   )],
                 )

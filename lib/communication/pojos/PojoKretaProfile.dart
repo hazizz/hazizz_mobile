@@ -1,5 +1,4 @@
 import 'dart:core';
-
 import 'package:json_annotation/json_annotation.dart';
 import 'Pojo.dart';
 import 'PojoKretaTeacherProfile.dart';
@@ -25,6 +24,4 @@ class PojoKretaProfile extends Pojo {
   }
 
   Map<String, dynamic> toJson() => _$PojoKretaProfileToJson(this);
-
-
 }

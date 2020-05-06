@@ -12,13 +12,11 @@ class ClassItemWidget extends StatelessWidget{
 
   final PojoClass pojoClass;
 
-  bool isCurrentEvent = false;
+  final bool isCurrentEvent;
 
-  ClassItemWidget({this.pojoClass});
+  ClassItemWidget({this.pojoClass}) : isCurrentEvent = false;
 
-  ClassItemWidget.isCurrentEvent({this.pojoClass}){
-    isCurrentEvent = true;
-  }
+  ClassItemWidget.isCurrentEvent({this.pojoClass}) : isCurrentEvent = true;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +33,8 @@ class ClassItemWidget extends StatelessWidget{
       bgColor = HazizzTheme.blue;
     }
 
-    return Container(
+    return Hero(
+      tag: pojoClass,
       child: Card(
         margin: EdgeInsets.only(left: 3, right: 3, bottom: 2.1, top: 2.1),
         color: bgColor,

@@ -2,13 +2,13 @@ import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:easy_localization/easy_localization_provider.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:mobile/blocs/auth/social_login_bloc.dart';
 import 'package:mobile/blocs/other/show_framerate_bloc.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
-import 'package:mobile/managers/preference_services.dart';
 import 'package:mobile/navigation/route_generator.dart';
 import 'package:mobile/services/firebase_analytics.dart';
 import 'package:mobile/services/hazizz_message_handler.dart';
@@ -252,56 +252,61 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
                   }
                   return StatsFl(
                     width: 200,
-                    isEnabled: showFramerate,
+                    isEnabled: false,// showFramerate,
                     align: Alignment(1.0, -0.92),
                     showText: true,
                     height: 50,
                     //   width: 300, height:1000,
-                    child: MaterialApp(
+                    child: Stack(
+                      children: <Widget>[
+                        MaterialApp(
 
-                      navigatorKey: BusinessNavigator().navigatorKey,
-                      initialRoute: startPage ??  NavigationSaver?.restoreRouteName, //?? startPage,
-                      //  onGenerateRoute: RouteGenerator.generateRoute,
+                          navigatorKey: BusinessNavigator().navigatorKey,
+                          initialRoute: startPage ??  NavigationSaver?.restoreRouteName, //?? startPage,
+                          //  onGenerateRoute: RouteGenerator.generateRoute,
 
-                      navigatorObservers: [
-                        widget._navigationSaver,
-                        SavedStateRouteObserver(savedState: savedState),
-                        //  FirebaseAnalyticsObserver(analytics: FirebaseAnalyticsManager.analytics),
-                        FirebaseAnalyticsManager.observer
-                      ],
-                      onGenerateRoute: (RouteSettings routeSettings) => widget._navigationSaver.onGenerateRoute(
-                        routeSettings, (RouteSettings settings, {NextPageInfo nextPageInfo,}) => RouteGenerator.generateRoute(settings),
-                      ),
+                          navigatorObservers: [
+                            widget._navigationSaver,
+                            SavedStateRouteObserver(savedState: savedState),
+                            //  FirebaseAnalyticsObserver(analytics: FirebaseAnalyticsManager.analytics),
+                            FirebaseAnalyticsManager.observer
+                          ],
+                          onGenerateRoute: (RouteSettings routeSettings) => widget._navigationSaver.onGenerateRoute(
+                            routeSettings, (RouteSettings settings, {NextPageInfo nextPageInfo,}) => RouteGenerator.generateRoute(settings),
+                          ),
 
-                      title: locText(context, key: "hazizz_appname") ?? "Hazizz Mobile",
-                      showPerformanceOverlay: false,
-                      theme: theme,
-                      localizationsDelegates: [
-                        HazizzLocalizations.delegate,
-                        GlobalMaterialLocalizations.delegate,
-                        GlobalWidgetsLocalizations.delegate,
-                      ],
-                      supportedLocales: getSupportedLocales(),
+                          title: locText(context, key: "hazizz_appname") ?? "Hazizz Mobile",
+                          showPerformanceOverlay: false,
+                          theme: theme,
+                          localizationsDelegates: [
+                            HazizzLocalizations.delegate,
+                            GlobalMaterialLocalizations.delegate,
+                            GlobalWidgetsLocalizations.delegate,
+                          ],
+                          supportedLocales: getSupportedLocales(),
 
-                      localeResolutionCallback: (locale, supportedLocales) {
-                        print("prCode1: ${preferredLocale.toString()}");
-                        if(preferredLocale != null){
-                          print("prCode: ${preferredLocale.languageCode}, ${preferredLocale.countryCode}");
-                          FirebaseAnalyticsManager.setUsedLanguage(preferredLocale.languageCode);
-                          return preferredLocale;
-                        }
-                        for(var supportedLocale in supportedLocales) {
-                          if(supportedLocale.languageCode == locale?.languageCode &&
-                              supportedLocale.countryCode == locale.countryCode) {
-                            setPreferredLocale(supportedLocale);
+                          localeResolutionCallback: (locale, supportedLocales) {
+                            print("prCode1: ${preferredLocale.toString()}");
+                            if(preferredLocale != null){
+                              print("prCode: ${preferredLocale.languageCode}, ${preferredLocale.countryCode}");
+                              FirebaseAnalyticsManager.setUsedLanguage(preferredLocale.languageCode);
+                              return preferredLocale;
+                            }
+                            for(var supportedLocale in supportedLocales) {
+                              if(supportedLocale.languageCode == locale?.languageCode &&
+                                  supportedLocale.countryCode == locale.countryCode) {
+                                setPreferredLocale(supportedLocale);
+                                FirebaseAnalyticsManager.setUsedLanguage(preferredLocale.languageCode);
+                                return supportedLocale;
+                              }
+                            }
                             FirebaseAnalyticsManager.setUsedLanguage(preferredLocale.languageCode);
-                            return supportedLocale;
-                          }
-                        }
-                        FirebaseAnalyticsManager.setUsedLanguage(preferredLocale.languageCode);
-                        return supportedLocales.first;
-                      },
-                    ),
+                            return supportedLocales.first;
+                          },
+                        ),
+                        if(showFramerate) PerformanceOverlay.allEnabled()
+                      ],
+                    )
                   );
                 },
               ),

@@ -21,13 +21,12 @@ abstract class CreateGroupState extends HState {
 class CreateGroupCreateEvent extends CreateGroupEvent {
   final GroupType groupType;
   final String groupName;
-  final String password;
-  CreateGroupCreateEvent({@required this.groupType, @required this.groupName, this.password})
-      : assert(groupType != null), assert(groupName != null), super([groupName, password]);
+  CreateGroupCreateEvent({@required this.groupType, @required this.groupName})
+      : assert(groupType != null), assert(groupName != null), super([groupName]);
 
   @override String toString() => 'CreateGroupCreateEvent';
   @override
-  List<Object> get props => [groupName, password];
+  List<Object> get props => [groupName, groupType];
 }
 
 
@@ -80,7 +79,13 @@ class CreateGroupBloc extends Bloc<CreateGroupEvent, CreateGroupState> {
     if (event is CreateGroupCreateEvent) {
       yield CreateGroupWaitingState();
 
-      HazizzResponse hazizzResponse = await getResponse(CreateGroup(type: event.groupType, b_groupName: event.groupName, b_password: event.password));
+      HazizzResponse hazizzResponse;
+
+      if(event.groupType == GroupType.CLOSED){
+        hazizzResponse = await getResponse(CreateGroup.closed(b_groupName: event.groupName));
+      }else{
+        hazizzResponse = await getResponse(CreateGroup.open(b_groupName: event.groupName));
+      }
 
       if(hazizzResponse.isSuccessful){
         yield CreateGroupSuccessfulState();

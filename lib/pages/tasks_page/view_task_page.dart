@@ -299,22 +299,22 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                                         return Transform.scale(
                                                           scale: 1.36,
                                                           child: Checkbox(
-                                                            activeColor: mainTag.name != "_HOMEWORK" ? Colors.green : Colors.black54,
-                                                            value: completed,
-                                                            onChanged: (val) async {
-                                                              setState(() {
-                                                                completed = val;
-                                                                pojoTask.completed = false;
-                                                              });
-                                                              HazizzResponse hazizzResponse = await RequestSender().getResponse(SetTaskCompleted(p_taskId: pojoTask.id, setCompleted: completed));
-                                                              if(hazizzResponse.isError){
+                                                              activeColor: mainTag.name != "_HOMEWORK" ? Colors.green : Colors.black54,
+                                                              value: completed,
+                                                              onChanged: (val) async {
                                                                 setState(() {
-                                                                  completed = !completed;
-                                                                  pojoTask.completed = !completed;
-
+                                                                  completed = val;
+                                                                  pojoTask.completed = false;
                                                                 });
-                                                              }
-                                                            }),
+                                                                HazizzResponse hazizzResponse = await RequestSender().getResponse(SetTaskCompleted(p_taskId: pojoTask.id, setCompleted: completed));
+                                                                if(hazizzResponse.isError){
+                                                                  setState(() {
+                                                                    completed = !completed;
+                                                                    pojoTask.completed = !completed;
+
+                                                                  });
+                                                                }
+                                                              }),
                                                         );
                                                       }),
                                                     ),
@@ -325,14 +325,14 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                                         builder: (context){
                                                           if(mainTag != null){
                                                             return Padding(
-                                                              padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 2),
+                                                              padding: const EdgeInsets.only(left: 20.0, right: 20.0),
                                                               child: new Row(
                                                                 mainAxisAlignment: MainAxisAlignment.center,
                                                                 children: [
                                                                   new Flexible(
                                                                       child: Text(mainTag.getDisplayName(context),
                                                                         style: TextStyle(
-                                                                            fontSize: 36,
+                                                                            fontSize: 32,
                                                                             fontWeight: FontWeight.w800
                                                                         ),
                                                                       )
@@ -365,11 +365,11 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                                                 child: Icon(FontAwesomeIcons.userAlt),
                                                               ),
                                                               new Flexible(
-                                                                child: Text(pojoTask.creator.displayName,
-                                                                  style: TextStyle(
-                                                                    fontSize: 20
-                                                                  ),
-                                                                )
+                                                                  child: Text(pojoTask.creator.displayName,
+                                                                    style: TextStyle(
+                                                                        fontSize: 20
+                                                                    ),
+                                                                  )
                                                               ),
                                                             ],
                                                           ),
@@ -393,11 +393,11 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                                                       child: Icon(FontAwesomeIcons.users),
                                                                     ),
                                                                     new Flexible(
-                                                                      child: Text(pojoTask.group.name,
-                                                                        style: TextStyle(
-                                                                            fontSize: 21
-                                                                        ),
-                                                                      )
+                                                                        child: Text(pojoTask.group.name,
+                                                                          style: TextStyle(
+                                                                              fontSize: 21
+                                                                          ),
+                                                                        )
                                                                     ),
                                                                   ],
                                                                 ),
@@ -441,29 +441,18 @@ class _ViewTaskPage extends State<ViewTaskPage> {
 
                                               Column(
                                                 children: <Widget>[
-                                                  _subject != null ? Padding(
-                                                    padding: const EdgeInsets.only( left: 0,top: 0),
-                                                    child: new Row(
-                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                      children: [
-                                                        new Flexible(
-                                                          child:
-                                                          new Container(
-                                                            // color: PojoType.getColor(pojoTask.type),
-                                                              decoration: BoxDecoration(
-                                                                borderRadius: BorderRadius.only(bottomRight: Radius.circular(20), bottomLeft: Radius.circular(20)),
-                                                                color: mainTag != null ? mainTag.getColor(): Theme.of(context).primaryColor,
-                                                              ),
-                                                              child: Padding(
-                                                                padding: const EdgeInsets.only(left: 12, top: 0, right: 12, bottom: 0),
-                                                                child: Text(pojoTask.subject.name,
-                                                                  style: TextStyle(fontSize: 32),
-                                                                ),
-                                                              )
-                                                          ),
-                                                        )
-                                                      ],
-                                                    ),
+                                                  _subject != null ? Container(
+                                                    // color: PojoType.getColor(pojoTask.type),
+                                                      decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.only(bottomRight: Radius.circular(20), bottomLeft: Radius.circular(20)),
+                                                        color: mainTag != null ? mainTag.getColor(): Theme.of(context).primaryColor,
+                                                      ),
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.only(left: 12, top: 0, right: 12, bottom: 0),
+                                                        child: Text(pojoTask.subject.name,
+                                                          style: TextStyle(fontSize: 28),
+                                                        ),
+                                                      )
                                                   ) : Container(),
                                                   Builder(
                                                     builder: (context){
@@ -477,7 +466,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                                               child: new Text(_title,
                                                                 style: TextStyle(
                                                                   //  fontFamily: "ShortStack",
-                                                                    fontSize: 33
+                                                                    fontSize: 26
                                                                 ),
                                                               ),
                                                             )
@@ -527,20 +516,20 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                                                         width: MediaQuery.of(context).size.width,
                                                                         heroTag: uri,
                                                                         salt: pojoTask.salt,
-                                                                      //  showThumbnail: true,
+                                                                        //  showThumbnail: true,
 
                                                                       ),
                                                                     );
 
                                                                   },
                                                                   styleSheet: MarkdownStyleSheet(
-                                                                    p:  TextStyle(fontFamily: "Nunito", fontSize: 20, color: textColor),
-                                                                    h1: TextStyle(fontFamily: "Nunito", fontSize: 32, color: textColor),
-                                                                    h2: TextStyle(fontFamily: "Nunito", fontSize: 30, color: textColor),
-                                                                    h3: TextStyle(fontFamily: "Nunito", fontSize: 28, color: textColor),
-                                                                    h4: TextStyle(fontFamily: "Nunito", fontSize: 26, color: textColor),
-                                                                    h5: TextStyle(fontFamily: "Nunito", fontSize: 24, color: textColor),
-                                                                    h6: TextStyle(fontFamily: "Nunito", fontSize: 22, color: textColor),
+                                                                    p:  TextStyle(fontFamily: "Nunito", fontSize: 16, color: textColor),
+                                                                    h1: TextStyle(fontFamily: "Nunito", fontSize: 28, color: textColor),
+                                                                    h2: TextStyle(fontFamily: "Nunito", fontSize: 26, color: textColor),
+                                                                    h3: TextStyle(fontFamily: "Nunito", fontSize: 24, color: textColor),
+                                                                    h4: TextStyle(fontFamily: "Nunito", fontSize: 22, color: textColor),
+                                                                    h5: TextStyle(fontFamily: "Nunito", fontSize: 20, color: textColor),
+                                                                    h6: TextStyle(fontFamily: "Nunito", fontSize: 18, color: textColor),
                                                                     a:  TextStyle(fontFamily: "Nunito", color: Colors.blue, decoration: TextDecoration.underline),
 
                                                                   ),

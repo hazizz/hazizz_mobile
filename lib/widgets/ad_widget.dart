@@ -26,35 +26,6 @@ Widget showAd(BuildContext context, {bool show = true, bool showHeader = false})
   return Container();
 }
 
-class AdManager{
-  AdManager();
-
-  int currentWidgetListLength;
-  List<int> adIndexList = [];
-
-  Widget a(int index, Widget widget){
-    if(adIndexList.contains(index)){
-      return Column(
-        children: <Widget>[
-          widget,
-          AdWidget()
-        ],
-      );
-    }
-    return widget;
-  }
-
-  List<Widget> insertAds(List<Widget> widgets, {int chance = 5}){
-    for(int i = 0; i < widgets.length; i++){
-      int r = Random().nextInt(chance);
-      if(r == 0){
-        widgets.insert(i, null);
-      }
-    }
-  }
-
-  static final List<bool> allowed = [];
-}
 
 class AdWidget extends StatefulWidget {
 
@@ -63,6 +34,7 @@ class AdWidget extends StatefulWidget {
   static const String ad_giveaway = "assets/images/giveaway_ad_banner.png";
   static const String ad_hazizz_meet = "assets/images/hazizz_meet_ad_banner.png";
 
+  /*
   double chance;
   int index;
 
@@ -77,6 +49,7 @@ class AdWidget extends StatefulWidget {
     AdManager.allowed.add(_show);
     index = AdManager.allowed.length-1;
   }
+  */
 
   AdWidget({Key key, chance}) : super(key: key);
 
@@ -146,8 +119,8 @@ class _AdWidgetState extends State<AdWidget> {
     return Padding(
       padding: const EdgeInsets.all(2),
       child: Material(
-      elevation: 5,
-      clipBehavior: Clip.antiAliasWithSaveLayer,
+        elevation: 5,
+        clipBehavior: Clip.antiAliasWithSaveLayer,
         borderRadius: BorderRadius.circular(8),
         child: Stack(
           children: <Widget>[
@@ -161,7 +134,7 @@ class _AdWidgetState extends State<AdWidget> {
                 child: InkWell(
                   onTap: () async {
                     if(adType == AdType.facebook
-                    || adType == AdType.hazizz_meet
+                        || adType == AdType.hazizz_meet
                     ){
                       openFacebookPage();
                       return;

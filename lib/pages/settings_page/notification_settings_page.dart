@@ -2,6 +2,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/communication/pojos/PojoAlertSettings.dart';
 import 'package:mobile/communication/pojos/PojoMeInfoPrivate.dart';
+import 'package:mobile/communication/pojos/PojoMyDetailedInfo.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/formats.dart';
@@ -59,31 +60,29 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage>  {
 
   @override
   void initState() {
-    CacheManager.getMyUserData().then((PojoMeInfoPrivate me){
-      RequestSender().getResponse(GetAlertSettings(q_userId: me.id)).then((HazizzResponse response){
-        if(response.isSuccessful){
-          PojoAlertSettings alertSetting = response.convertedData;
-       //   WidgetsBinding.instance.addPostFrameCallback((_){
-            setState(() {
-              List<String> s = alertSetting.alarmTime.split(":");
-              newTime = HazizzTimeOfDay(hour: int.parse(s[0]), minute: int.parse(s[1]));
-              mondayEnabled = alertSetting.mondayEnabled;
-              tuesdayEnabled = alertSetting.tuesdayEnabled;
-              wednesdayEnabled = alertSetting.wednesdayEnabled;
-              thursdayEnabled = alertSetting.thursdayEnabled;
-              fridayEnabled = alertSetting.fridayEnabled;
-              saturdayEnabled = alertSetting.saturdayEnabled;
-              sundayEnabled = alertSetting.sundayEnabled;
+    RequestSender().getResponse(GetAlertSettings(q_userId: CacheManager.getMyIdSafely)).then((HazizzResponse response){
+      if(response.isSuccessful){
+        PojoAlertSettings alertSetting = response.convertedData;
+        //   WidgetsBinding.instance.addPostFrameCallback((_){
+        setState(() {
+          List<String> s = alertSetting.alarmTime.split(":");
+          newTime = HazizzTimeOfDay(hour: int.parse(s[0]), minute: int.parse(s[1]));
+          mondayEnabled = alertSetting.mondayEnabled;
+          tuesdayEnabled = alertSetting.tuesdayEnabled;
+          wednesdayEnabled = alertSetting.wednesdayEnabled;
+          thursdayEnabled = alertSetting.thursdayEnabled;
+          fridayEnabled = alertSetting.fridayEnabled;
+          saturdayEnabled = alertSetting.saturdayEnabled;
+          sundayEnabled = alertSetting.sundayEnabled;
 
-              if(mondayEnabled || tuesdayEnabled || wednesdayEnabled || thursdayEnabled
+          if(mondayEnabled || tuesdayEnabled || wednesdayEnabled || thursdayEnabled
               || fridayEnabled || saturdayEnabled || sundayEnabled){
-                setState(() {
-                  receive = true;
-                });
-              }
+            setState(() {
+              receive = true;
             });
-        }
-      });
+          }
+        });
+      }
     });
 
 

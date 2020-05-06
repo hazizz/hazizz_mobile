@@ -64,112 +64,109 @@ class _DeveloperSettingsPage extends State<DeveloperSettingsPage> {
             title: Text(widget.getTitle(context)),
           ),
           body: Container(
-            child: Column(
-              children: <Widget>[
-                SizedBox(height: 10,),
-
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0, right:8, top: 8, bottom:8),
-                  child: TextField(
-                    maxLines: 1,
-                    controller: server_url_controller,
-                    decoration: InputDecoration(labelText: locText(context, key: "server_url"),// helperText: "Oktatási azonositó",
-                      alignLabelWithHint: true,
-                      labelStyle: TextStyle(
-
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  SizedBox(height: 10,),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0, right:8, top: 8, bottom:8),
+                    child: TextField(
+                      maxLines: 1,
+                      controller: server_url_controller,
+                      decoration: InputDecoration(labelText: locText(context, key: "server_url"),// helperText: "Oktatási azonositó",
+                        alignLabelWithHint: true,
+                        filled: true,
+                        fillColor: Colors.grey.withAlpha(120),
                       ),
-                      filled: true,
-                      fillColor: Colors.grey.withAlpha(120),
-
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom:8.0, right: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      RaisedButton(
-                        child: Text(locText(context, key: "apply")),
-                        onPressed: (){
-                          PreferenceService.setServerUrl(server_url_controller.text);
-                        },
-                      ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom:8.0, right: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        RaisedButton(
+                          child: Text(locText(context, key: "apply")),
+                          onPressed: (){
+                            PreferenceService.setServerUrl(server_url_controller.text);
+                          },
+                        ),
 
-                      SizedBox(width: 6,),
+                        SizedBox(width: 6,),
 
-                      RaisedButton(
-                        child: Text(locText(context, key: "reset")),
-                        onPressed: (){
-                          server_url_controller.text = Constants.BASE_URL;
-                          PreferenceService.setServerUrl(Constants.BASE_URL);
-                        },
-                      ),
-                    ],
+                        RaisedButton(
+                          child: Text(locText(context, key: "reset")),
+                          onPressed: (){
+                            server_url_controller.text = Constants.BASE_URL;
+                            PreferenceService.setServerUrl(Constants.BASE_URL);
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                ),
 
-                ListTile(
-                  leading: Icon(FontAwesomeIcons.fileAlt),
+                  ListTile(
+                    leading: Icon(FontAwesomeIcons.fileAlt),
 
-                  title: Text(locText(context, key: "logs")),
-                  onTap: (){
-                    Navigator.pushNamed(context, "/settings/developer/logs");
-                  },
-                ),
-                Divider(),
-                ListTile(
-                  leading: Icon(FontAwesomeIcons.times, color: Colors.red,),
-
-                  title: Text(locText(context, key: "delete_me")),
-                  onTap: () async {
-                    await showSureToDeleteMeDialog(context);
-                  },
-                ),
-                Divider(),
-                ListTile(
-                  title: Text("copy cm token"),
-                  trailing: FlatButton(
-                    child: Text("COPY"),
-                    onPressed: (){
-                      Clipboard.setData(new ClipboardData(text: token));
-                      print("oi12120: saved :${token}");
+                    title: Text(locText(context, key: "logs")),
+                    onTap: (){
+                      Navigator.pushNamed(context, "/settings/developer/logs");
                     },
                   ),
-                ),
-                Divider(),
+                  Divider(),
+                  ListTile(
+                    leading: Icon(FontAwesomeIcons.times, color: Colors.red,),
 
-                ListTile(
-                  onTap: () async {
-                    Navigator.pushNamed(context, "/settings/notification");
-                  },
-                  leading: Icon(FontAwesomeIcons.solidBell),
-                  title: Text(locText(context, key: "notification_settings")),
-                  // trailing: Text("time")
-                ),
-
-                Divider(),
-                ListTile(
-                    leading: Icon(FontAwesomeIcons.chartBar),
-                    title: Text("enable_show_framerate".locText(context)),
-                    trailing: Switch(
-                      value: _enable_framerate,
-                      onChanged: (val){
-                        setState(() {
-                          _enable_framerate = val;
-                        });
-                        ShowFramerateEvent event;
-                        if(_enable_framerate){
-                          event = ShowFramerateEnableEvent();
-                        }else{
-                          event = ShowFramerateDisableEvent();
-                        }
-                        BlocProvider.of<ShowFramerateBloc>(context).add(event);
-                        PreferenceService.setEnabledShowFramerate(_enable_framerate);
+                    title: Text(locText(context, key: "delete_me")),
+                    onTap: () async {
+                      await showSureToDeleteMeDialog(context);
+                    },
+                  ),
+                  Divider(),
+                  ListTile(
+                    title: Text("copy cm token"),
+                    trailing: FlatButton(
+                      child: Text("COPY"),
+                      onPressed: (){
+                        Clipboard.setData(new ClipboardData(text: token));
+                        print("oi12120: saved :${token}");
                       },
-                    )
-                ),
-              ],
+                    ),
+                  ),
+                  Divider(),
+
+                  ListTile(
+                    onTap: () async {
+                      Navigator.pushNamed(context, "/settings/notification");
+                    },
+                    leading: Icon(FontAwesomeIcons.solidBell),
+                    title: Text(locText(context, key: "notification_settings")),
+                    // trailing: Text("time")
+                  ),
+
+                  Divider(),
+                  ListTile(
+                      leading: Icon(FontAwesomeIcons.chartBar),
+                      title: Text("enable_performance_overlay".locText(context)),
+                      trailing: Switch(
+                        value: _enable_framerate,
+                        onChanged: (val){
+                          setState(() {
+                            _enable_framerate = val;
+                          });
+                          ShowFramerateEvent event;
+                          if(_enable_framerate){
+                            event = ShowFramerateEnableEvent();
+                          }else{
+                            event = ShowFramerateDisableEvent();
+                          }
+                          BlocProvider.of<ShowFramerateBloc>(context).add(event);
+                          PreferenceService.setEnabledShowFramerate(_enable_framerate);
+                        },
+                      )
+                  ),
+                ],
+              ),
             ),
           )
       ),

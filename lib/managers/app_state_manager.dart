@@ -12,6 +12,7 @@ import 'package:mobile/blocs/kreta/selected_session_bloc.dart';
 import 'package:mobile/communication/connection.dart';
 import 'package:mobile/communication/pojos/PojoMeInfo.dart';
 import 'package:mobile/communication/pojos/PojoMeInfoPrivate.dart';
+import 'package:mobile/communication/pojos/PojoMyDetailedInfo.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/communication/pojos/PojoTokens.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
@@ -39,6 +40,7 @@ class AppState{
 
   static bool logInProcedureDone = true;
 
+  /*
   static Future setUserData({@required PojoMeInfo meInfo}) async {
     CacheManager.setMyId(meInfo.id);
     CacheManager.setMyUsername(meInfo.username);
@@ -48,15 +50,16 @@ class AppState{
 
     }
   }
+  */
 
   static Future logInProcedure({@required PojoTokens tokens}) async {
     logInProcedureDone = false;
 
     HazizzLogger.printLog("logInProcedure: 0");
-    TokenManager.setToken(tokens.access_token);
+    TokenManager.setToken(tokens.token);
     HazizzLogger.printLog("logInProcedure: 1");
 
-    TokenManager.setRefreshToken(tokens.refresh_token);
+    TokenManager.setRefreshToken(tokens.refresh);
     HazizzLogger.printLog("logInProcedure: 2");
 
     var sh = await SharedPreferences.getInstance();
@@ -68,13 +71,13 @@ class AppState{
 
     HazizzResponse hazizzResponse = await RequestSender().getResponse(GetMyInfo.private());
     if(hazizzResponse.isSuccessful){
-      PojoMeInfo meInfo = hazizzResponse.convertedData;
-      setUserData(meInfo: meInfo);
+      PojoMyDetailedInfo myDetailedInfo = hazizzResponse.convertedData;
+      CacheManager.setMyUserData(myDetailedInfo);
     }else{
       hazizzResponse = await RequestSender().getResponse(GetMyInfo.private());
       if(hazizzResponse.isSuccessful){
-        PojoMeInfo meInfo = hazizzResponse.convertedData;
-        setUserData(meInfo: meInfo);
+        PojoMyDetailedInfo myDetailedInfo = hazizzResponse.convertedData;
+        CacheManager.setMyUserData(myDetailedInfo);
       }
     }
     HazizzLogger.printLog("logInProcedure: 4");
@@ -102,9 +105,10 @@ class AppState{
   }
 
   static Future<void> mainAppPartStartProcedure() async {
-
+    HazizzLogger.printLog("mainAppPartStartProcedure 0");
+   // UserDataBlocs().initialize();
    // await TokenManager.fetchRefreshTokens(username: (await InfoCache.getMyUserData()).username, refreshToken: await TokenManager.getRefreshToken());
-    Future.delayed(Duration(seconds: 2)).then((_) => ServerChecker.checkAll());
+    Future.delayed(Duration(seconds: 3)).then((_) => ServerChecker.checkAll());
   //  RequestSender._internal();
     HazizzLogger.printLog("mainAppPartStartProcedure 1");
     await KretaSessionManager.loadSelectedSession();
@@ -122,7 +126,7 @@ class AppState{
     HazizzLogger.printLog("mainAppPartStartProcedure 7");
 
     KretaSessionManager.getCachedSessions().then((List<PojoSession> sessions){
-      FirebaseAnalyticsManager.logNumberOfKretaSessionsAdded(sessions.length);
+      FirebaseAnalyticsManager.logNumberOfKretaSessionsAdded(sessions != null ? sessions.length : 0);
     });
   }
 

@@ -415,7 +415,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                           builder: (context, state){
                             if(UserDataBlocs().userDataBloc.myUserData != null) {
                               return Text(
-                                UserDataBlocs().userDataBloc.myUserData.displayName,
+                                UserDataBlocs().userDataBloc.myUserData.username,
                                 style: TextStyle(fontSize: 18, fontFamily: "Nunito", fontWeight: FontWeight.w700),);
                             }
                             return Text(locText(context, key: "loading"), style: TextStyle(fontSize: 18),);
@@ -524,25 +524,6 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                                       }
                                     }
                                     sessions.add(s);
-
-                                    /*
-                                    bool found = false;
-                                    for(int i = 0; i< SessionsBloc().sessions.length; i++ ){
-                                      if(s.username == SessionsBloc().sessions[i].username){
-                                        found = true;
-                                        if(SessionsBloc().sessions[i].status == "ACTIVE"
-                                        && s.status != "ACTIVE "){
-                                          sessions.add(s);
-                                          break;
-                                        }
-                                      }
-                                    }
-                                    if(!found){
-                                      sessions.add(s);
-                                    }
-                                    */
-
-
                                   }
 
                                   List<DropdownMenuItem> items = [];
