@@ -237,9 +237,7 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
                       widgetList.add(GradeItemWidget.bySubject(pojoGrade: grades[key][i],));
                     }
                     widgetList.add(showAd(context, show: (itemCount<3 && index == itemCount-1) || (index!=0 && index%3==0), showHeader: true));
-                    return Column(
-                        children: widgetList
-                    );
+                    return Column(children: widgetList);
                   }
               ),
             );

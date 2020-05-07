@@ -11,7 +11,6 @@ import 'package:mobile/widgets/hazizz_back_button.dart';
 
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/managers/preference_services.dart';
 import 'package:mobile/widgets/image_viewer_widget.dart';
 
 
@@ -28,17 +27,6 @@ class GoogleDriveSettingsPage extends StatefulWidget {
 }
 
 class _GoogleDriveSettingsPage extends State<GoogleDriveSettingsPage> {
-
-  String currentLanguageCode ;
-
-  List<DropdownMenuItem> startPageItems = List();
-  static List<Locale> supportedLocales = getSupportedLocales();
-  List<DropdownMenuItem> supportedLocaleItems = List();
-
-
-  String currentLocale = supportedLocales[0].languageCode;
-
-  int currentStartPageItemIndex = 0;
 
   FileList fileList;
 
@@ -175,29 +163,6 @@ class _GoogleDriveSettingsPage extends State<GoogleDriveSettingsPage> {
             ),
           )
         );
-      }
-    }
-
-    if(startPageItems.isEmpty) {
-      List<StartPageItem> startPages = PreferenceService.getStartPages(context);
-      for(StartPageItem startPage in startPages) {
-        startPageItems.add(DropdownMenuItem(
-          value: startPage.index,
-          child: Text(startPage.name,
-            textAlign: TextAlign.end,
-          ),
-        ));
-      }
-    }
-    if(supportedLocaleItems.isEmpty){
-      supportedLocales = getSupportedLocales();
-      for(Locale locale in supportedLocales) {
-        supportedLocaleItems.add(DropdownMenuItem(
-          value: locale.languageCode,
-          child: Text(locale.languageCode,
-            textAlign: TextAlign.end,
-          ),
-        ));
       }
     }
 

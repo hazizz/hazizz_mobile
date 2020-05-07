@@ -9,12 +9,12 @@ import 'package:mobile/theme/hazizz_theme.dart';
 
 class KretaLoginPage extends StatefulWidget {
 
-  Function onSuccess;
-  PojoSession sessionToAuth;
+  final Function onSuccess;
+  final PojoSession sessionToAuth;
 
-  KretaLoginPage({Key key, @required this.onSuccess}) : super(key: key);
+  KretaLoginPage({Key key, @required this.onSuccess}) : sessionToAuth = null, super(key: key);
 
-  KretaLoginPage.auth({Key key, @required this.sessionToAuth}) : super(key: key){
+  KretaLoginPage.auth({Key key, @required this.sessionToAuth}) : onSuccess = null, super(key: key){
     auth = true;
   }
 
@@ -28,9 +28,6 @@ class KretaLoginPage extends StatefulWidget {
 class _KretaLoginPage extends State<KretaLoginPage> with SingleTickerProviderStateMixin {
 
   KretaLoginWidget kretaLoginWidget;
-
-
-
 
   @override
   Widget build(BuildContext context) {

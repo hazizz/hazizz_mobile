@@ -93,6 +93,7 @@ class KretaSessionManager {
     if(success){
       selectedSession = session;
     }
+    HazizzLogger.printLog("Selected session was cached: " + session.username);
   }
 
   static Future<List<PojoSession>> getCachedSessions() async{

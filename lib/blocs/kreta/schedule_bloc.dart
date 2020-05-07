@@ -43,10 +43,11 @@ class ScheduleFetchEvent extends ScheduleEvent {
 }
 
 class ScheduleSetSessionEvent extends ScheduleEvent {
-  ScheduleSetSessionEvent() :  super([DateTime.now()]);
+  final DateTime dateTime;
+  ScheduleSetSessionEvent({this.dateTime}) :  super([dateTime]);
   @override
   String toString() => 'ScheduleSetSessionEvent';
-  List<Object> get props => [DateTime.now()];
+  List<Object> get props => [dateTime];
 }
 //endregion
 
@@ -73,7 +74,6 @@ class ScheduleLoadedState extends ScheduleState {
   final PojoSchedules schedules;
 
   final List<PojoSession> failedSessions;
-
 
   ScheduleLoadedState(this.schedules, {this.failedSessions}) : assert(schedules!= null), super([schedules, SelectedSessionBloc().selectedSession]);
   @override

@@ -565,16 +565,28 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                                               if(s.username == selectedKretaAccountName){
 
                                                 if(s.status != "ACTIVE"){
-                                                  WidgetsBinding.instance.addPostFrameCallback((_) =>
-                                                      Navigator.pushNamed(context, "/kreta/login/auth", arguments: s)
-                                                  );
+                                                  WidgetsBinding.instance.addPostFrameCallback((_) async {
+                                                    var reAuthSuccess = await Navigator.pushNamed(context, "/kreta/login/auth", arguments: s);
+
+                                                    if(reAuthSuccess){
+                                                      SelectedSessionBloc().add(SelectedSessionSetEvent(s));
+                                                    }else{
+                                                      setState(() {
+                                                        selectedKretaAccountName = SelectedSessionBloc().selectedSession.username;
+                                                      });
+                                                    }
+                                                  });
+                                                  break;
+                                                }else{
+                                                  SelectedSessionBloc().add(SelectedSessionSetEvent(s));
+                                                  selectedKretaAccount = s;
                                                 }
 
-                                                selectedKretaAccount = s;
+
                                                 print("uff2: ${selectedKretaAccount.username}");
 
-                                                SelectedSessionBloc().add(SelectedSessionSetEvent(s));
-                                                break;
+                                               // SelectedSessionBloc().add(SelectedSessionSetEvent(s));
+                                              //  break;
                                               }
                                             }
                                           });

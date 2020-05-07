@@ -66,10 +66,10 @@ Future<String> getPreferredCountryCode() async {
   return null;
 }
 
-List<Locale> getSupportedLocales() {
-  List<Locale> locales = [Locale('en', "EN"), Locale('hu', "HU")];
+List<Locale> supportedLocals = [Locale('en', "EN"), Locale('hu', "HU")];
 
-  return locales;
+List<Locale> getSupportedLocals() {
+  return supportedLocals;
 }
 
 class HazizzLocalizationsNoContext{

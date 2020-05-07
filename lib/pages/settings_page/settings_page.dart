@@ -25,11 +25,10 @@ class _SettingsPage extends State<SettingsPage>  {
   String currentLanguageCode ;//= Locale("en", "EN");
 
   List<DropdownMenuItem> startPageItems = List();
-  static List<Locale> supportedLocales = getSupportedLocales();
-  List<DropdownMenuItem> supportedLocaleItems = List();
+  List<DropdownMenuItem> supportedLocalItems = List();
 
 
-  String currentLocale = supportedLocales[0].languageCode;
+  //String currentLocale = supportedLocales[0].languageCode;
 
   int currentStartPageItemIndex = 0;
 
@@ -76,14 +75,13 @@ class _SettingsPage extends State<SettingsPage>  {
         ));
       }
     }
-    if(supportedLocaleItems.isEmpty){
-      supportedLocales = getSupportedLocales();
+    if(supportedLocalItems.isEmpty){
 
-      HazizzLogger.printLog("supported locales: ${supportedLocales.toString()}");
+      HazizzLogger.printLog("supported locales: ${supportedLocals.toString()}");
 
-      for(Locale locale in supportedLocales) {
+      for(Locale locale in supportedLocals) {
 
-        supportedLocaleItems.add(DropdownMenuItem(
+        supportedLocalItems.add(DropdownMenuItem(
           value: locale.languageCode,
           child: Text(locale.languageCode,
             textAlign: TextAlign.end,
@@ -93,7 +91,7 @@ class _SettingsPage extends State<SettingsPage>  {
 
     }
 
-    HazizzLogger.printLog("log: $supportedLocaleItems");
+    HazizzLogger.printLog("log: $supportedLocalItems");
 
 
     return Scaffold(
@@ -223,7 +221,7 @@ class _SettingsPage extends State<SettingsPage>  {
 
                         });
                       },
-                      items: supportedLocaleItems
+                      items: supportedLocalItems
                     ),
                   );
 

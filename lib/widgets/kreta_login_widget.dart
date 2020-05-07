@@ -15,12 +15,12 @@ import 'package:mobile/custom/hazizz_localizations.dart';
 
 class KretaLoginWidget extends StatefulWidget {
 
-  Function onSuccess;
-  PojoSession sessionToAuth;
+  final Function onSuccess;
+  final PojoSession sessionToAuth;
 
-  KretaLoginWidget({Key key, @required this.onSuccess}) : super(key: key);
+  KretaLoginWidget({Key key, @required this.onSuccess}) : sessionToAuth = null, super(key: key);
 
-  KretaLoginWidget.auth({Key key, @required this.sessionToAuth,}) : super(key: key);
+  KretaLoginWidget.auth({Key key, @required this.sessionToAuth,}) : onSuccess = null, super(key: key);
 
   @override
   _KretaLoginWidget createState() => _KretaLoginWidget();
@@ -35,6 +35,8 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
 
   final TextEditingController _usernameTextEditingController = TextEditingController();
   final TextEditingController _passwordTextEditingController =TextEditingController();
+
+  Function onSuccess;
 
   @override
   void initState() {
@@ -63,6 +65,8 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
       );
     });
 
+    onSuccess = widget.onSuccess;
+
     super.initState();
   }
 
@@ -71,8 +75,6 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
     print("didChangeDependencies called");
     super.didChangeDependencies();
   }
-
-
 
   @override
   void dispose() {
@@ -84,8 +86,6 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
 
   Future<void> showCustomHud(BuildContext context) async {
     pr.show();
-   // hud.progressColor = Colors.red;
-   // Navigator.push(context, hud);
   }
 
   Future<void> stopCustomHud() async {
@@ -95,15 +95,10 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
 
   @override
   Widget build(BuildContext context) {
-  //  pr.setMessage(locText(context, key: "loading"));
-
-
-    if(widget.onSuccess == null){
-      widget.onSuccess = () => Navigator.pop(context, true);
+    if(onSuccess == null){
+      onSuccess = () => Navigator.pop(context, true);
     }
-    var usernameWidget = TextField(
-
-
+    TextField usernameWidget = TextField(
       enabled: widget.sessionToAuth == null,
       style: TextStyle(fontSize: 18),
 
@@ -117,10 +112,9 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
       ),
     );
 
-    var passwordWidget =  Stack(
+    Stack passwordWidget =  Stack(
       children: <Widget>[
         Container(
-          //  height: 75,
           child: TextField(
             style: TextStyle(fontSize: 18),
             maxLines: 1,
@@ -136,17 +130,15 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
               ),
               filled: true,
               fillColor: Colors.grey.withAlpha(120),
-
             ),
           ),
         ),
         Positioned(
           right: 6, top: 8,
           child: IconButton(
-            icon: Icon(
-              passwordVisible
-                  ? FontAwesomeIcons.solidEyeSlash
-                  : FontAwesomeIcons.solidEye,
+            icon: Icon(passwordVisible
+                ? FontAwesomeIcons.solidEyeSlash
+                : FontAwesomeIcons.solidEye,
             ),
             onPressed: () {
               setState(() {
@@ -158,7 +150,7 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
       ],
     );
 
-    var schoolPickerWidget = BlocBuilder(
+    BlocBuilder<dynamic, ItemListState> schoolPickerWidget = BlocBuilder(
       bloc: kretaLoginBlocs.schoolBloc,
       builder: (BuildContext context, ItemListState state) {
         return GestureDetector(
@@ -178,14 +170,13 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
                     ),
 
                     child: Builder(
-                      builder: (BuildContext context){//, ItemListState state) {
+                      builder: (BuildContext context){
                         if (state is ItemListLoaded) {
                           return Text(" ");
                         }
                         if(state is ItemListPickedState){
                           return Text('${state.item.name}',
                             style: TextStyle(fontSize: 16),
-
                           );
                         }
                         return Text(locText(context, key: "loading"));
@@ -214,123 +205,129 @@ class _KretaLoginWidget extends State<KretaLoginWidget> with SingleTickerProvide
       }
     );
 
-    return BlocListener(
-      bloc: kretaLoginBlocs.kretaLoginBloc,
-
-      listener: (context, state){
-        if(state is KretaLoginWaiting) {
-          WidgetsBinding.instance.addPostFrameCallback((_) =>
-              showCustomHud(context)
-          );
-        }else if(state is KretaLoginSuccessState){
-          WidgetsBinding.instance.addPostFrameCallback((_){
-            stopCustomHud();
-            widget.onSuccess();
-          });
-        }
+    return WillPopScope(
+      onWillPop: (){
+        Navigator.pop(context, false);
+        return Future.value(false);
       },
-      child: BlocBuilder(
+      child: BlocListener(
         bloc: kretaLoginBlocs.kretaLoginBloc,
-        builder: (context, state){
-          String responseInfo = "";
-          bool isLoading = false;
 
+        listener: (context, state){
           if(state is KretaLoginWaiting) {
-
-          }else if(state is KretaLoginSuccessState){
-
-          }else{
             WidgetsBinding.instance.addPostFrameCallback((_) =>
-                stopCustomHud()
+                showCustomHud(context)
             );
-            if(state is KretaLoginFailure) {
-              if(state.error.errorCode == ErrorCodes.THERA_AUTHENTICATION_ERROR.code){
-                responseInfo = locText(context, key: "incorrect_data");
-              }else if(state.error.errorCode == ErrorCodes.GENERAL_THERA_ERROR.code){
-                responseInfo = locText(context, key: "kreta_server_unavailable");
-              }else{
-                responseInfo = locText(context, key: "try_again_later");
-              }
-
-
-            }else if(state is KretaLoginSomethingWentWrong){
-              responseInfo = locText(context, key: "try_again_later");
-            }else{
-
-            }
+          }else if(state is KretaLoginSuccessState){
+            WidgetsBinding.instance.addPostFrameCallback((_){
+              stopCustomHud();
+              onSuccess();
+            });
           }
+        },
+        child: BlocBuilder(
+          bloc: kretaLoginBlocs.kretaLoginBloc,
+          builder: (context, state){
+            String responseInfo = "";
+            bool isLoading = false;
 
-          return LoadingDialog(
-            child: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(left:16, right:16, bottom: 0),
-                    child: usernameWidget,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left:16, right:16, top: 4),
-                    child: Row(
-                      children: <Widget>[
-                        Flexible(child: Text("Oktatási azonositód, 11 karakteres", style: TextStyle(color: Colors.grey)))
-                      ],
+            if(state is KretaLoginWaiting) {
+
+            }else if(state is KretaLoginSuccessState){
+
+            }else{
+              WidgetsBinding.instance.addPostFrameCallback((_) =>
+                  stopCustomHud()
+              );
+              if(state is KretaLoginFailure) {
+                if(state.error.errorCode == ErrorCodes.THERA_AUTHENTICATION_ERROR.code){
+                  responseInfo = locText(context, key: "incorrect_data");
+                }else if(state.error.errorCode == ErrorCodes.GENERAL_THERA_ERROR.code){
+                  responseInfo = locText(context, key: "kreta_server_unavailable");
+                }else{
+                  responseInfo = locText(context, key: "try_again_later");
+                }
+
+
+              }else if(state is KretaLoginSomethingWentWrong){
+                responseInfo = locText(context, key: "try_again_later");
+              }else{
+
+              }
+            }
+
+            return LoadingDialog(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(left:16, right:16, bottom: 0),
+                      child: usernameWidget,
                     ),
-                  ),
-
-                  Padding(
-                    padding: EdgeInsets.only(left:16, right:16, bottom: 0),
-                    child: passwordWidget,
-                  ),
-
-                  Padding(
-                    padding: EdgeInsets.only(left:16, right:16, top: 4),
-                    child: Row(
-                      children: <Widget>[
-                        Flexible(child: Text("Ha nem állítotad át akkor a születési dátumod. pl: 2002-01-17", style: TextStyle(color: Colors.grey),))
-                      ],
-                    ),
-                  ),
-
-                  Padding(
-                    padding: EdgeInsets.only(left:16, right:16, top:4, bottom: 4),
-                    child: schoolPickerWidget,
-                  ),
-
-                  Text(responseInfo, style: TextStyle(color: HazizzTheme.red),),
-
-                  BlocListener(
-                    bloc: kretaLoginBlocs.kretaLoginBloc,
-                    listener: (context, state) {
-                      if (state is KretaLoginSuccessState) {
-
-                      }
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0),
-                      child: RaisedButton(
-                          child: Text(locText(context, key: "login").toUpperCase()),
-                          onPressed: () async {
-                            if(kretaLoginBlocs.schoolBloc.state is ItemListPickedState) {
-                              FocusScope.of(context).requestFocus(new FocusNode());
-
-                              kretaLoginBlocs.kretaLoginBloc.add(
-                                KretaLoginButtonPressed(
-                                  password: _passwordTextEditingController.text,
-                                  username: _usernameTextEditingController.text,
-                                  schoolUrl: kretaLoginBlocs.schoolBloc.pickedItem?.url
-                                )
-                              );
-                            }
-                          }
+                    Padding(
+                      padding: EdgeInsets.only(left:16, right:16, top: 4),
+                      child: Row(
+                        children: <Widget>[
+                          Flexible(child: Text("Oktatási azonositód, 11 karakteres", style: TextStyle(color: Colors.grey)))
+                        ],
                       ),
                     ),
-                  )
-                ],
+
+                    Padding(
+                      padding: EdgeInsets.only(left:16, right:16, bottom: 0),
+                      child: passwordWidget,
+                    ),
+
+                    Padding(
+                      padding: EdgeInsets.only(left:16, right:16, top: 4),
+                      child: Row(
+                        children: <Widget>[
+                          Flexible(child: Text("Ha nem állítotad át akkor a születési dátumod. pl: 2002-01-17", style: TextStyle(color: Colors.grey),))
+                        ],
+                      ),
+                    ),
+
+                    Padding(
+                      padding: EdgeInsets.only(left:16, right:16, top:4, bottom: 4),
+                      child: schoolPickerWidget,
+                    ),
+
+                    Text(responseInfo, style: TextStyle(color: HazizzTheme.red),),
+
+                    BlocListener(
+                      bloc: kretaLoginBlocs.kretaLoginBloc,
+                      listener: (context, state) {
+                        if (state is KretaLoginSuccessState) {
+
+                        }
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: RaisedButton(
+                            child: Text(locText(context, key: "login").toUpperCase()),
+                            onPressed: () async {
+                              if(kretaLoginBlocs.schoolBloc.state is ItemListPickedState) {
+                                FocusScope.of(context).requestFocus(new FocusNode());
+
+                                kretaLoginBlocs.kretaLoginBloc.add(
+                                  KretaLoginButtonPressed(
+                                    password: _passwordTextEditingController.text,
+                                    username: _usernameTextEditingController.text,
+                                    schoolUrl: kretaLoginBlocs.schoolBloc.pickedItem?.url
+                                  )
+                                );
+                              }
+                            }
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
-            show: isLoading,
-          );
-        },
+              show: isLoading,
+            );
+          },
+        ),
       ),
     );
   }

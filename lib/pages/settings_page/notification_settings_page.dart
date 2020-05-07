@@ -1,8 +1,6 @@
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/communication/pojos/PojoAlertSettings.dart';
-import 'package:mobile/communication/pojos/PojoMeInfoPrivate.dart';
-import 'package:mobile/communication/pojos/PojoMyDetailedInfo.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/formats.dart';
@@ -42,11 +40,9 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage>  {
   TimeOfDay newTime = HazizzTimeOfDay(hour: 0, minute: 0);
 
   List<DropdownMenuItem> startPageItems = List();
-  static List<Locale> supportedLocales = getSupportedLocales();
   List<DropdownMenuItem> supportedLocaleItems = List();
 
 
-  String currentLocale = supportedLocales[0].languageCode;
 
   int currentStartPageItemIndex = 0;
 

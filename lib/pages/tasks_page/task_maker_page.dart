@@ -32,6 +32,8 @@ import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'package:native_state/native_state.dart';
 
+import '../../main.dart';
+
 class TaskMakerPage extends StatefulWidget {
   int groupId;
 
@@ -429,6 +431,8 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
           ),
           onTap: () async {
             final DateTime picked = await showDatePicker(
+              locale: preferredLocale,
+              initialEntryMode: DatePickerEntryMode.calendar,
               context: context,
               initialDate: widget.mode == TaskMakerMode.edit ? widget.taskToEdit.dueDate : DateTime.now(),
 

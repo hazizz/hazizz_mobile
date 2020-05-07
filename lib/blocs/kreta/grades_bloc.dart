@@ -30,10 +30,11 @@ abstract class GradesEvent extends HEvent {
 }
 
 class GradesSetSessionEvent extends GradesEvent {
-  GradesSetSessionEvent() :  super([DateTime.now()]);
+  final DateTime dateTime;
+  GradesSetSessionEvent({this.dateTime}) :  super([dateTime]);
   @override
   String toString() => 'GradesSetSessionEvent';
-  List<Object> get props => null;
+  List<Object> get props => [dateTime];
 
 }
 

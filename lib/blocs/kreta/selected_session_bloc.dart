@@ -90,7 +90,6 @@ class SelectedSessionBloc extends Bloc<SelectedSessionEvent, SelectedSessionStat
 
   static final SelectedSessionBloc _singleton = new SelectedSessionBloc._internal();
   factory SelectedSessionBloc() {
-
     return _singleton;
   }
   SelectedSessionBloc._internal();
@@ -100,7 +99,7 @@ class SelectedSessionBloc extends Bloc<SelectedSessionEvent, SelectedSessionStat
     if(event is SelectedSessionInitalizeEvent){
 
       PojoSession selectedSessionCached = await KretaSessionManager.getSelectedSession();
-      HazizzLogger.printLog("asd debug33: $selectedSessionCached");
+      HazizzLogger.printLog("asd debug33: ${selectedSessionCached.username}");
 
       if(selectedSessionCached != null){
         selectedSession = selectedSessionCached;
@@ -122,13 +121,15 @@ class SelectedSessionBloc extends Bloc<SelectedSessionEvent, SelectedSessionStat
         });
       }
     }else if(event is SelectedSessionSetEvent){
-      selectedSession = event.session;
-      await KretaSessionManager.setSelectedSession(selectedSession);
-     // MainTabBlocs().schedulesBloc.add(ScheduleFetchEvent());
-     // MainTabBlocs().gradesBloc.add(GradesFetchEvent());
-      yield SelectedSessionFineState(selectedSession);
-      MainTabBlocs().schedulesBloc.add(ScheduleSetSessionEvent());
-      MainTabBlocs().gradesBloc.add(GradesSetSessionEvent());
+      if(event.session.status == "ACTIVE"){
+        selectedSession = event.session;
+        KretaSessionManager.setSelectedSession(selectedSession);
+        // MainTabBlocs().schedulesBloc.add(ScheduleFetchEvent());
+        // MainTabBlocs().gradesBloc.add(GradesFetchEvent());
+        yield SelectedSessionFineState(selectedSession);
+        MainTabBlocs().schedulesBloc.add(ScheduleSetSessionEvent(dateTime: DateTime.now()));
+        MainTabBlocs().gradesBloc.add(GradesSetSessionEvent(dateTime: DateTime.now()));
+      }
     }
     else if (event is SelectedSessionInactiveEvent) {
       if(await KretaSessionManager.isRememberPassword()){

@@ -25,11 +25,6 @@ class PreferencesSettingsPage extends StatefulWidget {
 class _PreferencesSettingsPage extends State<PreferencesSettingsPage> {
 
   List<DropdownMenuItem> startPageItems = List();
-  static List<Locale> supportedLocales = getSupportedLocales();
-  List<DropdownMenuItem> supportedLocaleItems = List();
-
-
-  String currentLocale = supportedLocales[0].languageCode;
 
   int currentStartPageItemIndex = 0;
 

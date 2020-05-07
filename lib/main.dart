@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:easy_localization/easy_localization_provider.dart';
+//import 'package:easy_localization/easy_localization_provider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,7 +13,7 @@ import 'package:mobile/navigation/route_generator.dart';
 import 'package:mobile/services/firebase_analytics.dart';
 import 'package:mobile/services/hazizz_message_handler.dart';
 import 'package:native_state/native_state.dart';
-import 'package:shared_pref_navigation_saver/shared_pref_navigation_saver.dart';
+//import 'package:shared_pref_navigation_saver/shared_pref_navigation_saver.dart';
 import 'package:statsfl/statsfl.dart';
 import 'blocs/main_tab/main_tab_blocs.dart';
 import 'communication/pojos/task/PojoTask.dart';
@@ -29,8 +29,8 @@ import 'notification/notification.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'dart:convert';
-import 'package:json_navigation_saver/json_navigation_saver.dart';
-import 'package:navigation_saver/navigation_saver.dart';
+//import 'package:json_navigation_saver/json_navigation_saver.dart';
+//import 'package:navigation_saver/navigation_saver.dart';
 
 String startPage;
 
@@ -73,14 +73,14 @@ Future<bool> fromNotification() async {
 
 void main() async{
 
-
-
+  /*
   final NavigationSaver _navigatorSaver = SharedPrefNavigationSaver(
         (Iterable<RouteSettings> routes) async => json.encode(serializeRoutes(routes)),
         (String routesAsString) async => deserializeRoutes(json.decode(routesAsString)),
   );
+  */
 
-  print("navigationrem: ${NavigationSaver.restoreRouteName}");
+  // print("navigationrem: ${NavigationSaver.restoreRouteName}");
 
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -125,11 +125,24 @@ void main() async{
   runApp(SavedState(
     name: "Main State",
     child: EasyLocalization(
+    //  preloaderColor: Colors.lightBlueAccent ,
+      preloaderWidget: Center(
+        child: Image.asset(
+          'assets/images/Logo.png',
+        ),
+      ),
+      path: 'assets/langs',
+     // assetLoader: FileAssetLoader(),
+     //   saveLocale: true,
+     // startLocale: supportedLocals[0],
+     // fallbackLocale: supportedLocals[1],
+      useOnlyLangCode: true,
+      supportedLocales: supportedLocals,
       child: Container(
        // isEnabled: true,//PreferenceService.enabledShowFramerate,
       //  showText: true,
 
-        child: HazizzApp(_navigatorSaver)
+        child: HazizzApp()//(_navigatorSaver)
       )
     ),
   ));
@@ -137,12 +150,12 @@ void main() async{
 
 class HazizzApp extends StatefulWidget{
 
-  final NavigationSaver _navigationSaver;
+ // final NavigationSaver _navigationSaver;
 
 
 
 
-  const HazizzApp(this._navigationSaver, {Key key}) : super(key: key);
+  const HazizzApp(/*this._navigationSaver,*/ {Key key}) : super(key: key);
 
   @override
   _HazizzApp createState() => _HazizzApp();
@@ -262,19 +275,21 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
                         MaterialApp(
 
                           navigatorKey: BusinessNavigator().navigatorKey,
-                          initialRoute: startPage ??  NavigationSaver?.restoreRouteName, //?? startPage,
+                          initialRoute: startPage, //??  NavigationSaver?.restoreRouteName, //?? startPage,
                           //  onGenerateRoute: RouteGenerator.generateRoute,
 
                           navigatorObservers: [
-                            widget._navigationSaver,
+                           // widget._navigationSaver,
                             SavedStateRouteObserver(savedState: savedState),
                             //  FirebaseAnalyticsObserver(analytics: FirebaseAnalyticsManager.analytics),
                             FirebaseAnalyticsManager.observer
                           ],
+                          onGenerateRoute: (RouteSettings routeSettings) => RouteGenerator.generateRoute(routeSettings),
+                          /*
                           onGenerateRoute: (RouteSettings routeSettings) => widget._navigationSaver.onGenerateRoute(
                             routeSettings, (RouteSettings settings, {NextPageInfo nextPageInfo,}) => RouteGenerator.generateRoute(settings),
                           ),
-
+                          */
                           title: locText(context, key: "hazizz_appname") ?? "Hazizz Mobile",
                           showPerformanceOverlay: false,
                           theme: theme,
@@ -283,7 +298,7 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
                             GlobalMaterialLocalizations.delegate,
                             GlobalWidgetsLocalizations.delegate,
                           ],
-                          supportedLocales: getSupportedLocales(),
+                          supportedLocales: supportedLocals,
 
                           localeResolutionCallback: (locale, supportedLocales) {
                             print("prCode1: ${preferredLocale.toString()}");
@@ -297,10 +312,12 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
                                   supportedLocale.countryCode == locale.countryCode) {
                                 setPreferredLocale(supportedLocale);
                                 FirebaseAnalyticsManager.setUsedLanguage(preferredLocale.languageCode);
+                                preferredLocale = supportedLocale;
                                 return supportedLocale;
                               }
                             }
                             FirebaseAnalyticsManager.setUsedLanguage(preferredLocale.languageCode);
+                            preferredLocale = supportedLocales.first;
                             return supportedLocales.first;
                           },
                         ),
