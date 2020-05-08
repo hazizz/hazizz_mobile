@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/blocs/group/create_group_bloc.dart';
 import 'package:mobile/enums/group_types_enum.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
-import 'dialogs.dart';
+import 'dialogs_collection.dart';
 
 class CreateGroupDialog extends StatefulWidget {
 
@@ -22,7 +22,7 @@ class _CreateGroupDialog extends State<CreateGroupDialog> {
 
   TextEditingController groupPasswordController;
 
-  GroupType groupType;
+  GroupTypeEnum groupType;
 
 
   @override
@@ -35,7 +35,7 @@ class _CreateGroupDialog extends State<CreateGroupDialog> {
 
   bool passwordVisible = true;
 
-  GroupType groupValue = GroupType.OPEN;
+  GroupTypeEnum groupValue = GroupTypeEnum.OPEN;
 
 
   final double width = 300;
@@ -44,7 +44,7 @@ class _CreateGroupDialog extends State<CreateGroupDialog> {
   final double searchBarHeight = 50;
 
 
-  setGroupTypeValue(GroupType groupType){
+  setGroupTypeValue(GroupTypeEnum groupType){
     groupPasswordController.text = "";
 
     groupValue = groupType;
@@ -166,17 +166,17 @@ class _CreateGroupDialog extends State<CreateGroupDialog> {
                     GestureDetector(
                       onTap: (){
                         setState(() {
-                          setGroupTypeValue(GroupType.OPEN);
+                          setGroupTypeValue(GroupTypeEnum.OPEN);
                         });
                       },
                       child: Row(
                         children: <Widget>[
                           Radio(
                             groupValue: groupValue,
-                            value: GroupType.OPEN,
-                            onChanged: (GroupType value) {
+                            value: GroupTypeEnum.OPEN,
+                            onChanged: (GroupTypeEnum value) {
                               setState(() {
-                                setGroupTypeValue(GroupType.OPEN);
+                                setGroupTypeValue(GroupTypeEnum.OPEN);
                               });
                             },
                           ),
@@ -187,7 +187,7 @@ class _CreateGroupDialog extends State<CreateGroupDialog> {
                     GestureDetector(
                       onTap: (){
                         setState(() {
-                          setGroupTypeValue(GroupType.CLOSED);
+                          setGroupTypeValue(GroupTypeEnum.CLOSED);
                         });
                       },
                       child: Row(
@@ -195,10 +195,10 @@ class _CreateGroupDialog extends State<CreateGroupDialog> {
                         children: <Widget>[
                           Radio(
                             groupValue: groupValue,
-                            value: GroupType.CLOSED,
-                            onChanged: (GroupType value) {
+                            value: GroupTypeEnum.CLOSED,
+                            onChanged: (GroupTypeEnum value) {
                               setState(() {
-                                setGroupTypeValue(GroupType.CLOSED);
+                                setGroupTypeValue(GroupTypeEnum.CLOSED);
                               });
                             },
                           ),

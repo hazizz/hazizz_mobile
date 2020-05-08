@@ -6,16 +6,15 @@ import 'package:mobile/theme/hazizz_theme.dart';
 
 class PermissionChip extends StatefulWidget {
 
-  Color backgroundColor = HazizzTheme.blue;
+  final Color backgroundColor = HazizzTheme.blue;
 
-  Widget child;
-
-  EdgeInsets padding = EdgeInsets.all(0);
+  final EdgeInsets padding ;
   GroupPermissionsEnum permission;
 
-  PermissionChip({Key key,  @required this.permission, this.padding,}) : super(key: key){
-    padding ??= EdgeInsets.only(left: 9, right: 9, top: 2, bottom: 2);
-  }
+  PermissionChip({Key key,
+    @required this.permission,
+    this.padding = const EdgeInsets.only(left: 9, right: 9, top: 2, bottom: 2),})
+  : super(key: key);
 
   @override
   _PermissionChip createState() => _PermissionChip();

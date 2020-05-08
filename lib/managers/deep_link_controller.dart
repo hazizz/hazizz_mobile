@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
-import 'package:mobile/dialogs/dialogs.dart';
+import 'package:mobile/dialogs/dialogs_collection.dart';
 import 'package:uni_links/uni_links.dart';
 
-class DeepLink{
+class DeepLinkController{
 
   static String createLinkToTask(int taskId){
     return "https://hazizz.page.link/?link=https://hazizz.github.io/hazizz-webclient/index.html?task=$taskId";

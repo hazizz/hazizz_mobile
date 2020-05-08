@@ -1,10 +1,7 @@
 // EZT NÉZD MEG -->https://github.com/Solido/awesome-flutter
 import 'dart:async';
-import 'dart:ui';
-
 import 'package:dio/dio.dart';
 import 'package:dio_flutter_transformer/dio_flutter_transformer.dart';
-import 'package:flutter/widgets.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/managers/app_state_manager.dart';

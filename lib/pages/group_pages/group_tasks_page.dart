@@ -8,7 +8,6 @@ import 'package:mobile/blocs/other/response_states.dart';
 import 'package:mobile/blocs/tasks/tasks_bloc.dart';
 import 'package:mobile/communication/custom_response_errors.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
-import 'package:mobile/custom/formats.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/enums/task_complete_state_enum.dart';
 import 'package:mobile/enums/task_expired_state_enum.dart';
@@ -16,10 +15,8 @@ import 'package:mobile/widgets/flushbars.dart';
 import 'package:mobile/widgets/listItems/task_header_item_widget.dart';
 import 'package:mobile/widgets/listItems/task_item_widget.dart';
 import 'package:mobile/widgets/scroll_space_widget.dart';
-
-
+import 'package:mobile/extension_methods/datetime_extension.dart';
 import 'package:sticky_headers/sticky_headers.dart';
-
 import 'package:mobile/custom/hazizz_localizations.dart';
 
 class GroupTasksPage extends StatefulWidget {
@@ -40,9 +37,9 @@ class GroupTasksPage extends StatefulWidget {
 class _GroupTasksPage extends State<GroupTasksPage> with AutomaticKeepAliveClientMixin {
 
 
-  TaskCompleteState currentCompletedTaskState;
+  TaskCompleteStateEnum currentCompletedTaskState;
 
-  TaskExpiredState currentExpiredTaskState;
+  TaskExpiredStateEnum currentExpiredTaskState;
 
 
   @override
@@ -113,9 +110,9 @@ class _GroupTasksPage extends State<GroupTasksPage> with AutomaticKeepAliveClien
                       });
                     },
                     items: [
-                      DropdownMenuItem(child: Text(locText(context, key: "complete")), value: TaskCompleteState.COMPLETED, ),
-                      DropdownMenuItem(child: Text(locText(context, key: "incomplete")), value: TaskCompleteState.UNCOMPLETED,),
-                      DropdownMenuItem(child: Text(locText(context, key: "both")), value: TaskCompleteState.BOTH, ),
+                      DropdownMenuItem(child: Text(locText(context, key: "complete")), value: TaskCompleteStateEnum.COMPLETED, ),
+                      DropdownMenuItem(child: Text(locText(context, key: "incomplete")), value: TaskCompleteStateEnum.UNCOMPLETED,),
+                      DropdownMenuItem(child: Text(locText(context, key: "both")), value: TaskCompleteStateEnum.BOTH, ),
 
                     ],
                   ),
@@ -131,8 +128,8 @@ class _GroupTasksPage extends State<GroupTasksPage> with AutomaticKeepAliveClien
                         });
                       },
                       items: [
-                        DropdownMenuItem(child: Text(locText(context, key: "expired")), value: TaskExpiredState.EXPIRED,),
-                        DropdownMenuItem(child: Text(locText(context, key: "active")), value: TaskExpiredState.UNEXPIRED,)
+                        DropdownMenuItem(child: Text(locText(context, key: "expired")), value: TaskExpiredStateEnum.EXPIRED,),
+                        DropdownMenuItem(child: Text(locText(context, key: "active")), value: TaskExpiredStateEnum.UNEXPIRED,)
                       ],
                     ),
                   ),
@@ -167,7 +164,7 @@ class _GroupTasksPage extends State<GroupTasksPage> with AutomaticKeepAliveClien
 
 
                     if(index == 0){
-                      return Center(child: Text(dateTimeToLastUpdatedFormat(context, GroupBlocs().groupTasksBloc.lastUpdated)));
+                      return Center(child: Text(GroupBlocs().groupTasksBloc.lastUpdated.dateTimeToLastUpdatedFormatLocalized(context)));
                     }
 
                     List<GlobalKey<AnimatedListState>> listKeyList = new List(map.keys.length);
@@ -199,7 +196,7 @@ class _GroupTasksPage extends State<GroupTasksPage> with AutomaticKeepAliveClien
 
                                 HazizzLogger.printLog("bro: me: ${currentCompletedTaskState}");
 
-                                if(currentCompletedTaskState != TaskCompleteState.BOTH){
+                                if(currentCompletedTaskState != TaskCompleteStateEnum.BOTH){
                                   HazizzLogger.printLog("bro: im trigered");
 
                                   // var removedItem = map[key].removeAt(index2);

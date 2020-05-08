@@ -5,11 +5,10 @@ import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 //import 'package:workmanager/workmanager.dart';
-
-import 'package:mobile/custom/hazizz_time_of_day.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/hazizz_response.dart';
+import 'package:mobile/extension_methods/time_of_day_extension.dart';
 
 Future callbackadder2() async {
   HazizzLogger.printLog("ALARM MANAGER FIRED");
@@ -209,7 +208,7 @@ class HazizzNotification{
 
    static const String key_notificationTime = "key_notificationTime";
 
-   static Future<HazizzTimeOfDay> getNotificationTime() async {
+   static Future<TimeOfDay> getNotificationTime() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     String str_time = sp.getString(key_notificationTime);
     if(str_time != null) {
@@ -218,13 +217,13 @@ class HazizzNotification{
       for(String s in str_list_time) {
         int t = int.parse(s);
         if(t == null) {
-          return  HazizzTimeOfDay(hour: 17, minute: 0);
+          return  TimeOfDay(hour: 17, minute: 0);
         }
         time.add(t);
       }
-      return HazizzTimeOfDay(hour: time[0], minute: time[1]);
+      return TimeOfDay(hour: time[0], minute: time[1]);
     }else
-    return HazizzTimeOfDay(hour: 17, minute: 0);
+    return TimeOfDay(hour: 17, minute: 0);
   }
 
   static Future cancel({int notificationId = dailyTaskNotificationId}) async {

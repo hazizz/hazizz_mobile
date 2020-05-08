@@ -1,16 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/blocs/tasks/task_maker_blocs.dart';
-import 'package:mobile/communication/pojos/PojoSubject.dart';
-import 'package:mobile/defaults/pojo_subject_empty.dart';
-import 'package:mobile/enums/group_types_enum.dart';
 import 'package:mobile/widgets/hyper_link.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
-import 'dialogs.dart';
+import 'dialogs_collection.dart';
 
 class RegistrationDialog extends StatefulWidget {
-
-
   RegistrationDialog({Key key}) : super(key: key);
 
   @override
@@ -19,10 +13,9 @@ class RegistrationDialog extends StatefulWidget {
 
 class _RegistrationDialog extends State<RegistrationDialog> {
 
-  double height = 210;
+  final double height = 210;
 
-  double width = 280;
-
+  final double width = 280;
 
   bool accepted = false;
 

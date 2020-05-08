@@ -1,23 +1,18 @@
 import 'package:flutter/material.dart';
-
 import 'package:mobile/communication/pojos/PojoGroup.dart';
-import 'package:mobile/communication/pojos/PojoInviteLink.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
-import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/enums/group_types_enum.dart';
 import 'package:mobile/services/firebase_analytics.dart';
 import 'package:share/share.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/request_sender.dart';
-import 'dialogs.dart';
+import 'dialogs_collection.dart';
 
 class InviteLinkDialog extends StatefulWidget {
 
-  PojoGroup group;
+  final PojoGroup group;
 
-  InviteLinkDialog({Key key, @required this.group}){
-
-  }
+  InviteLinkDialog({Key key, @required this.group});
 
   @override
   _InviteLinkDialog createState() => new _InviteLinkDialog();
@@ -54,7 +49,7 @@ class _InviteLinkDialog extends State<InviteLinkDialog> {
 
   bool passwordVisible = true;
 
-  GroupType groupValue = GroupType.OPEN;
+  GroupTypeEnum groupValue = GroupTypeEnum.OPEN;
 
 
   final double width = 300;

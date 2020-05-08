@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:mobile/custom/hazizz_date.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'package:mobile/widgets/card_header_widget.dart';
+import 'package:mobile/extension_methods/datetime_extension.dart';
 
 class TaskHeaderItemWidget extends StatelessWidget{
   final DateTime dateTime;
@@ -33,7 +33,7 @@ class TaskHeaderItemWidget extends StatelessWidget{
     }
     return CardHeaderWidget(
       text: title,
-      secondText: hazizzShowDateFormat(dateTime),
+      secondText: dateTime.hazizzShowDateFormat,
       backgroundColor: backColor,
     );
   }

@@ -119,7 +119,7 @@ class _KretaStatisticsPage extends State<KretaStatisticsPage> {
                             }
                             return Container();
                           }
-                          return Container();
+                          return Center(child: CircularProgressIndicator());
                         },
                       ),
                     ],

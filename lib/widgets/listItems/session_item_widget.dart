@@ -5,7 +5,7 @@ import 'package:mobile/blocs/kreta/sessions_bloc.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
-import 'package:mobile/dialogs/dialogs.dart';
+import 'package:mobile/dialogs/dialogs_collection.dart';
 
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/hazizz_response.dart';

@@ -30,13 +30,12 @@ import 'package:mobile/services/facebook_opener.dart';
 import 'package:mobile/storage/cache_manager.dart';
 import 'package:mobile/widgets/hero_dialog_route.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-
+import 'package:mobile/extension_methods/time_of_day_extension.dart';
+import 'package:mobile/extension_methods/datetime_extension.dart';
 import 'package:mobile/communication/request_sender.dart';
-import 'package:mobile/custom/hazizz_date.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
-import 'package:mobile/widgets/listItems/grade_item_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'choose_subject_dialog.dart';
 import 'create_group_dialog.dart';
@@ -46,7 +45,7 @@ import 'subject_editor_dialog.dart';
 import 'invite_link_dialog.dart';
 import 'join_group_dialog.dart';
 import 'kick_group_member_dialog.dart';
-import "package:mobile/extension_methods/extension_first_upper.dart";
+import "package:mobile/extension_methods/string_first_upper_extension.dart";
 
 // 280 min width
 class HazizzDialog extends Dialog{
@@ -730,7 +729,7 @@ Future<Widget> showGradeDialog(context, {@required PojoGrade grade}) {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(locText(context, key: "schedule_creation_date") + ":", style: TextStyle(fontSize: 18),),
-                    Expanded(child: Text(grade.creationDate == null ? "" : hazizzShowDateFormat(grade.creationDate), style: TextStyle(fontSize: 18), textAlign: TextAlign.end,)),
+                    Expanded(child: Text(grade.creationDate == null ? "" : grade.creationDate.hazizzShowDateFormat, style: TextStyle(fontSize: 18), textAlign: TextAlign.end,)),
                   ],
                 ),
                 Spacer(),
@@ -739,7 +738,7 @@ Future<Widget> showGradeDialog(context, {@required PojoGrade grade}) {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(locText(context, key: "date") + ":", style: TextStyle(fontSize: 18),),
-                    Expanded(child: Text(grade.date == null ? "" : hazizzShowDateFormat(grade.date), style: TextStyle(fontSize: 18), textAlign: TextAlign.end,)),
+                    Expanded(child: Text(grade.date == null ? "" : grade.date.hazizzShowDateFormat, style: TextStyle(fontSize: 18), textAlign: TextAlign.end,)),
                   ],
                 ),
 
@@ -924,9 +923,9 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
                       mainAxisAlignment: MainAxisAlignment.center,
 
                       children: <Widget>[
-                        Text(hazizzTimeOfDayToShow(pojoClass.startOfClass), style: TextStyle(fontSize: 22)),
+                        Text(pojoClass.startOfClass.hazizzFormat, style: TextStyle(fontSize: 22)),
                         Text("-", style: TextStyle(fontSize: 22)),
-                        Text(hazizzTimeOfDayToShow(pojoClass.endOfClass), style: TextStyle(fontSize: 22)),
+                        Text(pojoClass.endOfClass.hazizzFormat, style: TextStyle(fontSize: 22)),
                       ],
                     ),
                   ),

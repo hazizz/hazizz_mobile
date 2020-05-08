@@ -29,17 +29,19 @@ import 'package:mobile/communication/pojos/pojo_comment.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/custom/image_operations.dart';
-import 'package:mobile/enums/group_types_enum.dart';
 import 'package:mobile/managers/kreta_session_manager.dart';
-import 'package:mobile/managers/preference_services.dart';
+import 'package:mobile/managers/preference_service.dart';
 import 'package:mobile/managers/token_manager.dart';
 import 'package:meta/meta.dart';
 import 'package:mobile/services/pojo_converter_helper.dart';
 import 'package:mobile/storage/cache_manager.dart';
 import 'package:package_info/package_info.dart';
 
-import 'package:mobile/custom/hazizz_date.dart';
+
 import '../htttp_methods.dart';
+
+import 'package:mobile/extension_methods/datetime_extension.dart';
+
 
 Future<Request> refreshTokenInRequest(Request request) async {
   request.header[HttpHeaders.authorizationHeader] = await TokenManager.getToken();
@@ -796,7 +798,7 @@ class CreateTask extends HazizzRequest {
 
     body["tags"] = b_tags;
     body["description"] = b_description == null ? "" : b_description;
-    body["dueDate"] = hazizzRequestDateFormat(b_deadline);
+    body["dueDate"] = b_deadline.hazizzRequestDateFormat;
     if(b_salt != null && b_salt != ""){
       body["salt"] = b_salt;
     }
@@ -820,7 +822,7 @@ class EditTask extends HazizzRequest {
 
     body["tags"] = b_tags;
     body["description"] = b_description;
-    body["dueDate"] = hazizzRequestDateFormat(b_deadline);
+    body["dueDate"] = b_deadline.hazizzRequestDateFormat;
     if(b_salt != null && b_salt != ""){
       body["salt"] = b_salt;
     }

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:mobile/custom/hazizz_localizations.dart';
-import 'dialogs.dart';
+import 'dialogs_collection.dart';
 
 class SchoolDialog extends StatefulWidget {
 
-  final Map data;
+  final Map<String, dynamic> data;
   final Function({String key, String value}) onPicked;
 
   SchoolDialog({@required this.onPicked, @required this.data});
@@ -56,8 +56,6 @@ class _SchoolDialog extends State<SchoolDialog> {
             autofocus: true,
             style: TextStyle(fontSize: 20),
               onChanged: (String searchText){
-                //   List<String> searchKeys = keys;
-
                 List<String> nextSearchKeys = List();
                 for(String s in keys){
                   if(s.toLowerCase().contains(searchText.toLowerCase())){
@@ -72,7 +70,6 @@ class _SchoolDialog extends State<SchoolDialog> {
               decoration: InputDecoration(
                   hintText: locText(context, key: "search"),
                   prefixIcon: Icon(FontAwesomeIcons.search),
-                //  border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(25.0)))
               )
           ),
     ),

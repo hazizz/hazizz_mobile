@@ -208,7 +208,6 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
     if(state == AppLifecycleState.paused){
       lastActive = DateTime.now();
     }
-
     if(state == AppLifecycleState.resumed){
       if(lastActive != null){
         if(DateTime.now().difference(lastActive).inSeconds >= 60){
@@ -232,7 +231,6 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
 
     }
   }
-
 
   @override
   Widget build(BuildContext context) {

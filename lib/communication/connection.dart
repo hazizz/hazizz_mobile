@@ -22,10 +22,7 @@ class Connection{
 
 
       } else {
-        // hasConnection = false;
         HazizzLogger.printLog("Connection: not available");
-
-        //  lock();
       }
     });
   }
@@ -36,7 +33,6 @@ class Connection{
     listeners[identifier] = listener;
     HazizzLogger.printLog("Added Connection listener: ${identifier}");
   }
-
 
   static Future<bool> isOnline() async{
     var connectivityResult = await (Connectivity().checkConnectivity());
@@ -51,7 +47,4 @@ class Connection{
   static Future<bool> isOffline() async{
     return !(await isOnline());
   }
-
-
-
 }

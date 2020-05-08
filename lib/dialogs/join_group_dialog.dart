@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/enums/group_types_enum.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
-import 'dialogs.dart';
+import 'dialogs_collection.dart';
 
 class JoinGroupDialog extends StatefulWidget {
 
@@ -25,7 +24,7 @@ class _JoinGroupDialog extends State<JoinGroupDialog> {
 
   bool passwordVisible = true;
 
-  GroupType groupValue = GroupType.OPEN;
+  GroupTypeEnum groupValue = GroupTypeEnum.OPEN;
 
 
   final double width = 300;

@@ -4,16 +4,14 @@ import 'package:mobile/communication/pojos/PojoSubject.dart';
 import 'package:mobile/defaults/pojo_subject_empty.dart';
 import 'package:mobile/enums/group_types_enum.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
-import 'dialogs.dart';
+import 'dialogs_collection.dart';
 
 class ChooseSubjectDialog extends StatefulWidget {
 
-  int groupId;
-  List<PojoSubject> data;
+  final int groupId;
+  final List<PojoSubject> data;
 
-  SubjectItemPickerBloc subjectItemPickerBloc;
-
-  ChooseSubjectDialog({Key key, @required this.groupId, @required this.data, /*@required this.subjectItemPickerBloc*/}) : super(key: key);
+  ChooseSubjectDialog({Key key, @required this.groupId, @required this.data}) : super(key: key);
 
   @override
   _ChooseSubjectDialog createState() => new _ChooseSubjectDialog();
@@ -22,7 +20,7 @@ class ChooseSubjectDialog extends StatefulWidget {
 class _ChooseSubjectDialog extends State<ChooseSubjectDialog> {
 
 
-  List<PojoSubject> subjects_data = List();
+  List<PojoSubject> subjectsData = List();
 
   bool addedEmptySubject = false;
 
@@ -31,7 +29,7 @@ class _ChooseSubjectDialog extends State<ChooseSubjectDialog> {
 
     for(PojoSubject s in widget.data){
       if(s.subscribed || !s.subscriberOnly){
-        subjects_data.add(s);
+        subjectsData.add(s);
       }
     }
 
@@ -40,7 +38,7 @@ class _ChooseSubjectDialog extends State<ChooseSubjectDialog> {
 
   bool passwordVisible = true;
 
-  GroupType groupValue = GroupType.OPEN;
+  GroupTypeEnum groupValue = GroupTypeEnum.OPEN;
 
 
   final double width = 300;
@@ -50,7 +48,7 @@ class _ChooseSubjectDialog extends State<ChooseSubjectDialog> {
 
 
 
-  setGroupTypeValue(GroupType groupType){
+  setGroupTypeValue(GroupTypeEnum groupType){
 
     groupValue = groupType;
   }
@@ -60,18 +58,18 @@ class _ChooseSubjectDialog extends State<ChooseSubjectDialog> {
   Widget build(BuildContext context) {
 
     if(!addedEmptySubject){
-      subjects_data.insert(0, getEmptyPojoSubject(context));
+      subjectsData.insert(0, getEmptyPojoSubject(context));
       addedEmptySubject = true;
     }
 
 
     double subjectHeights;
 
-    if(subjects_data.length > 6){
+    if(subjectsData.length > 6){
       subjectHeights = 6 * 38.0;
 
     }else{
-      subjectHeights = subjects_data.length * 38.0;
+      subjectHeights = subjectsData.length * 38.0;
 
     }
 
@@ -103,7 +101,7 @@ class _ChooseSubjectDialog extends State<ChooseSubjectDialog> {
             children: <Widget>[
               Builder(
                 builder: (context){
-                  if(subjects_data.isEmpty){
+                  if(subjectsData.isEmpty){
                     return Text(locText(context, key: "no_subjects_yet"));
                   }
                   return Container();
@@ -111,14 +109,14 @@ class _ChooseSubjectDialog extends State<ChooseSubjectDialog> {
               ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: subjects_data.length,
+                  itemCount: subjectsData.length,
                   itemBuilder: (BuildContext context, int index) {
 
 
 
                     return GestureDetector(
                         onTap: () {
-                          Navigator.pop(context, subjects_data[index]);
+                          Navigator.pop(context, subjectsData[index]);
                         },
                         child: Padding(
                           padding: const EdgeInsets.only(
@@ -131,7 +129,7 @@ class _ChooseSubjectDialog extends State<ChooseSubjectDialog> {
                             width: width,
                             child: Center(
                               child: Text(
-                                subjects_data[index].name, //   data[index].name,
+                                subjectsData[index].name, //   data[index].name,
                                 style: TextStyle(
                                     fontSize: 25
                                 ),
@@ -151,7 +149,7 @@ class _ChooseSubjectDialog extends State<ChooseSubjectDialog> {
         children: <Widget>[
           Builder(
             builder: (context){
-              if(subjects_data.length == 1 && subjects_data[0].id == 0) {
+              if(subjectsData.length == 1 && subjectsData[0].id == 0) {
                 return FlatButton(
                   child: new Text(locText(context, key: "add_subject").toUpperCase()),
                   onPressed: () async {
@@ -159,7 +157,7 @@ class _ChooseSubjectDialog extends State<ChooseSubjectDialog> {
                     if(result != null){
                       setState(() {
 
-                        subjects_data.add(result);
+                        subjectsData.add(result);
                       });
                     }
                   },

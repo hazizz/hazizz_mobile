@@ -1,30 +1,29 @@
 import 'package:flutter/material.dart';
-
-import 'package:mobile/custom/hazizz_date.dart';
 import 'package:mobile/widgets/card_header_widget.dart';
-import "package:mobile/extension_methods/extension_first_upper.dart";
+import "package:mobile/extension_methods/string_first_upper_extension.dart";
+import "package:mobile/extension_methods/datetime_extension.dart";
 
 class GradeHeaderItemWidget extends StatelessWidget{
-  String subjectName;
+  final String subjectName;
 
-  String gradesAvarage;
+  final String gradesAverage;
 
-  DateTime date;
+  final DateTime date;
 
-  GradeHeaderItemWidget.bySubject({this.subjectName, this.gradesAvarage});
+  GradeHeaderItemWidget.bySubject({this.subjectName, this.gradesAverage}) : date = null;
 
-  GradeHeaderItemWidget.byDate({this.date});
+  GradeHeaderItemWidget.byDate({this.date}) : subjectName = null, gradesAverage = null ;
 
   @override
   Widget build(BuildContext context) {
     if(date == null){
       return CardHeaderWidget(
         text: subjectName.toUpperFirst(),
-        secondText: gradesAvarage,
+        secondText: gradesAverage,
       );
     }
     return CardHeaderWidget(
-      text: hazizzShowDateFormat(date),
+      text: date.hazizzShowDateFormat,
     );
   }
 }

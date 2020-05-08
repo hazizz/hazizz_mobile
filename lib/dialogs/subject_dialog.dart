@@ -1,33 +1,23 @@
-import 'dart:typed_data';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mobile/blocs/group/create_group_bloc.dart';
 import 'package:mobile/blocs/group/group_bloc.dart';
 import 'package:mobile/blocs/other/request_event.dart';
-import 'package:mobile/communication/pojos/PojoCreator.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
-import 'package:mobile/communication/pojos/PojoUser.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
-import 'package:mobile/custom/hazizz_date_time.dart';
 import 'package:mobile/dialogs/report_dialog.dart';
-import 'package:mobile/enums/group_types_enum.dart';
 import 'package:mobile/enums/group_permissions_enum.dart';
-import 'package:mobile/custom/image_operations.dart';
 import 'package:mobile/widgets/flushbars.dart';
-import 'package:mobile/widgets/permission_chip.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'package:mobile/communication/request_sender.dart';
-import 'dialogs.dart';
+import 'dialogs_collection.dart';
 
 class SubjectDialog extends StatefulWidget {
 
-  PojoSubject subject;
+  final PojoSubject subject;
 
   SubjectDialog({Key key, this.subject}) : super(key: key);
 
@@ -200,10 +190,6 @@ class _SubjectDialog extends State<SubjectDialog> {
                 return Container();
               },
             ),
-
-
-
-
           ),
         ),
         actionButtons: Row(

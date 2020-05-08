@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/communication/pojos/PojoClass.dart';
-import 'package:mobile/dialogs/dialogs.dart';
-
-import 'package:mobile/custom/hazizz_date.dart';
+import 'package:mobile/dialogs/dialogs_collection.dart';
+import 'package:mobile/extension_methods/time_of_day_extension.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
-import "package:mobile/extension_methods/extension_first_upper.dart";
+import "package:mobile/extension_methods/string_first_upper_extension.dart";
+import "package:mobile/extension_methods/datetime_extension.dart";
 
 
 class ClassItemWidget extends StatelessWidget{
@@ -27,8 +27,8 @@ class ClassItemWidget extends StatelessWidget{
 
     Color bgColor;
 
-    if(hazizzIsAfterHHMMSS(mainTime: currentDateTime, compareTime: pojoClass.startOfClass) &&
-       hazizzIsBeforeHHMMSS(mainTime: currentDateTime, compareTime: pojoClass.endOfClass)
+    if(currentDateTime.isAfterTimeOfDay(timeOfDay: pojoClass.startOfClass) &&
+       currentDateTime.isBeforeTimeOfDay(timeOfDay: pojoClass.startOfClass)
     ){
       bgColor = HazizzTheme.blue;
     }
@@ -127,18 +127,15 @@ class ClassItemWidget extends StatelessWidget{
                               padding: const EdgeInsets.only(left: 4),
                               child: Row(
                                 children: <Widget>[
-                                  Text(pojoClass.startOfClass.toHazizzFormat(), style: TextStyle(fontSize: 18, height: 0.85),),
+                                  Text(pojoClass.startOfClass.hazizzFormat, style: TextStyle(fontSize: 18, height: 0.85),),
                                   Text("-", style: TextStyle(fontSize: 18, height: 0.85),),
-                                  Text(pojoClass.endOfClass.toHazizzFormat(), style: TextStyle(fontSize: 18, height: 0.85),),
-                                 // Spacer(),
-                                //  Text(pojoClass.room == null ? " " : pojoClass.room, style: TextStyle(fontSize: 20),)
+                                  Text(pojoClass.endOfClass.hazizzFormat, style: TextStyle(fontSize: 18, height: 0.85),),
                                 ],
                               ),
                             )
                           ],
                         ),
                       ),
-                   //   Spacer(),
                       Column(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.end,

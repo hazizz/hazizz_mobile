@@ -1,7 +1,7 @@
 import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/response_states.dart';
 import 'package:bloc/bloc.dart';
-import 'package:mobile/managers/preference_services.dart';
+import 'package:mobile/managers/preference_service.dart';
 
 //region ShowFramerate event and state parts
 abstract class ShowFramerateEvent extends HEvent {

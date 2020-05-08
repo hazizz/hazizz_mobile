@@ -1,5 +1,3 @@
-import 'package:flutter/widgets.dart';
-
 extension DurationExtension on int {
 
   Duration get microseconds => Duration(microseconds: this);

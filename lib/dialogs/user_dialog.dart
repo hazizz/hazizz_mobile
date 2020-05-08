@@ -1,10 +1,6 @@
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mobile/blocs/group/create_group_bloc.dart';
 import 'package:mobile/blocs/group/group_bloc.dart';
 import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/communication/pojos/PojoCreator.dart';
@@ -12,7 +8,6 @@ import 'package:mobile/communication/pojos/PojoUser.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_date_time.dart';
 import 'package:mobile/dialogs/report_dialog.dart';
-import 'package:mobile/enums/group_types_enum.dart';
 import 'package:mobile/enums/group_permissions_enum.dart';
 import 'package:mobile/custom/image_operations.dart';
 import 'package:mobile/widgets/flushbars.dart';
@@ -21,11 +16,11 @@ import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'package:mobile/communication/request_sender.dart';
-import 'dialogs.dart';
+import 'dialogs_collection.dart';
 
 class UserDialog extends StatefulWidget {
 
-  GroupPermissionsEnum permission;
+  final GroupPermissionsEnum permission;
 
   UserDialog({PojoUser user, PojoCreator creator, this.permission}){
     if(user != null){
@@ -51,7 +46,7 @@ class UserDialog extends StatefulWidget {
   _UserDialog createState() => new _UserDialog();
 }
 
-enum PromotableTo{
+enum PromotableToEnum{
   MODERATOR,
   USER,
   NONE
@@ -65,7 +60,7 @@ class _UserDialog extends State<UserDialog> {
 
   GroupPermissionsEnum myPermission;
 
-  PromotableTo promotableTo = PromotableTo.NONE;
+  PromotableToEnum promotableTo = PromotableToEnum.NONE;
 
   Image img;
 
@@ -73,9 +68,9 @@ class _UserDialog extends State<UserDialog> {
   Future initState() {
     permission = widget.permission;
     if(permission == GroupPermissionsEnum.MODERATOR){
-      promotableTo = PromotableTo.USER;
+      promotableTo = PromotableToEnum.USER;
     }else if(permission == GroupPermissionsEnum.USER){
-      promotableTo = PromotableTo.MODERATOR;
+      promotableTo = PromotableToEnum.MODERATOR;
     }
 
     myPermission = GroupBlocs().myPermissionBloc.myPermission;
@@ -86,13 +81,9 @@ class _UserDialog extends State<UserDialog> {
         encodedProfilePic = hazizzResponse.convertedData;
 
         Uint8List profilePictureBytes = ImageOpeations.fromBase64ToBytesImage(encodedProfilePic);
-       // WidgetsBinding.instance.addPostFrameCallback((_) =>
           setState(() {
             img = Image.memory(profilePictureBytes);
           });
-       // );
-
-
       }
     });
 
@@ -109,8 +100,6 @@ class _UserDialog extends State<UserDialog> {
     ];
 
     GroupPermissionsEnum myPermission = GroupBlocs().myPermissionBloc.myPermission;
-   // GroupPermissionsEnum myId = ;
-
 
     if((myPermission == GroupPermissionsEnum.OWNER || myPermission == GroupPermissionsEnum.MODERATOR)) {
       if(permission == GroupPermissionsEnum.USER) {
@@ -154,7 +143,6 @@ class _UserDialog extends State<UserDialog> {
           height: 98,
           child: Stack(
             children: <Widget>[
-              //  Container(color: Theme.of(context).dialogBackgroundColor,),
               Container(
                   height: 62.0,
                   color: Theme.of(context).primaryColor
@@ -208,7 +196,6 @@ class _UserDialog extends State<UserDialog> {
                         GroupBlocs().groupMembersBloc.add(FetchData());
                       }
                     }
-                    
                   },
                   itemBuilder: (BuildContext context) {
                     return popupMenuItems;
@@ -235,7 +222,6 @@ class _UserDialog extends State<UserDialog> {
                         return Center(child: Text(locText(context, key: "loading")),);
                       }
                       ),
-                   //   backgroundColor: Theme.of(context).primaryColorDark,
                       radius: 44,
                     )
                 ),
@@ -250,13 +236,11 @@ class _UserDialog extends State<UserDialog> {
               [
                 Center(child: Text(widget.displayName, style: TextStyle(fontSize: 20), textAlign: TextAlign.center,) ),
                 Spacer(),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
 
                   children: <Widget>[
-                  //  Text(locText(context, key: "username") + ":", style: TextStyle(fontSize: 16)),
                     Expanded(child: Text(widget.username, style: TextStyle(fontSize: 16), textAlign: TextAlign.center,)),
                   ],
                 ),

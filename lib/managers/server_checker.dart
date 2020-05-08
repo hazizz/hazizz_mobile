@@ -1,11 +1,10 @@
-import 'package:mobile/blocs/flush_bloc.dart';
+import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/blocs/other/flush_bloc.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/communication/pojos/PojoTheraHealth.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 
 class ServerChecker{
-
   static bool gatewayOnline = false;
   static bool authOnline = false;
   static bool hazizzOnline = false;

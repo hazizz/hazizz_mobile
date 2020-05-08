@@ -1,26 +1,26 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
-import 'package:mobile/custom/hazizz_time_of_day.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
+import 'package:mobile/extension_methods/time_of_day_extension.dart';
 
 class ScheduleEventWidget extends StatelessWidget{
 
   String text;
 
-  Duration timerClassStart;
+  final Duration timerClassStart;
 
-  ScheduleEventWidget.beforeClasses(BuildContext context, HazizzTimeOfDay timeOfClassStart){
-    timerClassStart = HazizzTimeOfDay.now().compare(timeOfClassStart);
+  ScheduleEventWidget.beforeClasses(BuildContext context, TimeOfDay timeOfClassStart)
+    : timerClassStart = TimeOfDay.now().compare(timeOfClassStart){
     text = locText(context, key: "classes_not_started", args: [timerClassStart.inMinutes.toString()]);
   }
 
-  ScheduleEventWidget.afterClasses(BuildContext context){
+  ScheduleEventWidget.afterClasses(BuildContext context) : timerClassStart = null{
     text = locText(context, key: "classes_over");
   }
 
-  ScheduleEventWidget.breakTime(BuildContext context, HazizzTimeOfDay timeOfClassStart){
-    timerClassStart = HazizzTimeOfDay.now().compare( timeOfClassStart);
+  ScheduleEventWidget.breakTime(BuildContext context, TimeOfDay timeOfClassStart)
+    : timerClassStart = TimeOfDay.now().compare( timeOfClassStart) {
     text = locText(context, key: "classes_break", args: [timerClassStart.inMinutes.toString()]);
   }
 

@@ -11,9 +11,8 @@ import 'package:mobile/widgets/ad_widget.dart';
 import 'package:mobile/widgets/listItems/class_item_widget.dart';
 import 'package:mobile/widgets/schedule_event_widget.dart';
 import 'package:mobile/widgets/scroll_space_widget.dart';
-
+import 'package:mobile/extension_methods/time_of_day_extension.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
-import 'package:mobile/custom/hazizz_time_of_day.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class SchedulesTabPage extends StatefulWidget {
@@ -39,7 +38,7 @@ class _SchedulesTabPage extends State<SchedulesTabPage> with TickerProviderState
 
   int elek_tap_count = 0;
 
-  HazizzTimeOfDay now = HazizzTimeOfDay.now();
+  TimeOfDay now = TimeOfDay.now();
 
 
   final ItemScrollController itemScrollController = ItemScrollController();
@@ -49,7 +48,7 @@ class _SchedulesTabPage extends State<SchedulesTabPage> with TickerProviderState
 
   void updateTime(){
     setState(() {
-      now = HazizzTimeOfDay.now();
+      now = TimeOfDay.now();
     });
   }
 

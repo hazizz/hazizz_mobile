@@ -5,7 +5,7 @@ import 'package:mobile/blocs/kreta/kreta_login_blocs.dart';
 import 'package:mobile/communication/errorcode_collection.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
-import 'package:mobile/dialogs/dialogs.dart';
+import 'package:mobile/dialogs/dialogs_collection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/dialogs/loading_dialog.dart';
 import 'package:mobile/theme/hazizz_theme.dart';

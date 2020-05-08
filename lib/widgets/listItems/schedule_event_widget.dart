@@ -5,6 +5,7 @@ import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
 import 'package:mobile/blocs/kreta/schedule_event_bloc.dart';
 import 'package:mobile/custom/hazizz_date_time.dart';
 import 'package:mobile/custom/logger.dart';
+import 'package:mobile/extension_methods/time_of_day_extension.dart';
 
 class ScheduleEventWidget extends StatefulWidget {
   ScheduleEventWidget({Key key}) : super(key: key);
@@ -68,8 +69,7 @@ class _ScheduleEventWidget extends State<ScheduleEventWidget> with SingleTickerP
 
           if(currentEvent is AfterClassesEventItem) {
             if(currentEvent.tomorrowClass != null) {
-              text = "Az óráknak vége\nHolnap: ${currentEvent.tomorrowClass.startOfClass
-                  .toHazizzFormat()} - ${currentEvent.tomorrowClass.className}";
+              text = "Az óráknak vége\nHolnap: ${currentEvent.tomorrowClass.startOfClass.hazizzFormat} - ${currentEvent.tomorrowClass.className}";
             }else{
               text = "Az óráknak vége\n"
                      "Holnap: tanítási szünet";

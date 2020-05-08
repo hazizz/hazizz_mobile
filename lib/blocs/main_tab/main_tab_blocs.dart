@@ -1,7 +1,7 @@
 import 'package:mobile/blocs/kreta/grades_bloc.dart';
 import 'package:mobile/blocs/kreta/schedule_bloc.dart';
 import 'package:mobile/blocs/tasks/tasks_bloc.dart';
-import 'package:mobile/managers/preference_services.dart';
+import 'package:mobile/managers/preference_service.dart';
 
 class MainTabBlocs{
 

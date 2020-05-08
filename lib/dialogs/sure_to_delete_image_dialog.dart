@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/managers/google_drive_manager.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
-import 'dialogs.dart';
+import 'dialogs_collection.dart';
 
 class SureToDeleteHazizzImageDialog extends StatefulWidget {
 
-  String fileId;
+  final String fileId;
 
   SureToDeleteHazizzImageDialog({@required this.fileId});
 

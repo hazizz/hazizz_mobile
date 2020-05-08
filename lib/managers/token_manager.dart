@@ -5,11 +5,12 @@ import 'package:meta/meta.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/services/firebase_analytics.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'app_state_manager.dart';
 import 'package:mobile/storage/cache_manager.dart';
+
+// TODO refactor is needed here *badly*
 
 class LoginError implements Exception{
 
@@ -43,7 +44,6 @@ class KretaAccount{
   }
 }
 
-
 class TokenManager {
 
   static const String _keyToken = "key_token";
@@ -51,8 +51,6 @@ class TokenManager {
   static bool tokenIsValid = true;
 
   SharedPreferences prefs;
-
-
 
   static Future<HazizzResponse> createTokenWithPassword(@required String username, @required String password) async{
     HazizzResponse hazizzResponse = await RequestSender().getAuthResponse(new CreateToken.withPassword(q_username: username, q_password: password));

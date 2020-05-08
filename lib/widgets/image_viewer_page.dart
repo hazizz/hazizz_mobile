@@ -13,27 +13,35 @@ import 'hazizz_back_button.dart';
 import 'image_viewer_widget.dart';
 
 class ImageViewerPage extends StatefulWidget {
+  final ImageType imageType;
+  final Uint8List imageBytes;
+  final File imageFile;
+  final String imageUrl;
 
-  ImageType imageType;
-  Uint8List imageBytes;
-  File imageFile;
-  String imageUrl;
+  final Object heroTag;
+  final Function onDelete;
 
-  Object heroTag;
+  ImageViewerPage.fromNetwork(
+      this.imageUrl, {Key key, @required this.heroTag, this.onDelete})
+      : imageType = ImageType.NETWORK,
+        imageBytes = null, imageFile = null,
+        super(key: key);
 
-  Function onDelete;
-  ImageViewerPage.fromNetwork(this.imageUrl, {Key key, @required this.heroTag, this.onDelete}) : super(key: key){
-    imageType = ImageType.NETWORK;
-  }
-  ImageViewerPage.fromFile(this.imageFile, {Key key, @required this.heroTag, this.onDelete}) : super(key: key){
-    imageType = ImageType.FILE;
-  }
-  ImageViewerPage.fromBytes(this.imageBytes, {Key key, @required this.heroTag, this.onDelete}) : super(key: key){
-    imageType= ImageType.MEMORY;
-  }
-  ImageViewerPage.fromGoogleDrive(this.imageBytes, {Key key, @required this.heroTag, this.onDelete}) : super(key: key){
-    imageType = ImageType.MEMORY;
-  }
+  ImageViewerPage.fromFile(
+      this.imageFile, {Key key, @required this.heroTag, this.onDelete})
+      : imageType = ImageType.FILE,
+        imageBytes = null, imageUrl = null,
+        super(key: key);
+
+  ImageViewerPage.fromBytes(this.imageBytes, {Key key, @required this.heroTag, this.onDelete})
+      : imageType= ImageType.MEMORY,
+        imageFile = null, imageUrl = null,
+        super(key: key);
+
+  ImageViewerPage.fromGoogleDrive(this.imageBytes, {Key key, @required this.heroTag, this.onDelete})
+      : imageType = ImageType.MEMORY,
+        imageFile = null, imageUrl = null,
+        super(key: key);
 
   @override
   _ImageViewerPage createState() => _ImageViewerPage();
@@ -51,7 +59,6 @@ class _ImageViewerPage extends State<ImageViewerPage>{
 
   @override
   void initState() {
-
     imageBytes = widget.imageBytes;
     imageFile = widget.imageFile;
     imageUrl = widget.imageUrl;
@@ -112,7 +119,6 @@ class _ImageViewerPage extends State<ImageViewerPage>{
                         enableFeedback: true,
                         icon: Icon(FontAwesomeIcons.download, color: downloading ? Colors.grey : Colors.white,),
                         onPressed: () async {
-
                           if(!downloading){
                             setState(() {
                               downloading = true;
@@ -126,7 +132,6 @@ class _ImageViewerPage extends State<ImageViewerPage>{
                                 return;
                               }
                             }
-
                             if(imageFile != null) {
                               await ImageGallerySaver.saveImage(imageFile.readAsBytesSync());
                             }else if(imageBytes != null){

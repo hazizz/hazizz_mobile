@@ -12,25 +12,12 @@ import 'package:mobile/managers/google_drive_manager.dart';
 import 'package:mobile/services/hazizz_crypt.dart';
 import 'package:mobile/widgets/image_viewer_widget.dart';
 import 'package:path_provider/path_provider.dart';
-
 import 'package:image/image.dart' as imagePackage;
-import 'dart:io';
-
 
 class HazizzImageData{
   ImageType imageType;
 
   File imageFile;
-
-  /*
-  Image get image{
-    if(imageType == ImageType.FILE){
-      return Image.file(imageFile);
-    }else{
-      return Image.memory(imageFile);
-    }
-  }
-  */
 
   String thumbnailUrl;
 

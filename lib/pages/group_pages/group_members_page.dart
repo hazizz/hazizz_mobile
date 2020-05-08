@@ -6,12 +6,10 @@ import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/response_states.dart';
 import 'package:mobile/communication/pojos/PojoGroupPermissions.dart';
 import 'package:mobile/communication/pojos/PojoUser.dart';
-import 'package:mobile/dialogs/dialogs.dart';
+import 'package:mobile/dialogs/dialogs_collection.dart';
 import 'package:mobile/enums/group_permissions_enum.dart';
 import 'package:mobile/widgets/listItems/member_item_widget.dart';
 import 'package:mobile/widgets/scroll_space_widget.dart';
-
-
 import 'package:mobile/custom/hazizz_localizations.dart';
 
 

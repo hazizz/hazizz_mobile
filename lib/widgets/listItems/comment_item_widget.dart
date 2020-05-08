@@ -5,14 +5,14 @@ import 'package:mobile/blocs/other/view_task_bloc.dart';
 import 'package:mobile/communication/pojos/pojo_comment.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
-import 'package:mobile/dialogs/dialogs.dart';
+import 'package:mobile/dialogs/dialogs_collection.dart';
 import 'package:mobile/dialogs/report_dialog.dart';
 import 'package:mobile/storage/cache_manager.dart';
 import 'package:mobile/widgets/flushbars.dart';
-import 'package:mobile/custom/hazizz_date.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'package:mobile/communication/request_sender.dart';
+import 'package:mobile/extension_methods/datetime_extension.dart';
 
 class CommentItemWidget extends StatefulWidget  {
 
@@ -76,8 +76,8 @@ class _CommentItemWidget extends State<CommentItemWidget>{
                 ),
                 Padding(
                   padding: const EdgeInsets.all(3),
-                  child: Text(hazizzShowDateAndTimeFormat(widget.comment.creationDate),
-                    style: Theme.of(context).textTheme.subtitle,
+                  child: Text(widget.comment.creationDate.hazizzShowDateAndTimeFormat,
+                    style: Theme.of(context).textTheme.subtitle2,
                   ),
                 )
               ],

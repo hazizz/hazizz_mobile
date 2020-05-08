@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/communication/request_sender.dart';
-import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,8 +11,6 @@ class StartPageItem{
 }
 
 class PreferenceService{
-
-
   static const String _key_imageAutoLoad = "_key_imageAutoLoad";
   static const String _key_imageAutoDownload = "_key_imageAutoDownload";
 

@@ -3,15 +3,15 @@ import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
-import 'package:mobile/custom/hazizz_date.dart';
-import 'package:mobile/dialogs/dialogs.dart';
+
+import 'package:mobile/dialogs/dialogs_collection.dart';
 import 'package:mobile/managers/google_drive_manager.dart';
 import 'package:mobile/managers/app_state_manager.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
-
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/widgets/image_viewer_widget.dart';
+import 'package:mobile/extension_methods/datetime_extension.dart';
 
 
 class GoogleDriveSettingsPage extends StatefulWidget {
@@ -53,13 +53,12 @@ class _GoogleDriveSettingsPage extends State<GoogleDriveSettingsPage> {
   void initState() {
     final DateTime now = DateTime.now();
     getResponse(GetTasksFromMe(
-      q_startingDate: hazizzRequestDateFormat(now.subtract(Duration(days: 365))),
-      q_endDate: hazizzRequestDateFormat(now.add(Duration(days: 365)))
+      q_startingDate: now.subtract(Duration(days: 365)).hazizzRequestDateFormat,
+      q_endDate: now.add(Duration(days: 365)).hazizzRequestDateFormat
     )).then((HazizzResponse h){
       tasks = h.convertedData;
       checkIfGotAllResponse();
-      print("tasksss 1: ${tasks}");
-      print("tasksss 2: ${tasks.length}");
+      print("tasks length: ${tasks.length}");
     });
     AppState.isAllowedGDrive().then((isAllowed){
       if(isAllowed){

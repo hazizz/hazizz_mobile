@@ -10,10 +10,10 @@ import 'package:flutter/material.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
-import 'package:mobile/dialogs/dialogs.dart';
+import 'package:mobile/dialogs/dialogs_collection.dart';
 import 'package:mobile/dialogs/report_dialog.dart';
 import 'package:mobile/enums/group_permissions_enum.dart';
-import 'package:mobile/managers/deep_link_receiver.dart';
+import 'package:mobile/managers/deep_link_controller.dart';
 import 'package:mobile/managers/google_drive_manager.dart';
 import 'package:mobile/services/firebase_analytics.dart';
 import 'package:mobile/storage/cache_manager.dart';
@@ -24,12 +24,13 @@ import 'package:mobile/widgets/image_viewer_widget.dart';
 import 'package:mobile/widgets/tag_chip.dart';
 import 'package:share/share.dart';
 import 'package:snappable/snappable.dart';
-import 'package:mobile/custom/hazizz_date.dart';
+
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:mobile/extension_methods/datetime_extension.dart';
 
 class ViewTaskPage extends StatefulWidget {
 
@@ -106,7 +107,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
       }
 
       DateTime date_deadline =  pojoTask.dueDate;
-      _deadline = hazizzShowDateFormat(date_deadline);//"${date_deadline.day}.${date_deadline.month}.${date_deadline.year}";
+      _deadline = date_deadline.hazizzShowDateFormat;//"${date_deadline.day}.${date_deadline.month}.${date_deadline.year}";
       _description = pojoTask.description;
       _title = pojoTask.title;
 
@@ -147,13 +148,11 @@ class _ViewTaskPage extends State<ViewTaskPage> {
     Future<void> _init(PojoTask pTask){
       pojoTask = pTask;
       FirebaseAnalyticsManager.logOpenedViewTaskPage(pojoTask);
-      CacheManager.getMyId().then((int result){
-        if(pojoTask.creator.id == result){
-          setState(() {
-            canModify = true;
-          });
-        }
-      });
+      if(pojoTask.creator.id == CacheManager.getMyIdSafely){
+        setState(() {
+          canModify = true;
+        });
+      }
       if(pojoTask.permission == GroupPermissionsEnum.OWNER
       || pojoTask.permission == GroupPermissionsEnum.MODERATOR
       ){
@@ -217,7 +216,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                           showReportSuccessFlushBar(context, what: locText(context, key: "task"));
                         }
                       }else if(value == "share"){
-                        await Share.share(locText(context, key: "invite_to_task_text_title", args: [DeepLink.createLinkToTask(pojoTask.id)]));
+                        await Share.share(locText(context, key: "invite_to_task_text_title", args: [DeepLinkController.createLinkToTask(pojoTask.id)]));
                       }
                       else if(value == "snap"){
                         snapKey.currentState.snap();

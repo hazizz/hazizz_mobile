@@ -3,16 +3,14 @@ import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/communication/pojos/PojoAlertSettings.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
-import 'package:mobile/custom/formats.dart';
 import 'package:mobile/services/hazizz_message_handler.dart';
 import 'package:mobile/storage/cache_manager.dart';
 import 'package:mobile/widgets/flushbars.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
-
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
-import 'package:mobile/custom/hazizz_time_of_day.dart';
+import 'package:mobile/extension_methods/time_of_day_extension.dart';
 
 class NotificationSettingsPage extends StatefulWidget {
 
@@ -37,7 +35,7 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage>  {
   bool saturdayEnabled = false;
   bool sundayEnabled = false;
 
-  TimeOfDay newTime = HazizzTimeOfDay(hour: 0, minute: 0);
+  TimeOfDay newTime = TimeOfDay(hour: 0, minute: 0);
 
   List<DropdownMenuItem> startPageItems = List();
   List<DropdownMenuItem> supportedLocaleItems = List();
@@ -62,7 +60,7 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage>  {
         //   WidgetsBinding.instance.addPostFrameCallback((_){
         setState(() {
           List<String> s = alertSetting.alarmTime.split(":");
-          newTime = HazizzTimeOfDay(hour: int.parse(s[0]), minute: int.parse(s[1]));
+          newTime = TimeOfDay(hour: int.parse(s[0]), minute: int.parse(s[1]));
           mondayEnabled = alertSetting.mondayEnabled;
           tuesdayEnabled = alertSetting.tuesdayEnabled;
           wednesdayEnabled = alertSetting.wednesdayEnabled;
@@ -156,7 +154,7 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage>  {
                     trailing: Container(
                       child: Padding(
                         padding: const EdgeInsets.all(4.0),
-                        child: Text(toHazizzFormat(newTime), style: TextStyle(fontSize: 24), ),
+                        child: Text(newTime.hazizzFormat, style: TextStyle(fontSize: 24), ),
                       ),
                       decoration: BoxDecoration(
                           color: HazizzTheme.red,
@@ -281,6 +279,14 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage>  {
                         timeZoneOffset += "0" + timeZoneOffsetHour.toString() + "00";
 
                       }
+
+                      String add0(int n){
+                        if(n < 10){
+                          return "0$n";
+                        }
+                        return n.toString();
+                      }
+
                       HazizzResponse response = await RequestSender().getResponse(UpdateAlertSettings(q_userId: CacheManager.getMyIdSafely, b_alarmTime: "${add0(newTime.hour)}:${add0(newTime.minute)}:00+$timeZoneOffset", b_mondayEnabled: mondayEnabled,
                         b_tuesdayEnabled: tuesdayEnabled, b_wednesdayEnabled: wednesdayEnabled, b_thursdayEnabled: thursdayEnabled,
                         b_fridayEnabled: fridayEnabled, b_saturdayEnabled: saturdayEnabled, b_sundayEnabled: sundayEnabled

@@ -5,21 +5,21 @@ import 'package:mobile/theme/hazizz_theme.dart';
 
 class TagChip extends StatefulWidget {
 
-  Color backgroundColor = HazizzTheme.blue;
+  final Color backgroundColor;
 
-  Widget child;
+  final Widget child;
 
-  Function onClick;
-  Function onCloseClick;
-  EdgeInsets padding = EdgeInsets.all(0);
+  final Function onClick;
+  final Function onCloseClick;
+  final EdgeInsets padding;
 
   bool hasCloseButton = true;
 
-  TagChip({Key key, @required this.child, this.backgroundColor, this.hasCloseButton, this.padding, this.onClick, this.onCloseClick}) : super(key: key){
-    padding ??= EdgeInsets.only(left: 9, right: 9, top: 2, bottom: 2);
-    onClick ??= (){};
-    onCloseClick ??= (){};
-  }
+  TagChip({Key key, @required this.child,
+    this.backgroundColor = HazizzTheme.blue, this.hasCloseButton,
+    this.padding = const EdgeInsets.only(left: 9, right: 9, top: 2, bottom: 2),
+    this.onClick, this.onCloseClick})
+  : super(key: key);
 
   @override
   _TagChip createState() => _TagChip();
@@ -41,51 +41,47 @@ class _TagChip extends State<TagChip> {
 
   @override
   Widget build(BuildContext context) {
-
-
-
     return GestureDetector(
-      onTap: ()=> widget.onClick(),
+      onTap: ()=> widget.onClick() ?? (){},
       child:  Card(
+        margin: EdgeInsets.only(top: 5, bottom: 5),
+          color: widget.backgroundColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(50.0),
 
-            margin: EdgeInsets.only(top: 5, bottom: 5),
-              color: widget.backgroundColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(50.0),
-
-              ),
-              clipBehavior: Clip.antiAliasWithSaveLayer,
-              elevation: 10,
-              child: Padding(
-                padding: widget.padding,
-                child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      widget.child,
-
-                      Builder(
-                        builder: (context){
-                          if(widget.hasCloseButton){
-                            return GestureDetector(
-                              onTap: (){widget.onCloseClick();},
-                               // color: Colors.red,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 4.0),
-                                  child: Icon(FontAwesomeIcons.solidTimesCircle, size: 20, /*color: Colors.red,*/),
-                                ),
-                              //  iconSize: 20,
-                               // onPressed: () => widget.onCloseClick
-                            );
-                          }
-                          return Container();
-                        },
-                      )
-
-                    ]
-                ),
-              )
           ),
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          elevation: 10,
+          child: Padding(
+            padding: widget.padding,
+            child: Row(
+                mainAxisSize: MainAxisSize.min,
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  widget.child,
+
+                  Builder(
+                    builder: (context){
+                      if(widget.hasCloseButton){
+                        return GestureDetector(
+                          onTap: () => widget.onCloseClick() ?? (){},
+                           // color: Colors.red,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 4.0),
+                              child: Icon(FontAwesomeIcons.solidTimesCircle, size: 20, /*color: Colors.red,*/),
+                            ),
+                          //  iconSize: 20,
+                           // onPressed: () => widget.onCloseClick
+                        );
+                      }
+                      return Container();
+                    },
+                  )
+
+                ]
+            ),
+          )
+      ),
     );
   }
 }

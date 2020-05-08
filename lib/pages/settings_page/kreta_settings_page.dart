@@ -1,14 +1,13 @@
-
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/kreta/selected_session_bloc.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/managers/kreta_session_manager.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
-
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/notification/notification.dart';
+import 'package:mobile/extension_methods/time_of_day_extension.dart';
 
 class KretaSettingsPage extends StatefulWidget {
 
@@ -44,7 +43,7 @@ class _KretaSettingsPage extends State<KretaSettingsPage>  {
 
     HazizzNotification.getNotificationTime().then((value){
       setState(() {
-        notificationTime = value.toHazizzFormat();
+        notificationTime = value.hazizzFormat;
       });
     });
 

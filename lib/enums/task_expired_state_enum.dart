@@ -1,4 +1,4 @@
-enum TaskExpiredState{
+enum TaskExpiredStateEnum{
   EXPIRED,
   UNEXPIRED,
 }

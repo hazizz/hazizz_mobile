@@ -1,30 +1,27 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
-import 'package:mobile/managers/preference_services.dart';
+import 'package:mobile/managers/preference_service.dart';
 import 'package:mobile/services/hazizz_crypt.dart';
-import 'package:mobile/widgets/error_proof_widget.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile/widgets/image_viewer_widget.dart';
 
 class GoogleDriveImage extends StatefulWidget {
 
-  bool showThumbnail;
+  final bool showThumbnail;
  // bool loadImage = PreferenceService.imageAutoLoad;
   
-  String salt;
-  String imageUrl;
+  final String salt;
+  final String imageUrl;
 
-  Object heroTag;
+  final Object heroTag;
 
-  Function onSmallDelete;
-  Function onDelete;
+  final Function onSmallDelete;
+  final Function onDelete;
 
-  double height;
+  final double height;
   double width;
 
 

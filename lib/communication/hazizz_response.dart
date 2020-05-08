@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:meta/meta.dart';
-import 'package:mobile/blocs/flush_bloc.dart';
+import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/blocs/other/flush_bloc.dart';
 import 'package:mobile/blocs/kreta/kreta_status_bloc.dart';
 import 'package:mobile/blocs/kreta/selected_session_bloc.dart';
 import 'package:mobile/communication/pojos/PojoError.dart';

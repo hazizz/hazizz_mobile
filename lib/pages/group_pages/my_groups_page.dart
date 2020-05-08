@@ -5,7 +5,7 @@ import 'package:mobile/blocs/group/my_groups_bloc.dart';
 import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/response_states.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
-import 'package:mobile/dialogs/dialogs.dart';
+import 'package:mobile/dialogs/dialogs_collection.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 import 'package:mobile/widgets/listItems/group_item_widget.dart';

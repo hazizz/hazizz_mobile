@@ -11,11 +11,10 @@ import 'package:mobile/blocs/kreta/grades_bloc.dart';
 import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
 import 'package:mobile/communication/custom_response_errors.dart';
 import 'package:mobile/communication/pojos/PojoGrade.dart';
-import 'package:mobile/custom/formats.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/enums/grade_type_enum.dart';
 import 'package:mobile/enums/grades_sort_enum.dart';
-import 'package:mobile/managers/preference_services.dart';
+import 'package:mobile/managers/preference_service.dart';
 import 'package:mobile/services/selected_session_helper.dart';
 import 'package:mobile/widgets/ad_widget.dart';
 import 'package:mobile/widgets/flushbars.dart';
@@ -26,6 +25,7 @@ import 'package:mobile/widgets/tab_widget.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/pages/kreta_pages/kreta_service_holder.dart';
+import 'package:mobile/extension_methods/datetime_extension.dart';
 
 class GradesPage extends TabWidget  {
 
@@ -98,7 +98,7 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
           itemCount: itemCount,
           itemBuilder: (BuildContext context, int index) {
             if(index == 0){
-              return Center(child: Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().gradesBloc.lastUpdated)));
+              return Center(child: Text(MainTabBlocs().gradesBloc.lastUpdated.dateTimeToLastUpdatedFormatLocalized(context)));
             }
             if(grades.values.toList()[index-1].isNotEmpty){
               return GradeItemWidget.bySubject(
@@ -130,7 +130,7 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
             itemCount: itemCount,
             itemBuilder: (BuildContext context, int index) {
               if(index == 0){
-                return Center(child: Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().gradesBloc.lastUpdated)));
+                return Center(child: Text(MainTabBlocs().gradesBloc.lastUpdated.dateTimeToLastUpdatedFormatLocalized(context)));
               }
               if(grades.values.toList()[index-1].isNotEmpty){
                 return GradeItemWidget.bySubject(
@@ -147,7 +147,7 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
 
     }
 
-    if(MainTabBlocs().gradesBloc.currentGradeSort == GradesSort.BYSUBJECT){
+    if(MainTabBlocs().gradesBloc.currentGradeSort == GradesSortEnum.BYSUBJECT){
       Map<String, List<PojoGrade>> grades = MainTabBlocs().gradesBloc.getGradesFromSession().grades;// pojoGrades.grades;
 
       if(currentPage == 0){
@@ -165,7 +165,7 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
       if(grades.isEmpty){
         return Stack(
           children: <Widget>[
-            Align(alignment: Alignment.topCenter, child: Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().gradesBloc.lastUpdated))),
+            Align(alignment: Alignment.topCenter, child: Text( MainTabBlocs().gradesBloc.lastUpdated.dateTimeToLastUpdatedFormatLocalized(context))),
             Center(
               child: Padding(
                 padding: const EdgeInsets.only(left: 8.0, right: 8),
@@ -190,7 +190,7 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
           itemBuilder: (BuildContext context, int index) {
 
             if(index == 0){
-              return Center(child: Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().gradesBloc.lastUpdated)));
+              return Center(child: Text(MainTabBlocs().gradesBloc.lastUpdated.dateTimeToLastUpdatedFormatLocalized(context)));
             }
 
             String key = grades.keys.elementAt(index-1);
@@ -202,7 +202,7 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
                 crossAxisAlignment: CrossAxisAlignment.stretch,
 
                 children: <Widget>[
-                  GradeHeaderItemWidget.bySubject(subjectName: key, gradesAvarage: gradesAvarage),
+                  GradeHeaderItemWidget.bySubject(subjectName: key, gradesAverage: gradesAvarage),
                 ],
               ),
               content: Builder(
@@ -275,7 +275,7 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
         return SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              Center(child: Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().gradesBloc.lastUpdated))),
+              Center(child: Text(MainTabBlocs().gradesBloc.lastUpdated.dateTimeToLastUpdatedFormatLocalized(context))),
               Padding(
                 padding: const EdgeInsets.only(bottom: 5),
                 child: Wrap(
@@ -300,7 +300,7 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
         itemCount: itemCount,
         itemBuilder: (BuildContext context, int index) {
           if(index == 0){
-            return Center(child: Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().gradesBloc.lastUpdated)));
+            return Center(child: Text(MainTabBlocs().gradesBloc.lastUpdated.dateTimeToLastUpdatedFormatLocalized(context)));
           }
           Widget gradeItemWidget = GradeItemWidget.byDate(pojoGrade: gradesByDate[index-1],);
 
@@ -371,9 +371,9 @@ class _GradesPage extends State<GradesPage> with TickerProviderStateMixin , Auto
                                         });
                                       } : null,
                                       items: [
-                                        DropdownMenuItem(child: Text(locText(context, key: "creation_date")), value: GradesSort.BYCREATIONDATE),
-                                        DropdownMenuItem(child: Text(locText(context, key: "date")), value: GradesSort.BYDATE),
-                                        DropdownMenuItem(child: Text(locText(context, key: "kreta_subject")), value: GradesSort.BYSUBJECT),
+                                        DropdownMenuItem(child: Text(locText(context, key: "creation_date")), value: GradesSortEnum.BYCREATIONDATE),
+                                        DropdownMenuItem(child: Text(locText(context, key: "date")), value: GradesSortEnum.BYDATE),
+                                        DropdownMenuItem(child: Text(locText(context, key: "kreta_subject")), value: GradesSortEnum.BYSUBJECT),
                                       ],
                                     ),
                                     Spacer(),

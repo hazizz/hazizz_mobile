@@ -9,8 +9,7 @@ import 'package:mobile/communication/pojos/PojoClass.dart';
 import 'package:mobile/custom/hazizz_date_time.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/custom/logger.dart';
-import 'package:mobile/custom/hazizz_time_of_day.dart';
-
+import 'package:mobile/extension_methods/time_of_day_extension.dart';
 import 'package:bloc/bloc.dart';
 
 //region ScheduleEvent events
@@ -233,7 +232,7 @@ class ScheduleEventBloc extends Bloc<ScheduleEventEvent, ScheduleEventState> {
     startTimeout();
   }
 
-  HazizzTimeOfDay nextEventChangeTime;
+  TimeOfDay nextEventChangeTime;
 
   bool nextEventChangeIsNotToday = false;
 
@@ -323,7 +322,7 @@ class ScheduleEventBloc extends Bloc<ScheduleEventEvent, ScheduleEventState> {
     List<PojoClass> todayClasses =  MainTabBlocs().schedulesBloc.classes.classes[currentDayIndex.toString()];
 
     HazizzLogger.printLog("log: opsie: 2");
-    HazizzTimeOfDay now = HazizzTimeOfDay.now();
+    TimeOfDay now = TimeOfDay.now();
     HazizzLogger.printLog("log: opsie: 3");
 
     HazizzLogger.printLog("log: oy1334: todayClssaes.length: ${todayClasses.length}");

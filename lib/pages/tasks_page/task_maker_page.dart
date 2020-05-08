@@ -16,49 +16,49 @@ import 'package:mobile/communication/pojos/PojoTag.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/custom/image_operations.dart';
-
 import 'package:mobile/defaults/pojo_group_empty.dart';
 import 'package:mobile/defaults/pojo_subject_empty.dart';
-import 'package:mobile/dialogs/dialogs.dart';
+import 'package:mobile/dialogs/dialogs_collection.dart';
 import 'package:mobile/managers/app_state_manager.dart';
 import 'package:mobile/services/hazizz_crypt.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 import 'package:mobile/widgets/image_viewer_widget.dart';
 import 'package:mobile/widgets/similar_tasks_widget.dart';
 import 'package:mobile/widgets/tag_chip.dart';
-
-import 'package:mobile/custom/hazizz_date.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'package:native_state/native_state.dart';
+import 'package:mobile/extension_methods/datetime_extension.dart';
 
 import '../../main.dart';
 
+// TODO image deletion doesnt work
+// TODO delete uploaded files from gDrive when canceled
 class TaskMakerPage extends StatefulWidget {
-  int groupId;
+  final int groupId;
 
-  PojoGroup group;
-  PojoTask taskToEdit;
-  int taskId;
+  final PojoGroup group;
+  final PojoTask taskToEdit;
+  final int taskId;
 
-  TaskMakerMode mode;
+  final TaskMakerMode mode;
 
-  String title;
-
-  String cryptKey = HazizzCrypt.generateKey();
+  final String cryptKey;
 
   final TaskMakerAppState taskMakerAppState;
 
-  TaskMakerPage.edit({Key key, this.taskToEdit, this.taskMakerAppState}) : super(key: key){
-    taskId = taskToEdit.id;
-    mode = TaskMakerMode.edit;
+  TaskMakerPage.edit({Key key, this.taskToEdit, this.taskMakerAppState})
+    : groupId = taskToEdit.group.id, group = taskToEdit.group,
+      taskId = taskToEdit.id,
+      cryptKey = taskToEdit.salt,
+      mode = TaskMakerMode.edit,
+    super(key: key);
 
-    cryptKey = taskToEdit.salt;
-  }
-
-  TaskMakerPage.create({Key key, this.groupId, this.taskMakerAppState}) : super(key: key){
-    mode = TaskMakerMode.create;
-  }
+  TaskMakerPage.create({Key key, this.groupId, this.taskMakerAppState})
+    : group = null, taskToEdit = null, taskId = null,
+      cryptKey = HazizzCrypt.generateKey(),
+      mode = TaskMakerMode.create,
+    super(key: key);
 
   @override
   _TaskMakerPage createState() => _TaskMakerPage();
@@ -415,7 +415,7 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
                               return Container();
                             }
                             if(state is DateTimePickedState){
-                              return Text('${hazizzShowDateFormat(state.dateTime)}',
+                              return Text('${state.dateTime.hazizzShowDateFormat}',
                                 style: TextStyle(fontSize: 20.0),
                               );
                             }
@@ -661,16 +661,6 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
                                                   color: Colors.grey,
                                                   child: Stack(
                                                     children: <Widget>[
-
-                                                      /*
-                                                      Positioned(
-                                                        left: 12, top: 10,
-                                                        child: Padding(
-                                                          padding: const EdgeInsets.all(0.0),
-                                                          child: Icon(FontAwesomeIcons.googleDrive, size: 34,),
-                                                        ),
-                                                      ),
-                                                      */
                                                       Positioned(
                                                         bottom: 10, right: 2,
                                                         child: Container(
@@ -685,57 +675,66 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
                                                           ),
                                                         )
                                                       ),
-                                                     /* Positioned(
-                                                        top: 20,
-                                                        child: Icon(FontAwesomeIcons.plus, color: Colors.red, size: 34,),
-                                                      ),*/
                                                       Positioned(
                                                         bottom: 12, left: 4,
                                                         child: Icon(FontAwesomeIcons.plus),
                                                       )
-
                                                     ],
                                                   ),
                                                 ),
                                               );
                                             }
                                             return Card(
-                                                color: Colors.grey,
-                                                child: Padding(
+                                              color: Colors.grey,
+                                              child: Padding(
                                                   padding: EdgeInsets.all(4),
                                                   child: ConstrainedBox(
                                                     constraints: new BoxConstraints(
                                                       minHeight: 0,
                                                       maxHeight: 100,
                                                     ),
-                                                    child: SingleChildScrollView(
-                                                      controller: scrollController,
+                                                    child: Stack(
+                                                      children: <Widget>[
+                                                        SingleChildScrollView(
+                                                          controller: scrollController,
 
-                                                      scrollDirection: Axis.horizontal,
-                                                      child: Row(
-                                                        children: <Widget>[
-                                                          Container(
-                                                            child: ListView.builder(
-                                                                cacheExtent: 100000000,
-                                                                addAutomaticKeepAlives: true,
-                                                                shrinkWrap: true,
-                                                                scrollDirection: Axis.horizontal,
-                                                                itemCount: imageDatas.length,
-                                                                itemBuilder: (context, index){
-                                                                  return Padding(
-                                                                      padding: EdgeInsets.only(left: 6, ),
-                                                                      child: Container(
-                                                                        height: 100,
-                                                                        child: Stack(
-                                                                          children: <Widget>[
-                                                                            Builder(
-                                                                              builder: (context){
-                                                                                Function f = (){};
-                                                                                if(imageDatas[index].imageType == ImageType.GOOGLE_DRIVE){
-                                                                                  f = (){
-                                                                                    imageDatasToRemove.add(imageDatas[index]);
-                                                                                  };
-                                                                                }
+                                                          scrollDirection: Axis.horizontal,
+                                                          child: Row(
+                                                            children: <Widget>[
+                                                              Container(
+                                                                child: ListView.builder(
+                                                                    cacheExtent: 100000000,
+                                                                    addAutomaticKeepAlives: true,
+                                                                    shrinkWrap: true,
+                                                                    scrollDirection: Axis.horizontal,
+                                                                    itemCount: imageDatas.length,
+                                                                    itemBuilder: (context, index){
+                                                                      return Padding(
+                                                                          padding: EdgeInsets.only(left: 6, ),
+                                                                          child: Container(
+                                                                            height: 100,
+                                                                            child: Stack(
+                                                                              children: <Widget>[
+                                                                                Builder(
+                                                                                  builder: (context){
+                                                                                    Function f = (){};
+                                                                                    if(imageDatas[index].imageType == ImageType.GOOGLE_DRIVE){
+                                                                                      f = (){
+                                                                                        imageDatasToRemove.add(imageDatas[index]);
+                                                                                      };
+                                                                                    }
+
+                                                                                    return imageViewerFromHazizzImageData(
+                                                                                      imageDatas[index],
+                                                                                      height: 100,
+                                                                                      onSmallDelete: (){
+                                                                                        f();
+                                                                                        setState(() {
+                                                                                          imageDatas.removeAt(index);
+                                                                                        });
+                                                                                      },
+                                                                                    );
+                                                                                    /*
                                                                                 return ImageViewer.fromHazizzImageData(
                                                                                   imageDatas[index],
                                                                                   height: 100,
@@ -744,49 +743,49 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
                                                                                     setState(() {
                                                                                       imageDatas.removeAt(index);
                                                                                     });
-
                                                                                   },
                                                                                 );
-                                                                                //  }
-                                                                                return null;
-
-                                                                              },
+                                                                                */
+                                                                                  },
+                                                                                ),
+                                                                              ],
                                                                             ),
-                                                                            /* Positioned(
-                                                                      top: 0, left: 0,
-                                                                      child: Transform.translate(
-                                                                        offset: Offset(-1, -1),
-                                                                        child: GestureDetector(
-                                                                          child: Icon(FontAwesomeIcons.solidTimesCircle, size: 20, color: Colors.red,),
-                                                                          onTap: (){
-
-                                                                          },
-                                                                        )
-                                                                      )
-                                                                    )
-                                                                    */
-                                                                          ],
-                                                                        ),
-                                                                      )
-                                                                  );
-                                                                }
-                                                            ),
-                                                          ),
-                                                          Builder(
-                                                            builder: (context){
-                                                              if(imageDatas.length >= 5) return Container();
-                                                              return Padding(
-                                                                padding: EdgeInsets.only(left: 4),
-                                                                child: IconButton(
-                                                                  icon: Icon(FontAwesomeIcons.plus),
-                                                                  onPressed: pickImage
+                                                                          )
+                                                                      );
+                                                                    }
                                                                 ),
-                                                              );
-                                                            },
-                                                          )
-                                                        ],
-                                                      ),
-                                                    ),
+                                                              ),
+                                                              Builder(
+                                                                builder: (context){
+                                                                  if(imageDatas.length >= 5) return Container();
+                                                                  return Center(
+                                                                    child: Padding(
+                                                                      padding: EdgeInsets.only(left: 4),
+                                                                      child: IconButton(
+                                                                          icon: Icon(FontAwesomeIcons.plus),
+                                                                          onPressed: pickImage
+                                                                      ),
+                                                                    ),
+                                                                  );
+                                                                },
+                                                              )
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Positioned(top: 0, right: 0,
+                                                          child:Container(
+                                                              decoration: BoxDecoration(
+                                                                  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(8)),
+                                                                  color: Colors.grey
+                                                              ),
+                                                              child: Padding(
+                                                                padding: const EdgeInsets.only(left: 3),
+                                                                child: Text("${imageDatas.length}/5"),
+                                                              ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    )
                                                   ),
                                                 )
                                             );
@@ -795,7 +794,6 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
                                       ),
                                     ),
                                   ),
-
                                 ],
                               ),
                             ),

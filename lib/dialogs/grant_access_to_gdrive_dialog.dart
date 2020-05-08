@@ -3,22 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/managers/google_drive_manager.dart';
 import 'package:mobile/managers/app_state_manager.dart';
-import 'dialogs.dart';
+import 'dialogs_collection.dart';
 
-class GrantAccessToGDRiveDialog extends StatefulWidget {
+class GrantAccessToGDRiveDialog extends StatelessWidget {
   GrantAccessToGDRiveDialog({Key key}) : super(key: key);
-
-  @override
-  _GrantAccessToGDRiveDialog createState() => new _GrantAccessToGDRiveDialog();
-}
-
-class _GrantAccessToGDRiveDialog extends State<GrantAccessToGDRiveDialog> {
-
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {

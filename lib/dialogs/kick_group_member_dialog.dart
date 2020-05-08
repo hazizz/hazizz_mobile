@@ -5,13 +5,13 @@ import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
-import 'dialogs.dart';
+import 'dialogs_collection.dart';
 
 class KickGroupMemberDialog extends StatefulWidget {
 
-  int groupId;
+  final int groupId;
 
-  PojoUser user;
+  final PojoUser user;
 
   KickGroupMemberDialog({@required this.groupId, @required this.user});
 
@@ -27,8 +27,8 @@ class _KickGroupMemberDialog extends State<KickGroupMemberDialog> {
     super.initState();
   }
 
-  final double width = 300;
-  final double height = 90;
+  static const double width = 300;
+  static const double height = 90;
 
   final double searchBarHeight = 50;
 
@@ -41,21 +41,21 @@ class _KickGroupMemberDialog extends State<KickGroupMemberDialog> {
           height: height,
           color: HazizzTheme.red,
           child: Padding(
-              padding: const EdgeInsets.all(5),
-              child:
-              Center(
-                child: Builder(builder: (context){
-                  if(!isLoading){
-                    return Text(locText(context, key: "areyousure_to_kick_from_group", args: [widget.user.displayName]  ),
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w800,
-                        )
-                    );
-                  }
-                  return Center(child: Text(locText(context, key: "loading"), style: TextStyle(fontSize: 20),));
-                }),
-              )
+            padding: const EdgeInsets.all(5),
+            child:
+            Center(
+              child: Builder(builder: (context){
+                if(!isLoading){
+                  return Text(locText(context, key: "areyousure_to_kick_from_group", args: [widget.user.displayName]  ),
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                    )
+                  );
+                }
+                return Center(child: Text(locText(context, key: "loading"), style: TextStyle(fontSize: 20),));
+              }),
+            )
           ),
         ),
         content: Container(),

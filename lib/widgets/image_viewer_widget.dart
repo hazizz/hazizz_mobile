@@ -2,14 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/communication/pojos/pojo_comment.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/custom/image_operations.dart';
-import 'package:mobile/managers/preference_services.dart';
+import 'package:mobile/managers/preference_service.dart';
 import 'package:mobile/services/hazizz_crypt.dart';
 import 'package:mobile/widgets/image_viewer_page.dart';
 import 'package:http/http.dart' as http;
@@ -21,99 +20,89 @@ enum ImageType{
   GOOGLE_DRIVE,
 }
 
+
+ImageViewer imageViewerFromHazizzImageData(HazizzImageData imageData, {Key key, Function onSmallDelete, Function onDelete, double width, double height}){
+  if(imageData.imageType == ImageType.FILE){
+    return ImageViewer.fromFile(imageData.imageFile, heroTag: imageData.imageFile.path, );
+  }else if(imageData.imageType == ImageType.NETWORK){
+    return ImageViewer.fromNetwork(imageData.url, heroTag: imageData.url, onSmallDelete: onSmallDelete, onDelete: onDelete, width: width, height: height);
+  }else if(imageData.imageType == ImageType.GOOGLE_DRIVE){
+    return ImageViewer.fromGoogleDrive(imageData.url, salt: imageData.key, heroTag: imageData.url, onSmallDelete: onSmallDelete, onDelete: onDelete, width: width, height: height);
+  }
+  return null;
+}
+
 class ImageViewer extends StatefulWidget {
 
-  ImageType imageType;
+  final ImageType imageType;
 
   final double height;
   final double width;
 
-  File imageFile;
-  String imageUrl;
-  Uint8List imageBytes;
+  final File imageFile;
+  final String imageUrl;
+  final Uint8List imageBytes;
 
-  Object heroTag;
+  final Object heroTag;
 
   final Function onSmallDelete;
   final Function onDelete;
 
-  Image image;
-  String salt;
-  bool loadImageEnabled = PreferenceService.imageAutoLoad;
-  Image thumbnailImage;
-  bool tapped = false;
+  final Image image;
+  final String salt;
+  final bool loadImageEnabled = PreferenceService.imageAutoLoad;
+  final Image thumbnailImage;
+  final bool tapped = false;
 
-  HazizzImageData imageData;
+  final HazizzImageData imageData;
 
-  ImageViewer.fromNetwork(this.imageUrl, {Key key, @required this.heroTag, this.onSmallDelete, this.onDelete, this.width, this.height}) : super(key: key){
-    image = Image.network(imageUrl, key: Key(imageUrl),
-      loadingBuilder: (context, child, progress){
-        return progress == null
-          ? child
-          : CircularProgressIndicator();
-      },
-    );
-    imageType = ImageType.NETWORK;
-  }
-  ImageViewer.fromFile(this.imageFile, {Key key, @required this.heroTag, this.onSmallDelete, this.onDelete, this.width, this.height}) : super(key: key){
-    image = Image.file(imageFile,);
-    imageType = ImageType.FILE;
-  }
-  ImageViewer.fromBytes(this.imageBytes, {Key key, @required this.heroTag, this.onSmallDelete, this.onDelete, this.width, this.height}) : super(key: key){
-    image = Image.memory(imageBytes);
-    imageType = ImageType.MEMORY;
-  }
-
-
-  ImageViewer.fromGoogleDrive(this.imageUrl, {Key key, @required this.salt, @required this.heroTag, this.onSmallDelete, this.onDelete, this.width, this.height}) : super(key: key){
-    thumbnailImage = Image.network(
-      "https://drive.google.com/thumbnail?id=${imageUrl.split("?id=")[1]}",
-      width: width,
-      fit: BoxFit.fitWidth,
-      height: height,
-      loadingBuilder: (context, child, progress){
-        return progress == null
-          ? child
-          : CircularProgressIndicator();
-      },
-    );
-    imageType = ImageType.GOOGLE_DRIVE;
-  }
-
-  ImageViewer.fromHazizzImageData(this.imageData, {Key key, this.onSmallDelete, this.onDelete, this.width, this.height}) : super(key: key){
-    if(imageData.imageType == ImageType.FILE){
-      image = Image.file(imageData.imageFile);
-      heroTag = imageData.imageFile.path;
-      imageType = ImageType.FILE;
-      imageFile = imageData.imageFile;
-    }else if(imageData.imageType == ImageType.NETWORK){
-      image = Image.network(imageData.url,
+  ImageViewer.fromNetwork(this.imageUrl, {Key key, @required this.heroTag,
+    this.onSmallDelete, this.onDelete, this.width, this.height})
+    : imageData = null, imageBytes = null, imageFile = null, salt = null,
+      thumbnailImage = null, imageType = ImageType.NETWORK,
+      image = Image.network(imageUrl, key: Key(imageUrl),
         loadingBuilder: (context, child, progress){
           return progress == null
-              ? child
-              : CircularProgressIndicator();
+            ? child
+            : CircularProgressIndicator();
         },
-      );
-      heroTag = imageData.url;
-      imageType = ImageType.NETWORK;
-    }else if(imageData.imageType == ImageType.GOOGLE_DRIVE){
-      salt = imageData.key;
-      imageUrl = imageData.url;
-      thumbnailImage = Image.network(
-        "https://drive.google.com/thumbnail?id=${imageUrl.split("?id=")[1]}",
-        width: width,
-        fit: BoxFit.fitWidth,
-        height: height,
-        loadingBuilder: (context, child, progress){
-          return progress == null
-              ? child
-              : CircularProgressIndicator();
-        },
-      );
-      imageType = ImageType.GOOGLE_DRIVE;
-      heroTag = imageData.url ;//+ HeroHelper.uniqueTag;
-    }
-  }
+      ),
+    super(key: key);
+
+  ImageViewer.fromFile(
+    this.imageFile, {Key key, @required this.heroTag, this.onSmallDelete,
+    this.onDelete, this.width, this.height})
+    : imageData = null, imageBytes = null, imageUrl = null, salt = null,
+      thumbnailImage = null, imageType = ImageType.FILE,
+      image = Image.file(imageFile),
+    super(key: key);
+
+
+  ImageViewer.fromBytes(this.imageBytes, {Key key, @required this.heroTag,
+    this.onSmallDelete, this.onDelete, this.width, this.height})
+    : imageData = null, imageUrl = null,
+      salt = null, thumbnailImage = null, imageFile = null,
+      image = Image.memory(imageBytes),
+      imageType = ImageType.MEMORY,
+    super(key: key);
+
+
+  ImageViewer.fromGoogleDrive(this.imageUrl, {Key key, @required this.salt,
+    @required this.heroTag, this.onSmallDelete, this.onDelete, this.width, this.height})
+      : imageData = null, imageFile = null, image = null, imageBytes = null,
+        imageType = ImageType.GOOGLE_DRIVE,
+        thumbnailImage = Image.network(
+          "https://drive.google.com/thumbnail?id=${imageUrl.split("?id=")[1]}",
+          width: width,
+          fit: BoxFit.fitWidth,
+          height: height,
+          loadingBuilder: (context, child, progress){
+            return progress == null
+                ? child
+                : CircularProgressIndicator();
+          },
+        ),
+     super(key: key);
 
   @override
   _ImageViewer createState() => _ImageViewer();
@@ -141,6 +130,9 @@ class _ImageViewer extends State<ImageViewer> with AutomaticKeepAliveClientMixin
 
   Future request;
 
+
+  bool loadImageEnabled ;
+
   Future<Size> _calculateImageDimension(Image image) {
     Completer<Size> completer = Completer();
     image.image.resolve(ImageConfiguration()).addListener(
@@ -157,6 +149,8 @@ class _ImageViewer extends State<ImageViewer> with AutomaticKeepAliveClientMixin
 
   @override
   void initState() {
+    loadImageEnabled = widget.loadImageEnabled;
+
     image = widget.image;
     width = widget.width;
     height = widget.height;
@@ -283,7 +277,7 @@ class _ImageViewer extends State<ImageViewer> with AutomaticKeepAliveClientMixin
                 child: Builder(
                   builder: (context){
                     if(widget.imageType == ImageType.GOOGLE_DRIVE){
-                      if(!widget.loadImageEnabled){
+                      if(!loadImageEnabled){
                         print("people be like :O 2");
                         return thumbnailWidget(loadImage);
                       }
@@ -384,7 +378,7 @@ class _ImageViewer extends State<ImageViewer> with AutomaticKeepAliveClientMixin
   void loadImage(){
     print("loading inmage");
     setState(() {
-      widget.loadImageEnabled = true;
+      loadImageEnabled = true;
     });
   }
 

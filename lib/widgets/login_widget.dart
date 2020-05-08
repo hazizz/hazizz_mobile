@@ -3,19 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mobile/blocs/auth/social_login_bloc.dart';
 import 'package:mobile/controller/hashed_text_controller.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/managers/app_state_manager.dart';
 import 'package:mobile/widgets/google_sign_in_widget.dart';
-
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'notebook_background_widget.dart';
 
-
-
 class LoginWidget extends StatefulWidget {
-
   LoginWidget({Key key}) : super(key: key);
 
   @override
@@ -44,7 +39,8 @@ class _LoginWidget extends State<LoginWidget> with SingleTickerProviderStateMixi
   Future proceedToApp(BuildContext context) async {
    // MainTabBlocs().initialize();
     await AppState.mainAppPartStartProcedure();
-    Navigator.popAndPushNamed(context, "/");
+  //  Navigator.popAndPushNamed(context, "/");
+    Navigator.pushReplacementNamed(context, "/");
   }
 
   @override
@@ -81,14 +77,11 @@ class _LoginWidget extends State<LoginWidget> with SingleTickerProviderStateMixi
         width: MediaQuery.of(context).size.width,
         child: Stack(
             children: <Widget>[
-
-
               Container(
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
                 child: SvgPicture.asset(
                   "assets/images/hatter-1.svg",
-                  // semanticsLabel: 'Acme Logo'
                   fit: BoxFit.fitHeight,
 
                   height: MediaQuery.of(context).size.height,
@@ -98,28 +91,21 @@ class _LoginWidget extends State<LoginWidget> with SingleTickerProviderStateMixi
 
               Container(width: MediaQuery.of(context).size.width, height: 60, color: Colors.white,),
 
-
-
               Column(
-                  children: <Widget>[
-
-                    Stack(
-                      children: <Widget>[
-                        SafeArea(
-                          child: NotebookBackgroundWidget(),
-                        ),
-                        Image.asset(
-                          'assets/images/Logo.png',
-                        ),
-                      ],
-                    ),
-
-                    Expanded(child: AutoSizeText(locText(context, key: "login"), style: TextStyle(/*fontSize: 60,*/ fontWeight: FontWeight.w800, color: HazizzTheme.blue, ), maxLines: 1, minFontSize: 44,)),
-
-                  ],
-                ),
-
-
+                children: <Widget>[
+                  Stack(
+                    children: <Widget>[
+                      SafeArea(
+                        child: NotebookBackgroundWidget(),
+                      ),
+                      Image.asset(
+                        'assets/images/Logo.png',
+                      ),
+                    ],
+                  ),
+                  Expanded(child: AutoSizeText(locText(context, key: "login"), style: TextStyle(fontWeight: FontWeight.w800, color: HazizzTheme.blue, ), maxLines: 1, minFontSize: 44,)),
+                ],
+              ),
 
               Positioned(
                 bottom: 0,

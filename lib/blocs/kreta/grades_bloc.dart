@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
-import 'package:mobile/blocs/flush_bloc.dart';
+import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/blocs/other/flush_bloc.dart';
 import 'package:mobile/blocs/kreta/new_grade_bloc.dart';
 import 'package:mobile/blocs/kreta/selected_session_bloc.dart';
 
@@ -122,7 +122,7 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
 
   List<PojoSession> failedSessions = [];
 
-  GradesSort currentGradeSort = GradesSort.BYCREATIONDATE;
+  GradesSortEnum currentGradeSort = GradesSortEnum.BYCREATIONDATE;
   GradesBloc();
 
   int _failedRequestCount = 0;
@@ -176,7 +176,7 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
       }
       HazizzLogger.printLog("Grades sub LENGTH: ${gradesByDate.length}");
 
-      if(currentGradeSort == GradesSort.BYCREATIONDATE) {
+      if(currentGradeSort == GradesSortEnum.BYCREATIONDATE) {
         gradesByDate.sort((a, b) => a.compareToByCreationDate(b));
       }else{
         gradesByDate.sort((a, b) => a.compareToByDate(b));
@@ -215,7 +215,7 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
   @override
   Stream<GradesState> mapEventToState(GradesEvent event) async* {
     if(event is GradesSetSessionEvent){
-      print("happended12");
+      print("Updating GradeBloc state due to new session selected");
       yield GradesLoadedState(grades, failedSessions: failedSessions);
     }
     else if (event is GradesFetchEvent) {
@@ -275,23 +275,6 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
         print("CHANGE HAPPENDE03");
         if(hazizzResponse.isSuccessful){
           failedSessions = getFailedSessionsFromHeader(hazizzResponse.response.headers);
-
-          /*
-          if(doesContainSelectedSession(failedSessions)){
-            print("doesContainSelectedSession");
-            FlushBloc().add(FlushSessionFailEvent());
-            print("doesContainSelectedSession0");
-
-           // yield GradesSessionFailedState(grades ?? PojoGrades({}));
-            print("doesContainSelectedSession1");
-
-          //  yield GradesLoadedState(grades, failedSessions: failedSessions);
-          //  print("doesContainSelectedSession2");
-
-          }
-          */
-          print("testgst:0");
-
           if(hazizzResponse.convertedData != null){
             print("testgst:1");
             PojoGrades r = hazizzResponse.convertedData;
@@ -321,7 +304,6 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
 
               lastUpdated = DateTime.now();
               saveGradesCache(grades);
-              print("happended122");
 
               yield GradesLoadedState(grades, failedSessions: failedSessions);
             }else{

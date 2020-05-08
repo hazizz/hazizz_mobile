@@ -1,7 +1,5 @@
-import 'dart:convert';
 import 'dart:io' as io;
 import 'package:flutter/widgets.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/drive/v3.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
@@ -163,7 +161,6 @@ class GoogleDriveManager {
 
     File driveFile = await driveApi.files.create(drivef, uploadMedia: Media(tempFile.openRead(), tempFile.lengthSync()), $fields: "webContentLink, id, name"); // thumbnailLink,
 
-
     tempFile.delete();
 
     permission.allowFileDiscovery = true;
@@ -171,9 +168,6 @@ class GoogleDriveManager {
     Permission a = await driveApi.permissions.create(permission, driveFile.id, supportsAllDrives: true, supportsTeamDrives: true, );
 
     print("brughh001: ${a}, ${a.type}, ${a.role}");
-
-  //  driveFile = await driveApi.files.get(driveFile.id, $fields: "webContentLink, thumbnailLink, id");//"files/webViewLink");
-
 
     print("brughh000: ${driveFile.permissions.toString()}");
 

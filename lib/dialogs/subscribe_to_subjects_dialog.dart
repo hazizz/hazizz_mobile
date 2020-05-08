@@ -7,7 +7,7 @@ import 'package:mobile/blocs/other/response_states.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/widgets/listItems/subject_item_widget.dart';
-import 'dialogs.dart';
+import 'dialogs_collection.dart';
 
 class SubscribeToSubjectDialog extends StatefulWidget {
   SubscribeToSubjectDialog({Key key}) : super(key: key);

@@ -6,8 +6,8 @@ import 'package:mobile/communication/pojos/PojoGrade.dart';
 
 class GradesChart extends StatefulWidget {
 
-  String subjectName;
-  List<PojoGrade> grades;
+  final String subjectName;
+  final List<PojoGrade> grades;
   
   GradesChart({Key key, @required this.subjectName, @required this.grades}) : super(key: key);
 
@@ -41,9 +41,6 @@ class _GradesChart extends State<GradesChart> with TickerProviderStateMixin {
         return null;
       }
     }
-
-    List<DateTime> dates;
-    List<int> gradePossibilities = [1, 2, 3, 4, 5];
 
     Map<int, List<PojoGrade>> subject = {1 : List(), 2 : List(), 3 : List(), 4 : List(), 5 : List(), };
 

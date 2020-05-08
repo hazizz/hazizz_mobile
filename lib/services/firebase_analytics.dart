@@ -1,6 +1,5 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
-import 'package:mobile/communication/pojos/PojoMeInfo.dart';
 import 'package:mobile/communication/pojos/PojoMyDetailedInfo.dart';
 import 'package:mobile/communication/pojos/PojoTag.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';

@@ -4,7 +4,7 @@ import 'package:mobile/services/task_similarity_checker.dart';
 import 'listItems/similar_task_item_widget.dart';
 
 class SimilarTasksWidget extends StatefulWidget {
-  List<TaskSimilarity> similarTasks;
+  final List<TaskSimilarity> similarTasks;
 
   SimilarTasksWidget({Key key, @required this.similarTasks}) : super(key: key);
 

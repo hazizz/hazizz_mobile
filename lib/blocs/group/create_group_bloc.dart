@@ -19,7 +19,7 @@ abstract class CreateGroupState extends HState {
 }
 
 class CreateGroupCreateEvent extends CreateGroupEvent {
-  final GroupType groupType;
+  final GroupTypeEnum groupType;
   final String groupName;
   CreateGroupCreateEvent({@required this.groupType, @required this.groupName})
       : assert(groupType != null), assert(groupName != null), super([groupName]);
@@ -81,7 +81,7 @@ class CreateGroupBloc extends Bloc<CreateGroupEvent, CreateGroupState> {
 
       HazizzResponse hazizzResponse;
 
-      if(event.groupType == GroupType.CLOSED){
+      if(event.groupType == GroupTypeEnum.CLOSED){
         hazizzResponse = await getResponse(CreateGroup.closed(b_groupName: event.groupName));
       }else{
         hazizzResponse = await getResponse(CreateGroup.open(b_groupName: event.groupName));

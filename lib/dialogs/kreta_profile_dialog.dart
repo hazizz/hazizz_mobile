@@ -5,10 +5,10 @@ import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/hazizz_response.dart';
-import 'dialogs.dart';
+import 'dialogs_collection.dart';
 
 class KretaProfileDialog extends StatefulWidget {
-  PojoSession session;
+  final PojoSession session;
 
   KretaProfileDialog({@required this.session});
 

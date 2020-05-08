@@ -7,7 +7,7 @@ import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mobile/blocs/flush_bloc.dart';
+import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/blocs/other/flush_bloc.dart';
 import 'package:mobile/blocs/kreta/new_grade_bloc.dart';
 import 'package:mobile/blocs/kreta/sessions_bloc.dart';
 import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
@@ -18,13 +18,13 @@ import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/custom/hazizz_app_info.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/custom/session_status_converter.dart';
-import 'package:mobile/dialogs/dialogs.dart';
+import 'package:mobile/dialogs/dialogs_collection.dart';
 import 'package:mobile/managers/app_state_manager.dart';
 import 'package:mobile/managers/app_state_restorer.dart';
-import 'package:mobile/managers/preference_services.dart';
+import 'package:mobile/managers/preference_service.dart';
 import 'package:mobile/services/firebase_analytics.dart';
 import 'package:mobile/storage/cache_manager.dart';
-import 'package:mobile/managers/deep_link_receiver.dart';
+import 'package:mobile/managers/deep_link_controller.dart';
 import 'package:mobile/managers/version_handler.dart';
 import 'package:mobile/pages/main_pages/main_grades_page.dart';
 import 'package:mobile/pages/main_pages/main_tasks_page.dart';
@@ -37,11 +37,7 @@ import 'main_schedules_page.dart';
 
 class MainTabHosterPage extends StatefulWidget {
 
- // MainTabBlocs mainTabBlocs;
-
-  MainTabHosterPage({Key key}) : super(key: key){
-   // mainTabBlocs = MainTabBlocs();
-  }
+  MainTabHosterPage({Key key}) : super(key: key);
 
   @override
   _MainTabHosterPage createState() => _MainTabHosterPage();
@@ -115,7 +111,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
     selectedKretaAccount = SelectedSessionBloc().selectedSession;
     selectedKretaAccountName = selectedKretaAccount?.username;
 
-    DeepLink.initUniLinks(context);
+    DeepLinkController.initUniLinks(context);
 
     CacheManager.getMyDisplayName().then(
             (value){
@@ -222,7 +218,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
   @override
   void dispose() {
     FirebaseAnalyticsManager.observer.unsubscribe(this);
-    DeepLink.dispose();
+    DeepLinkController.dispose();
     _tabController.dispose();
     animationController.dispose();
     super.dispose();
@@ -513,7 +509,6 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                                   List<PojoSession> sessions = [];
 
                                   for(PojoSession s in SessionsBloc().sessions){
-                                    print("öö99: ${s.id}: ${s.username}");
                                     for(int i = 0; i< sessions.length; i++ ){
                                       PojoSession s2 = sessions[i];
                                       if(s2.username == s.username){
@@ -530,10 +525,10 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
 
                                   for(PojoSession s in sessions){
                                     //  if(selectedKretaAccount == null || s.username != selectedKretaAccount.username){
-                                    print("MÓÓÓÓ");
-
                                     if(getSessionStatusRank(s.status) > 0){
-                                      items.add(DropdownMenuItem(child: Text(s.username, style: TextStyle(color: Colors.red),), value: s.username,));
+                                      if(s.status != "INVALID_CREDENTIALS"){
+                                        items.add(DropdownMenuItem(child: Text(s.username, style: TextStyle(color: Colors.red),), value: s.username,));
+                                      }
                                     }else{
                                       items.add(DropdownMenuItem(child: Text(s.username), value: s.username,));
                                     }
@@ -542,13 +537,12 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                                       selectedKretaAccount = s;
                                       selectedKretaAccountName = s.username;
                                     }
-                                    //  }
                                   }
 
-                                  items.forEach((item) => print("opo111: ${item.value}"));
-                                  print("opo222: ${selectedKretaAccount?.username}");
-                                  print("opo333: ${items.where((item) => item.value == selectedKretaAccountName).length == 1}");
-
+                                  print("Items in Dropdown widget:");
+                                  items.forEach((item) => print(item.value));
+                                  print("Items selected in Dropdown widget: ${selectedKretaAccount?.username}");
+                                  print("items.where((item) => item.value == selectedKretaAccountName).length == 1: ${items.where((item) => item.value == selectedKretaAccountName).length == 1}");
 
                                   return Padding(
                                     padding: const EdgeInsets.only(left: 8),
@@ -560,7 +554,6 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                                         }else{
                                           setState(() {
                                             selectedKretaAccountName = item;
-                                            print("uff: ${selectedKretaAccountName}");
                                             for(PojoSession s in sessions){
                                               if(s.username == selectedKretaAccountName){
 
@@ -583,7 +576,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                                                 }
 
 
-                                                print("uff2: ${selectedKretaAccount.username}");
+                                                print("Selected Kreta account is: ${selectedKretaAccount.username}");
 
                                                // SelectedSessionBloc().add(SelectedSessionSetEvent(s));
                                               //  break;
@@ -595,97 +588,6 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                                       items: items
                                     ),
                                   );
-
-
-                                  /*
-                                  for(PojoSession s in SessionsBloc().sessions){
-                                    String username = s.username;
-
-                                    if(sessions.every((element) => element.username == s.username)){
-                                      continue;
-                                    }
-
-                                    if(s.status == "ACTIVE" ){
-                                      sessions.add(s);
-                                    }else{
-                                      for(PojoSession s2 in SessionsBloc().sessions){
-                                        if(){
-
-                                        }
-                                      }
-                                    }
-                                  }*/
-
-
-                                  if(SessionsBloc().activeSessions != null && SessionsBloc().activeSessions.isNotEmpty){
-
-                                    List<DropdownMenuItem> items = [];
-
-                                    bool found = false;
-
-                                    for(PojoSession s in SessionsBloc().activeSessions){
-                                      //  if(selectedKretaAccount == null || s.username != selectedKretaAccount.username){
-                                      items.add(DropdownMenuItem(child: Text(s.username), value: s.username,));
-                                      if(selectedKretaAccount?.username == s.username){
-                                        found = true;
-                                        selectedKretaAccount = s;
-                                        selectedKretaAccountName = s.username;
-                                      }
-                                      //  }
-                                    }
-
-                                    if(selectedKretaAccount == null){
-                                      print("uffi pufi");
-                                      selectedKretaAccount = SessionsBloc().activeSessions[0];
-                                      selectedKretaAccountName = selectedKretaAccount.username;
-                                    }
-
-                                    if(items.isEmpty){
-                                      items.add(DropdownMenuItem(child: Text("add Kréta account"), value: "add Kréta account",));
-                                    }
-                                    items.forEach((item) => print("opo111: ${item.value}"));
-                                    print("opo222: ${selectedKretaAccount?.username}");
-                                    print("opo333: ${items.where((item) => item.value == selectedKretaAccountName).length == 1}");
-
-
-                                    /*
-                                    if(!items.contains(selectedKretaAccountName)){
-                                      print("uff this");
-                                      selectedKretaAccountName = null;
-                                    }
-                                    */
-
-
-
-                                    return Padding(
-                                      padding: const EdgeInsets.only(left: 8),
-                                      child: DropdownButton(
-                                          value: selectedKretaAccountName,
-                                          onChanged: (item){
-                                            if(item =="add Kréta account"){
-                                              Navigator.of(context).pushNamed("/kreta/login");
-                                            }else{
-
-                                              setState(() {
-                                                selectedKretaAccountName = item;
-                                                print("uff: ${selectedKretaAccountName}");
-                                                for(PojoSession s in SessionsBloc().activeSessions){
-                                                  if(s.username == selectedKretaAccountName){
-                                                    selectedKretaAccount = s;
-                                                    print("uff2: ${selectedKretaAccount.username}");
-
-                                                    SelectedSessionBloc().add(SelectedSessionSetEvent(s));
-                                                    break;
-                                                  }
-                                                }
-                                              });
-                                            }
-                                          },
-                                          items: items
-                                      ),
-                                    );
-                                  }
-                                  return Container();
                                 },
                               ),
                             ),
@@ -695,7 +597,6 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                               child: IconButton(
                                 icon: Icon(FontAwesomeIcons.userEdit),
                                 onPressed: (){
-                                  // SessionsBloc().add(FetchData());
                                   Navigator.popAndPushNamed(context, "/kreta/accountSelector");
                                 },
                               ),
@@ -816,7 +717,6 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                                 origin: Offset(0, -60),
                                 angle: anim2.value,
                                 child: Animator(
-                                  //   tween: Tween<double>(begin: -40, end:  40),
                                   duration: Duration(milliseconds: 700),
                                   cycles: 20,
                                   builder: (anim3){

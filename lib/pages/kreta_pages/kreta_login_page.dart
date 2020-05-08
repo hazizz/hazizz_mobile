@@ -12,14 +12,11 @@ class KretaLoginPage extends StatefulWidget {
   final Function onSuccess;
   final PojoSession sessionToAuth;
 
-  KretaLoginPage({Key key, @required this.onSuccess}) : sessionToAuth = null, super(key: key);
+  final bool auth;
 
-  KretaLoginPage.auth({Key key, @required this.sessionToAuth}) : onSuccess = null, super(key: key){
-    auth = true;
-  }
+  KretaLoginPage({Key key, @required this.onSuccess}) : auth = false, sessionToAuth = null, super(key: key);
 
-  bool auth = false;
-
+  KretaLoginPage.auth({Key key, @required this.sessionToAuth}) : auth = true, onSuccess = null, super(key: key);
 
   @override
   _KretaLoginPage createState() => _KretaLoginPage();

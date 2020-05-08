@@ -1,11 +1,12 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/communication/pojos/PojoGrade.dart';
-import 'package:mobile/dialogs/dialogs.dart';
-import 'package:mobile/custom/hazizz_date.dart';
-import 'package:mobile/enums/grade_type_enum.dart';
-import "package:mobile/extension_methods/extension_first_upper.dart";
+import 'package:mobile/dialogs/dialogs_collection.dart';
 
+import 'package:mobile/enums/grade_type_enum.dart';
+import "package:mobile/extension_methods/string_first_upper_extension.dart";
+
+import 'package:mobile/extension_methods/datetime_extension.dart';
 
 class GradeItemWidget extends StatelessWidget {
 
@@ -189,7 +190,7 @@ class GradeItemWidget extends StatelessWidget {
                 ),
               ),
               Positioned(bottom: 2, right: 4,
-                child: Text(hazizzShowDateFormat(pojoGrade.creationDate),style: Theme.of(context).textTheme.subtitle,) ,
+                child: Text(pojoGrade.creationDate.hazizzShowDateFormat,style: Theme.of(context).textTheme.subtitle,) ,
               )
             ],
           )

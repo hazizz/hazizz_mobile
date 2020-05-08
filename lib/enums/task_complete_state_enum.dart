@@ -1,4 +1,4 @@
-enum TaskCompleteState{
+enum TaskCompleteStateEnum{
   COMPLETED,
   UNCOMPLETED,
   BOTH

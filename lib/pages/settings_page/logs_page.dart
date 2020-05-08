@@ -93,7 +93,6 @@ class _LogsPage extends State<LogsPage> {
                         );
 
                         await FlutterMailer.send(mailOptions);
-
                       }
                     },
                   ),

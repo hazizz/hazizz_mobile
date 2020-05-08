@@ -21,7 +21,7 @@ abstract class JoinGroupState extends HState {
 }
 
 class JoinGroupCreateEvent extends JoinGroupEvent {
-  final GroupType groupType;
+  final GroupTypeEnum groupType;
   final String groupName;
   final String password;
   JoinGroupCreateEvent({@required this.groupType, @required this.groupName, this.password})

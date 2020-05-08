@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/calendar/v3.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
-import 'package:mobile/managers/deep_link_receiver.dart';
+import 'package:mobile/managers/deep_link_controller.dart';
 
 import '../services/google_http_client.dart';
 
@@ -77,7 +77,7 @@ class GoogleCalendarManager {
       ..start = (EventDateTime()..date = task.dueDate)
       ..colorId = GoogleCalendarColorIds.bold_red
       ..end = (EventDateTime()..date = task.dueDate)
-      ..description = "${task.description}\n\nView this task in Hazizz Mobile:\n${DeepLink.createLinkToTask(task.id)}"
+      ..description = "${task.description}\n\nView this task in Hazizz Mobile:\n${DeepLinkController.createLinkToTask(task.id)}"
       ..creator = (EventCreator()..displayName = task.creator.displayName)
       ..summary = "Házizz - ${task.tags[0].getDisplayNameAsync()} - ${task.subject.name}"
       ..attachments = [EventAttachment()

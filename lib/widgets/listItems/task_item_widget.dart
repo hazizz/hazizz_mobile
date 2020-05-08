@@ -22,7 +22,6 @@ class TheraTaskItemWidget extends StatelessWidget  {
 
   final PojoTask task;
 
-
   PojoTag mainTag;
   Color mainColor = Colors.grey;
 
@@ -57,40 +56,6 @@ class TheraTaskItemWidget extends StatelessWidget  {
 
   @override
   Widget build(BuildContext context) {
-
-    /*
-    List<Widget> tagWidgets = List();
-
-
-    tagWidgets.add(Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(bottomRight: Radius.circular(12)),
-            color: mainColor
-        ),
-        child: Padding(
-          padding: const EdgeInsets.only(
-              left: 3, top: 3, right: 6, bottom: 3),
-          child: Text(mainTag.getDisplayName(context),
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),),
-        )
-    ));
-    for(PojoTag t in tags){
-      tagWidgets.add(Padding(
-        padding: const EdgeInsets.only(top: 2, left:2),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(20)),
-            color: t.name == "Thera" ? HazizzTheme.kreta_homeworkColor : Colors.grey,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.only(top: 2.0, bottom: 2, left: 6, right: 6),
-            child: Text(t.getDisplayName(context), style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),),
-          ),
-        ),
-      ));
-    }
-    */
-
     return  Card(
         margin: EdgeInsets.only(left: 7, right: 7, top: 3, bottom: 3),
         clipBehavior: Clip.antiAliasWithSaveLayer,

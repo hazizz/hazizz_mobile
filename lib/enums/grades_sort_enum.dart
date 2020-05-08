@@ -1,4 +1,4 @@
-enum GradesSort{
+enum GradesSortEnum{
   BYSUBJECT,
   BYDATE,
   BYCREATIONDATE

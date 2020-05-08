@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/communication/pojos/PojoUser.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
-import 'package:mobile/dialogs/dialogs.dart';
+import 'package:mobile/dialogs/dialogs_collection.dart';
 import 'package:mobile/enums/group_permissions_enum.dart';
 import 'package:mobile/widgets/permission_chip.dart';
 

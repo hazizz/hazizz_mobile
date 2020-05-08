@@ -9,9 +9,10 @@ import 'package:mobile/communication/connection.dart';
 import 'package:mobile/communication/custom_response_errors.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
-import 'package:mobile/custom/hazizz_date.dart';
+
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/communication/request_sender.dart';
+import 'package:mobile/extension_methods/datetime_extension.dart';
 
 //region TasksCalendar bloc parts
 //region TasksCalendar events
@@ -119,8 +120,8 @@ class TasksCalendarBloc extends Bloc<TasksCalendarEvent, TasksCalendarState> {
       try {
         yield TasksCalendarWaitingState();
 
-        String startDate = hazizzRequestDateFormat(DateTime.now().subtract(Duration(days: 40)));
-        String endDate = hazizzRequestDateFormat(DateTime.now().add(Duration(days: 365)));
+        String startDate = DateTime.now().subtract(Duration(days: 40)).hazizzRequestDateFormat;
+        String endDate = DateTime.now().add(Duration(days: 365)).hazizzRequestDateFormat;
 
         HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetTasksFromMe(q_unfinishedOnly: false, q_finishedOnly: false, q_showThera: true, q_startingDate: startDate, q_endDate: endDate));
 

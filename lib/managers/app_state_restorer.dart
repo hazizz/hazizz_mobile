@@ -1,13 +1,10 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:mobile/blocs/tasks/task_maker_blocs.dart';
 import 'package:mobile/communication/pojos/Pojo.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:json_annotation/json_annotation.dart';
-
 part 'app_state_restorer.g.dart';
 
 

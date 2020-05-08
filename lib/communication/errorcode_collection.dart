@@ -1,7 +1,7 @@
 class ErrorCode{
   final int code;
   final String message;
-  ErrorCode(this.code, this.message);
+  const ErrorCode(this.code, this.message);
 
   static ErrorCode fromInt(int from){
     for(ErrorCode errorCode in ErrorCodes.list){
@@ -28,7 +28,7 @@ class ErrorCode{
 
 class ErrorCodes {
   //region Primary errors
-  static final
+  static const
   UNKNOWN_ERROR = ErrorCode(1, "Unidentified error! Please report it."),
   INVALID_DATA = ErrorCode(2, "Invalid data! Bad request!"),
   DATABASE_ERROR = ErrorCode(3, "Unidentified error in the database! Please report it."),

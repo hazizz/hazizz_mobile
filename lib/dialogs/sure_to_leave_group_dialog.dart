@@ -10,7 +10,7 @@ import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
-import 'dialogs.dart';
+import 'dialogs_collection.dart';
 
 class SureToLeaveGroupDialog extends StatefulWidget {
 

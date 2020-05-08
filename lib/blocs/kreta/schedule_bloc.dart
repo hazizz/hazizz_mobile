@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
-import 'package:mobile/blocs/flush_bloc.dart';
+import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/blocs/other/flush_bloc.dart';
 import 'package:mobile/blocs/kreta/selected_session_bloc.dart';
 import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
 import 'package:mobile/blocs/other/request_event.dart';
@@ -222,7 +222,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
   @override
   Stream<ScheduleState> mapEventToState(ScheduleEvent event) async* {
     if(event is ScheduleSetSessionEvent){
-      print("change: 10101");
+      print("Updating ScheduleBloc state due to new session selected");
       yield ScheduleLoadedState(classes, failedSessions: failedSessions);
     }
     else if (event is ScheduleFetchEvent) {

@@ -1,10 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/blocs/tasks/task_maker_blocs.dart';
-import 'package:mobile/communication/pojos/PojoSubject.dart';
-import 'package:mobile/defaults/pojo_subject_empty.dart';
-import 'package:mobile/enums/group_types_enum.dart';
-import 'package:mobile/custom/hazizz_localizations.dart';
-import 'dialogs.dart';
 
 class HazizzDialog extends StatefulWidget {
 
@@ -16,9 +10,7 @@ class HazizzDialog extends StatefulWidget {
 
   final double height, width;
 
-  HazizzDialog({this.header, this.content, this.actionButtons,@required this.height,@required this.width}){
-
-  }
+  HazizzDialog({this.header, this.content, this.actionButtons,@required this.height,@required this.width});
 
   @override
   _HazizzDialog createState() => new _HazizzDialog();

@@ -1,10 +1,5 @@
-
 import 'package:flutter/material.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
-import 'package:mobile/custom/hazizz_date.dart';
-import 'package:json_annotation/json_annotation.dart';
-import 'package:mobile/custom/hazizz_time_of_day.dart';
-
 import 'Pojo.dart';
 
 part 'PojoClass.gg.dart';
@@ -14,8 +9,8 @@ part 'PojoClass.gg.dart';
 class PojoClass extends Pojo{
   String accountId;
   DateTime date;
-  HazizzTimeOfDay startOfClass;
-  HazizzTimeOfDay endOfClass;
+  TimeOfDay startOfClass;
+  TimeOfDay endOfClass;
   int periodNumber;
   bool cancelled;
   bool standIn;

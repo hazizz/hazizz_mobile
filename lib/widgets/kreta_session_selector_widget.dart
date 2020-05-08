@@ -14,13 +14,11 @@ import 'listItems/session_item_widget.dart';
 
 class SessionSelectorWidget extends StatefulWidget {
 
-  bool fromDedicatedPage = false;
+  final bool fromDedicatedPage;
 
-  SessionSelectorWidget({Key key}) : super(key: key);
+  SessionSelectorWidget({Key key}) : fromDedicatedPage = false, super(key: key);
 
-  SessionSelectorWidget.fromDedicatedPage({Key key}) : super(key: key){
-    fromDedicatedPage = true;
-  }
+  SessionSelectorWidget.fromDedicatedPage({Key key}) : fromDedicatedPage = true, super(key: key);
 
   @override
   _SessionSelectorWidget createState() => _SessionSelectorWidget();

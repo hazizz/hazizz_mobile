@@ -1,10 +1,8 @@
 import 'package:flutter_svg/svg.dart';
-import 'package:googleapis/drive/v2.dart';
 import 'package:mobile/managers/server_checker.dart';
 import 'package:mobile/services/facebook_opener.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 import 'package:mobile/widgets/hyper_link.dart';
-
 import 'package:url_launcher/url_launcher.dart';
 import 'package:mobile/custom/hazizz_app_info.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';

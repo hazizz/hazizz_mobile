@@ -5,7 +5,7 @@ import 'package:mobile/widgets/hazizz_back_button.dart';
 
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/managers/preference_services.dart';
+import 'package:mobile/managers/preference_service.dart';
 
 
 class SettingsPage extends StatefulWidget {

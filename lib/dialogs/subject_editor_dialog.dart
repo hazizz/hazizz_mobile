@@ -8,8 +8,7 @@ import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/enums/action_type_enum.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'package:mobile/communication/request_sender.dart';
-import 'dialogs.dart';
-
+import 'dialogs_collection.dart';
 
 class SubjectEditorDialog extends StatefulWidget {
 

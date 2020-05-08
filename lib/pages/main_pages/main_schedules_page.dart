@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
@@ -11,10 +10,7 @@ import 'package:mobile/blocs/other/response_states.dart';
 import 'package:mobile/blocs/kreta/schedule_bloc.dart';
 import 'package:mobile/communication/custom_response_errors.dart';
 import 'package:mobile/communication/pojos/PojoClass.dart';
-import 'package:mobile/communication/pojos/PojoSchedules.dart';
-import 'package:mobile/custom/formats.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
-import 'package:mobile/main.dart';
 import 'package:mobile/services/selected_session_helper.dart';
 import 'package:mobile/widgets/flushbars.dart';
 
@@ -23,6 +19,7 @@ import 'package:mobile/pages/kreta_pages/kreta_service_holder.dart';
 import 'package:mobile/widgets/selected_session_fail_widget.dart';
 import 'package:mobile/widgets/tab_widget.dart';
 import 'main_schedules_tab_page.dart';
+import 'package:mobile/extension_methods/datetime_extension.dart';
 
 class SchedulesPage extends TabWidget {
 
@@ -225,7 +222,7 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
 
     return Column(
       children: [
-        Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().schedulesBloc.lastUpdated)),
+        Text(MainTabBlocs().schedulesBloc.lastUpdated.dateTimeToLastUpdatedFormatLocalized(context)),
         Expanded(child: body)
       ]
     );
@@ -341,7 +338,7 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
                                                       return Container();
                                                     },
                                                   ),
-                                                  Text("${dateTimeToMonthDay(MainTabBlocs().schedulesBloc.currentWeekMonday)} - ${dateTimeToMonthDay(MainTabBlocs().schedulesBloc.currentWeekSunday)}", style: TextStyle(fontSize: 18),),
+                                                  Text("${MainTabBlocs().schedulesBloc.currentWeekMonday.dateTimeToMonthDay} - ${MainTabBlocs().schedulesBloc.currentWeekSunday.dateTimeToMonthDay}", style: TextStyle(fontSize: 18),),
                                                 ],
                                               ),
 

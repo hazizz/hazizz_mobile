@@ -12,8 +12,8 @@ import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/enums/task_complete_state_enum.dart';
 import 'package:mobile/enums/task_expired_state_enum.dart';
 
+import 'package:mobile/extension_methods/datetime_extension.dart';
 
-import 'package:mobile/custom/hazizz_date.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/storage/caches/data_cache.dart';
@@ -112,9 +112,9 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     this.groupId = groupId;
   }
 
-  TaskCompleteState currentTaskCompleteState = TaskCompleteState.UNCOMPLETED;
+  TaskCompleteStateEnum currentTaskCompleteState = TaskCompleteStateEnum.UNCOMPLETED;
 
-  TaskExpiredState currentTaskExpiredState = TaskExpiredState.UNEXPIRED;
+  TaskExpiredStateEnum currentTaskExpiredState = TaskExpiredStateEnum.UNEXPIRED;
 
   DateTime lastUpdated = DateTime(0, 0, 0, 0, 0);
 
@@ -168,8 +168,8 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
       try {
         yield TasksWaitingState();
 
-        if(currentTaskExpiredState == TaskExpiredState.UNEXPIRED
-        && currentTaskCompleteState == TaskCompleteState.UNCOMPLETED
+        if(currentTaskExpiredState == TaskExpiredStateEnum.UNEXPIRED
+        && currentTaskCompleteState == TaskCompleteStateEnum.UNCOMPLETED
         && groupId == null){
           DataCache dataCache = await loadTasksCache();
           if(dataCache!= null){
@@ -182,22 +182,22 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
 
         String startDate = null;
         String endDate = null;
-        if(currentTaskExpiredState == TaskExpiredState.EXPIRED){
+        if(currentTaskExpiredState == TaskExpiredStateEnum.EXPIRED){
           DateTime now = DateTime.now();
-          endDate = hazizzRequestDateFormat(now);
-          startDate = hazizzRequestDateFormat(now.subtract(Duration(days: 365)));
+          endDate = now.hazizzRequestDateFormat;
+          startDate = now.subtract(Duration(days: 365)).hazizzRequestDateFormat;
         }
 
         bool unfinishedOnly = false;
         bool finishedOnly = false;
 
-        if(currentTaskCompleteState == TaskCompleteState.UNCOMPLETED){
+        if(currentTaskCompleteState == TaskCompleteStateEnum.UNCOMPLETED){
           unfinishedOnly = true;
           finishedOnly = false;
-        }else if(currentTaskCompleteState == TaskCompleteState.COMPLETED){
+        }else if(currentTaskCompleteState == TaskCompleteStateEnum.COMPLETED){
           unfinishedOnly = false;
           finishedOnly = true;
-        }if(currentTaskCompleteState == TaskCompleteState.BOTH){
+        }if(currentTaskCompleteState == TaskCompleteStateEnum.BOTH){
           unfinishedOnly = false;
           finishedOnly = false;
         }
@@ -217,8 +217,8 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
             onLoaded(tasksList);
             HazizzLogger.printLog("juhuhuuu: 1");
             lastUpdated = DateTime.now();
-            if(currentTaskExpiredState == TaskExpiredState.UNEXPIRED
-            && currentTaskCompleteState == TaskCompleteState.UNCOMPLETED
+            if(currentTaskExpiredState == TaskExpiredStateEnum.UNEXPIRED
+            && currentTaskCompleteState == TaskCompleteStateEnum.UNCOMPLETED
             && groupId == null) {
               saveTasksCache(tasksList);
             }
@@ -227,7 +227,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
 
             HazizzLogger.printLog("log: opsie: 0");
 
-            if(currentTaskExpiredState == TaskExpiredState.EXPIRED){
+            if(currentTaskExpiredState == TaskExpiredStateEnum.EXPIRED){
               Map<DateTime, List<PojoTask>> b = {};
               for(int i = tasks.keys.length-1; i >= 0; i--)
               {

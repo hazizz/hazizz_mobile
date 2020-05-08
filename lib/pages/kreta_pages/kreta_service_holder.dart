@@ -3,10 +3,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/blocs/kreta/kreta_status_bloc.dart';
 import 'package:mobile/blocs/kreta/selected_session_bloc.dart';
-import 'package:mobile/widgets/kreta_session_selector_widget.dart';
 
 import 'package:mobile/custom/hazizz_localizations.dart';
-import 'kreta_session_selector_page.dart';
 
 class KretaServiceHolder extends StatefulWidget {
 

@@ -6,7 +6,7 @@ import 'package:mobile/blocs/auth/google_login_bloc.dart';
 import 'package:mobile/blocs/auth/social_login_bloc.dart';
 import 'package:mobile/communication/errorcode_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
-import 'package:mobile/dialogs/dialogs.dart';
+import 'package:mobile/dialogs/dialogs_collection.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
 import 'package:mobile/custom/hazizz_localizations.dart';
@@ -19,17 +19,11 @@ class SocialSignInButtonWidget extends StatefulWidget {
 
   static const String link_terms_of_service = "https://hazizz.github.io/tos-en.txt";
 
-  SocialSignInMode socialSignInMode;
+  final SocialSignInMode socialSignInMode;
 
+  SocialSignInButtonWidget.google({Key key, }) : socialSignInMode = SocialSignInMode.google, super(key: key);
 
-
-  SocialSignInButtonWidget.google({Key key, }) : super(key: key){
-    socialSignInMode = SocialSignInMode.google;
-  }
-
-  SocialSignInButtonWidget.facebook({Key key, }) : super(key: key){
-    socialSignInMode = SocialSignInMode.facebook;
-  }
+  SocialSignInButtonWidget.facebook({Key key, }) : socialSignInMode = SocialSignInMode.facebook, super(key: key);
 
   @override
   _SocialSignInButtonWidget createState() => _SocialSignInButtonWidget();
@@ -139,7 +133,6 @@ class _SocialSignInButtonWidget extends State<SocialSignInButtonWidget> {
 
               errorText = locText(context, key: "error_conditionsNotAccepted");
             }
-
           }
 
            return Column(

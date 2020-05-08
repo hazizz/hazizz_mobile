@@ -10,10 +10,10 @@ TimeOfDay convertToHazizzTimeOfDay(String str_time){
   try{
     List<String> timePeriod = str_time.split(":");
 
-    HazizzTimeOfDay hazizzTimeOfDay;
+    TimeOfDay hazizzTimeOfDay;
     int hour = int.parse(timePeriod[0]);
     int minute = int.parse(timePeriod[1]);
-    hazizzTimeOfDay = HazizzTimeOfDay(hour: hour, minute: minute);
+    hazizzTimeOfDay = TimeOfDay(hour: hour, minute: minute);
     return hazizzTimeOfDay;
   }catch(ex){
     HazizzLogger.printLog(ex);
@@ -21,7 +21,7 @@ TimeOfDay convertToHazizzTimeOfDay(String str_time){
   }
 }
 
-String convertBack(HazizzTimeOfDay a){
+String convertBack(TimeOfDay a){
   int hour = a.hour;
   int minute = a.minute;
   String str_hour = a.hour.toString();

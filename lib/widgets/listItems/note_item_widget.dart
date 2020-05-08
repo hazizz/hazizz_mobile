@@ -5,12 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/communication/pojos/PojoKretaNote.dart';
-
-import 'package:mobile/custom/hazizz_date.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'dart:math' as math;
-
 import 'package:url_launcher/url_launcher.dart';
+import 'package:mobile/extension_methods/datetime_extension.dart';
 
 
 class NoteItemWidget extends StatefulWidget  {
@@ -126,7 +124,7 @@ class _NoteItemWidget extends State<NoteItemWidget> with SingleTickerProviderSta
                       return  Markdown(
                         selectable: true,
                         data: widget.note.content,
-                       // selectable: true,
+                        // selectable: true,
                         padding:  const EdgeInsets.only(left: 4, top: 10, bottom: 4),
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
@@ -155,7 +153,7 @@ class _NoteItemWidget extends State<NoteItemWidget> with SingleTickerProviderSta
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text(widget.note.teacher, style: TextStyle(fontSize: 16)),
-                        Text(hazizzShowDateFormat(widget.note.creationDate), style: TextStyle(fontSize: 16)),
+                        Text(widget.note.creationDate.hazizzShowDateFormat, style: TextStyle(fontSize: 16)),
                       ],
                     ),
                   )

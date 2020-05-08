@@ -13,13 +13,13 @@ import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/dialogs/loading_dialog.dart';
 import 'package:mobile/managers/app_state_manager.dart';
-import 'package:mobile/managers/deep_link_receiver.dart';
+import 'package:mobile/managers/deep_link_controller.dart';
 import 'package:mobile/managers/welcome_manager.dart';
 import 'package:mobile/navigation/business_navigator.dart';
 import 'package:mobile/widgets/google_sign_in_widget.dart';
 import 'package:mobile/widgets/kreta_login_widget.dart';
 import 'package:mobile/widgets/notebook_background_widget.dart';
-import 'package:mobile/dialogs/dialogs.dart';
+import 'package:mobile/dialogs/dialogs_collection.dart';
 import 'package:mobile/custom/hazizz_tab_bar_view.dart';
 import 'package:mobile/custom/hazizz_tab_controller.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
@@ -88,7 +88,7 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
 
   @override
   void initState() {
-    DeepLink.initUniLinks(context);
+    DeepLinkController.initUniLinks(context);
     _tabController = new HazizzTabController(length: 4, vsync: this);
     super.initState();
   }

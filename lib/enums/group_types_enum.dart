@@ -1,4 +1,4 @@
-enum GroupType{
+enum GroupTypeEnum{
   OPEN,
   CLOSED,
 }
@@ -8,6 +8,6 @@ enum GroupType{
 
 
 
-String valueOfGroupType(GroupType groupType){
+String valueOfGroupType(GroupTypeEnum groupType){
   return groupType.toString().split(".")[1];
 }

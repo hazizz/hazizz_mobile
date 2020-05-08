@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:mobile/custom/hazizz_localizations.dart';
-import 'package:mobile/managers/preference_services.dart';
+import 'package:mobile/managers/preference_service.dart';
 import 'package:mobile/pages/settings_page/about_page.dart';
 import 'package:mobile/services/facebook_opener.dart';
 import 'package:mobile/widgets/card_header_widget.dart';

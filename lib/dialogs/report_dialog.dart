@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mobile/blocs/group/create_group_bloc.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
-import 'package:mobile/enums/group_types_enum.dart';
 import 'package:mobile/widgets/hyper_link.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'package:mobile/communication/request_sender.dart';
-import 'dialogs.dart';
+import 'dialogs_collection.dart';
 
 enum ReportTypeEnum{
   GROUP,
@@ -23,10 +18,10 @@ enum ReportTypeEnum{
 
 class ReportDialog extends StatefulWidget {
 
-  int id, secondId;
-  String name;
+  final int id, secondId;
+  final String name;
 
-  ReportTypeEnum reportType;
+  final ReportTypeEnum reportType;
 
   ReportDialog({@required this.reportType, @required this.id, this.secondId, @required this.name,});
 
@@ -40,11 +35,10 @@ class _ReportDialog extends State<ReportDialog> {
 
   bool acceptedHazizzPolicy = false;
 
-  TextEditingController descriptionController;
+  final TextEditingController descriptionController = TextEditingController();
 
   @override
   void initState() {
-    descriptionController = TextEditingController();
     descriptionController.addListener((){
       setState(() {
         errorText = null;

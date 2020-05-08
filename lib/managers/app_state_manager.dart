@@ -18,7 +18,7 @@ import 'package:mobile/communication/pojos/PojoTokens.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/communication/hazizz_response.dart';
-import 'package:mobile/managers/preference_services.dart';
+import 'package:mobile/managers/preference_service.dart';
 import 'package:mobile/managers/server_checker.dart';
 import 'package:mobile/navigation/business_navigator.dart';
 import 'package:mobile/services/firebase_analytics.dart';

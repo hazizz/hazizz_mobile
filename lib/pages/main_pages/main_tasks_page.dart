@@ -7,7 +7,6 @@ import 'package:mobile/blocs/other/response_states.dart';
 import 'package:mobile/blocs/tasks/tasks_bloc.dart';
 import 'package:mobile/communication/custom_response_errors.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
-import 'package:mobile/custom/formats.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/enums/task_complete_state_enum.dart';
 import 'package:mobile/enums/task_expired_state_enum.dart';
@@ -18,6 +17,7 @@ import 'package:mobile/widgets/scroll_space_widget.dart';
 import 'package:mobile/widgets/tab_widget.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
+import 'package:mobile/extension_methods/datetime_extension.dart';
 
 class TasksPage extends TabWidget {
   TasksPage({Key key}) : super(key: key){
@@ -36,9 +36,9 @@ class _TasksPage extends State<TasksPage>
     with TickerProviderStateMixin,
         AutomaticKeepAliveClientMixin{
 
-  TaskCompleteState currentCompletedTaskState;
+  TaskCompleteStateEnum currentCompletedTaskState;
 
-  TaskExpiredState currentExpiredTaskState;
+  TaskExpiredStateEnum currentExpiredTaskState;
 
   @override
   void initState() {
@@ -86,9 +86,9 @@ class _TasksPage extends State<TasksPage>
                       });
                     },
                     items: [
-                      DropdownMenuItem(child: Text(locText(context, key: "complete")), value: TaskCompleteState.COMPLETED, ),
-                      DropdownMenuItem(child: Text(locText(context, key: "incomplete")), value: TaskCompleteState.UNCOMPLETED,),
-                      DropdownMenuItem(child: Text(locText(context, key: "both")), value: TaskCompleteState.BOTH, ),
+                      DropdownMenuItem(child: Text(locText(context, key: "complete")), value: TaskCompleteStateEnum.COMPLETED, ),
+                      DropdownMenuItem(child: Text(locText(context, key: "incomplete")), value: TaskCompleteStateEnum.UNCOMPLETED,),
+                      DropdownMenuItem(child: Text(locText(context, key: "both")), value: TaskCompleteStateEnum.BOTH, ),
 
                     ],
                   ),
@@ -103,8 +103,8 @@ class _TasksPage extends State<TasksPage>
                         });
                       },
                       items: [
-                        DropdownMenuItem(child: Text(locText(context, key: "expired")), value: TaskExpiredState.EXPIRED,),
-                        DropdownMenuItem(child: Text(locText(context, key: "active")), value: TaskExpiredState.UNEXPIRED,)
+                        DropdownMenuItem(child: Text(locText(context, key: "expired")), value: TaskExpiredStateEnum.EXPIRED,),
+                        DropdownMenuItem(child: Text(locText(context, key: "active")), value: TaskExpiredStateEnum.UNEXPIRED,)
                       ],
                     ),
                   ),
@@ -139,7 +139,7 @@ class _TasksPage extends State<TasksPage>
                   },
                   itemBuilder: (BuildContext context, int index) {
                     if(index == 0){
-                      return Center(child: Text(dateTimeToLastUpdatedFormat(context, MainTabBlocs().tasksBloc.lastUpdated)));
+                      return Center(child: Text(MainTabBlocs().tasksBloc.lastUpdated.dateTimeToLastUpdatedFormatLocalized(context)));
                     }
 
                     List<GlobalKey<AnimatedListState>> listKeyList = new List(map.keys.length);
@@ -164,7 +164,7 @@ class _TasksPage extends State<TasksPage>
 
                                 physics: NeverScrollableScrollPhysics(),
                                 itemBuilder: (context, index2, animation) => buildItem(context, index2, animation, map[key][index2], (){
-                                  if(currentCompletedTaskState != TaskCompleteState.BOTH){
+                                  if(currentCompletedTaskState != TaskCompleteStateEnum.BOTH){
                                     var removedItem = map[key][index2];
                                     listKeyList[index-1].currentState.removeItem(index2, (context2, animation2){
                                       animation2.addStatusListener((AnimationStatus animationStatus){
