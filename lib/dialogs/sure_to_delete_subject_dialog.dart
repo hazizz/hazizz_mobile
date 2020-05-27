@@ -5,7 +5,7 @@ import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
-import 'dialogs_collection.dart';
+import 'dialog_collection.dart';
 
 class SureToDeleteSubjectDialog extends StatefulWidget {
 
@@ -55,7 +55,7 @@ class _SureToDeleteSubjectDialog extends State<SureToDeleteSubjectDialog> {
                   child:
                   Center(
                     child: Builder(builder: (context){
-                      return Text(locText(context, key: "areyousure_delete_subject", args: [widget.subject.name]),
+                      return Text(localize(context, key: "areyousure_delete_subject", args: [widget.subject.name]),
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w700,
@@ -85,13 +85,13 @@ class _SureToDeleteSubjectDialog extends State<SureToDeleteSubjectDialog> {
 
           return Row(children: <Widget>[
             FlatButton(
-              child: Text(locText(context, key: "no").toUpperCase(),),
+              child: Text(localize(context, key: "no").toUpperCase(),),
               onPressed: (){
                 Navigator.pop(context, false);
               },
             ),
             FlatButton(
-              child: Text(locText(context, key: "yes").toUpperCase(),),
+              child: Text(localize(context, key: "yes").toUpperCase(),),
               onPressed: () async {
 
                 setState(() {

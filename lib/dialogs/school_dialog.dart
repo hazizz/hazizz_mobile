@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:mobile/custom/hazizz_localizations.dart';
-import 'dialogs_collection.dart';
+import 'dialog_collection.dart';
 
 class SchoolDialog extends StatefulWidget {
 
@@ -68,7 +68,7 @@ class _SchoolDialog extends State<SchoolDialog> {
               },
               controller: searchController,
               decoration: InputDecoration(
-                  hintText: locText(context, key: "search"),
+                  hintText: localize(context, key: "search"),
                   prefixIcon: Icon(FontAwesomeIcons.search),
               )
           ),
@@ -114,7 +114,7 @@ class _SchoolDialog extends State<SchoolDialog> {
               );
             }else{
               return Center(
-                child: Text("no_school_with_that_name".locText(context),
+                child: Text("no_school_with_that_name".localize(context),
                   style: TextStyle(fontSize: 20),
                   textAlign: TextAlign.center,
                 )
@@ -126,7 +126,7 @@ class _SchoolDialog extends State<SchoolDialog> {
     actionButtons: Row(
       children:[ 
         FlatButton(
-          child: Text("close".locText(context).toUpperCase()), 
+          child: Text("close".localize(context).toUpperCase()),
           onPressed: () => Navigator.pop(context),
           padding: EdgeInsets.all(0),
         )

@@ -19,7 +19,7 @@ import 'package:mobile/navigation/business_navigator.dart';
 import 'package:mobile/widgets/google_sign_in_widget.dart';
 import 'package:mobile/widgets/kreta_login_widget.dart';
 import 'package:mobile/widgets/notebook_background_widget.dart';
-import 'package:mobile/dialogs/dialogs_collection.dart';
+import 'package:mobile/dialogs/dialog_collection.dart';
 import 'package:mobile/custom/hazizz_tab_bar_view.dart';
 import 'package:mobile/custom/hazizz_tab_controller.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
@@ -29,7 +29,6 @@ import 'package:mobile/theme/hazizz_theme.dart';
 import 'package:mobile/communication/request_sender.dart';
 
 class IntroPage extends StatefulWidget {
-
   IntroPage({Key key}) : super(key: key);
 
   @override
@@ -37,10 +36,6 @@ class IntroPage extends StatefulWidget {
 }
 
 class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin{
-  static const double angle = pi / 16;
-
-  static const double dy = -86;
-
   HazizzTabController _tabController;
 
   bool joinLater = false;
@@ -62,7 +57,7 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
 
         }else{
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            showToast(locText(context, key: "already_in_group"), duration: Duration(seconds: 3));
+            showToast(localize(context, key: "already_in_group"), duration: Duration(seconds: 3));
 
            // Toast.show(locText(context, key: ""), context, duration: Toast.LENGTH_LONG, gravity:  Toast.BOTTOM);
           });
@@ -222,7 +217,7 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 8, right: 8),
                                   child: AutoSizeText(
-                                    locText(context, key: "hazizz_intro"),
+                                    localize(context, key: "hazizz_intro"),
                                       style: TextStyle(fontSize: 20),
                                    //   maxLines: 10,
                                       maxFontSize: 20,
@@ -256,7 +251,7 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
           Padding(
             padding: const EdgeInsets.only(top: 42, left: 6, right: 6),
             child: AutoSizeText(
-              locText(context, key: "about_group_title"),
+              localize(context, key: "about_group_title"),
               style: TextStyle(fontSize: 50, fontWeight: FontWeight.w800),
               minFontSize: 20,
               maxFontSize: 50,
@@ -271,7 +266,7 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
                     AutoSizeText(
-                      locText(context, key: "about_group_description1"),
+                      localize(context, key: "about_group_description1"),
                       group: autoSizeGroup,
                       style: TextStyle(fontSize: 20),
                       minFontSize: 10,
@@ -281,10 +276,10 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: RaisedButton(child: Text(locText(context, key: "create_group").toUpperCase()), onPressed: () async {
+                      child: RaisedButton(child: Text(localize(context, key: "create_group").toUpperCase()), onPressed: () async {
                         bool success = await showCreateGroupDialog(context);
                         if(success != null && success){
-                          showToast(locText(context, key: "group_created"), duration: Duration(seconds: 3));
+                          showToast(localize(context, key: "group_created"), duration: Duration(seconds: 3));
 
                         //  Toast.show(locText(context, key: ""), context, duration: 2);
                           nextPage();
@@ -293,7 +288,7 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
                       ),
                     ),
                     AutoSizeText(
-                      locText(context, key: "about_group_description2"),
+                      localize(context, key: "about_group_description2"),
                       group: autoSizeGroup,
                       style: TextStyle(fontSize: 20),
                       minFontSize: 10,
@@ -323,14 +318,14 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
 
       introPageBuilder(Padding(
         padding: const EdgeInsets.only(top: 20.0),
-        child: Text(locText(context, key: "ekreta"), style: TextStyle(fontSize: 80, fontWeight: FontWeight.w800, color: HazizzTheme.blue, )),
+        child: Text(localize(context, key: "ekreta"), style: TextStyle(fontSize: 80, fontWeight: FontWeight.w800, color: HazizzTheme.blue, )),
       ),
           Column(
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(top: 60, left: 8.0, right: 8),
                 child: Center(
-                    child: Text(locText(context, key: "kreta_intro"), style: TextStyle(fontSize: 20, ), textAlign: TextAlign.center,)
+                    child: Text(localize(context, key: "kreta_intro"), style: TextStyle(fontSize: 20, ), textAlign: TextAlign.center,)
                 ),
               ),
               Spacer(),
@@ -338,7 +333,7 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
-                  FlatButton(child: Text(locText(context, key: "skip").toUpperCase()),
+                  FlatButton(child: Text(localize(context, key: "skip").toUpperCase()),
                     onPressed: () async {
                       if(await showIntroCancelDialog(context)){
                         exitIntro();
@@ -362,14 +357,14 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
     introPageBuilder(
       Padding(
        padding: const EdgeInsets.only(top: 20.0, bottom: 0),
-       child: Text(locText(context, key: "ekreta"), style: TextStyle(fontSize: 80, fontWeight: FontWeight.w800, color: HazizzTheme.blue, ),),
+       child: Text(localize(context, key: "ekreta"), style: TextStyle(fontSize: 80, fontWeight: FontWeight.w800, color: HazizzTheme.blue, ),),
       ) ,
       Padding(
         padding: const EdgeInsets.only(top: 10.0),
         child: Column(children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(top: 0.0, bottom: 10),
-            child: Text(locText(context, key: "login"), style: TextStyle(fontSize: 40, fontWeight: FontWeight.w800, color: HazizzTheme.blue),),
+            child: Text(localize(context, key: "login"), style: TextStyle(fontSize: 40, fontWeight: FontWeight.w800, color: HazizzTheme.blue),),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 0.0),
@@ -382,7 +377,7 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
           Spacer(),
           Row(
             children: <Widget>[
-              FlatButton(child: Text(locText(context, key:  "skip").toUpperCase()),
+              FlatButton(child: Text(localize(context, key:  "skip").toUpperCase()),
                 onPressed: () async {
                   if(await showIntroCancelDialog(context)){
                     exitIntro();
@@ -413,7 +408,7 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
   }
 
   Future<bool> _onWillPop() async {
-    return await false;
+    return false;
   }
 
   @override

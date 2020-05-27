@@ -47,7 +47,7 @@ class TasksCalendarWaitingState extends TasksCalendarState {
 
 
 class TasksCalendarLoadedState extends TasksCalendarState {
-  Map<DateTime, List<PojoTask>> tasks;
+  final Map<DateTime, List<PojoTask>> tasks;
 
   TasksCalendarLoadedState(this.tasks) : assert(tasks!= null), super([tasks]);
   @override
@@ -56,7 +56,7 @@ class TasksCalendarLoadedState extends TasksCalendarState {
 }
 
 class TasksCalendarLoadedCacheState extends TasksCalendarState {
-  Map<DateTime, List<PojoTask>> tasks;
+  final Map<DateTime, List<PojoTask>> tasks;
 
   TasksCalendarLoadedCacheState(this.tasks) : assert(tasks!= null), super([tasks]);
   @override
@@ -65,7 +65,7 @@ class TasksCalendarLoadedCacheState extends TasksCalendarState {
 }
 
 class TasksCalendarErrorState extends TasksCalendarState {
-  HazizzResponse hazizzResponse;
+  final HazizzResponse hazizzResponse;
   TasksCalendarErrorState(this.hazizzResponse) : assert(hazizzResponse!= null), super([hazizzResponse]);
 
   @override
@@ -79,7 +79,7 @@ class TasksCalendarErrorState extends TasksCalendarState {
 //region TasksCalendar bloc
 class TasksCalendarBloc extends Bloc<TasksCalendarEvent, TasksCalendarState> {
 
-  TasksCalendarBloc(){}
+  TasksCalendarBloc();
 
   DateTime lastUpdated = DateTime(0, 0, 0, 0, 0);
 

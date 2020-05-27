@@ -19,7 +19,7 @@ class _ScheduleBuilderPageState extends State<ScheduleBuilderPage> {
     return Scaffold(
       appBar: AppBar(
         leading: HazizzBackButton(),
-        title: Text(locText(context, key: "schedule_editor")),
+        title: Text(localize(context, key: "schedule_editor")),
       ),
 
       body: ListView.builder(

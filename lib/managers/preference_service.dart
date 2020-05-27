@@ -55,9 +55,9 @@ class PreferenceService{
 
 
   static List<StartPageItem> getStartPages(BuildContext context){
-    List<StartPageItem> pages = [StartPageItem(locText(context, key: "tasks"), 0),
-      StartPageItem(locText(context, key: "schedule"), 1),
-      StartPageItem(locText(context, key: "grades"), 2)
+    List<StartPageItem> pages = [StartPageItem(localize(context, key: "tasks"), 0),
+      StartPageItem(localize(context, key: "schedule"), 1),
+      StartPageItem(localize(context, key: "grades"), 2)
     ];
     return pages;
   }
@@ -130,7 +130,7 @@ class PreferenceService{
     serverUrl = Constants.BASE_URL;
     return Constants.BASE_URL;
   }
-  static Future<String> setServerUrl(String url)async {
+  static void setServerUrl(String url)async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     serverUrl = url;
     prefs.setString(_key_serverUrl, url);

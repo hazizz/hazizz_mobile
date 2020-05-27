@@ -71,13 +71,13 @@ class _CommentSectionWidget extends State<CommentSectionWidget>{
                   }
                   return Center(child: Padding(
                     padding: const EdgeInsets.only(top: 20.0),
-                    child: Text(locText(context, key: "no_comments_yet")),
+                    child: Text(localize(context, key: "no_comments_yet")),
                   ));
                 }
                 else if(state is CommentSectionFailState){
                   return Center(child: Padding(
                     padding: const EdgeInsets.only(top: 8.0),
-                    child: Text(locText(context, key: "something_went_wrong")),
+                    child: Text(localize(context, key: "something_went_wrong")),
                   ));
                 }
                 else{
@@ -103,7 +103,7 @@ class _CommentSectionWidget extends State<CommentSectionWidget>{
 
                   }
                   else if(commentWriterState is CommentWriterEmptyState){
-                    error = locText(context, key: "empty_field");
+                    error = localize(context, key: "empty_field");
                   }
 
                   return Card(
@@ -127,7 +127,7 @@ class _CommentSectionWidget extends State<CommentSectionWidget>{
                                 decoration:
                                 InputDecoration(
                                   errorText: error,
-                                  labelText: locText(context, key: "write_comment"),),
+                                  labelText: localize(context, key: "write_comment"),),
                                 controller: ViewTaskBloc().commentBlocs.commentWriterBloc
                                     .commentController,
                                 autofocus: false,

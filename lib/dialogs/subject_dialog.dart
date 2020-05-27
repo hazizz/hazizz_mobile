@@ -13,7 +13,7 @@ import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'package:mobile/communication/request_sender.dart';
-import 'dialogs_collection.dart';
+import 'dialog_collection.dart';
 
 class SubjectDialog extends StatefulWidget {
 
@@ -41,7 +41,7 @@ class _SubjectDialog extends State<SubjectDialog> {
 
 
   @override
-  Future initState() {
+  void initState() {
     subject = widget.subject;
     super.initState();
   }
@@ -84,7 +84,7 @@ class _SubjectDialog extends State<SubjectDialog> {
                     List<PopupMenuEntry> entries = [
                       PopupMenuItem(
                         value: "report",
-                        child: Text(locText(context, key: "report"),
+                        child: Text(localize(context, key: "report"),
                           style: TextStyle(color: HazizzTheme.red),
                         ),
                       ),
@@ -93,7 +93,7 @@ class _SubjectDialog extends State<SubjectDialog> {
                       if(state.permission == GroupPermissionsEnum.MODERATOR || state.permission == GroupPermissionsEnum.OWNER){
                         entries.add(PopupMenuItem(
                           value: "edit",
-                          child: Text(locText(context, key: "edit"),),
+                          child: Text(localize(context, key: "edit"),),
                         ),
                         );
                       }
@@ -102,7 +102,7 @@ class _SubjectDialog extends State<SubjectDialog> {
                       if(state.permission == GroupPermissionsEnum.MODERATOR || state.permission == GroupPermissionsEnum.OWNER){
                         entries.add(PopupMenuItem(
                           value: "delete",
-                          child: Text(locText(context, key: "delete"),
+                          child: Text(localize(context, key: "delete"),
                             style: TextStyle(color: HazizzTheme.red),
                           ),
                         ),
@@ -118,12 +118,12 @@ class _SubjectDialog extends State<SubjectDialog> {
                         if(value == "report"){
                           bool success = await showReportDialog(context, reportType: ReportTypeEnum.SUBJECT, id: widget.subject.id, secondId: GroupBlocs().group.id, name: widget.subject.name);
                           if(success != null && success){
-                            showReportSuccessFlushBar(context, what: locText(context, key: "subject"));
+                            showReportSuccessFlushBar(context, what: localize(context, key: "subject"));
                           }
                         }else if(value == "delete"){
                           bool success = await showDeleteSubjectDialog(context, groupId: GroupBlocs().group.id, subject: widget.subject);
                           if(success != null && success){
-                            showDeleteWasSuccessfulFlushBar(context, what: "${widget.subject.name} ${locText(context, key: "subject")}");
+                            showDeleteWasSuccessfulFlushBar(context, what: "${widget.subject.name} ${localize(context, key: "subject")}");
                             GroupBlocs().groupSubjectsBloc.add(FetchData());
                             Navigator.pop(context);
                           }
@@ -155,7 +155,7 @@ class _SubjectDialog extends State<SubjectDialog> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Text("${locText(context, key: "subscribed")}:", style: TextStyle(fontSize: 18),),
+                      Text("${localize(context, key: "subscribed")}:", style: TextStyle(fontSize: 18),),
                       Transform.scale(scale: 1.3,
                         child: Checkbox(
 
@@ -199,7 +199,7 @@ class _SubjectDialog extends State<SubjectDialog> {
                 padding: const EdgeInsets.only(right: 0),
                 child: FlatButton(
                   child: Center(
-                    child: Text(locText(context, key: "close").toUpperCase(),),
+                    child: Text(localize(context, key: "close").toUpperCase(),),
                   ),
                   onPressed: () {
                     Navigator.pop(context);

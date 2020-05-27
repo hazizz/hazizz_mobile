@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
-import 'package:mobile/dialogs/dialogs_collection.dart';
+import 'package:mobile/dialogs/dialog_collection.dart';
 import 'package:uni_links/uni_links.dart';
 
 class DeepLinkController{

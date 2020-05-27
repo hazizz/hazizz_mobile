@@ -1,5 +1,6 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
+import 'package:flutter/widgets.dart';
 import 'package:mobile/communication/pojos/PojoMyDetailedInfo.dart';
 import 'package:mobile/communication/pojos/PojoTag.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
@@ -27,18 +28,18 @@ class FirebaseAnalyticsManager{
     await analytics.logEvent(name: "user_id", parameters: parameters);
   }
 
-  static Future<void> setUsedLanguage(String language_code) async {
+  static Future<void> setUsedLanguage(String languageCode) async {
     if(!(await AppState.isLoggedIn())){
       HazizzLogger.printLog("Wasn't able to log due to not being logged in");
       return;
     }
-    HazizzLogger.printLog("log user property to analytics: " "language_code: " +language_code);
+    HazizzLogger.printLog("log user property to analytics: " "language_code: " +languageCode);
 
-    await analytics?.setUserProperty(name: "language_code", value: language_code);
-    HazizzLogger.printLog("log event to analytics: " "language_code: " +language_code);
+    await analytics?.setUserProperty(name: "language_code", value: languageCode);
+    HazizzLogger.printLog("log event to analytics: " "language_code: " +languageCode);
     Map<String, dynamic> parameters = {
       "user_id": CacheManager.getMyIdSafely,
-      "language_code": language_code
+      "language_code": languageCode
     };
   //  await analytics?.logEvent(name: "used_language", parameters: parameters);
   }
@@ -117,9 +118,9 @@ class FirebaseAnalyticsManager{
     }
     HazizzLogger.printLog("log event to analytics: " + "created_task_page: " + taskId.toString());
     String tags_string = "";
-    for(String tag in tags){
-        tags_string += tag;
-    }
+
+    tags.forEach((String tag) => tags_string += tag);
+
     Map<String, dynamic> parameters = {
       "task_id": taskId,
       "has_subject": (subjectId != null).toString(),
@@ -283,4 +284,20 @@ class FirebaseAnalyticsManager{
     };
     await analytics.logEvent(name: "unknown_error_response", parameters: parameters);
   }
+
+  static Future<void> logTranslationError({@required String key, @required List<String> arguments, @required String translatedText }) async {
+    if(!(await AppState.isLoggedIn())){
+      HazizzLogger.printLog("Wasn't able to log due to not being logged in");
+      return;
+    }
+    HazizzLogger.printLog("log event to analytics: " + "translation_error for key: " + key);
+
+    Map<String, dynamic> parameters = {
+      "text_key": key,
+      "arguments": arguments?.join(", ") ?? "null",
+      "translated_text": translatedText ?? "null",
+    };
+    await analytics.logEvent(name: "translation_error", parameters: parameters);
+  }
+
 }

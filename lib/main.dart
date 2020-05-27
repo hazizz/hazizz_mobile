@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
-//import 'package:easy_localization/easy_localization_provider.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
@@ -13,7 +11,6 @@ import 'package:mobile/navigation/route_generator.dart';
 import 'package:mobile/services/firebase_analytics.dart';
 import 'package:mobile/services/hazizz_message_handler.dart';
 import 'package:native_state/native_state.dart';
-//import 'package:shared_pref_navigation_saver/shared_pref_navigation_saver.dart';
 import 'package:statsfl/statsfl.dart';
 import 'blocs/main_tab/main_tab_blocs.dart';
 import 'communication/pojos/task/PojoTask.dart';
@@ -28,9 +25,6 @@ import 'navigation/business_navigator.dart';
 import 'notification/notification.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
-import 'dart:convert';
-//import 'package:json_navigation_saver/json_navigation_saver.dart';
-//import 'package:navigation_saver/navigation_saver.dart';
 
 String startPage;
 
@@ -42,11 +36,11 @@ bool isLoggedIn = true;
 
 bool isFromNotification = false;
 
-String tasksTomorrowSerialzed;
+String tasksTomorrowSerialized;
 List<PojoTask> tasksForTomorrow;
 
-MainTabBlocs mainTabBlocs = MainTabBlocs();
-LoginBlocs loginBlocs = LoginBlocs();
+final MainTabBlocs mainTabBlocs = MainTabBlocs();
+final LoginBlocs loginBlocs = LoginBlocs();
 
 Locale preferredLocale;
 
@@ -62,7 +56,7 @@ Future<bool> fromNotification() async {
     isFromNotification = true;
     String payload = notificationAppLaunchDetails.payload;
     if(payload != null) {
-      tasksTomorrowSerialzed = payload;
+      tasksTomorrowSerialized = payload;
     }
   }else{
   }
@@ -98,7 +92,7 @@ void main() async{
     if(!(await AppState.isLoggedIn())) { // !(await AppState.isLoggedIn())
       isLoggedIn = false;
     }else {
-      if(await TokenManager.checkIfTokenRefreshIsNeeded()) {
+      if(await TokenManager.isTokenValid()) {
         await TokenManager.createTokenWithRefresh();
       }
       AppState.mainAppPartStartProcedure();
@@ -152,9 +146,6 @@ class HazizzApp extends StatefulWidget{
 
  // final NavigationSaver _navigationSaver;
 
-
-
-
   const HazizzApp(/*this._navigationSaver,*/ {Key key}) : super(key: key);
 
   @override
@@ -165,9 +156,6 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
   DateTime currentBackPressTime;
 
   DateTime lastActive;
-
-
-
 
   /*
   void enableShowFramerate(bool enabled){
@@ -220,7 +208,7 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
         HazizzLogger.printLog("payload: $payload");
         Navigator.pushNamed(context, "/tasksTomorrow");
 
-        tasksTomorrowSerialzed = payload;
+        tasksTomorrowSerialized = payload;
       }else  HazizzLogger.printLog("no payload");
       if(await fromNotification()) {
         Navigator.pushNamed(context, "/tasksTomorrow");
@@ -288,7 +276,7 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
                             routeSettings, (RouteSettings settings, {NextPageInfo nextPageInfo,}) => RouteGenerator.generateRoute(settings),
                           ),
                           */
-                          title: locText(context, key: "hazizz_appname") ?? "Hazizz Mobile",
+                          title: localize(context, key: "hazizz_appname") ?? "Hazizz Mobile",
                           showPerformanceOverlay: false,
                           theme: theme,
                           localizationsDelegates: [

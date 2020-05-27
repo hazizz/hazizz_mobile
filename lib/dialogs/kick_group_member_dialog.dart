@@ -5,12 +5,11 @@ import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
-import 'dialogs_collection.dart';
+import 'dialog_collection.dart';
 
 class KickGroupMemberDialog extends StatefulWidget {
 
   final int groupId;
-
   final PojoUser user;
 
   KickGroupMemberDialog({@required this.groupId, @required this.user});
@@ -46,14 +45,14 @@ class _KickGroupMemberDialog extends State<KickGroupMemberDialog> {
             Center(
               child: Builder(builder: (context){
                 if(!isLoading){
-                  return Text(locText(context, key: "areyousure_to_kick_from_group", args: [widget.user.displayName]  ),
+                  return Text(localize(context, key: "areyousure_to_kick_from_group", args: [widget.user.displayName]  ),
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w800,
                     )
                   );
                 }
-                return Center(child: Text(locText(context, key: "loading"), style: TextStyle(fontSize: 20),));
+                return Center(child: Text(localize(context, key: "loading"), style: TextStyle(fontSize: 20),));
               }),
             )
           ),
@@ -64,13 +63,13 @@ class _KickGroupMemberDialog extends State<KickGroupMemberDialog> {
           if(!isLoading){
             return Row(children: <Widget>[
               FlatButton(
-                child: Text(locText(context, key: "no").toUpperCase(),),
+                child: Text(localize(context, key: "no").toUpperCase(),),
                 onPressed: (){
                   Navigator.pop(context);
                 },
               ),
               FlatButton(
-                child: Text(locText(context, key: "yes").toUpperCase(),),
+                child: Text(localize(context, key: "yes").toUpperCase(),),
                 onPressed: () async {
 
                   setState(() {

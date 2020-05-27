@@ -8,7 +8,7 @@ import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/enums/action_type_enum.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'package:mobile/communication/request_sender.dart';
-import 'dialogs_collection.dart';
+import 'dialog_collection.dart';
 
 class SubjectEditorDialog extends StatefulWidget {
 
@@ -68,7 +68,7 @@ class _SubjectEditorDialog extends State<SubjectEditorDialog> {
         child: Padding(
           padding: const EdgeInsets.all(5),
           child:
-          AutoSizeText(widget.subject == null ? locText(context, key: "create_subject") : locText(context, key: "edit_subject") ,
+          AutoSizeText(widget.subject == null ? localize(context, key: "create_subject") : localize(context, key: "edit_subject") ,
               style: TextStyle(
                 fontSize: 30.0,
                 fontWeight: FontWeight.w800,
@@ -97,14 +97,14 @@ class _SubjectEditorDialog extends State<SubjectEditorDialog> {
                         controller: _subjectTextEditingController,
                         textInputAction: TextInputAction.send,
                         decoration:
-                        InputDecoration(hintText: locText(context, key: "subject"), errorText: errorText),
+                        InputDecoration(hintText: localize(context, key: "subject"), errorText: errorText),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 8.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Text(locText(context, key: "subscription_based"), style: TextStyle(fontSize: 19),),
+                            Text(localize(context, key: "subscription_based"), style: TextStyle(fontSize: 19),),
                             Transform.scale(scale: 1.3,
                               child: Checkbox(
                                 value: isSubscriberOnly,
@@ -143,7 +143,7 @@ class _SubjectEditorDialog extends State<SubjectEditorDialog> {
         children: <Widget>[
           FlatButton(
               child: Center(
-                child: Text(locText(context, key: "cancel").toUpperCase()),
+                child: Text(localize(context, key: "cancel").toUpperCase()),
               ),
               onPressed: () {
                 Navigator.of(context).pop(null);
@@ -153,7 +153,7 @@ class _SubjectEditorDialog extends State<SubjectEditorDialog> {
           FlatButton(
 
               child: Center(
-                child: Text((widget.subject == null ? locText(context, key: "add") : locText(context, key: "edit")).toUpperCase() ,
+                child: Text((widget.subject == null ? localize(context, key: "add") : localize(context, key: "edit")).toUpperCase() ,
                   style: TextStyle(
                       color: HazizzTheme.warningColor
                   ),

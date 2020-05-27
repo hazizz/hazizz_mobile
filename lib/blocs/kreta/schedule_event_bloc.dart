@@ -1,16 +1,14 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
-
 import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/response_states.dart';
 import 'package:mobile/communication/pojos/PojoClass.dart';
-import 'package:mobile/custom/hazizz_date_time.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/custom/logger.dart';
 import 'package:mobile/extension_methods/time_of_day_extension.dart';
 import 'package:bloc/bloc.dart';
+import 'package:mobile/extension_methods/datetime_extension.dart';
 
 //region ScheduleEvent events
 abstract class ScheduleEventEvent extends HEvent {
@@ -97,29 +95,26 @@ class ScheduleEventUpdateClassesEvent extends ScheduleEventEvent {
 //endregion
 
 //region Event item parts
-// Áll: időtartamból és egy event típusból(child class)
 class EventItem{
 
-  HazizzDateTime start;
+  final DateTime start;
+  final DateTime end;
 
-  HazizzDateTime end;
-
-  EventItem({@required this.start, @required this.end}){
-  }
+  EventItem({@required this.start, @required this.end});
 }
 
 class BeforeClassesEventItem extends EventItem{
   BeforeClassesEventItem({
-    @required HazizzDateTime start,
-    @required  HazizzDateTime end}) :
+    @required DateTime start,
+    @required  DateTime end}) :
     super(start: start, end: end);
 }
 
 class AfterClassesEventItem extends EventItem{
   PojoClass tomorrowClass;
   AfterClassesEventItem({
-    @required HazizzDateTime start,
-    @required  HazizzDateTime end,
+    @required DateTime start,
+    @required  DateTime end,
     this.tomorrowClass}) :
     super(start: start, end: end);
 
@@ -128,16 +123,16 @@ class AfterClassesEventItem extends EventItem{
     @required  PojoClass upcomingClass,
     this.tomorrowClass}) :
     super(
-      start: HazizzDateTime.fromTimeOfDay(lastClass.endOfClass),
-      end: HazizzDateTime.fromTimeOfDay(upcomingClass.startOfClass)
+      start: lastClass.endOfClass.getDateTimeFromToday(),//DateTime.fromTimeOfDay(lastClass.endOfClass),
+      end: upcomingClass.startOfClass.getDateTimeFromToday()
     );
 }
 
 
 class NoSchoolEventItem extends EventItem{
   NoSchoolEventItem({
-    @required HazizzDateTime start,
-    @required  HazizzDateTime end}) :
+    @required DateTime start,
+    @required  DateTime end}) :
     super(start: start, end: end);
 }
 
@@ -145,8 +140,8 @@ class ClassEventItem extends EventItem{
   PojoClass currentClass;
 
   ClassEventItem({
-    @required HazizzDateTime start,
-    @required  HazizzDateTime end,
+    @required DateTime start,
+    @required  DateTime end,
     @required this.currentClass}) :
     super(start: start, end: end
   );
@@ -154,16 +149,16 @@ class ClassEventItem extends EventItem{
   ClassEventItem.fromClass({
     @required this.currentClass}) :
     super(
-      start: HazizzDateTime.fromTimeOfDay(currentClass.startOfClass),
-      end: HazizzDateTime.fromTimeOfDay(currentClass.endOfClass)
+      start: currentClass.startOfClass.getDateTimeFromToday(),
+      end: currentClass.endOfClass.getDateTimeFromToday()
     );
 }
 
 class BreakEventItem extends EventItem{
 
   BreakEventItem({
-    @required HazizzDateTime start,
-    @required  HazizzDateTime end}) :
+    @required DateTime start,
+    @required  DateTime end}) :
     super(start: start, end: end);
 }
 //endregion
@@ -176,9 +171,11 @@ class ScheduleEventBloc extends Bloc<ScheduleEventEvent, ScheduleEventState> {
 
   ScheduleEventBloc scheduleEventBloc;
 
-  int currentDayIndex = HazizzDateTime.now().weekday-1;
+  int currentDayIndex = DateTime.now().weekday-1;
 
   EventItem currentEvent;
+
+  Timer timer;
 
   @override
   ScheduleEventState get initialState => ScheduleEventInitializeState();
@@ -197,7 +194,6 @@ class ScheduleEventBloc extends Bloc<ScheduleEventEvent, ScheduleEventState> {
 
       findCurrentEvent();
 
-
       HazizzLogger.printLog("log: this is a debug: 1");
 
       this.add(ScheduleEventUpdateEvent());
@@ -206,12 +202,11 @@ class ScheduleEventBloc extends Bloc<ScheduleEventEvent, ScheduleEventState> {
     }else if (event is ScheduleEventUpdateEvent) {
 
       yield ScheduleEventFineState(currentEvent: currentEvent, nextEvent: nextEvent());
-
     }
   }
 
-  // ez fog szolni hogy mikor kell újra kalkulálni
-  void setTimer(HazizzDateTime nextEventChangeTime2){
+  /// ez fog szolni hogy mikor kell újra kalkulálni
+  void setTimer(DateTime nextEventChangeTime2){
 
     void handleTimeout() {  // callback function
       // time to update the event widget
@@ -219,17 +214,10 @@ class ScheduleEventBloc extends Bloc<ScheduleEventEvent, ScheduleEventState> {
       this.add(ScheduleEventNextEvent());
     }
 
-    startTimeout() {
-      HazizzDateTime now = HazizzDateTime.now();
-
-      var duration = (nextEventChangeTime2.difference(now));
-
-      HazizzLogger.printLog("DURATION: ${duration.inMinutes}, ${duration.inSeconds}");
-
-      return new Timer(duration, handleTimeout);
-    }
-
-    startTimeout();
+    DateTime now = DateTime.now();
+    var duration = (nextEventChangeTime2.difference(now));
+    HazizzLogger.printLog("DURATION: ${duration.inMinutes}, ${duration.inSeconds}");
+    timer = Timer(duration, handleTimeout);
   }
 
   TimeOfDay nextEventChangeTime;
@@ -265,7 +253,7 @@ class ScheduleEventBloc extends Bloc<ScheduleEventEvent, ScheduleEventState> {
 
   EventItem findCurrentEvent(){
     int i = currentEventIndex != null ? currentEventIndex : 0;
-    var now = HazizzDateTime.now();
+    var now = DateTime.now();
     for(;i < events.length; i++){
       EventItem event = events[i];
       logger.d("iteratrion: $i, event: $event, event.start: ${event.start}, event.end: ${event.end}");
@@ -285,15 +273,14 @@ class ScheduleEventBloc extends Bloc<ScheduleEventEvent, ScheduleEventState> {
   }
 
 
-
-  void calculateUpcomingEvent2(){
+  void calculateUpcomingEvent(){
     HazizzLogger.printLog("log: debugMode ACTIVATED: 0");
     if( MainTabBlocs().schedulesBloc.classes.classes.containsKey(currentDayIndex.toString())) {
       List<PojoClass> todayClasses = MainTabBlocs().schedulesBloc.classes
           .classes[currentDayIndex.toString()];
 
       HazizzLogger.printLog("log: debugMode ACTIVATED: 1: ${todayClasses.length}");
-      events.add(BeforeClassesEventItem(start: HazizzDateTime.fromToday(0, 0), end: HazizzDateTime.fromTimeOfDay(todayClasses[0].startOfClass) ));
+      events.add(BeforeClassesEventItem(start: TimeOfDay(hour: 0, minute: 0).getDateTimeFromToday(), end: todayClasses[0].startOfClass.getDateTimeFromToday() ));
       HazizzLogger.printLog("log: debugMode ACTIVATED: 2");
       for(int i = 0; i < todayClasses.length; i++){
         HazizzLogger.printLog("log: debugMode ACTIVATED: 3: $i");
@@ -302,7 +289,10 @@ class ScheduleEventBloc extends Bloc<ScheduleEventEvent, ScheduleEventState> {
         if(currentClassInLoop.periodNumber == 1){
           events.add(ClassEventItem.fromClass(currentClass: currentClassInLoop));
         }else{
-          events.add(BreakEventItem(start: HazizzDateTime.fromTimeOfDay(todayClasses[i-1].endOfClass), end: HazizzDateTime.fromTimeOfDay(currentClassInLoop.startOfClass)));
+          events.add(BreakEventItem(
+            start: todayClasses[i-1].endOfClass.getDateTimeFromToday(),
+            end: currentClassInLoop.startOfClass.getDateTimeFromToday())
+          );
           events.add(ClassEventItem.fromClass(currentClass: currentClassInLoop));
         }
         HazizzLogger.printLog("log: debugMode ACTIVATED: 4");
@@ -311,14 +301,13 @@ class ScheduleEventBloc extends Bloc<ScheduleEventEvent, ScheduleEventState> {
       HazizzLogger.printLog("log: class state: loop end");
     }
     else{
-      events.add(NoSchoolEventItem(start: HazizzDateTime.fromToday(0, 0), end: HazizzDateTime.fromToday(23, 59)));
+      events.add(NoSchoolEventItem(start: TimeOfDay(hour: 0, minute: 0).getDateTimeFromToday(), end: TimeOfDay(hour: 23, minute: 59).getDateTimeFromToday()));
       HazizzLogger.printLog("log: 998: null or empty;");
     }
   }
 
 
-  void calculateUpcomingEvent(){
-
+  void calculateUpcomingEvent2(){
     List<PojoClass> todayClasses =  MainTabBlocs().schedulesBloc.classes.classes[currentDayIndex.toString()];
 
     HazizzLogger.printLog("log: opsie: 2");
@@ -328,20 +317,18 @@ class ScheduleEventBloc extends Bloc<ScheduleEventEvent, ScheduleEventState> {
     HazizzLogger.printLog("log: oy1334: todayClssaes.length: ${todayClasses.length}");
 
     for(int i = 0; i < todayClasses.length; i++){
-
       HazizzLogger.printLog("loop: i: $i");
 
       PojoClass currentClassInLoop = todayClasses[i];
 
       if(i == 0){
         if(currentClassInLoop.startOfClass > now){
-          // első óra még nem indult el
-
+          /// első óra még nem indult el
           nextEventChangeTime = currentClassInLoop.startOfClass;
           HazizzLogger.printLog("log: class state: első óra még nem indult el");
           break;
         }else if(currentClassInLoop.startOfClass < now && currentClassInLoop.endOfClass > now){
-          // első óra már el indult, de nem ért végett
+          /// első óra már el indult, de nem ért végett
           nextEventChangeTime = currentClassInLoop.endOfClass;
           HazizzLogger.printLog("log: class state: első óra már el indult, de nem ért végett");
           break;
@@ -350,18 +337,18 @@ class ScheduleEventBloc extends Bloc<ScheduleEventEvent, ScheduleEventState> {
 
       else if(i == todayClasses.length-1){
         if(currentClassInLoop.startOfClass > now){
-          // utlsó óra még nem indult el
+          /// utolsó óra még nem indult el
           nextEventChangeTime = currentClassInLoop.startOfClass;
           HazizzLogger.printLog("log: class state: utlsó óra még nem indult el");
           break;
         }else if(currentClassInLoop.startOfClass < now && currentClassInLoop.endOfClass > now){
-          // utlsó óra már el indult, de nem ért végett
+          /// utolsó óra már el indult, de nem ért végett
 
           nextEventChangeTime = currentClassInLoop.endOfClass;
           HazizzLogger.printLog("log: class state: utlsó óra már el indult, de nem ért végett");
           break;
         }else{
-          // az utolsó órának vége
+          /// az utolsó órának vége
           nextEventChangeTime = null;
           nextEventChangeIsNotToday = true;
           HazizzLogger.printLog("log: class state: az utlsó órának vége");
@@ -370,18 +357,18 @@ class ScheduleEventBloc extends Bloc<ScheduleEventEvent, ScheduleEventState> {
       }
       else{
         if(todayClasses[i-1].endOfClass < now && currentClassInLoop.startOfClass > now){
-          // szünetben
+          /// szünetben
           nextEventChangeTime = currentClassInLoop.startOfClass;
           HazizzLogger.printLog("log: class state: szünetben: ");
           break;
         }else if(currentClassInLoop.startOfClass < now && currentClassInLoop.endOfClass > now){
 
-          // órán, nem az első és nem is az utolsó óra ez
+          /// órán, nem az első és nem is az utolsó óra ez
           nextEventChangeTime = currentClassInLoop.endOfClass;
           HazizzLogger.printLog("log: class state: órán, nem az első és nem is az utolsó óra ez ");
           break;
         }
-        // itt már error mentesen lehet az elöző és a következő órához hasonlitani
+        /// itt már error mentesen lehet az elöző és a következő órához hasonlitani
       }
     }
     HazizzLogger.printLog("log: class state: loop end");

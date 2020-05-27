@@ -77,8 +77,8 @@ class HazizzNotification{
       // displaying
       // az id visszajön az appba
 
-      String tasksTomorrowChannelName = await locTextContextless(key: "notification_tasksTomorrow_channel_name");
-      String tasksTomorrowChannelDescription = await locTextContextless(key: "notification_tasksTomorrow_channel_description");
+      String tasksTomorrowChannelName = await localizeWithoutContext(key: "notification_tasksTomorrow_channel_name");
+      String tasksTomorrowChannelDescription = await localizeWithoutContext(key: "notification_tasksTomorrow_channel_description");
 
       final androidPlatformChannelSpecifics = AndroidNotificationDetails(
         tasksTomorrowChannelId, tasksTomorrowChannelName, tasksTomorrowChannelDescription,
@@ -109,13 +109,13 @@ class HazizzNotification{
           }
           if(tasksToShow.length == 0){
             await flutterLocalNotificationsPlugin.show(
-              0, await locTextContextless(key: "tasks_tomorrow"), "${await locTextContextless(key: "no_tasks_for_tomorrow", args: [tasksToShow.length.toString()])}",
+              0, await localizeWithoutContext(key: "tasks_tomorrow"), "${await localizeWithoutContext(key: "no_tasks_for_tomorrow", args: [tasksToShow.length.toString()])}",
               platformChannelSpecifics,
               payload: tasksToShow.map((e) => e.toJson()).toList().toString()
             );
           }else{
             await flutterLocalNotificationsPlugin.show(
-              0, await locTextContextless(key: "tasks_tomorrow"), "${await locTextContextless(key: "notif_unfinished_tasks", args: [tasksToShow.length.toString()])}",
+              0, await localizeWithoutContext(key: "tasks_tomorrow"), "${await localizeWithoutContext(key: "notif_unfinished_tasks", args: [tasksToShow.length.toString()])}",
               platformChannelSpecifics,
               payload: tasksToShow.map((e) => e.toJson()).toList().toString()
             );
@@ -125,7 +125,7 @@ class HazizzNotification{
           HazizzLogger.printLog("request for notif was successful");
         }else{
           await _flutterLocalNotificationsPlugin.show(
-            0, await locTextContextless(key: "tasks_tomorrow"), "${await locTextContextless(key: "check_your_tasks")}",
+            0, await localizeWithoutContext(key: "tasks_tomorrow"), "${await localizeWithoutContext(key: "check_your_tasks")}",
             platformChannelSpecifics,
             payload: 'none'
           );
@@ -133,7 +133,7 @@ class HazizzNotification{
       }
       else{
         await _flutterLocalNotificationsPlugin.show(
-          0, await locTextContextless(key: "tasks_tomorrow"), "${await locTextContextless(key: "check_your_tasks")}",
+          0, await localizeWithoutContext(key: "tasks_tomorrow"), "${await localizeWithoutContext(key: "check_your_tasks")}",
           platformChannelSpecifics,
           payload: 'none'
         );
@@ -173,8 +173,8 @@ class HazizzNotification{
    // await AndroidAlarmManager.periodic(const Duration(hours: 24), alarmID, callbackadder2, wakeup: true, exact: true, rescheduleOnReboot: true,  startAt: dateTime);
 
 
-    String tasksTomorrowChannelName = await locTextContextless(key: "notification_tasksTomorrow_channel_name");
-    String tasksTomorrowChannelDescription = await locTextContextless(key: "notification_tasksTomorrow_channel_description");
+    String tasksTomorrowChannelName = await localizeWithoutContext(key: "notification_tasksTomorrow_channel_name");
+    String tasksTomorrowChannelDescription = await localizeWithoutContext(key: "notification_tasksTomorrow_channel_description");
 
     final androidPlatformChannelSpecifics = AndroidNotificationDetails(
       tasksTomorrowChannelId, tasksTomorrowChannelName, tasksTomorrowChannelDescription,
@@ -194,8 +194,8 @@ class HazizzNotification{
 
     await flutterLocalNotificationsPlugin.showDailyAtTime(
       dailyTaskNotificationId,
-      await locTextContextless(key: "tasks_tomorrow"),
-      "${await locTextContextless(key: "check_your_tasks")}",
+      await localizeWithoutContext(key: "tasks_tomorrow"),
+      "${await localizeWithoutContext(key: "check_your_tasks")}",
       time,
       platformChannelSpecifics,
       payload: "payload",

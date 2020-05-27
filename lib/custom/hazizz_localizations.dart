@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mobile/services/firebase_analytics.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'hazizz_logger.dart';
@@ -9,16 +10,16 @@ import 'hazizz_logger.dart';
 const _keyLangCode = "key_langCode";
 
 extension LocTextExtension on String{
-  String locText(BuildContext context, {List<String> args}){
+  String localize(BuildContext context, {List<String> args}){
     return HazizzLocalizations.of(context)?.translate(this, args: args);
   }
 }
 
-String locText(BuildContext context, {@required String key, List<String> args}){
+String localize(BuildContext context, {@required String key, List<String> args}){
   return HazizzLocalizations.of(context)?.translate(key, args: args);
 }
 
-Future<String> locTextContextless({@required String key, List<String> args}) async {
+Future<String> localizeWithoutContext({@required String key, List<String> args}) async {
   return await HazizzLocalizationsNoContext.translate(key, args: args);
 }
 
@@ -81,7 +82,7 @@ class HazizzLocalizationsNoContext{
     String preferredLangCode = await getPreferredLangCode();
     String preferredCountryCode = await getPreferredCountryCode();
     String jsonString =
-    await rootBundle.loadString('assets/langs/${preferredLangCode}-${preferredCountryCode}.json');
+    await rootBundle.loadString('assets/langs/$preferredLangCode-$preferredCountryCode.json');
 
     Map<String, dynamic> jsonMap = json.decode(jsonString);
 
@@ -97,6 +98,8 @@ class HazizzLocalizationsNoContext{
 
     String nullCheckAndReturn(String text){
       if(text == null){
+        HazizzLogger.printLog("Error translating text for key \"" + key + "\"");
+        FirebaseAnalyticsManager.logTranslationError(key: key, arguments: args, translatedText: text);
         return "ERROR: KEY NOT FOUND";
       }
       return text;
@@ -106,19 +109,19 @@ class HazizzLocalizationsNoContext{
       await load();
     }
 
-    HazizzLogger.printLog("locale: translate args: $args");
-
     String text = localizedStrings[key];
     if(args == null) {
       return nullCheckAndReturn(text);
     }
 
-    HazizzLogger.printLog("locale: translate  args length: ${args.length}");
-
-    for(int i = 0; i < args.length; i++) {
-      HazizzLogger.printLog("locale: translate iteration: $i");
-      text = text.replaceFirst(RegExp('{}'), args[i]);
+    try{
+      for(int i = 0; i < args.length; i++) {
+        text = text.replaceFirst(RegExp('{}'), args[i]);
+      }
+    }catch(e){
+      FirebaseAnalyticsManager.logTranslationError(key: key, arguments: args, translatedText: text);
     }
+
     return nullCheckAndReturn(text);
   }
 }
@@ -149,6 +152,8 @@ class HazizzLocalizations {
   String translate(String key, {@required List<String> args }) {
     String nullCheckAndReturn(String text){
       if(text == null){
+        HazizzLogger.printLog("Error translating text for key \"" + key + "\"");
+        FirebaseAnalyticsManager.logTranslationError(key: key, arguments: args, translatedText: text);
         return "ERROR: KEY NOT FOUND";
       }
       return text;
@@ -160,11 +165,12 @@ class HazizzLocalizations {
       return nullCheckAndReturn(text);
     }
 
-    HazizzLogger.printLog("locale: translate  args length: ${args.length}");
-
-    for(int i = 0; i < args.length; i++) {
-      HazizzLogger.printLog("locale: translate  iter: $i");
-      text = text.replaceFirst(RegExp('{}'), args[i]);
+    try{
+      for(int i = 0; i < args.length; i++) {
+        text = text.replaceFirst(RegExp('{}'), args[i]);
+      }
+    }catch(e){
+      FirebaseAnalyticsManager.logTranslationError(key: key, arguments: args, translatedText: text);
     }
     return nullCheckAndReturn(text);
   }

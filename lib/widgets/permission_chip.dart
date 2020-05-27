@@ -9,7 +9,7 @@ class PermissionChip extends StatefulWidget {
   final Color backgroundColor = HazizzTheme.blue;
 
   final EdgeInsets padding ;
-  GroupPermissionsEnum permission;
+  final GroupPermissionsEnum permission;
 
   PermissionChip({Key key,
     @required this.permission,
@@ -37,9 +37,9 @@ class _PermissionChip extends State<PermissionChip> {
   Widget build(BuildContext context) {
 
     if(widget.permission == GroupPermissionsEnum.OWNER){
-      return Chip(label: Text(locText(context, key: "owner"), style: TextStyle(fontWeight: FontWeight.w700),), backgroundColor: HazizzTheme.yellow, shadowColor: HazizzTheme.yellow, elevation: 4,);
+      return Chip(label: Text(localize(context, key: "owner"), style: TextStyle(fontWeight: FontWeight.w700),), backgroundColor: HazizzTheme.yellow, shadowColor: HazizzTheme.yellow, elevation: 4,);
     }else if(widget.permission == GroupPermissionsEnum.MODERATOR){
-      return Chip(label: Text(locText(context, key: "moderator"), style: TextStyle(fontWeight: FontWeight.w700),), backgroundColor: Colors.deepOrangeAccent, shadowColor: Colors.deepOrangeAccent, elevation: 4,);
+      return Chip(label: Text(localize(context, key: "moderator"), style: TextStyle(fontWeight: FontWeight.w700),), backgroundColor: Colors.deepOrangeAccent, shadowColor: Colors.deepOrangeAccent, elevation: 4,);
     }
 
     return Container();

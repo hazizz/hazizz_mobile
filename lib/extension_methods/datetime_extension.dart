@@ -20,6 +20,33 @@ extension DateTimeExtension on DateTime {
 
   String get hazizzShowDateAndTimeFormat => DateFormat("yyyy.MM.dd HH:mm").format(this.add(DateTime.now().timeZoneOffset));
 
+  String daysDifference(BuildContext context){
+   // int daysDifference = DateTime.now().difference(this).inDays;
+    int daysDiff = this.difference(DateTime.now().subtract(Duration(days: 1))).inDays;
+
+    String day;
+    if(daysDiff == 0){
+      day = localize(context, key: "today");
+    }else if(daysDiff == 1){
+      day = localize(context, key: "tomorrow");
+    }else if(daysDiff == -1){
+      day = localize(context, key: "yesterday");
+    }else if(daysDiff < 0){
+      day = localize(context, key: "days_ago", args: [daysDiff.abs().toString()]);
+    }else{
+      day = localize(context, key: "days_later", args: [daysDiff.toString()]);
+    }
+
+    return day;
+  }
+
+  String weekdayLocalize(BuildContext context){
+    // int daysDifference = DateTime.now().difference(this).inDays;
+
+    return "days_${this.weekday}".localize(context);
+  }
+
+
   String dateTimeToLastUpdatedFormatLocalized(BuildContext context){
     int month = this.month;
 
@@ -44,7 +71,7 @@ extension DateTimeExtension on DateTime {
       str_minute = "0$str_minute";
     }
 
-    return locText(context, key: "last_updated") + ": " + "${this.year}.$str_month.$str_day $str_hour:$str_minute";
+    return localize(context, key: "last_updated") + ": " + "${this.year}.$str_month.$str_day $str_hour:$str_minute";
   }
 
 
@@ -70,8 +97,23 @@ extension DateTimeExtension on DateTime {
     return compareInSec < mainInSec;
   }
 
+  bool operator >=(dynamic other) {
+    if (other is! DateTime) return false;
+    return this.millisecondsSinceEpoch >= other.millisecondsSinceEpoch;
+  }
 
+  bool operator >(dynamic other) {
+    if (other is! DateTime) return false;
+    return this.millisecondsSinceEpoch > other.millisecondsSinceEpoch;
+  }
 
+  bool operator <=(dynamic other) {
+    if (other is! DateTime) return false;
+    return this.millisecondsSinceEpoch <= other.millisecondsSinceEpoch;
+  }
+
+  bool operator <(dynamic other) {
+    if (other is! DateTime) return false;
+    return this.millisecondsSinceEpoch < other.millisecondsSinceEpoch;
+  }
 }
-
-

@@ -5,17 +5,18 @@ import 'package:mobile/blocs/group/my_groups_bloc.dart';
 import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/response_states.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
-import 'package:mobile/dialogs/dialogs_collection.dart';
+import 'package:mobile/dialogs/dialog_collection.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 import 'package:mobile/widgets/listItems/group_item_widget.dart';
+import 'package:mobile/widgets/scroll_space_widget.dart';
 
 class MyGroupsPage extends StatefulWidget {
 
    static const String title = "My groups";
 
    String getTitle(BuildContext context){
-     return locText(context, key: "my_groups");
+     return localize(context, key: "my_groups");
    }
 
   MyGroupsPage({Key key}) : super(key: key);
@@ -43,15 +44,6 @@ class _MyGroupsPage extends State<MyGroupsPage> {
       child: Scaffold(
         appBar: AppBar(
           leading: HazizzBackButton(),
-          actions: <Widget>[
-            IconButton(icon: Icon(FontAwesomeIcons.plus),
-              onPressed: () async {
-                bool result = await showCreateGroupDialog(context);
-                if(result != null && result == true){
-                  myGroupsBloc.add(FetchData());
-                }
-              })
-          ],
           title: Text(widget.getTitle(context)),
         ),
         body: new RefreshIndicator(
@@ -61,32 +53,43 @@ class _MyGroupsPage extends State<MyGroupsPage> {
                   if (state is ResponseDataLoaded) {
                     List<PojoGroup> groups = state.data;
                     return new ListView.builder(
-                       // physics: BouncingScrollPhysics(),
-                        itemCount: groups.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return GroupItemWidget(group: groups[index]);
+                      itemCount: groups.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        if(index == groups.length-1){
+                          return addScrollSpace(GroupItemWidget(group: groups[index]));
                         }
+                        return GroupItemWidget(group: groups[index]);
+                      }
                     );
                   } else if (state is ResponseEmpty) {
                     return Column(
-                        children: [
-                          Center(
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 50.0),
-                              child: Text(locText(context, key: "no_my_groups_yet")),
-                            ),
-                          )
-                        ]
+                      children: [
+                        Center(
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 50.0),
+                            child: Text(localize(context, key: "no_my_groups_yet")),
+                          ),
+                        )
+                      ]
                     );
                   } else if (state is ResponseWaiting) {
                     return Center(child: CircularProgressIndicator(),);
                   }
                   return Center(
-                      child: Text(locText(context, key: "info_something_went_wrong")));
+                      child: Text(localize(context, key: "info_something_went_wrong")));
                 }
             ),
             onRefresh: () async => myGroupsBloc.add(FetchData()) //await getData()
-        )
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(FontAwesomeIcons.plus),
+          onPressed: () async {
+            bool result = await showCreateGroupDialog(context);
+            if(result != null && result == true){
+              myGroupsBloc.add(FetchData());
+            }
+          }
+        ),
       ),
     );
   }

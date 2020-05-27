@@ -1,22 +1,19 @@
 import 'dart:convert';
 import 'dart:io';
-
-import 'dart:math';
+import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile/blocs/kreta/selected_session_bloc.dart';
 import 'package:mobile/communication/pojos/PojoAlertSettings.dart';
-import 'package:mobile/communication/pojos/PojoError.dart';
 import 'package:mobile/communication/pojos/PojoGradeAvarage.dart';
 import 'package:mobile/communication/pojos/PojoGrades.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/pojos/PojoGroupDetailed.dart';
 import 'package:mobile/communication/pojos/PojoGroupPermissions.dart';
+import 'package:mobile/communication/pojos/PojoInviteLink.dart';
 import 'package:mobile/communication/pojos/PojoKretaNote.dart';
 import 'package:mobile/communication/pojos/PojoKretaProfile.dart';
-import 'package:mobile/communication/pojos/PojoMeInfoPrivate.dart';
 import 'package:mobile/communication/pojos/PojoMeInfo.dart';
 import 'package:mobile/communication/pojos/PojoMyDetailedInfo.dart';
 import 'package:mobile/communication/pojos/PojoSchedules.dart';
@@ -28,7 +25,6 @@ import 'package:mobile/communication/pojos/PojoUser.dart';
 import 'package:mobile/communication/pojos/pojo_comment.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
-import 'package:mobile/custom/image_operations.dart';
 import 'package:mobile/managers/kreta_session_manager.dart';
 import 'package:mobile/managers/preference_service.dart';
 import 'package:mobile/managers/token_manager.dart';
@@ -36,20 +32,19 @@ import 'package:meta/meta.dart';
 import 'package:mobile/services/pojo_converter_helper.dart';
 import 'package:mobile/storage/cache_manager.dart';
 import 'package:package_info/package_info.dart';
-
-
-import '../htttp_methods.dart';
+import 'dart:core';
+import '../../annotation.dart';
+import '../htttp_method_enum.dart';
 
 import 'package:mobile/extension_methods/datetime_extension.dart';
 
 
 Future<Request> refreshTokenInRequest(Request request) async {
-  request.header[HttpHeaders.authorizationHeader] = await TokenManager.getToken();
-
+  request.header[HttpHeaders.authorizationHeader] = await TokenManager.accessToken;
   return request;
 }
 
-//region The base request
+//region Base request
 class Request {
   dynamic responseData;
 
@@ -75,7 +70,7 @@ class Request {
 
     HazizzLogger.printLog("Building header: 3");
     if(authTokenHeader){
-      header[HttpHeaders.authorizationHeader] = "Bearer ${await TokenManager.getToken()}";
+      header[HttpHeaders.authorizationHeader] = "Bearer ${await TokenManager.accessToken}";
     }if(contentTypeHeader) {
       header[HttpHeaders.contentTypeHeader] = "application/json";
     }
@@ -99,7 +94,7 @@ class Request {
 }
 //endregion
 
-//region Second gen parent requests
+//region Second parent requests
 class HazizzRequest extends Request{
   HazizzRequest() {
     super.SERVER_PATH = "hazizz-server/";
@@ -456,37 +451,6 @@ class UpdateMyDisplayName extends HazizzRequest {
   }
 }
 
-class UploadImage extends Request {
-  UploadImage({ @required HazizzImageData imageData, @required String key, @required String iv})  {
-   // package.Image im = package.decodeImage(image.readAsBytesSync());
-    authTokenHeader = false;
-    contentTypeHeader = false;
-    BASE_URL = "https://transfer.sh/${Random().nextInt(1000)}.txt";
-    httpMethod = HttpMethod.PUT;
-    header[HttpHeaders.contentTypeHeader] = "text/plain";
-  //  List<String> a = image.path.split("/");
-
-    // body = package.encodeJpg(im, quality: 100);
-
-    print("melody1");
-   // Uint8List s = image.readAsBytesSync();
-    print("melody2");
-
-   // String crypted = HazizzCrypt.encrypt(base64.encode(s), key, iv); //encrypt
-    print("melody3");
-
-    body = imageData.encryptedData;
-
-    debugPrint(body);
-  }
-
-  @override
-  convertData(Response response) {
-    print(response.data);
-    String imgUrl = response.data;
-    return imgUrl;
-  }
-}
 
 class GetUploadedImage extends Request {
   GetUploadedImage({ @required String url})  {
@@ -544,9 +508,7 @@ class Report extends HazizzRequest {
   }
 }
 
-
 class CreateGroup extends HazizzRequest {
-
   CreateGroup.open({ @required String b_groupName})  {
     httpMethod = HttpMethod.POST;
     PATH = "groups";
@@ -573,7 +535,6 @@ class CreateGroup extends HazizzRequest {
 
 // you can also join group with this
 class RetrieveGroup extends HazizzRequest {
-
   bool isDetailed = false;
   bool isWithoutMe = false;
 
@@ -703,7 +664,7 @@ class DeleteSubject extends HazizzRequest {
 }
 
 class CreateSubject extends HazizzRequest {
-  CreateSubject({ @required int p_groupId, @required String b_subjectName, @required bool b_subscriberOnly = false})  {
+  CreateSubject({ @required int p_groupId, @required String b_subjectName, bool b_subscriberOnly = false})  {
     httpMethod = HttpMethod.POST;
     PATH = "subjects/groups/${p_groupId}";
     authTokenHeader = true;
@@ -810,12 +771,13 @@ class CreateTask extends HazizzRequest {
   }
 }
 
+@DasAnnotation("Can is go to the batroomk")
 class EditTask extends HazizzRequest {
   EditTask({ @required int taskId,
     @required List<String> b_tags,
     @required String b_description,@required  DateTime b_deadline, String b_salt})  {
     httpMethod = HttpMethod.PATCH;
-    PATH = "tasks/${taskId}";
+    PATH = "tasks/$taskId";
 
     authTokenHeader = true;
     contentTypeHeader = true;
@@ -1080,26 +1042,50 @@ class KickGroupMember extends HazizzRequest {
 
 
 
-class GetGroupInviteLinks extends Request {
-  GetGroupInviteLinks.open({ @required int groupId})  {
+class GetGroupInviteLinks extends HazizzRequest {
+
+  GetGroupInviteLinks({ @required int groupId})  {
     httpMethod = HttpMethod.GET;
-    PATH = "s/groups/$groupId";
+    PATH = "groups/$groupId/invitelinks";
     authTokenHeader = true;
   }
+  /*
+  etGroupInviteLinks.open({ @required int groupId})  {
+    httpMethod = HttpMethod.GET;
+    PATH = "groups/$groupId/invitelinks";
+    authTokenHeader = true;
+  }
+
   GetGroupInviteLinks.closed({ @required int groupId,  @required int groupPassword})  {
     httpMethod = HttpMethod.GET;
     PATH = "s/groups/$groupId/$groupPassword";
     authTokenHeader = true;
   }
+  */
 
   @override
   dynamic convertData(Response response) {
-    return response;//response.headers.value("Location");
-    /*
+   // return response;//response.headers.value("Location");
+
     Iterable iter = getIterable(response.data);
     List<PojoInviteLink> links = iter.map<PojoInviteLink>((json) => PojoInviteLink.fromJson(json)).toList();
     return links;
-    */
+
+  }
+}
+
+class CreateGroupInviteLink extends HazizzRequest {
+  CreateGroupInviteLink({ @required int groupId})  {
+    httpMethod = HttpMethod.POST;
+    PATH = "groups/$groupId/invitelinks";
+    authTokenHeader = true;
+  }
+
+  @override
+  dynamic convertData(Response response) {
+    // return response;//response.headers.value("Location");
+    return PojoInviteLink.fromJson(jsonDecode(response.data));
+
   }
 }
 
@@ -1138,6 +1124,20 @@ class GetGroupInviteLink extends HazizzRequest {
 //region Kreta requests
 //region Kreta session requests
 
+class KretaGetSession extends TheraRequest {
+  KretaGetSession({@required int sessionId})  {
+    httpMethod = HttpMethod.GET;
+    PATH = "kreta/sessions/$sessionId";
+    authTokenHeader = true;
+  }
+
+  @override
+  dynamic convertData(Response response) {
+    PojoSession session = PojoSession.fromJson(jsonDecode(response.data));
+    return session;
+  }
+}
+
 class KretaGetSessions extends TheraRequest {
   KretaGetSessions()  {
     httpMethod = HttpMethod.GET;
@@ -1155,9 +1155,9 @@ class KretaGetSessions extends TheraRequest {
 
 class KretaGetProfile extends TheraRequest {
   KretaGetProfile({ @required PojoSession session})  {
-  httpMethod = HttpMethod.GET;
-  PATH = "kreta/sessions/${session.id}/profile";
-  authTokenHeader = true;
+    httpMethod = HttpMethod.GET;
+    PATH = "kreta/sessions/${session.id}/profile";
+    authTokenHeader = true;
   }
 
   @override

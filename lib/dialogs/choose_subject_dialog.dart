@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/blocs/tasks/task_maker_blocs.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
 import 'package:mobile/defaults/pojo_subject_empty.dart';
 import 'package:mobile/enums/group_types_enum.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
-import 'dialogs_collection.dart';
+import 'dialog_collection.dart';
 
 class ChooseSubjectDialog extends StatefulWidget {
 
@@ -85,7 +84,7 @@ class _ChooseSubjectDialog extends State<ChooseSubjectDialog> {
         child: Padding(
           padding: const EdgeInsets.all(5),
           child:
-          Text(locText(context, key: "select_subject"),
+          Text(localize(context, key: "select_subject"),
               style: TextStyle(
                 fontSize: 26,
                 fontWeight: FontWeight.w700,
@@ -102,7 +101,7 @@ class _ChooseSubjectDialog extends State<ChooseSubjectDialog> {
               Builder(
                 builder: (context){
                   if(subjectsData.isEmpty){
-                    return Text(locText(context, key: "no_subjects_yet"));
+                    return Text(localize(context, key: "no_subjects_yet"));
                   }
                   return Container();
                 },
@@ -151,7 +150,7 @@ class _ChooseSubjectDialog extends State<ChooseSubjectDialog> {
             builder: (context){
               if(subjectsData.length == 1 && subjectsData[0].id == 0) {
                 return FlatButton(
-                  child: new Text(locText(context, key: "add_subject").toUpperCase()),
+                  child: new Text(localize(context, key: "add_subject").toUpperCase()),
                   onPressed: () async {
                     PojoSubject result = await showAddSubjectDialog(context, groupId: widget.groupId);
                     if(result != null){
@@ -167,7 +166,7 @@ class _ChooseSubjectDialog extends State<ChooseSubjectDialog> {
             },
           ),
           FlatButton(
-            child: new Text(locText(context, key: "close").toUpperCase()),
+            child: new Text(localize(context, key: "close").toUpperCase()),
             onPressed: () {
               Navigator.pop(context, null);
             },

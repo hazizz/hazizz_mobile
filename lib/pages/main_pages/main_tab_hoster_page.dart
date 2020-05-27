@@ -18,7 +18,7 @@ import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/custom/hazizz_app_info.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/custom/session_status_converter.dart';
-import 'package:mobile/dialogs/dialogs_collection.dart';
+import 'package:mobile/dialogs/dialog_collection.dart';
 import 'package:mobile/managers/app_state_manager.dart';
 import 'package:mobile/managers/app_state_restorer.dart';
 import 'package:mobile/managers/preference_service.dart';
@@ -62,13 +62,13 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
 
   bool doEvent = false;
 
-  PojoSession selectedKretaAccount = null;
+  PojoSession selectedKretaAccount;
 
-  String selectedKretaAccountName = null;
+  String selectedKretaAccountName;
 
   static String currentTabName;
 
-  String mapTabIndexToTabName(int index){
+  void mapTabIndexToTabName(int index){
     switch(index){
       case 0:
         currentTabName = tasksTabPage.tabName;
@@ -104,7 +104,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
     if(currentTabName == null){
       PreferenceService.getStartPageIndex().then(
       (int pageIndex){
-        currentTabName = mapTabIndexToTabName(pageIndex);
+        mapTabIndexToTabName(pageIndex);
       });
     }
 
@@ -232,7 +232,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
         now.difference(currentBackPressTime) > Duration(seconds: 2)) {
       currentBackPressTime = now;
       _scaffoldKey.currentState.showSnackBar(SnackBar(
-        content: Text(locText(context, key: "press_again_to_exit")),
+        content: Text(localize(context, key: "press_again_to_exit")),
         duration: Duration(seconds: 3),
       ));
 
@@ -279,7 +279,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                 ),
                 title: Padding(
                   padding: const EdgeInsets.only(top: 4, ),
-                  child: Text(locText(context, key: "hazizz"), style: TextStyle(fontWeight: FontWeight.w700, fontFamily: "Nunito", fontSize: 21),),
+                  child: Text(localize(context, key: "hazizz"), style: TextStyle(fontWeight: FontWeight.w700, fontFamily: "Nunito", fontSize: 21),),
                 ),
 
                 bottom: TabBar(
@@ -414,7 +414,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                                 UserDataBlocs().userDataBloc.myUserData.username,
                                 style: TextStyle(fontSize: 18, fontFamily: "Nunito", fontWeight: FontWeight.w700),);
                             }
-                            return Text(locText(context, key: "loading"), style: TextStyle(fontSize: 18),);
+                            return Text(localize(context, key: "loading"), style: TextStyle(fontSize: 18),);
 
 
                           },
@@ -426,10 +426,10 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                               return Text(text, style: TextStyle(fontSize: 16, fontFamily: "Nunito", fontWeight: FontWeight.w600), );
                             }
                             if(state is SelectedSessionFineState){
-                              return unHardCodeify("${locText(context, key: "kreta_account")}: ${state.session.username}");
+                              return unHardCodeify("${localize(context, key: "kreta_account")}: ${state.session.username}");
 
                             }
-                            return unHardCodeify(locText(context, key: "not_logged_in_to_kreta_account"));
+                            return unHardCodeify(localize(context, key: "not_logged_in_to_kreta_account"));
                           },
                         ),
 
@@ -455,7 +455,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
 
 
                             return CircleAvatar(
-                              child: new Text(locText(context, key: "loading")),
+                              child: new Text(localize(context, key: "loading")),
                             );
                           },
                         ),
@@ -467,7 +467,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                         child: ListTile(
                           leading: Icon(FontAwesomeIcons.users),
 
-                          title: Text("my_groups".locText(context)),
+                          title: Text("my_groups".localize(context)),
                           onTap: () {
                             //Navigator.pop(context);
                             // Navigator.push(context,MaterialPageRoute(builder: (context) => GroupTabHosterPage(groupId: 2)));
@@ -478,7 +478,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
 
                       ListTile(
                         leading: Icon(FontAwesomeIcons.tasks),
-                        title: Text(locText(context, key: "task_calendar")),
+                        title: Text(localize(context, key: "task_calendar")),
                         onTap: () {
                           Navigator.popAndPushNamed(context, "/calendarTasks");
                         },
@@ -488,7 +488,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                         children: <Widget>[
                           Padding(
                             padding: const EdgeInsets.only(left: 6, right: 8.0),
-                            child: Text(locText(context, key: "kreta")),
+                            child: Text(localize(context, key: "kreta")),
                           ),
                           Expanded(child: Divider())
                         ],
@@ -502,12 +502,17 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
 
                             Padding(
                               padding: const EdgeInsets.only(left: 14),
-                              child: BlocBuilder(
+                              child: BlocConsumer(
                                 bloc: SessionsBloc(),
+                                listener: (context, state){
+                                  if(state is SelectedSessionFineState){
+                                    setState(() {
+                                      selectedKretaAccountName = state.session.username;
+                                    });
+                                  }
+                                },
                                 builder: (context, state){
-
                                   List<PojoSession> sessions = [];
-
                                   for(PojoSession s in SessionsBloc().sessions){
                                     for(int i = 0; i< sessions.length; i++ ){
                                       PojoSession s2 = sessions[i];
@@ -557,6 +562,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                                             for(PojoSession s in sessions){
                                               if(s.username == selectedKretaAccountName){
 
+                                                HazizzLogger.printLog("Hé te paraszth: " + s.status);
                                                 if(s.status != "ACTIVE"){
                                                   WidgetsBinding.instance.addPostFrameCallback((_) async {
                                                     var reAuthSuccess = await Navigator.pushNamed(context, "/kreta/login/auth", arguments: s);
@@ -622,14 +628,14 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                             angle: math.pi,
                             child: Icon(FontAwesomeIcons.stickyNote)
                         ),
-                        title: Text(locText(context, key: "kreta_notes")),
+                        title: Text(localize(context, key: "kreta_notes")),
                         onTap: () {
                           Navigator.popAndPushNamed(context, "/kreta/notes");
                         },
                       ),
                       ListTile(
                         leading: Icon(FontAwesomeIcons.percentage),
-                        title: Text(locText(context, key: "kreta_grade_statistics")),
+                        title: Text(localize(context, key: "kreta_grade_statistics")),
                         onTap: () {
                           Navigator.popAndPushNamed(context, "/kreta/statistics");
                         },
@@ -647,7 +653,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                                   Navigator.pushNamed(context, "/settings");
                                 },
                                 leading: Icon(FontAwesomeIcons.cog),
-                                title: Text(locText(context, key: "settings"))
+                                title: Text(localize(context, key: "settings"))
                             ),
                             Row(
                               children: [
@@ -657,7 +663,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                                       angle: -math.pi,
                                       child:  Icon(FontAwesomeIcons.signOutAlt)
                                   ),
-                                  title: Text(locText(context, key: "textview_logout_drawer")),
+                                  title: Text(localize(context, key: "textview_logout_drawer")),
                                   onTap: () async {
                                     await AppState.logout();
                                   },

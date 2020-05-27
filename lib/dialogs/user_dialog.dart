@@ -6,7 +6,6 @@ import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/communication/pojos/PojoCreator.dart';
 import 'package:mobile/communication/pojos/PojoUser.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
-import 'package:mobile/custom/hazizz_date_time.dart';
 import 'package:mobile/dialogs/report_dialog.dart';
 import 'package:mobile/enums/group_permissions_enum.dart';
 import 'package:mobile/custom/image_operations.dart';
@@ -16,30 +15,30 @@ import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'package:mobile/communication/request_sender.dart';
-import 'dialogs_collection.dart';
+import 'dialog_collection.dart';
+import 'package:mobile/extension_methods/datetime_extension.dart';
 
 class UserDialog extends StatefulWidget {
 
   final GroupPermissionsEnum permission;
 
-  UserDialog({PojoUser user, PojoCreator creator, this.permission}){
-    if(user != null){
-      username = user.username;
-      displayName = user.displayName;
-      registrationDate = user.registrationDate;
-      id = user.id;
-    }else{
-      username = creator.username;
-      displayName = creator.displayName;
-      registrationDate = creator.registrationDate;
-      id = creator.id;
-    }
-  }
+  final int id;
+  final String username;
+  final String displayName;
+  final DateTime registrationDate;
 
-  int id;
-  String username;
-  String displayName;
-  HazizzDateTime registrationDate;
+  UserDialog.user({@required PojoUser user, this.permission}) :
+    username = user.username,
+    displayName = user.displayName,
+    registrationDate = user.registrationDate,
+    id = user.id;
+
+  UserDialog.creator({@required PojoCreator creator, this.permission}) :
+    username = creator.username,
+    displayName = creator.displayName,
+    registrationDate = creator.registrationDate,
+    id = creator.id;
+
   
   
   @override
@@ -55,17 +54,14 @@ enum PromotableToEnum{
 class _UserDialog extends State<UserDialog> {
 
   String encodedProfilePic;
-
   GroupPermissionsEnum permission;
-
   GroupPermissionsEnum myPermission;
-
   PromotableToEnum promotableTo = PromotableToEnum.NONE;
 
   Image img;
 
   @override
-  Future initState() {
+  void initState() {
     permission = widget.permission;
     if(permission == GroupPermissionsEnum.MODERATOR){
       promotableTo = PromotableToEnum.USER;
@@ -75,15 +71,14 @@ class _UserDialog extends State<UserDialog> {
 
     myPermission = GroupBlocs().myPermissionBloc.myPermission;
 
-
     RequestSender().getResponse(GetUserProfilePicture.full(userId: widget.id)).then((HazizzResponse hazizzResponse){
       if(hazizzResponse.isSuccessful){
         encodedProfilePic = hazizzResponse.convertedData;
 
-        Uint8List profilePictureBytes = ImageOpeations.fromBase64ToBytesImage(encodedProfilePic);
-          setState(() {
-            img = Image.memory(profilePictureBytes);
-          });
+        Uint8List profilePictureBytes = ImageOperations.fromBase64ToBytesImage(encodedProfilePic);
+        setState(() {
+          img = Image.memory(profilePictureBytes);
+        });
       }
     });
 
@@ -94,10 +89,7 @@ class _UserDialog extends State<UserDialog> {
 
   @override
   Widget build(BuildContext context) {
-
-    List<PopupMenuEntry> popupMenuItems = [
-
-    ];
+    List<PopupMenuEntry> popupMenuItems = [];
 
     GroupPermissionsEnum myPermission = GroupBlocs().myPermissionBloc.myPermission;
 
@@ -105,25 +97,25 @@ class _UserDialog extends State<UserDialog> {
       if(permission == GroupPermissionsEnum.USER) {
         popupMenuItems.add(PopupMenuItem(
           value: "promote_to_moderator",
-          child: Text(locText(context, key: "promote_to_moderator"),),
+          child: Text(localize(context, key: "promote_to_moderator"),),
         ));
       }else if(permission == GroupPermissionsEnum.MODERATOR && myPermission == GroupPermissionsEnum.OWNER) {
         popupMenuItems.add(PopupMenuItem(
           value: "promote_to_user",
-          child: Text(locText(context, key: "promote_to_user"),),
+          child: Text(localize(context, key: "promote_to_user"),),
         ));
       }
       
       if(myPermission == GroupPermissionsEnum.OWNER){
         popupMenuItems.add(PopupMenuItem(
           value: "kick",
-          child: Text(locText(context, key: "kick"),),
+          child: Text(localize(context, key: "kick"),),
         ));
       }else if(myPermission == GroupPermissionsEnum.MODERATOR){
         if(permission == GroupPermissionsEnum.USER) {
           popupMenuItems.add(PopupMenuItem(
             value: "kick",
-            child: Text(locText(context, key: "kick")))
+            child: Text(localize(context, key: "kick")))
           );
         }
       }
@@ -131,7 +123,7 @@ class _UserDialog extends State<UserDialog> {
     popupMenuItems.add(
       PopupMenuItem(
         value: "report",
-        child: Text(locText(context, key: "report"),
+        child: Text(localize(context, key: "report"),
           style: TextStyle(color: HazizzTheme.red),
         ),
       )
@@ -183,7 +175,7 @@ class _UserDialog extends State<UserDialog> {
                     else if(value == "report"){
                       bool success = await showReportDialog(context, reportType: ReportTypeEnum.USER, id: widget.id, name: widget.displayName);
                       if(success != null && success){
-                        showReportSuccessFlushBar(context, what: locText(context, key: "user"));
+                        showReportSuccessFlushBar(context, what: localize(context, key: "user"));
 
                         Navigator.pop(context, permission);
 
@@ -219,7 +211,7 @@ class _UserDialog extends State<UserDialog> {
                             ),
                           );
                         }
-                        return Center(child: Text(locText(context, key: "loading")),);
+                        return Center(child: Text(localize(context, key: "loading")),);
                       }
                       ),
                       radius: 44,
@@ -252,8 +244,8 @@ class _UserDialog extends State<UserDialog> {
                         crossAxisAlignment: CrossAxisAlignment.start,
 
                         children: <Widget>[
-                          Text(locText(context, key: "registrationDate") + ":", style: TextStyle(fontSize: 20)),
-                          Expanded(child: Text(widget.registrationDate.hazizzShowDateFormat(), style: TextStyle(fontSize: 20), textAlign: TextAlign.end,)),
+                          Text(localize(context, key: "registrationDate") + ":", style: TextStyle(fontSize: 20)),
+                          Expanded(child: Text(widget.registrationDate.hazizzShowDateFormat, style: TextStyle(fontSize: 20), textAlign: TextAlign.end,)),
                         ],
                       );
                     }
@@ -263,8 +255,6 @@ class _UserDialog extends State<UserDialog> {
                   },
                 ),
                 Center(child:  PermissionChip(permission: permission  ,)),
-
-
               ]
           ),
         ),),
@@ -275,7 +265,7 @@ class _UserDialog extends State<UserDialog> {
                 padding: const EdgeInsets.only(right: 0),
                 child: FlatButton(
                   child: Center(
-                    child: Text(locText(context, key: "close").toUpperCase(),),
+                    child: Text(localize(context, key: "close").toUpperCase(),),
                   ),
                   onPressed: () {
                     Navigator.pop(context, permission);

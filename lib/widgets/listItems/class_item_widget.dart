@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/communication/pojos/PojoClass.dart';
-import 'package:mobile/dialogs/dialogs_collection.dart';
+import 'package:mobile/dialogs/dialog_collection.dart';
 import 'package:mobile/extension_methods/time_of_day_extension.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
 import "package:mobile/extension_methods/string_first_upper_extension.dart";
 import "package:mobile/extension_methods/datetime_extension.dart";
 
-
 class ClassItemWidget extends StatelessWidget{
 
   final PojoClass pojoClass;
-
   final bool isCurrentEvent;
 
   ClassItemWidget({this.pojoClass}) : isCurrentEvent = false;
@@ -23,7 +21,7 @@ class ClassItemWidget extends StatelessWidget{
 
     const double itemHeight = 65;
 
-    DateTime currentDateTime = DateTime.now();
+    final  DateTime currentDateTime = DateTime.now();
 
     Color bgColor;
 
@@ -80,18 +78,18 @@ class ClassItemWidget extends StatelessWidget{
                           children: <Widget>[
                             Container(
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.only(bottomRight: Radius.circular(20)),
+                                    borderRadius: BorderRadius.only(bottomRight: Radius.circular(10)),
                                     color: Theme.of(context).primaryColor
                                 ),
                                 child: Padding(
-                                  padding: const EdgeInsets.only(left: 2, top: 0, right: 8, bottom: 0),
+                                  padding: const EdgeInsets.only(left: 2, right: 4, top: 2),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                       children: [
 
                                   //  Text(pojoClass.subject == null ? "subject" : pojoClass.subject, style: TextStyle(fontSize: 20)),
                                         Text(pojoClass.subject == null ? "className" : pojoClass.subject.toUpperFirst(),
-                                          style: TextStyle(fontSize: 19),
+                                          style: TextStyle(fontSize: 18, height: 1),
                                         ),
                                       ]
                                   ),
@@ -115,9 +113,9 @@ class ClassItemWidget extends StatelessWidget{
                               padding: const EdgeInsets.only(left: 4.0),
                               child: Builder(builder: (context){
                                 if(pojoClass.cancelled){
-                                  return Text(locText(context, key: "thera_canceled").toUpperCase(), style: TextStyle(fontSize: 19, color: HazizzTheme.red));
+                                  return Text(localize(context, key: "thera_canceled").toUpperCase(), style: TextStyle(fontSize: 19, color: HazizzTheme.red));
                                 }else if(pojoClass.standIn){
-                                  return Text("${locText(context, key: "thera_standin")}: ${pojoClass.teacher}", style: TextStyle(fontSize: 19, color: HazizzTheme.red));
+                                  return Text("${localize(context, key: "thera_standin")}: ${pojoClass.teacher}", style: TextStyle(fontSize: 19, color: HazizzTheme.red));
 
                                 }
                                 return Container();
@@ -140,7 +138,10 @@ class ClassItemWidget extends StatelessWidget{
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
-                          Text(pojoClass.room ?? "", style: TextStyle(fontSize: 18),)
+                          Padding(
+                            padding: const EdgeInsets.only(right: 1.5),
+                            child: Text(pojoClass.room ?? "", style: TextStyle(fontSize: 18, height: 0.85),),
+                          )
                         ],
                       ),
                     ],

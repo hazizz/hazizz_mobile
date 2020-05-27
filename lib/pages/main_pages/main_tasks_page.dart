@@ -25,7 +25,7 @@ class TasksPage extends TabWidget {
   }
 
   getUIName(BuildContext context){
-    return locText(context, key: "tasks").toUpperCase();
+    return localize(context, key: "tasks").toUpperCase();
   }
 
   @override
@@ -67,7 +67,6 @@ class _TasksPage extends State<TasksPage>
     map = m;
 
     HazizzLogger.printLog("REBUILD, BIIP BOOp");
-    int itemCount2 = map.keys.length+1;
     return new Column(
       children: <Widget>[
         Card(
@@ -86,9 +85,9 @@ class _TasksPage extends State<TasksPage>
                       });
                     },
                     items: [
-                      DropdownMenuItem(child: Text(locText(context, key: "complete")), value: TaskCompleteStateEnum.COMPLETED, ),
-                      DropdownMenuItem(child: Text(locText(context, key: "incomplete")), value: TaskCompleteStateEnum.UNCOMPLETED,),
-                      DropdownMenuItem(child: Text(locText(context, key: "both")), value: TaskCompleteStateEnum.BOTH, ),
+                      DropdownMenuItem(child: Text(localize(context, key: "complete")), value: TaskCompleteStateEnum.COMPLETED, ),
+                      DropdownMenuItem(child: Text(localize(context, key: "incomplete")), value: TaskCompleteStateEnum.UNCOMPLETED,),
+                      DropdownMenuItem(child: Text(localize(context, key: "both")), value: TaskCompleteStateEnum.BOTH, ),
 
                     ],
                   ),
@@ -103,14 +102,14 @@ class _TasksPage extends State<TasksPage>
                         });
                       },
                       items: [
-                        DropdownMenuItem(child: Text(locText(context, key: "expired")), value: TaskExpiredStateEnum.EXPIRED,),
-                        DropdownMenuItem(child: Text(locText(context, key: "active")), value: TaskExpiredStateEnum.UNEXPIRED,)
+                        DropdownMenuItem(child: Text(localize(context, key: "expired")), value: TaskExpiredStateEnum.EXPIRED,),
+                        DropdownMenuItem(child: Text(localize(context, key: "active")), value: TaskExpiredStateEnum.UNEXPIRED,)
                       ],
                     ),
                   ),
                   Spacer(),
 
-                  FlatButton(child: Text(locText(context, key: "apply").toUpperCase(), style: TextStyle(fontSize: 13),),
+                  FlatButton(child: Text(localize(context, key: "apply").toUpperCase(), style: TextStyle(fontSize: 13),),
                     onPressed: (){
 
                       applyFilters();
@@ -126,7 +125,7 @@ class _TasksPage extends State<TasksPage>
         Expanded(
           child: Builder(builder: (context){
             if(map.keys == null || map.keys.isEmpty){
-              return Center(child: Text(locText(context, key: "no_tasks")),);
+              return Center(child: Text(localize(context, key: "no_tasks")),);
 
             }else{
 
@@ -143,13 +142,11 @@ class _TasksPage extends State<TasksPage>
                     }
 
                     List<GlobalKey<AnimatedListState>> listKeyList = new List(map.keys.length);
-                    for(int i = 0; i < listKeyList.length; i++){
-                      listKeyList[i] =  GlobalKey();
-                    }
+
+                    listKeyList.forEach((e) => e = GlobalKey());
 
                     DateTime key = map.keys.elementAt(index-1);
 
-                    HazizzLogger.printLog("Adjsadk");
                     Widget s = StickyHeader(
                       header: TaskHeaderItemWidget(dateTime: key),
                       content: Builder(
@@ -262,7 +259,7 @@ class _TasksPage extends State<TasksPage>
                                   Center(
                                     child: Padding(
                                       padding: const EdgeInsets.only(top: 50.0),
-                                      child: Text(locText(context, key: "no_tasks_yet")),
+                                      child: Text(localize(context, key: "no_tasks_yet")),
                                     ),
                                   )
                                 ]
@@ -279,7 +276,7 @@ class _TasksPage extends State<TasksPage>
                                 Flushbar(
                                   icon: Icon(FontAwesomeIcons.exclamation, color: Colors.red,),
 
-                                  message: "${locText(context, key: "tasks")}: ${locText(context, key: "info_something_went_wrong")}",
+                                  message: "${localize(context, key: "tasks")}: ${localize(context, key: "info_something_went_wrong")}",
                                   duration: Duration(seconds: 3),
                                 );
                               });
@@ -288,10 +285,10 @@ class _TasksPage extends State<TasksPage>
                               return onLoaded(MainTabBlocs().tasksBloc.tasks);
                             }
                             return Center(
-                                child: Text(locText(context, key: "info_something_went_wrong")));
+                                child: Text(localize(context, key: "info_something_went_wrong")));
                           }
                           return Center(
-                              child: Text(locText(context, key: "info_something_went_wrong")));
+                              child: Text(localize(context, key: "info_something_went_wrong")));
                         }
                     ),
                   ],

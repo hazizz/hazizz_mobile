@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:meta/meta.dart';
@@ -58,7 +57,6 @@ class HazizzResponse{
   }
 
   static Future<HazizzResponse> onError({@required DioError dioError, @required Request request})async{
-  //  _onErrorResponse(dioError);
     HazizzResponse hazizzResponse = new HazizzResponse._();
     hazizzResponse.dioError = dioError;
     hazizzResponse.response = dioError.response;
@@ -72,12 +70,12 @@ class HazizzResponse{
     }
     HazizzLogger.printLog("error response dio error: ${hazizzResponse.dioError.type.toString()}");
 
-
     return hazizzResponse;
   }
 
   onErrorResponse()async {
-    if(response != null) {
+    if(response != null && response?.data != null && response?.data != "") {
+      HazizzLogger.printLog("göfguiea:." + response.data + ".");
       pojoError = PojoError.fromJson(json.decode(response?.data));
 
       HazizzLogger.printLog("log: error response: $response");
@@ -98,11 +96,10 @@ class HazizzResponse{
           await RequestSender().waitCooldown();
 
         }
-        else if(pojoError.errorCode == 18 ||
-                pojoError.errorCode == 17) { // wrong token
-          // a requestet elmenteni hogy újra küldje
-          HazizzLogger.printLog("token is wrong or expired, the failed request is saved and a refresh token request is being sent. dio interceptro: ${RequestSender().isLocked()}");
-          if(!RequestSender().isLocked()) {
+        else if(pojoError.errorCode == 18 || pojoError.errorCode == 17) { // wrong token
+          /// a requestet elmenteni hogy újra küldje
+          HazizzLogger.printLog("token is wrong or expired, the failed request is saved and a refresh token request is being sent. dio interceptro: ${RequestSender().isLocked}");
+          if(!RequestSender().isLocked) {
             HazizzLogger.printLog("Locking dio interceptor and sending refresh token request");
 
             RequestSender().lock();
@@ -118,21 +115,17 @@ class HazizzResponse{
               }
               HazizzLogger.printLog("obtaining token failed. The user is redirected to the login screen");
             }
-            // elküldi újra ezt a requestet ami errort dobott
+            /// elküldi újra ezt a requestet ami errort dobott
             RequestSender().refreshRequestQueue.add(request);
-        //    HazizzResponse hazizzResponse = await RequestSender().getResponse(await refreshTokenInRequest(request));
             HazizzLogger.printLog("added request to refreshtoken list: ${request}");
-
-           // RequestSender().unlockTokenRefreshRequests();
           }else {
             HazizzLogger.printLog("Still waiting for refresh token request response, saving the new request in the queue");
 
             RequestSender().refreshRequestQueue.add(request);
-           // RequestSender().getResponse(request);
           }
         }else if(pojoError.errorCode == 13 || pojoError.errorCode == 14 ||
             pojoError.errorCode == 15) {
-          // navigate to login/register page
+          /// navigate to login/register page
         }else if(pojoError.errorCode == 132 && !(request is KretaAuthenticateSession)){
          // SelectedSessionBloc().add(SelectedSessionSetEvent(null));
           Crashlytics().recordError(CustomException("Tried authenticating a non existing session"), StackTrace.current, context: "Session is null");
@@ -150,7 +143,6 @@ class HazizzResponse{
         else if(pojoError.errorCode == 136 || pojoError.errorCode == 132 || pojoError.errorCode == 130){
           SelectedSessionBloc().add(SelectedSessionInactiveEvent());
         }
-
 
         HazizzLogger.printLog("log: response error: ${pojoError.toString()}");
       }

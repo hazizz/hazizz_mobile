@@ -1,11 +1,9 @@
 import 'dart:async';
-
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/item_list/item_list_picker_bloc.dart';
 import 'package:mobile/blocs/kreta/sessions_bloc.dart';
 import 'package:mobile/blocs/other/text_form_bloc.dart';
-
 import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/response_states.dart';
 import 'package:mobile/blocs/kreta/selected_session_bloc.dart';
@@ -20,8 +18,6 @@ import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/managers/kreta_session_manager.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/communication/hazizz_response.dart';
-
-
 
 //region KretaLoginEvents
 abstract class KretaLoginEvent extends HEvent {
@@ -48,8 +44,7 @@ class KretaLoginButtonPressed extends KretaLoginEvent {
 
 class KretaLoginDataChanged extends KretaLoginEvent {
   @override
-  String toString() =>
-      'KretaLoginDataChanged';
+  String toString() => 'KretaLoginDataChanged';
   List<Object> get props => null;
 
 }
@@ -314,14 +309,42 @@ class KretaLoginBloc extends Bloc<KretaLoginEvent, KretaLoginState> {
           HazizzLogger.printLog("sentaa22");
           yield KretaLoginWaiting();
           HazizzResponse hazizzResponse = await RequestSender().getResponse(
-              new KretaCreateSession(
-                  b_username: usernameController.text,
-                  b_password: passwordController.text,
-                  b_url: schoolBloc.pickedItem.url)
+            KretaCreateSession(
+              b_username: usernameController.text,
+              b_password: passwordController.text,
+              b_url: schoolBloc.pickedItem.url
+            )
           );
           if(hazizzResponse.isSuccessful) {
             PojoSession newSession = hazizzResponse.convertedData;
 
+            if(newSession.status == "LOADING"){
+              int tryCount = 0;
+              while(tryCount < 14){
+                HazizzResponse hazizzResponse = await getResponse(
+                  KretaGetSession(sessionId: newSession.id)
+                );
+                String status = hazizzResponse.convertedData.status;
+
+                if(status == "LOADING"){
+                  await Future.delayed(const Duration(seconds: 1));
+                  continue;
+                }
+                if(status == "ACTIVE" ){
+                  setSession(newSession, password: passwordController.text);
+                  yield KretaLoginSuccessState();
+                  return;
+                }else if(status == "INVALID_CREDENTIALS" ){
+                  yield KretaLoginSomethingWentWrong();
+                  return;
+                }else{
+
+                  break;
+                }
+
+                tryCount++;
+              }
+            }
 
             if(newSession.status == "ACTIVE"){
               setSession(newSession, password: passwordController.text);

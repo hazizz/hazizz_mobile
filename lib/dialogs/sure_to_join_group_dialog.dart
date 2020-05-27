@@ -5,7 +5,7 @@ import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/services/firebase_analytics.dart';
-import 'dialogs_collection.dart';
+import 'dialog_collection.dart';
 
 class SureToJoinGroupDialog extends StatefulWidget {
 
@@ -73,7 +73,7 @@ class _SureToJoinGroupDialog extends State<SureToJoinGroupDialog> {
           Center(
             child: Builder(builder: (context){
               if(someThingWentWrong){
-                return Text(locText(context, key: "try_again_later"),
+                return Text(localize(context, key: "try_again_later"),
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
@@ -82,7 +82,7 @@ class _SureToJoinGroupDialog extends State<SureToJoinGroupDialog> {
               }
               if(!isLoading){
                 if(!isMember){
-                  return Text(locText(context, key: "sure_to_join_group", args: [groupName] ),
+                  return Text(localize(context, key: "sure_to_join_group", args: [groupName] ),
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w800,
@@ -90,14 +90,14 @@ class _SureToJoinGroupDialog extends State<SureToJoinGroupDialog> {
                   );
                 }
 
-                return Text(locText(context, key: "already_a_member_of_group", args: [groupName]  ),
+                return Text(localize(context, key: "already_a_member_of_group", args: [groupName]  ),
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
                     )
                 );
               }
-              return Center(child: Text(locText(context, key: "loading"), style: TextStyle(fontSize: 20),));
+              return Center(child: Text(localize(context, key: "loading"), style: TextStyle(fontSize: 20),));
             }),
           )
         ),
@@ -109,7 +109,7 @@ class _SureToJoinGroupDialog extends State<SureToJoinGroupDialog> {
           if(isMember || someThingWentWrong){
             return Row(children: <Widget>[
               FlatButton(
-                child: Text(locText(context, key: "ok").toUpperCase(),),
+                child: Text(localize(context, key: "ok").toUpperCase(),),
                 onPressed: (){
                   Navigator.pop(context);
                 },
@@ -119,13 +119,13 @@ class _SureToJoinGroupDialog extends State<SureToJoinGroupDialog> {
 
           return Row(children: <Widget>[
             FlatButton(
-              child: Text(locText(context, key: "no").toUpperCase(),),
+              child: Text(localize(context, key: "no").toUpperCase(),),
               onPressed: (){
                 Navigator.pop(context);
               },
             ),
             FlatButton(
-              child: Text(locText(context, key: "yes").toUpperCase(),),
+              child: Text(localize(context, key: "yes").toUpperCase(),),
               onPressed: () async {
 
                 setState(() {

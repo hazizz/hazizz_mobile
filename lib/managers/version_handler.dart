@@ -30,7 +30,7 @@ class VersionHandler{
     return a;
   }
 
-  static Future<String> setShowedNewFeatures() async {
+  static void setShowedNewFeatures() async {
     var sh = await SharedPreferences.getInstance();
     sh.setBool(_key_features_shown, true);
   }
@@ -41,7 +41,7 @@ class VersionHandler{
     String currentVersion = HazizzAppInfo().getInfo.version;
 
     if(currentVersion != lastVersion){
-      await onNewVersionDetected();
+      onNewVersionDetected();
     }
   }
 

@@ -1,9 +1,7 @@
 import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
-import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/blocs/other/flush_bloc.dart';
 import 'package:mobile/blocs/kreta/selected_session_bloc.dart';
 import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
 import 'package:mobile/blocs/other/request_event.dart';
@@ -14,9 +12,7 @@ import 'package:mobile/communication/pojos/PojoClass.dart';
 import 'package:mobile/communication/pojos/PojoSchedules.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
-import 'package:mobile/custom/hazizz_date_time.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
-
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/blocs/kreta/schedule_event_bloc.dart';
@@ -82,7 +78,7 @@ class ScheduleLoadedState extends ScheduleState {
 }
 
 class ScheduleLoadedCacheState extends ScheduleState {
-  PojoSchedules data;
+  final PojoSchedules data;
   final List<PojoSession> failedSessions;
 
   ScheduleLoadedCacheState(this.data, {this.failedSessions}) : assert(data!= null), super([data, SelectedSessionBloc().selectedSession]);
@@ -93,7 +89,7 @@ class ScheduleLoadedCacheState extends ScheduleState {
 }
 
 class ScheduleErrorState extends ScheduleState {
-  HazizzResponse hazizzResponse;
+  final HazizzResponse hazizzResponse;
   ScheduleErrorState(this.hazizzResponse) : assert(hazizzResponse!= null), super([hazizzResponse]);
 
   @override
@@ -110,7 +106,6 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
   List<PojoSession> failedSessions = [];
 
-
   ScheduleEventBloc scheduleEventBloc;
 
   int currentYearNumber = DateTime.now().year;
@@ -119,11 +114,10 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
   int currentCurrentWeekNumber;
   int currentCurrentYearNumber;
 
-  DateTime currentWeekMonday = HazizzDateTime(0, 0, 0, 0, 0);
-  DateTime currentWeekSunday = HazizzDateTime(0, 0, 0, 0, 0);
+  DateTime currentWeekMonday = DateTime(0, 0, 0, 0, 0);
+  DateTime currentWeekSunday = DateTime(0, 0, 0, 0, 0);
 
   int _failedRequestCount = 0;
-//  int _failedRequestLimit = 2;
 
   DateTime nowDate;
 

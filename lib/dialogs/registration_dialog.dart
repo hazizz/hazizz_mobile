@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/widgets/hyper_link.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
-import 'dialogs_collection.dart';
+import 'dialog_collection.dart';
 
 class RegistrationDialog extends StatefulWidget {
   RegistrationDialog({Key key}) : super(key: key);
@@ -63,7 +63,7 @@ class _RegistrationDialog extends State<RegistrationDialog> {
 
           child: Center(child: Padding(
             padding: const EdgeInsets.only(top: 4.0, bottom:4),
-            child: Text(locText(context, key: "registration"), style: TextStyle(fontSize: 32),),
+            child: Text(localize(context, key: "registration"), style: TextStyle(fontSize: 32),),
           )),
         ),
 
@@ -95,12 +95,12 @@ class _RegistrationDialog extends State<RegistrationDialog> {
                             //  width: width-70,
                               child: Wrap(
                                 children: <Widget>[
-                                  Text(locText(context, key: "have_to_accept_privacy_tos1"), style: TextStyle(fontSize: 18),),
-                                  Hyperlink(getLinkPrivacy(), Text(locText(context, key: "have_to_accept_privacy"), style: TextStyle(fontSize: 18, color: HazizzTheme.red, decoration: TextDecoration.underline,), )),
-                                  Text(locText(context, key: "have_to_accept_privacy_tos2"), style: TextStyle(fontSize: 18)),
-                                  Hyperlink(getLinkTermsOfService(), Text(locText(context, key: "have_to_accept_tos"), style: TextStyle(fontSize: 18, color: HazizzTheme.red, decoration: TextDecoration.underline,), )),
-                                  Text(locText(context, key: "have_to_accept_privacy_tos3"), style: TextStyle(fontSize: 18)),
-                                  Hyperlink(getGuidelines(), Text(locText(context, key: "have_to_accept_guidelines"), style: TextStyle(fontSize: 18, color: HazizzTheme.red, decoration: TextDecoration.underline,), )),
+                                  Text(localize(context, key: "have_to_accept_privacy_tos1"), style: TextStyle(fontSize: 18),),
+                                  Hyperlink(getLinkPrivacy(), Text(localize(context, key: "have_to_accept_privacy"), style: TextStyle(fontSize: 18, color: HazizzTheme.red, decoration: TextDecoration.underline,), )),
+                                  Text(localize(context, key: "have_to_accept_privacy_tos2"), style: TextStyle(fontSize: 18)),
+                                  Hyperlink(getLinkTermsOfService(), Text(localize(context, key: "have_to_accept_tos"), style: TextStyle(fontSize: 18, color: HazizzTheme.red, decoration: TextDecoration.underline,), )),
+                                  Text(localize(context, key: "have_to_accept_privacy_tos3"), style: TextStyle(fontSize: 18)),
+                                  Hyperlink(getGuidelines(), Text(localize(context, key: "have_to_accept_guidelines"), style: TextStyle(fontSize: 18, color: HazizzTheme.red, decoration: TextDecoration.underline,), )),
 
                                 ],
                               ),
@@ -123,13 +123,13 @@ class _RegistrationDialog extends State<RegistrationDialog> {
         Row(
           children: <Widget>[
             FlatButton(
-              child: Text(locText(context, key: "cancel").toUpperCase()),
+              child: Text(localize(context, key: "cancel").toUpperCase()),
               onPressed: (){
                 Navigator.pop(context, false) ;
               },
             ),
             FlatButton(
-              child: Text(locText(context, key: "proceed").toUpperCase()),
+              child: Text(localize(context, key: "proceed").toUpperCase()),
               onPressed: (){
 
                 if(accepted){
@@ -137,7 +137,7 @@ class _RegistrationDialog extends State<RegistrationDialog> {
                 }
                 else{
                   setState(() {
-                    errorText = locText(context, key: "error_conditionsNotAccepted");
+                    errorText = localize(context, key: "error_conditionsNotAccepted");
                   });
                 }
               },

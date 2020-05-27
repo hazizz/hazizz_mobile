@@ -6,7 +6,7 @@ import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'package:mobile/communication/request_sender.dart';
-import 'dialogs_collection.dart';
+import 'dialog_collection.dart';
 
 enum ReportTypeEnum{
   GROUP,
@@ -59,24 +59,24 @@ class _ReportDialog extends State<ReportDialog> {
 
     switch(widget.reportType){
       case ReportTypeEnum.GROUP:
-        something = locText(context, key: "group");
+        something = localize(context, key: "group");
         break;
       case ReportTypeEnum.COMMENT:
-        something = locText(context, key: "somebodys_comment");
+        something = localize(context, key: "somebodys_comment");
         break;
       case ReportTypeEnum.SUBJECT:
-        something = locText(context, key: "subject");
+        something = localize(context, key: "subject");
         break;
       case ReportTypeEnum.TASK:
-        something = locText(context, key: "task");
+        something = localize(context, key: "task");
         break;
       case ReportTypeEnum.USER:
-        something = locText(context, key: "user");
+        something = localize(context, key: "user");
         break;
     }
     HazizzLogger.printLog("about to report a $something");
 
-    String title = locText(context, key: "report_something", args: ["${widget.name} $something"]);
+    String title = localize(context, key: "report_something", args: ["${widget.name} $something"]);
 
 
     String currentLang = Localizations.localeOf(context).languageCode;
@@ -116,7 +116,7 @@ class _ReportDialog extends State<ReportDialog> {
                       style: TextStyle(fontSize: 18),
                       controller: descriptionController,
                       decoration: InputDecoration(
-                        labelText: locText(context, key: "description"),
+                        labelText: localize(context, key: "description"),
                       ),
                       maxLength: 500,
                       maxLines: 5,
@@ -131,8 +131,8 @@ class _ReportDialog extends State<ReportDialog> {
                           acceptedHazizzPolicy = value;
                         });
                       }),
-                      Text(locText(context, key: "accept_hazizz_guidelines1"), style: TextStyle(fontSize: 15,)),
-                      Hyperlink("https://hazizz.github.io/guideline-hu.txt", Text(locText(context, key: "accept_hazizz_guidelines2"), style: TextStyle(fontSize: 15, color: HazizzTheme.red, decoration: TextDecoration.underline,), )),
+                      Text(localize(context, key: "accept_hazizz_guidelines1"), style: TextStyle(fontSize: 15,)),
+                      Hyperlink("https://hazizz.github.io/guideline-hu.txt", Text(localize(context, key: "accept_hazizz_guidelines2"), style: TextStyle(fontSize: 15, color: HazizzTheme.red, decoration: TextDecoration.underline,), )),
 
                     ],),
                     Builder(builder: (context){
@@ -166,19 +166,19 @@ class _ReportDialog extends State<ReportDialog> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           FlatButton(
-            child: Text(locText(context, key: "close").toUpperCase()),
+            child: Text(localize(context, key: "close").toUpperCase()),
             onPressed: (){
               Navigator.pop(context, false);
             },
           ),
           FlatButton(
-              child: Text(locText(context, key: "send").toUpperCase()),
+              child: Text(localize(context, key: "send").toUpperCase()),
               onPressed: () async {
                 HazizzLogger.printLog("report descp: ${descriptionController.text}");
                 if(descriptionController.text != "" && descriptionController.text != null){
                   if(!acceptedHazizzPolicy){
                     setState(() {
-                      errorText = locText(context, key: "error_accept_hazizz_guidelines");
+                      errorText = localize(context, key: "error_accept_hazizz_guidelines");
                     });
                   }
                   else{
@@ -210,7 +210,7 @@ class _ReportDialog extends State<ReportDialog> {
                       Navigator.pop(context, true);
                     }else{
                       setState(() {
-                        errorText = locText(context, key: "try_again_later");
+                        errorText = localize(context, key: "try_again_later");
                       });
                      // Navigator.pop(context, false);
                     }

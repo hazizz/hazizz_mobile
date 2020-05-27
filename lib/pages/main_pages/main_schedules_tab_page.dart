@@ -16,19 +16,20 @@ import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class SchedulesTabPage extends StatefulWidget {
+  final List<PojoClass> classes;
 
-  List<PojoClass> classes;
+  final bool noClasses;
+  final bool isToday;
 
-  bool noClasses = false;
-  bool isToday = false;
+  final int dayIndex;
 
-  int dayIndex;
+  SchedulesTabPage({Key key, @required this.classes, this.isToday = false, this.dayIndex})
+    : noClasses = false,
+      super(key: key);
 
-  SchedulesTabPage({Key key, @required this.classes, this.isToday = false, this.dayIndex}) : super(key: key);
-
-  SchedulesTabPage.noClasses({Key key,this.isToday = false}) : super(key: key){
-    noClasses = true;
-  }
+  SchedulesTabPage.noClasses({Key key,this.isToday = false, this.dayIndex})
+    : classes = null, noClasses = true,
+      super(key: key);
 
   @override
   _SchedulesTabPage createState() => _SchedulesTabPage();
@@ -64,14 +65,12 @@ class _SchedulesTabPage extends State<SchedulesTabPage> with TickerProviderState
   void scrollTo({int index}){
     WidgetsBinding.instance.addPostFrameCallback((_){
       if(index != null) currentEventIndex = index;
-      print("scrolling: $currentEventIndex");
+      print("scrolling to index $currentEventIndex");
       itemScrollController?.scrollTo(
         index: currentEventIndex,
         duration: Duration(milliseconds: 600),
         curve: Curves.easeInOutCubic
       );
-      print("scrolling: $currentEventIndex yes");
-
     });
   }
 
@@ -105,7 +104,7 @@ class _SchedulesTabPage extends State<SchedulesTabPage> with TickerProviderState
              // color: Colors.red,
               child: Column(
                 children: <Widget>[
-                  Text(locText(context, key: "no_classes_today")),
+                  Text(localize(context, key: "no_classes_today")),
                   Container(
                     height: 150,
                     child: InkWell(
@@ -114,7 +113,7 @@ class _SchedulesTabPage extends State<SchedulesTabPage> with TickerProviderState
                         elek_tap_count++;
                         if(elek_tap_count >= 4){
                           showToast(
-                            "elek_woken_up".locText(context),
+                            "elek_woken_up".localize(context),
                             duration: Duration(seconds: 4),
                             animation: StyledToastAnimation.slideFromTopFade,
                             reverseAnimation: StyledToastAnimation.slideToBottomFade,
@@ -146,7 +145,7 @@ class _SchedulesTabPage extends State<SchedulesTabPage> with TickerProviderState
                     child: Row(
                       children: <Widget>[
                         Text(
-                            locText(context, key: "next_week").toLowerCase()),
+                            localize(context, key: "next_week").toLowerCase()),
                         Icon(FontAwesomeIcons.chevronRight)
                       ],
                     ),

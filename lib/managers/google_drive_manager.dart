@@ -5,7 +5,6 @@ import 'package:googleapis/drive/v3.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/custom/image_operations.dart';
 import 'package:path_provider/path_provider.dart';
-
 import '../services/google_http_client.dart';
 
 class GoogleDriveManager {
@@ -21,7 +20,6 @@ class GoogleDriveManager {
   GoogleSignIn _googleSignIn;
 
   static const String hazizzFolderName = "hazizz_mobile";
-
   static const String gDriveAccessScope = "https://www.googleapis.com/auth/drive.file";
 
   Future<bool> initialize() async {
@@ -56,8 +54,7 @@ class GoogleDriveManager {
   }
 
   Future<void> renameHazizzImage({@required String fileId, @required String oldName, @required int taskId}) async {
-    HazizzLogger.printLog("deleting Hazizz Image: $fileId}");
-
+    HazizzLogger.printLog("deleting Hazizz Image: $fileId");
     File f = File()..name = "${taskId}_" + oldName;
     await driveApi.files.update(f, fileId);
   }
@@ -85,7 +82,6 @@ class GoogleDriveManager {
     HazizzLogger.printLog("deleting Hazizz Image: $fileId}");
     await driveApi.files.delete(fileId);
   }
-
 
   Future<File> getHazizzFolder() async {
     File hazizzFolder;
@@ -134,9 +130,7 @@ class GoogleDriveManager {
 
     Permission permission = Permission()
       ..type = "anyone"
-      ..role = "reader"
-    ;
-
+      ..role = "reader";
 
     print("hason1: ${d.encryptedData}");
 
@@ -157,7 +151,6 @@ class GoogleDriveManager {
           )
         )
     ;
-
 
     File driveFile = await driveApi.files.create(drivef, uploadMedia: Media(tempFile.openRead(), tempFile.lengthSync()), $fields: "webContentLink, id, name"); // thumbnailLink,
 

@@ -21,15 +21,35 @@ enum ImageType{
 }
 
 
-ImageViewer imageViewerFromHazizzImageData(HazizzImageData imageData, {Key key, Function onSmallDelete, Function onDelete, double width, double height}){
+Widget imageViewerFromHazizzImageData(HazizzImageData imageData, {Key key, Function onSmallDelete, Function onDelete, double width, double height, int index}){
   if(imageData.imageType == ImageType.FILE){
-    return ImageViewer.fromFile(imageData.imageFile, heroTag: imageData.imageFile.path, );
+    return ImageViewer.fromFile(imageData.imageFile, key: key, heroTag: imageData.imageFile.path, onSmallDelete: onSmallDelete, onDelete: onDelete, width: width, height: height,);
   }else if(imageData.imageType == ImageType.NETWORK){
-    return ImageViewer.fromNetwork(imageData.url, heroTag: imageData.url, onSmallDelete: onSmallDelete, onDelete: onDelete, width: width, height: height);
+    return ImageViewer.fromNetwork(imageData.url, key: key, heroTag: imageData.url, onSmallDelete: onSmallDelete, onDelete: onDelete, width: width, height: height);
   }else if(imageData.imageType == ImageType.GOOGLE_DRIVE){
-    return ImageViewer.fromGoogleDrive(imageData.url, salt: imageData.key, heroTag: imageData.url, onSmallDelete: onSmallDelete, onDelete: onDelete, width: width, height: height);
+    return ImageViewer.fromGoogleDrive(imageData.url, key: key, salt: imageData.key, heroTag: imageData.url, onSmallDelete: onSmallDelete, onDelete: onDelete, width: width, height: height);
   }
   return null;
+  return Stack( key: key,
+    children: <Widget>[
+      Builder(
+        builder: (c){
+          if(imageData.imageType == ImageType.FILE){
+            return ImageViewer.fromFile(imageData.imageFile, /*key: key,*/ heroTag: imageData.imageFile.path, onSmallDelete: onSmallDelete, onDelete: onDelete, width: width, height: height,);
+          }else if(imageData.imageType == ImageType.NETWORK){
+            return ImageViewer.fromNetwork(imageData.url, /*key: key,*/ heroTag: imageData.url, onSmallDelete: onSmallDelete, onDelete: onDelete, width: width, height: height);
+          }else if(imageData.imageType == ImageType.GOOGLE_DRIVE){
+            return ImageViewer.fromGoogleDrive(imageData.url, /*key: key,*/ salt: imageData.key, heroTag: imageData.url, onSmallDelete: onSmallDelete, onDelete: onDelete, width: width, height: height);
+          }
+          return null;
+
+        },
+      ),
+      Center(child: Text(index.toString()),)
+    ],
+  );
+
+
 }
 
 class ImageViewer extends StatefulWidget {
@@ -234,15 +254,15 @@ class _ImageViewer extends State<ImageViewer> with AutomaticKeepAliveClientMixin
   }
 
   Widget deletedImageWidget(){
-    return errorImageWidget(locText(context, key: "gdrive_image_deleted"));
+    return errorImageWidget(localize(context, key: "gdrive_image_deleted"));
   }
 
   Widget noSaltImageWidget(){
-    return errorImageWidget(locText(context, key: "gdrive_image_no_salt"));
+    return errorImageWidget(localize(context, key: "gdrive_image_no_salt"));
   }
 
   Widget otherErrorImageWidget(){
-    return errorImageWidget(locText(context, key: "gdrive_image_other_error"));
+    return errorImageWidget(localize(context, key: "gdrive_image_other_error"));
   }
 
   @override
@@ -343,7 +363,7 @@ class _ImageViewer extends State<ImageViewer> with AutomaticKeepAliveClientMixin
               Builder(
                 builder: (context){
                   print("boi??0");
-                  if(widget.onSmallDelete == null) return Container(width: 1,);
+                  if(widget.onSmallDelete == null) return Container(width: 1);
                   print("boi??1");
                   return Positioned(
                       top: 3, left: 3,

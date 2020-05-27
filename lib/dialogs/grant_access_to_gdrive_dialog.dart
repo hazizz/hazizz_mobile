@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/managers/google_drive_manager.dart';
 import 'package:mobile/managers/app_state_manager.dart';
-import 'dialogs_collection.dart';
+import 'dialog_collection.dart';
 
 class GrantAccessToGDRiveDialog extends StatelessWidget {
   GrantAccessToGDRiveDialog({Key key}) : super(key: key);
@@ -23,7 +23,7 @@ class GrantAccessToGDRiveDialog extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(5),
           child:
-          AutoSizeText(locText(context, key: "gdrive_grant_permission"),
+          AutoSizeText(localize(context, key: "gdrive_grant_permission"),
             style: TextStyle(
               fontSize: 20.0,
               fontWeight: FontWeight.w700,
@@ -37,7 +37,7 @@ class GrantAccessToGDRiveDialog extends StatelessWidget {
       actionButtons: Row(
         children: <Widget>[
           FlatButton(
-            child: new Text(locText(context, key: "cancel").toUpperCase()),
+            child: new Text(localize(context, key: "cancel").toUpperCase()),
             onPressed: () async {
               await AppState.setDisallowedGDrive();
 
@@ -47,7 +47,7 @@ class GrantAccessToGDRiveDialog extends StatelessWidget {
           ),
 
           FlatButton(
-            child: new Text(locText(context, key: "allow").toUpperCase()),
+            child: new Text(localize(context, key: "allow").toUpperCase()),
             onPressed: () async {
               bool allowed = await GoogleDriveManager().initialize();
               await AppState.setAllowedGDrive();

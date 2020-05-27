@@ -56,7 +56,7 @@ class _SessionSelectorWidget extends State<SessionSelectorWidget> with Automatic
     List<PojoSession> sessions1 = s;
 
     if(sessions1.isEmpty){
-      return Center(child: Text(locText(context, key: "no_kreta_account_added_yet")));
+      return Center(child: Text(localize(context, key: "no_kreta_account_added_yet")));
     }
     return BlocBuilder(
       bloc: SelectedSessionBloc(),
@@ -75,7 +75,7 @@ class _SessionSelectorWidget extends State<SessionSelectorWidget> with Automatic
               }
           );
         }
-        return Text(locText(context, key: "should_add_kreta_account"));
+        return Text(localize(context, key: "should_add_kreta_account"));
       },
     );
   }
@@ -120,7 +120,7 @@ class _SessionSelectorWidget extends State<SessionSelectorWidget> with Automatic
                               return Center(child: CircularProgressIndicator(),);
                             }
                             return Center(
-                                child: Text(locText(context, key: "info_something_went_wrong")));
+                                child: Text(localize(context, key: "info_something_went_wrong")));
                           }
                         ),
                       ),

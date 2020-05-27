@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:mobile/custom/hazizz_localizations.dart';
@@ -12,13 +13,14 @@ enum AdType{
   fel_elek,
   facebook,
   giveaway,
-  hazizz_meet
+  hazizz_meet,
+  vakacio,
 }
 
 Widget showAd(BuildContext context, {bool show = true, bool showHeader = false}){
   if(PreferenceService.enabledAd && show){
     if(showHeader) return StickyHeader(
-      header: CardHeaderWidget(text: locText(context, key: "ad"),),
+      header: CardHeaderWidget(text: localize(context, key: "ad"),),
       content: AdWidget(),
     );
     return AdWidget();
@@ -33,6 +35,8 @@ class AdWidget extends StatefulWidget {
   static const String ad_facebook = "assets/images/facebook_ad_banner.png";
   static const String ad_giveaway = "assets/images/giveaway_ad_banner.png";
   static const String ad_hazizz_meet = "assets/images/hazizz_meet_ad_banner.png";
+  static const String ad_hazizz_vakacio = "assets/images/hazizz_meet_ad_banner.png";
+
 
   /*
   double chance;
@@ -60,17 +64,35 @@ class AdWidget extends StatefulWidget {
 class _AdWidgetState extends State<AdWidget> {
 
   AdType adType;
+  Timer timer;
+
+  DateTime now = DateTime.now();
+  Duration durationUntilVakacio;
+
+  DateTime vakacioDate;
+
+  @override
+  void initState() {
+    vakacioDate = DateTime(now.year, 6, 16);
+    durationUntilVakacio = vakacioDate.difference(now);
+    setTimer(now.add(Duration(seconds: 1)));
+    chooseType();
+    super.initState();
+  }
 
   void chooseType(){
-    int r = Random().nextInt(4);
+    int r = Random().nextInt(5);
     if(r == 0){
       adType = AdType.fel_elek;
     }else if(r == 1){
       adType = AdType.facebook;
+    }else if(r == 2 || r == 3 || r == 4){
+       adType = AdType.vakacio;
     }else{
-      if(r == 2 && DateTime.now().isBefore(DateTime(2020, 04, 17, 23, 59))){
+      /*
+      if(r == 3 && DateTime.now().isBefore(DateTime(2020, 04, 17, 23, 59))){
         adType = AdType.giveaway;
-      }else if(r == 3
+      }else if(r == 4
           && DateTime.now().isBefore(DateTime(2020, 04, 1, 23, 59))
           && DateTime.now().isAfter(DateTime(2020, 04, 1, 0, 0))
       ){
@@ -84,6 +106,7 @@ class _AdWidgetState extends State<AdWidget> {
           adType = AdType.facebook;
         }
       }
+      */
     }
   }
 
@@ -96,8 +119,64 @@ class _AdWidgetState extends State<AdWidget> {
       return AdWidget.ad_giveaway;
     }if(adType == AdType.hazizz_meet){
       return AdWidget.ad_hazizz_meet;
+    }if(adType == AdType.vakacio){
+      return AdWidget.ad_hazizz_vakacio;
     }
   }
+
+  void setTimer(DateTime nextEventChangeTime2){
+    void handleTimeout() {
+      setState(() {
+        now = DateTime.now();
+        durationUntilVakacio = vakacioDate.difference(now);
+      });
+      setTimer(nextEventChangeTime2.add(Duration(seconds: 1)));
+    }
+
+    var duration = (nextEventChangeTime2.difference(now));
+    timer = new Timer(duration, handleTimeout);
+  }
+
+  Widget vakacioWidget(){
+    final String vakacioLocalized = "vakacio".localize(context);
+
+    /*
+    HazizzLogger.printLog("sadfsdg: "+ vakacioLocalized.length.toString());
+    HazizzLogger.printLog("sadfsdg2: "+ durationUntilVakacio.inDays.toString());
+    */
+
+    int off = 0;
+
+    if(durationUntilVakacio.inDays <= vakacioLocalized.length){
+      off = durationUntilVakacio.inDays - vakacioLocalized.length;
+    }
+
+    return Stack(
+      children: <Widget>[
+        Image.asset(
+          chooseImage(),
+          fit: BoxFit.fitWidth,
+        ),
+
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            if(!durationUntilVakacio.isNegative)
+              Text("vakacio_until".localize(context, args: [
+                durationUntilVakacio.inDays.toString(),
+                (durationUntilVakacio.inHours - durationUntilVakacio.inDays * 24).toString(),
+                (durationUntilVakacio.inMinutes - (durationUntilVakacio.inHours * 60)).toString(),
+                (durationUntilVakacio.inSeconds - (durationUntilVakacio.inMinutes * 60)).toString()
+              ]), textAlign: TextAlign.center, style: TextStyle(fontSize: 16, letterSpacing: 1.6)),
+            Text(vakacioLocalized.substring(vakacioLocalized.length - off, vakacioLocalized.length),
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 26, letterSpacing: 4),)
+          ],
+        )
+      ],
+    );
+  }
+
 
   String chooseUrl(){
     if(adType == AdType.facebook){
@@ -109,9 +188,9 @@ class _AdWidgetState extends State<AdWidget> {
   }
 
   @override
-  void initState() {
-    chooseType();
-    super.initState();
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
   }
 
   @override
@@ -124,17 +203,17 @@ class _AdWidgetState extends State<AdWidget> {
         borderRadius: BorderRadius.circular(8),
         child: Stack(
           children: <Widget>[
-            Image.asset(
+            adType != AdType.vakacio ? Image.asset(
               chooseImage(),
               fit: BoxFit.fitWidth,
-            ),
+            ) : vakacioWidget(),
             Positioned.fill(
               child: Material(
                 color: Colors.transparent,
                 child: InkWell(
                   onTap: () async {
                     if(adType == AdType.facebook
-                        || adType == AdType.hazizz_meet
+                    || adType == AdType.hazizz_meet
                     ){
                       openFacebookPage();
                       return;

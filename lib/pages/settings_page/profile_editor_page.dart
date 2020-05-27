@@ -10,10 +10,6 @@ import 'package:mobile/custom/image_operations.dart';
 
 
 class ProfileEditorPage extends StatefulWidget {
-  String getTitle(BuildContext context){
-    return locText(context, key: "profile_editor");
-  }
-
   ProfileEditorPage({Key key}) : super(key: key);
 
   @override
@@ -87,7 +83,7 @@ class _ProfileEditorPage extends State<ProfileEditorPage> with TickerProviderSta
     return Scaffold(
         appBar: AppBar(
           leading: HazizzBackButton(),
-          title: Text(widget.getTitle(context)),
+          title: Text("profile_editor".localize(context)),
         ),
         body: Container(
           width: 400,
@@ -125,14 +121,14 @@ class _ProfileEditorPage extends State<ProfileEditorPage> with TickerProviderSta
                                     ImageProvider profilePicProvider;
                                     if(profileEditorBlocs.pictureEditorBloc.profilePictureBytes == null){
                                       profilePicProvider = null;
-                                      return Text(locText(context, key: "loading"));
+                                      return Text(localize(context, key: "loading"));
                                     }else{
 
                                       var sad= profileEditorBlocs.pictureEditorBloc.profilePictureBytes;
 
-                                      var sad2 = ImageOpeations.fromBytesImageToBase64(sad);
+                                      var sad2 = ImageOperations.fromBytesImageToBase64(sad);
 
-                                      var sad3 = ImageOpeations.fromBase64ToBytesImage(sad2);
+                                      var sad3 = ImageOperations.fromBase64ToBytesImage(sad2);
 
                                       profilePicProvider = Image.memory(sad3).image;
 
@@ -217,7 +213,7 @@ class _ProfileEditorPage extends State<ProfileEditorPage> with TickerProviderSta
                               style: TextStyle(fontSize: 22),
                                maxLength: 20,
                               decoration: InputDecoration(
-                                  labelText: locText(context, key: "displayName")
+                                  labelText: localize(context, key: "displayName")
                               ),
                             ),
                           ),

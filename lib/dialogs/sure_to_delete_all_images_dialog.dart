@@ -3,12 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/managers/google_drive_manager.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
-import 'dialogs_collection.dart';
+import 'dialog_collection.dart';
 
 class SureToDeleteAllHazizzImageDialog extends StatefulWidget {
-
   SureToDeleteAllHazizzImageDialog();
-
   @override
   _SureToDeleteAllHazizzImageDialog createState() => new _SureToDeleteAllHazizzImageDialog();
 }
@@ -51,7 +49,7 @@ class _SureToDeleteAllHazizzImageDialog extends State<SureToDeleteAllHazizzImage
                   child:
                   Center(
                     child: Builder(builder: (context){
-                      return AutoSizeText(locText(context, key: "areyousure_delete_all_images"),
+                      return AutoSizeText(localize(context, key: "areyousure_delete_all_images"),
                           maxFontSize: 20,
                           minFontSize: 12,
                           maxLines: 10,
@@ -84,13 +82,13 @@ class _SureToDeleteAllHazizzImageDialog extends State<SureToDeleteAllHazizzImage
 
           return Row(children: <Widget>[
             FlatButton(
-              child: Text(locText(context, key: "no").toUpperCase(),),
+              child: Text(localize(context, key: "no").toUpperCase(),),
               onPressed: (){
                 Navigator.pop(context, false);
               },
             ),
             FlatButton(
-              child: Text(locText(context, key: "yes").toUpperCase(),),
+              child: Text(localize(context, key: "yes").toUpperCase(),),
               onPressed: () async {
 
                 setState(() {

@@ -103,7 +103,7 @@ class _LoginWidget extends State<LoginWidget> with SingleTickerProviderStateMixi
                       ),
                     ],
                   ),
-                  Expanded(child: AutoSizeText(locText(context, key: "login"), style: TextStyle(fontWeight: FontWeight.w800, color: HazizzTheme.blue, ), maxLines: 1, minFontSize: 44,)),
+                  Expanded(child: AutoSizeText(localize(context, key: "login"), style: TextStyle(fontWeight: FontWeight.w800, color: HazizzTheme.blue, ), maxLines: 1, minFontSize: 44,)),
                 ],
               ),
 

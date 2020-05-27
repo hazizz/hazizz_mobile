@@ -15,7 +15,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:image/image.dart' as imagePackage;
 
 class HazizzImageData{
-  ImageType imageType;
+  final ImageType imageType;
 
   File imageFile;
 
@@ -28,18 +28,12 @@ class HazizzImageData{
   String driveFileId;
   String driveName;
 
-  HazizzImageData(this.imageFile, this.encryptedData, this.key);
+ // HazizzImageData(this.imageFile, this.encryptedData, this.key);
 
-  HazizzImageData.fromFile(this.imageFile){
-    imageType = ImageType.FILE;
-  }
-  HazizzImageData.fromNetwork(this.url){
-    imageType = ImageType.NETWORK;
-  }
+  HazizzImageData.fromFile(this.imageFile) :  imageType = ImageType.FILE;
+  HazizzImageData.fromNetwork(this.url) : imageType = ImageType.NETWORK;
 
-  HazizzImageData.fromGoogleDrive(this.url, this.key){
-    imageType = ImageType.GOOGLE_DRIVE;
-  }
+  HazizzImageData.fromGoogleDrive(this.url, this.key) : imageType = ImageType.GOOGLE_DRIVE;
 
   Function currentAsyncTask;
 
@@ -170,15 +164,14 @@ class HazizzImageData{
 }
 
 Uint8List fromBase64ToBytesImage(String base64) {
-    return ImageOpeations.fromBase64ToBytesImage(base64);
+    return ImageOperations.fromBase64ToBytesImage(base64);
 }
 
 String fromBytesImageToBase64 (Uint8List bytes) {
-  return ImageOpeations.fromBytesImageToBase64(bytes);
+  return ImageOperations.fromBytesImageToBase64(bytes);
 }
 
-class ImageOpeations{
-
+class ImageOperations{
 
   static Uint8List fromBase64ToBytesImage(String base64) {
     return base64Decode(base64);
@@ -241,7 +234,7 @@ class ImageOpeations{
   }
   */
   
-  
+  /*
   Future<HazizzImageData> encrypt2(File file, {@required String key}) async {
     if(file == null){
       return null;                                                                                
@@ -253,5 +246,6 @@ class ImageOpeations{
     String encryptedData = HazizzCrypt.encrypt(base64.encode(file.readAsBytesSync()), key); //encrypt
                                                                                                   
     return HazizzImageData(file, encryptedData, key);                                             
-  } 
+  }
+  */
 }                                                                                               

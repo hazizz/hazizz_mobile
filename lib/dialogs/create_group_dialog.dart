@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/blocs/group/create_group_bloc.dart';
 import 'package:mobile/enums/group_types_enum.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
-import 'dialogs_collection.dart';
+import 'dialog_collection.dart';
 
 class CreateGroupDialog extends StatefulWidget {
 
@@ -18,9 +18,8 @@ class _CreateGroupDialog extends State<CreateGroupDialog> {
 
   CreateGroupBloc createGroupBloc;
   
-  TextEditingController groupNameController;
-
-  TextEditingController groupPasswordController;
+  final TextEditingController groupNameController = TextEditingController();
+  final TextEditingController groupPasswordController = TextEditingController();
 
   GroupTypeEnum groupType;
 
@@ -28,8 +27,6 @@ class _CreateGroupDialog extends State<CreateGroupDialog> {
   @override
   void initState() {
     createGroupBloc = CreateGroupBloc();
-    groupNameController = TextEditingController();
-    groupPasswordController = TextEditingController();
     super.initState();
   }
 
@@ -39,7 +36,7 @@ class _CreateGroupDialog extends State<CreateGroupDialog> {
 
 
   final double width = 300;
-  final double height = 240;
+  final double height = 260;
 
   final double searchBarHeight = 50;
 
@@ -63,7 +60,7 @@ class _CreateGroupDialog extends State<CreateGroupDialog> {
         child: Padding(
           padding: const EdgeInsets.all(5),
           child:
-          Text(locText(context, key: "create_group"),
+          Text(localize(context, key: "create_group"),
               style: TextStyle(
                 fontSize: 26.0,
                 fontWeight: FontWeight.w800,
@@ -74,7 +71,7 @@ class _CreateGroupDialog extends State<CreateGroupDialog> {
       content: Container(
           height: 280,
           child: Padding(
-            padding: const EdgeInsets.only(left: 8.0, right: 8, top: 4),
+            padding: const EdgeInsets.only(left: 8.0, right: 8, top: 0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -85,24 +82,21 @@ class _CreateGroupDialog extends State<CreateGroupDialog> {
                       style: TextStyle(fontSize: 18),
                       controller: groupNameController,
                       decoration: InputDecoration(
-                        labelText: locText(context, key: "group"),
+                        labelText: localize(context, key: "group"),
                       )
                 ),
                 BlocBuilder(
                   bloc: createGroupBloc,
                   builder: (context, state){
                     if(state is CreateGroupInvalidState){
-                      return Text(locText(context, key: "error_groupName_length_error"), style: TextStyle(color: Colors.red),);
+                      return Text(localize(context, key: "error_groupName_length_error"), style: TextStyle(color: Colors.red),);
                     }else if(state is CreateGroupGroupNameTakenState){
-                      return Text(locText(context, key: "error_groupName_taken"), style: TextStyle(color: Colors.red),);
+                      return Text(localize(context, key: "error_groupName_taken"), style: TextStyle(color: Colors.red),);
                     }
                     return Container();
                   },
                 ),
-                Text(locText(context, key: "group_name_suggestion")),
-
-
-
+                Text(localize(context, key: "group_name_suggestion")),
 
         /*
                 Builder(
@@ -160,8 +154,7 @@ class _CreateGroupDialog extends State<CreateGroupDialog> {
                 ),
                 */
 
-
-                Column(
+                if (false) Column(
                   children: <Widget>[
                     GestureDetector(
                       onTap: (){
@@ -191,7 +184,6 @@ class _CreateGroupDialog extends State<CreateGroupDialog> {
                         });
                       },
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Radio(
                             groupValue: groupValue,
@@ -209,19 +201,20 @@ class _CreateGroupDialog extends State<CreateGroupDialog> {
                   ],
                 ),
 
+
                 Spacer(),
 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
                     FlatButton(
-                      child: Text(locText(context, key: "close").toUpperCase()),
+                      child: Text(localize(context, key: "close").toUpperCase()),
                       onPressed: (){
                         Navigator.pop(context);
                       },
                     ),
                     FlatButton(
-                      child: Text(locText(context, key: "create").toUpperCase()),
+                      child: Text(localize(context, key: "create").toUpperCase()),
                       onPressed: (){
                         createGroupBloc.add(CreateGroupCreateEvent(groupType: groupValue, groupName: groupNameController.text));
                       }

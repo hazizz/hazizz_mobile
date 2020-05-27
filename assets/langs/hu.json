@@ -8,6 +8,7 @@
   "days_later":"{} nap múlva",
   "days_ago":"Lejárt {} napja",
   "tomorrow":"Holnap",
+  "yesterday":"Tegnap",
   "days2":"2 nap múlva",
   "today":"Ma",
   "overdays7":"Több mint 7 nap múlva",
@@ -450,6 +451,17 @@
   "days_m_4":"P",
   "days_m_5":"Sz",
   "days_m_6":"V",
+
+
+  "session_status_active" : "Aktív",
+  "session_status_loading" : "Betöltés...",
+  "session_status_invalid_credentials" : "Helytelen fiók adatok",
+  "session_status_authentication_required" : "Bejelentkezés szükséges",
+
+
+  "vakacio" : "VAKÁCIÓ!",
+  "vakacio_until" : "{} nap {} óra {} perc és {} másodperc maradt a nyári szünetig!",
+
   "filterType_map":{
     "new":"Új",
     "subject":"Tantárgy",

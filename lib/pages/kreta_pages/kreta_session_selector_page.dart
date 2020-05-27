@@ -25,7 +25,7 @@ class _SessionSelectorPage extends State<SessionSelectorPage> {
       
       appBar: AppBar(
         leading: HazizzBackButton(),
-        title: Text(locText(context, key: "kreta_accounts")),
+        title: Text(localize(context, key: "kreta_accounts")),
       ),
       body: SessionSelectorWidget()
 

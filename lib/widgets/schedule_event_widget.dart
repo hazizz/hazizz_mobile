@@ -6,23 +6,21 @@ import 'package:mobile/extension_methods/time_of_day_extension.dart';
 
 class ScheduleEventWidget extends StatelessWidget{
 
-  String text;
-
+  final String unlocalizedText;
   final Duration timerClassStart;
 
   ScheduleEventWidget.beforeClasses(BuildContext context, TimeOfDay timeOfClassStart)
-    : timerClassStart = TimeOfDay.now().compare(timeOfClassStart){
-    text = locText(context, key: "classes_not_started", args: [timerClassStart.inMinutes.toString()]);
-  }
+    : timerClassStart = TimeOfDay.now().compare(timeOfClassStart),
+      unlocalizedText = "classes_not_started";
 
-  ScheduleEventWidget.afterClasses(BuildContext context) : timerClassStart = null{
-    text = locText(context, key: "classes_over");
-  }
+  ScheduleEventWidget.afterClasses(BuildContext context)
+    : timerClassStart = null,
+      unlocalizedText = "classes_over";
+
 
   ScheduleEventWidget.breakTime(BuildContext context, TimeOfDay timeOfClassStart)
-    : timerClassStart = TimeOfDay.now().compare( timeOfClassStart) {
-    text = locText(context, key: "classes_break", args: [timerClassStart.inMinutes.toString()]);
-  }
+    : timerClassStart = TimeOfDay.now().compare( timeOfClassStart),
+    unlocalizedText = "classes_break";
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +32,11 @@ class ScheduleEventWidget extends StatelessWidget{
         padding: const EdgeInsets.only(top: 1.8, bottom: 1.8, left: 6),
         child: Row(
           children: <Widget>[
-            AutoSizeText(text,
+            AutoSizeText(
+              unlocalizedText != "classes_over"
+                  ? unlocalizedText.localize(context,
+                    args: [timerClassStart?.inMinutes?.toString()]
+              ) : unlocalizedText.localize(context),
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
               maxLines: 1,
               maxFontSize: 20,

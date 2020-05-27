@@ -3,21 +3,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/other/show_framerate_bloc.dart';
 import 'package:mobile/constants.dart';
-import 'package:mobile/dialogs/dialogs_collection.dart';
+import 'package:mobile/dialogs/dialog_collection.dart';
 import 'package:mobile/managers/preference_service.dart';
 import 'package:mobile/services/hazizz_message_handler.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:flutter/material.dart';
 
-import '../../main.dart';
-
 class DeveloperSettingsPage extends StatefulWidget {
 
   String getTitle(BuildContext context){
-    return locText(context, key: "developer_settings");
+    return localize(context, key: "developer_settings");
   }
-
 
   DeveloperSettingsPage({Key key}) : super(key: key);
 
@@ -73,7 +70,7 @@ class _DeveloperSettingsPage extends State<DeveloperSettingsPage> {
                     child: TextField(
                       maxLines: 1,
                       controller: server_url_controller,
-                      decoration: InputDecoration(labelText: locText(context, key: "server_url"),// helperText: "Oktatási azonositó",
+                      decoration: InputDecoration(labelText: localize(context, key: "server_url"),// helperText: "Oktatási azonositó",
                         alignLabelWithHint: true,
                         filled: true,
                         fillColor: Colors.grey.withAlpha(120),
@@ -86,7 +83,7 @@ class _DeveloperSettingsPage extends State<DeveloperSettingsPage> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
                         RaisedButton(
-                          child: Text(locText(context, key: "apply")),
+                          child: Text(localize(context, key: "apply")),
                           onPressed: (){
                             PreferenceService.setServerUrl(server_url_controller.text);
                           },
@@ -95,7 +92,7 @@ class _DeveloperSettingsPage extends State<DeveloperSettingsPage> {
                         SizedBox(width: 6,),
 
                         RaisedButton(
-                          child: Text(locText(context, key: "reset")),
+                          child: Text(localize(context, key: "reset")),
                           onPressed: (){
                             server_url_controller.text = Constants.BASE_URL;
                             PreferenceService.setServerUrl(Constants.BASE_URL);
@@ -108,7 +105,7 @@ class _DeveloperSettingsPage extends State<DeveloperSettingsPage> {
                   ListTile(
                     leading: Icon(FontAwesomeIcons.fileAlt),
 
-                    title: Text(locText(context, key: "logs")),
+                    title: Text(localize(context, key: "logs")),
                     onTap: (){
                       Navigator.pushNamed(context, "/settings/developer/logs");
                     },
@@ -117,7 +114,7 @@ class _DeveloperSettingsPage extends State<DeveloperSettingsPage> {
                   ListTile(
                     leading: Icon(FontAwesomeIcons.times, color: Colors.red,),
 
-                    title: Text(locText(context, key: "delete_me")),
+                    title: Text(localize(context, key: "delete_me")),
                     onTap: () async {
                       await showSureToDeleteMeDialog(context);
                     },
@@ -140,14 +137,14 @@ class _DeveloperSettingsPage extends State<DeveloperSettingsPage> {
                       Navigator.pushNamed(context, "/settings/notification");
                     },
                     leading: Icon(FontAwesomeIcons.solidBell),
-                    title: Text(locText(context, key: "notification_settings")),
+                    title: Text(localize(context, key: "notification_settings")),
                     // trailing: Text("time")
                   ),
 
                   Divider(),
                   ListTile(
                       leading: Icon(FontAwesomeIcons.chartBar),
-                      title: Text("enable_performance_overlay".locText(context)),
+                      title: Text("enable_performance_overlay".localize(context)),
                       trailing: Switch(
                         value: _enable_framerate,
                         onChanged: (val){

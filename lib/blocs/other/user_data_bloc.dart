@@ -121,6 +121,8 @@ class ProfilePictureBloc extends Bloc<ProfilePictureEvent, ProfilePictureState> 
       yield ProfilePictureWaitingState();
       String str_profilePicture = await CacheManager.getMyProfilePicture();
       if(str_profilePicture == null){
+        HazizzLogger.printLog("baj van fönök: 1");
+
         HazizzResponse hazizzResponse = await RequestSender().getResponse(GetMyProfilePicture.full());
 
         if(hazizzResponse.isSuccessful){
@@ -128,10 +130,12 @@ class ProfilePictureBloc extends Bloc<ProfilePictureEvent, ProfilePictureState> 
 
         }
       }
-      profilePictureBytes = ImageOpeations.fromBase64ToBytesImage(str_profilePicture);
 
+      if(str_profilePicture != null){
+        profilePictureBytes = ImageOperations.fromBase64ToBytesImage(str_profilePicture);
+        yield ProfilePictureLoadedState();
+      }
 
-      yield ProfilePictureLoadedState();
     }
 
     if(event is ProfilePictureSetEvent) {
@@ -147,6 +151,7 @@ class ProfilePictureBloc extends Bloc<ProfilePictureEvent, ProfilePictureState> 
     }
     else if(event is ProfilePictureRefreshEvent) {
       yield ProfilePictureWaitingState();
+      HazizzLogger.printLog("baj van fönök: 2");
       HazizzResponse hazizzResponse = await RequestSender().getResponse(
           new GetMyProfilePicture.full());
       if(hazizzResponse.isSuccessful) {
@@ -428,6 +433,7 @@ class DisplayNameBloc extends Bloc<DisplayNameEvent, DisplayNameState> {
     }
     else if(event is ProfilePictureRefreshEvent) {
       yield DisplayNameWaitingState();
+      HazizzLogger.printLog("baj van fönök: 3");
       HazizzResponse hazizzResponse = await RequestSender().getResponse(
           new GetMyProfilePicture.full());
       if(hazizzResponse.isSuccessful) {

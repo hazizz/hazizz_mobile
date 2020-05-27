@@ -1,11 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/communication/pojos/PojoGrade.dart';
-import 'package:mobile/dialogs/dialogs_collection.dart';
-
+import 'package:mobile/dialogs/dialog_collection.dart';
 import 'package:mobile/enums/grade_type_enum.dart';
 import "package:mobile/extension_methods/string_first_upper_extension.dart";
-
 import 'package:mobile/extension_methods/datetime_extension.dart';
 
 class GradeItemWidget extends StatelessWidget {
@@ -16,10 +14,10 @@ class GradeItemWidget extends StatelessWidget {
   final String altSubject;
   final double width;
 
-  GradeItemWidget.bySubject({@required this.pojoGrade, this.rectForm = false, this.altSubject, this.width = 72})
+  GradeItemWidget.bySubject({@required this.pojoGrade, this.rectForm = false, this.altSubject, this.width = 60})
     : isBySubject = true, super(key: UniqueKey());
 
-  GradeItemWidget.byDate({@required this.pojoGrade, this.rectForm = false, this.width = 72})
+  GradeItemWidget.byDate({@required this.pojoGrade, this.rectForm = false, this.width = 60})
     : isBySubject= false, altSubject = null, super(key: UniqueKey());
 
 
@@ -36,11 +34,16 @@ class GradeItemWidget extends StatelessWidget {
             alignment: (pojoGrade.weight != null && pojoGrade.weight != 0)
                 ? Alignment.topCenter
                 : Alignment.center,
-            child: AutoSizeText(pojoGrade.grade == null ? "5" : pojoGrade.grade,
-              style: TextStyle(fontSize: 50, color: Colors.black, fontFamily: "Nunito"),
-              maxLines: 1,
-              maxFontSize: 50,
-              minFontSize: 10,
+            child: Padding(
+              padding: (pojoGrade.weight != null && pojoGrade.weight != 0)
+                  ? const EdgeInsets.only(bottom: 2)
+                  : const EdgeInsets.all(0),
+              child: AutoSizeText(pojoGrade.grade == null ? "5" : pojoGrade.grade,
+                style: TextStyle(fontSize: 50, color: Colors.black, fontFamily: "Nunito"),
+                maxLines: 1,
+                maxFontSize: 50,
+                minFontSize: 10,
+              ),
             ),
           ),
           if (pojoGrade.gradeType == GradeTypeEnum.MIDYEAR)
@@ -88,7 +91,7 @@ class GradeItemWidget extends StatelessWidget {
     return Hero(
       tag: pojoGrade,
       child: Card(
-        margin: EdgeInsets.only(left: 7, top: 2.5, bottom: 2.5, right: 7),
+        margin: EdgeInsets.only(left: 6, top: 2, bottom: 2, right: 6),
         clipBehavior: Clip.antiAliasWithSaveLayer,
         elevation: 5,
         child: InkWell(
@@ -128,7 +131,7 @@ class GradeItemWidget extends StatelessWidget {
                                   ),
                                   child: Padding(
                                     padding: const EdgeInsets.only(
-                                      left: 4, top: 3, bottom: 2,  right: 8, ),
+                                      left: 4, top: 3, bottom: 1,  right: 8, ),
                                     child: Column(
                                       children: <Widget>[
                                         Text((altSubject ?? pojoGrade.subject).toUpperFirst(),
@@ -157,7 +160,7 @@ class GradeItemWidget extends StatelessWidget {
                                     && pojoGrade.topic != ""){
                                   return Padding(
                                     padding: const EdgeInsets.only(top: 3),
-                                    child: Text(pojoGrade.topic, style: TextStyle(fontSize: 16, height: 0.98),),
+                                    child: Text(pojoGrade.topic.toUpperFirst(), style: TextStyle(fontSize: 15, height: 0.98),),
                                   );
                                 }
                                 return Container();
@@ -189,8 +192,8 @@ class GradeItemWidget extends StatelessWidget {
                   ],
                 ),
               ),
-              Positioned(bottom: 2, right: 4,
-                child: Text(pojoGrade.creationDate.hazizzShowDateFormat,style: Theme.of(context).textTheme.subtitle,) ,
+              Positioned(bottom: 0, right: 2,
+                child: Text(pojoGrade.creationDate.hazizzShowDateFormat,style: TextStyle(fontSize: 14, height: 0.98),) ,
               )
             ],
           )

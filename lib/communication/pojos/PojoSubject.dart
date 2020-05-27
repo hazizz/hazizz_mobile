@@ -1,7 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:mobile/communication/pojos/PojoComplient.dart';
-import 'package:mobile/communication/pojos/PojoCreator.dart';
-
 import 'Pojo.dart';
 part 'PojoSubject.g.dart';
 

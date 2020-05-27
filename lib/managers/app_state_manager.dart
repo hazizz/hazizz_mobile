@@ -10,8 +10,6 @@ import 'package:mobile/blocs/other/user_data_bloc.dart';
 import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
 import 'package:mobile/blocs/kreta/selected_session_bloc.dart';
 import 'package:mobile/communication/connection.dart';
-import 'package:mobile/communication/pojos/PojoMeInfo.dart';
-import 'package:mobile/communication/pojos/PojoMeInfoPrivate.dart';
 import 'package:mobile/communication/pojos/PojoMyDetailedInfo.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/communication/pojos/PojoTokens.dart';
@@ -40,26 +38,15 @@ class AppState{
 
   static bool logInProcedureDone = true;
 
-  /*
-  static Future setUserData({@required PojoMeInfo meInfo}) async {
-    CacheManager.setMyId(meInfo.id);
-    CacheManager.setMyUsername(meInfo.username);
-    CacheManager.setMyDisplayName(meInfo.displayName);
-
-    if(meInfo is PojoMeInfoPrivate){
-
-    }
-  }
-  */
-
   static Future logInProcedure({@required PojoTokens tokens}) async {
     logInProcedureDone = false;
 
+    TokenManager.setTokens(tokens);
+
     HazizzLogger.printLog("logInProcedure: 0");
-    TokenManager.setToken(tokens.token);
+
     HazizzLogger.printLog("logInProcedure: 1");
 
-    TokenManager.setRefreshToken(tokens.refresh);
     HazizzLogger.printLog("logInProcedure: 2");
 
     var sh = await SharedPreferences.getInstance();
@@ -82,12 +69,15 @@ class AppState{
     }
     HazizzLogger.printLog("logInProcedure: 4");
 
+    /*
+    HazizzLogger.printLog("baj van fönök: 4");
     RequestSender().getResponse(GetMyProfilePicture.full()).then((HazizzResponse hazizzResponse){
       if(hazizzResponse.isSuccessful){
         String base64Image = hazizzResponse.convertedData;
         CacheManager.setMyProfilePicture(base64Image);
       }
     });
+    */
 
 
     logInProcedureDone = true;
@@ -101,7 +91,6 @@ class AppState{
     Crashlytics.instance.enableInDevMode = false;
     FlutterError.onError = Crashlytics.instance.recordFlutterError;
     await AndroidAlarmManager.initialize();
-
   }
 
   static Future<void> mainAppPartStartProcedure() async {
@@ -162,13 +151,11 @@ class AppState{
 
 
   static Future<bool> isLoggedIn() async {
-    bool hasToken = await TokenManager.hasToken();
-    bool hasRefreshToken = await TokenManager.hasRefreshToken();
+    bool hasTokens = await TokenManager.accessToken != null;
     var sh = await SharedPreferences.getInstance();
-    bool isLoggedIn = sh.getBool(key_isLoggedIn);
-    isLoggedIn ??= false;
+    bool isLoggedIn = sh.getBool(key_isLoggedIn) ?? false;
 
-    return hasRefreshToken && isLoggedIn && hasToken;
+    return isLoggedIn && hasTokens;
   }
 
 

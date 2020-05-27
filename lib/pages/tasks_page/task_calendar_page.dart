@@ -12,10 +12,6 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 
 class TaskCalendarPage extends StatefulWidget {
-  String getTabName(BuildContext context){
-    return locText(context, key: "tasks").toUpperCase();
-  }
-
   TaskCalendarPage({Key key, }) : super(key: key);
 
   @override
@@ -47,12 +43,8 @@ class _TaskCalendarPage extends State<TaskCalendarPage> {
   @override
   void initState() {
     tasksCalendarBloc.add(TasksCalendarFetchEvent());
-
-    final _selectedDay = DateTime.now();
     currentDay = DateTime.now();
-
-    _selectedEvents = _events[_selectedDay] ?? [];
-
+    _selectedEvents = _events[DateTime.now()] ?? [];
     super.initState();
   }
 
@@ -93,36 +85,36 @@ class _TaskCalendarPage extends State<TaskCalendarPage> {
       }
 
       eventTasks.add(
-          Padding(
-            padding: const EdgeInsets.only(left: 0.5, right: 0.5),
-            child: Container(
-              child: Stack(
-                children: <Widget>[
-                  Container(
-                    width: 10.0,
-                    height: 10.0,
+        Padding(
+          padding: const EdgeInsets.only(left: 0.5, right: 0.5),
+          child: Container(
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  width: 10.0,
+                  height: 10.0,
+                  padding: const EdgeInsets.all(20.0),//I used some padding without fixed width and height
+                  decoration: new BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: externalColor,
+                  ),
+                ),
+                Positioned(
+                  left: 2.5, top: 2.5,
+                  child: Container(
+                    width: 5.0,
+                    height: 5.0,
                     padding: const EdgeInsets.all(20.0),//I used some padding without fixed width and height
                     decoration: new BoxDecoration(
                       shape: BoxShape.circle,
-                      color: externalColor,
+                      color: innerColor,
                     ),
                   ),
-                  Positioned(
-                    left: 2.5, top: 2.5,
-                    child: Container(
-                      width: 5.0,
-                      height: 5.0,
-                      padding: const EdgeInsets.all(20.0),//I used some padding without fixed width and height
-                      decoration: new BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: innerColor,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          )
+          ),
+        )
       );
     }
 
@@ -231,7 +223,7 @@ class _TaskCalendarPage extends State<TaskCalendarPage> {
     return Scaffold(
       appBar: AppBar(
         leading: HazizzBackButton(),
-        title: Text(locText(context, key: "task_calendar")),
+        title: Text(localize(context, key: "task_calendar")),
       ),
       floatingActionButton:AnimatedOpacity(
         opacity: !fabIsInactive ? 0.0 : 1.0,
@@ -288,7 +280,7 @@ class _TaskCalendarPage extends State<TaskCalendarPage> {
                                 }
                                 return Padding(
                                   padding: EdgeInsets.only(top: 40),
-                                  child: Text(locText(context, key: "no_tasks_for_this_day")),
+                                  child: Text(localize(context, key: "no_tasks_for_this_day")),
                                 );
                               },
                             )

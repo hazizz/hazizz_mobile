@@ -136,6 +136,9 @@ class SessionsBloc extends Bloc<HEvent, HState> {
         prepareSessions();
         KretaSessionManager.setSessions(sessions);
         activeSessions = getActiveSessions(sessions);
+        if(SelectedSessionBloc().selectedSession == null && activeSessions.isNotEmpty){
+          SelectedSessionBloc().add(SelectedSessionSetEvent(activeSessions[0]));
+        }
         yield ResponseDataLoaded(data: sessions);
       }else{
         HazizzResponse hazizzResponse = await getResponse(new KretaGetSessions());
@@ -144,6 +147,9 @@ class SessionsBloc extends Bloc<HEvent, HState> {
           sessions = hazizzResponse.convertedData;
           KretaSessionManager.setSessions(sessions);
           activeSessions = getActiveSessions(sessions);
+          if(SelectedSessionBloc().selectedSession == null && activeSessions.isNotEmpty){
+            SelectedSessionBloc().add(SelectedSessionSetEvent(activeSessions[0]));
+          }
           yield ResponseDataLoaded(data: sessions);
         }
         else{

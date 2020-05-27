@@ -33,13 +33,10 @@ class TasksFetchEvent extends TasksEvent {
 }
 
 class TasksRemoveItemEvent extends TasksEvent {
+  final DateTime mapKey;
+  final int index;
 
-  DateTime mapKey;
-  int index;
-
-  TasksRemoveItemEvent({this.mapKey, this.index}) :  super([DateTime.now().microsecondsSinceEpoch]){
-
-  }
+  TasksRemoveItemEvent({this.mapKey, this.index}) :  super([DateTime.now().microsecondsSinceEpoch]);
   @override
   String toString() => 'TasksRemoveItemEvent';
   List<Object> get props => [mapKey, index, DateTime.now()];
@@ -84,7 +81,7 @@ class TasksLoadedCacheState extends TasksState {
 }
 
 class TasksErrorState extends TasksState {
-  HazizzResponse hazizzResponse;
+  final HazizzResponse hazizzResponse;
   TasksErrorState(this.hazizzResponse) : assert(hazizzResponse!= null), super([hazizzResponse]);
 
   @override
@@ -98,19 +95,15 @@ class TasksErrorState extends TasksState {
 //region Tasks bloc
 class TasksBloc extends Bloc<TasksEvent, TasksState> {
 
-  bool wholeGroup = false;
-  int groupId;
+  final bool wholeGroup;
+  final int groupId;
+  final bool theraEnabled;
 
-  bool theraEnabled;
+  TasksBloc({this.theraEnabled = true})
+    : wholeGroup = false, groupId = null;
 
-  TasksBloc({theraEnabled = true}){
-
-  }
-
-  TasksBloc.group(int groupId, {theraEnabled = true}){
-    wholeGroup = true;
-    this.groupId = groupId;
-  }
+  TasksBloc.group(int groupId, {this.theraEnabled = true})
+    : wholeGroup = true, this.groupId = groupId;
 
   TaskCompleteStateEnum currentTaskCompleteState = TaskCompleteStateEnum.UNCOMPLETED;
 
@@ -180,8 +173,8 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
           }
         }
 
-        String startDate = null;
-        String endDate = null;
+        String startDate;
+        String endDate;
         if(currentTaskExpiredState == TaskExpiredStateEnum.EXPIRED){
           DateTime now = DateTime.now();
           endDate = now.hazizzRequestDateFormat;
@@ -202,14 +195,9 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
           finishedOnly = false;
         }
 
-       // HazizzResponse hazizzResponse2 = await RequestSender().getResponse(new GetRecentEvents());
-
-
         HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetTasksFromMe(q_unfinishedOnly: unfinishedOnly, q_finishedOnly: finishedOnly, q_showThera: theraEnabled, q_startingDate: startDate, q_endDate: endDate, q_groupId: groupId, q_wholeGroup: wholeGroup));
 
-        //  HazizzLogger.printLog("tasks.: ${tasks}");
         if(hazizzResponse.isSuccessful){
-
           HazizzLogger.printLog("tasks.tasks: ${ hazizzResponse.convertedData}");
           tasksList = hazizzResponse.convertedData;
           HazizzLogger.printLog("off: $tasksList");

@@ -41,13 +41,13 @@ class PojoTag implements Pojo{
 
   String getDisplayName(BuildContext context){
     if(name == defaultTags[0].name){
-      return locText(context, key: "taskType_1");
+      return localize(context, key: "taskType_1");
     } else if(name == defaultTags[1].name){
-      return locText(context, key: "taskType_2");
+      return localize(context, key: "taskType_2");
     } else if(name == defaultTags[2].name){
-      return locText(context, key: "taskType_3");
+      return localize(context, key: "taskType_3");
     } else if(name == defaultTags[3].name){
-      return locText(context, key: "taskType_4");
+      return localize(context, key: "taskType_4");
     }/*else if(name == defaultTags[4].name){
       return locText(context, key: "taskType_5");
     }
@@ -57,13 +57,13 @@ class PojoTag implements Pojo{
 
   Future<String> getDisplayNameAsync() async {
     if(name == defaultTags[0].name){
-      return await locTextContextless(key: "taskType_1");
+      return await localizeWithoutContext(key: "taskType_1");
     } else if(name == defaultTags[1].name){
-      return await locTextContextless(key: "taskType_2");
+      return await localizeWithoutContext(key: "taskType_2");
     } else if(name == defaultTags[2].name){
-      return await locTextContextless(key: "taskType_3");
+      return await localizeWithoutContext(key: "taskType_3");
     } else if(name == defaultTags[3].name){
-      return await locTextContextless( key: "taskType_4");
+      return await localizeWithoutContext( key: "taskType_4");
     }/*else if(name == defaultTags[4].name){
       return await locTextContextless( key: "taskType_5");
     }*/

@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter_mailer/flutter_mailer.dart';
 import 'package:logcat/logcat.dart';
-//import 'package:mobile/custom/logcat/logcat-master/lib/logcat.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:mobile/custom/hazizz_app_info.dart';
@@ -9,11 +8,6 @@ import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:flutter/material.dart';
 
 class LogsPage extends StatefulWidget {
-
-  String getTitle(BuildContext context){
-    return locText(context, key: "logs");
-  }
-
   LogsPage({Key key}) : super(key: key);
 
   @override
@@ -22,12 +16,11 @@ class LogsPage extends StatefulWidget {
 
 class _LogsPage extends State<LogsPage> {
 
-
   String logs = "none";
   File logFile;
   String filePath;
 
-  TextEditingController controller = TextEditingController();
+  final TextEditingController controller = TextEditingController();
 
   @override
   void initState() {
@@ -53,7 +46,7 @@ class _LogsPage extends State<LogsPage> {
       child: Scaffold(
           appBar: AppBar(
             leading: HazizzBackButton(),
-            title: Text(widget.getTitle(context)),
+            title: Text("logs".localize(context)),
           ),
           body: Column(
             children: <Widget>[
@@ -63,7 +56,7 @@ class _LogsPage extends State<LogsPage> {
                   minLines: 1,
                   maxLines: 3,
                   decoration:  InputDecoration(
-                    labelText: locText(context, key: "tell_us_what_happened"),
+                    labelText: "tell_us_what_happened".localize(context),
                   ),
                 ),
               ),
@@ -80,18 +73,16 @@ class _LogsPage extends State<LogsPage> {
                 padding: const EdgeInsets.all(8.0),
                 child: Center(
                   child: RaisedButton(
-                    child: Text(locText(context, key: "send_log_via_email")),
+                    child: Text(localize(context, key: "send_log_via_email")),
                     onPressed: () async {
 
                       if(logFile != null){
                         final MailOptions mailOptions = MailOptions(
-
                           body: 'version: ${HazizzAppInfo().getInfo.version}\nbuildNumber: ${HazizzAppInfo().getInfo.buildNumber}\nstory: ${controller.text}',
                           subject: 'Hazizz Mobile log',
                           recipients: ['hazizzvelunk@gmail.com'],
                           attachments: [ filePath, ],
                         );
-
                         await FlutterMailer.send(mailOptions);
                       }
                     },

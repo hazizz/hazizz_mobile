@@ -1,6 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:mobile/custom/hazizz_date_time.dart';
-
 import 'Pojo.dart';
 
 part 'PojoCreator.g.dart';

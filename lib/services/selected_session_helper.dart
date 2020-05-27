@@ -20,7 +20,7 @@ List<PojoSession> getFailedSessionsFromHeader(Headers headers){
     if(key == "failed-sessions"){
       if(valueList != null && valueList.isNotEmpty){
         for(String s in valueList){
-          print("failed session2: ${s}");
+          print("failed session2: $s");
 
           List<String> splited = s.split("_");
           PojoSession se = PojoSession(

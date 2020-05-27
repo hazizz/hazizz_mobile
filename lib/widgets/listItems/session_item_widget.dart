@@ -5,7 +5,7 @@ import 'package:mobile/blocs/kreta/sessions_bloc.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
-import 'package:mobile/dialogs/dialogs_collection.dart';
+import 'package:mobile/dialogs/dialog_collection.dart';
 
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/hazizz_response.dart';
@@ -14,10 +14,7 @@ import 'package:mobile/communication/request_sender.dart';
 
 
 class SessionItemWidget extends StatefulWidget  {
-
-  PojoSession session;
-
-  bool selected = false;
+  final PojoSession session;
 
   SessionItemWidget({@required this.session});
 
@@ -25,13 +22,7 @@ class SessionItemWidget extends StatefulWidget  {
   _SessionItemWidget createState() => _SessionItemWidget();
 }
 
-
 class _SessionItemWidget extends State<SessionItemWidget>{
-  @override
-  void initState() {
-    super.initState();
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -63,15 +54,14 @@ class _SessionItemWidget extends State<SessionItemWidget>{
                   ),
                   child: Padding(
                     padding: const EdgeInsets.only(left: 4, top: 4, right: 8, bottom: 6),
-                    child: Text(widget.session.status, style: TextStyle(fontSize: 14)),
+                    child: Text(widget.session.getLocalizedStatus(context), style: TextStyle(fontSize: 14)),
                   )
                 ),
               ],
             ),
             Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-
+                children:[
                   Padding(
                     padding: const EdgeInsets.only(left: 4, bottom: 2),
                     child: Text(widget.session.url, style: TextStyle(fontSize: 14),),
@@ -84,7 +74,7 @@ class _SessionItemWidget extends State<SessionItemWidget>{
                         PopupMenuItem(
                           value: value_remove,
                           child: GestureDetector(
-                            child: Text(locText(context, key: "remove"),
+                            child: Text(localize(context, key: "remove"),
                               style: TextStyle(color: HazizzTheme.red),
                             ),
                           )
@@ -96,7 +86,7 @@ class _SessionItemWidget extends State<SessionItemWidget>{
                           PopupMenuItem(
                               value: value_reauth,
                               child: GestureDetector(
-                                child: Text(locText(context, key: "reauth"),
+                                child: Text(localize(context, key: "reauth"),
                                   //   style: TextStyle(color: HazizzTheme.red),
                                 ),
                               )
@@ -114,36 +104,17 @@ class _SessionItemWidget extends State<SessionItemWidget>{
                             if(hazizzResponse.isSuccessful){
                               SessionsBloc().add(FetchData());
                             }
-                            // ViewTaskBloc().commentBlocs.commentSectionBloc.add(CommentSectionFetchEvent());
                           }
                           if(value == value_reauth){
                             WidgetsBinding.instance.addPostFrameCallback((_) =>
                                 Navigator.pushNamed(context, "/kreta/login/auth", arguments: widget.session)
                             );
-                            // ViewTaskBloc().commentBlocs.commentSectionBloc.add(CommentSectionFetchEvent());
                           }
-
-
-                          /*else if(value == value_select){
-
-                        if(widget.session.status != "ACTIVE"){
-                          if(await showDialogSessionReauth(context)){
-                            WidgetsBinding.instance.addPostFrameCallback((_) =>
-                                Navigator.pushNamed(context, "/kreta/login/auth", arguments: widget.session)
-                            );
-                          }else{
-                          }
-                        }else{
-                          SelectedSessionBloc().add(SelectedSessionSetEvent(widget.session));
-                        }
-                      }
-                      */
                         },
                         itemBuilder: (BuildContext context) {
                           return menuItems;
                         },
                       );
-
                     },
                   )
                 ]

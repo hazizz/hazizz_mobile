@@ -270,7 +270,7 @@ class _SimilarTaskItemWidget extends State<SimilarTaskItemWidget> with TickerPro
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.only(top: 1, right: 6),
-                          child: Text(widget.taskSimilarity.task.creator.displayName, style: theme(context).textTheme.subtitle,),
+                          child: Text(widget.taskSimilarity.task.creator.displayName, style: theme(context).textTheme.subtitle2,),
                         ),
                       ],
                     )

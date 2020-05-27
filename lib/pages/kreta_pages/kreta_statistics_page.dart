@@ -10,14 +10,13 @@ import 'package:mobile/widgets/hazizz_back_button.dart';
 import 'package:mobile/widgets/listItems/grade_item_widget.dart';
 
 class KretaStatisticsPage extends StatefulWidget {
-
   @override
   _KretaStatisticsPage createState() => _KretaStatisticsPage();
 }
 
 class _KretaStatisticsPage extends State<KretaStatisticsPage> {
 
-  KretaGradeStatisticsBloc gradeAvaragesBloc = KretaGradeStatisticsBloc();
+  final KretaGradeStatisticsBloc gradeAvaragesBloc = KretaGradeStatisticsBloc();
 
   @override
   void initState() {
@@ -33,7 +32,7 @@ class _KretaStatisticsPage extends State<KretaStatisticsPage> {
 
         appBar: AppBar(
           leading: HazizzBackButton(),
-          title: Text(locText(context, key: "kreta_grade_statistics")),
+          title: Text(localize(context, key: "kreta_grade_statistics")),
         ),
         body: RefreshIndicator(
           onRefresh: () async{
@@ -92,21 +91,21 @@ class _KretaStatisticsPage extends State<KretaStatisticsPage> {
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: <Widget>[
-                                          Text("${locText(context, key: "average")}:", style: TextStyle(fontSize: 18),),
+                                          Text("${localize(context, key: "average")}:", style: TextStyle(fontSize: 18),),
                                           Text(avarage.grade.toString(), style: TextStyle(fontSize: 18),),
                                         ],
                                       ),
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: <Widget>[
-                                          Text("${locText(context, key: "class_average")}:", style: TextStyle(fontSize: 18),),
+                                          Text("${localize(context, key: "class_average")}:", style: TextStyle(fontSize: 18),),
                                           Text(avarage.classGrade.toString(), style: TextStyle(fontSize: 18),),
                                         ],
                                       ),
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: <Widget>[
-                                          Text("${locText(context, key: "difference")}:", style: TextStyle(fontSize: 18),),
+                                          Text("${localize(context, key: "difference")}:", style: TextStyle(fontSize: 18),),
                                           avarage.difference >= 0 ?
                                           Text("+${avarage.difference.toString()}", style: TextStyle(color: Colors.green, fontSize: 18),) :
                                           Text(avarage.difference.toString(), style: TextStyle(color: Colors.red, fontSize: 18))
@@ -132,7 +131,7 @@ class _KretaStatisticsPage extends State<KretaStatisticsPage> {
                           List<PojoGrade> grades = MainTabBlocs().gradesBloc.getGradesFromSession().grades[selectedSubject];
 
                           if(grades == null || grades.isEmpty){
-                            return Center(child: Text(locText(context, key: "no_grades_yet")));
+                            return Center(child: Text(localize(context, key: "no_grades_yet")));
                           }
                           return new ListView.builder(
                             itemCount: grades.length,

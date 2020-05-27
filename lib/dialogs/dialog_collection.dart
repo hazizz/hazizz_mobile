@@ -169,7 +169,7 @@ Future<PojoGroup> showDialogGroup(BuildContext context, {List<PojoGroup> data}) 
         padding: const EdgeInsets.all(5),
         child:
         AutoSizeText(
-          locText(context, key: "select_group"),
+          localize(context, key: "select_group"),
           style: TextStyle( fontWeight: FontWeight.w800, fontSize: 26),
           maxLines: 1,
         ),
@@ -184,7 +184,7 @@ Future<PojoGroup> showDialogGroup(BuildContext context, {List<PojoGroup> data}) 
             Builder(
               builder: (context){
                 if(groups_data.length <= 1){
-                  return Text(locText(context, key: "not_member_of_groups"));
+                  return Text(localize(context, key: "not_member_of_groups"));
                 }
                 return Container();
               },
@@ -226,7 +226,7 @@ Future<PojoGroup> showDialogGroup(BuildContext context, {List<PojoGroup> data}) 
     actionButtons: Row(
       children: <Widget>[
         FlatButton(
-          child: new Text(locText(context, key: "close").toUpperCase()),
+          child: new Text(localize(context, key: "close").toUpperCase()),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -391,7 +391,7 @@ Future<PojoTag> showDialogTaskTag(BuildContext context, {List<PojoTag> except}) 
       child: Padding(
         padding: const EdgeInsets.all(5),
         child:
-        Text(locText(context, key: "select_tag"),
+        Text(localize(context, key: "select_tag"),
             style: TextStyle(
               fontSize: 28.0,
               fontWeight: FontWeight.w800,
@@ -418,7 +418,7 @@ Future<PojoTag> showDialogTaskTag(BuildContext context, {List<PojoTag> except}) 
                     Navigator.pop(context, PojoTag(name: newTagController.text));
                   }
                 }),
-                hintText: locText(context, key: "add_new_tag"),
+                hintText: localize(context, key: "add_new_tag"),
                 prefixIcon: Icon(FontAwesomeIcons.searchPlus),
               )
             ),
@@ -461,7 +461,7 @@ Future<PojoTag> showDialogTaskTag(BuildContext context, {List<PojoTag> except}) 
     actionButtons: Row(
       children: <Widget>[
         FlatButton(
-          child: new Text(locText(context, key: "close").toUpperCase()),
+          child: new Text(localize(context, key: "close").toUpperCase()),
           onPressed: () {
             Navigator.pop(context, null);
           },
@@ -479,14 +479,13 @@ Future<PojoTag> showDialogTaskTag(BuildContext context, {List<PojoTag> except}) 
   return result;
 }
 
-Future<dynamic> showUserDialog(context, { PojoUser user, PojoCreator creator, GroupPermissionsEnum permission}) {
-
+Future<dynamic> showUserInformationDialog(context, {PojoUser user, PojoCreator creator, GroupPermissionsEnum permission}) {
   return showDialog(
     context: context,
     barrierDismissible: true,
-
     builder: (BuildContext context) {
-      return UserDialog(creator: creator, user: user, permission: permission,);
+      if(user != null) return UserDialog.user(user: user, permission: permission);
+      else return UserDialog.creator(creator: creator, permission: permission);
     }
   );
 }
@@ -524,7 +523,7 @@ Future<bool> showDeleteTaskDialog(context, {@required int taskId}) async {
         child: Padding(
           padding: EdgeInsets.all(10),
           child: Text(
-            locText(context, key: "areyousure_delete_task"),
+            localize(context, key: "areyousure_delete_task"),
             style: TextStyle(
               fontSize: 20.0,
               fontWeight: FontWeight.w700,
@@ -541,7 +540,7 @@ Future<bool> showDeleteTaskDialog(context, {@required int taskId}) async {
           FlatButton(
               child: Center(
                 child: Text(
-                  locText(context, key: "cancel").toUpperCase()
+                  localize(context, key: "cancel").toUpperCase()
                 ),
               ),
               onPressed: () {
@@ -552,7 +551,7 @@ Future<bool> showDeleteTaskDialog(context, {@required int taskId}) async {
           FlatButton(
               child: Center(
                 child: Text(
-                  locText(context, key: "delete").toUpperCase(),
+                  localize(context, key: "delete").toUpperCase(),
                   style: TextStyle(
                       color: HazizzTheme.warningColor),
                 ),
@@ -693,8 +692,8 @@ Future<Widget> showGradeDialog(context, {@required PojoGrade grade}) {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(locText(context, key: "topic") + ":", style: TextStyle(fontSize: 18)),
-                    Expanded(child: Text(grade.topic == null ? "" : (grade.topic),
+                    Text(localize(context, key: "topic") + ":", style: TextStyle(fontSize: 18)),
+                    Expanded(child: Text(grade.topic == null ? "" : (grade.topic).toUpperFirst(),
                       style: TextStyle(fontSize: 18, height: 0.95), textAlign: TextAlign.end,)
                     ),
                   ],
@@ -706,17 +705,17 @@ Future<Widget> showGradeDialog(context, {@required PojoGrade grade}) {
                   crossAxisAlignment: CrossAxisAlignment.start,
 
                   children: <Widget>[
-                    Text(locText(context, key: "grade_type") + ":", style: TextStyle(fontSize: 18)),
+                    Text(localize(context, key: "grade_type") + ":", style: TextStyle(fontSize: 18)),
                     Builder(
                       builder: (context){
                         GradeTypeEnum gradeType = grade.gradeType;
                         String gradeTypeShow;
                         if(gradeType == GradeTypeEnum.MIDYEAR){
-                          gradeTypeShow = locText(context, key: "gradeType_midYear");
+                          gradeTypeShow = localize(context, key: "gradeType_midYear");
                         }else if(gradeType == GradeTypeEnum.HALFYEAR){
-                          gradeTypeShow = locText(context, key: "gradeType_halfYear");
+                          gradeTypeShow = localize(context, key: "gradeType_halfYear");
                         }else if(gradeType == GradeTypeEnum.ENDYEAR){
-                          gradeTypeShow = locText(context, key: "gradeType_endYear");
+                          gradeTypeShow = localize(context, key: "gradeType_endYear");
                         }
                         return Expanded(child: Text(gradeTypeShow, style: TextStyle(fontSize: 18), textAlign: TextAlign.end,));
                       },
@@ -728,7 +727,7 @@ Future<Widget> showGradeDialog(context, {@required PojoGrade grade}) {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(locText(context, key: "schedule_creation_date") + ":", style: TextStyle(fontSize: 18),),
+                    Text(localize(context, key: "schedule_creation_date") + ":", style: TextStyle(fontSize: 18),),
                     Expanded(child: Text(grade.creationDate == null ? "" : grade.creationDate.hazizzShowDateFormat, style: TextStyle(fontSize: 18), textAlign: TextAlign.end,)),
                   ],
                 ),
@@ -737,7 +736,7 @@ Future<Widget> showGradeDialog(context, {@required PojoGrade grade}) {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(locText(context, key: "date") + ":", style: TextStyle(fontSize: 18),),
+                    Text(localize(context, key: "date") + ":", style: TextStyle(fontSize: 18),),
                     Expanded(child: Text(grade.date == null ? "" : grade.date.hazizzShowDateFormat, style: TextStyle(fontSize: 18), textAlign: TextAlign.end,)),
                   ],
                 ),
@@ -752,7 +751,7 @@ Future<Widget> showGradeDialog(context, {@required PojoGrade grade}) {
                 padding: const EdgeInsets.only(right: 0),
                 child: FlatButton(
                     child: Center(
-                      child: Text(locText(context, key: "close").toUpperCase(),),
+                      child: Text(localize(context, key: "close").toUpperCase(),),
                     ),
                     onPressed: () {
                       Navigator.of(context).pop();
@@ -787,7 +786,7 @@ Future<bool> showJoinedGroupDialog(context, {@required PojoGroup group}) async {
         color: Theme.of(context).primaryColor,
         child: Padding(
           padding: const EdgeInsets.all(4.0),
-          child: Text(locText(context, key: "welcome_to_group", args: [group.name]), style: TextStyle(fontSize: 22),),
+          child: Text(localize(context, key: "welcome_to_group", args: [group.name]), style: TextStyle(fontSize: 22),),
         )
       ),
       content: Container(),
@@ -798,7 +797,7 @@ Future<bool> showJoinedGroupDialog(context, {@required PojoGroup group}) async {
           FlatButton(
             child: Center(
               child: Text(
-                locText(context, key: "ok").toUpperCase(),
+                localize(context, key: "ok").toUpperCase(),
               ),
             ),
             onPressed: () {
@@ -938,7 +937,7 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
                     crossAxisAlignment: CrossAxisAlignment.center,
 
                     children: <Widget>[
-                      Text("${locText(context, key: "thera_canceled").toUpperCase()}", style: TextStyle(fontSize: 24, color: HazizzTheme.red)),
+                      Text("${localize(context, key: "thera_canceled").toUpperCase()}", style: TextStyle(fontSize: 24, color: HazizzTheme.red)),
                     ],
                   ));
                 }
@@ -947,7 +946,7 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text(locText(context, key: "class_name") + ":", style: TextStyle(fontSize: 18)),
+                    Text(localize(context, key: "class_name") + ":", style: TextStyle(fontSize: 18)),
                     Expanded(
                       child: Text(pojoClass.className == null ? "" : (pojoClass.className),
                         style: TextStyle(fontSize: 18), textAlign: TextAlign.end,),
@@ -961,7 +960,7 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
                     crossAxisAlignment: CrossAxisAlignment.start,
 
                     children: <Widget>[
-                      Text("${locText(context, key: "thera_standin")}:", style: TextStyle(fontSize: 18, color: HazizzTheme.red)),
+                      Text("${localize(context, key: "thera_standin")}:", style: TextStyle(fontSize: 18, color: HazizzTheme.red)),
                       Expanded(child: Text(pojoClass.teacher, style: TextStyle(fontSize: 18,  color: HazizzTheme.red), textAlign: TextAlign.end,)),
                     ],
                   ));
@@ -970,7 +969,7 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(locText(context, key: "teacher") + ":", style: TextStyle(fontSize: 18, height: 0.94)),
+                      Text(localize(context, key: "teacher") + ":", style: TextStyle(fontSize: 18, height: 0.94)),
                       Expanded(child: Text(pojoClass.teacher == null ? "" : pojoClass.teacher, style: TextStyle(fontSize: 18, height: 0.94), textAlign:TextAlign.end,),),
                     ],
                   ),);
@@ -981,7 +980,7 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
                   crossAxisAlignment: CrossAxisAlignment.start,
 
                   children: <Widget>[
-                    Text(locText(context, key: "room") + ":", style: TextStyle(fontSize: 18)),
+                    Text(localize(context, key: "room") + ":", style: TextStyle(fontSize: 18)),
                     Expanded(child: Text(pojoClass.room == null ? "" : pojoClass.room, style: TextStyle(fontSize: 18), textAlign: TextAlign.end,)),
                   ],
                 ),);
@@ -992,7 +991,7 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
                     crossAxisAlignment: CrossAxisAlignment.start,
 
                     children: <Widget>[
-                      Text(locText(context, key: "topic") + ":", style: TextStyle(fontSize: 18, height: 0.94)),
+                      Text(localize(context, key: "topic") + ":", style: TextStyle(fontSize: 18, height: 0.94)),
                       Expanded(child: Text(pojoClass.topic, style: TextStyle(fontSize: 18, height: 0.94), textAlign: TextAlign.end)),
                     ],
                   ));
@@ -1006,7 +1005,7 @@ Future<void> showClassDialog(context, {@required PojoClass pojoClass}) {
         Row(
           children: <Widget>[
             FlatButton(
-              child: Text(locText(context, key: "close").toUpperCase()),
+              child: Text(localize(context, key: "close").toUpperCase()),
               onPressed: (){
                 Navigator.pop(context) ;
               },
@@ -1073,7 +1072,7 @@ Future<bool> showIntroCancelDialog(context) async {
         child: Padding(
           padding: const EdgeInsets.all(5),
           child:
-          Text(locText(context, key: "kreta_login_later"),
+          Text(localize(context, key: "kreta_login_later"),
             style: TextStyle(
               fontSize: 23.0,
             )
@@ -1085,13 +1084,13 @@ Future<bool> showIntroCancelDialog(context) async {
       Row(
         children: <Widget>[
           FlatButton(
-            child: Text(locText(context, key: "close").toUpperCase()),
+            child: Text(localize(context, key: "close").toUpperCase()),
             onPressed: (){
               Navigator.pop(context) ;
             },
           ),
           FlatButton(
-            child: Text(locText(context, key: "ok").toUpperCase()),
+            child: Text(localize(context, key: "ok").toUpperCase()),
             onPressed: (){
               success = true;
               Navigator.pop(context) ;
@@ -1124,7 +1123,7 @@ Future<bool> showDialogSessionReauth(BuildContext context) async{
       child: Padding(
         padding: const EdgeInsets.all(5),
         child:
-        Text(locText(context, key: "you_can_only_use_active_account"),
+        Text(localize(context, key: "you_can_only_use_active_account"),
             style: TextStyle(
               fontSize: 20.0,
             )
@@ -1133,18 +1132,18 @@ Future<bool> showDialogSessionReauth(BuildContext context) async{
     ),
     content: Container(
       height: 40,
-      child: Text(locText(context, key: "do_you_want_to_log_in_again")),
+      child: Text(localize(context, key: "do_you_want_to_log_in_again")),
     ),
     actionButtons: Row(
       children: <Widget>[
         FlatButton(
-          child: new Text(locText(context, key: "no").toUpperCase()),
+          child: new Text(localize(context, key: "no").toUpperCase()),
           onPressed: () {
             Navigator.pop(context, false);
           },
         ),
         FlatButton(
-          child: new Text(locText(context, key: "yes").toUpperCase()),
+          child: new Text(localize(context, key: "yes").toUpperCase()),
           onPressed: () {
             Navigator.pop(context, true);
           },
@@ -1190,7 +1189,7 @@ Future<void> showNewFeatureDialog(context) async {
         ),
         child: Padding(
           padding: EdgeInsets.all(6),
-          child: Text( "${locText(context, key: "new_features")}:",
+          child: Text( "${localize(context, key: "new_features")}:",
             style: TextStyle(
               fontSize: 20.0,
               fontWeight: FontWeight.w700,
@@ -1215,7 +1214,7 @@ Future<void> showNewFeatureDialog(context) async {
                           padding: const EdgeInsets.only(right: 4),
                           child: Text("-"),
                         ),
-                        Expanded(child: Text("${locText(context, key: "new_feature_subject_subscribe")}", style: TextStyle(fontSize: 15.4),)),
+                        Expanded(child: Text("${localize(context, key: "new_feature_subject_subscribe")}", style: TextStyle(fontSize: 15.4),)),
                       ],
                     ),
                   ),
@@ -1231,7 +1230,7 @@ Future<void> showNewFeatureDialog(context) async {
         children: <Widget>[
           FlatButton(
             child: Center(
-              child: Text(locText(context, key: "ok").toUpperCase()),
+              child: Text(localize(context, key: "ok").toUpperCase()),
             ),
             onPressed: () {
               Navigator.of(context).pop();
@@ -1290,7 +1289,7 @@ Future<bool> showMarkdownInfo(context,) async {
           color: Theme.of(context).primaryColor,
           child: Padding(
             padding: const EdgeInsets.all(4.0),
-            child: Text(locText(context, key: "markdown_info"), style: TextStyle(fontSize: 22),),
+            child: Text(localize(context, key: "markdown_info"), style: TextStyle(fontSize: 22),),
           )
       ),
       content: Container(
@@ -1302,9 +1301,9 @@ Future<bool> showMarkdownInfo(context,) async {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Text(locText(context, key: "markdown_info_h1")),
+                    Text(localize(context, key: "markdown_info_h1")),
                     Spacer(),
-                    Container(width: 100,child: getMark(locText(context, key: "markdown_info_h1")))
+                    Container(width: 100,child: getMark(localize(context, key: "markdown_info_h1")))
                   ],
                 ),
               ),
@@ -1313,69 +1312,69 @@ Future<bool> showMarkdownInfo(context,) async {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
                   children: <Widget>[
-                    Text(locText(context, key: "markdown_info_h2")),
+                    Text(localize(context, key: "markdown_info_h2")),
                     Spacer(),
-                    Flexible(child: getMark(locText(context, key: "markdown_info_h2")))
+                    Flexible(child: getMark(localize(context, key: "markdown_info_h2")))
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
                   children: <Widget>[
-                    Text(locText(context, key: "markdown_info_h3")),
+                    Text(localize(context, key: "markdown_info_h3")),
                     Spacer(),
-                    Flexible(child: getMark(locText(context, key: "markdown_info_h3")))
+                    Flexible(child: getMark(localize(context, key: "markdown_info_h3")))
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
                   children: <Widget>[
-                    Text(locText(context, key: "markdown_info_h4")),
+                    Text(localize(context, key: "markdown_info_h4")),
                     Spacer(),
-                    Flexible(child: getMark(locText(context, key: "markdown_info_h4")))
+                    Flexible(child: getMark(localize(context, key: "markdown_info_h4")))
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
                   children: <Widget>[
-                    Text(locText(context, key: "markdown_info_h5")),
+                    Text(localize(context, key: "markdown_info_h5")),
                     Spacer(),
-                    Flexible(child: getMark(locText(context, key: "markdown_info_h5")))
+                    Flexible(child: getMark(localize(context, key: "markdown_info_h5")))
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
                   children: <Widget>[
-                    Text(locText(context, key: "markdown_info_h6")),
+                    Text(localize(context, key: "markdown_info_h6")),
                     Spacer(),
-                    Flexible(child: getMark(locText(context, key: "markdown_info_h6")))
+                    Flexible(child: getMark(localize(context, key: "markdown_info_h6")))
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text(locText(context, key: "markdown_info_a")),
+                    Text(localize(context, key: "markdown_info_a")),
                     Spacer(),
-                    Flexible(child: getMark(locText(context, key: "markdown_info_a"))
+                    Flexible(child: getMark(localize(context, key: "markdown_info_a"))
                   )                  ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text(locText(context, key: "markdown_info_ul")),
+                    Text(localize(context, key: "markdown_info_ul")),
                     Spacer(),
-                    Flexible(child: getMark(locText(context, key: "markdown_info_ul")))
+                    Flexible(child: getMark(localize(context, key: "markdown_info_ul")))
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text(locText(context, key: "markdown_info_ol")),
+                    Text(localize(context, key: "markdown_info_ol")),
                     Spacer(),
-                    Flexible(child: getMark(locText(context, key: "markdown_info_ol")))
+                    Flexible(child: getMark(localize(context, key: "markdown_info_ol")))
                   ],
                 ),
 
@@ -1389,7 +1388,7 @@ Future<bool> showMarkdownInfo(context,) async {
           FlatButton(
               child: Center(
                 child: Text(
-                  locText(context, key: "close").toUpperCase(),
+                  localize(context, key: "close").toUpperCase(),
                 ),
               ),
               onPressed: () {
@@ -1431,7 +1430,7 @@ Future<bool> showGiveawayDialog(context) async {
           width: 270,
           child: Padding(
             padding: const EdgeInsets.only(top: 4),
-            child: AutoSizeText(locText(context, key: "giveaway_title",).toUpperCase(),
+            child: AutoSizeText(localize(context, key: "giveaway_title",).toUpperCase(),
               style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.w800,
@@ -1449,7 +1448,7 @@ Future<bool> showGiveawayDialog(context) async {
       padding: const EdgeInsets.only(left: 4, right: 4, top: 4),
       child: Column(
         children: <Widget>[
-          AutoSizeText(locText(context, key: "giveaway_description",),
+          AutoSizeText(localize(context, key: "giveaway_description",),
             style: TextStyle(fontSize: 18),
             maxFontSize: 18,
             minFontSize: 16,
@@ -1513,7 +1512,7 @@ Future<bool> showNoAssociatedEmail(context,) async {
           color: Theme.of(context).primaryColor,
           child: Padding(
             padding: const EdgeInsets.all(4.0),
-            child: AutoSizeText(locText(context, key: "markdown_info"),
+            child: AutoSizeText(localize(context, key: "markdown_info"),
               maxLines: 2,
               maxFontSize: 24,
               minFontSize: 16,
@@ -1529,7 +1528,7 @@ Future<bool> showNoAssociatedEmail(context,) async {
           FlatButton(
               child: Center(
                 child: Text(
-                  locText(context, key: "close").toUpperCase(),
+                  localize(context, key: "close").toUpperCase(),
                 ),
               ),
               onPressed: () {
@@ -1540,7 +1539,7 @@ Future<bool> showNoAssociatedEmail(context,) async {
           FlatButton(
               child: Center(
                 child: Text(
-                  locText(context, key: "add_email").toUpperCase(),
+                  localize(context, key: "add_email").toUpperCase(),
                 ),
               ),
               onPressed: () async {

@@ -1,12 +1,8 @@
 import 'dart:async';
-import 'dart:math';
-
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
-import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/blocs/other/flush_bloc.dart';
 import 'package:mobile/blocs/kreta/new_grade_bloc.dart';
 import 'package:mobile/blocs/kreta/selected_session_bloc.dart';
-
 import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/response_states.dart';
 import 'package:mobile/communication/connection.dart';
@@ -31,7 +27,7 @@ abstract class GradesEvent extends HEvent {
 
 class GradesSetSessionEvent extends GradesEvent {
   final DateTime dateTime;
-  GradesSetSessionEvent({this.dateTime}) :  super([dateTime]);
+  GradesSetSessionEvent({this.dateTime}) : super([dateTime]);
   @override
   String toString() => 'GradesSetSessionEvent';
   List<Object> get props => [dateTime];
@@ -93,17 +89,6 @@ class GradesLoadedCacheState extends GradesState {
   String toString() => 'GradesLoadedCacheState';
   List<Object> get props => [data, SelectedSessionBloc().selectedSession];
 }
-/*
-class GradesSessionFailedState extends GradesState {
-  PojoGrades data;
-  GradesSessionFailedState(this.data) : assert(data!= null), super([data, SelectedSessionBloc().selectedSession]){
-    data ??= PojoGrades({});
-  }
-  @override
-  String toString() => 'GradesLoadedCacheState';
-  List<Object> get props => [data, SelectedSessionBloc().selectedSession];
-}
-*/
 
 class GradesErrorState extends GradesState {
   HazizzResponse hazizzResponse;
@@ -113,8 +98,6 @@ class GradesErrorState extends GradesState {
   String toString() => 'GradesErrorState';
   List<Object> get props => [hazizzResponse];
 }
-
-
 //endregion
 
 //region Grades bloc
@@ -206,7 +189,6 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
     }
     if(gradeSum != 0 && gradeAmount != 0){
       return (gradeSum/gradeAmount).round2(decimals: 2).toString();
-
     }
     return "";
   }
@@ -216,7 +198,12 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
   Stream<GradesState> mapEventToState(GradesEvent event) async* {
     if(event is GradesSetSessionEvent){
       print("Updating GradeBloc state due to new session selected");
-      yield GradesLoadedState(grades, failedSessions: failedSessions);
+      if(grades != null){
+        yield GradesLoadedState(grades, failedSessions: failedSessions);
+      }else{
+        yield GradesWaitingState();
+      }
+
     }
     else if (event is GradesFetchEvent) {
       try {

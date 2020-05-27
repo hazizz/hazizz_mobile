@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:intl/intl.dart';
 import 'package:mobile/communication/pojos/PojoMeInfoPrivate.dart';
 import 'package:mobile/communication/pojos/PojoMyDetailedInfo.dart';
 import 'package:mobile/custom/hazizz_logger.dart';

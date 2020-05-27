@@ -9,6 +9,7 @@
   "header_item_later":"múlva",
   "days":"days",
   "tomorrow":"Tomorrow",
+  "yesterday":"Yesterday",
   "days2":"In 2 days",
   "days_later":"In {} days",
   "days_ago":"Expired {} days ago",
@@ -449,6 +450,16 @@
   "days_m_4":"F",
   "days_m_5":"Sa",
   "days_m_6":"Su",
+
+
+  "session_status_active" : "Activate",
+  "session_status_loading" : "Loading...",
+  "session_status_invalid_credentials" : "Invalid credentials",
+  "session_status_authentication_required" : "Login in required",
+
+  "vakacio" : "VAKÁCIÓ!",
+  "vakacio_until" : "{} days {} hours {} minutes and {} seconds until summer vacation!",
+
   "homework_map":{
     "homework":"Homework",
     "assignment":"Assignment",

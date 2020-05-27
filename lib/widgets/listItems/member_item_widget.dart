@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/communication/pojos/PojoUser.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
-import 'package:mobile/dialogs/dialogs_collection.dart';
+import 'package:mobile/dialogs/dialog_collection.dart';
 import 'package:mobile/enums/group_permissions_enum.dart';
 import 'package:mobile/widgets/permission_chip.dart';
 
 
 class MemberItemWidget extends StatefulWidget{
 
-  bool isMe = false;
-  PojoUser member;
-  GroupPermissionsEnum permission;
-  Widget permissionChip = Container();
-  Function onKicked;
+  final bool isMe;
+  final PojoUser member;
+  final GroupPermissionsEnum permission;
+  final Function onKicked;
 
-  MemberItemWidget({@required this.member, @required this.permission,  @required this.onKicked, this.isMe}){
-    isMe ??= false;
-  }
+  MemberItemWidget({@required this.member, @required this.permission,  @required this.onKicked, this.isMe = false});
 
   @override
   _MemberItemWidget createState() => new _MemberItemWidget();
@@ -30,7 +27,6 @@ class _MemberItemWidget extends State<MemberItemWidget>{
   @override
   void initState() {
     permission = widget.permission;
-
     super.initState();
   }
 
@@ -48,7 +44,7 @@ class _MemberItemWidget extends State<MemberItemWidget>{
               child: InkWell(
                   onTap: () async {
 
-                    dynamic result = await showUserDialog(context, user: widget.member, permission: permission);
+                    dynamic result = await showUserInformationDialog(context, user: widget.member, permission: permission);
 
                     HazizzLogger.printLog("result from user view dialog: ${result.toString()}");
 

@@ -6,8 +6,8 @@ import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// TODO refactor this
 class DataCache{
-
   DateTime lastUpdated;
   var json;
 
@@ -133,18 +133,18 @@ Future<DataCache> loadGradesCache() async {
 
 Future forgetScheduleCache() async {
   var sh = await SharedPreferences.getInstance();
-  bool a = await sh.remove("scheduleCache");
-  bool s = await sh.remove("scheduleCache" + "_time");
+  await sh.remove("scheduleCache");
+  await sh.remove("scheduleCache" + "_time");
 }
 
 Future forgetGradesCache() async {
   var sh = await SharedPreferences.getInstance();
-  bool a = await sh.remove("gradesCache");
-  bool s = await sh.remove("gradesCache" + "_time");
+  await sh.remove("gradesCache");
+  await sh.remove("gradesCache" + "_time");
 }
 
 Future forgetTasksCache() async {
   var sh = await SharedPreferences.getInstance();
-  bool a = await sh.remove("tasksCache");
-  bool s = await sh.remove("tasksCache" + "_time");
+  await sh.remove("tasksCache");
+  await sh.remove("tasksCache" + "_time");
 }

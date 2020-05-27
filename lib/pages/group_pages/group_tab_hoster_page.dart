@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/group/group_bloc.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
-import 'package:mobile/dialogs/dialogs_collection.dart';
+import 'package:mobile/dialogs/dialog_collection.dart';
 import 'package:mobile/dialogs/report_dialog.dart';
 import 'package:mobile/widgets/flushbars.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
@@ -22,7 +22,7 @@ class GroupTabHosterPage extends StatefulWidget {
 
   final PojoGroup group;
 
-  VisitorEnum visitorEnum;
+  final VisitorEnum visitorEnum;
 
 
   GroupTabHosterPage({Key key, @required this.group, @required this.visitorEnum}) : super(key: key);
@@ -82,7 +82,7 @@ class _GroupTabHosterPage extends State<GroupTabHosterPage> with SingleTickerPro
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
         scaffoldState.currentState.showSnackBar(SnackBar(
-          content: Text(locText(context, key: "already_in_group")),
+          content: Text(localize(context, key: "already_in_group")),
           duration: Duration(seconds: 3),
         ));
       });
@@ -108,7 +108,7 @@ class _GroupTabHosterPage extends State<GroupTabHosterPage> with SingleTickerPro
 
   @override
   Widget build(BuildContext context) {
-    title = "${locText(context, key: "group")}: ${widget.group.name}";
+    title = "${localize(context, key: "group")}: ${widget.group.name}";
     return Scaffold(
       key: scaffoldState,
      // backgroundColor: widget.color,
@@ -135,7 +135,7 @@ class _GroupTabHosterPage extends State<GroupTabHosterPage> with SingleTickerPro
               if(value == "report"){
                 bool success = await showReportDialog(context, reportType: ReportTypeEnum.GROUP, id: widget.group.id, name: widget.group.name);
                 if(success != null && success){
-                  showReportSuccessFlushBar(context, what: locText(context, key: "group"));
+                  showReportSuccessFlushBar(context, what: localize(context, key: "group"));
 
                 }
               }else if(value == "invite"){
@@ -151,18 +151,18 @@ class _GroupTabHosterPage extends State<GroupTabHosterPage> with SingleTickerPro
               return [
                 PopupMenuItem(
                   value: "invite",
-                  child: Text(locText(context, key: "invite_others"),
+                  child: Text(localize(context, key: "invite_others"),
                   ),
                 ),
                 PopupMenuItem(
                   value: "report",
-                  child: Text(locText(context, key: "report"),
+                  child: Text(localize(context, key: "report"),
                     style: TextStyle(color: HazizzTheme.red),
                   ),
                 ),
                 PopupMenuItem(
                   value: "leave",
-                  child: Text(locText(context, key: "leave"),
+                  child: Text(localize(context, key: "leave"),
                     style: TextStyle(color: HazizzTheme.red),
                   ),
                 )

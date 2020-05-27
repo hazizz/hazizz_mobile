@@ -5,7 +5,7 @@ import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/hazizz_response.dart';
-import 'dialogs_collection.dart';
+import 'dialog_collection.dart';
 
 class KretaProfileDialog extends StatefulWidget {
   final PojoSession session;
@@ -74,7 +74,7 @@ class _KretaProfileDialog extends State<KretaProfileDialog> {
                       ],
                     );
                   }
-                  return Center(child: Text(locText(context, key: "loading"), style: TextStyle(fontSize: 20),));
+                  return Center(child: Text(localize(context, key: "loading"), style: TextStyle(fontSize: 20),));
                 }),
               )
           ),
@@ -126,7 +126,7 @@ class _KretaProfileDialog extends State<KretaProfileDialog> {
         ),
         actionButtons: Builder(builder: (context){
           return FlatButton(
-            child: Text(locText(context, key: "close").toUpperCase(),),
+            child: Text(localize(context, key: "close").toUpperCase(),),
             onPressed: (){
               Navigator.pop(context);
             },

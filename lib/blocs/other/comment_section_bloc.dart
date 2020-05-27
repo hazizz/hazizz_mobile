@@ -81,18 +81,19 @@ class CommentSectionInitialState extends CommentSectionState {
 class CommentSectionBloc extends Bloc<CommentSectionEvent, CommentSectionState> {
   List<PojoComment> comments;
 
-  int taskId;
-  bool enabled = true;
+  final int taskId;
+  final bool enabled;
 
-  CommentSectionBloc({@required this.taskId, @required enabled = true});
+  CommentSectionBloc({@required this.taskId, @required this.enabled});
 
   @override
   CommentSectionState get initialState => CommentSectionInitialState();
 
   @override
   Stream<CommentSectionState> mapEventToState(CommentSectionEvent event) async* {
-    HazizzLogger.printLog("log: Event2: ${event.toString()}");
+
     if(enabled){
+      HazizzLogger.printLog("log: Event2: ${event.toString()}");
       if (event is CommentSectionFetchEvent) {
         try {
           yield CommentSectionWaitingState();
@@ -156,8 +157,8 @@ class CommentWriterSendEvent extends CommentWriterEvent {
 }
 
 class CommentWriterUpdateContentEvent extends CommentWriterEvent {
-  String content;
-  CommentWriterUpdateContentEvent({@required String this.content}): assert(content != null), super([content]);
+  final String content;
+  CommentWriterUpdateContentEvent({@required this.content}): assert(content != null), super([content]);
 
   List<Object> get props => [content];
 }
@@ -198,7 +199,7 @@ class CommentWriterBloc extends Bloc<CommentWriterEvent,  CommentWriterState> {
 
   bool enabled = true;
 
-  CommentWriterBloc({@required this.taskId, @required this.commentSectionBloc, @required enabled = true}){
+  CommentWriterBloc({@required this.taskId, @required this.commentSectionBloc, @required this.enabled}){
     commentController.addListener((){
       content = commentController.text;
       if(content.length > 0 && this.state is CommentWriterEmptyState){

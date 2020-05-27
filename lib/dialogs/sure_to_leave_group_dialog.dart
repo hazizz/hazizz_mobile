@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mobile/blocs/group/create_group_bloc.dart';
-import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
-import 'package:mobile/enums/group_types_enum.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
-import 'dialogs_collection.dart';
+import 'dialog_collection.dart';
 
 class SureToLeaveGroupDialog extends StatefulWidget {
 
-  int groupId;
+  final int groupId;
 
   SureToLeaveGroupDialog({@required this.groupId});
 
@@ -23,7 +17,6 @@ class SureToLeaveGroupDialog extends StatefulWidget {
 }
 
 class _SureToLeaveGroupDialog extends State<SureToLeaveGroupDialog> {
-
 
   String groupName;
 
@@ -42,7 +35,6 @@ class _SureToLeaveGroupDialog extends State<SureToLeaveGroupDialog> {
     super.initState();
   }
 
-
   final double width = 300;
   final double height = 90;
 
@@ -60,13 +52,12 @@ class _SureToLeaveGroupDialog extends State<SureToLeaveGroupDialog> {
               child:
               Center(
                 child: Builder(builder: (context){
-                  return Text(locText(context, key: "areyousure_leave_group"),
+                  return Text(localize(context, key: "areyousure_leave_group"),
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w700,
                       )
                   );
-
                 }),
               )
           ),
@@ -76,13 +67,13 @@ class _SureToLeaveGroupDialog extends State<SureToLeaveGroupDialog> {
 
           return Row(children: <Widget>[
               FlatButton(
-                child: Text(locText(context, key: "no").toUpperCase(),),
+                child: Text(localize(context, key: "no").toUpperCase(),),
                 onPressed: (){
                   Navigator.pop(context, false);
                 },
               ),
               FlatButton(
-                child: Text(locText(context, key: "yes").toUpperCase(),),
+                child: Text(localize(context, key: "yes").toUpperCase(),),
                 onPressed: () async {
 
                   setState(() {

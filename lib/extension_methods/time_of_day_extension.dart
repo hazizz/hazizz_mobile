@@ -50,5 +50,19 @@ extension TimeOfDayExtension on TimeOfDay {
     final otherInMinutes = typedOther.inMinutes;
     return inMinutes < otherInMinutes;
   }
+
+
+
+  /*
+  fromTimeOfDay(){
+    final d = DateTime.now();
+    return DateTime(d.year, d.month, d.day, this.hour, this.minute);
+  }
+  */
+
+  DateTime getDateTimeFromToday(){
+    final d = DateTime.now();
+    return DateTime(d.year, d.month, d.day, hour, minute);
+  }
   
 }

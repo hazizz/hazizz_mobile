@@ -4,8 +4,7 @@ import 'package:mobile/blocs/other/comment_section_bloc.dart';
 import 'package:mobile/blocs/other/view_task_bloc.dart';
 import 'package:mobile/communication/pojos/pojo_comment.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
-import 'package:mobile/custom/hazizz_logger.dart';
-import 'package:mobile/dialogs/dialogs_collection.dart';
+import 'package:mobile/dialogs/dialog_collection.dart';
 import 'package:mobile/dialogs/report_dialog.dart';
 import 'package:mobile/storage/cache_manager.dart';
 import 'package:mobile/widgets/flushbars.dart';
@@ -32,15 +31,11 @@ class _CommentItemWidget extends State<CommentItemWidget>{
 
   @override
   void initState() {
-    CacheManager.getMyId().then((int result){
-      HazizzLogger.printLog("user is the author: $result");
-
-      if(widget.comment.creator.id == result){
-        setState(() {
-          imTheAuthor = true;
-        });
-      }
-    });
+    if(widget.comment.creator.id == CacheManager.getMyIdSafely){
+      setState(() {
+        imTheAuthor = true;
+      });
+    }
     super.initState();
   }
 
@@ -106,12 +101,12 @@ class _CommentItemWidget extends State<CommentItemWidget>{
 
                       PopupMenuItem(
                         value: "profile",
-                        child: Text(locText(context, key: "viewProfile"),),
+                        child: Text(localize(context, key: "viewProfile"),),
                       ),
 
                       PopupMenuItem(
                         value: "report",
-                        child: Text(locText(context, key: "report"),
+                        child: Text(localize(context, key: "report"),
                           style: TextStyle(color: HazizzTheme.red),
                         ),
                       ),
@@ -120,7 +115,7 @@ class _CommentItemWidget extends State<CommentItemWidget>{
                     if(imTheAuthor) {
                       menuItems.add(PopupMenuItem(
                           value: value_delete,
-                          child: Text(locText(context, key: "delete"),
+                          child: Text(localize(context, key: "delete"),
                             style: TextStyle(color: HazizzTheme.red),
                           ),
 
@@ -135,10 +130,10 @@ class _CommentItemWidget extends State<CommentItemWidget>{
                         }else if(value == "report"){
                           bool success = await showReportDialog(context, reportType: ReportTypeEnum.COMMENT, id: widget.comment.id, secondId: widget.taskId, name: widget.comment.creator.displayName);
                           if(success != null && success){
-                            showReportSuccessFlushBar(context, what: locText(context, key: "comment"));
+                            showReportSuccessFlushBar(context, what: localize(context, key: "comment"));
                           }
                         }else if(value == "profile"){
-                          showUserDialog(context, creator: widget.comment.creator);
+                          showUserInformationDialog(context, creator: widget.comment.creator);
                         }
                       },
                       itemBuilder: (BuildContext context) {

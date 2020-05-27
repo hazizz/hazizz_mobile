@@ -7,7 +7,7 @@ import 'package:mobile/blocs/other/response_states.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/widgets/listItems/subject_item_widget.dart';
-import 'dialogs_collection.dart';
+import 'dialog_collection.dart';
 
 class SubscribeToSubjectDialog extends StatefulWidget {
   SubscribeToSubjectDialog({Key key}) : super(key: key);
@@ -45,7 +45,7 @@ class _SubscribeToSubjectDialog extends State<SubscribeToSubjectDialog> {
         child: Padding(
           padding: const EdgeInsets.all(5),
           child:
-          AutoSizeText(locText(context, key: "choose_subjects_to_subscribe_to"),
+          AutoSizeText(localize(context, key: "choose_subjects_to_subscribe_to"),
               style: TextStyle(
                 fontSize: 25.0,
                 fontWeight: FontWeight.w700,
@@ -103,7 +103,7 @@ class _SubscribeToSubjectDialog extends State<SubscribeToSubjectDialog> {
       actionButtons: Row(
         children: <Widget>[
           FlatButton(
-            child: new Text(locText(context, key: "proceed").toUpperCase()),
+            child: new Text(localize(context, key: "proceed").toUpperCase()),
             onPressed: () {
               pop(context);
             },

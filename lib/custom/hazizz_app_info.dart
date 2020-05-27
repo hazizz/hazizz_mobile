@@ -1,7 +1,6 @@
 import 'package:package_info/package_info.dart';
 
 class HazizzAppInfo{
-
   static final HazizzAppInfo _singleton = new HazizzAppInfo._internal();
   factory HazizzAppInfo() {
     return _singleton;
@@ -9,7 +8,6 @@ class HazizzAppInfo{
   HazizzAppInfo._internal();
 
   PackageInfo _packageInfo;
-
   
   PackageInfo get getInfo{
     if(_packageInfo != null){
@@ -22,5 +20,4 @@ class HazizzAppInfo{
     _packageInfo = await PackageInfo.fromPlatform();
     return _packageInfo;
   }
-
 }

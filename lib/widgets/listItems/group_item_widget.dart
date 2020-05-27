@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
-import 'package:mobile/dialogs/dialogs_collection.dart';
+import 'package:mobile/dialogs/dialog_collection.dart';
 import 'package:mobile/dialogs/report_dialog.dart';
 import 'package:mobile/widgets/flushbars.dart';
 
@@ -25,54 +25,54 @@ class GroupItemWidget extends StatelessWidget{
             },
             child:
             Align(
-                alignment: Alignment.centerLeft,
-                child:
-                Padding(
-                  padding: const EdgeInsets.only(left: 8,),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(group.name,
-                        style: TextStyle(
-                            fontSize: 22, fontWeight: FontWeight.w700
-                        ),
+              alignment: Alignment.centerLeft,
+              child:
+              Padding(
+                padding: const EdgeInsets.only(left: 8,),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(group.name,
+                      style: TextStyle(
+                          fontSize: 22, fontWeight: FontWeight.w700
                       ),
-                      PopupMenuButton(
-                        icon: Icon(FontAwesomeIcons.ellipsisV, size: 20,),
-                        onSelected: (value) async {
-                          if(value == "report"){
-                            bool success = await showReportDialog(context, reportType: ReportTypeEnum.GROUP, id: group.id, name: group.name);
-                            if(success != null && success){
-                              showReportSuccessFlushBar(context, what: locText(context, key: "group"));
+                    ),
+                    PopupMenuButton(
+                      icon: Icon(FontAwesomeIcons.ellipsisV, size: 20,),
+                      onSelected: (value) async {
+                        if(value == "report"){
+                          bool success = await showReportDialog(context, reportType: ReportTypeEnum.GROUP, id: group.id, name: group.name);
+                          if(success != null && success){
+                            showReportSuccessFlushBar(context, what: localize(context, key: "group"));
 
-                            }
-                          }else if(value == "leave"){
-                            bool success = await showSureToLeaveGroupDialog(context, groupId: group.id);
-                            if(success != null && success){
-                              Navigator.pop(context);
-                            }
                           }
-                        },
-                        itemBuilder: (BuildContext context) {
-                          return [
-                            PopupMenuItem(
-                              value: "report",
-                              child: Text(locText(context, key: "report"),
-                                style: TextStyle(color: HazizzTheme.red),
-                              ),
+                        }else if(value == "leave"){
+                          bool success = await showSureToLeaveGroupDialog(context, groupId: group.id);
+                          if(success != null && success){
+                            Navigator.pop(context);
+                          }
+                        }
+                      },
+                      itemBuilder: (BuildContext context) {
+                        return [
+                          PopupMenuItem(
+                            value: "report",
+                            child: Text(localize(context, key: "report"),
+                              style: TextStyle(color: HazizzTheme.red),
                             ),
-                            PopupMenuItem(
-                              value: "leave",
-                              child: Text(locText(context, key: "leave"),
-                                style: TextStyle(color: HazizzTheme.red),
-                              ),
-                            )
-                          ];
-                        },
-                      )
-                    ],
-                  )
+                          ),
+                          PopupMenuItem(
+                            value: "leave",
+                            child: Text(localize(context, key: "leave"),
+                              style: TextStyle(color: HazizzTheme.red),
+                            ),
+                          )
+                        ];
+                      },
+                    )
+                  ],
                 )
+              )
             )
         )
     );

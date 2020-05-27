@@ -18,7 +18,7 @@ import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/custom/image_operations.dart';
 import 'package:mobile/defaults/pojo_group_empty.dart';
 import 'package:mobile/defaults/pojo_subject_empty.dart';
-import 'package:mobile/dialogs/dialogs_collection.dart';
+import 'package:mobile/dialogs/dialog_collection.dart';
 import 'package:mobile/managers/app_state_manager.dart';
 import 'package:mobile/services/hazizz_crypt.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
@@ -29,10 +29,9 @@ import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'package:native_state/native_state.dart';
 import 'package:mobile/extension_methods/datetime_extension.dart';
-
 import '../../main.dart';
 
-// TODO image deletion doesnt work
+// TODO image deletion doesnt work. And it won't
 // TODO delete uploaded files from gDrive when canceled
 class TaskMakerPage extends StatefulWidget {
   final int groupId;
@@ -48,7 +47,7 @@ class TaskMakerPage extends StatefulWidget {
   final TaskMakerAppState taskMakerAppState;
 
   TaskMakerPage.edit({Key key, this.taskToEdit, this.taskMakerAppState})
-    : groupId = taskToEdit.group.id, group = taskToEdit.group,
+    : groupId = taskToEdit?.group?.id, group = taskToEdit?.group,
       taskId = taskToEdit.id,
       cryptKey = taskToEdit.salt,
       mode = TaskMakerMode.edit,
@@ -64,12 +63,17 @@ class TaskMakerPage extends StatefulWidget {
   _TaskMakerPage createState() => _TaskMakerPage();
 }
 
-class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
+class _TaskMakerPage extends State<TaskMakerPage> {
 
-  List<HazizzImageData> imageDatas = List();
+  static const int imageLimit = 5;
 
-  List<HazizzImageData> imageDatasToRemove = List();
+  final List<HazizzImageData> imageDatas = List();//(imageLimit);
 
+  /// images that has been deleted
+  final List<HazizzImageData> imageDatasToRemove = List();//(imageLimit);
+
+  /// images that has been added
+  final List<HazizzImageData> imageDatasNewlyAdded = List();//(imageLimit);
 
   final FocusNode _descriptionFocusNode = FocusNode();
 
@@ -77,51 +81,52 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
 
   static String _color = '';
 
-  static final double padding = 8;
+  static const double padding = 8;
 
-  TaskMakerBloc blocs;
-
-  static PojoSubject chosenSubject;
-
-  FormField groupFormField;
+  TaskMakerBloc taskMakerBloc;
 
   final ScrollController scrollController = ScrollController();
 
 
-  int descriptionMaxLength = 500;
+  static const int descriptionMaxLength = 500;
 
   AppBar getAppBar(BuildContext context){
     return AppBar(
       leading: HazizzBackButton(),
-        title: Text(widget.mode == TaskMakerMode.create ? locText(context, key: "createTask") : locText(context, key: "editTask") )
+        title: Text(widget.mode == TaskMakerMode.create ? localize(context, key: "createTask") : localize(context, key: "editTask") )
     );
   }
 
-  void deleteGDriveImages(){
+  void deleteDeletedGDriveImages(){
     print("deleting google drives images");
-    for(Object imageData in imageDatas){
+    for(HazizzImageData imageData in imageDatasToRemove){
       print("deleting google drives images loop");
-      if(imageData is HazizzImageData){
-        if(imageData.driveFileId != null){
-          print("deleting google drives images loop2");
+      if(imageData.driveFileId != null){
+        print("deleting google drives images loop2");
+        GoogleDriveManager().deleteHazizzImage(imageData.driveFileId);
+      }
+    }
+  }
 
-          GoogleDriveManager().deleteHazizzImage(imageData.driveFileId);
-        }
+  void deleteAddedGDriveImages(){
+    print("deleting google drives images");
+    for(HazizzImageData imageData in imageDatasNewlyAdded){
+      print("deleting google drives images loop");
+      if(imageData.driveFileId != null){
+        print("deleting google drives images loop2");
+        GoogleDriveManager().deleteHazizzImage(imageData.driveFileId);
       }
     }
   }
 
   @override
   void initState() {
-
     if(widget.mode == TaskMakerMode.create){
-      blocs = TaskCreateBloc(group: widget.group, taskMakerAppState: widget.taskMakerAppState);
-
+      taskMakerBloc = TaskCreateBloc(group: widget.group, taskMakerAppState: widget.taskMakerAppState);
     }else if(widget.mode == TaskMakerMode.edit){
-      blocs = new TaskEditBloc(taskToEdit: widget.taskToEdit, taskMakerAppState: widget.taskMakerAppState);
+      taskMakerBloc = new TaskEditBloc(taskToEdit: widget.taskToEdit, taskMakerAppState: widget.taskMakerAppState);
 
       List<String> splited = widget.taskToEdit.description.split("\n![img_");
-
       for(int i = 1; i < splited.length; i++){
         if(true){
           final String url = splited[i].substring(3, splited[i].length-1);
@@ -131,20 +136,19 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
         }
       }
 
-
     }else{
       HazizzLogger.printLog("this should not be visible: 542311z8");
     }
 
-    blocs.descriptionController.addListener((){
-      SavedState.of(context).putString("task_description", blocs.descriptionController.text);
+    taskMakerBloc.descriptionController.addListener((){
+      SavedState.of(context).putString("task_description", taskMakerBloc.descriptionController.text);
     });
     super.initState();
   }
 
   @override
   void dispose() {
-    blocs.close();
+    taskMakerBloc.close();
     super.dispose();
   }
 
@@ -158,12 +162,11 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
       }
     }
 
-
-    blocs.add(TaskMakerSaveStateEvent(
+    taskMakerBloc.add(TaskMakerSaveStateEvent(
       salt: widget.cryptKey,
       imageDatas: imageDatas
     ));
-    HazizzImageData imageData = await ImageOpeations.pick();
+    HazizzImageData imageData = await ImageOperations.pick();
     AppStateRestorer.setShouldReloadTaskMaker(false);
     print("miauuu?");
     if(imageData == null){
@@ -171,13 +174,14 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
     }
     setState(() {
       imageDatas.add(imageData);
+      imageDatasNewlyAdded.add(imageData);
     });
     await GoogleDriveManager().initialize();
 
     // upload to gdrive
     imageData.compressEncryptAndUpload(widget.cryptKey);
 
-    Future.delayed(Duration(milliseconds: 400), (){
+    Future.delayed(Duration(milliseconds: 1000), (){
       scrollController.animateTo(scrollController.position.maxScrollExtent, duration: Duration(milliseconds: 300), curve: Curves.easeOut);
     });
   }
@@ -186,13 +190,13 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
   Widget build(BuildContext context) {
     AppBar appBar = AppBar(
       leading: HazizzBackButton(),
-      title: Text(widget.mode == TaskMakerMode.create ? locText(context, key: "createTask") : locText(context, key: "editTask") )
+      title: Text(widget.mode == TaskMakerMode.create ? localize(context, key: "createTask") : localize(context, key: "editTask") )
     );
 
-    var taskTypePicker = BlocBuilder(
-        bloc: blocs.taskTagBloc,
+    Widget taskTypePicker = BlocBuilder(
+        bloc: taskMakerBloc.taskTagBloc,
         builder: (BuildContext context, TaskTagState state) {
-          List<PojoTag> pickedTags =  blocs.taskTagBloc.pickedTags;
+          List<PojoTag> pickedTags =  taskMakerBloc.taskTagBloc.pickedTags;
           List<Widget> tagWidgets = List();
           for(PojoTag t in pickedTags){
             tagWidgets.add(
@@ -200,7 +204,7 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
                 hasCloseButton: true,
                 onCloseClick: (){
                   HazizzLogger.printLog("locsing");
-                  blocs.taskTagBloc.add(TaskTagRemoveEvent(tag: t));
+                  taskMakerBloc.taskTagBloc.add(TaskTagRemoveEvent(tag: t));
                 },
               )
             );
@@ -210,15 +214,15 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
               child: Row(
                 children: <Widget>[
                   Icon(FontAwesomeIcons.plus, size: 18,),
-                  Text(locText(context, key: "add"), style: TextStyle(fontSize: 20),)
+                  Text(localize(context, key: "add"), style: TextStyle(fontSize: 20),)
                 ],
               ),
               hasCloseButton: false,
               onClick: () async {
-                PojoTag result = await showDialogTaskTag(context, except: blocs.taskTagBloc.pickedTags);
+                PojoTag result = await showDialogTaskTag(context, except: taskMakerBloc.taskTagBloc.pickedTags);
                 HazizzLogger.printLog("showDialogTaskTag dialog result: ${result?.name}");
                 if(result != null){
-                  blocs.taskTagBloc.add(TaskTagAddEvent(result));
+                  taskMakerBloc.taskTagBloc.add(TaskTagAddEvent(result));
                 }
               },
             ));
@@ -231,18 +235,18 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
 
         }
     );
-    var groupPicker = BlocBuilder(
-      bloc: blocs.groupItemPickerBloc,
+    Widget groupPicker = BlocBuilder(
+      bloc: taskMakerBloc.groupItemPickerBloc,
       builder: (BuildContext context, ItemListState state) {
         String error;
         if(state is ItemListNotPickedState){
-          error = locText(context, key: "error_noGroupSelected");
+          error = localize(context, key: "error_noGroupSelected");
         }
 
         return GestureDetector(
           child: Row(
             children: <Widget>[
-              Icon(FontAwesomeIcons.users, color: blocs is TaskCreateBloc ? null : Colors.black26,),
+              Icon(FontAwesomeIcons.users, color: taskMakerBloc is TaskCreateBloc ? null : Colors.black26,),
               Expanded(child:
                 Padding(
                   padding: EdgeInsets.only(left: 12),
@@ -250,7 +254,7 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
                     builder: (FormFieldState formState) {
                       String hint;
                       if(state is ItemListLoaded){
-                        hint = locText(context, key: "group");
+                        hint = localize(context, key: "group");
                       }
                       return InputDecorator(
                           decoration: InputDecoration(
@@ -268,12 +272,12 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
                                 return Text('${ state.item.id != 0
                                     ? state.item.name
                                     : getEmptyPojoGroup(context).name}',
-                                  style: TextStyle(fontSize: 20, color: blocs is TaskCreateBloc
+                                  style: TextStyle(fontSize: 20, color: taskMakerBloc is TaskCreateBloc
                                     ? null
                                     : Colors.black45,)
                                 );
                               }
-                              return Text(locText(context, key: "loading"));
+                              return Text(localize(context, key: "loading"));
                             },
                           )
                       );
@@ -284,13 +288,13 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
             ],
           ),
           onTap: () async {
-            if(blocs is TaskCreateBloc) {
-              List<PojoGroup> dataList = blocs.groupItemPickerBloc.dataList;
+            if(taskMakerBloc is TaskCreateBloc) {
+              List<PojoGroup> dataList = taskMakerBloc.groupItemPickerBloc.dataList;
               if(dataList != null) {
                 if(state is ItemListLoaded || state is PickedGroupState) {
                   PojoGroup result = await showDialogGroup(context, data: dataList);
                   if(result != null) {
-                    blocs.groupItemPickerBloc.add(
+                    taskMakerBloc.groupItemPickerBloc.add(
                         PickedGroupEvent(item: result));
                   }
                 }
@@ -300,26 +304,26 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
         );
       }
     );
-    var subjectPicker = BlocBuilder(
-        bloc: blocs.subjectItemPickerBloc,
+    Widget subjectPicker = BlocBuilder(
+        bloc: taskMakerBloc.subjectItemPickerBloc,
         builder: (BuildContext context, ItemListState state) {
           return BlocBuilder(
-            bloc: blocs.groupItemPickerBloc,
+            bloc: taskMakerBloc.groupItemPickerBloc,
             builder: (context2, state2){
-              if(blocs.groupItemPickerBloc.pickedItem == null || blocs.groupItemPickerBloc.pickedItem.id == 0){
+              if(taskMakerBloc.groupItemPickerBloc.pickedItem == null || taskMakerBloc.groupItemPickerBloc.pickedItem.id == 0){
                 return Container();
               }
               return GestureDetector(
                 child: Row(children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.only(left: 4.0),
-                    child: Icon(FontAwesomeIcons.flask, color: blocs is TaskCreateBloc ? null : Colors.black26,),
+                    child: Icon(FontAwesomeIcons.flask, color: taskMakerBloc is TaskCreateBloc ? null : Colors.black26,),
                   ),
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.only(left: 8.0),
                       child: FormField(
-                        enabled: blocs is TaskCreateBloc,
+                        enabled: taskMakerBloc is TaskCreateBloc,
 
                         builder: (FormFieldState formState) {
                           String hint;
@@ -328,7 +332,7 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
                             error = "Not picked";
                           }
                           if(!(state is PickedSubjectState)){
-                            hint = locText(context, key: "subject");
+                            hint = localize(context, key: "subject");
                           }
 
                           return InputDecorator(
@@ -348,7 +352,7 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
                                     return Text('${ state.item.id != 0
                                         ? state.item.name
                                         : getEmptyPojoSubject(context).name}',
-                                      style: TextStyle(fontSize: 20, color: blocs is TaskCreateBloc
+                                      style: TextStyle(fontSize: 20, color: taskMakerBloc is TaskCreateBloc
                                         ? null
                                         : Colors.black45,
                                       ),
@@ -369,12 +373,12 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
                   )
                 ],),
                 onTap: () async {
-                  if(blocs is TaskCreateBloc) {
-                    List<PojoSubject> dataList = blocs.subjectItemPickerBloc.dataList;
+                  if(taskMakerBloc is TaskCreateBloc) {
+                    List<PojoSubject> dataList = taskMakerBloc.subjectItemPickerBloc.dataList;
                     if (state is! Waiting && state is! InitialState && state is! ItemListFail) {
-                      PojoSubject result = await showDialogSubject(context, data: dataList, group: blocs.groupItemPickerBloc.pickedItem);
+                      PojoSubject result = await showDialogSubject(context, data: dataList, group: taskMakerBloc.groupItemPickerBloc.pickedItem);
                       if(result != null){
-                        blocs.subjectItemPickerBloc.add(PickedSubjectEvent(item: result));
+                        taskMakerBloc.subjectItemPickerBloc.add(PickedSubjectEvent(item: result));
                       }
                     }
                   }
@@ -384,8 +388,8 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
           );
         }
     );
-    var deadlinePicker = BlocBuilder(
-      bloc: blocs.deadlineBloc,
+    Widget deadlinePicker = BlocBuilder(
+      bloc: taskMakerBloc.deadlineBloc,
       builder: (BuildContext context, DateTimePickerState state) {
         return GestureDetector(
           child: Row(
@@ -401,7 +405,7 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
                     builder: (FormFieldState formState) {
                       String hint;
                       if(state is DateTimeNotPickedState){
-                        hint = locText(context, key: "deadline");
+                        hint = localize(context, key: "deadline");
                       }
                       return InputDecorator(
                         decoration: InputDecoration(
@@ -419,7 +423,7 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
                                 style: TextStyle(fontSize: 20.0),
                               );
                             }
-                            return Text(locText(context, key: "loading"));
+                            return Text(localize(context, key: "loading"));
                           },
                         ),
                       );
@@ -440,32 +444,32 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
               lastDate: DateTime.now().add(Duration(days: 364))
             );
             if(picked != null) {
-              blocs.deadlineBloc.add(DateTimePickedEvent(dateTime: picked));
+              taskMakerBloc.deadlineBloc.add(DateTimePickedEvent(dateTime: picked));
             }
           },
         );
       }
     );
-    var descriptionTextForm = Stack(
+    Widget descriptionTextForm = Stack(
       children: <Widget>[
         BlocBuilder(
-            bloc: blocs.descriptionBloc,
+            bloc: taskMakerBloc.descriptionBloc,
             builder: (BuildContext context, HFormState state) {
 
               if(state is TextFormSetState){
-                blocs.descriptionController.text = state.text;
+                taskMakerBloc.descriptionController.text = state.text;
               }
               return TextFormField(
                 inputFormatters:[
                   LineBreakLimitingTextInputFormatter(24)
                 ],
                 focusNode: _descriptionFocusNode,
-                controller: blocs.descriptionController,
+                controller: taskMakerBloc.descriptionController,
                 textInputAction: TextInputAction.newline,
                 onFieldSubmitted: (String value){
                   FocusScope.of(context).requestFocus(new FocusNode());
                 },
-                decoration: InputDecoration(labelText: locText(context, key: "description"), errorText: null,
+                decoration: InputDecoration(labelText: localize(context, key: "description"), errorText: null,
                   alignLabelWithHint: true,
                   filled: true,
                 ),
@@ -479,28 +483,25 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
               );
             }
         ),
-      /*  Positioned(top: 0, right: 0,
-          child: IconButton(
-            icon: Icon(FontAwesomeIcons.infoCircle),
-            onPressed: (){
-              showMarkdownInfo(context);
-            },
-          ),
-        )
-        */
       ],
     );
 
     return WillPopScope(
       onWillPop: (){
-        deleteGDriveImages();
+        if(widget.mode == TaskMakerMode.create){
+          deleteDeletedGDriveImages();
+          deleteAddedGDriveImages();
+        }else if(widget.mode == TaskMakerMode.edit){
+          deleteAddedGDriveImages();
+        }
        // Navigator.pop(context);
         return Future.value(true);
       },
       child: BlocListener(
-          bloc: blocs,
+          bloc: taskMakerBloc,
           listener: (context, state) async {
             if (state is TaskMakerSuccessfulState) {
+              deleteDeletedGDriveImages();
               Navigator.pop(context, state.task);
             }
             if(state is SimilarTasksTaskCreateState) {
@@ -517,7 +518,7 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
                     return SimilarTasksWidget(similarTasks: state.similarTasks,);
               });
               if(result){
-                blocs.add(TaskMakerProceedToSendEvent());
+                taskMakerBloc.add(TaskMakerProceedToSendEvent());
               }else{
                 Navigator.pop(context);
               }
@@ -527,7 +528,7 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
             floatingActionButton: Padding(
               padding: const EdgeInsets.all(10),
               child: BlocBuilder(
-                  bloc: blocs,
+                  bloc: taskMakerBloc,
                   builder: (BuildContext context, TaskMakerState state) {
                     if(state is TaskMakerWaitingState) {
                       return FloatingActionButton(
@@ -552,7 +553,7 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
                           ),
                           onPressed: () async {
                             if(!(state is TaskMakerWaitingState)) {
-                              blocs.add(
+                              taskMakerBloc.add(
                                   TaskMakerSendEvent(imageDatas: imageDatas, salt: widget.cryptKey)
                               );
                             }
@@ -581,7 +582,7 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
                     clipBehavior: Clip.antiAliasWithSaveLayer,
                     elevation: 100,
                     child: BlocBuilder(
-                      bloc: blocs.taskTagBloc,
+                      bloc: taskMakerBloc.taskTagBloc,
                       builder: (BuildContext context, TaskTagState state) {
                         headerColor = HazizzTheme.blue;
                         if(state is TaskTagFineState){
@@ -697,60 +698,134 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
                                                       children: <Widget>[
                                                         SingleChildScrollView(
                                                           controller: scrollController,
-
                                                           scrollDirection: Axis.horizontal,
                                                           child: Row(
                                                             children: <Widget>[
                                                               Container(
                                                                 child: ListView.builder(
+                                                              /*
                                                                     cacheExtent: 100000000,
                                                                     addAutomaticKeepAlives: true,
+                                                                    */
                                                                     shrinkWrap: true,
                                                                     scrollDirection: Axis.horizontal,
                                                                     itemCount: imageDatas.length,
                                                                     itemBuilder: (context, index){
-                                                                      return Padding(
-                                                                          padding: EdgeInsets.only(left: 6, ),
-                                                                          child: Container(
-                                                                            height: 100,
-                                                                            child: Stack(
-                                                                              children: <Widget>[
-                                                                                Builder(
-                                                                                  builder: (context){
-                                                                                    Function f = (){};
-                                                                                    if(imageDatas[index].imageType == ImageType.GOOGLE_DRIVE){
-                                                                                      f = (){
-                                                                                        imageDatasToRemove.add(imageDatas[index]);
-                                                                                      };
-                                                                                    }
+                                                                      Function f = (){};
+                                                                      if(imageDatas[index].imageType == ImageType.GOOGLE_DRIVE){
+                                                                        f = (){
+                                                                          imageDatasToRemove.add(imageDatas[index]);
+                                                                        };
+                                                                      }
+                                                                      return imageViewerFromHazizzImageData(
+                                                                        imageDatas[index], //key: ObjectKey(imageDatas[index]), //index: index, key: ObjectKey(imageDatas[index]),//Key(index.toString()),//ObjectKey(imageDatas[index]),
+                                                                        height: 100,
+                                                                        onSmallDelete: (){
+                                                                          HazizzLogger.printLog("Pressed X. Deleting at index ${index}");
+                                                                          // f();
+                                                                          setState(() {
+                                                                          //  imageDatas.removeAt(index);
+                                                                            imageDatas.remove(imageDatas[index]);
+                                                                            // imageDatas.removeRange(2,3);
+                                                                            //  imageDatas.clear();
+                                                                            //    imageDatas = imageDatas..remove(imageDatas[index]);
+                                                                            // imageDatas = imageDatas..removeAt(index);
+                                                                            /*
+                                                                                        int k = 0;
+                                                                                        for(HazizzImageData i2 in imageDatas){
 
-                                                                                    return imageViewerFromHazizzImageData(
-                                                                                      imageDatas[index],
-                                                                                      height: 100,
-                                                                                      onSmallDelete: (){
-                                                                                        f();
-                                                                                        setState(() {
-                                                                                          imageDatas.removeAt(index);
-                                                                                        });
-                                                                                      },
-                                                                                    );
-                                                                                    /*
-                                                                                return ImageViewer.fromHazizzImageData(
-                                                                                  imageDatas[index],
-                                                                                  height: 100,
-                                                                                  onSmallDelete: (){
-                                                                                    f();
-                                                                                    setState(() {
-                                                                                      imageDatas.removeAt(index);
-                                                                                    });
-                                                                                  },
-                                                                                );
-                                                                                */
-                                                                                  },
-                                                                                ),
-                                                                              ],
-                                                                            ),
-                                                                          )
+                                                                                          if(k == index){
+                                                                                            i2 = null;
+                                                                                            print("asdsadasd: " + i2.toString());
+
+                                                                                            imageDatas[k] = null;
+
+                                                                                            break;
+                                                                                          }
+                                                                                          k++;
+                                                                                        }
+                                                                                        */
+                                                                          });
+                                                                        },
+                                                                        onDelete: (){
+                                                                          HazizzLogger.printLog("Pressed X. Deleting");
+                                                                          f();
+                                                                          setState(() {
+                                                                            imageDatas.removeAt(index);
+                                                                          });
+                                                                          Navigator.pop(context);
+                                                                        },
+                                                                      );
+
+                                                                      return Padding(
+                                                                        padding: EdgeInsets.only(left: 6, ),
+                                                                        child: Container(
+                                                                          height: 100,
+                                                                          child: Stack(
+                                                                            children: <Widget>[
+                                                                              Builder(
+                                                                                builder: (context){
+                                                                                  Function f = (){};
+                                                                                  if(imageDatas[index].imageType == ImageType.GOOGLE_DRIVE){
+                                                                                    f = (){
+                                                                                      imageDatasToRemove.add(imageDatas[index]);
+                                                                                    };
+                                                                                  }
+
+                                                                                  return imageViewerFromHazizzImageData(
+                                                                                    imageDatas[index], index: index, key: ObjectKey(imageDatas[index]),
+                                                                                    height: 100,
+                                                                                    onSmallDelete: (){
+                                                                                      HazizzLogger.printLog("Pressed X. Deleting at index ${index}");
+                                                                                     // f();
+                                                                                      setState(() {
+                                                                                        imageDatas..remove(imageDatas[index]);
+                                                                                       // imageDatas.removeRange(2,3);
+                                                                                      //  imageDatas.clear();
+                                                                                    //    imageDatas = imageDatas..remove(imageDatas[index]);
+                                                                                       // imageDatas = imageDatas..removeAt(index);
+                                                                                        /*
+                                                                                        int k = 0;
+                                                                                        for(HazizzImageData i2 in imageDatas){
+
+                                                                                          if(k == index){
+                                                                                            i2 = null;
+                                                                                            print("asdsadasd: " + i2.toString());
+
+                                                                                            imageDatas[k] = null;
+
+                                                                                            break;
+                                                                                          }
+                                                                                          k++;
+                                                                                        }
+                                                                                        */
+                                                                                      });
+                                                                                    },
+                                                                                    onDelete: (){
+                                                                                      HazizzLogger.printLog("Pressed X. Deleting");
+                                                                                      f();
+                                                                                      setState(() {
+                                                                                        imageDatas.removeAt(index);
+                                                                                      });
+                                                                                    },
+                                                                                  );
+                                                                                  /*
+                                                                              return ImageViewer.fromHazizzImageData(
+                                                                                imageDatas[index],
+                                                                                height: 100,
+                                                                                onSmallDelete: (){
+                                                                                  f();
+                                                                                  setState(() {
+                                                                                    imageDatas.removeAt(index);
+                                                                                  });
+                                                                                },
+                                                                              );
+                                                                              */
+                                                                                },
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        )
                                                                       );
                                                                     }
                                                                 ),
@@ -815,3 +890,77 @@ class _TaskMakerPage extends State<TaskMakerPage> with StateRestoration {
    // blocs.descriptionController.text = savedState.getString("task_description") ?? "";
   }
 }
+
+
+/*
+return Padding(
+                                                                        padding: EdgeInsets.only(left: 6, ),
+                                                                        child: Container(
+                                                                          height: 100,
+                                                                          child: Stack(
+                                                                            children: <Widget>[
+                                                                              Builder(
+                                                                                builder: (context){
+                                                                                  Function f = (){};
+                                                                                  if(imageDatas[index].imageType == ImageType.GOOGLE_DRIVE){
+                                                                                    f = (){
+                                                                                      imageDatasToRemove.add(imageDatas[index]);
+                                                                                    };
+                                                                                  }
+
+                                                                                  return imageViewerFromHazizzImageData(
+                                                                                    imageDatas[index], index: index, key: ObjectKey(imageDatas[index]),
+                                                                                    height: 100,
+                                                                                    onSmallDelete: (){
+                                                                                      HazizzLogger.printLog("Pressed X. Deleting at index ${index}");
+                                                                                     // f();
+                                                                                      setState(() {
+                                                                                        imageDatas..remove(imageDatas[index]);
+                                                                                       // imageDatas.removeRange(2,3);
+                                                                                      //  imageDatas.clear();
+                                                                                    //    imageDatas = imageDatas..remove(imageDatas[index]);
+                                                                                       // imageDatas = imageDatas..removeAt(index);
+                                                                                        /*
+                                                                                        int k = 0;
+                                                                                        for(HazizzImageData i2 in imageDatas){
+
+                                                                                          if(k == index){
+                                                                                            i2 = null;
+                                                                                            print("asdsadasd: " + i2.toString());
+
+                                                                                            imageDatas[k] = null;
+
+                                                                                            break;
+                                                                                          }
+                                                                                          k++;
+                                                                                        }
+                                                                                        */
+                                                                                      });
+                                                                                    },
+                                                                                    onDelete: (){
+                                                                                      HazizzLogger.printLog("Pressed X. Deleting");
+                                                                                      f();
+                                                                                      setState(() {
+                                                                                        imageDatas.removeAt(index);
+                                                                                      });
+                                                                                    },
+                                                                                  );
+                                                                                  /*
+                                                                              return ImageViewer.fromHazizzImageData(
+                                                                                imageDatas[index],
+                                                                                height: 100,
+                                                                                onSmallDelete: (){
+                                                                                  f();
+                                                                                  setState(() {
+                                                                                    imageDatas.removeAt(index);
+                                                                                  });
+                                                                                },
+                                                                              );
+                                                                              */
+                                                                                },
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        )
+                                                                      );
+ */

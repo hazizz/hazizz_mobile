@@ -2,18 +2,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/widgets/ad_widget.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
-
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/managers/preference_service.dart';
 
-
 class SettingsPage extends StatefulWidget {
-
-  String getTitle(BuildContext context){
-    return locText(context, key: "settings");
-  }
-
   SettingsPage({Key key}) : super(key: key);
 
   @override
@@ -80,7 +73,6 @@ class _SettingsPage extends State<SettingsPage>  {
       HazizzLogger.printLog("supported locales: ${supportedLocals.toString()}");
 
       for(Locale locale in supportedLocals) {
-
         supportedLocalItems.add(DropdownMenuItem(
           value: locale.languageCode,
           child: Text(locale.languageCode,
@@ -97,7 +89,7 @@ class _SettingsPage extends State<SettingsPage>  {
     return Scaffold(
         appBar: AppBar(
           leading: HazizzBackButton(),
-          title: Text(widget.getTitle(context))
+          title: Text("settings".localize(context))
 
         ),
         body: SingleChildScrollView(
@@ -111,7 +103,7 @@ class _SettingsPage extends State<SettingsPage>  {
                   onTap: (){
                     Navigator.pushNamed(context, "/about");
                   },
-                  title: Text(locText(context, key: "about")),
+                  title: Text(localize(context, key: "about")),
                   leading: Icon(FontAwesomeIcons.infoCircle),
                 ),
               ),
@@ -123,7 +115,7 @@ class _SettingsPage extends State<SettingsPage>  {
                   onTap: (){
                     Navigator.pushNamed(context, "/settings/preferences");
                   },
-                  title: Text(locText(context, key: "preferences")),
+                  title: Text(localize(context, key: "preferences")),
                   leading: Icon(FontAwesomeIcons.asterisk),
                 ),
               ),
@@ -132,7 +124,7 @@ class _SettingsPage extends State<SettingsPage>  {
                 onTap: (){
                   Navigator.pushNamed(context, "/settings/google_drive_settings");
                 },
-                title: Text(locText(context, key: "google_drive_settings")),
+                title: Text(localize(context, key: "google_drive_settings")),
                 leading: Icon(FontAwesomeIcons.googleDrive),
               ),
               /*
@@ -193,7 +185,7 @@ class _SettingsPage extends State<SettingsPage>  {
                   Navigator.pushNamed(context, "/settings/profile_editor");
                 },
                 leading: Icon(FontAwesomeIcons.solidUser),
-                title: Text(locText(context, key: "profile_editor")),
+                title: Text(localize(context, key: "profile_editor")),
               ),
 
               Divider(),
@@ -202,14 +194,14 @@ class _SettingsPage extends State<SettingsPage>  {
                   Navigator.pushNamed(context, "/settings/developer");
                 },
                 leading: Icon(FontAwesomeIcons.wrench),
-                title: Text(locText(context, key: "developer_settings")),
+                title: Text(localize(context, key: "developer_settings")),
               ),
               Divider(),
               Builder(
                 builder: (context){
                   return ListTile(
                     leading: Icon(FontAwesomeIcons.language),
-                    title: Text(locText(context, key: "language")),
+                    title: Text(localize(context, key: "language")),
                     trailing: DropdownButton(
                       value: currentLanguageCode,
                       onChanged: (value){

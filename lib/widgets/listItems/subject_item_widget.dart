@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
-import 'package:mobile/dialogs/dialogs_collection.dart';
+import 'package:mobile/dialogs/dialog_collection.dart';
 import 'package:mobile/widgets/flushbars.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/communication/request_sender.dart';
 
 class SubjectItemWidget extends StatefulWidget{
 
-  PojoSubject subject;
+  final PojoSubject subject;
   SubjectItemWidget({this.subject});
 
   @override
@@ -48,7 +48,8 @@ class _SubjectItemWidget extends State<SubjectItemWidget>{
                   child: Text(widget.subject.name,
                     style: TextStyle(
                         fontSize: 18, fontWeight: FontWeight.w700
-                    ),),
+                    ),
+                  ),
                 ),
                 Spacer(),
                 Builder(
@@ -62,7 +63,6 @@ class _SubjectItemWidget extends State<SubjectItemWidget>{
                             setState(() {
                               subject.subscribed = value;
                             });
-
 
                             HazizzResponse hazizzResponse = subject.subscribed
                                 ? await RequestSender().getResponse(SubscribeToSubject(p_subjectId: subject.id))
@@ -81,7 +81,6 @@ class _SubjectItemWidget extends State<SubjectItemWidget>{
                           },
                           activeColor: Colors.green,
                           checkColor: Colors.white,
-
                         ),
                       );
                     }

@@ -22,7 +22,7 @@ class GoogleDriveImage extends StatefulWidget {
   final Function onDelete;
 
   final double height;
-  double width;
+  final double width;
 
 
   GoogleDriveImage({@required this.imageUrl, this.heroTag, @required this.salt, this.onSmallDelete, this.onDelete, this.height, this.width, this.showThumbnail = true});
@@ -44,9 +44,6 @@ class _GoogleDriveImage extends State<GoogleDriveImage>{
   double height;
   double width;
 
-
-
-
   Future<Size> _calculateImageDimension(Image image) {
     Completer<Size> completer = Completer();
     image.image.resolve(ImageConfiguration()).addListener(
@@ -60,9 +57,6 @@ class _GoogleDriveImage extends State<GoogleDriveImage>{
     );
     return completer.future;
   }
-
-
-
 
   @override
   void initState() {
@@ -85,8 +79,7 @@ class _GoogleDriveImage extends State<GoogleDriveImage>{
         if(widget.height != null){
           double resizePercent = widget.height / size.height;
           setState(() {
-            widget.width = size.width * resizePercent;
-            width = widget.width;
+            width = size.width * resizePercent;
           });
         }
         print("size is: ${size.width}, ${size.height}");
@@ -122,21 +115,19 @@ class _GoogleDriveImage extends State<GoogleDriveImage>{
       child: Stack(
         children: <Widget>[
           ClipRRect(
-              child: GestureDetector(
-                  onTap: (){
-                    if(onTapped != null) onTapped();
-                    tapped = true;
-                  },
-                  child: thumbnailImage
-              ),
-              borderRadius: BorderRadius.circular(4),
+            child: GestureDetector(
+              onTap: (){
+                if(onTapped != null) onTapped();
+                tapped = true;
+              },
+              child: thumbnailImage
             ),
-
+            borderRadius: BorderRadius.circular(4),
+          ),
           Builder(
             builder: (context){
 
               print("heightttt: ${thumbnailImage?.height}");
-
 
               if(tapped){
                 return Center(
@@ -162,7 +153,7 @@ class _GoogleDriveImage extends State<GoogleDriveImage>{
       ),
       child: Center(child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Text(locText(context, key: "gdrive_image_deleted"), textAlign: TextAlign.center, style: TextStyle(fontSize: 16),),
+        child: Text(localize(context, key: "gdrive_image_deleted"), textAlign: TextAlign.center, style: TextStyle(fontSize: 16),),
       )),
     );
   }

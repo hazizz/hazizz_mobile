@@ -15,6 +15,7 @@ class ErrorCode{
     return this.code == errorCode;
   }
 
+  @override
   bool operator == (dynamic other) {
     if (other is ErrorCode ){
       return this.code == other.code;

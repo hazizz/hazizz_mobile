@@ -20,19 +20,19 @@ class TaskHeaderItemWidget extends StatelessWidget{
     String title;
     if(days == 0){
       backColor = HazizzTheme.yellow;
-      title = locText(context, key: "today");
+      title = localize(context, key: "today");
     }else if(days == 1){
-      title = locText(context, key: "tomorrow");
+      title = localize(context, key: "tomorrow");
     }else if(days < 0){
-      title = locText(context, key: "days_ago", args: [days.abs().toString()]);
+      title = localize(context, key: "days_ago", args: [days.abs().toString()]);
       backColor = HazizzTheme.red;
     }
 
     else{
-      title = locText(context, key: "days_later", args: [days.toString()]);
+      title = localize(context, key: "days_later", args: [days.toString()]);
     }
     return CardHeaderWidget(
-      text: title,
+      text: dateTime.daysDifference(context),
       secondText: dateTime.hazizzShowDateFormat,
       backgroundColor: backColor,
     );

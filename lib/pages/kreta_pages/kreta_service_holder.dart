@@ -8,7 +8,7 @@ import 'package:mobile/custom/hazizz_localizations.dart';
 
 class KretaServiceHolder extends StatefulWidget {
 
-  Widget child;
+  final Widget child;
 
   KretaServiceHolder({Key key, this.child}) : super(key: key);
 
@@ -36,9 +36,6 @@ class _KretaServiceHolder extends State<KretaServiceHolder> with TickerProviderS
     return BlocBuilder(
       bloc: SelectedSessionBloc(),
       builder: (context, state){
-
-
-
         return BlocBuilder(
           bloc: KretaStatusBloc(),
           builder: (context2, state2){
@@ -50,8 +47,7 @@ class _KretaServiceHolder extends State<KretaServiceHolder> with TickerProviderS
                     onPressed: (){
                       Navigator.pushNamed(context, "/kreta/accountSelector");
                     },
-                    child: Text(locText(context, key: "not_logged_in_to_kreta_account").toUpperCase(), style: TextStyle(color: Colors.red, fontSize: 13),)
-
+                    child: Text(localize(context, key: "not_logged_in_to_kreta_account").toUpperCase(), style: TextStyle(color: Colors.red, fontSize: 13),)
                   ),
                   Expanded(
                     child: widget.child,
@@ -62,14 +58,8 @@ class _KretaServiceHolder extends State<KretaServiceHolder> with TickerProviderS
               sessionActived = true;
             }
             return widget.child;
-            if(state2 is KretaStatusUnavailableState){
-              return Center(child: Text(locText(context, key: "kreta_server_unavailable"), style: TextStyle(fontSize: 20),));
-            }else{
-              return widget.child;
-            }
           },
         );
-
       },
     );
   }

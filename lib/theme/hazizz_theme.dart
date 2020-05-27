@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 ThemeData theme(BuildContext context){
   return Theme.of(context);
 }
@@ -35,32 +34,28 @@ class HazizzTheme{
   testColor = red,
   oralTestColor = purple,
   assignmentColor = yellow,
-  kreta_homeworkColor = kreta_blue
-  ;
+  kreta_homeworkColor = kreta_blue;
 
   static final Color formColor = Colors.grey.withAlpha(120);
 
 
   static Color get warningColor => red;
 
-
-
   static final ThemeData lightThemeData = new ThemeData(
     textTheme: TextTheme(
-      body1: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600,),
-      body2: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
-      title: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w800),
-      caption: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
-      display2: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
-      display3: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
-      display4: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
-      headline: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
-      overline: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
-      subhead: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
-      display1: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
-
-      subtitle: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
-      button: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w800),
+      bodyText2: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600,),
+      bodyText1: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
+      headline6: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w800),
+      caption:   TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
+      headline3: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
+      headline2: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
+      headline1: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
+      headline5: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
+      overline:  TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
+      subtitle1: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
+      headline4: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
+      subtitle2: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
+      button:    TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w800),
 
     ),
 
@@ -72,21 +67,20 @@ class HazizzTheme{
   );
 
   static final ThemeData darkThemeData = new ThemeData(
-    textTheme: TextTheme(
-      body1: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600, ),
-      body2: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
-      title: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w800),
-      caption: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
-      display2: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
-      display3: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
-      display4: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
-      headline: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
-      overline: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
-      subhead: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
-      display1: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
-
-      subtitle: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
-      button: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w800),
+      textTheme: TextTheme(
+      bodyText2: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600, ),
+      bodyText1: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
+      headline6: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w800),
+      caption:   TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
+      headline3: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
+      headline2: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
+      headline1: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
+      headline5: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
+      overline:  TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
+      subtitle1: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
+      headline4: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
+      subtitle2: TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w600),
+      button:    TextStyle(fontFamily: "Nunito", fontWeight: FontWeight.w800),
     ),
     brightness: Brightness.dark,
     accentColor: red,

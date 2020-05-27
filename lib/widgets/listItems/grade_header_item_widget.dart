@@ -5,9 +5,7 @@ import "package:mobile/extension_methods/datetime_extension.dart";
 
 class GradeHeaderItemWidget extends StatelessWidget{
   final String subjectName;
-
   final String gradesAverage;
-
   final DateTime date;
 
   GradeHeaderItemWidget.bySubject({this.subjectName, this.gradesAverage}) : date = null;

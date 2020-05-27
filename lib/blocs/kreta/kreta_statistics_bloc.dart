@@ -20,8 +20,6 @@ abstract class KretaGradeStatisticsEvent extends HEvent {
 }
 
 class KretaGradeStatisticsFetchEvent extends KretaGradeStatisticsEvent {
-  KretaGradeStatisticsFetchEvent() :  super([/*unfinishedOnly*/]){
-  }
   @override
   String toString() => 'KretaGradeStatisticsFetchEvent';
   List<Object> get props => null;
@@ -46,7 +44,7 @@ class KretaGradeStatisticsWaitingState extends KretaGradeStatisticsState {
 }
 
 class KretaGradeStatisticsLoadedState extends KretaGradeStatisticsState {
-  List<PojoGradeAvarage> gradeAvarages;
+  final List<PojoGradeAvarage> gradeAvarages;
 
   KretaGradeStatisticsLoadedState(this.gradeAvarages) : assert(gradeAvarages!= null), super([gradeAvarages, SelectedSessionBloc().selectedSession]);
   @override
@@ -55,7 +53,7 @@ class KretaGradeStatisticsLoadedState extends KretaGradeStatisticsState {
 }
 
 class KretaGradeStatisticsLoadedCacheState extends KretaGradeStatisticsState {
-  List<PojoGradeAvarage> gradeAvarages;
+  final List<PojoGradeAvarage> gradeAvarages;
   KretaGradeStatisticsLoadedCacheState(this.gradeAvarages) : assert(gradeAvarages!= null), super([gradeAvarages, SelectedSessionBloc().selectedSession]);
   @override
   String toString() => 'KretaGradeStatisticsLoadedCacheState';
@@ -63,7 +61,7 @@ class KretaGradeStatisticsLoadedCacheState extends KretaGradeStatisticsState {
 }
 
 class KretaGradeStatisticsErrorState extends KretaGradeStatisticsState {
-  HazizzResponse hazizzResponse;
+  final HazizzResponse hazizzResponse;
   KretaGradeStatisticsErrorState(this.hazizzResponse) : assert(hazizzResponse!= null), super([hazizzResponse]);
 
   @override

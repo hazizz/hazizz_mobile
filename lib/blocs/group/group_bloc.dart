@@ -108,7 +108,7 @@ class GroupMembersBloc extends Bloc<HEvent, HState> {
           int myId = CacheManager.getMyIdSafely;
           bool found = false;
           
-          for(PojoUser member in membersPermissions.OWNER){
+          for(PojoUser member in membersPermissions.owner){
             if (myId == member.id){
 
               GroupBlocs().myPermissionBloc.add(MyPermissionSetEvent(permission: GroupPermissionsEnum.OWNER));
@@ -116,7 +116,7 @@ class GroupMembersBloc extends Bloc<HEvent, HState> {
             }
           }
           if(!found){
-            for(PojoUser member in membersPermissions.MODERATOR){
+            for(PojoUser member in membersPermissions.moderator){
               if (myId == member.id){
                 GroupBlocs().myPermissionBloc.add(MyPermissionSetEvent(permission: GroupPermissionsEnum.MODERATOR));
                 found = true;
@@ -124,7 +124,7 @@ class GroupMembersBloc extends Bloc<HEvent, HState> {
             }
           }
           if(!found){
-            for(PojoUser member in membersPermissions.USER){
+            for(PojoUser member in membersPermissions.user){
               if (myId == member.id){
                 GroupBlocs().myPermissionBloc.add(MyPermissionSetEvent(permission: GroupPermissionsEnum.USER));
                 found = true;
@@ -132,7 +132,7 @@ class GroupMembersBloc extends Bloc<HEvent, HState> {
             }
           }
           if(!found){
-            for(PojoUser member in membersPermissions.NULL){
+            for(PojoUser member in membersPermissions.null_permission){
               if (myId == member.id){
                 GroupBlocs().myPermissionBloc.add(MyPermissionSetEvent(permission: GroupPermissionsEnum.NULL));
                 found = true;
@@ -224,12 +224,12 @@ class MyPermissionBloc extends Bloc<MyPermissionEvent, MyPermissionState> {
 }
 
 class GroupBlocs{
-  MyPermissionBloc myPermissionBloc = MyPermissionBloc();
+  final MyPermissionBloc myPermissionBloc = MyPermissionBloc();
 
   PojoGroup group;
   TasksBloc groupTasksBloc;
-  GroupSubjectsBloc groupSubjectsBloc = new GroupSubjectsBloc();
-  GroupMembersBloc groupMembersBloc = new GroupMembersBloc();
+  final GroupSubjectsBloc groupSubjectsBloc = new GroupSubjectsBloc();
+  final GroupMembersBloc groupMembersBloc = new GroupMembersBloc();
 
   static final GroupBlocs _singleton = new GroupBlocs._internal();
   factory GroupBlocs() {

@@ -13,10 +13,10 @@ class TagChip extends StatefulWidget {
   final Function onCloseClick;
   final EdgeInsets padding;
 
-  bool hasCloseButton = true;
+  final bool hasCloseButton;
 
   TagChip({Key key, @required this.child,
-    this.backgroundColor = HazizzTheme.blue, this.hasCloseButton,
+    this.backgroundColor = HazizzTheme.blue, this.hasCloseButton = true,
     this.padding = const EdgeInsets.only(left: 9, right: 9, top: 2, bottom: 2),
     this.onClick, this.onCloseClick})
   : super(key: key);
@@ -42,16 +42,16 @@ class _TagChip extends State<TagChip> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: ()=> widget.onClick() ?? (){},
+      onTap: ()=> widget?.onClick() ?? (){},
       child:  Card(
-        margin: EdgeInsets.only(top: 5, bottom: 5),
+        margin: EdgeInsets.only(top: 0, bottom: 4),
           color: widget.backgroundColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(50.0),
 
           ),
           clipBehavior: Clip.antiAliasWithSaveLayer,
-          elevation: 10,
+          elevation: 5,
           child: Padding(
             padding: widget.padding,
             child: Row(

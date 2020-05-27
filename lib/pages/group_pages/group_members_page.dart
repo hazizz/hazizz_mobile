@@ -6,7 +6,7 @@ import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/response_states.dart';
 import 'package:mobile/communication/pojos/PojoGroupPermissions.dart';
 import 'package:mobile/communication/pojos/PojoUser.dart';
-import 'package:mobile/dialogs/dialogs_collection.dart';
+import 'package:mobile/dialogs/dialog_collection.dart';
 import 'package:mobile/enums/group_permissions_enum.dart';
 import 'package:mobile/widgets/listItems/member_item_widget.dart';
 import 'package:mobile/widgets/scroll_space_widget.dart';
@@ -15,7 +15,7 @@ import 'package:mobile/custom/hazizz_localizations.dart';
 
 class GroupMembersPage extends StatefulWidget {
   String getTabName(BuildContext context){
-    return locText(context, key: "groupMembers").toUpperCase();
+    return localize(context, key: "groupMembers").toUpperCase();
   }
 
   final GroupMembersBloc groupMembersBloc;
@@ -68,16 +68,16 @@ class _GroupMembersPage extends State<GroupMembersPage> with AutomaticKeepAliveC
                     groupMembersBloc.add(FetchData());
                   };
 
-                  for(PojoUser member in memberPermissions.OWNER){
+                  for(PojoUser member in memberPermissions.owner){
                     membersWidget.add(MemberItemWidget(member: member, permission: GroupPermissionsEnum.OWNER, onKicked: onKicked,));
                   }
-                  for(PojoUser member in memberPermissions.MODERATOR){
+                  for(PojoUser member in memberPermissions.moderator){
                     membersWidget.add(MemberItemWidget(member: member, permission: GroupPermissionsEnum.MODERATOR, onKicked: onKicked));
                   }
-                  for(PojoUser member in memberPermissions.USER){
+                  for(PojoUser member in memberPermissions.user){
                     membersWidget.add(MemberItemWidget(member: member, permission: GroupPermissionsEnum.USER, onKicked: onKicked));
                   }
-                  for(PojoUser member in memberPermissions.NULL){
+                  for(PojoUser member in memberPermissions.null_permission){
                     membersWidget.add(MemberItemWidget(member: member, permission: GroupPermissionsEnum.NULL, onKicked: onKicked));
                   }
 
@@ -95,7 +95,7 @@ class _GroupMembersPage extends State<GroupMembersPage> with AutomaticKeepAliveC
                 } else if (state is ResponseWaiting) {
                   return Center(child: CircularProgressIndicator(),);
                 }
-                return Center(child: Text(locText(context, key: "info_something_went_wrong")));
+                return Center(child: Text(localize(context, key: "info_something_went_wrong")));
               }
             ),
           ],

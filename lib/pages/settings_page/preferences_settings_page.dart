@@ -12,10 +12,6 @@ import 'package:mobile/managers/preference_service.dart';
 
 class PreferencesSettingsPage extends StatefulWidget {
 
-  String getTitle(BuildContext context){
-    return locText(context, key: "preferences");
-  }
-
   PreferencesSettingsPage({Key key}) : super(key: key);
 
   @override
@@ -71,14 +67,14 @@ class _PreferencesSettingsPage extends State<PreferencesSettingsPage> {
       child: Scaffold(
           appBar: AppBar(
             leading: HazizzBackButton(),
-            title: Text(widget.getTitle(context)),
+            title: Text("preferences".localize(context)),
           ),
           body: Container(
             child: Column(
               children: <Widget>[
                 SizedBox(height: 10),
                 ListTile(
-                    title: Text(locText(context, key: "enable_ads")),
+                    title: Text(localize(context, key: "enable_ads")),
                     leading: Icon(FontAwesomeIcons.ad),
                     trailing: Switch(
                       value: enabledAd,
@@ -92,7 +88,7 @@ class _PreferencesSettingsPage extends State<PreferencesSettingsPage> {
                 ),
                 Divider(),
                 ListTile(
-                    title: Text(locText(context, key: "starting_page")),
+                    title: Text(localize(context, key: "starting_page")),
                     leading: Icon(FontAwesomeIcons.doorOpen),
                     trailing: DropdownButton(
                       items: startPageItems,
@@ -107,7 +103,7 @@ class _PreferencesSettingsPage extends State<PreferencesSettingsPage> {
                   ),
                 Divider(),
                 ListTile(
-                  title: Text(locText(context, key: "remember_kreta_password")),
+                  title: Text(localize(context, key: "remember_kreta_password")),
                   trailing: Switch(
                     value: isRemember,
                     onChanged: (value){
@@ -136,7 +132,7 @@ class _PreferencesSettingsPage extends State<PreferencesSettingsPage> {
                 ),
                 Divider(),
                 ListTile(
-                  title: Text(locText(context, key: "auto_load_image")),
+                  title: Text(localize(context, key: "auto_load_image")),
                   leading: Icon(FontAwesomeIcons.spinner),
                   trailing: Switch(
                     value: autoLoad,
@@ -150,7 +146,7 @@ class _PreferencesSettingsPage extends State<PreferencesSettingsPage> {
                 ),
                 Divider(),
                 ListTile(
-                  title: Text(locText(context, key: "auto_download_image")),
+                  title: Text(localize(context, key: "auto_download_image")),
                   leading: Icon(FontAwesomeIcons.download),
                   trailing: Switch(
                     value: autoDownload,

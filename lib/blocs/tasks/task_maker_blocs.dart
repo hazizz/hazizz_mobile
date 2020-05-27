@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'dart:io';
 
@@ -196,8 +195,7 @@ class SetSubjectEvent extends ItemListEvent {
 }
 
 class SubjectLoadData extends ItemListEvent {
-
-  int groupId;
+  final int groupId;
 
   SubjectLoadData(this.groupId);
 
@@ -264,8 +262,6 @@ class SubjectItemPickerBloc extends ItemListPickerBloc {
     }
 
   }
-
-
   @override
   ItemListState get initialState => InitialState();
 
@@ -281,7 +277,7 @@ abstract class TaskTagState extends HState {
 }
 class TaskTagFineState extends TaskTagState {
   final List<PojoTag> tags;
-  DateTime time;
+  final DateTime time;
 
  // PojoTag tag;
 
@@ -311,10 +307,8 @@ class TaskTagAddEvent extends TaskTagEvent {
 }
 
 class TaskTagRemoveEvent extends TaskTagEvent {
-  // List<PojoTag> tags;
-
-  PojoTag tag;
-  int index;
+  final PojoTag tag;
+  final int index;
 
   TaskTagRemoveEvent({this.tag, this.index}) : super([tag, index]);
 
@@ -329,9 +323,7 @@ class TaskTagBloc extends Bloc<TaskTagEvent, TaskTagState>{
 
   List<PojoTag> pickedTags = List();
 
-  TaskTagBloc(){
-
-  }
+  TaskTagBloc();
 
   @override
   TaskTagState get initialState =>TaskTagFineState(pickedTags, DateTime.now());
@@ -346,13 +338,11 @@ class TaskTagBloc extends Bloc<TaskTagEvent, TaskTagState>{
       yield TaskTagFineState(pickedTags, DateTime.now());
     }else if(event is TaskTagRemoveEvent){
       HazizzLogger.printLog("oi");
-      bool asd = null;
       if(event.tag != null){
-        asd = pickedTags.remove(event.tag);
+        pickedTags.remove(event.tag);
       }else{
         pickedTags.removeAt(event.index);
       }
-      HazizzLogger.printLog("asdőú: $asd");
       HazizzLogger.printLog("asdőű: ${pickedTags}");
       yield TaskTagFineState(pickedTags, DateTime.now());
     }
@@ -392,8 +382,8 @@ abstract class TaskMakerEvent extends HEvent {
 }
 
 class TaskMakerSendEvent extends TaskMakerEvent {
-  List<HazizzImageData> imageDatas;
-  String salt;
+  final List<HazizzImageData> imageDatas;
+  final String salt;
   TaskMakerSendEvent({@required this.imageDatas, @required this.salt});
   @override
   String toString() => 'TaskMakerSendEvent';
@@ -401,8 +391,8 @@ class TaskMakerSendEvent extends TaskMakerEvent {
 }
 
 class TaskMakerSaveStateEvent extends TaskMakerEvent {
-  List<HazizzImageData> imageDatas;
-  String salt;
+  final List<HazizzImageData> imageDatas;
+  final String salt;
   TaskMakerSaveStateEvent({@required this.imageDatas, @required this.salt});
   @override
   String toString() => 'TaskMakerSendEvent';

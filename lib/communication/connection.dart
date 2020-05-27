@@ -13,14 +13,9 @@ class Connection{
         .onConnectivityChanged.listen((ConnectivityResult result) {
       HazizzLogger.printLog(result.toString());
       if (result == ConnectivityResult.mobile || result == ConnectivityResult.wifi) {
-        // hasConnection = true;
         HazizzLogger.printLog("Connection: available");
         listeners.forEach((k,v) => v());
-
-
         listeners.clear();
-
-
       } else {
         HazizzLogger.printLog("Connection: not available");
       }

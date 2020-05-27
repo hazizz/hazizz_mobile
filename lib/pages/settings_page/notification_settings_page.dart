@@ -15,7 +15,7 @@ import 'package:mobile/extension_methods/time_of_day_extension.dart';
 class NotificationSettingsPage extends StatefulWidget {
 
   String getTitle(BuildContext context){
-    return locText(context, key: "notification_settings");
+    return localize(context, key: "notification_settings");
   }
 
   NotificationSettingsPage({Key key}) : super(key: key);
@@ -108,7 +108,7 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage>  {
                 Padding(
                   padding: const EdgeInsets.only(top: 10.0),
                   child: ListTile(
-                    title: Text(locText(context, key: "notif_settings_notify_everyday_tasks")),
+                    title: Text(localize(context, key: "notif_settings_notify_everyday_tasks")),
                     leading: Icon(iconBell),
                     trailing: Switch(
                       value: receive,
@@ -150,7 +150,7 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage>  {
                       });
                     },
                     leading: Icon(FontAwesomeIcons.clock),
-                    title: Text(locText(context, key: "set_time_for_notification")),
+                    title: Text(localize(context, key: "set_time_for_notification")),
                     trailing: Container(
                       child: Padding(
                         padding: const EdgeInsets.all(4.0),
@@ -167,7 +167,7 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage>  {
                 Divider(),
                 ListTile(
                     enabled: receive,
-                    title: Text(locText(context, key: "days_0")),
+                    title: Text(localize(context, key: "days_0")),
                     trailing: Switch(
                       value: mondayEnabled, //!receive ? false : mondayEnabled,
                       onChanged: (value){
@@ -181,7 +181,7 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage>  {
               //  Divider(),
                 ListTile(
                     enabled: receive,
-                    title: Text(locText(context, key: "days_1")),
+                    title: Text(localize(context, key: "days_1")),
                     trailing: Switch(
                         value: tuesdayEnabled,//!receive ? false : tuesdayEnabled,
                         onChanged: (value){
@@ -195,7 +195,7 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage>  {
                // Divider(),
                 ListTile(
                     enabled: receive,
-                    title: Text(locText(context, key: "days_2")),
+                    title: Text(localize(context, key: "days_2")),
                     trailing: Switch(
                         value: wednesdayEnabled,//!receive ? false : wednesdayEnabled,
                         onChanged: (value){
@@ -209,7 +209,7 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage>  {
               //  Divider(),
                 ListTile(
                     enabled: receive,
-                    title: Text(locText(context, key: "days_3")),
+                    title: Text(localize(context, key: "days_3")),
                     trailing: Switch(
                         value: thursdayEnabled,//!receive ? false : thursdayEnabled,
                         onChanged: (value){
@@ -223,7 +223,7 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage>  {
                // Divider(),
                 ListTile(
                     enabled: receive,
-                    title: Text(locText(context, key: "days_4")),
+                    title: Text(localize(context, key: "days_4")),
                     trailing: Switch(
                         value: fridayEnabled,//!receive ? false : fridayEnabled,
                         onChanged: (value){
@@ -237,7 +237,7 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage>  {
                // Divider(),
                 ListTile(
                   enabled: receive,
-                  title: Text(locText(context, key: "days_5")),
+                  title: Text(localize(context, key: "days_5")),
                   trailing: Switch(
                     value: saturdayEnabled,//!receive ? false : saturdayEnabled,
                     onChanged: (value){
@@ -251,7 +251,7 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage>  {
               //  Divider(),
                 ListTile(
                   enabled: receive,
-                  title: Text(locText(context, key: "days_6")),
+                  title: Text(localize(context, key: "days_6")),
                   trailing: Switch(
                     value: sundayEnabled, //!receive ? false : sundayEnabled,
                     onChanged: (value){

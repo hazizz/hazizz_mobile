@@ -99,11 +99,12 @@ class SelectedSessionBloc extends Bloc<SelectedSessionEvent, SelectedSessionStat
     if(event is SelectedSessionInitalizeEvent){
 
       PojoSession selectedSessionCached = await KretaSessionManager.getSelectedSession();
-      HazizzLogger.printLog("asd debug33: ${selectedSessionCached.username}");
+
 
       if(selectedSessionCached != null){
         selectedSession = selectedSessionCached;
         yield SelectedSessionFineState(selectedSession);
+        HazizzLogger.printLog("asd debug33: ${selectedSession.username}");
       }else{
         yield SelectedSessionEmptyState();
       }

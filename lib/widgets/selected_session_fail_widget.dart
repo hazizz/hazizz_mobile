@@ -21,7 +21,7 @@ class _SelectedSessionFailWidgetState extends State<SelectedSessionFailWidget> {
           children: <Widget>[
             Spacer(),
             AutoSizeText(
-              locText(context, key: "failed_session"),
+              localize(context, key: "failed_session"),
               style: TextStyle(fontSize: 14),
               maxFontSize: 14,
               minFontSize: 11,

@@ -1,8 +1,3 @@
-import 'package:json_annotation/json_annotation.dart';
-
-
-import 'Pojo.dart';
-
 import 'package:meta/meta.dart';
 import 'dart:convert';
 

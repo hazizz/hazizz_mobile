@@ -1,5 +1,3 @@
-import 'package:json_annotation/json_annotation.dart';
-import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/enums/group_permissions_enum.dart';
 
 import '../Pojo.dart';

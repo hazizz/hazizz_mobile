@@ -1,6 +1,5 @@
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 
 class HashedTextEditingController extends TextEditingController{

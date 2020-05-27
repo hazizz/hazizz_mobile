@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
 import 'package:mobile/blocs/kreta/schedule_event_bloc.dart';
-import 'package:mobile/custom/hazizz_date_time.dart';
 import 'package:mobile/custom/logger.dart';
 import 'package:mobile/extension_methods/time_of_day_extension.dart';
 
@@ -16,19 +15,14 @@ class ScheduleEventWidget extends StatefulWidget {
 
 class _ScheduleEventWidget extends State<ScheduleEventWidget> with SingleTickerProviderStateMixin {
   Duration countdownToEventEnd;
-  HazizzDateTime eventEnd;
+  DateTime eventEnd;
 
   void resetCountdown(){
     new Timer.periodic(Duration(seconds: 1), (Timer t) => setState((){
-      HazizzDateTime now = HazizzDateTime.now();
+      DateTime now = DateTime.now();
 
       countdownToEventEnd = now.difference(eventEnd);
     }));
-  }
-
-  @override
-  void initState() {
-    super.initState();
   }
 
   @override

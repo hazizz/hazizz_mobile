@@ -6,7 +6,7 @@ import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/managers/app_state_manager.dart';
 import 'package:mobile/storage/cache_manager.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
-import 'dialogs_collection.dart';
+import 'dialog_collection.dart';
 
 class SureToDeleteMeDialog extends StatefulWidget {
 
@@ -46,7 +46,7 @@ class _SureToDeleteMeDialog extends State<SureToDeleteMeDialog> {
                   child:
                   Center(
                     child: Builder(builder: (context){
-                      return Text(locText(context, key: "areyousure_delete_me"),
+                      return Text(localize(context, key: "areyousure_delete_me"),
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w700,
@@ -76,13 +76,13 @@ class _SureToDeleteMeDialog extends State<SureToDeleteMeDialog> {
 
           return Row(children: <Widget>[
             FlatButton(
-              child: Text(locText(context, key: "no").toUpperCase(),),
+              child: Text(localize(context, key: "no").toUpperCase(),),
               onPressed: (){
                 Navigator.pop(context, false);
               },
             ),
             FlatButton(
-              child: Text(locText(context, key: "yes").toUpperCase(),),
+              child: Text(localize(context, key: "yes").toUpperCase(),),
               onPressed: () async {
 
                 setState(() {

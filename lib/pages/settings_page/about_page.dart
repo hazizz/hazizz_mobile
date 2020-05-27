@@ -8,7 +8,6 @@ import 'package:mobile/custom/hazizz_app_info.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:flutter/material.dart';
 
-
 class AboutPage extends StatefulWidget {
 
   static final String version = HazizzAppInfo().getInfo.version;
@@ -19,9 +18,8 @@ class AboutPage extends StatefulWidget {
   static const String gh_site = "https://github.com/hazizz";
 
   String getTitle(BuildContext context){
-    return locText(context, key: "about");
+    return localize(context, key: "about");
   }
-
 
   AboutPage({Key key}) : super(key: key);
 
@@ -31,18 +29,20 @@ class AboutPage extends StatefulWidget {
 
 class _AboutPage extends State<AboutPage> {
 
-  bool gatewayServerIsOnline = true;
-  bool authServerIsOnline = true;
-  bool hazizzServerIsOnline = true;
-  bool theraServerIsOnline = true;
+  bool gatewayServerIsOnline;
+  bool authServerIsOnline;
+  bool hazizzServerIsOnline;
+  bool theraServerIsOnline;
 
   int kretaRequestsInLastHour;
   double kretaSuccessRate;
 
+  final Widget loadingWidget = Transform.scale(scale: 0.7, child: CircularProgressIndicator());
 
   _AboutPage();
 
   void _map(){
+
     gatewayServerIsOnline = ServerChecker.gatewayOnline;
     authServerIsOnline = ServerChecker.authOnline;
     hazizzServerIsOnline = ServerChecker.hazizzOnline;
@@ -53,7 +53,9 @@ class _AboutPage extends State<AboutPage> {
   }
 
   Future<void> fetch() async {
-    _map();
+   // _map();
+    kretaRequestsInLastHour = ServerChecker.kretaRequestsInLastHour;
+    kretaSuccessRate = ServerChecker.kretaSuccessRate;
     await ServerChecker.checkAll(notifyFlush: false).then((val){
       if(mounted){
         setState(() {
@@ -65,17 +67,16 @@ class _AboutPage extends State<AboutPage> {
 
   @override
   void initState() {
-
     fetch();
     super.initState();
   }
 
   Widget isOnlineWidget(){
-    return Text(locText(context, key: "online"), style: TextStyle(color: Colors.green, fontSize: 17),);
+    return Text(localize(context, key: "online"), style: TextStyle(color: Colors.green, fontSize: 17),);
   }
 
   Widget isOfflineWidget(){
-    return Text(locText(context, key: "offline"), style: TextStyle(color: Colors.red, fontSize: 17),);
+    return Text(localize(context, key: "offline"), style: TextStyle(color: Colors.red, fontSize: 17),);
   }
 
   @override
@@ -96,7 +97,7 @@ class _AboutPage extends State<AboutPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text("${locText(context, key: "version")}:", style: TextStyle(fontSize: 17),),
+                        Text("${localize(context, key: "version")}:", style: TextStyle(fontSize: 17),),
                         Text(AboutPage.version, style: TextStyle(fontSize: 17))
                       ],
                     )
@@ -108,13 +109,15 @@ class _AboutPage extends State<AboutPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text("${locText(context, key: "gateway_server")}:", style: TextStyle(fontSize: 17),),
+                        Text("${localize(context, key: "gateway_server")}:", style: TextStyle(fontSize: 17),),
                         Builder(
                           builder: (context){
-                            if(gatewayServerIsOnline){
-                              return isOnlineWidget();
+                            if(gatewayServerIsOnline == null){
+                              return loadingWidget;
                             }
-                            return isOfflineWidget();
+                            return gatewayServerIsOnline
+                                ? isOnlineWidget()
+                                : isOfflineWidget();
                           },
                         )
                       ],
@@ -127,13 +130,15 @@ class _AboutPage extends State<AboutPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text("${locText(context, key: "auth_server")}:", style: TextStyle(fontSize: 17),),
+                        Text("${localize(context, key: "auth_server")}:", style: TextStyle(fontSize: 17),),
                         Builder(
                           builder: (context){
-                            if(authServerIsOnline){
-                              return isOnlineWidget();
+                            if(authServerIsOnline == null){
+                              return loadingWidget;
                             }
-                            return isOfflineWidget();
+                            return authServerIsOnline
+                                ? isOnlineWidget()
+                                : isOfflineWidget();
                           },
                         )
                       ],
@@ -146,13 +151,15 @@ class _AboutPage extends State<AboutPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text("${locText(context, key: "hazizz_server")}:", style: TextStyle(fontSize: 17),),
+                        Text("${localize(context, key: "hazizz_server")}:", style: TextStyle(fontSize: 17),),
                         Builder(
                           builder: (context){
-                            if(hazizzServerIsOnline){
-                              return isOnlineWidget();
+                            if(hazizzServerIsOnline == null){
+                              return loadingWidget;
                             }
-                            return isOfflineWidget();
+                            return hazizzServerIsOnline
+                                ? isOnlineWidget()
+                                : isOfflineWidget();
                           },
                         )
                       ],
@@ -167,13 +174,15 @@ class _AboutPage extends State<AboutPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Text("${locText(context, key: "thera_server")}:", style: TextStyle(fontSize: 17),),
+                            Text("${localize(context, key: "thera_server")}:", style: TextStyle(fontSize: 17),),
                             Builder(
                               builder: (context){
-                                if(theraServerIsOnline){
+                                if(theraServerIsOnline == null){
                                   return isOnlineWidget();
                                 }
-                                return isOfflineWidget();
+                                return theraServerIsOnline
+                                    ? isOnlineWidget()
+                                    : isOfflineWidget();
                               },
                             )
                           ],
@@ -185,7 +194,7 @@ class _AboutPage extends State<AboutPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
                             children: <Widget>[
-                              Text("${locText(context, key: "kreta_requests_in_last_hour")}: ", style: TextStyle(fontSize: 15),),
+                              Text("${localize(context, key: "kreta_requests_in_last_hour")}: ", style: TextStyle(fontSize: 15),),
                               Text(kretaRequestsInLastHour.toString(), style: TextStyle(fontSize: 15))
                             ],
                           ),
@@ -195,7 +204,7 @@ class _AboutPage extends State<AboutPage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              Text("${locText(context, key: "kreta_success_rate")}: ", style: TextStyle(fontSize: 15),),
+                              Text("${localize(context, key: "kreta_success_rate")}: ", style: TextStyle(fontSize: 15),),
                               Text("${(kretaSuccessRate * 100).round()}%" , style: TextStyle(fontSize: 15))
                             ],
                           ),
@@ -210,7 +219,7 @@ class _AboutPage extends State<AboutPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text("${locText(context, key: "website")}:", style: TextStyle(fontSize: 17),),
+                        Text("${localize(context, key: "website")}:", style: TextStyle(fontSize: 17),),
                         Hyperlink(AboutPage.website, Text(AboutPage.website, style: TextStyle(color: Colors.blueAccent, fontSize: 17, decoration: TextDecoration.underline),))
                       ],
                     )
@@ -245,7 +254,6 @@ class _AboutPage extends State<AboutPage> {
                           child: SvgPicture.asset(
                             "assets/icons/twitter.svg",
                             fit: BoxFit.fitHeight,
-
                             height: 40,
                             width: 40,
                           ),
@@ -263,7 +271,6 @@ class _AboutPage extends State<AboutPage> {
                           child: SvgPicture.asset(
                             "assets/icons/discord.svg",
                             fit: BoxFit.fitHeight,
-
                             height: 40,
                             width: 40,
                           ),
@@ -281,7 +288,6 @@ class _AboutPage extends State<AboutPage> {
                           child: SvgPicture.asset(
                             "assets/icons/github.svg",
                             fit: BoxFit.fitHeight,
-
                             height: 40,
                             width: 40,
                           ),

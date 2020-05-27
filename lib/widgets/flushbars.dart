@@ -22,7 +22,7 @@ dynamic showHaventSavedFlushBar(BuildContext context){
         ],
       ),
     ),
-    message:  locText(context, key: "havent_saved_changes"),
+    message:  localize(context, key: "havent_saved_changes"),
     duration:  Duration(seconds: 3),
   )..show(context);
 }
@@ -44,7 +44,7 @@ dynamic showNoConnectionFlushBar(BuildContext context){
         ],
       ),
     ),
-    message:  locText(context, key: "info_noInternetAccess"),
+    message:  localize(context, key: "info_noInternetAccess"),
     duration:  Duration(seconds: 3),
   )..show(context);
 }
@@ -66,7 +66,7 @@ dynamic showKretaUnavailableFlushBar(BuildContext context){
         ],
       ),
     ),
-    message:  locText(context, key: "kreta_server_unavailable"),
+    message:  localize(context, key: "kreta_server_unavailable"),
     duration:  Duration(seconds: 3),
   )..show(context);
 }
@@ -88,7 +88,7 @@ dynamic showServerUnavailableFlushBar(BuildContext context){
         ],
       ),
     ),
-    message:  locText(context, key: "server_unavailable"),
+    message:  localize(context, key: "server_unavailable"),
     duration:  Duration(seconds: 3),
   )..show(context);
 }
@@ -117,7 +117,7 @@ dynamic showGatewayServerUnavailableFlushBar(BuildContext context){
         ],
       ),
     ),
-    message:  locText(context, key: "gateway_server_unavailable"),
+    message:  localize(context, key: "gateway_server_unavailable"),
     duration:  Duration(seconds: 4),
   )..show(context);
 }
@@ -144,7 +144,7 @@ dynamic showAuthServerUnavailableFlushBar(BuildContext context){
         ],
       ),
     ),
-    message:  locText(context, key: "auth_server_unavailable"),
+    message:  localize(context, key: "auth_server_unavailable"),
     duration:  Duration(seconds: 4),
   )..show(context);
 }
@@ -171,7 +171,7 @@ dynamic showHazizzServerUnavailableFlushBar(BuildContext context){
         ],
       ),
     ),
-    message:  locText(context, key: "hazizz_server_unavailable"),
+    message:  localize(context, key: "hazizz_server_unavailable"),
     duration:  Duration(seconds: 4),
   )..show(context);
 }
@@ -198,7 +198,7 @@ dynamic showTheraServerUnavailableFlushBar(BuildContext context){
         ],
       ),
     ),
-    message:  locText(context, key: "thera_server_unavailable"),
+    message:  localize(context, key: "thera_server_unavailable"),
     duration:  Duration(seconds: 4),
   )..show(context);
 }
@@ -209,7 +209,7 @@ dynamic showSessionFailFlushBar(BuildContext context){
     shouldIconPulse: true,
 
     icon: Icon(FontAwesomeIcons.userTimes, color: Colors.red,),
-    message:  locText(context, key: "failed_session"),
+    message:  localize(context, key: "failed_session"),
     duration:  Duration(seconds: 4),
   )..show(context);
 }
@@ -218,7 +218,7 @@ dynamic showSessionFailFlushBar(BuildContext context){
 void showReportSuccessFlushBar(BuildContext context, {@required String what}){
   Flushbar(
     icon: Icon(FontAwesomeIcons.solidFlag, color: Colors.green,),
-    message:  locText(context, key: "report_successful", args: [what]),
+    message:  localize(context, key: "report_successful", args: [what]),
     duration:  Duration(seconds: 4),
   )..show(context);
 }
@@ -226,7 +226,7 @@ void showReportSuccessFlushBar(BuildContext context, {@required String what}){
 void showDeleteWasSuccessfulFlushBar(BuildContext context, {@required String what}){
   Flushbar(
     icon: Icon(FontAwesomeIcons.times, color: Colors.green,),
-    message:  locText(context, key: "subscribed_to_subject", args: [what]),
+    message:  localize(context, key: "subscribed_to_subject", args: [what]),
     duration:  Duration(seconds: 4),
   )..show(context);
 }
@@ -234,7 +234,7 @@ void showDeleteWasSuccessfulFlushBar(BuildContext context, {@required String wha
 void showSubscribedToSubjectFlushBar(BuildContext context, {@required String what}){
   Flushbar(
     icon: Icon(FontAwesomeIcons.check, color: Colors.green,),
-    message:  locText(context, key: "subscribed_to_subject", args: [what]),
+    message:  localize(context, key: "subscribed_to_subject", args: [what]),
     duration:  Duration(seconds: 3),
   )..show(context);
 }
@@ -242,7 +242,7 @@ void showSubscribedToSubjectFlushBar(BuildContext context, {@required String wha
 void showUnsubscribedFromSubjectFlushBar(BuildContext context, {@required String what}){
   Flushbar(
     icon: Icon(FontAwesomeIcons.times, color: Colors.red,),
-    message:  locText(context, key: "unsubscribed_from_subject", args: [what]),
+    message:  localize(context, key: "unsubscribed_from_subject", args: [what]),
     duration:  Duration(seconds: 3),
   )..show(context);
 }

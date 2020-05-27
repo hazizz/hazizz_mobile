@@ -98,7 +98,10 @@ class _ImageViewerPage extends State<ImageViewerPage>{
                 child:  Container(
                   width: MediaQuery.of(context).size.width,
                   child: PhotoView(
-                    imageProvider: imageProvider
+                    imageProvider: imageProvider,
+                    enableRotation: true,
+                    maxScale: PhotoViewComputedScale.covered * 2.5,
+                    minScale: PhotoViewComputedScale.contained * 0.8,
                   ),
                 ),
                 )
@@ -112,8 +115,7 @@ class _ImageViewerPage extends State<ImageViewerPage>{
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-
-                    Padding(
+                    if(widget.imageType != ImageType.FILE) Padding(
                       padding: const EdgeInsets.only(bottom: 6),
                       child: IconButton(
                         enableFeedback: true,
@@ -140,7 +142,7 @@ class _ImageViewerPage extends State<ImageViewerPage>{
                               var response = await  Dio().get(imageUrl, options: Options(responseType: ResponseType.bytes));
                               await ImageGallerySaver.saveImage(Uint8List.fromList(response.data));
                             }
-                            showToast(locText(context, key: "image_saved"), duration: Duration(seconds: 3));
+                            showToast(localize(context, key: "image_saved"), duration: Duration(seconds: 3));
                             setState(() {
                               downloading = false;
                             });

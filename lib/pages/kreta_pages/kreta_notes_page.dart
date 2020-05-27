@@ -15,7 +15,7 @@ class KretaNotesPage extends StatefulWidget {
 
 class _KretaNotesPage extends State<KretaNotesPage> {
 
-  KretaNotesBloc notesBloc = KretaNotesBloc();
+  final KretaNotesBloc notesBloc = KretaNotesBloc();
 
   @override
   void initState() {
@@ -28,7 +28,7 @@ class _KretaNotesPage extends State<KretaNotesPage> {
     return Scaffold(
         appBar: AppBar(
           leading: HazizzBackButton(),
-          title: Text(locText(context, key: "kreta_notes")),
+          title: Text(localize(context, key: "kreta_notes")),
         ),
         body: RefreshIndicator(
           onRefresh: () async{

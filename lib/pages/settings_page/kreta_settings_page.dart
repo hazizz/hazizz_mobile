@@ -12,7 +12,7 @@ import 'package:mobile/extension_methods/time_of_day_extension.dart';
 class KretaSettingsPage extends StatefulWidget {
 
   String getTitle(BuildContext context){
-    return locText(context, key: "kreta_settings");
+    return localize(context, key: "kreta_settings");
   }
 
   KretaSettingsPage({Key key}) : super(key: key);
@@ -65,14 +65,13 @@ class _KretaSettingsPage extends State<KretaSettingsPage>  {
                 Padding(
                   padding: const EdgeInsets.only(top: 10.0),
                   child: ListTile(
-                    title: Text(locText(context, key: "remember_kreta_password")),
+                    title: Text(localize(context, key: "remember_kreta_password")),
                     trailing: Switch(
                       value: isRemember,
                       onChanged: (value){
                         HazizzLogger.printLog("remember kreta password is enabled: ${value}");
                         KretaSessionManager.setRememberPassword(value);
                         if(value){
-
                           setState(() {
                             iconBell = FontAwesomeIcons.solidBell;
                             isRemember = value;

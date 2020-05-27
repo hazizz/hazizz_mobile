@@ -23,7 +23,7 @@ class GroupTasksPage extends StatefulWidget {
   // This widget is the root of your application.
 
   String getTabName(BuildContext context){
-    return locText(context, key: "tasks").toUpperCase();
+    return localize(context, key: "tasks").toUpperCase();
   }
 
  // GroupTasksBloc groupTasksBloc;
@@ -83,7 +83,7 @@ class _GroupTasksPage extends State<GroupTasksPage> with AutomaticKeepAliveClien
   }
 
 
-  Map<DateTime, List<PojoTask>> map = null;
+  Map<DateTime, List<PojoTask>> map;
 
   Widget onLoaded(Map<DateTime, List<PojoTask>> m){
 
@@ -110,9 +110,9 @@ class _GroupTasksPage extends State<GroupTasksPage> with AutomaticKeepAliveClien
                       });
                     },
                     items: [
-                      DropdownMenuItem(child: Text(locText(context, key: "complete")), value: TaskCompleteStateEnum.COMPLETED, ),
-                      DropdownMenuItem(child: Text(locText(context, key: "incomplete")), value: TaskCompleteStateEnum.UNCOMPLETED,),
-                      DropdownMenuItem(child: Text(locText(context, key: "both")), value: TaskCompleteStateEnum.BOTH, ),
+                      DropdownMenuItem(child: Text(localize(context, key: "complete")), value: TaskCompleteStateEnum.COMPLETED, ),
+                      DropdownMenuItem(child: Text(localize(context, key: "incomplete")), value: TaskCompleteStateEnum.UNCOMPLETED,),
+                      DropdownMenuItem(child: Text(localize(context, key: "both")), value: TaskCompleteStateEnum.BOTH, ),
 
                     ],
                   ),
@@ -128,14 +128,14 @@ class _GroupTasksPage extends State<GroupTasksPage> with AutomaticKeepAliveClien
                         });
                       },
                       items: [
-                        DropdownMenuItem(child: Text(locText(context, key: "expired")), value: TaskExpiredStateEnum.EXPIRED,),
-                        DropdownMenuItem(child: Text(locText(context, key: "active")), value: TaskExpiredStateEnum.UNEXPIRED,)
+                        DropdownMenuItem(child: Text(localize(context, key: "expired")), value: TaskExpiredStateEnum.EXPIRED,),
+                        DropdownMenuItem(child: Text(localize(context, key: "active")), value: TaskExpiredStateEnum.UNEXPIRED,)
                       ],
                     ),
                   ),
                   Spacer(),
 
-                  FlatButton(child: Text(locText(context, key: "apply").toUpperCase(), style: TextStyle(fontSize: 13),),
+                  FlatButton(child: Text(localize(context, key: "apply").toUpperCase(), style: TextStyle(fontSize: 13),),
                     onPressed: (){
 
                       applyFilters();
@@ -151,7 +151,7 @@ class _GroupTasksPage extends State<GroupTasksPage> with AutomaticKeepAliveClien
         Expanded(
           child: Builder(builder: (context){
             if(map.keys == null || map.keys.isEmpty){
-              return Center(child: Text(locText(context, key: "no_tasks")),);
+              return Center(child: Text(localize(context, key: "no_tasks")),);
 
 
             }else{
@@ -276,7 +276,7 @@ class _GroupTasksPage extends State<GroupTasksPage> with AutomaticKeepAliveClien
                             Center(
                               child: Padding(
                                 padding: const EdgeInsets.only(top: 50.0),
-                                child: Text(locText(context, key: "no_tasks_yet")),
+                                child: Text(localize(context, key: "no_tasks_yet")),
                               ),
                             )
                           ]
@@ -296,7 +296,7 @@ class _GroupTasksPage extends State<GroupTasksPage> with AutomaticKeepAliveClien
                           Flushbar(
                             icon: Icon(FontAwesomeIcons.exclamation, color: Colors.red,),
 
-                            message: "${locText(context, key: "tasks")}: ${locText(context, key: "info_something_went_wrong")}",
+                            message: "${localize(context, key: "tasks")}: ${localize(context, key: "info_something_went_wrong")}",
                             duration: Duration(seconds: 3),
                           );
                         });
@@ -306,10 +306,10 @@ class _GroupTasksPage extends State<GroupTasksPage> with AutomaticKeepAliveClien
                         return onLoaded(GroupBlocs().groupTasksBloc.tasks);
                       }
                       return Center(
-                          child: Text(locText(context, key: "info_something_went_wrong")));
+                          child: Text(localize(context, key: "info_something_went_wrong")));
                     }
                     return Center(
-                        child: Text(locText(context, key: "info_something_went_wrong")));
+                        child: Text(localize(context, key: "info_something_went_wrong")));
                   }
 
               ),

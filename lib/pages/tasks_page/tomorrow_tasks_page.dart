@@ -8,11 +8,8 @@ import 'package:mobile/widgets/hazizz_back_button.dart';
 import 'package:mobile/widgets/listItems/task_header_item_widget.dart';
 import 'package:mobile/widgets/listItems/task_item_widget.dart';
 
-
 import 'package:sticky_headers/sticky_headers.dart';
-
 import 'package:mobile/custom/hazizz_localizations.dart';
-
 import '../../main.dart';
 
 
@@ -33,7 +30,7 @@ class TasksTomorrowPage extends StatefulWidget {
   }
 
   getTitleName(BuildContext context){
-    return locText(context, key: "title_tasks_tomorrow");
+    return localize(context, key: "title_tasks_tomorrow");
   }
 
   @override
@@ -113,7 +110,7 @@ class _TasksTomorrowPage extends State<TasksTomorrowPage> with SingleTickerProvi
                   return Center(child: CircularProgressIndicator(),);
                 }
                 return Center(
-                    child: Text(locText(context, key: "info_something_went_wrong")));
+                    child: Text(localize(context, key: "info_something_went_wrong")));
               }
 
           ),

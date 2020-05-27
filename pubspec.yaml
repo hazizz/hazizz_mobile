@@ -1,12 +1,13 @@
 name: mobile
 description: Hazizz Mobile application.
 
-version: 1.4.19+62
+version: 1.5.0+65
 
 environment:
   sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
+  ffloat: 1.0.1
   statsfl: 0.1.0
 
   edit_distance: 0.4.1
