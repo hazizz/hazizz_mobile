@@ -1,10 +1,7 @@
 import 'dart:async';
-import 'dart:io';
-
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/blocs/item_list/item_list_picker_bloc.dart';
-
 import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/response_states.dart';
 import 'package:mobile/blocs/other/text_form_bloc.dart';
@@ -15,10 +12,8 @@ import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:meta/meta.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
-
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/communication/hazizz_response.dart';
-
 import 'package:mobile/blocs/other/date_time_picker_bloc.dart';
 import 'package:mobile/custom/image_operations.dart';
 
@@ -32,7 +27,6 @@ abstract class TaskMakerBloc extends Bloc<TaskMakerEvent, TaskMakerState> {
   TextFormBloc descriptionBloc;
 
   final TextEditingController descriptionController = TextEditingController();
-
 
 
   TaskMakerBloc(){
@@ -58,7 +52,6 @@ abstract class TaskMakerBloc extends Bloc<TaskMakerEvent, TaskMakerState> {
     deadlineBloc.close();
     taskTagBloc.close();
     descriptionBloc.close();
-  
     return super.close();
   }
 }
@@ -244,7 +237,7 @@ class SubjectItemPickerBloc extends ItemListPickerBloc {
         try {
           yield Waiting();
           HazizzResponse hazizzResponse = await RequestSender().getResponse(
-              new GetSubjects(groupId: event.groupId));
+              new GetSubjects(pGroupId: event.groupId));
           // HazizzLogger.printLog("log: responseData: ${hazizzResponse.convertedData}");
           //   HazizzLogger.printLog("log: responseData type:  ${hazizzResponse.runtimeType.toString()}");
 
@@ -297,7 +290,7 @@ abstract class TaskTagEvent extends HEvent {
 class TaskTagAddEvent extends TaskTagEvent {
  // List<PojoTag> tags;
 
-  PojoTag tag;
+  final PojoTag tag;
 
   TaskTagAddEvent(this.tag) : assert(tag != null), super([tag]);
 
@@ -343,7 +336,7 @@ class TaskTagBloc extends Bloc<TaskTagEvent, TaskTagState>{
       }else{
         pickedTags.removeAt(event.index);
       }
-      HazizzLogger.printLog("asdőű: ${pickedTags}");
+      HazizzLogger.printLog("asdőű: $pickedTags");
       yield TaskTagFineState(pickedTags, DateTime.now());
     }
   }

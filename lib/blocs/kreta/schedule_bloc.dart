@@ -18,6 +18,7 @@ import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/blocs/kreta/schedule_event_bloc.dart';
 import 'package:mobile/services/selected_session_helper.dart';
 import 'package:mobile/storage/caches/data_cache.dart';
+import 'package:mobile/extension_methods/duration_extension.dart';
 
 //region Schedule bloc parts
 //region Schedule events
@@ -106,7 +107,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
   List<PojoSession> failedSessions = [];
 
-  ScheduleEventBloc scheduleEventBloc;
+  final ScheduleEventBloc scheduleEventBloc = ScheduleEventBloc();
 
   int currentYearNumber = DateTime.now().year;
   int currentWeekNumber = 0;
@@ -151,7 +152,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     selectedDate = nowDate;
 
     currentDayIndex = todayIndex;
-    scheduleEventBloc = ScheduleEventBloc();
+
 
 
     currentCurrentWeekNumber = _getWeekNumber(nowDate);
@@ -168,10 +169,8 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
   PojoSchedules sessionClasses;
 
-  int todayIndex = DateTime.now().weekday-1;
-
+  final int todayIndex = DateTime.now().weekday-1;
   int currentDayIndex;
-
   int fromCurrentWeek = 0;
 
   int _getYear(DateTime dateTime){
@@ -191,7 +190,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
   void nextWeek(){
     fromCurrentWeek++;
-    selectedDate = selectedDate.add(Duration(days: 7));
+    selectedDate = selectedDate.add(7.days);
 
     int year = _getYear(selectedDate);
     int weekNumber = _getWeekNumber(selectedDate);
@@ -201,8 +200,8 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
   void previousWeek(){
     fromCurrentWeek--;
-    selectedDate = selectedDate.subtract(Duration(days: 7));
-    print("slected date: ${selectedDate}");
+    selectedDate = selectedDate.subtract(7.days);
+    print("slected date: $selectedDate");
 
     int year = _getYear(selectedDate);
     int weekNumber = _getWeekNumber(selectedDate);
@@ -237,7 +236,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
         currentWeekMonday = DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
         HazizzLogger.printLog("currentWeekMonday: $currentWeekMonday");
 
-        currentWeekSunday = currentWeekMonday.add(Duration(days: 6));
+        currentWeekSunday = currentWeekMonday.add(6.days);
 
         HazizzLogger.printLog("currentWeekSunday: $currentWeekSunday");
 
@@ -262,7 +261,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
         //HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetSchedulesWithSession(q_year: currentYearNumber, q_weekNumber: currentWeekNumber));
         HazizzResponse hazizzResponse = await getResponse(
-          KretaGetSchedules(q_year: currentYearNumber, q_weekNumber: currentWeekNumber),
+          KretaGetSchedules(qYear: currentYearNumber, qWeekNumber: currentWeekNumber),
           useSecondaryOptions: event.retry
         );
 

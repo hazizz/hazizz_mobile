@@ -11,6 +11,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:photo_view/photo_view.dart';
 import 'hazizz_back_button.dart';
 import 'image_viewer_widget.dart';
+import 'package:mobile/extension_methods/duration_extension.dart';
 
 class ImageViewerPage extends StatefulWidget {
   final ImageType imageType;
@@ -125,9 +126,10 @@ class _ImageViewerPage extends State<ImageViewerPage>{
                             setState(() {
                               downloading = true;
                             });
-                            if(await PermissionHandler().checkPermissionStatus(PermissionGroup.storage) != PermissionStatus.granted){
-                              Map<PermissionGroup, PermissionStatus> permission = await PermissionHandler().requestPermissions([PermissionGroup.storage]);
-                              if(permission[PermissionGroup.storage] != PermissionStatus.granted){
+
+                            if(! (await Permission.storage.status.isGranted)){//await Permission.checkPermissionStatus(PermissionGroup.storage) != PermissionStatus.granted){
+                              PermissionStatus permissionStatus = await Permission.storage.request();
+                              if(!permissionStatus.isGranted){
                                 setState(() {
                                   downloading = false;
                                 });
@@ -142,7 +144,7 @@ class _ImageViewerPage extends State<ImageViewerPage>{
                               var response = await  Dio().get(imageUrl, options: Options(responseType: ResponseType.bytes));
                               await ImageGallerySaver.saveImage(Uint8List.fromList(response.data));
                             }
-                            showToast(localize(context, key: "image_saved"), duration: Duration(seconds: 3));
+                            showToast(localize(context, key: "image_saved"), duration: 3.seconds);
                             setState(() {
                               downloading = false;
                             });

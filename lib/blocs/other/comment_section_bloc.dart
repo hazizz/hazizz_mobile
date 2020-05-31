@@ -97,7 +97,7 @@ class CommentSectionBloc extends Bloc<CommentSectionEvent, CommentSectionState> 
       if (event is CommentSectionFetchEvent) {
         try {
           yield CommentSectionWaitingState();
-          HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetTaskComments(p_taskId: taskId));
+          HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetTaskComments(pTaskId: taskId));
           if(hazizzResponse.isSuccessful){
             comments = hazizzResponse.convertedData;
             HazizzLogger.printLog("comments: $comments");
@@ -110,8 +110,7 @@ class CommentSectionBloc extends Bloc<CommentSectionEvent, CommentSectionState> 
           else if(hazizzResponse.isError){
             yield CommentSectionFailState(error: hazizzResponse.pojoError);
           }
-        } on Exception catch(e){
-        }
+        } catch(e){}
       }else if(event is CommentSectionLoadedEvent){
         yield CommentSectionLoadedState(items: event.items);
       }
@@ -125,7 +124,7 @@ class CommentSectionBloc extends Bloc<CommentSectionEvent, CommentSectionState> 
 //endregion
 
 class CommentBlocs{
-  int taskId;
+  final int taskId;
 
   CommentSectionBloc commentSectionBloc;
   CommentWriterBloc commentWriterBloc;
@@ -191,15 +190,15 @@ class CommentWriterErrorState extends CommentWriterState {
 class CommentWriterBloc extends Bloc<CommentWriterEvent,  CommentWriterState> {
   final TextEditingController commentController = TextEditingController();
 
-  int taskId;
+  final int taskId;
 
-  CommentSectionBloc commentSectionBloc;
+  final CommentSectionBloc commentSectionBloc;
 
   String content;
 
-  bool enabled = true;
+  final bool enabled;
 
-  CommentWriterBloc({@required this.taskId, @required this.commentSectionBloc, @required this.enabled}){
+  CommentWriterBloc({@required this.taskId, @required this.commentSectionBloc, @required this.enabled = true}){
     commentController.addListener((){
       content = commentController.text;
       if(content.length > 0 && this.state is CommentWriterEmptyState){
@@ -232,7 +231,7 @@ class CommentWriterBloc extends Bloc<CommentWriterEvent,  CommentWriterState> {
           yield CommentWriterEmptyState();
         }else {
           HazizzResponse hazizzResponse = await RequestSender().getResponse(
-              CreateTaskComment(p_taskId: taskId, b_content: content));
+              CreateTaskComment(pTaskId: taskId, bContent: content));
           if(hazizzResponse.isSuccessful) {
             commentController.clear();
             commentSectionBloc.add(CommentSectionFetchEvent());

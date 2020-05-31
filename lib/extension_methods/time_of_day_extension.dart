@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/extension_methods/duration_extension.dart';
 
 extension TimeOfDayExtension on TimeOfDay {
   String get hazizzFormat{
@@ -9,7 +10,7 @@ extension TimeOfDayExtension on TimeOfDay {
 
   Duration compare(TimeOfDay other){
     int minutesDifference = other.inMinutes - this.inMinutes;
-    Duration inDuration = Duration(minutes: minutesDifference);
+    Duration inDuration = minutesDifference.minutes;
 
     return inDuration;
   }

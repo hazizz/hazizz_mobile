@@ -46,6 +46,7 @@ import 'invite_link_dialog.dart';
 import 'join_group_dialog.dart';
 import 'kick_group_member_dialog.dart';
 import "package:mobile/extension_methods/string_first_upper_extension.dart";
+import 'package:mobile/extension_methods/duration_extension.dart';
 
 // 280 min width
 class HazizzDialog extends Dialog{
@@ -560,7 +561,7 @@ Future<bool> showDeleteTaskDialog(context, {@required int taskId}) async {
                 if(!pressed) {
                   pressed = true;
                   HazizzResponse response = await RequestSender().getResponse(
-                      DeleteTask(taskId: taskId));
+                      DeleteTask(pTaskId: taskId));
                   if(response.isSuccessful) {
                     success = true;
                   }
@@ -602,16 +603,6 @@ Future<PojoSubject> showEditSubjectDialog(context, {@required PojoSubject subjec
   });
 }
 
-class CircularRectTween extends RectTween {
-  CircularRectTween({Rect begin, Rect end})
-      : super(begin: begin, end: end) {}
-
-  @override
-  Rect lerp(double t) {
-    //Add implementation here
-    print(t); //Returns value from 0.0 to 1.0.
-  }
-}
 
 Future<Widget> showGradeDialog(context, {@required PojoGrade grade}) {
   Widget getGradeAvatar(){
@@ -1405,7 +1396,7 @@ Future<bool> showMarkdownInfo(context,) async {
       barrierLabel: MaterialLocalizations.of(context)
           .modalBarrierDismissLabel,
       barrierColor: Colors.black45,
-      transitionDuration: const Duration(milliseconds: 200),
+      transitionDuration: 200.milliseconds,
       pageBuilder: (BuildContext buildContext,
           Animation animation,
           Animation secondaryAnimation) {

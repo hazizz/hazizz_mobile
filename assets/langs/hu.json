@@ -89,6 +89,12 @@
   "auto_download_image":"Automatikus kép letöltés a feladatokban",
   "enable_ads":"Reklámok engedélyezése",
   "enable_performance_overlay":"Performance overlay bekapcsolása",
+
+  "enable_flutter_error_catcher":"Exception catcher bekapcsolása",
+
+  "caught_exceptions":"Caught exceptions",
+
+  "dismiss":"Elvetés",
   "ad":"Reklám",
   "language":"Nyelv",
   "profile_editor":"Profil szerkesztő",

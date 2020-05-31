@@ -7,7 +7,6 @@ import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'package:mobile/communication/request_sender.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 // TODO rewrite this mess
 
@@ -26,16 +25,13 @@ class TheraTaskItemWidget extends StatelessWidget  {
   PojoTag mainTag;
   Color mainColor = Colors.grey;
 
+  List<PojoTag> tags = [];
+
   TheraTaskItemWidget(this.task, {Key key}) : super(key: key) {
-
-    List<PojoTag> tags = [];
-    if(task.tags != null && tags != null){
-      tags.addAll(task.tags);
-    }
-
     bool doBreak = false;
-
     if(task.tags != null){
+      tags.addAll(task.tags);
+
       for(PojoTag t in task.tags) {
         if(!doBreak){
           for(PojoTag defT in PojoTag.defaultTags) {
@@ -63,7 +59,7 @@ class TheraTaskItemWidget extends StatelessWidget  {
       elevation: 5,
       child: InkWell(
         onTap: () async {
-          dynamic editedTask = await Navigator.pushNamed(context, "/viewTask", arguments: task.copy());
+          await Navigator.pushNamed(context, "/viewTask", arguments: task.copy());
         },
         child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,7 +89,7 @@ class TheraTaskItemWidget extends StatelessWidget  {
                                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),),
                                 )
                             ),
-                            for (PojoTag t in task.tags) Padding(
+                            for (PojoTag t in tags) Padding(
                               padding: const EdgeInsets.only(top: 2, left:2),
                               child: Container(
                                 decoration: BoxDecoration(
@@ -217,11 +213,11 @@ class TheraTaskItemWidget extends StatelessWidget  {
                                             ),
                                           );
                                         },
+
                                         onTapLink: (String url) async {
-                                          if (await canLaunch(url)) {
-                                            await launch(url);
-                                          }
+                                          await Navigator.pushNamed(context, "/viewTask", arguments: task.copy());
                                         },
+
                                         styleSheet: MarkdownStyleSheet(
                                           p:  TextStyle(fontFamily: "Nunito", fontSize: 14, color: textColor),
                                           h1: TextStyle(fontFamily: "Nunito", fontSize: 26, color: textColor),
@@ -248,7 +244,7 @@ class TheraTaskItemWidget extends StatelessWidget  {
                   children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.only(top: 1, right: 6),
-                      child: Text(task.creator.displayName, style: theme(context).textTheme.subtitle,),
+                      child: Text(task.creator.displayName, style: theme(context).textTheme.subtitle2,),
                     ),
                   ],
                 )
@@ -288,19 +284,17 @@ class _TaskItemWidget extends State<TaskItemWidget>  {
     pojoTask = widget.originalPojoTask;
     isCompleted = pojoTask.completed;
 
-    List<PojoTag> tags = [];
-    if(pojoTask.tags != null && tags != null){
-      tags.addAll(pojoTask.tags);
-    }
-
     bool doBreak = false;
 
     if(pojoTask.tags != null){
-      for(PojoTag t in pojoTask.tags) {
+      tags.addAll(pojoTask.tags);
+
+      for(int i = 0; i < tags.length; i++) {
+        PojoTag t = pojoTask.tags[i];
         if(!doBreak){
           for(PojoTag defT in PojoTag.defaultTags) {
             if(defT.name == t.name) {
-              tags.remove(t);
+              tags.removeAt(i);
               mainTag = t;
               mainColor = t.getColor();
               doBreak = true;
@@ -312,6 +306,9 @@ class _TaskItemWidget extends State<TaskItemWidget>  {
         }
       }
     }
+
+    HazizzLogger.printLog("msgasdsd " + tags.join(", "));
+
     super.initState();
   }
 
@@ -320,10 +317,26 @@ class _TaskItemWidget extends State<TaskItemWidget>  {
     super.dispose();
   }
 
+  void onTap() async {
+    dynamic editedTask = await Navigator.pushNamed(context, "/viewTask", arguments: pojoTask.copy());
+    if(editedTask != null){
+      HazizzLogger.printLog("old task: ${pojoTask.toJson()}");
+      HazizzLogger.printLog("edited task: ${editedTask.toJson()}");
+
+      if(pojoTask.completed != editedTask.completed){
+        widget.onCompletedChanged();
+      }
+      if(mounted){
+        setState(() {
+          pojoTask = editedTask;
+        });
+      }
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
-
     /*
     List<Widget> tagWidgets = List();
 
@@ -362,22 +375,7 @@ class _TaskItemWidget extends State<TaskItemWidget>  {
       clipBehavior: Clip.antiAliasWithSaveLayer,
       elevation: 5,
       child: InkWell(
-        onTap: () async {
-          dynamic editedTask = await Navigator.pushNamed(context, "/viewTask", arguments: pojoTask.copy());
-          if(editedTask != null){
-            HazizzLogger.printLog("old task: ${pojoTask.toJson()}");
-            HazizzLogger.printLog("edited task: ${editedTask.toJson()}");
-
-            if(pojoTask.completed != editedTask.completed){
-              widget.onCompletedChanged();
-            }
-            if(mounted){
-              setState(() {
-                pojoTask = editedTask;
-              });
-            }
-          }
-        },
+        onTap: onTap,
         child: Stack(
           children: <Widget>[
             if(pojoTask.assignation.name != "THERA") Positioned(
@@ -399,7 +397,7 @@ class _TaskItemWidget extends State<TaskItemWidget>  {
                           widget.onCompletedChanged();
                         }
                       });
-                      await RequestSender().getResponse(SetTaskCompleted(p_taskId: widget.originalPojoTask.id, setCompleted: isCompleted));
+                      await RequestSender().getResponse(SetTaskCompleted(pTaskId: widget.originalPojoTask.id, setCompleted: isCompleted));
                     }),
                   );
                 },
@@ -558,11 +556,11 @@ class _TaskItemWidget extends State<TaskItemWidget>  {
                                             ),
                                           );
                                         },
+
                                         onTapLink: (String url) async {
-                                          if (await canLaunch(url)) {
-                                            await launch(url);
-                                          }
+                                          onTap();
                                         },
+
                                         styleSheet: MarkdownStyleSheet(
                                           p:  TextStyle(fontFamily: "Nunito", fontSize: 14, color: textColor),
                                           h1: TextStyle(fontFamily: "Nunito", fontSize: 26, color: textColor),

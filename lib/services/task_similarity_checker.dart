@@ -41,7 +41,6 @@ List<TaskSimilarity> checkTaskSimilarity(String description, int subjectId, Date
 
     matches[0].toString();
 
-
     List<String> charsToReplace = ["#", "*", "_", "!", "\n", ];
 
     charsToReplace.forEach((char) => newDescription.replaceAll(char, ""));
@@ -49,7 +48,7 @@ List<TaskSimilarity> checkTaskSimilarity(String description, int subjectId, Date
     charsToReplace.forEach((char) => otherDescription.replaceAll(char, ""));
 
     double similarity = similarityChecker.normalizedDistance(newDescription, otherDescription);
-    HazizzLogger.printLog("log: lull22: ${similarity}");
+    HazizzLogger.printLog("log: lull22: $similarity");
 
     double similarityPercent = (1 - similarity) *100;
 
@@ -57,6 +56,5 @@ List<TaskSimilarity> checkTaskSimilarity(String description, int subjectId, Date
       similarTasks.add(TaskSimilarity(similarityPercent, t));
     }
   }
-
   return similarTasks;
 }

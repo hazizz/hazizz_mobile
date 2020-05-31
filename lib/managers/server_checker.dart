@@ -1,4 +1,4 @@
-import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/blocs/other/flush_bloc.dart';
+import 'package:mobile/blocs/other/flush_bloc.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/communication/pojos/PojoTheraHealth.dart';
 import 'package:mobile/communication/request_sender.dart';
@@ -62,7 +62,6 @@ class ServerChecker{
     HazizzResponse hazizzResponse = await getResponse(PingTheraServer());
     if(hazizzResponse != null && hazizzResponse.isSuccessful){
       PojoTheraHealth theraHealth = hazizzResponse.convertedData;
-
       if(theraHealth.status == "UP"){
         theraOnline = true;
         print("asdds1: ${theraHealth.components.theraHealthManager.details.kretaSuccessRate}");
@@ -70,10 +69,7 @@ class ServerChecker{
 
         kretaSuccessRate = theraHealth.components.theraHealthManager.details.kretaSuccessRate;
         kretaRequestsInLastHour = theraHealth.components.theraHealthManager.details.kretaRequestsInLastHour;
-
       }
-
-
     }else{
       if(notifyFlush) FlushBloc().add(FlushTheraServerUnavailableEvent());
       theraOnline = false;

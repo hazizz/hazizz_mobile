@@ -65,8 +65,8 @@ class _SubjectItemWidget extends State<SubjectItemWidget>{
                             });
 
                             HazizzResponse hazizzResponse = subject.subscribed
-                                ? await RequestSender().getResponse(SubscribeToSubject(p_subjectId: subject.id))
-                                : await RequestSender().getResponse(UnsubscribeFromSubject(p_subjectId: subject.id));
+                              ? await RequestSender().getResponse(SubscribeToSubject(pSubjectId: subject.id))
+                              : await RequestSender().getResponse(UnsubscribeFromSubject(pSubjectId: subject.id));
                             if(hazizzResponse.isSuccessful){
                               if(subject.subscribed){
                                 showSubscribedToSubjectFlushBar(context, what: subject.name);

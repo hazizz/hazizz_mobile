@@ -44,7 +44,7 @@ class KretaGradeStatisticsWaitingState extends KretaGradeStatisticsState {
 }
 
 class KretaGradeStatisticsLoadedState extends KretaGradeStatisticsState {
-  final List<PojoGradeAvarage> gradeAvarages;
+  final List<PojoGradeAverage> gradeAvarages;
 
   KretaGradeStatisticsLoadedState(this.gradeAvarages) : assert(gradeAvarages!= null), super([gradeAvarages, SelectedSessionBloc().selectedSession]);
   @override
@@ -53,7 +53,7 @@ class KretaGradeStatisticsLoadedState extends KretaGradeStatisticsState {
 }
 
 class KretaGradeStatisticsLoadedCacheState extends KretaGradeStatisticsState {
-  final List<PojoGradeAvarage> gradeAvarages;
+  final List<PojoGradeAverage> gradeAvarages;
   KretaGradeStatisticsLoadedCacheState(this.gradeAvarages) : assert(gradeAvarages!= null), super([gradeAvarages, SelectedSessionBloc().selectedSession]);
   @override
   String toString() => 'KretaGradeStatisticsLoadedCacheState';
@@ -73,8 +73,8 @@ class KretaGradeStatisticsErrorState extends KretaGradeStatisticsState {
 //region KretaGradeStatisticsBloc
 class KretaGradeStatisticsBloc extends Bloc<KretaGradeStatisticsEvent, KretaGradeStatisticsState> {
 
-  List<PojoGradeAvarage> gradeAvarages = List();
-  Map<String, PojoGradeAvarage> gradeAvaragesBySubject = Map();
+  List<PojoGradeAverage> gradeAvarages = List();
+  Map<String, PojoGradeAverage> gradeAvaragesBySubject = Map();
 
 
 

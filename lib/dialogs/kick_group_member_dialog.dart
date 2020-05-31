@@ -75,8 +75,9 @@ class _KickGroupMemberDialog extends State<KickGroupMemberDialog> {
                   setState(() {
                     isLoading = true;
                   });
-                  HazizzResponse hazizzResponse = await RequestSender().getResponse(KickGroupMember(p_groupId: widget.groupId, p_userId: widget.user.id));
-
+                  HazizzResponse hazizzResponse = await RequestSender().getResponse(
+                    KickGroupMember(pGroupId: widget.groupId, pUserId: widget.user.id)
+                  );
 
                   if(hazizzResponse.isSuccessful){
                     Navigator.pop(context, true);
@@ -85,13 +86,11 @@ class _KickGroupMemberDialog extends State<KickGroupMemberDialog> {
                   setState(() {
                     isLoading = false;
                   });
-
                 },
               )
             ],);
           }
           return Container();
-
         })
     );
     return dialog;

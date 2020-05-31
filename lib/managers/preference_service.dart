@@ -24,6 +24,8 @@ class PreferenceService{
   static const String _key_serverUrl = "_key_serverUrl";
 
   static const String _key_enable_show_framerate = "_key_enable_show_framerate";
+  static const String _key_enable_exception_catcher = "_key_enable_exception_catcher";
+
 
   static const int tasksPage = 0;
   static const int schedulePage = 1;
@@ -40,6 +42,7 @@ class PreferenceService{
   static String serverUrl = Constants.BASE_URL;
 
   static bool enabledShowFramerate = false;
+  static bool enabledExceptionCatcher = false;
 
 
 
@@ -51,6 +54,7 @@ class PreferenceService{
     imageAutoDownload = await getImageAutoDownload();
     enabledAd = await getEnabledAd();
     enabledShowFramerate = await getEnabledShowFramerate();
+    enabledExceptionCatcher = await getEnabledExceptionCatcher();
   }
 
 
@@ -146,6 +150,20 @@ class PreferenceService{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     enabledShowFramerate = enable;
     prefs.setBool(_key_enable_show_framerate, enable);
+  }
+
+
+
+  static Future<bool> getEnabledExceptionCatcher()async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool enable = prefs.getBool(_key_enable_exception_catcher);
+    enabledExceptionCatcher = enable == null ? false : enable;
+    return enabledExceptionCatcher;
+  }
+  static Future setEnabledExceptionCatcher(bool enable)async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    enabledExceptionCatcher = enable;
+    prefs.setBool(_key_enable_exception_catcher, enable);
   }
 
 }

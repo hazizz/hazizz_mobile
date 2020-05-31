@@ -4,7 +4,7 @@ import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/hazizz_response.dart';
-import 'package:mobile/services/firebase_analytics.dart';
+import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/firebase_analytics.dart';
 import 'dialog_collection.dart';
 
 class SureToJoinGroupDialog extends StatefulWidget {
@@ -30,7 +30,7 @@ class _SureToJoinGroupDialog extends State<SureToJoinGroupDialog> {
     setState(() {
       isLoading = true;
     });
-    RequestSender().getResponse(RetrieveGroup.withoutMe(p_groupId: widget.groupId)).then((HazizzResponse hazizzResponse){
+    RequestSender().getResponse(RetrieveGroup.withoutMe(pGroupId: widget.groupId)).then((HazizzResponse hazizzResponse){
       if(hazizzResponse.isSuccessful){
         group = hazizzResponse.convertedData;
         if(group.userCount == group.userCountWithoutMe){
@@ -131,7 +131,7 @@ class _SureToJoinGroupDialog extends State<SureToJoinGroupDialog> {
                 setState(() {
                   isLoading = true;
                 });
-                HazizzResponse hazizzResponse = await RequestSender().getResponse(JoinGroup(p_groupId: group.id));
+                HazizzResponse hazizzResponse = await RequestSender().getResponse(JoinGroup(pGroupId: group.id));
 
                 if(hazizzResponse.isSuccessful){
                   FirebaseAnalyticsManager.logJoinGroup(widget.groupId);

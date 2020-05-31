@@ -6,8 +6,8 @@ part of 'PojoGradeAvarage.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-PojoGradeAvarage _$PojoGradeAvarageFromJson(Map<String, dynamic> json) {
-  return PojoGradeAvarage(
+PojoGradeAverage _$PojoGradeAvarageFromJson(Map<String, dynamic> json) {
+  return PojoGradeAverage(
     subject: json['subject'] as String,
     grade: (json['grade'] as num)?.toDouble(),
     classGrade: (json['classGrade'] as num)?.toDouble(),
@@ -15,7 +15,7 @@ PojoGradeAvarage _$PojoGradeAvarageFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$PojoGradeAvarageToJson(PojoGradeAvarage instance) =>
+Map<String, dynamic> _$PojoGradeAvarageToJson(PojoGradeAverage instance) =>
     <String, dynamic>{
       'subject': instance.subject,
       'grade': instance.grade,

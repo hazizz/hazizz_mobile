@@ -82,9 +82,9 @@ class CreateGroupBloc extends Bloc<CreateGroupEvent, CreateGroupState> {
       HazizzResponse hazizzResponse;
 
       if(event.groupType == GroupTypeEnum.CLOSED){
-        hazizzResponse = await getResponse(CreateGroup.closed(b_groupName: event.groupName));
+        hazizzResponse = await getResponse(CreateGroup.closed(bGroupName: event.groupName));
       }else{
-        hazizzResponse = await getResponse(CreateGroup.open(b_groupName: event.groupName));
+        hazizzResponse = await getResponse(CreateGroup.open(bGroupName: event.groupName));
       }
 
       if(hazizzResponse.isSuccessful){

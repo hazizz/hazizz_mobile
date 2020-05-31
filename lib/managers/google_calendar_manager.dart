@@ -81,13 +81,13 @@ class GoogleCalendarManager {
       ..creator = (EventCreator()..displayName = task.creator.displayName)
       ..summary = "Házizz - ${task.tags[0].getDisplayNameAsync()} - ${task.subject.name}"
       ..attachments = [EventAttachment()
-                        ..fileUrl = "https://drive.google.com/open?id=1XyEugm8YWGYPWQA8zXzXi1rseiaIROoC"
-                        ..title = "Hazizz image"
-                        ..mimeType = "image/jpg"
-                        ,
-                      ]
+        ..fileUrl = "https://drive.google.com/open?id=1XyEugm8YWGYPWQA8zXzXi1rseiaIROoC"
+        ..title = "Hazizz image"
+        ..mimeType = "image/jpg"
+        ,
+      ]
       ..iCalUID = "hazizz_task3"
     ;
-    await calendarApi.events.insert(hazizzTaskEvent, "primary", sendNotifications: true, );
+    await calendarApi.events.insert(hazizzTaskEvent, "primary", sendNotifications: true);
   }
 }

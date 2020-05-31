@@ -88,6 +88,12 @@
   "auto_download_image":"Automatically download images in tasks, if opened",
   "enable_ads":"Enable ads",
   "enable_performance_overlay":"Enable performance overlay",
+
+  "enable_flutter_error_catcher":"Enable exception catcher",
+
+  "caught_exceptions":"Caught exceptions",
+
+  "dismiss":"Dismiss",
   "ad":"Ad",
   "preferences":"Preferences",
   "language":"Language",

@@ -119,20 +119,20 @@ class ProfilePictureBloc extends Bloc<ProfilePictureEvent, ProfilePictureState> 
 
     if(event is ProfilePictureGetEvent) {
       yield ProfilePictureWaitingState();
-      String str_profilePicture = await CacheManager.getMyProfilePicture();
-      if(str_profilePicture == null){
+      String strProfilePicture = await CacheManager.getMyProfilePicture();
+      if(strProfilePicture == null){
         HazizzLogger.printLog("baj van fönök: 1");
 
         HazizzResponse hazizzResponse = await RequestSender().getResponse(GetMyProfilePicture.full());
 
         if(hazizzResponse.isSuccessful){
-          str_profilePicture = hazizzResponse.convertedData;
+          strProfilePicture = hazizzResponse.convertedData;
 
         }
       }
 
-      if(str_profilePicture != null){
-        profilePictureBytes = ImageOperations.fromBase64ToBytesImage(str_profilePicture);
+      if(strProfilePicture != null){
+        profilePictureBytes = ImageOperations.fromBase64ToBytesImage(strProfilePicture);
         yield ProfilePictureLoadedState();
       }
 
@@ -421,7 +421,7 @@ class DisplayNameBloc extends Bloc<DisplayNameEvent, DisplayNameState> {
     if(event is DisplayNameSetEvent) {
       yield DisplayNameWaitingState();
       HazizzResponse hazizzResponse = await RequestSender().getResponse(
-          new UpdateMyDisplayName(b_displayName: event.newDisplayName));
+          new UpdateMyDisplayName(bDisplayName: event.newDisplayName));
       if(hazizzResponse.isSuccessful) {
 
         PojoMeInfo meInfo = hazizzResponse.convertedData;
@@ -447,45 +447,6 @@ class DisplayNameBloc extends Bloc<DisplayNameEvent, DisplayNameState> {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 abstract class MyUserDataState extends HState {
   MyUserDataState([List props = const []]) : super(props);
 }
@@ -506,10 +467,8 @@ class MyUserDataRefreshEvent extends MyUserDataEvent {
 }
 
 class MyUserDataChangeDisplaynameEvent extends MyUserDataEvent {
-  String displayName;
-  MyUserDataChangeDisplaynameEvent({this.displayName}) : super([displayName]){
-
-  }
+  final String displayName;
+  MyUserDataChangeDisplaynameEvent({this.displayName}) : super([displayName]);
   @override
   String toString() => 'MyUserDataChangeDisplaynameEvent';
   List<Object> get props => [displayName];

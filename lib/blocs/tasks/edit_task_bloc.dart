@@ -11,7 +11,6 @@ import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:meta/meta.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/custom/image_operations.dart';
-import 'package:mobile/defaults/pojo_subject_empty.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/managers/app_state_restorer.dart';
@@ -123,7 +122,7 @@ class TaskEditBloc extends TaskMakerBloc {
         yield TaskMakerWaitingState();
 
         //region send
-        int subjectId;
+
         List<String> tags = List();
         DateTime deadline;
         String description;
@@ -133,9 +132,7 @@ class TaskEditBloc extends TaskMakerBloc {
         taskTagBloc.pickedTags.forEach((f){tags.add(f.name);});
 
 
-        if(subject != null){
-          subjectId = subject.id;
-        }
+
 
         DateTimePickerState deadlineState = deadlineBloc.state;
         if(deadlineState is DateTimePickedState) {
@@ -182,11 +179,11 @@ class TaskEditBloc extends TaskMakerBloc {
         HazizzResponse hazizzResponse;
 
         hazizzResponse = await getResponse(new EditTask(
-          taskId: taskToEdit.id,
-          b_tags: tags,
-          b_description: description /*+ imageUrls*/ + newImageUrlsDesc,
-          b_deadline: deadline,
-          b_salt: event.salt
+          pTaskId: taskToEdit.id,
+          bTags: tags,
+          bDescription: description /*+ imageUrls*/ + newImageUrlsDesc,
+          bDeadline: deadline,
+          bSalt: event.salt
         ));
 
 

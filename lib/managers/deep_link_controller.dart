@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/widgets.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/dialogs/dialog_collection.dart';
@@ -17,24 +16,23 @@ class DeepLinkController{
 
       HazizzLogger.printLog("sadsadasd " + deepLink.pathSegments[1]);
       if(deepLink.pathSegments[0] == "groups" /*||  deepLink.queryParameters.containsKey("group") || deepLink.queryParameters.containsKey("groups")*/){
-       // String str_groupId = deepLink.queryParameters["groups"];
-        String str_groupId = deepLink.pathSegments[1];
+        String strGroupId = deepLink.pathSegments[1];
 
-        if(str_groupId == null || str_groupId == ""){
-          str_groupId = deepLink.pathSegments[deepLink.pathSegments.length-1];
+        if(strGroupId == null || strGroupId == ""){
+          strGroupId = deepLink.pathSegments[deepLink.pathSegments.length-1];
         }
-        int groupId = int.parse(str_groupId);
+        int groupId = int.parse(strGroupId);
         if(groupId != null){
           await showSureToJoinGroupDialog(context, groupId: groupId);
           HazizzLogger.printLog("showed showSureToJoinGroupDialog");
         }
       }else if(deepLink.queryParameters.containsKey("task")) {
-        String str_taskId = deepLink.queryParameters["task"];
+        String strTaskId = deepLink.queryParameters["task"];
 
-        if(str_taskId == null || str_taskId == "") {
-          str_taskId = deepLink.pathSegments[deepLink.pathSegments.length - 1];
+        if(strTaskId == null || strTaskId == "") {
+          strTaskId = deepLink.pathSegments[deepLink.pathSegments.length - 1];
         }
-        int taskId = int.parse(str_taskId);
+        int taskId = int.parse(strTaskId);
         if(taskId != null) {
           Navigator.pushNamed(context, "/viewTask", arguments: taskId);
         }

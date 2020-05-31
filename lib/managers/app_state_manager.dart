@@ -1,10 +1,12 @@
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mobile/blocs/auth/facebook_login_bloc.dart';
 import 'package:mobile/blocs/auth/google_login_bloc.dart';
 import 'package:mobile/blocs/auth/social_login_bloc.dart';
 import 'package:mobile/blocs/kreta/sessions_bloc.dart';
+import 'package:mobile/blocs/other/flush_bloc.dart';
 import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/user_data_bloc.dart';
 import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
@@ -18,16 +20,17 @@ import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/managers/preference_service.dart';
 import 'package:mobile/managers/server_checker.dart';
-import 'package:mobile/navigation/business_navigator.dart';
-import 'package:mobile/services/firebase_analytics.dart';
+import 'package:mobile/navigation/route_generator.dart';
+import 'package:mobile/services/flutter_error_collector.dart';
+import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/firebase_analytics.dart';
 import 'package:mobile/storage/caches/data_cache.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:mobile/custom/hazizz_app_info.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/managers/kreta_session_manager.dart';
 import 'package:mobile/managers/token_manager.dart';
 import 'package:mobile/storage/cache_manager.dart';
+import 'package:mobile/extension_methods/duration_extension.dart';
 
 class AppState{
   static const key_newComer = "key_newComer";
@@ -54,8 +57,6 @@ class AppState{
 
     HazizzLogger.printLog("logInProcedure: 3");
 
-  //  HazizzNotification.scheduleNotificationAlarmManager();
-
     HazizzResponse hazizzResponse = await RequestSender().getResponse(GetMyInfo.private());
     if(hazizzResponse.isSuccessful){
       PojoMyDetailedInfo myDetailedInfo = hazizzResponse.convertedData;
@@ -69,17 +70,6 @@ class AppState{
     }
     HazizzLogger.printLog("logInProcedure: 4");
 
-    /*
-    HazizzLogger.printLog("baj van fönök: 4");
-    RequestSender().getResponse(GetMyProfilePicture.full()).then((HazizzResponse hazizzResponse){
-      if(hazizzResponse.isSuccessful){
-        String base64Image = hazizzResponse.convertedData;
-        CacheManager.setMyProfilePicture(base64Image);
-      }
-    });
-    */
-
-
     logInProcedureDone = true;
   }
 
@@ -89,7 +79,12 @@ class AppState{
     await HazizzAppInfo().initalize();
     await Connection.listener();
     Crashlytics.instance.enableInDevMode = false;
-    FlutterError.onError = Crashlytics.instance.recordFlutterError;
+    FlutterError.onError = (FlutterErrorDetails details){
+      FlutterErrorCollector.add(details);
+    //  FlushBloc().add(FlushFlutterErrorEvent(details));
+      Crashlytics.instance.recordFlutterError(details);
+    };
+   // for(int i = 0; i < 14; i++){Crashlytics().crash();}
     await AndroidAlarmManager.initialize();
   }
 
@@ -97,7 +92,7 @@ class AppState{
     HazizzLogger.printLog("mainAppPartStartProcedure 0");
    // UserDataBlocs().initialize();
    // await TokenManager.fetchRefreshTokens(username: (await InfoCache.getMyUserData()).username, refreshToken: await TokenManager.getRefreshToken());
-    Future.delayed(Duration(seconds: 3)).then((_) => ServerChecker.checkAll());
+    Future.delayed(3.seconds).then((_) => ServerChecker.checkAll());
   //  RequestSender._internal();
     HazizzLogger.printLog("mainAppPartStartProcedure 1");
     await KretaSessionManager.loadSelectedSession();
@@ -135,8 +130,6 @@ class AppState{
     setDisallowedGDrive();
     RequestSender().clearAllRequests();
     RequestSender().unlock();
-
-
   }
 
   static Future logout() async {
@@ -148,6 +141,14 @@ class AppState{
     }
   }
 
+  static Future applicationQuitProcedure() async {
+    await logoutProcedure();
+    var sh = await SharedPreferences.getInstance();
+    bool isLoggedIn = sh.getBool(key_isLoggedIn);
+    if(!isLoggedIn){
+      BusinessNavigator().state().pushNamedAndRemoveUntil('login', (Route<dynamic> route) => false);
+    }
+  }
 
 
   static Future<bool> isLoggedIn() async {

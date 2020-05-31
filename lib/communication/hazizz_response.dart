@@ -13,7 +13,7 @@ import 'package:mobile/custom/custom_exception.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/managers/app_state_manager.dart';
 import 'package:mobile/managers/token_manager.dart';
-import 'package:mobile/services/firebase_analytics.dart';
+import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/firebase_analytics.dart';
 
 import 'custom_response_errors.dart';
 
@@ -30,12 +30,11 @@ class HazizzResponse{
   dynamic convertedData;
 
   DioError dioError;
-
   PojoError pojoError;
 
   HazizzResponse._();
 
-  static HazizzResponse onSuccess({@required Response response, @required Request request}){
+  static HazizzResponse initSuccess({@required Response response, @required Request request}){
     HazizzResponse hazizzResponse = new HazizzResponse._();
     hazizzResponse.response = response;
     hazizzResponse.request = request;
@@ -52,11 +51,10 @@ class HazizzResponse{
     if(request is TheraRequest && KretaStatusBloc().state is KretaStatusUnavailableState){
       KretaStatusBloc().add(KretaStatusAvailableEvent());
     }
-
     return hazizzResponse;
   }
 
-  static Future<HazizzResponse> onError({@required DioError dioError, @required Request request})async{
+  static Future<HazizzResponse> initError({@required DioError dioError, @required Request request})async{
     HazizzResponse hazizzResponse = new HazizzResponse._();
     hazizzResponse.dioError = dioError;
     hazizzResponse.response = dioError.response;
@@ -73,7 +71,7 @@ class HazizzResponse{
     return hazizzResponse;
   }
 
-  onErrorResponse()async {
+  Future<void> onErrorResponse()async {
     if(response != null && response?.data != null && response?.data != "") {
       HazizzLogger.printLog("göfguiea:." + response.data + ".");
       pojoError = PojoError.fromJson(json.decode(response?.data));
@@ -117,7 +115,7 @@ class HazizzResponse{
             }
             /// elküldi újra ezt a requestet ami errort dobott
             RequestSender().refreshRequestQueue.add(request);
-            HazizzLogger.printLog("added request to refreshtoken list: ${request}");
+            HazizzLogger.printLog("added request to refreshtoken list: $request");
           }else {
             HazizzLogger.printLog("Still waiting for refresh token request response, saving the new request in the queue");
 
@@ -130,7 +128,7 @@ class HazizzResponse{
          // SelectedSessionBloc().add(SelectedSessionSetEvent(null));
           Crashlytics().recordError(CustomException("Tried authenticating a non existing session"), StackTrace.current, context: "Session is null");
           // TODO handle this
-          HazizzResponse hazizzResponse = await RequestSender().getResponse(KretaCreateSession(b_username: SelectedSessionBloc().selectedSession.username, b_password: SelectedSessionBloc().selectedSession.password, b_url: SelectedSessionBloc().selectedSession.url));
+          HazizzResponse hazizzResponse = await RequestSender().getResponse(KretaCreateSession(bUsername: SelectedSessionBloc().selectedSession.username, bPassword: SelectedSessionBloc().selectedSession.password, bUrl: SelectedSessionBloc().selectedSession.url));
           if(hazizzResponse.isSuccessful){
             PojoSession newSession = hazizzResponse.convertedData;
             SelectedSessionBloc().add(SelectedSessionSetEvent(newSession));

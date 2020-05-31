@@ -20,7 +20,7 @@ PojoGroupPermissions _$PojoGroupPermissionsFromJson(Map<String, dynamic> json) {
         ?.map((e) =>
             e == null ? null : PojoUser.fromJson(e as Map<String, dynamic>))
         ?.toList(),
-    null_permission: (json['NULL'] as List)
+    nullPermission: (json['NULL'] as List)
         ?.map((e) =>
             e == null ? null : PojoUser.fromJson(e as Map<String, dynamic>))
         ?.toList(),
@@ -33,5 +33,5 @@ Map<String, dynamic> _$PojoGroupPermissionsToJson(
       'OWNER': instance.owner,
       'MODERATOR': instance.moderator,
       'USER': instance.user,
-      'NULL': instance.null_permission,
+      'NULL': instance.nullPermission,
     };

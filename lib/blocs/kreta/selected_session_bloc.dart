@@ -135,7 +135,12 @@ class SelectedSessionBloc extends Bloc<SelectedSessionEvent, SelectedSessionStat
     else if (event is SelectedSessionInactiveEvent) {
       if(await KretaSessionManager.isRememberPassword()){
         HazizzLogger.printLog("SelectedSessionInactiveEvent but remembers password and logins again");
-        HazizzResponse hazizzResponse = await RequestSender().getResponse(KretaAuthenticateSession(p_session: selectedSession.id, b_password: selectedSession.password));
+        HazizzResponse hazizzResponse = await RequestSender().getResponse(
+          KretaAuthenticateSession(
+            pSession: selectedSession.id,
+            bPassword: selectedSession.password
+          )
+        );
         if(hazizzResponse.isSuccessful){
           PojoSession newSession = hazizzResponse.convertedData;
           newSession.password = selectedSession.password;

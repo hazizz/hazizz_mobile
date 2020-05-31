@@ -2,29 +2,43 @@ import 'package:flutter/material.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/managers/app_state_restorer.dart';
-import 'package:mobile/pages/kreta_pages/kreta_notes_page.dart';
-import 'package:mobile/pages/kreta_pages/kreta_statistics_page.dart';
-import 'package:mobile/pages/settings_page/about_page.dart';
-import 'package:mobile/pages/settings_page/developer_settings_page.dart';
-import 'package:mobile/pages/kreta_pages/kreta_session_selector_page.dart';
-import 'package:mobile/pages/settings_page/google_drive_settings_page.dart';
-import 'package:mobile/pages/settings_page/kreta_settings_page.dart';
-import 'package:mobile/pages/auth_pages/login_page.dart';
-import 'package:mobile/pages/settings_page/logs_page.dart';
-import 'package:mobile/pages/settings_page/notification_settings_page.dart';
-import 'package:mobile/pages/settings_page/preferences_settings_page.dart';
-import 'package:mobile/pages/tasks_page/task_calendar_page.dart';
-import 'package:mobile/pages/tasks_page/view_task_page.dart';
-import 'package:mobile/pages/group_pages/group_tab_hoster_page.dart';
-import 'package:mobile/pages/other_pages/intro_page.dart';
-import 'package:mobile/pages/kreta_pages/kreta_login_page.dart';
-import 'package:mobile/pages/main_pages/main_tab_hoster_page.dart';
-import 'package:mobile/pages/group_pages/my_groups_page.dart';
-import 'package:mobile/pages/settings_page/profile_editor_page.dart';
-import 'package:mobile/pages/settings_page/settings_page.dart';
-import 'package:mobile/pages/tasks_page/task_maker_page.dart';
-import 'package:mobile/pages/tasks_page/tomorrow_tasks_page.dart';
+import 'package:mobile/widgets/pages/auth_pages/login_page.dart';
+import 'package:mobile/widgets/pages/group_pages/group_tab_hoster_page.dart';
+import 'package:mobile/widgets/pages/group_pages/my_groups_page.dart';
+import 'package:mobile/widgets/pages/kreta_pages/kreta_login_page.dart';
+import 'package:mobile/widgets/pages/kreta_pages/kreta_notes_page.dart';
+import 'package:mobile/widgets/pages/kreta_pages/kreta_session_selector_page.dart';
+import 'package:mobile/widgets/pages/kreta_pages/kreta_statistics_page.dart';
+import 'package:mobile/widgets/pages/main_pages/main_tab_hoster_page.dart';
+import 'package:mobile/widgets/pages/other_pages/intro_page.dart';
+import 'package:mobile/widgets/pages/settings_page/about_page.dart';
+import 'package:mobile/widgets/pages/settings_page/developer_settings_page.dart';
+import 'package:mobile/widgets/pages/settings_page/flutter_error_page.dart';
+import 'package:mobile/widgets/pages/settings_page/google_drive_settings_page.dart';
+import 'package:mobile/widgets/pages/settings_page/kreta_settings_page.dart';
+import 'package:mobile/widgets/pages/settings_page/logs_page.dart';
+import 'package:mobile/widgets/pages/settings_page/notification_settings_page.dart';
+import 'package:mobile/widgets/pages/settings_page/preferences_settings_page.dart';
+import 'package:mobile/widgets/pages/settings_page/profile_editor_page.dart';
+import 'package:mobile/widgets/pages/settings_page/settings_page.dart';
+import 'package:mobile/widgets/pages/tasks_page/task_calendar_page.dart';
+import 'package:mobile/widgets/pages/tasks_page/task_maker_page.dart';
+import 'package:mobile/widgets/pages/tasks_page/tomorrow_tasks_page.dart';
+import 'package:mobile/widgets/pages/tasks_page/view_task_page.dart';
 
+class BusinessNavigator{
+  static final BusinessNavigator _singleton = new BusinessNavigator._internal();
+  factory BusinessNavigator() {
+    return _singleton;
+  }
+  BusinessNavigator._internal();
+
+  final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
+
+  NavigatorState state() {
+    return navigatorKey.currentState;
+  }
+}
 
 class RouteGenerator{
   static Route<dynamic> _errorRoute(String errorLog) {
@@ -73,6 +87,8 @@ class RouteGenerator{
         return MaterialPageRoute(builder: (_) => DeveloperSettingsPage());
       case '/settings/developer/logs':
         return MaterialPageRoute(builder: (_) => LogsPage());
+      case '/caught_exception_page':
+        return MaterialPageRoute(builder: (_) => CaughtExceptionsPage(flutterErrorDetails: args,));
       case '/settings/google_drive_settings':
         return MaterialPageRoute(builder: (_) => GoogleDriveSettingsPage());
 
@@ -103,8 +119,6 @@ class RouteGenerator{
         break;
       case '/calendarTasks':
         return MaterialPageRoute(builder: (_) => TaskCalendarPage());
-
-
       case '/kreta/login':
         return MaterialPageRoute(builder: (_) => KretaLoginPage(onSuccess: args));
       case '/kreta/login/auth': assert(args != null);

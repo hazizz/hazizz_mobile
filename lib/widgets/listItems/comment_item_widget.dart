@@ -64,7 +64,10 @@ class _CommentItemWidget extends State<CommentItemWidget>{
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(widget.comment.creator.displayName == null ? "displayName" : widget.comment.creator.displayName , style: TextStyle(fontSize: 20),),
+                            Text(widget.comment.creator.displayName == null
+                                ? "displayName" :
+                                widget.comment.creator.displayName,
+                              style: TextStyle(fontSize: 20),),
                           ]
                       ),
                     )
@@ -125,10 +128,15 @@ class _CommentItemWidget extends State<CommentItemWidget>{
                       icon: Icon(FontAwesomeIcons.ellipsisV, size: 20,),
                       onSelected: (value) async {
                         if(value == value_delete){
-                          await RequestSender().getResponse(DeleteComment(p_commentId: widget.comment.id));
+                          await RequestSender().getResponse(
+                            DeleteComment(pCommentId: widget.comment.id)
+                          );
                           ViewTaskBloc().commentBlocs.commentSectionBloc.add(CommentSectionFetchEvent());
                         }else if(value == "report"){
-                          bool success = await showReportDialog(context, reportType: ReportTypeEnum.COMMENT, id: widget.comment.id, secondId: widget.taskId, name: widget.comment.creator.displayName);
+                          bool success = await showReportDialog(context,
+                              reportType: ReportTypeEnum.COMMENT, id: widget.comment.id,
+                              secondId: widget.taskId, name: widget.comment.creator.displayName
+                          );
                           if(success != null && success){
                             showReportSuccessFlushBar(context, what: localize(context, key: "comment"));
                           }
@@ -139,7 +147,6 @@ class _CommentItemWidget extends State<CommentItemWidget>{
                       itemBuilder: (BuildContext context) {
                         return  menuItems;
                       },
-
                     );
                   }
                 )

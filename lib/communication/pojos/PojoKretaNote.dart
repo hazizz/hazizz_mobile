@@ -1,8 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-
 import 'Pojo.dart';
-import 'PojoClass.dart';
-
 part 'PojoKretaNote.g.dart';
 
 @JsonSerializable()

@@ -30,7 +30,7 @@ class _NoteItemWidget extends State<NoteItemWidget> with SingleTickerProviderSta
   void initState() {
     animationController = new AnimationController(
       vsync: this,
-      duration: new Duration(milliseconds: 2300 + Random().nextInt(500) ),
+      duration: Duration(milliseconds: 2300 + Random().nextInt(500) ),
     );
 
     animationController.forward();

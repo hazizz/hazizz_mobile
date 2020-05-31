@@ -20,7 +20,6 @@ class TaskMakerAppState implements Pojo{
   factory TaskMakerAppState.fromJson(Map<String, dynamic> json) =>
       _$TaskMakerAppStateFromJson(json);
 
-  @override
   Map<String, dynamic> toJson() => _$TaskMakerAppStateToJson(this);
 
 }

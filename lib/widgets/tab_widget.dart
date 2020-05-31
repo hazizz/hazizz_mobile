@@ -1,9 +1,9 @@
 import 'package:flutter/widgets.dart';
 
 abstract class TabWidget extends StatefulWidget {
-  String tabName;
+  final String tabName;
 
-  TabWidget({Key key}) : super(key: key);
+  TabWidget({Key key, @required this.tabName}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {

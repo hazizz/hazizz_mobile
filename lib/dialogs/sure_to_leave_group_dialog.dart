@@ -79,7 +79,9 @@ class _SureToLeaveGroupDialog extends State<SureToLeaveGroupDialog> {
                   setState(() {
                     isLoading = true;
                   });
-                  HazizzResponse hazizzResponse = await RequestSender().getResponse(LeaveGroup(p_groupId: widget.groupId));
+                  HazizzResponse hazizzResponse = await RequestSender().getResponse(
+                    LeaveGroup(pGroupId: widget.groupId)
+                  );
 
                   if(hazizzResponse.isSuccessful){
                     Navigator.pop(context, true);
@@ -87,7 +89,6 @@ class _SureToLeaveGroupDialog extends State<SureToLeaveGroupDialog> {
                   setState(() {
                     isLoading = false;
                   });
-
                 },
               )
             ],);

@@ -310,10 +310,11 @@ class DisplayNameEditorBloc extends Bloc<DisplayNameEvent, DisplayNameState> {
       yield DisplayNameLoadedFromCacheState(displayName: displayNameFromCache);
     }else if (event is DisplayNameSendEvent){
       if(this.state is DisplayNameChangedState){
-        HazizzResponse hazizzResponse = await getResponse(UpdateMyDisplayName(b_displayName: displayNameController.text));
+        HazizzResponse hazizzResponse = await getResponse(
+          UpdateMyDisplayName(bDisplayName: displayNameController.text)
+        );
 
         if(hazizzResponse.isSuccessful){
-
           PojoMeInfo meInfo = hazizzResponse.convertedData;
 
           displayNameController.text = meInfo.displayName;

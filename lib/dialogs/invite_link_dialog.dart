@@ -4,7 +4,7 @@ import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/pojos/PojoInviteLink.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/enums/group_types_enum.dart';
-import 'package:mobile/services/firebase_analytics.dart';
+import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/firebase_analytics.dart';
 import 'package:share/share.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/request_sender.dart';
@@ -29,7 +29,7 @@ class _InviteLinkDialog extends State<InviteLinkDialog> {
   @override
   void initState() {
 
-    RequestSender().getResponse(GetGroupInviteLinks(groupId: widget.group.id)).then((hazizzResponse) async {
+    RequestSender().getResponse(GetGroupInviteLinks(pGroupId: widget.group.id)).then((hazizzResponse) async {
       if(hazizzResponse.isSuccessful){
         List<PojoInviteLink> links = hazizzResponse.convertedData;
         if(links.isNotEmpty){
@@ -37,15 +37,14 @@ class _InviteLinkDialog extends State<InviteLinkDialog> {
             inviteLink = links[links.length-1].link;
           });
         }else{
-          HazizzResponse hazizzResponse = await RequestSender().getResponse(CreateGroupInviteLink(groupId: widget.group.id));
+          HazizzResponse hazizzResponse = await RequestSender().getResponse(
+            CreateGroupInviteLink(pGroupId: widget.group.id)
+          );
           PojoInviteLink newInviteLink = hazizzResponse.convertedData;
           setState(() {
             inviteLink = newInviteLink.link;
           });
         }
-
-       // inviteLink = hazizzResponse.response.headers.value("Location");
-
       }else{
         inviteLink = errorText;
       }
@@ -67,9 +66,6 @@ class _InviteLinkDialog extends State<InviteLinkDialog> {
 
   @override
   Widget build(BuildContext context) {
-
-
-
     HazizzDialog h = HazizzDialog(
         header:
         Container(

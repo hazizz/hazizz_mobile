@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'package:mobile/widgets/card_header_widget.dart';
 import 'package:mobile/extension_methods/datetime_extension.dart';
+import 'package:mobile/extension_methods/duration_extension.dart';
 
 class TaskHeaderItemWidget extends StatelessWidget{
   final DateTime dateTime;
@@ -12,7 +12,7 @@ class TaskHeaderItemWidget extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    Duration d = dateTime.difference(DateTime.now().subtract(Duration(days: 1)));
+    Duration d = dateTime.difference(DateTime.now().subtract(1.days));
     int days = d.inDays;
 
     Color backColor;

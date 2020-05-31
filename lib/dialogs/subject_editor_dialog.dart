@@ -68,15 +68,16 @@ class _SubjectEditorDialog extends State<SubjectEditorDialog> {
         child: Padding(
           padding: const EdgeInsets.all(5),
           child:
-          AutoSizeText(widget.subject == null ? localize(context, key: "create_subject") : localize(context, key: "edit_subject") ,
-              style: TextStyle(
-                fontSize: 30.0,
-                fontWeight: FontWeight.w800,
-              ),
-              maxLines: 1,
-              minFontSize: 20,
+          AutoSizeText(widget.subject == null
+            ? localize(context, key: "create_subject")
+            : localize(context, key: "edit_subject"),
+            style: TextStyle(
+              fontSize: 30.0,
+              fontWeight: FontWeight.w800,
+            ),
+            maxLines: 1,
+            minFontSize: 20,
             maxFontSize: 30,
-
           ),
         ),
       ),
@@ -93,7 +94,6 @@ class _SubjectEditorDialog extends State<SubjectEditorDialog> {
                           LengthLimitingTextInputFormatter(20),
                         ],
                         autofocus: true,
-
                         controller: _subjectTextEditingController,
                         textInputAction: TextInputAction.send,
                         decoration:
@@ -163,7 +163,6 @@ class _SubjectEditorDialog extends State<SubjectEditorDialog> {
               onPressed: !isLoading ? () async {
 
                 if(_subjectTextEditingController.text.length >= 2 && _subjectTextEditingController.text.length <= 20){
-
                   setState(() {
                     isLoading = true;
 
@@ -171,12 +170,12 @@ class _SubjectEditorDialog extends State<SubjectEditorDialog> {
 
                   HazizzResponse response = await getResponse(
                     widget.actionType == ActionTypeEnum.CREATE ?
-                      CreateSubject(p_groupId: widget.groupId,
-                          b_subjectName: _subjectTextEditingController.text,
-                          b_subscriberOnly: isSubscriberOnly)
-                    : UpdateSubject(p_subjectId: widget.subject.id,
-                        b_subjectName: _subjectTextEditingController.text,
-                        b_subscriberOnly: isSubscriberOnly)
+                      CreateSubject(pGroupId: widget.groupId,
+                        bSubjectName: _subjectTextEditingController.text,
+                        bSubscriberOnly: isSubscriberOnly)
+                    : UpdateSubject(pSubjectId: widget.subject.id,
+                        bSubjectName: _subjectTextEditingController.text,
+                        bSubscriberOnly: isSubscriberOnly)
                   );
 
                   setState(() {

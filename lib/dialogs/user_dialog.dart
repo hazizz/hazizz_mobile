@@ -71,7 +71,7 @@ class _UserDialog extends State<UserDialog> {
 
     myPermission = GroupBlocs().myPermissionBloc.myPermission;
 
-    RequestSender().getResponse(GetUserProfilePicture.full(userId: widget.id)).then((HazizzResponse hazizzResponse){
+    RequestSender().getResponse(GetUserProfilePicture.full(pUserId: widget.id)).then((HazizzResponse hazizzResponse){
       if(hazizzResponse.isSuccessful){
         encodedProfilePic = hazizzResponse.convertedData;
 
@@ -148,7 +148,7 @@ class _UserDialog extends State<UserDialog> {
                   icon: Icon(FontAwesomeIcons.ellipsisV, size: 20,),
                   onSelected: (value) async {
                     if(value == "promote_to_moderator"){
-                      HazizzResponse hazizzResponse = await RequestSender().getResponse(PromoteMember.toModerator(p_groupId: GroupBlocs().group.id, p_userId: widget.id));
+                      HazizzResponse hazizzResponse = await RequestSender().getResponse(PromoteMember.toModerator(pGroupId: GroupBlocs().group.id, pUserId: widget.id));
                       setState(() {
                         permission = GroupPermissionsEnum.MODERATOR;
                       });
@@ -160,7 +160,7 @@ class _UserDialog extends State<UserDialog> {
                         });
                       }
                     }else if(value == "promote_to_user"){
-                      HazizzResponse hazizzResponse = await RequestSender().getResponse(PromoteMember.toUser(p_groupId: GroupBlocs().group.id, p_userId: widget.id));
+                      HazizzResponse hazizzResponse = await RequestSender().getResponse(PromoteMember.toUser(pGroupId: GroupBlocs().group.id, pUserId: widget.id));
                       setState(() {
                         permission = GroupPermissionsEnum.USER;
                       });

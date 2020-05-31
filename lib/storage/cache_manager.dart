@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:mobile/communication/pojos/PojoMeInfoPrivate.dart';
 import 'package:mobile/communication/pojos/PojoMyDetailedInfo.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
-import 'package:mobile/services/firebase_analytics.dart';
+import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/firebase_analytics.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CacheManager{
@@ -30,8 +30,6 @@ class CacheManager{
     }
     return myId;
   }
-
-  SharedPreferences prefs;
 
   static Future<String> getMyUsername() async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -92,10 +90,10 @@ class CacheManager{
 
   static Future<PojoMyDetailedInfo> getMyUserData() async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    String str_myUserData = prefs.getString(_keyMe + _userData);
-    HazizzLogger.printLog("str_myUserData: $str_myUserData");
-    if(str_myUserData != null) {
-      meInfo = PojoMyDetailedInfo.fromJson(jsonDecode(str_myUserData));
+    String strMyUserData = prefs.getString(_keyMe + _userData);
+    HazizzLogger.printLog("strMyUserData: $strMyUserData");
+    if(strMyUserData != null) {
+      meInfo = PojoMyDetailedInfo.fromJson(jsonDecode(strMyUserData));
       FirebaseAnalyticsManager.setUserId(meInfo);
     }else{
       return null;
@@ -115,10 +113,10 @@ class CacheManager{
 
   static Future<PojoMeInfoPrivate> getMyUserDataOld() async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    String str_myUserData = prefs.getString(_keyMe + _userDataOld);
-    HazizzLogger.printLog("str_myUserDataOld: $str_myUserData");
-    if(str_myUserData != null) {
-      meInfoOld = PojoMeInfoPrivate.fromJson(jsonDecode(str_myUserData));
+    String strMyUserData = prefs.getString(_keyMe + _userDataOld);
+    HazizzLogger.printLog("strMyUserDataOld: $strMyUserData");
+    if(strMyUserData != null) {
+      meInfoOld = PojoMeInfoPrivate.fromJson(jsonDecode(strMyUserData));
       FirebaseAnalyticsManager.setUserId(meInfo);
     }else{
       return null;
@@ -140,7 +138,7 @@ class CacheManager{
     return prefs.getBool(_keyMe + _seen_giveaway) == null ? false : true;
   }
 
-  static Future<bool> setSeenGiveaway() async{
+  static void setSeenGiveaway() async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool(_keyMe + _seen_giveaway, true);
   }

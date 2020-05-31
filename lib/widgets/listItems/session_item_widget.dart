@@ -100,7 +100,9 @@ class _SessionItemWidget extends State<SessionItemWidget>{
                           HazizzLogger.printLog("session popupmenuitem value: $value");
 
                           if(value == value_remove){
-                            HazizzResponse hazizzResponse = await RequestSender().getResponse(KretaRemoveSessions(p_session: widget.session.id));
+                            HazizzResponse hazizzResponse = await RequestSender().getResponse(
+                              KretaRemoveSessions(pSession: widget.session.id)
+                            );
                             if(hazizzResponse.isSuccessful){
                               SessionsBloc().add(FetchData());
                             }

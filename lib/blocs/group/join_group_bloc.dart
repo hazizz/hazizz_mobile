@@ -1,3 +1,4 @@
+/*
 import 'package:flutter/widgets.dart';
 import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/response_states.dart';
@@ -10,7 +11,7 @@ import 'package:bloc/bloc.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/communication/request_sender.dart';
 
-/*
+
 
 abstract class JoinGroupEvent extends HEvent {
   JoinGroupEvent([List props = const []]) : super(props);

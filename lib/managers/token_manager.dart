@@ -2,7 +2,7 @@ import 'package:intl/intl.dart';
 import 'package:mobile/communication/pojos/PojoTokens.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
-import 'package:mobile/services/firebase_analytics.dart';
+import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/firebase_analytics.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/communication/hazizz_response.dart';
@@ -21,7 +21,9 @@ class TokenManager {
 
   static Future<HazizzResponse> createTokenWithRefresh() async{
     HazizzLogger.printLog("In createTokenWithRefresh function");
-    HazizzResponse hazizzResponse = await RequestSender().getAuthResponse(new CreateToken.withRefresh(q_username: await CacheManager.getMyUsername(), q_refreshToken: await getRefreshToken()));
+   // HazizzLogger.printLog("In createTokenWithRefresh function0: " + (await tokens).token);
+   // HazizzLogger.printLog("In createTokenWithRefresh function1: " + (await tokens).refresh);
+    HazizzResponse hazizzResponse = await RequestSender().getAuthResponse(new CreateToken.withRefresh(qUsername: await CacheManager.getMyUsername(), qRefreshToken: await getRefreshToken()));
     if(hazizzResponse.isSuccessful){
       HazizzLogger.printLog("In createTokenWithRefresh function: token response successful");
       PojoTokens tokens = hazizzResponse.convertedData;
@@ -34,7 +36,7 @@ class TokenManager {
   }
 
   static Future<HazizzResponse> createTokenWithGoogleOpenId(String openIdToken) async{
-    HazizzResponse hazizzResponse = await RequestSender().getAuthResponse(new CreateToken.withGoogleAccount(q_openIdToken: openIdToken));
+    HazizzResponse hazizzResponse = await RequestSender().getAuthResponse(new CreateToken.withGoogleAccount(qOpenIdToken: openIdToken));
     if(hazizzResponse.isSuccessful){
       PojoTokens tokens = hazizzResponse.convertedData;
      // setTokens(tokens);
@@ -47,7 +49,7 @@ class TokenManager {
   }
 
   static Future<HazizzResponse> createTokenWithFacebookAccount(String facebookToken) async{
-    HazizzResponse hazizzResponse = await RequestSender().getAuthResponse(new CreateToken.withFacebookAccount(q_facebookToken: facebookToken));
+    HazizzResponse hazizzResponse = await RequestSender().getAuthResponse(new CreateToken.withFacebookAccount(qFacebookToken: facebookToken));
     if(hazizzResponse.isSuccessful){
       PojoTokens tokens = hazizzResponse.convertedData;
      // setTokens(tokens.token, tokens.refresh);
@@ -73,8 +75,10 @@ class TokenManager {
     return prefs.getString(_keyToken);
   }
 
-  @Deprecated("Use instead accessToken property")
+  @Deprecated("Use instead [tokens] property")
   static Future<String> getRefreshToken() async{
+    final String refresh = (await tokens)?.refresh;
+    if(refresh != null) return refresh;
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(_keyRefreshToken);
   }

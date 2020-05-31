@@ -47,8 +47,8 @@ class FacebookLoginBloc extends SocialLoginBloc{
 
   @override
   Future<HazizzResponse> registerRequest(String socialToken) async {
-    print("registerRequest: ${socialToken}");
-    return await RequestSender().getAuthResponse(RegisterWithFacebookAccount(b_facebookToken: socialToken));
+    print("registerRequest: $socialToken");
+    return await RequestSender().getAuthResponse(RegisterWithFacebookAccount(bFacebookToken: socialToken));
   }
 
   void reset(){
@@ -58,6 +58,5 @@ class FacebookLoginBloc extends SocialLoginBloc{
   @override
   Future<void> logout() async {
     await facebookLogin.logOut();
-
   }
 }

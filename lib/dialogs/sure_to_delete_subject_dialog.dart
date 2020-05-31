@@ -97,7 +97,7 @@ class _SureToDeleteSubjectDialog extends State<SureToDeleteSubjectDialog> {
                 setState(() {
                   isLoading = true;
                 });
-                HazizzResponse hazizzResponse = await RequestSender().getResponse(DeleteSubject(p_subjectId: widget.subject.id));
+                HazizzResponse hazizzResponse = await RequestSender().getResponse(DeleteSubject(pSubjectId: widget.subject.id));
 
                 if(hazizzResponse.isSuccessful){
                   Navigator.pop(context, true);

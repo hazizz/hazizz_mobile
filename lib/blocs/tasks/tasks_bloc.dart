@@ -17,6 +17,7 @@ import 'package:mobile/extension_methods/datetime_extension.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/storage/caches/data_cache.dart';
+import 'package:mobile/extension_methods/duration_extension.dart';
 
 //region Tasks bloc parts
 //region Tasks events
@@ -138,6 +139,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
       }
       return tasks;
     }
+    return null;
   }
 
   @override
@@ -178,7 +180,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
         if(currentTaskExpiredState == TaskExpiredStateEnum.EXPIRED){
           DateTime now = DateTime.now();
           endDate = now.hazizzRequestDateFormat;
-          startDate = now.subtract(Duration(days: 365)).hazizzRequestDateFormat;
+          startDate = now.subtract(365.days).hazizzRequestDateFormat;
         }
 
         bool unfinishedOnly = false;
@@ -195,7 +197,12 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
           finishedOnly = false;
         }
 
-        HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetTasksFromMe(q_unfinishedOnly: unfinishedOnly, q_finishedOnly: finishedOnly, q_showThera: theraEnabled, q_startingDate: startDate, q_endDate: endDate, q_groupId: groupId, q_wholeGroup: wholeGroup));
+        HazizzResponse hazizzResponse = await RequestSender().getResponse(
+          GetTasksFromMe(qUnfinishedOnly: unfinishedOnly, qFinishedOnly: finishedOnly,
+            qShowThera: theraEnabled, qStartingDate: startDate, qEndDate: endDate,
+            qGroupId: groupId, qWholeGroup: wholeGroup
+          )
+        );
 
         if(hazizzResponse.isSuccessful){
           HazizzLogger.printLog("tasks.tasks: ${ hazizzResponse.convertedData}");

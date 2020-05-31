@@ -5,6 +5,7 @@ import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
 import 'package:mobile/blocs/kreta/schedule_event_bloc.dart';
 import 'package:mobile/custom/logger.dart';
 import 'package:mobile/extension_methods/time_of_day_extension.dart';
+import 'package:mobile/extension_methods/duration_extension.dart';
 
 class ScheduleEventWidget extends StatefulWidget {
   ScheduleEventWidget({Key key}) : super(key: key);
@@ -18,7 +19,7 @@ class _ScheduleEventWidget extends State<ScheduleEventWidget> with SingleTickerP
   DateTime eventEnd;
 
   void resetCountdown(){
-    new Timer.periodic(Duration(seconds: 1), (Timer t) => setState((){
+    new Timer.periodic(1.seconds, (Timer t) => setState((){
       DateTime now = DateTime.now();
 
       countdownToEventEnd = now.difference(eventEnd);

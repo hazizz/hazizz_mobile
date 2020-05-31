@@ -1,15 +1,10 @@
-
-import 'package:flutter/material.dart';
 import 'package:mobile/extension_methods/datetime_extension.dart';
 import 'package:mobile/extension_methods/duration_extension.dart';
-import 'package:googleapis/drive/v3.dart' as driveapi;
 import 'package:mobile/blocs/item_list/item_list_picker_bloc.dart';
 import 'package:mobile/blocs/other/date_time_picker_bloc.dart';
-import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
 import 'package:mobile/blocs/other/response_states.dart';
 import 'package:mobile/blocs/other/text_form_bloc.dart';
 import 'package:mobile/blocs/tasks/task_maker_blocs.dart';
-import 'package:mobile/blocs/tasks/tasks_bloc.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
 import 'package:mobile/communication/pojos/PojoSubject.dart';
 import 'package:mobile/communication/pojos/PojoTag.dart';
@@ -20,11 +15,9 @@ import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/custom/image_operations.dart';
 import 'package:mobile/managers/app_state_restorer.dart';
-import 'package:mobile/services/firebase_analytics.dart';
+import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/firebase_analytics.dart';
 import 'package:mobile/services/task_similarity_checker.dart';
 import 'package:mobile/widgets/image_viewer_widget.dart';
-
-import '../../managers/google_drive_manager.dart';
 
 
 //region EditTask bloc parts
@@ -136,7 +129,7 @@ class TaskCreateBloc extends TaskMakerBloc {
         }
       }
 
-      HazizzLogger.printLog("BEFORE POIOP: ${groupId}, ${subjectId},");
+      HazizzLogger.printLog("BEFORE POIOP: $groupId, $subjectId,");
 
 
 
@@ -145,21 +138,21 @@ class TaskCreateBloc extends TaskMakerBloc {
 
         print("majas2: ${imageDatas[0]?.key}");
 
-        print("majas3: ${imageUrls}");
-        print("majas4: ${description}");
+        print("majas3: $imageUrls");
+        print("majas4: $description");
 
-        print("majas5: ${imageUrlsDesc}");
+        print("majas5: $imageUrlsDesc");
 
         print("leírás hosz: ${(description + imageUrlsDesc).length}");
       }
 
       HazizzResponse hazizzResponse = await getResponse(new CreateTask(
-          groupId: groupId,
-          subjectId: subjectId,
-          b_tags: tags,
-          b_description: imageDatas.isEmpty ? description : description + "\n" + imageUrlsDesc,
-          b_deadline: deadline,
-          b_salt: imageDatas.isEmpty ? null : salt
+          pGroupId: groupId,
+          pSubjectId: subjectId,
+          bTags: tags,
+          bDescription: imageDatas.isEmpty ? description : description + "\n" + imageUrlsDesc,
+          bDeadline: deadline,
+          bSalt: imageDatas.isEmpty ? null : salt
       ));
 
       print("majas3: broo");
@@ -324,12 +317,12 @@ class TaskCreateBloc extends TaskMakerBloc {
         if(false){
           HazizzResponse hazizzResponse = await getResponse(
               GetTasksFromMe(
-                q_showThera:false,
-                q_startingDate: (deadline - 7.days).hazizzRequestDateFormat,
-                q_endDate: (deadline + 7.days).hazizzRequestDateFormat,
-                q_groupId: groupId,
-                q_subjectId: subjectId,
-                q_wholeGroup: true
+                qShowThera:false,
+                qStartingDate: (deadline - 7.days).hazizzRequestDateFormat,
+                qEndDate: (deadline + 7.days).hazizzRequestDateFormat,
+                qGroupId: groupId,
+                qSubjectId: subjectId,
+                qWholeGroup: true
               )
           );
           if(hazizzResponse.isSuccessful){

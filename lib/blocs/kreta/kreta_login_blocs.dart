@@ -18,6 +18,7 @@ import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/managers/kreta_session_manager.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/communication/hazizz_response.dart';
+import 'package:mobile/extension_methods/duration_extension.dart';
 
 //region KretaLoginEvents
 abstract class KretaLoginEvent extends HEvent {
@@ -261,8 +262,10 @@ class KretaLoginBloc extends Bloc<KretaLoginEvent, KretaLoginState> {
         sessionId ??= session.id;
 
         yield KretaLoginWaiting();
-        HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaAuthenticateSession(
-            p_session: sessionId, b_password: passwordController.text)
+        HazizzResponse hazizzResponse = await RequestSender().getResponse(
+          KretaAuthenticateSession(
+            pSession: sessionId, bPassword: passwordController.text
+          )
         );
         if(hazizzResponse.isSuccessful){
           HazizzLogger.printLog("debuglol111");
@@ -310,9 +313,9 @@ class KretaLoginBloc extends Bloc<KretaLoginEvent, KretaLoginState> {
           yield KretaLoginWaiting();
           HazizzResponse hazizzResponse = await RequestSender().getResponse(
             KretaCreateSession(
-              b_username: usernameController.text,
-              b_password: passwordController.text,
-              b_url: schoolBloc.pickedItem.url
+              bUsername: usernameController.text,
+              bPassword: passwordController.text,
+              bUrl: schoolBloc.pickedItem.url
             )
           );
           if(hazizzResponse.isSuccessful) {
@@ -327,7 +330,7 @@ class KretaLoginBloc extends Bloc<KretaLoginEvent, KretaLoginState> {
                 String status = hazizzResponse.convertedData.status;
 
                 if(status == "LOADING"){
-                  await Future.delayed(const Duration(seconds: 1));
+                  await Future.delayed(1.seconds);
                   continue;
                 }
                 if(status == "ACTIVE" ){

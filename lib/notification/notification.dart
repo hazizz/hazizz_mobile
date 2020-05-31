@@ -4,11 +4,9 @@ import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-//import 'package:workmanager/workmanager.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/hazizz_response.dart';
-import 'package:mobile/extension_methods/time_of_day_extension.dart';
 
 Future callbackadder2() async {
   HazizzLogger.printLog("ALARM MANAGER FIRED");

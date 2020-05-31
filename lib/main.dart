@@ -8,8 +8,8 @@ import 'package:mobile/blocs/auth/social_login_bloc.dart';
 import 'package:mobile/blocs/other/show_framerate_bloc.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/navigation/route_generator.dart';
-import 'package:mobile/services/firebase_analytics.dart';
-import 'package:mobile/services/hazizz_message_handler.dart';
+import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/firebase_analytics.dart';
+import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/hazizz_message_handler.dart';
 import 'package:native_state/native_state.dart';
 import 'package:statsfl/statsfl.dart';
 import 'blocs/main_tab/main_tab_blocs.dart';
@@ -21,7 +21,6 @@ import 'managers/app_state_manager.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'managers/welcome_manager.dart';
-import 'navigation/business_navigator.dart';
 import 'notification/notification.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
@@ -31,9 +30,7 @@ String startPage;
 ThemeData themeData;
 
 bool newComer = false;
-
 bool isLoggedIn = true;
-
 bool isFromNotification = false;
 
 String tasksTomorrowSerialized;
@@ -48,8 +45,6 @@ Future<bool> fromNotification() async {
   var flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   var notificationAppLaunchDetails =
   await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
-
-  // var notificationAppLaunchDetails = await HazizzNotification.flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
   print("from notif1: ${notificationAppLaunchDetails.didNotificationLaunchApp}");
   print("from notif2: ${notificationAppLaunchDetails.payload}");
   if(notificationAppLaunchDetails.didNotificationLaunchApp) {
@@ -66,16 +61,6 @@ Future<bool> fromNotification() async {
 
 
 void main() async{
-
-  /*
-  final NavigationSaver _navigatorSaver = SharedPrefNavigationSaver(
-        (Iterable<RouteSettings> routes) async => json.encode(serializeRoutes(routes)),
-        (String routesAsString) async => deserializeRoutes(json.decode(routesAsString)),
-  );
-  */
-
-  // print("navigationrem: ${NavigationSaver.restoreRouteName}");
-
   WidgetsFlutterBinding.ensureInitialized();
 
   preferredLocale = await getPreferredLocale();
@@ -119,34 +104,22 @@ void main() async{
   runApp(SavedState(
     name: "Main State",
     child: EasyLocalization(
-    //  preloaderColor: Colors.lightBlueAccent ,
       preloaderWidget: Center(
         child: Image.asset(
           'assets/images/Logo.png',
         ),
       ),
       path: 'assets/langs',
-     // assetLoader: FileAssetLoader(),
-     //   saveLocale: true,
-     // startLocale: supportedLocals[0],
-     // fallbackLocale: supportedLocals[1],
       useOnlyLangCode: true,
       supportedLocales: supportedLocals,
-      child: Container(
-       // isEnabled: true,//PreferenceService.enabledShowFramerate,
-      //  showText: true,
-
-        child: HazizzApp()//(_navigatorSaver)
-      )
+      child: HazizzApp()
     ),
   ));
 }
 
 class HazizzApp extends StatefulWidget{
 
- // final NavigationSaver _navigationSaver;
-
-  const HazizzApp(/*this._navigationSaver,*/ {Key key}) : super(key: key);
+  const HazizzApp({Key key}) : super(key: key);
 
   @override
   _HazizzApp createState() => _HazizzApp();
@@ -157,30 +130,10 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
 
   DateTime lastActive;
 
-  /*
-  void enableShowFramerate(bool enabled){
-    setState(() {
-      showFramerate = enabled;
-    });
-    PreferenceService.setEnabledShowFramerate(enabled);
-  }
-  */
   @override
   initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    /*
-    if(await AppStateRestorer.getShouldReloadTaskMaker()){
-    TaskMakerAppState taskMakerAppState = await AppStateRestorer.loadTaskState();
-    if(taskMakerAppState != null){
-    if(taskMakerAppState.taskMakerMode == TaskMakerMode.create){
-    startPage = "/createTask";
-    }else{
-    startPage = "/editTask";
-    }
-    }
-    }
-    */
   }
 
   @override
@@ -196,7 +149,7 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
     if(state == AppLifecycleState.paused){
       lastActive = DateTime.now();
     }
-    if(state == AppLifecycleState.resumed){
+    else if(state == AppLifecycleState.resumed){
       if(lastActive != null){
         if(DateTime.now().difference(lastActive).inSeconds >= 60){
           MainTabBlocs().fetchAll();
@@ -215,14 +168,14 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
       }
     }
 
-    if(state == AppLifecycleState.detached){
+    else if(state == AppLifecycleState.detached){
 
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    print("startpage: ${startPage}");
+    print("startpage: $startPage");
     var savedState = SavedState.of(context);
     print("restore route: ${SavedStateRouteObserver.restoreRoute(savedState)}");
     return BlocProvider(
@@ -231,6 +184,7 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
           data: (brightness) => themeData,
           themedWidgetBuilder: (context, theme) {
             return StyledToast(
+              locale: context.locale,
               textStyle: TextStyle(fontSize: 16.0, color: Colors.white),
               backgroundColor: Color(0x99000000),
               borderRadius: BorderRadius.circular(5.0),
@@ -251,31 +205,21 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
                   }
                   return StatsFl(
                     width: 200,
-                    isEnabled: false,// showFramerate,
+                    isEnabled: false,
                     align: Alignment(1.0, -0.92),
                     showText: true,
                     height: 50,
-                    //   width: 300, height:1000,
                     child: Stack(
                       children: <Widget>[
                         MaterialApp(
-
                           navigatorKey: BusinessNavigator().navigatorKey,
-                          initialRoute: startPage, //??  NavigationSaver?.restoreRouteName, //?? startPage,
-                          //  onGenerateRoute: RouteGenerator.generateRoute,
-
+                          initialRoute: startPage,
                           navigatorObservers: [
-                           // widget._navigationSaver,
                             SavedStateRouteObserver(savedState: savedState),
                             //  FirebaseAnalyticsObserver(analytics: FirebaseAnalyticsManager.analytics),
                             FirebaseAnalyticsManager.observer
                           ],
                           onGenerateRoute: (RouteSettings routeSettings) => RouteGenerator.generateRoute(routeSettings),
-                          /*
-                          onGenerateRoute: (RouteSettings routeSettings) => widget._navigationSaver.onGenerateRoute(
-                            routeSettings, (RouteSettings settings, {NextPageInfo nextPageInfo,}) => RouteGenerator.generateRoute(settings),
-                          ),
-                          */
                           title: localize(context, key: "hazizz_appname") ?? "Hazizz Mobile",
                           showPerformanceOverlay: false,
                           theme: theme,

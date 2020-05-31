@@ -17,6 +17,7 @@ class HazizzLogger{
 
   // only logs
   static void log(String msg){
+   // Crashlytics().
     Crashlytics().log(_processMessage(msg));
   }
 

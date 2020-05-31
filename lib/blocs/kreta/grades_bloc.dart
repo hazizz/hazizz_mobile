@@ -91,7 +91,7 @@ class GradesLoadedCacheState extends GradesState {
 }
 
 class GradesErrorState extends GradesState {
-  HazizzResponse hazizzResponse;
+  final HazizzResponse hazizzResponse;
   GradesErrorState(this.hazizzResponse) : assert(hazizzResponse!= null), super([hazizzResponse]);
 
   @override

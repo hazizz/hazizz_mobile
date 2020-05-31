@@ -1,6 +1,4 @@
 import 'package:mobile/communication/pojos/PojoGrade.dart';
-import 'package:json_annotation/json_annotation.dart';
-
 import 'Pojo.dart';
 
 part 'PojoGrades.gg.dart';

@@ -63,7 +63,7 @@ class _SessionSelectorWidget extends State<SessionSelectorWidget> with Automatic
       builder: (context2, state2){
         sessions.clear();
         sessions.addAll(sessions1);
-        HazizzLogger.printLog("session change: $state2: ${sessions1}");
+        HazizzLogger.printLog("session change: $state2: $sessions1");
         if(sessions.isNotEmpty){
           return new ListView.builder(
               itemCount: sessions.length,

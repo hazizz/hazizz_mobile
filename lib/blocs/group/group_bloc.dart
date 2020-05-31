@@ -12,8 +12,6 @@ import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/enums/group_permissions_enum.dart';
 import 'package:mobile/storage/cache_manager.dart';
-
-
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 
@@ -31,7 +29,12 @@ class GroupTasksBloc extends Bloc<HEvent, HState> {
       try {
         yield ResponseWaiting();
        // HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetTasksFromGroup(groupId: GroupBlocs().group.id));
-        HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetTasksFromMe(q_groupId: GroupBlocs().group.id, q_wholeGroup: true));
+        HazizzResponse hazizzResponse = await RequestSender().getResponse(
+          GetTasksFromMe(
+            qGroupId: GroupBlocs().group.id,
+            qWholeGroup: true
+          )
+        );
 
         if(hazizzResponse.isSuccessful){
           List<PojoTask> tasks = hazizzResponse.convertedData;
@@ -65,7 +68,7 @@ class GroupSubjectsBloc extends Bloc<HEvent, HState> {
     if (event is FetchData) {
       try {
         yield ResponseWaiting();
-        HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetSubjects(groupId: GroupBlocs().group.id));
+        HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetSubjects(pGroupId: GroupBlocs().group.id));
 
         if(hazizzResponse.isSuccessful){
           List<PojoSubject> tasks = hazizzResponse.convertedData;
@@ -100,7 +103,7 @@ class GroupMembersBloc extends Bloc<HEvent, HState> {
     if (event is FetchData) {
       try {
         yield ResponseWaiting();
-        HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetGroupMemberPermissions(groupId: GroupBlocs().group.id));
+        HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetGroupMemberPermissions(pGroupId: GroupBlocs().group.id));
 
         if(hazizzResponse.isSuccessful){
           membersPermissions = hazizzResponse.convertedData;
@@ -132,7 +135,7 @@ class GroupMembersBloc extends Bloc<HEvent, HState> {
             }
           }
           if(!found){
-            for(PojoUser member in membersPermissions.null_permission){
+            for(PojoUser member in membersPermissions.nullPermission){
               if (myId == member.id){
                 GroupBlocs().myPermissionBloc.add(MyPermissionSetEvent(permission: GroupPermissionsEnum.NULL));
                 found = true;

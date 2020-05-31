@@ -1,11 +1,6 @@
-
-
 import 'dart:core';
-
 import 'package:flutter/material.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:mobile/enums/grade_type_enum.dart';
-
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'Pojo.dart';
 
@@ -14,27 +9,21 @@ part 'PojoGrade.gg.dart';
 //@JsonSerializable()
 class PojoGrade extends Pojo implements Comparable {
 
-  String accountId;
-  DateTime date;
-  DateTime creationDate;
-  String subject;
-  String topic;
-  GradeTypeEnum gradeType;
-  String grade;
-  int weight;
+  final String accountId;
+  final DateTime date;
+  final DateTime creationDate;
+  final String subject;
+  final String topic;
+  final GradeTypeEnum gradeType;
+  final String grade;
+  final int weight;
 
   bool isNew = false;
 
-  /*
-  DateTime creationDate;
-  String gradeType;
-  */
-
   Color color;
 
-  PojoGrade({this.accountId, this.date, this.creationDate, this.subject, this.topic,
-      this.gradeType, this.grade, this.weight}){
-  //  grade = "5";
+  PojoGrade({this.accountId, this.date, this.creationDate, this.subject,
+    this.topic, this.gradeType, this.grade, this.weight}){
     _setColor();
   }
 
@@ -102,6 +91,5 @@ class PojoGrade extends Pojo implements Comparable {
     }
     return false;
   }
-
 
 }

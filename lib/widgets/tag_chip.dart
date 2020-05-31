@@ -42,7 +42,7 @@ class _TagChip extends State<TagChip> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: ()=> widget?.onClick() ?? (){},
+      onTap: widget.onClick,
       child:  Card(
         margin: EdgeInsets.only(top: 0, bottom: 4),
           color: widget.backgroundColor,

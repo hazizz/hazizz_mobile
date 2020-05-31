@@ -43,7 +43,7 @@ extension DateTimeExtension on DateTime {
   String weekdayLocalize(BuildContext context){
     // int daysDifference = DateTime.now().difference(this).inDays;
 
-    return "days_${this.weekday}".localize(context);
+    return "days_${this.weekday-1}".localize(context);
   }
 
 
@@ -54,24 +54,23 @@ extension DateTimeExtension on DateTime {
     int hour = this.hour;
     int minute = this.minute;
 
-    String str_hour = hour.toString();
-    String str_minute = minute.toString();
-    String str_day = day.toString();
-    String str_month = month.toString();
+    String strHour = hour.toString();
+    String strMinute = minute.toString();
+    String strDay = day.toString();
+    String strMonth = month.toString();
     if(month < 10){
-      str_month = "0$str_month";
+      strMonth = "0$strMonth";
     }
     if(day < 10){
-      str_day = "0$str_day";
+      strDay = "0$strDay";
     }
     if(hour < 10){
-      str_hour = "0$str_hour";
+      strHour = "0$strHour";
     }
     if(minute < 10){
-      str_minute = "0$str_minute";
+      strMinute = "0$strMinute";
     }
-
-    return localize(context, key: "last_updated") + ": " + "${this.year}.$str_month.$str_day $str_hour:$str_minute";
+    return localize(context, key: "last_updated") + ": " + "${this.year}.$strMonth.$strDay $strHour:$strMinute";
   }
 
 

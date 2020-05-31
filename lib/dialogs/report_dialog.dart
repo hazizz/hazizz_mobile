@@ -188,19 +188,24 @@ class _ReportDialog extends State<ReportDialog> {
                     HazizzResponse hazizzResponse;
                     switch(widget.reportType){
                       case ReportTypeEnum.GROUP:
-                        hazizzResponse = await RequestSender().getResponse(Report.group(p_groupId: widget.id,  b_description: descriptionController.text));
+                        hazizzResponse = await RequestSender().getResponse(
+                          Report.group(pGroupId: widget.id,  bDescription: descriptionController.text));
                         break;
                       case ReportTypeEnum.COMMENT:
-                        hazizzResponse = await RequestSender().getResponse(Report.comment(p_commentId: widget.id, p_taskId: widget.secondId, b_description: descriptionController.text));
+                        hazizzResponse = await RequestSender().getResponse(
+                          Report.comment(pCommentId: widget.id, pTaskId: widget.secondId, bDescription: descriptionController.text));
                         break;
                       case ReportTypeEnum.SUBJECT:
-                        hazizzResponse = await RequestSender().getResponse(Report.subject(p_groupId: widget.secondId, p_subjectId: widget.id, b_description: descriptionController.text));
+                        hazizzResponse = await RequestSender().getResponse(
+                          Report.subject(pGroupId: widget.secondId, pSubjectId: widget.id, bDescription: descriptionController.text));
                         break;
                       case ReportTypeEnum.TASK:
-                        hazizzResponse = await RequestSender().getResponse(Report.task(p_taskId: widget.id, b_description: descriptionController.text));
+                        hazizzResponse = await RequestSender().getResponse(
+                          Report.task(pTaskId: widget.id, bDescription: descriptionController.text));
                         break;
                       case ReportTypeEnum.USER:
-                        hazizzResponse = await RequestSender().getResponse(Report.user(p_userId: widget.id,  b_description: descriptionController.text));
+                        hazizzResponse = await RequestSender().getResponse(
+                          Report.user(pUserId: widget.id, bDescription: descriptionController.text));
                         break;
                     }
                     setState(() {

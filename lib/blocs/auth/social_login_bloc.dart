@@ -76,7 +76,7 @@ class SocialLoginWaitingState extends SocialLoginState {
 }
 
 class SocialLoginFailedState extends SocialLoginState {
-  PojoError error;
+  final PojoError error;
   SocialLoginFailedState({this.error}) : super([error]);
 
   @override String toString() => 'SocialLoginFailedState';
@@ -103,27 +103,14 @@ class SocialLoginHaveToAcceptConditionsState extends SocialLoginState {
 }
 
 
-class SocialLoginBloc extends Bloc<SocialLoginEvent, SocialLoginState> {
-
-  /*
-  static final SocialLoginBloc _singleton = new SocialLoginBloc._internal();
-  factory SocialLoginBloc() {
-    return _singleton;
-  }
-  SocialLoginBloc._internal();
-  */
-
+abstract class SocialLoginBloc extends Bloc<SocialLoginEvent, SocialLoginState> {
   String _socialToken;
 
-  void initialize(){}
-
-  Future<String> getSocialToken(){}
-
-  Future<HazizzResponse> loginRequest(String socialToken){}
-
-  Future<HazizzResponse> registerRequest(String socialToken){}
-
-
+  void initialize();
+  Future<String> getSocialToken();
+  Future<HazizzResponse> loginRequest(String socialToken);
+  Future<HazizzResponse> registerRequest(String socialToken);
+  Future<void> logout();
 
   SocialLoginBloc(){
     initialize();
@@ -141,8 +128,6 @@ class SocialLoginBloc extends Bloc<SocialLoginEvent, SocialLoginState> {
   void reset(){
     this.add(SocialLoginResetEvent());
   }
-
-  Future<void> logout() async{}
 
 
   @override
@@ -166,7 +151,6 @@ class SocialLoginBloc extends Bloc<SocialLoginEvent, SocialLoginState> {
 
       HazizzLogger.printLog("socialToken is not null: ${_socialToken != null}");
 
-     // HazizzResponse hazizzResponseLogin = await TokenManager.createTokenWithGoolgeOpenId(_openIdToken);
       HazizzResponse hazizzResponseLogin = await loginRequest(_socialToken);
       if(hazizzResponseLogin.isSuccessful) {
         yield SocialLoginSuccessfulState();
@@ -178,7 +162,6 @@ class SocialLoginBloc extends Bloc<SocialLoginEvent, SocialLoginState> {
           HazizzLogger.printLog("bruh you better work: 2");
           yield SocialLoginHaveToAcceptConditionsState();
           return;
-          HazizzLogger.printLog("bruh you better work: 3");
         }else if(hazizzResponseLogin.pojoError.errorCode == ErrorCodes.NO_ASSOCIATED_EMAIL.code){
           HazizzLogger.printLog("bruh you better work: 4");
           yield SocialLoginFailedState(error: hazizzResponseLogin.pojoError);

@@ -10,6 +10,7 @@ import 'package:mobile/communication/hazizz_response.dart';
 import 'connection.dart';
 import 'custom_response_errors.dart';
 import 'htttp_method_enum.dart';
+import 'package:mobile/extension_methods/duration_extension.dart';
 
 Future<HazizzResponse> getResponse(Request request, {bool useSecondaryOptions = false})async{
   return await RequestSender().getResponse(request, useSecondaryOptions: useSecondaryOptions);
@@ -44,7 +45,7 @@ class RequestSender{
           if(requestCount >= 3){
             print("boi: b4");
             print("oops: too many requests. Waiting");
-            await Future.delayed(const Duration(milliseconds: 1000));
+            await Future.delayed(1000.milliseconds);
           }
           print("boi: b5");
           requestCount++;
@@ -103,7 +104,7 @@ class RequestSender{
 
   Future<void> waitCooldown() async{
     lock();
-    await new Future.delayed(const Duration(milliseconds: 1000));
+    await new Future.delayed(1000.milliseconds);
     unlock();
   }
   void lock(){
@@ -139,14 +140,14 @@ class RequestSender{
     try{
       final Dio authDio = Dio(defaultOptions);
       Response response = await authDio.post(authRequest.url, queryParameters: authRequest.query, data: authRequest.body, options: Options(headers: await authRequest.buildHeader()));
-      hazizzResponse = HazizzResponse.onSuccess(response: response, request: authRequest);
+      hazizzResponse = HazizzResponse.initSuccess(response: response, request: authRequest);
 
       HazizzLogger.printLog("hey: sent token request");
     }on DioError catch(error){
       if(error.response != null) {
         HazizzLogger.printLog("log: error response data: ${error.response.data}");
       }
-      hazizzResponse = await HazizzResponse.onError(dioError: error, request: authRequest);
+      hazizzResponse = await HazizzResponse.initError(dioError: error, request: authRequest);
       if(hazizzResponse.pojoError != null){
         if(hazizzResponse.pojoError.errorCode == 21){
           await AppState.logout();
@@ -244,7 +245,7 @@ class RequestSender{
 
         HazizzLogger.printLog("request was sent successfully: ${request.toString()}");
         HazizzLogger.printLog("response for ${request.toString()}: ${response.toString()}");
-        hazizzResponse = HazizzResponse.onSuccess(response: response, request: request);
+        hazizzResponse = HazizzResponse.initSuccess(response: response, request: request);
         HazizzLogger.printLog("HazizzResponse.onSuccess ran: ${request.toString()}");
 
       }else{
@@ -254,13 +255,13 @@ class RequestSender{
     }on DioError catch(error) {
       if(error?.response?.statusCode == 308){
         if(request is GetGroupInviteLinks){
-          return HazizzResponse.onSuccess(response: error.response, request: request);
+          return HazizzResponse.initSuccess(response: error.response, request: request);
         }
       }
 
       HazizzLogger.printLog("response is error: ${request.toString()}");
 
-      hazizzResponse = await HazizzResponse.onError(dioError: error, request: request);
+      hazizzResponse = await HazizzResponse.initError(dioError: error, request: request);
       HazizzLogger.printLog("HazizzResponse.onError ran: ${request.toString()}");
     }
     return hazizzResponse;

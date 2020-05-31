@@ -37,15 +37,15 @@ Future _save(String key, dynamic data) async {
 
 Future<DataCache> _load(String key) async {
   var sh = await SharedPreferences.getInstance();
-  String str_data = sh.getString(key);
-  String str_date = sh.getString(key + "_time");
-  HazizzLogger.printLog("piskota11: $str_data");
-  HazizzLogger.printLog("piskota12: $str_date");
-  if(str_data != null && str_date != null){
+  String strData = sh.getString(key);
+  String strDate = sh.getString(key + "_time");
+  HazizzLogger.printLog("piskota11: $strData");
+  HazizzLogger.printLog("piskota12: $strDate");
+  if(strData != null && strDate != null){
 
-    var json = jsonDecode(str_data);
+    var json = jsonDecode(strData);
     HazizzLogger.printLog("piskota20: $json");
-    DateTime date = DateTime.parse(str_date);
+    DateTime date = DateTime.parse(strDate);
     HazizzLogger.printLog("piskota21: $json");
     HazizzLogger.printLog("piskota22: $date");
     if(json != null && date != null){
@@ -61,17 +61,17 @@ Future<DataCache> _load(String key) async {
 
 Future<DataCache> _loadList(String key) async {
   var sh = await SharedPreferences.getInstance();
-  String str_data = sh.getString(key);
-  String str_date = sh.getString(key + "_time");
-  HazizzLogger.printLog("piskota11: $str_data");
-  HazizzLogger.printLog("piskota12: $str_date");
-  if(str_data != null && str_date != null){
+  String strData = sh.getString(key);
+  String strDate = sh.getString(key + "_time");
+  HazizzLogger.printLog("piskota11: $strData");
+  HazizzLogger.printLog("piskota12: $strDate");
+  if(strData != null && strDate != null){
 
-  //  var json = jsonDecode(str_data);
+  //  var json = jsonDecode(strData);
     HazizzLogger.printLog("piskota20: $json");
-    DateTime date = DateTime.parse(str_date);
+    DateTime date = DateTime.parse(strDate);
 
-    Iterable iter = json.decode(json.encode(json.decode(str_data)));
+    final Iterable iter = json.decode(json.encode(json.decode(strData)));
     HazizzLogger.printLog("didit");
     List<PojoTask> myTasks = iter.map<PojoTask>((json) => PojoTask.fromJson(json)).toList();
     HazizzLogger.printLog(myTasks.toString());

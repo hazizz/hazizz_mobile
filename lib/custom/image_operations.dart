@@ -13,6 +13,7 @@ import 'package:mobile/services/hazizz_crypt.dart';
 import 'package:mobile/widgets/image_viewer_widget.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:image/image.dart' as imagePackage;
+import 'package:mobile/extension_methods/duration_extension.dart';
 
 class HazizzImageData{
   final ImageType imageType;
@@ -38,7 +39,7 @@ class HazizzImageData{
   Function currentAsyncTask;
 
 
-  Future futureUploadedToDrive = Future.delayed(Duration(seconds: 60));
+  Future futureUploadedToDrive = Future.delayed(60.seconds);
 
   Future<void> _uploadToGDrive() async {
     driveapi.File f = await GoogleDriveManager().uploadImageToDrive(this);

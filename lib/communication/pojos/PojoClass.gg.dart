@@ -32,7 +32,7 @@ String convertBack(TimeOfDay a){
   if(minute < 10){
     str_minute = "0$str_minute";
   }
-  return "${str_hour}:${str_minute}:00";
+  return "$str_hour:$str_minute:00";
 }
 
 PojoClass _$PojoClassFromJson(Map<String, dynamic> json) {

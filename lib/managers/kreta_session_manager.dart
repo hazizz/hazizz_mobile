@@ -1,16 +1,8 @@
-
 import 'dart:convert';
-
-
 import 'package:mobile/communication/pojos/PojoKretaProfile.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:mobile/communication/request_sender.dart';
-import 'package:mobile/storage/cache_manager.dart';
-
-
 
 class KretaSessionData{
   PojoSession session;
@@ -21,18 +13,11 @@ class KretaSessionData{
 
 
 class KretaSessionManager {
-
   static const String _keySession = "key_session";
   static const String _keySessions = "key_sessions";
-
   static const String _key_rememberPassword= "key_remember_session_password";
-
   static PojoSession selectedSession;
-
   static List<PojoSession> otherSessions;
-
-
-  SharedPreferences prefs;
 
   static Future<bool> hasSelectedSession() async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();

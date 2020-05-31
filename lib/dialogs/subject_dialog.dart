@@ -35,10 +35,8 @@ class _SubjectDialog extends State<SubjectDialog> {
 
   PojoSubject subject;
 
-
   double width = 200;
   double height = 110;
-
 
   @override
   void initState() {
@@ -165,8 +163,8 @@ class _SubjectDialog extends State<SubjectDialog> {
                               subject.subscribed = value;
                             });
                             HazizzResponse hazizzResponse = subject.subscribed
-                                ? await RequestSender().getResponse(SubscribeToSubject(p_subjectId: subject.id))
-                                : await RequestSender().getResponse(UnsubscribeFromSubject(p_subjectId: subject.id));
+                              ? await RequestSender().getResponse(SubscribeToSubject(pSubjectId: subject.id))
+                              : await RequestSender().getResponse(UnsubscribeFromSubject(pSubjectId: subject.id));
                             if(hazizzResponse.isSuccessful){
                               if(subject.subscribed){
                                 showSubscribedToSubjectFlushBar(context, what: subject.name);

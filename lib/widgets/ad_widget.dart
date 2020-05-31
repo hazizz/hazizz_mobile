@@ -1,13 +1,16 @@
 import 'dart:async';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/managers/preference_service.dart';
-import 'package:mobile/pages/settings_page/about_page.dart';
 import 'package:mobile/services/facebook_opener.dart';
 import 'package:mobile/widgets/card_header_widget.dart';
+import 'package:mobile/widgets/hyper_link.dart';
+import 'package:mobile/widgets/pages/settings_page/about_page.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:mobile/extension_methods/duration_extension.dart';
 
 enum AdType{
   fel_elek,
@@ -35,7 +38,9 @@ class AdWidget extends StatefulWidget {
   static const String ad_facebook = "assets/images/facebook_ad_banner.png";
   static const String ad_giveaway = "assets/images/giveaway_ad_banner.png";
   static const String ad_hazizz_meet = "assets/images/hazizz_meet_ad_banner.png";
-  static const String ad_hazizz_vakacio = "assets/images/hazizz_meet_ad_banner.png";
+  static const String ad_hazizz_vakacio = "assets/images/vakacio_background.png";
+
+
 
 
   /*
@@ -63,6 +68,8 @@ class AdWidget extends StatefulWidget {
 
 class _AdWidgetState extends State<AdWidget> {
 
+
+
   AdType adType;
   Timer timer;
 
@@ -75,7 +82,7 @@ class _AdWidgetState extends State<AdWidget> {
   void initState() {
     vakacioDate = DateTime(now.year, 6, 16);
     durationUntilVakacio = vakacioDate.difference(now);
-    setTimer(now.add(Duration(seconds: 1)));
+    setTimer(now.add(1.seconds));
     chooseType();
     super.initState();
   }
@@ -87,7 +94,12 @@ class _AdWidgetState extends State<AdWidget> {
     }else if(r == 1){
       adType = AdType.facebook;
     }else if(r == 2 || r == 3 || r == 4){
-       adType = AdType.vakacio;
+      if(now.isAfter(DateTime(now.year, 9, 1))){
+        adType = AdType.fel_elek;
+      }else{
+        adType = AdType.vakacio;
+      }
+
     }else{
       /*
       if(r == 3 && DateTime.now().isBefore(DateTime(2020, 04, 17, 23, 59))){
@@ -122,6 +134,7 @@ class _AdWidgetState extends State<AdWidget> {
     }if(adType == AdType.vakacio){
       return AdWidget.ad_hazizz_vakacio;
     }
+    return AdWidget.ad_facebook;
   }
 
   void setTimer(DateTime nextEventChangeTime2){
@@ -130,7 +143,7 @@ class _AdWidgetState extends State<AdWidget> {
         now = DateTime.now();
         durationUntilVakacio = vakacioDate.difference(now);
       });
-      setTimer(nextEventChangeTime2.add(Duration(seconds: 1)));
+      setTimer(nextEventChangeTime2.add(1.seconds));
     }
 
     var duration = (nextEventChangeTime2.difference(now));
@@ -139,11 +152,6 @@ class _AdWidgetState extends State<AdWidget> {
 
   Widget vakacioWidget(){
     final String vakacioLocalized = "vakacio".localize(context);
-
-    /*
-    HazizzLogger.printLog("sadfsdg: "+ vakacioLocalized.length.toString());
-    HazizzLogger.printLog("sadfsdg2: "+ durationUntilVakacio.inDays.toString());
-    */
 
     int off = 0;
 
@@ -158,20 +166,51 @@ class _AdWidgetState extends State<AdWidget> {
           fit: BoxFit.fitWidth,
         ),
 
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            if(!durationUntilVakacio.isNegative)
-              Text("vakacio_until".localize(context, args: [
-                durationUntilVakacio.inDays.toString(),
-                (durationUntilVakacio.inHours - durationUntilVakacio.inDays * 24).toString(),
-                (durationUntilVakacio.inMinutes - (durationUntilVakacio.inHours * 60)).toString(),
-                (durationUntilVakacio.inSeconds - (durationUntilVakacio.inMinutes * 60)).toString()
-              ]), textAlign: TextAlign.center, style: TextStyle(fontSize: 16, letterSpacing: 1.6)),
-            Text(vakacioLocalized.substring(vakacioLocalized.length - off, vakacioLocalized.length),
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 26, letterSpacing: 4),)
-          ],
+        Padding(
+          padding: const EdgeInsets.only(top: 6, left: 4, right: 4 ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              if(!durationUntilVakacio.isNegative)
+                AutoSizeText("vakacio_until".localize(context,
+                  args: [
+                    durationUntilVakacio.inDays.toString(),
+                    (durationUntilVakacio.inHours - durationUntilVakacio.inDays * 24).toString(),
+                    (durationUntilVakacio.inMinutes - (durationUntilVakacio.inHours * 60)).toString(),
+                    (durationUntilVakacio.inSeconds - (durationUntilVakacio.inMinutes * 60)).toString()
+                  ]),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20,
+                    letterSpacing: 1.6,
+                    color: Colors.deepOrange,
+                    fontWeight: FontWeight.w700,
+                    height: 1
+                  ),
+                  maxFontSize: 20,
+                  minFontSize: 15,
+                  maxLines: 2,
+                ),
+              Row(mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                Text(vakacioLocalized.substring(vakacioLocalized.length - off, vakacioLocalized.length),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: durationUntilVakacio.isNegative ? 40 : 28, letterSpacing: 4,  color: Colors.redAccent, fontWeight: FontWeight.w800),
+                )
+              ],)
+            ],
+          ),
+        ),
+        Positioned(bottom: 0, left: 2  ,
+          child: Hyperlink("https://icons8.com/",
+            Text("Image: icons8",
+              style: TextStyle(
+                color: Colors.black54,//Colors.blueAccent,
+                fontSize: 12,
+               // decoration: TextDecoration.underline
+              )
+            )
+          )
         )
       ],
     );
@@ -211,7 +250,8 @@ class _AdWidgetState extends State<AdWidget> {
               child: Material(
                 color: Colors.transparent,
                 child: InkWell(
-                  onTap: () async {
+                  excludeFromSemantics: true,
+                  onTap: adType == AdType.vakacio ? null : () async {
                     if(adType == AdType.facebook
                     || adType == AdType.hazizz_meet
                     ){

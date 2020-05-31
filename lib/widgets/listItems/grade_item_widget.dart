@@ -91,7 +91,7 @@ class GradeItemWidget extends StatelessWidget {
     return Hero(
       tag: pojoGrade,
       child: Card(
-        margin: EdgeInsets.only(left: 6, top: 2, bottom: 2, right: 6),
+        margin: EdgeInsets.only(left: 4, top: 2, bottom: 2, right: 4),
         clipBehavior: Clip.antiAliasWithSaveLayer,
         elevation: 5,
         child: InkWell(

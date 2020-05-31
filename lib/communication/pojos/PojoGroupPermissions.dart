@@ -10,9 +10,9 @@ class PojoGroupPermissions implements Pojo {
   List<PojoUser> owner;
   List<PojoUser> moderator;
   List<PojoUser> user;
-  List<PojoUser> null_permission;
+  List<PojoUser> nullPermission;
 
-  PojoGroupPermissions({this.owner, this.moderator, this.user, this.null_permission});
+  PojoGroupPermissions({this.owner, this.moderator, this.user, this.nullPermission});
 
   factory PojoGroupPermissions.fromJson(Map<String, dynamic> json) =>
       _$PojoGroupPermissionsFromJson(json);

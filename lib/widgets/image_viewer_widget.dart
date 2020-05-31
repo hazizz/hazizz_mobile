@@ -341,7 +341,7 @@ class _ImageViewer extends State<ImageViewer> with AutomaticKeepAliveClientMixin
                               return deletedImageWidget();
                             }
                             print("sadsd: 1 ${responseState.data.statusCode}");
-                            print("asd: ${imageUrl}");
+                            print("asd: $imageUrl");
                             untouchable = true;
                             return otherErrorImageWidget();
                           }else{

@@ -1,9 +1,10 @@
 import 'dart:math' as math;
-
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
+import 'package:mobile/extension_methods/duration_extension.dart';
 
 dynamic showHaventSavedFlushBar(BuildContext context){
   return Flushbar(
@@ -23,8 +24,49 @@ dynamic showHaventSavedFlushBar(BuildContext context){
       ),
     ),
     message:  localize(context, key: "havent_saved_changes"),
-    duration:  Duration(seconds: 3),
+    duration:  3.seconds,
   )..show(context);
+}
+
+dynamic showFlutterErrorFlushBar(BuildContext context, {@required FlutterErrorDetails flutterErrorDetails}){
+  HazizzLogger.printLog("loggieg: " + flutterErrorDetails.exceptionAsString());
+  Flushbar flush;
+  flush =  Flushbar(
+    titleText: Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(right: 3, top: 4),
+          child: Icon(FontAwesomeIcons.bug, color: Colors.white,),
+        ),
+        Text("Exception caught!", style: TextStyle(fontSize: 18, color: Colors.white),),
+      ],
+    ),
+    duration:  8.seconds,
+    mainButton: FlatButton(
+      child: Text("dismiss".localize(context).toUpperCase(), style: TextStyle(color: Colors.redAccent, fontSize: 14),),
+      onPressed: (){
+        flush.dismiss(true);
+      },
+    ),
+   messageText: Container(
+     child: Padding(
+       padding: const EdgeInsets.all(2),
+       child: Text(flutterErrorDetails.exceptionAsString()),
+     ),
+     decoration: new BoxDecoration(
+       borderRadius: BorderRadius.all(Radius.circular(6)),
+       color: Colors.grey
+      // color: Theme.of(context).dialogBackgroundColor,
+     ),
+   ),
+    onTap: (a) {
+      Navigator.pushNamed(context, "/caught_exception_page", arguments: flutterErrorDetails);
+    },
+    flushbarStyle: FlushbarStyle.FLOATING,
+    padding: EdgeInsets.only(left: 8, bottom: 10),
+  )..show(context);
+  return flush;
 }
 
 dynamic showNoConnectionFlushBar(BuildContext context){
@@ -45,7 +87,7 @@ dynamic showNoConnectionFlushBar(BuildContext context){
       ),
     ),
     message:  localize(context, key: "info_noInternetAccess"),
-    duration:  Duration(seconds: 3),
+    duration:  3.seconds,
   )..show(context);
 }
 
@@ -67,7 +109,7 @@ dynamic showKretaUnavailableFlushBar(BuildContext context){
       ),
     ),
     message:  localize(context, key: "kreta_server_unavailable"),
-    duration:  Duration(seconds: 3),
+    duration:  3.seconds,
   )..show(context);
 }
 
@@ -89,7 +131,7 @@ dynamic showServerUnavailableFlushBar(BuildContext context){
       ),
     ),
     message:  localize(context, key: "server_unavailable"),
-    duration:  Duration(seconds: 3),
+    duration:  3.seconds,
   )..show(context);
 }
 
@@ -118,7 +160,7 @@ dynamic showGatewayServerUnavailableFlushBar(BuildContext context){
       ),
     ),
     message:  localize(context, key: "gateway_server_unavailable"),
-    duration:  Duration(seconds: 4),
+    duration:  4.seconds,
   )..show(context);
 }
 dynamic showAuthServerUnavailableFlushBar(BuildContext context){
@@ -145,7 +187,7 @@ dynamic showAuthServerUnavailableFlushBar(BuildContext context){
       ),
     ),
     message:  localize(context, key: "auth_server_unavailable"),
-    duration:  Duration(seconds: 4),
+    duration:  4.seconds,
   )..show(context);
 }
 dynamic showHazizzServerUnavailableFlushBar(BuildContext context){
@@ -172,7 +214,7 @@ dynamic showHazizzServerUnavailableFlushBar(BuildContext context){
       ),
     ),
     message:  localize(context, key: "hazizz_server_unavailable"),
-    duration:  Duration(seconds: 4),
+    duration:  4.seconds,
   )..show(context);
 }
 dynamic showTheraServerUnavailableFlushBar(BuildContext context){
@@ -199,7 +241,7 @@ dynamic showTheraServerUnavailableFlushBar(BuildContext context){
       ),
     ),
     message:  localize(context, key: "thera_server_unavailable"),
-    duration:  Duration(seconds: 4),
+    duration:  4.seconds,
   )..show(context);
 }
 
@@ -210,7 +252,7 @@ dynamic showSessionFailFlushBar(BuildContext context){
 
     icon: Icon(FontAwesomeIcons.userTimes, color: Colors.red,),
     message:  localize(context, key: "failed_session"),
-    duration:  Duration(seconds: 4),
+    duration:  4.seconds,
   )..show(context);
 }
 
@@ -219,7 +261,7 @@ void showReportSuccessFlushBar(BuildContext context, {@required String what}){
   Flushbar(
     icon: Icon(FontAwesomeIcons.solidFlag, color: Colors.green,),
     message:  localize(context, key: "report_successful", args: [what]),
-    duration:  Duration(seconds: 4),
+    duration:  4.seconds,
   )..show(context);
 }
 
@@ -227,7 +269,7 @@ void showDeleteWasSuccessfulFlushBar(BuildContext context, {@required String wha
   Flushbar(
     icon: Icon(FontAwesomeIcons.times, color: Colors.green,),
     message:  localize(context, key: "subscribed_to_subject", args: [what]),
-    duration:  Duration(seconds: 4),
+    duration:  4.seconds,
   )..show(context);
 }
 
@@ -235,7 +277,7 @@ void showSubscribedToSubjectFlushBar(BuildContext context, {@required String wha
   Flushbar(
     icon: Icon(FontAwesomeIcons.check, color: Colors.green,),
     message:  localize(context, key: "subscribed_to_subject", args: [what]),
-    duration:  Duration(seconds: 3),
+    duration: 3.seconds,
   )..show(context);
 }
 
@@ -243,7 +285,7 @@ void showUnsubscribedFromSubjectFlushBar(BuildContext context, {@required String
   Flushbar(
     icon: Icon(FontAwesomeIcons.times, color: Colors.red,),
     message:  localize(context, key: "unsubscribed_from_subject", args: [what]),
-    duration:  Duration(seconds: 3),
+    duration:  3.seconds,
   )..show(context);
 }
 

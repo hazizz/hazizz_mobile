@@ -1,6 +1,8 @@
+import 'package:flutter/widgets.dart';
 import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/response_states.dart';
 import 'package:bloc/bloc.dart';
+import 'package:mobile/managers/preference_service.dart';
 
 //region Flush event and state parts
 abstract class FlushEvent extends HEvent {
@@ -100,6 +102,18 @@ class FlushSessionFailState extends FlushState {
   List<Object> get props => null;
 }
 
+class FlushFlutterErrorEvent extends FlushEvent {
+  final FlutterErrorDetails flutterErrorDetails;
+  FlushFlutterErrorEvent(this.flutterErrorDetails);
+  @override String toString() => 'FlushFlutterErrorEvent';
+  @override List<Object> get props => null;
+}
+class FlushFlutterErrorState extends FlushState {
+  final FlutterErrorDetails flutterErrorDetails;
+  FlushFlutterErrorState(this.flutterErrorDetails);
+  @override String toString() => 'FlushFlutterErrorState';
+  @override List<Object> get props => null;
+}
 
 
 class FlushResetState extends FlushState {
@@ -139,7 +153,15 @@ class FlushBloc extends Bloc<FlushEvent, FlushState> {
   @override
   Stream<FlushState> mapEventToState(FlushEvent event) async* {
     print("dude1: ${event.toString()}");
-    if (event is FlushNoConnectionEvent) {
+
+
+    if (event is FlushFlutterErrorEvent) {
+      if(PreferenceService.enabledExceptionCatcher){
+        yield FlushFlutterErrorState(event.flutterErrorDetails);
+      }
+    }
+
+    else if (event is FlushNoConnectionEvent) {
       yield FlushNoConnectionState();
     }else if (event is FlushServerUnavailableEvent) {
       yield FlushServerUnavailableState();

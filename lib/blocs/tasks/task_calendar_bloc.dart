@@ -13,7 +13,7 @@ import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/extension_methods/datetime_extension.dart';
-
+import 'package:mobile/extension_methods/duration_extension.dart';
 //region TasksCalendar bloc parts
 //region TasksCalendar events
 abstract class TasksCalendarEvent extends HEvent {
@@ -109,6 +109,7 @@ class TasksCalendarBloc extends Bloc<TasksCalendarEvent, TasksCalendarState> {
       }
       return tasks;
     }
+    return null;
   }
 
   @override
@@ -120,10 +121,10 @@ class TasksCalendarBloc extends Bloc<TasksCalendarEvent, TasksCalendarState> {
       try {
         yield TasksCalendarWaitingState();
 
-        String startDate = DateTime.now().subtract(Duration(days: 40)).hazizzRequestDateFormat;
-        String endDate = DateTime.now().add(Duration(days: 365)).hazizzRequestDateFormat;
+        String startDate = DateTime.now().subtract(40.days).hazizzRequestDateFormat;
+        String endDate = DateTime.now().add(365.days).hazizzRequestDateFormat;
 
-        HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetTasksFromMe(q_unfinishedOnly: false, q_finishedOnly: false, q_showThera: true, q_startingDate: startDate, q_endDate: endDate));
+        HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetTasksFromMe(qUnfinishedOnly: false, qFinishedOnly: false, qShowThera: true, qStartingDate: startDate, qEndDate: endDate));
 
         if(hazizzResponse.isSuccessful){
           tasksRaw = hazizzResponse.convertedData;
