@@ -20,15 +20,7 @@ class ViewTaskBloc extends Bloc<HEvent, HState> {
     return _singleton;
   }
 
-  /*
-  ViewTaskBloc getInstance(){
-    if(_singleton ==) {
-      return _singleton;
-    }
-  }
-  */
-
-  void reCreate({@required PojoTask pojoTask }){
+  void reCreate({@required PojoTask pojoTask}){
     this.pojoTask = pojoTask;
     HazizzLogger.printLog("assign: " + pojoTask.assignation.name );
     if(pojoTask.assignation.name == "THERA"){
@@ -39,8 +31,6 @@ class ViewTaskBloc extends Bloc<HEvent, HState> {
     commentBlocs = CommentBlocs(taskId: pojoTask.id, hasCommentSection: hasCommentSection);
   }
 
-
-
   ViewTaskBloc._internal();
 
   @override
@@ -50,5 +40,4 @@ class ViewTaskBloc extends Bloc<HEvent, HState> {
   Stream<HState> mapEventToState(HEvent event) {
     return null;
   }
-
 }

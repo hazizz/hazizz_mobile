@@ -48,6 +48,7 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
 
   @override
   void initState() {
+    currentDayIndex = MainTabBlocs().schedulesBloc.currentDayIndex;
     super.initState();
   }
 
@@ -85,7 +86,6 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
     }
 
     Map<String, List<PojoClass>> schedule = MainTabBlocs().schedulesBloc.getScheduleFromSession().classes;//pojoSchedule.classes;
-
 
     Widget body;
 
@@ -158,10 +158,8 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
                         maxLines: 1,
                         style: TextStyle(color: Colors.red, fontSize: 28, fontWeight: FontWeight.bold, decoration: d),
                       );
-
                     },
                   ),
-
                 ],
               )
             ));
@@ -182,8 +180,7 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
               canBuildBottomNavBar = true;
             });
           }
-        }
-        );
+        });
       }
 
       body = Column(
@@ -237,152 +234,146 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
           ),
           Expanded(
             child: KretaServiceHolder(
-              child: BlocBuilder(
-                  bloc: MainTabBlocs().schedulesBloc,
-                  builder: (context, state){
-                    return GestureDetector (
-                      onTap: () { /* do nothing*/ },
-                      child: RefreshIndicator(
-                        onRefresh: () async{
-                          MainTabBlocs().schedulesBloc.add(ScheduleFetchEvent());
-                        }, 
-                        child: Stack(
-                          children: <Widget>[
-                            ListView(),
-                            Column(
-                              children: <Widget>[
-                                Card(
-                                  child: BlocBuilder(
-                                    bloc: MainTabBlocs().schedulesBloc,
-                                    builder: (_, state){
-                                      return Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child:  GestureDetector (
+                onTap: () { /* do nothing*/ },
+                child: RefreshIndicator(
+                  onRefresh: () async{
+                    MainTabBlocs().schedulesBloc.add(ScheduleFetchEvent());
+                  },
+                  child: Stack(
+                    children: <Widget>[
+                      ListView(),
+                      Column(
+                        children: <Widget>[
+                          Card(
+                            child: BlocConsumer(
+                                bloc: MainTabBlocs().schedulesBloc,
+                                listener: (context, state){
+                                  setState(() {
+                                    MainTabBlocs().schedulesBloc.currentDayIndex;
+                                  });
+                                },
+                                builder: (_, state){
+                                  return Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      IconButton(
+                                        icon: Icon(FontAwesomeIcons.chevronLeft),
+                                        onPressed: (){
+                                          MainTabBlocs().schedulesBloc.previousWeek();
+                                        },
+                                      ),
+
+                                      Column(
                                         children: <Widget>[
-                                          IconButton(
-                                            icon: Icon(FontAwesomeIcons.chevronLeft),
-                                            onPressed: (){
-                                              MainTabBlocs().schedulesBloc.previousWeek();
+                                          Builder(
+                                            builder: (context){
+                                              if(MainTabBlocs().schedulesBloc.selectedWeekIsCurrent){
+                                                return Text(localize(context, key: "current_week"), style: TextStyle(fontSize: 16),);
+                                              }else if(MainTabBlocs().schedulesBloc.selectedWeekIsPrevious){
+                                                return Text(localize(context, key: "previous_week"), style: TextStyle(fontSize: 16));
+                                              }
+                                              else if(MainTabBlocs().schedulesBloc.selectedWeekIsNext){
+                                                return Text(localize(context, key: "next_week"), style: TextStyle(fontSize: 16));
+                                              }
+                                              return Container();
                                             },
                                           ),
-
-                                          Column(
-                                            children: <Widget>[
-                                              Builder(
-                                                builder: (context){
-                                                  if(MainTabBlocs().schedulesBloc.selectedWeekIsCurrent){
-                                                    return Text(localize(context, key: "current_week"), style: TextStyle(fontSize: 16),);
-                                                  }else if(MainTabBlocs().schedulesBloc.selectedWeekIsPrevious){
-                                                    return Text(localize(context, key: "previous_week"), style: TextStyle(fontSize: 16));
-                                                  }
-                                                  else if(MainTabBlocs().schedulesBloc.selectedWeekIsNext){
-                                                    return Text(localize(context, key: "next_week"), style: TextStyle(fontSize: 16));
-                                                  }
-                                                  return Container();
-                                                },
-                                              ),
-                                              Text("${MainTabBlocs().schedulesBloc.currentWeekMonday.dateTimeToMonthDay} - ${MainTabBlocs().schedulesBloc.currentWeekSunday.dateTimeToMonthDay}", style: TextStyle(fontSize: 18),),
-                                            ],
-                                          ),
-
-                                          //  Text("${weekStart.day}-${weekEnd.day}"),
-                                          IconButton(
-                                            icon: Icon(FontAwesomeIcons.chevronRight),
-                                            onPressed: (){
-                                              MainTabBlocs().schedulesBloc.nextWeek();
-                                            },
-                                          ),
+                                          Text("${MainTabBlocs().schedulesBloc.currentWeekMonday.dateTimeToMonthDay} - ${MainTabBlocs().schedulesBloc.currentWeekSunday.dateTimeToMonthDay}", style: TextStyle(fontSize: 18),),
                                         ],
-                                      );
-                                    }
-                                  ),
-                                ),
-                                Expanded(
-                                  child: BlocBuilder(
-                                      bloc:  MainTabBlocs().schedulesBloc,
-                                      condition: (ScheduleState beforeState, ScheduleState state){
-                                        if(beforeState is ScheduleLoadedState && state is ScheduleLoadedState){
-                                          //return false;
-                                        }
-                                        return true;
-                                      },
-                                      builder: (_, ScheduleState state) {
-
-                                        HazizzLogger.printLog("ScheduleState: ${state}");
-                                        if (state is ScheduleWaitingState || (state is ScheduleLoadedCacheState && lastState is ScheduleWaitingState)) {
-                                          //return Center(child: Text("Loading Data"));
-                                          return Center(child: CircularProgressIndicator(),);
-                                        }
-                                        lastState = state;
-
-                                        if (state is ScheduleLoadedState) {
-                                          if(MainTabBlocs().schedulesBloc.classes?.classes != null/*state.schedules != null && state.data.isNotEmpty()*/){
-                                            if (doesContainSelectedSession(state.failedSessions)) {
-                                              return Container();
-                                            }
-                                            return onLoaded();
-                                          }
-                                        }else if (state is ScheduleLoadedCacheState) {
-                                          if(MainTabBlocs().schedulesBloc.classes?.classes != null/*state.data != null && state.data.isNotEmpty()*/){
-                                            if (doesContainSelectedSession(state.failedSessions)) {
-                                              return Container();
-                                            }
-                                            return onLoaded();
-
-                                          }
-                                        }
-                                        else if (state is ResponseEmpty) {
-                                          return Column(
-                                            children: [
-                                              Center(
-                                                child: Padding(
-                                                  padding: const EdgeInsets.only(top: 50.0),
-                                                  child:  AutoSizeText(
-                                                    localize(context, key: "no_schedule"),
-                                                    style: TextStyle(fontSize: 17),
-                                                    textAlign: TextAlign.center,
-                                                    maxFontSize: 17,
-                                                    minFontSize: 14,
-                                                  ),
-                                                ),
-                                              )
-                                            ]
-                                          );
-                                        }else if(state is ScheduleErrorState ){
-                                          if(state.hazizzResponse.pojoError != null && state.hazizzResponse.pojoError.errorCode == 138){
-                                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                                              showKretaUnavailableFlushBar(context);
-                                            });
-                                          }
-                                          else if(state.hazizzResponse.dioError == noConnectionError){
-
-                                          }else{
-                                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                                              Flushbar(
-                                                icon: Icon(FontAwesomeIcons.exclamation, color: Colors.red,),
-
-                                                message: "${localize(context, key: "schedule")}: ${localize(context, key: "info_something_went_wrong")}",
-                                                duration: 3.seconds,
-                                              );
-                                            });
-                                          }
-
-                                          if(MainTabBlocs().schedulesBloc.classes != null){
-                                            return onLoaded();
-                                          }
-                                          return Center(
-                                              child: Text(localize(context, key: "info_something_went_wrong")));
-                                        }
-                                        return Center(child: Text(localize(context, key: "info_something_went_wrong")),);
-                                      }
-                                  ),
-                                ),
-                              ],
+                                      ),
+                                      IconButton(
+                                        icon: Icon(FontAwesomeIcons.chevronRight),
+                                        onPressed: (){
+                                          MainTabBlocs().schedulesBloc.nextWeek();
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                }
                             ),
-                          ],
-                        ),
+                          ),
+                          Expanded(
+                            child: BlocBuilder(
+                                bloc:  MainTabBlocs().schedulesBloc,
+                                condition: (ScheduleState beforeState, ScheduleState state){
+                                  if(beforeState is ScheduleLoadedState && state is ScheduleLoadedState){
+                                    //return false;
+                                  }
+                                  return true;
+                                },
+                                builder: (_, ScheduleState state) {
+
+                                  HazizzLogger.printLog("ScheduleState: ${state}");
+                                  if (state is ScheduleWaitingState || (state is ScheduleLoadedCacheState && lastState is ScheduleWaitingState)) {
+                                    //return Center(child: Text("Loading Data"));
+                                    return Center(child: CircularProgressIndicator(),);
+                                  }
+                                  lastState = state;
+
+                                  if (state is ScheduleLoadedState) {
+                                    if(MainTabBlocs().schedulesBloc.classes?.classes != null/*state.schedules != null && state.data.isNotEmpty()*/){
+                                      if (doesContainSelectedSession(state.failedSessions)) {
+                                        return Container();
+                                      }
+                                      return onLoaded();
+                                    }
+                                  }else if (state is ScheduleLoadedCacheState) {
+                                    if(MainTabBlocs().schedulesBloc.classes?.classes != null/*state.data != null && state.data.isNotEmpty()*/){
+                                      if (doesContainSelectedSession(state.failedSessions)) {
+                                        return Container();
+                                      }
+                                      return onLoaded();
+                                    }
+                                  }
+                                  else if (state is ResponseEmpty) {
+                                    return Column(
+                                        children: [
+                                          Center(child: Padding(
+                                            padding: const EdgeInsets.only(top: 50.0),
+                                            child:  AutoSizeText(
+                                              localize(context, key: "no_schedule"),
+                                              style: TextStyle(fontSize: 17),
+                                              textAlign: TextAlign.center,
+                                              maxFontSize: 17,
+                                              minFontSize: 14,
+                                            ),
+                                          ))
+                                        ]
+                                    );
+                                  }else if(state is ScheduleErrorState ){
+                                    if(state.hazizzResponse.pojoError != null && state.hazizzResponse.pojoError.errorCode == 138){
+                                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                                        showKretaUnavailableFlushBar(context);
+                                      });
+                                    }
+                                    else if(state.hazizzResponse.dioError == noConnectionError){
+
+                                    }else{
+                                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                                        Flushbar(
+                                          icon: Icon(FontAwesomeIcons.exclamation, color: Colors.red,),
+                                          message: "${localize(context, key: "schedule")}: ${localize(context, key: "info_something_went_wrong")}",
+                                          duration: 3.seconds,
+                                        );
+                                      });
+                                    }
+
+                                    if(MainTabBlocs().schedulesBloc.classes != null){
+                                      return onLoaded();
+                                    }
+                                    return Center(
+                                        child: Text(localize(context, key: "info_something_went_wrong")));
+                                  }
+                                  return Center(child: Text(localize(context, key: "info_something_went_wrong")),);
+                                }
+                            ),
+                          ),
+                        ],
                       ),
-                    );
-                  }
+                    ],
+                  ),
+                ),
               )
             ),
           )

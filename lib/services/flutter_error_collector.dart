@@ -9,5 +9,4 @@ class FlutterErrorCollector{
 		FlushBloc().add(FlushFlutterErrorEvent(flutterErrorDetails));
 		errorDetailList.add(flutterErrorDetails);
 	}
-
 }

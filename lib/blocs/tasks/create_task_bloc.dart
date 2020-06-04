@@ -19,7 +19,6 @@ import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/firebase
 import 'package:mobile/services/task_similarity_checker.dart';
 import 'package:mobile/widgets/image_viewer_widget.dart';
 
-
 //region EditTask bloc parts
 //region EditTask events
 abstract class TaskCreateEvent extends TaskMakerEvent {
@@ -67,7 +66,6 @@ class SimilarTasksTaskCreateState extends TaskCreateState {
 
 //region TaskCreate bloc
 class TaskCreateBloc extends TaskMakerBloc {
-
   int groupId, subjectId;
   List<String> tags = List();
   DateTime deadline;
@@ -85,7 +83,6 @@ class TaskCreateBloc extends TaskMakerBloc {
   TaskMakerAppState taskMakerAppState;
 
   TaskCreateBloc({this.group, this.taskMakerAppState}) : super(){
-
     if(taskMakerAppState != null){
       PojoTask t = taskMakerAppState.pojoTask;
 
@@ -103,7 +100,6 @@ class TaskCreateBloc extends TaskMakerBloc {
   }
 
 
- 
   @override
   Stream<TaskMakerState> mapEventToState(TaskMakerEvent event) async*{
 
@@ -130,8 +126,6 @@ class TaskCreateBloc extends TaskMakerBloc {
       }
 
       HazizzLogger.printLog("BEFORE POIOP: $groupId, $subjectId,");
-
-
 
       if(imageDatas != null && imageDatas.isNotEmpty){
         print("majas1: ${imageDatas[0]}");

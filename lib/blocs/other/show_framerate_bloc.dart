@@ -40,9 +40,10 @@ class ShowFramerateDisabledState extends ShowFramerateState {
 //region ShowFramerate bloc
 class ShowFramerateBloc extends Bloc<ShowFramerateEvent, ShowFramerateState> {
 
-  ShowFramerateState get initialState => PreferenceService.enabledShowFramerate ?
-  ShowFramerateEnabledState() :
-  ShowFramerateDisabledState();
+  ShowFramerateState get initialState =>
+    PreferenceService.enabledShowFramerate
+      ? ShowFramerateEnabledState()
+      : ShowFramerateDisabledState();
 
   @override
   Future<void> close() {

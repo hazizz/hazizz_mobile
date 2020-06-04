@@ -12,6 +12,7 @@ import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/custom_exception.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/managers/app_state_manager.dart';
+import 'package:mobile/managers/server_url_manager.dart';
 import 'package:mobile/managers/token_manager.dart';
 import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/firebase_analytics.dart';
 
@@ -71,7 +72,16 @@ class HazizzResponse{
     return hazizzResponse;
   }
 
-  Future<void> onErrorResponse()async {
+  Future<void> onErrorResponse() async {
+    if(dioError.type == DioErrorType.DEFAULT
+        || dioError.type == DioErrorType.CONNECT_TIMEOUT
+        || dioError.type == DioErrorType.RECEIVE_TIMEOUT
+        || dioError?.response?.statusCode == 503
+    ){
+      ServerUrlManager.switchToSecondary();
+
+      FlushBloc().add(FlushServerUnavailableEvent());
+    }
     if(response != null && response?.data != null && response?.data != "") {
       HazizzLogger.printLog("göfguiea:." + response.data + ".");
       pojoError = PojoError.fromJson(json.decode(response?.data));
@@ -145,10 +155,13 @@ class HazizzResponse{
         HazizzLogger.printLog("log: response error: ${pojoError.toString()}");
       }
       else{
-        if(dioError.type == DioErrorType.CONNECT_TIMEOUT
+        if(dioError.type == DioErrorType.DEFAULT
+        || dioError.type == DioErrorType.CONNECT_TIMEOUT
         || dioError.type == DioErrorType.RECEIVE_TIMEOUT
         || dioError?.response?.statusCode == 503
         ){
+          ServerUrlManager.switchToSecondary();
+
           FlushBloc().add(FlushServerUnavailableEvent());
         }
       }

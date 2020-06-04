@@ -15,6 +15,7 @@ import 'package:mobile/extension_methods/time_of_day_extension.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:mobile/extension_methods/duration_extension.dart';
+
 class SchedulesTabPage extends StatefulWidget {
   final List<PojoClass> classes;
 

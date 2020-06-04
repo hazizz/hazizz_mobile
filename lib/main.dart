@@ -59,7 +59,6 @@ Future<bool> fromNotification() async {
 }
 
 
-
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
 

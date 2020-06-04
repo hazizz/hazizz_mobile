@@ -75,9 +75,11 @@ class _GradesPage extends State<GradesPage>
   }
 
   Widget onLoaded(Map<String, List<PojoGrade>> g) {
+    if(g == null) return Center(child: Text("error"),);
+
     if (currentPage == 1) {
-      Map<String, List<PojoGrade>> grades =
-          copyMap(MainTabBlocs().gradesBloc.grades.grades);
+      Map<String, List<PojoGrade>> grades = copyMap(g);
+      // copyMap(MainTabBlocs().gradesBloc.grades.grades);
 
       List<PojoGrade> halfYearGrades = [];
 
@@ -107,8 +109,8 @@ class _GradesPage extends State<GradesPage>
       return Center(child: Text("empty"));
     } else if (currentPage == 2) {
       /// End of year grades
-      Map<String, List<PojoGrade>> grades =
-          copyMap(MainTabBlocs().gradesBloc.grades.grades);
+      Map<String, List<PojoGrade>> grades = copyMap(g);
+         // copyMap(MainTabBlocs().gradesBloc.grades.grades);
 
       List<PojoGrade> endOfYearGrades = [];
 

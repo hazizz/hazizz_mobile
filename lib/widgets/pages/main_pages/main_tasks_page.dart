@@ -59,75 +59,72 @@ class _TasksPage extends State<TasksPage>
   }
 
 
-  Map<DateTime, List<PojoTask>> map;
 
-  Widget onLoaded(Map<DateTime, List<PojoTask>> m){
 
-    map = m;
+  Widget onLoaded(Map<DateTime, List<PojoTask>> map){
+	//	Map<DateTime, List<PojoTask>> map = m;
 
     HazizzLogger.printLog("REBUILD, BIIP BOOp");
     return new Column(
       children: <Widget>[
         Card(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 4.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  //  Text("Feladatok:"),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 4.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                //  Text("Feladatok:"),
 
-                  DropdownButton(
-                    value: currentCompletedTaskState,
+                DropdownButton(
+                  value: currentCompletedTaskState,
+                  onChanged: (value){
+                    setState(() {
+                      currentCompletedTaskState = value;
+                    });
+                  },
+                  items: [
+                    DropdownMenuItem(child: Text(localize(context, key: "complete")), value: TaskCompleteStateEnum.COMPLETED, ),
+                    DropdownMenuItem(child: Text(localize(context, key: "incomplete")), value: TaskCompleteStateEnum.UNCOMPLETED,),
+                    DropdownMenuItem(child: Text(localize(context, key: "both")), value: TaskCompleteStateEnum.BOTH, ),
+
+                  ],
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.only(left: 4.0),
+                  child: DropdownButton(
+                    value: currentExpiredTaskState,
                     onChanged: (value){
                       setState(() {
-                        currentCompletedTaskState = value;
+                        currentExpiredTaskState = value;
                       });
                     },
                     items: [
-                      DropdownMenuItem(child: Text(localize(context, key: "complete")), value: TaskCompleteStateEnum.COMPLETED, ),
-                      DropdownMenuItem(child: Text(localize(context, key: "incomplete")), value: TaskCompleteStateEnum.UNCOMPLETED,),
-                      DropdownMenuItem(child: Text(localize(context, key: "both")), value: TaskCompleteStateEnum.BOTH, ),
-
+                      DropdownMenuItem(child: Text(localize(context, key: "expired")), value: TaskExpiredStateEnum.EXPIRED,),
+                      DropdownMenuItem(child: Text(localize(context, key: "active")), value: TaskExpiredStateEnum.UNEXPIRED,)
                     ],
                   ),
+                ),
+                Spacer(),
 
-                  Padding(
-                    padding: const EdgeInsets.only(left: 4.0),
-                    child: DropdownButton(
-                      value: currentExpiredTaskState,
-                      onChanged: (value){
-                        setState(() {
-                          currentExpiredTaskState = value;
-                        });
-                      },
-                      items: [
-                        DropdownMenuItem(child: Text(localize(context, key: "expired")), value: TaskExpiredStateEnum.EXPIRED,),
-                        DropdownMenuItem(child: Text(localize(context, key: "active")), value: TaskExpiredStateEnum.UNEXPIRED,)
-                      ],
-                    ),
-                  ),
-                  Spacer(),
+                FlatButton(child: Text(localize(context, key: "apply").toUpperCase(), style: TextStyle(fontSize: 13),),
+                  onPressed: (){
 
-                  FlatButton(child: Text(localize(context, key: "apply").toUpperCase(), style: TextStyle(fontSize: 13),),
-                    onPressed: (){
+                    applyFilters();
 
-                      applyFilters();
-
-                      MainTabBlocs().tasksBloc.add(TasksFetchEvent());
-                    },
-                  )
-                ],
-              ),
-            )
+                    MainTabBlocs().tasksBloc.add(TasksFetchEvent());
+                  },
+                )
+              ],
+            ),
+          )
         ),
 
         Expanded(
           child: Builder(builder: (context){
             if(map.keys == null || map.keys.isEmpty){
               return Center(child: Text(localize(context, key: "no_tasks")),);
-
             }else{
-
               int itemCount = map.keys.length+1;
               return ListView.separated(
                   addAutomaticKeepAlives: false,
@@ -159,21 +156,22 @@ class _TasksPage extends State<TasksPage>
                                 initialItemCount: map[key].length,
 
                                 physics: NeverScrollableScrollPhysics(),
-                                itemBuilder: (context, index2, animation) => buildItem(context, index2, animation, map[key][index2], (){
-                                  if(currentCompletedTaskState != TaskCompleteStateEnum.BOTH){
-                                    var removedItem = map[key][index2];
-                                    listKeyList[index-1].currentState.removeItem(index2, (context2, animation2){
-                                      animation2.addStatusListener((AnimationStatus animationStatus){
-                                        if(animationStatus == AnimationStatus.dismissed){
-                                          MainTabBlocs().tasksBloc.add(TasksRemoveItemEvent( mapKey: key, index: index2));
-                                        }
-                                      });
-                                      return buildItem(context2, index2, animation2, removedItem, (){});
-                                    },
-                                    duration: 500.milliseconds
-                                    );
-                                  }
-                                }),
+                                itemBuilder: (context, index2, animation) =>
+                                  buildItem(context, index2, animation, map[key][index2], (){
+                                    if(currentCompletedTaskState != TaskCompleteStateEnum.BOTH){
+                                      var removedItem = map[key][index2];
+                                      listKeyList[index-1].currentState.removeItem(index2, (context2, animation2){
+                                        animation2.addStatusListener((AnimationStatus animationStatus){
+                                          if(animationStatus == AnimationStatus.dismissed){
+                                            MainTabBlocs().tasksBloc.add(TasksRemoveItemEvent( mapKey: key, index: index2));
+                                          }
+                                        });
+                                        return buildItem(context2, index2, animation2, removedItem, (){});
+                                      },
+                                      duration: 500.milliseconds
+                                      );
+                                    }
+                                  }),
                               ),
                             ],
                           );
@@ -242,15 +240,15 @@ class _TasksPage extends State<TasksPage>
                         //  stream: tasksBloc.subject.stream,
                         builder: (_, TasksState state) {
                           if (state is TasksLoadedState) {
-                            Map<DateTime, List<PojoTask>> tasks = state.tasks;
+                          //  Map<DateTime, List<PojoTask>> tasks = state.tasks;
 
                             HazizzLogger.printLog("onLoaded asdasd");
-                            return onLoaded(tasks);
+                            return onLoaded(state.tasks);
 
                           }if (state is TasksLoadedCacheState) {
-                            Map<DateTime, List<PojoTask>> tasks = state.tasks;
+                           // Map<DateTime, List<PojoTask>> tasks = state.tasks;
 
-                            return onLoaded(tasks);
+                            return onLoaded(state.tasks);
 
                           } else if (state is ResponseEmpty) {
                             return Column(

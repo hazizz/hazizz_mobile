@@ -47,7 +47,6 @@ class DateTimeNotPickedEvent extends DateTimePickerEvent {
 }
 //endregion
 
-
 //region DateTimePicker bloc
 class DateTimePickerBloc extends Bloc<DateTimePickerEvent, DateTimePickerState> {
   @override

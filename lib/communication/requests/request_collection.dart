@@ -27,6 +27,7 @@ import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/managers/kreta_session_manager.dart';
 import 'package:mobile/managers/preference_service.dart';
+import 'package:mobile/managers/server_url_manager.dart';
 import 'package:mobile/managers/token_manager.dart';
 import 'package:meta/meta.dart';
 import 'package:mobile/services/pojo_converter_helper.dart';
@@ -49,7 +50,8 @@ class Request {
   bool authTokenHeader = false;
   bool contentTypeHeader = false;
 
-  final String baseUrl = PreferenceService.serverUrl;
+ // String baseUrl = ServerUrlManager.serverUrl;
+  String get baseUrl => ServerUrlManager.serverUrl;
   String serverPath = "";
   String path = "";
 

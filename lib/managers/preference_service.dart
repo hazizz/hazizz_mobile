@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/constants.dart';
+import 'package:mobile/managers/server_url_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:mobile/custom/hazizz_localizations.dart';
@@ -21,8 +21,6 @@ class PreferenceService{
   static const String _key_enableAd = "_key_enableAd";
 
 
-  static const String _key_serverUrl = "_key_serverUrl";
-
   static const String _key_enable_show_framerate = "_key_enable_show_framerate";
   static const String _key_enable_exception_catcher = "_key_enable_exception_catcher";
 
@@ -39,15 +37,12 @@ class PreferenceService{
 
   static bool enabledAd = false;
 
-  static String serverUrl = Constants.BASE_URL;
-
   static bool enabledShowFramerate = false;
   static bool enabledExceptionCatcher = false;
 
 
-
   static Future<void> loadAllPreferences() async {
-    serverUrl = await getServerUrl();
+    await ServerUrlManager.load();
     startPageIndex = await getStartPageIndex();
     gradeRectForm = await getGradeRectForm();
     imageAutoLoad = await getImageAutoLoad();
@@ -56,7 +51,6 @@ class PreferenceService{
     enabledShowFramerate = await getEnabledShowFramerate();
     enabledExceptionCatcher = await getEnabledExceptionCatcher();
   }
-
 
   static List<StartPageItem> getStartPages(BuildContext context){
     List<StartPageItem> pages = [StartPageItem(localize(context, key: "tasks"), 0),
@@ -74,6 +68,7 @@ class PreferenceService{
     }
     return tasksPage;
   }
+
   static Future<void> setStartPageIndex(int startPage)async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(_key_startPage, startPage.toString());
@@ -123,23 +118,6 @@ class PreferenceService{
     imageAutoDownload = autoDownloadImages;
   }
 
-
-  static Future<String> getServerUrl()async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String str = prefs.get(_key_serverUrl);
-    if(str != null){
-      serverUrl = str;
-      return str;
-    }
-    serverUrl = Constants.BASE_URL;
-    return Constants.BASE_URL;
-  }
-  static void setServerUrl(String url)async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    serverUrl = url;
-    prefs.setString(_key_serverUrl, url);
-  }
-
   static Future<bool> getEnabledShowFramerate()async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool enable = prefs.getBool(_key_enable_show_framerate);
@@ -152,8 +130,6 @@ class PreferenceService{
     prefs.setBool(_key_enable_show_framerate, enable);
   }
 
-
-
   static Future<bool> getEnabledExceptionCatcher()async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool enable = prefs.getBool(_key_enable_exception_catcher);
@@ -165,5 +141,4 @@ class PreferenceService{
     enabledExceptionCatcher = enable;
     prefs.setBool(_key_enable_exception_catcher, enable);
   }
-
 }

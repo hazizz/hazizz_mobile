@@ -20,7 +20,6 @@ class CacheManager{
 
   static PojoMeInfoPrivate meInfoOld;
 
-
   static PojoMyDetailedInfo meInfo;
   static int myId;
 

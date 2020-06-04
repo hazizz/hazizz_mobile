@@ -198,7 +198,7 @@ class CommentWriterBloc extends Bloc<CommentWriterEvent,  CommentWriterState> {
 
   final bool enabled;
 
-  CommentWriterBloc({@required this.taskId, @required this.commentSectionBloc, @required this.enabled = true}){
+  CommentWriterBloc({@required this.taskId, @required this.commentSectionBloc, this.enabled = true}){
     commentController.addListener((){
       content = commentController.text;
       if(content.length > 0 && this.state is CommentWriterEmptyState){

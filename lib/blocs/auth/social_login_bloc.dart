@@ -51,7 +51,6 @@ class SocialLoginRejectConditionsEvent extends SocialLoginEvent {
 }
 
 
-
 class SocialLoginFineState extends SocialLoginState {
   @override String toString() => 'SocialLoginFineState';
   @override
@@ -116,7 +115,6 @@ abstract class SocialLoginBloc extends Bloc<SocialLoginEvent, SocialLoginState> 
     initialize();
   }
 
-
   SocialLoginState get initialState => SocialLoginFineState();
 
   @override
@@ -141,7 +139,8 @@ abstract class SocialLoginBloc extends Bloc<SocialLoginEvent, SocialLoginState> 
       try{
         _socialToken = await getSocialToken();
         if(_socialToken == null && _socialToken == "canceled"){
-          Crashlytics().recordError(CustomException("Social Token is null"), StackTrace.current, context: "Social Token is null");
+          Crashlytics().recordError(CustomException("Social Token is null"),
+              StackTrace.current, context: "Social Token is null");
           yield SocialLoginFineState();
         }
       }catch(exception, stacktrace){
@@ -153,9 +152,8 @@ abstract class SocialLoginBloc extends Bloc<SocialLoginEvent, SocialLoginState> 
 
       HazizzResponse hazizzResponseLogin = await loginRequest(_socialToken);
       if(hazizzResponseLogin.isSuccessful) {
+        /// proceed to the app
         yield SocialLoginSuccessfulState();
-        // proceed to the app
-
       }else if(hazizzResponseLogin.hasPojoError){
         HazizzLogger.printLog("bruh you better work: 1");
         if(hazizzResponseLogin.pojoError.errorCode == ErrorCodes.AUTH_TOKEN_INVALID.code){
@@ -182,16 +180,17 @@ abstract class SocialLoginBloc extends Bloc<SocialLoginEvent, SocialLoginState> 
         HazizzResponse hazizzResponseLogin2 = await loginRequest(_socialToken);// await TokenManager.createTokenWithGoolgeOpenId(_openIdToken);
 
         if(hazizzResponseLogin2.isSuccessful){
+          /// proceed to the app
           yield SocialLoginSuccessfulState();
         }else{
           HazizzResponse hazizzResponseLogin3 = await loginRequest(_socialToken);//await TokenManager.createTokenWithGoolgeOpenId(_openIdToken);
           if(hazizzResponseLogin3.isSuccessful){
+            /// proceed to the app
             yield SocialLoginSuccessfulState();
           }else{
             yield SocialLoginFailedState(error: hazizzResponseLogin3.pojoError);
           }
         }
-        // proceed to the app
 
       }else{
         Crashlytics().recordError(CustomException("Social login failed second time"), StackTrace.current);
@@ -228,6 +227,4 @@ class LoginBlocs{
     googleLoginBloc.reset();
     facebookLoginBloc.reset();
   }
-
-
 }

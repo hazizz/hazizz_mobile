@@ -178,12 +178,6 @@ class TextFormBloc extends Bloc<HFormEvent, HFormState> {
 
   @override
   Stream<HFormState> mapEventToState(HFormEvent event) async* {
- /*   HazizzLogger.printLog("state change: $event");
-    HazizzLogger.printLog("isLocked: $isLocked");
-    HazizzLogger.printLog("lastText: $lastText, ");
-*/
-
-    Exception("asd");
     if(event is TextFormLock){
       isLocked = true;
       yield TextFormLocked();
@@ -191,7 +185,6 @@ class TextFormBloc extends Bloc<HFormEvent, HFormState> {
       isLocked = false;
       yield TextFormUnlocked();
     }
-
 
     else if(event is TextFormSetEvent) {
       lastText = event.text;

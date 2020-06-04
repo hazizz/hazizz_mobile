@@ -5,12 +5,14 @@ import 'package:mobile/dialogs/dialog_collection.dart';
 import 'package:mobile/enums/grade_type_enum.dart';
 import "package:mobile/extension_methods/string_first_upper_extension.dart";
 import 'package:mobile/extension_methods/datetime_extension.dart';
+import 'package:mobile/widgets/tag_chip.dart';
+import 'package:mobile/custom/hazizz_localizations.dart';
+import 'package:mobile/extension_methods/duration_extension.dart';
 
 class GradeItemWidget extends StatelessWidget {
 
   final PojoGrade pojoGrade;
-  final bool isBySubject;
-  final bool rectForm;
+  final bool isBySubject, rectForm;
   final String altSubject;
   final double width;
 
@@ -25,45 +27,67 @@ class GradeItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
 
     Widget gradeRectWidget(){
-      return Container(
-        width: width,
-        height: width,
-        color: pojoGrade.color,
-        child: Stack(children: [
-          Align(
-            alignment: (pojoGrade.weight != null && pojoGrade.weight != 0)
-                ? Alignment.topCenter
-                : Alignment.center,
-            child: Padding(
-              padding: (pojoGrade.weight != null && pojoGrade.weight != 0)
-                  ? const EdgeInsets.only(bottom: 2)
-                  : const EdgeInsets.all(0),
-              child: AutoSizeText(pojoGrade.grade == null ? "5" : pojoGrade.grade,
-                style: TextStyle(fontSize: 50, color: Colors.black, fontFamily: "Nunito"),
-                maxLines: 1,
-                maxFontSize: 50,
-                minFontSize: 10,
+      return Stack(
+        children: <Widget>[
+          Container(
+            width: width,
+            height: width,
+            color: pojoGrade.color,
+            child: Stack(children: [
+              Align(
+                alignment: (pojoGrade.weight != null && pojoGrade.weight != 0)
+                    ? Alignment.topCenter
+                    : Alignment.center,
+                child: Padding(
+                  padding: (pojoGrade.weight != null && pojoGrade.weight != 0)
+                      ? const EdgeInsets.only(bottom: 2)
+                      : const EdgeInsets.all(0),
+                  child: AutoSizeText(pojoGrade.grade == null ? "5" : pojoGrade.grade,
+                    style: TextStyle(fontSize: 50, color: Colors.black, fontFamily: "Nunito"),
+                    maxLines: 1,
+                    maxFontSize: 50,
+                    minFontSize: 10,
+                  ),
+                ),
               ),
+              if (pojoGrade.gradeType == GradeTypeEnum.MIDYEAR
+                  && (pojoGrade.weight != null && pojoGrade.weight != 0))
+                Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 0, left: 4),
+                      child: Builder(
+                        builder: (context){
+                          Color textColor = Colors.black;
+                          if(pojoGrade.weight == 200){
+                            // textColor = Colors.red;
+                          }
+                          return Text("${pojoGrade.weight}%", style: TextStyle(color: textColor, fontFamily: "Nunito"),);
+                        },
+                      ),
+                    )
+                ),
+
+
+              if(pojoGrade.creationDate.isBefore(DateTime.now().add(1.days))
+              && pojoGrade.creationDate.isAfter(DateTime.now().subtract(1.days)))
+                Align(alignment: Alignment.topRight,
+                  child: Padding(
+                    padding: const EdgeInsets.all(1),
+                    child: TagChip(
+                      hasCloseButton: false,
+                      padding: EdgeInsets.only(left: 2, right: 2),
+                      height: 18,
+                      child: Text("new".localize(context), style: TextStyle(fontSize: 10),),
+                      backgroundColor: Colors.red,
+                    ),
+                  ),
+                )
+
+            ]
             ),
           ),
-          if (pojoGrade.gradeType == GradeTypeEnum.MIDYEAR)
-            if(pojoGrade.weight != null && pojoGrade.weight != 0) Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 0, left: 4),
-                child: Builder(
-                  builder: (context){
-                    Color textColor = Colors.black;
-                    if(pojoGrade.weight == 200){
-                      // textColor = Colors.red;
-                    }
-                    return Text("${pojoGrade.weight}%", style: TextStyle(color: textColor, fontFamily: "Nunito"),);
-                  },
-                ),
-              )
-            ),
-        ]
-        ),
+        ],
       );
     }
 
@@ -104,15 +128,7 @@ class GradeItemWidget extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                    Container( //Hero(
-                      /*
-                      placeholderBuilder: (context, size, widget){
-                        return gradeRectWidget();
-                      },
-
-                      tag: pojoGrade,
-
-                       */
+                    Container(
                       child: gradeRectWidget(),
                     ),
                     Expanded(
@@ -136,10 +152,10 @@ class GradeItemWidget extends StatelessWidget {
                                       children: <Widget>[
                                         Text((altSubject ?? pojoGrade.subject).toUpperFirst(),
                                           style: TextStyle(
-                                              fontSize: 18,
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w700,
-                                              height: 0.96
+                                            fontSize: 18,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w700,
+                                            height: 0.96
                                           )
                                         ),
                                       ],
@@ -167,25 +183,6 @@ class GradeItemWidget extends StatelessWidget {
                               },
                             ),
                           ),
-                          /*
-                          Padding(
-                            padding: const EdgeInsets.only(left: 6.0),
-                            child: Builder(
-                              builder: (context){
-                                GradeTypeEnum gradeType = pojoGrade.gradeType;
-                                String gradeTypeShow;
-                                if(gradeType == GradeTypeEnum.MIDYEAR){
-                                  gradeTypeShow = locText(context, key: "gradeType_midYear");
-                                }else if(gradeType == GradeTypeEnum.HALFYEAR){
-                                  gradeTypeShow = locText(context, key: "gradeType_halfYear");
-                                }else if(gradeType == GradeTypeEnum.ENDYEAR){
-                                  gradeTypeShow = locText(context, key: "gradeType_endYear");
-                                }
-                                return Text(gradeTypeShow);
-                              },
-                            ),
-                          ),
-                          */
                         ],
                       ),
                     )

@@ -168,7 +168,6 @@ class SchoolItemPickerBloc extends ItemListPickerBloc {
           HazizzLogger.printLog("kréta schools fetch successful for the second time");
 
           data = hazizzResponse.convertedData;
-          // listItemData = responseData;
           yield ItemListLoaded(data: data);
 
         }else{
@@ -191,8 +190,6 @@ Future setSession(PojoSession newSession, {String password}) async {
 class KretaLoginBloc extends Bloc<KretaLoginEvent, KretaLoginState> {
   TextEditingController usernameController;
   TextEditingController passwordController;
-  // final TextFormBloc usernameBloc;
-  // final TextFormBloc passwordBloc;
   final SchoolItemPickerBloc schoolBloc;
 
   PojoSession session;

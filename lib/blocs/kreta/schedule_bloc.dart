@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile/blocs/kreta/selected_session_bloc.dart';
 import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
@@ -68,11 +69,13 @@ class ScheduleWaitingState extends ScheduleState {
 
 
 class ScheduleLoadedState extends ScheduleState {
+  final int year, week;
   final PojoSchedules schedules;
 
   final List<PojoSession> failedSessions;
 
-  ScheduleLoadedState(this.schedules, {this.failedSessions}) : assert(schedules!= null), super([schedules, SelectedSessionBloc().selectedSession]);
+  ScheduleLoadedState(this.schedules, {this.year, this.week, this.failedSessions})
+      : assert(schedules!= null), super([schedules, SelectedSessionBloc().selectedSession]);
   @override
   String toString() => 'ScheduleLoadedState';
   List<Object> get props => [schedules, SelectedSessionBloc().selectedSession];
@@ -82,7 +85,8 @@ class ScheduleLoadedCacheState extends ScheduleState {
   final PojoSchedules data;
   final List<PojoSession> failedSessions;
 
-  ScheduleLoadedCacheState(this.data, {this.failedSessions}) : assert(data!= null), super([data, SelectedSessionBloc().selectedSession]);
+  ScheduleLoadedCacheState(this.data, {this.failedSessions})
+      : assert(data!= null), super([data, SelectedSessionBloc().selectedSession]);
   @override
   String toString() => 'ScheduleLoadedCacheState';
   List<Object> get props => [data, SelectedSessionBloc().selectedSession];
@@ -216,7 +220,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
   Stream<ScheduleState> mapEventToState(ScheduleEvent event) async* {
     if(event is ScheduleSetSessionEvent){
       print("Updating ScheduleBloc state due to new session selected");
-      yield ScheduleLoadedState(classes, failedSessions: failedSessions);
+      yield ScheduleLoadedState(classes, year: currentYearNumber, week: currentWeekNumber, failedSessions: failedSessions);
     }
     else if (event is ScheduleFetchEvent) {
       try {
@@ -246,7 +250,6 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
           currentDayIndex = 0;
         }
 
-
         HazizzLogger.printLog("event.yearNumber, event.weekNumber: ${event.yearNumber}, ${event.weekNumber}");
 
         if(currentYearNumber == currentCurrentYearNumber && currentWeekNumber == currentCurrentWeekNumber){
@@ -259,21 +262,13 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
           }
         }
 
-        //HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetSchedulesWithSession(q_year: currentYearNumber, q_weekNumber: currentWeekNumber));
         HazizzResponse hazizzResponse = await getResponse(
           KretaGetSchedules(qYear: currentYearNumber, qWeekNumber: currentWeekNumber),
           useSecondaryOptions: event.retry
         );
 
         if(hazizzResponse.isSuccessful){
-
           failedSessions = getFailedSessionsFromHeader(hazizzResponse.response.headers);
-
-          /*
-          if(doesContainSelectedSession(failedSessions)){
-            FlushBloc().add(FlushSessionFailEvent());
-          }
-          */
 
           PojoSchedules r = hazizzResponse.convertedData;
           if(r != null && r.classes.isNotEmpty){
@@ -284,35 +279,11 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
               if(currentYearNumber == currentCurrentYearNumber && currentWeekNumber == currentCurrentWeekNumber) {
                 saveScheduleCache(classes, year: currentYearNumber, weekNumber: currentWeekNumber);
               }
-              yield ScheduleLoadedState(classes, failedSessions: failedSessions);
+              yield ScheduleLoadedState(classes, year: currentYearNumber, week: currentWeekNumber, failedSessions: failedSessions);
             }
           }else{
             yield ScheduleLoadedCacheState(classes, failedSessions: failedSessions);
           }
-          /*
-          classes = PojoSchedules({"0": [
-            PojoClass(date: DateTime(2000), periodNumber: 0, startOfClass: HazizzTimeOfDay(hour: 2, minute: 2), endOfClass: HazizzTimeOfDay(hour: 2, minute: 2), className: "TEST", topic: "TOPIC", subject: "SUBJECT", room: "", cancelled: true, standIn: true, teacher: "PEKÁR LOL"),
-            PojoClass(date: DateTime(2000), periodNumber: 0, startOfClass: HazizzTimeOfDay(hour: 2, minute: 2), endOfClass: HazizzTimeOfDay(hour: 2, minute: 2), className: "TEST", topic: "TOPIC", subject: "SUBJECT", room: "", cancelled: true, standIn: true, teacher: "PEKÁR LOL"),
-            PojoClass(date: DateTime(2000), periodNumber: 0, startOfClass: HazizzTimeOfDay(hour: 2, minute: 2), endOfClass: HazizzTimeOfDay(hour: 2, minute: 2), className: "TEST", topic: "TOPIC", subject: "SUBJECT", room: "", cancelled: true, standIn: true, teacher: "PEKÁR LOL"),
-            PojoClass(date: DateTime(2000), periodNumber: 0, startOfClass: HazizzTimeOfDay(hour: 2, minute: 2), endOfClass: HazizzTimeOfDay(hour: 2, minute: 2), className: "TEST", topic: "TOPIC", subject: "SUBJECT", room: "", cancelled: true, standIn: true, teacher: "PEKÁR LOL"),
-
-          ],
-            "3": [
-              PojoClass(date: DateTime(2000), periodNumber: 2, startOfClass: HazizzTimeOfDay(hour: 2, minute: 2), endOfClass: HazizzTimeOfDay(hour: 2, minute: 2), className: "TEST", topic: "TOPIC", subject: "SUBJECT", room: "", cancelled: true, standIn: true, teacher: "PEKÁR LOL"),
-              PojoClass(date: DateTime(2000), periodNumber: 2, startOfClass: HazizzTimeOfDay(hour: 2, minute: 2), endOfClass: HazizzTimeOfDay(hour: 2, minute: 2), className: "TEST", topic: "TOPIC", subject: "SUBJECT", room: "", cancelled: true, standIn: true, teacher: "PEKÁR LOL"),
-              PojoClass(date: DateTime(2000), periodNumber: 2, startOfClass: HazizzTimeOfDay(hour: 2, minute: 2), endOfClass: HazizzTimeOfDay(hour: 2, minute: 2), className: "TEST", topic: "TOPIC", subject: "SUBJECT", room: "", cancelled: true, standIn: true, teacher: "PEKÁR LOL"),
-              PojoClass(date: DateTime(2000), periodNumber: 2, startOfClass: HazizzTimeOfDay(hour: 2, minute: 2), endOfClass: HazizzTimeOfDay(hour: 2, minute: 2), className: "TEST", topic: "TOPIC", subject: "SUBJECT", room: "", cancelled: true, standIn: true, teacher: "PEKÁR LOL"),
-
-            ],
-            "4": [
-              PojoClass(date: DateTime(2000), periodNumber: 2, startOfClass: HazizzTimeOfDay(hour: 2, minute: 2), endOfClass: HazizzTimeOfDay(hour: 2, minute: 2), className: "TEST", topic: "TOPIC", subject: "SUBJECT", room: "", cancelled: true, standIn: true, teacher: "PEKÁR LOL"),
-              PojoClass(date: DateTime(2000), periodNumber: 2, startOfClass: HazizzTimeOfDay(hour: 2, minute: 2), endOfClass: HazizzTimeOfDay(hour: 2, minute: 2), className: "TEST", topic: "TOPIC", subject: "SUBJECT", room: "", cancelled: true, standIn: true, teacher: "PEKÁR LOL"),
-              PojoClass(date: DateTime(2000), periodNumber: 2, startOfClass: HazizzTimeOfDay(hour: 2, minute: 2), endOfClass: HazizzTimeOfDay(hour: 2, minute: 2), className: "TEST", topic: "TOPIC", subject: "SUBJECT", room: "", cancelled: true, standIn: true, teacher: "PEKÁR LOL"),
-              PojoClass(date: DateTime(2000), periodNumber: 2, startOfClass: HazizzTimeOfDay(hour: 2, minute: 2), endOfClass: HazizzTimeOfDay(hour: 2, minute: 2), className: "TEST", topic: "TOPIC", subject: "SUBJECT", room: "", cancelled: true, standIn: true, teacher: "PEKÁR LOL"),
-
-            ],
-          });
-          */
         }
         else if(hazizzResponse.isError){
 
@@ -320,9 +291,9 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
             yield ScheduleErrorState(hazizzResponse);
 
             Connection.addConnectionOnlineListener((){
-              this.add(ScheduleFetchEvent());
-            },
-                "schedule_fetch"
+                this.add(ScheduleFetchEvent());
+              },
+              "schedule_fetch"
             );
 
           }else if(hazizzResponse.dioError.type == DioErrorType.CONNECT_TIMEOUT
@@ -333,10 +304,8 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
             }else{
               yield ScheduleLoadedCacheState(classes);
             }
-
           }else{
             yield ScheduleErrorState(hazizzResponse);
-
           }
         }
       } on Exception catch(e){

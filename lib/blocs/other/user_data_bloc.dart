@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-
 import 'package:flutter/widgets.dart';
 import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/response_states.dart';
@@ -9,19 +8,16 @@ import 'package:mobile/communication/pojos/PojoMeInfoPrivate.dart';
 import 'package:mobile/communication/pojos/PojoMyDetailedInfo.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
-
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/custom/image_operations.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/storage/cache_manager.dart';
-
 
 class UserDataBlocs{
 
   ProfilePictureBloc pictureBloc = ProfilePictureBloc();
   DisplayNameBloc displayNameBloc = DisplayNameBloc();
   MyUserDataBloc userDataBloc = MyUserDataBloc();
-
 
   static final UserDataBlocs _singleton = new UserDataBlocs._internal();
   factory UserDataBlocs() {
@@ -38,6 +34,7 @@ class UserDataBlocs{
 
 
   Future<void> close(){
+    displayNameBloc.close();
     return pictureBloc.close();
   }
 }
@@ -485,7 +482,7 @@ class MyUserDataInitialState extends MyUserDataState {
 }
 
 class MyUserDataLoadedState extends MyUserDataState {
-  PojoMyDetailedInfo meInfo;
+  final PojoMyDetailedInfo meInfo;
   MyUserDataLoadedState({@required this.meInfo}) : super([meInfo]){
 
   }

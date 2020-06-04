@@ -100,7 +100,6 @@ class SelectedSessionBloc extends Bloc<SelectedSessionEvent, SelectedSessionStat
 
       PojoSession selectedSessionCached = await KretaSessionManager.getSelectedSession();
 
-
       if(selectedSessionCached != null){
         selectedSession = selectedSessionCached;
         yield SelectedSessionFineState(selectedSession);
@@ -152,8 +151,6 @@ class SelectedSessionBloc extends Bloc<SelectedSessionEvent, SelectedSessionStat
         }else{
           yield SelectedSessionInactiveState();
         }
-
-
       }else{
         HazizzLogger.printLog("SelectedSessionInactiveEvent but doesnt remembers password");
         yield SelectedSessionInactiveState();

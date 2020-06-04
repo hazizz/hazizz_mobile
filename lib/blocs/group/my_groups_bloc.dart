@@ -6,7 +6,6 @@ import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 
-
 class MyGroupsBloc extends Bloc<HEvent, HState> {
   @override
   HState get initialState => ResponseEmpty();

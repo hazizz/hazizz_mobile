@@ -22,8 +22,10 @@ class _FlutterErrorPage extends State<CaughtExceptionsPage> {
 	@override
 	void initState() {
 		if(widget.flutterErrorDetails != null && FlutterErrorCollector.errorDetailList.isNotEmpty){
-			int index = FlutterErrorCollector.errorDetailList.indexOf(widget.flutterErrorDetails);
-			itemScrollController.scrollTo(index: index, duration: 400.milliseconds);
+			try{
+				int index = FlutterErrorCollector.errorDetailList.indexOf(widget.flutterErrorDetails);
+				itemScrollController.scrollTo(index: index, duration: 400.milliseconds);
+			}catch(e){}
 		}
 		super.initState();
 	}

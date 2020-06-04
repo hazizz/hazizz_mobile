@@ -654,7 +654,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                                       onPressed: () async {
                                                         if(await showDeleteTaskDialog(context, taskId: widget.taskId)){
                                                           HazizzLogger.printLog("showDeleteTaskDialog : success");
-                                                          MainTabBlocs().tasksBloc.add(TasksFetchEvent());
+
                                                           List<String> splited = pojoTask.description.split("\n![img_");
                                                           if(splited.length > 1){
                                                             await GoogleDriveManager().initialize();
@@ -665,10 +665,9 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                                           }
 
                                                           Navigator.of(context).pop();
-
+                                                          MainTabBlocs().tasksBloc.add(TasksFetchEvent());
                                                         }else{
                                                           HazizzLogger.printLog("showDeleteTaskDialog: no success");
-
                                                         }
 
                                                       },

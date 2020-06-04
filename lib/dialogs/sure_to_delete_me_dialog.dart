@@ -9,9 +9,7 @@ import 'package:mobile/theme/hazizz_theme.dart';
 import 'dialog_collection.dart';
 
 class SureToDeleteMeDialog extends StatefulWidget {
-
   SureToDeleteMeDialog();
-
   @override
   _SureToDeleteMeDialog createState() => new _SureToDeleteMeDialog();
 }
@@ -20,8 +18,6 @@ class _SureToDeleteMeDialog extends State<SureToDeleteMeDialog> {
 
   @override
   void initState() {
-
-
     super.initState();
   }
 
@@ -29,7 +25,6 @@ class _SureToDeleteMeDialog extends State<SureToDeleteMeDialog> {
 
   final double width = 300;
   final double height = 90;
-
 
   @override
   Widget build(BuildContext context) {
@@ -47,10 +42,10 @@ class _SureToDeleteMeDialog extends State<SureToDeleteMeDialog> {
                   Center(
                     child: Builder(builder: (context){
                       return Text(localize(context, key: "areyousure_delete_me"),
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                          )
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                        )
                       );
 
                     }),
@@ -72,40 +67,35 @@ class _SureToDeleteMeDialog extends State<SureToDeleteMeDialog> {
           ],
         ),
         content: Container(),
-        actionButtons: Builder(builder: (context){
-
-          return Row(children: <Widget>[
-            FlatButton(
-              child: Text(localize(context, key: "no").toUpperCase(),),
-              onPressed: (){
-                Navigator.pop(context, false);
-              },
-            ),
-            FlatButton(
-              child: Text(localize(context, key: "yes").toUpperCase(),),
-              onPressed: () async {
-
-                setState(() {
-                  isLoading = true;
-                });
-                HazizzResponse hazizzResponse = await RequestSender().getResponse(
+        actionButtons: Row(children: <Widget>[
+          FlatButton(
+            child: Text(localize(context, key: "no").toUpperCase(),),
+            onPressed: (){
+              Navigator.pop(context, false);
+            },
+          ),
+          FlatButton(
+            child: Text(localize(context, key: "yes").toUpperCase(),),
+            onPressed: () async {
+              setState(() {
+                isLoading = true;
+              });
+              HazizzResponse hazizzResponse = await RequestSender().getResponse(
                   DeleteMe(pUserId: CacheManager.getMyIdSafely)
-                );
+              );
 
-                if(hazizzResponse.isSuccessful){
-                  AppState.logout();
-                }else{
-                  print("delete me failed");
-                }
-                setState(() {
-                  isLoading = false;
-                });
+              if(hazizzResponse.isSuccessful){
+                AppState.logout();
+              }else{
+                print("delete me failed");
+              }
+              setState(() {
+                isLoading = false;
+              });
 
-              },
-            )
-          ],);
-
-        })
+            },
+          )
+        ],)
     );
     return dialog;
   }

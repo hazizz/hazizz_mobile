@@ -55,11 +55,11 @@ class RequestSender{
       },
       onResponse:(Response response) {
         HazizzLogger.printLog("got response: ${response.data}");
-        return response; // continue
+        return response;
       },
       onError: (DioError e) async{
         HazizzLogger.printLog("got response error: ${e}");
-        return  e;//continue
+        return  e;
       }
     ));
   }
@@ -219,15 +219,10 @@ class RequestSender{
         HazizzLogger.printLog("request url: ${request.url}");
 
         Dio currentDio;
-      //  BaseOptions currentOption;
 
-        if(useSecondaryOptions){
-          currentDio = secondaryDio;
-        }else if(request is TheraRequest){
-          currentDio = theraDio;
-        }else{
-          currentDio = defaultDio;
-        }
+        if(useSecondaryOptions) currentDio = secondaryDio;
+        else if(request is TheraRequest) currentDio = theraDio;
+        else currentDio = defaultDio;
 
         final Options option = Options(headers: await request.buildHeader());
 

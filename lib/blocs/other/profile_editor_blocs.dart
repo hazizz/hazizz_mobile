@@ -11,33 +11,21 @@ import 'package:mobile/custom/image_operations.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/blocs/other/user_data_bloc.dart';
 
-
 class ProfileEditorBlocs{
 
-  ProfilePictureEditorBloc pictureEditorBloc;
-  DisplayNameEditorBloc displayNameEditorBloc;
-
-
+  ProfilePictureEditorBloc pictureEditorBloc = ProfilePictureEditorBloc();
+  DisplayNameEditorBloc displayNameEditorBloc = DisplayNameEditorBloc();
 
   ProfileEditorBlocs(){
-    pictureEditorBloc = new ProfilePictureEditorBloc();
-
     pictureEditorBloc.add(ProfilePictureEditorLoadFromCacheEvent());
-
-
-    displayNameEditorBloc = new DisplayNameEditorBloc();
-
     displayNameEditorBloc.add(DisplayNameLoadFromCacheEvent());
-
   }
 
   Future<void> close(){
     pictureEditorBloc.close();
     return displayNameEditorBloc.close();
-
   }
 }
-
 
 
 abstract class DisplayNameTextFieldState extends HState {
@@ -126,10 +114,6 @@ class ProfilePictureEditorInitialState extends ProfilePictureEditorState {
 class ProfilePictureEditorBloc extends Bloc<ProfilePictureEditorEvent, ProfilePictureEditorState> {
   Uint8List profilePictureBytes;
 
-
-
-  ProfilePictureEditorBloc();
-
   @override
   ProfilePictureEditorState get initialState => ProfilePictureEditorInitialState();
 
@@ -152,12 +136,9 @@ class ProfilePictureEditorBloc extends Bloc<ProfilePictureEditorEvent, ProfilePi
       HazizzResponse hazizzResponse = await RequestSender().getResponse(new UpdateMyProfilePicture(encodedImage: fromBytesImageToBase64(profilePictureBytes)));
 
       if (hazizzResponse.isSuccessful) {
-
         UserDataBlocs().pictureBloc.add(ProfilePictureSetEvent(imageBytes: profilePictureBytes));
 
         yield ProfilePictureEditorFineState(imageBytes: profilePictureBytes);
-
-
       }else{
         yield ProfilePictureEditorChangedState(imageBytes: profilePictureBytes);
       }
@@ -167,12 +148,9 @@ class ProfilePictureEditorBloc extends Bloc<ProfilePictureEditorEvent, ProfilePi
       HazizzResponse hazizzResponse = await RequestSender().getResponse(new UpdateMyProfilePicture(encodedImage: fromBytesImageToBase64(profilePictureBytes)));
 
       if (hazizzResponse.isSuccessful) {
-
         UserDataBlocs().pictureBloc.add(ProfilePictureSetEvent(imageBytes: profilePictureBytes));
 
         yield ProfilePictureEditorFineState(imageBytes: profilePictureBytes);
-
-
       }else{
         yield ProfilePictureEditorChangedState(imageBytes: profilePictureBytes);
       }
@@ -180,32 +158,7 @@ class ProfilePictureEditorBloc extends Bloc<ProfilePictureEditorEvent, ProfilePi
       RequestSender().getResponse(new GetMyGroups());
     }
   }
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //region GroupItemPickerBlocParts
@@ -279,7 +232,6 @@ class DisplayNameEditorBloc extends Bloc<DisplayNameEvent, DisplayNameState> {
   String lastText;
 
   TextEditingController displayNameController = TextEditingController();
-
 
   DisplayNameEditorBloc() {
     displayNameController.addListener((){

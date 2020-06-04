@@ -20,14 +20,12 @@ class HazizzTheme{
 
   kreta_blue = Color.fromRGBO(47, 168, 202, 1),
 
-
   grade5Color = Colors.green,
   grade4Color = Colors.lightGreenAccent,
   grade3Color = Colors.yellowAccent,
   grade2Color = Colors.orange,
   grade1Color = Colors.red,
   gradeNeutralColor = Colors.grey,
-
 
   headerColor = Colors.red,
   homeworkColor = Colors.green,

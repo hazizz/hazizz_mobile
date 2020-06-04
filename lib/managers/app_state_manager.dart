@@ -1,12 +1,10 @@
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mobile/blocs/auth/facebook_login_bloc.dart';
 import 'package:mobile/blocs/auth/google_login_bloc.dart';
 import 'package:mobile/blocs/auth/social_login_bloc.dart';
 import 'package:mobile/blocs/kreta/sessions_bloc.dart';
-import 'package:mobile/blocs/other/flush_bloc.dart';
 import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/user_data_bloc.dart';
 import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
@@ -81,10 +79,8 @@ class AppState{
     Crashlytics.instance.enableInDevMode = false;
     FlutterError.onError = (FlutterErrorDetails details){
       FlutterErrorCollector.add(details);
-    //  FlushBloc().add(FlushFlutterErrorEvent(details));
       Crashlytics.instance.recordFlutterError(details);
     };
-   // for(int i = 0; i < 14; i++){Crashlytics().crash();}
     await AndroidAlarmManager.initialize();
   }
 
@@ -175,22 +171,18 @@ class AppState{
     return true;
   }
 
-
   static Future setDisallowedGDrive() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
-
     sp.setBool(key_isAllowedGDrive, false);
   }
 
   static Future setAllowedGDrive() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
-
     sp.setBool(key_isAllowedGDrive, true);
   }
 
   static Future<bool> isAllowedGDrive() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
-
     bool allowed = sp.getBool(key_isAllowedGDrive);
     return allowed ?? false;
   }

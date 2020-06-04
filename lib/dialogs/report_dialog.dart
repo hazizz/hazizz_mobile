@@ -32,7 +32,6 @@ class ReportDialog extends StatefulWidget {
 class _ReportDialog extends State<ReportDialog> {
 
   bool isLoading = false;
-
   bool acceptedHazizzPolicy = false;
 
   final TextEditingController descriptionController = TextEditingController();
@@ -84,7 +83,6 @@ class _ReportDialog extends State<ReportDialog> {
       currentLang = "en";
     }
 
-
     var dialog = HazizzDialog(width: width, height: height,
       header: Container(
         width: width,
@@ -109,8 +107,6 @@ class _ReportDialog extends State<ReportDialog> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-
-
                     TextField(
                       // textInputAction: TextInputAction.done,
                       style: TextStyle(fontSize: 18),
@@ -123,7 +119,6 @@ class _ReportDialog extends State<ReportDialog> {
                       minLines: 2,
                       expands: false,
                     ),
-
 
                     Row(children: <Widget>[
                       Checkbox(value: acceptedHazizzPolicy, onChanged: (value){
@@ -144,7 +139,6 @@ class _ReportDialog extends State<ReportDialog> {
                       }
                       return Container();
                     },)
-
                   ],
                 ),
               )

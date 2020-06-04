@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/item_list/item_list_picker_bloc.dart';
+import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
+import 'package:mobile/blocs/tasks/tasks_bloc.dart';
 import 'package:mobile/custom/line_break_limit_text_formatter.dart';
 import 'package:mobile/main.dart';
 import 'package:mobile/managers/app_state_restorer.dart';
@@ -293,8 +295,7 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                 if(state is ItemListLoaded || state is PickedGroupState) {
                   PojoGroup result = await showDialogGroup(context, data: dataList);
                   if(result != null) {
-                    taskMakerBloc.groupItemPickerBloc.add(
-                        PickedGroupEvent(item: result));
+                    taskMakerBloc.groupItemPickerBloc.add(PickedGroupEvent(item: result));
                   }
                 }
               }
@@ -309,7 +310,8 @@ class _TaskMakerPage extends State<TaskMakerPage> {
           return BlocBuilder(
             bloc: taskMakerBloc.groupItemPickerBloc,
             builder: (context2, state2){
-              if(taskMakerBloc.groupItemPickerBloc.pickedItem == null || taskMakerBloc.groupItemPickerBloc.pickedItem.id == 0){
+              if(taskMakerBloc.groupItemPickerBloc.pickedItem == null
+              || taskMakerBloc.groupItemPickerBloc.pickedItem.id == 0){
                 return Container();
               }
               return GestureDetector(
@@ -336,9 +338,9 @@ class _TaskMakerPage extends State<TaskMakerPage> {
 
                           return InputDecorator(
                               decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.only(left: 6, bottom: 8, top: 10),
-                                  labelText: hint,
-                                  errorText: error
+                                contentPadding: EdgeInsets.only(left: 6, bottom: 8, top: 10),
+                                labelText: hint,
+                                errorText: error
                               ),
                               isEmpty: _color == '',
                               child: Builder(
@@ -347,7 +349,6 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                                     return Container();
                                   }
                                   if(state is PickedSubjectState) {
-
                                     return Text('${ state.item.id != 0
                                         ? state.item.name
                                         : getEmptyPojoSubject(context).name}',
@@ -468,17 +469,14 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                 onFieldSubmitted: (String value){
                   FocusScope.of(context).requestFocus(new FocusNode());
                 },
-                decoration: InputDecoration(labelText: localize(context, key: "description"), errorText: null,
-                  alignLabelWithHint: true,
-                  filled: true,
+                decoration: InputDecoration(labelText: "description".localize(context),
+                  alignLabelWithHint: true, filled: true,
                 ),
                 maxLength: descriptionMaxLength - 75 * imageDatas.length,
                 maxLines: 10,
                 minLines: 6,
                 expands: false,
-                style: TextStyle(
-                    fontSize: 19
-                ),
+                style: TextStyle(fontSize: 19),
               );
             }
         ),
@@ -493,7 +491,6 @@ class _TaskMakerPage extends State<TaskMakerPage> {
         }else if(widget.mode == TaskMakerMode.edit){
           deleteAddedGDriveImages();
         }
-       // Navigator.pop(context);
         return Future.value(true);
       },
       child: BlocListener(
@@ -502,20 +499,20 @@ class _TaskMakerPage extends State<TaskMakerPage> {
             if (state is TaskMakerSuccessfulState) {
               deleteDeletedGDriveImages();
               Navigator.pop(context, state.task);
+              MainTabBlocs().tasksBloc.add(TasksFetchEvent());
             }
             if(state is SimilarTasksTaskCreateState) {
               bool result = await showGeneralDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  barrierLabel: MaterialLocalizations.of(context)
-                      .modalBarrierDismissLabel,
-                  barrierColor: Colors.black45,
-                  transitionDuration: 200.milliseconds,
-                  pageBuilder: (BuildContext buildContext,
-                      Animation animation,
-                      Animation secondaryAnimation) {
-                    return SimilarTasksWidget(similarTasks: state.similarTasks,);
-              });
+                context: context,
+                barrierDismissible: false,
+                barrierLabel: MaterialLocalizations.of(context)
+                    .modalBarrierDismissLabel,
+                barrierColor: Colors.black45,
+                transitionDuration: 200.milliseconds,
+                pageBuilder: (BuildContext buildContext, Animation animation, Animation secondaryAnimation) {
+                  return SimilarTasksWidget(similarTasks: state.similarTasks,);
+                }
+              );
               if(result){
                 taskMakerBloc.add(TaskMakerProceedToSendEvent());
               }else{
@@ -546,10 +543,12 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                       );
                     }else{
                       return FloatingActionButton(
-                          child: widget.mode == TaskMakerMode.create ?  Icon(FontAwesomeIcons.check) : Padding(
-                            padding: const EdgeInsets.only(bottom: 4),
-                            child: Icon(FontAwesomeIcons.edit),
-                          ),
+                          child: widget.mode == TaskMakerMode.create
+                            ?  Icon(FontAwesomeIcons.check)
+                            : Padding(
+                              padding: const EdgeInsets.only(bottom: 4),
+                              child: Icon(FontAwesomeIcons.edit),
+                            ),
                           onPressed: () async {
                             if(!(state is TaskMakerWaitingState)) {
                               taskMakerBloc.add(
