@@ -93,6 +93,7 @@ class PickedGroupState extends ItemListState {
 //endregion
 
 //region GroupItemListBloc
+// TODO rewrite this
 class GroupItemPickerBloc extends ItemListPickerBloc {
   final SubjectItemPickerBloc subjectItemPickerBloc;
   StreamSubscription subjectItemPickerBlocSubscription;

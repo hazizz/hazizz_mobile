@@ -304,7 +304,7 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
                                 },
                                 builder: (_, ScheduleState state) {
 
-                                  HazizzLogger.printLog("ScheduleState: ${state}");
+                                  HazizzLogger.printLog("ScheduleState: $state");
                                   if (state is ScheduleWaitingState || (state is ScheduleLoadedCacheState && lastState is ScheduleWaitingState)) {
                                     //return Center(child: Text("Loading Data"));
                                     return Center(child: CircularProgressIndicator(),);

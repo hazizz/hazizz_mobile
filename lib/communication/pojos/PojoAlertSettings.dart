@@ -22,7 +22,6 @@ class PojoAlertSettings  implements Pojo {
   factory PojoAlertSettings.fromJson(Map<String, dynamic> json) =>
       _$PojoAlertSettingsFromJson(json);
 
-  @override
   Map<String, dynamic> toJson() => _$PojoAlertSettingsToJson(this);
 }
 

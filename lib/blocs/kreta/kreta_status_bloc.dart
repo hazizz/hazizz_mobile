@@ -77,6 +77,11 @@ class KretaStatusBloc extends Bloc<KretaStatusEvent, KretaStatusState> {
   }
   @override
   KretaStatusState get initialState => KretaStatusAvailableState();
+
+
+  void closeBloc(){
+    _singleton.close();
+  }
 }
 //endregion
 //endregion

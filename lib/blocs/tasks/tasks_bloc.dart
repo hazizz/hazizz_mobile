@@ -64,7 +64,7 @@ class TasksWaitingState extends TasksState {
 
 
 class TasksLoadedState extends TasksState {
-  Map<DateTime, List<PojoTask>> tasks;
+  final Map<DateTime, List<PojoTask>> tasks;
 
   TasksLoadedState(this.tasks) : assert(tasks!= null), super([tasks, DateTime.now()]);
   @override
@@ -73,7 +73,7 @@ class TasksLoadedState extends TasksState {
 }
 
 class TasksLoadedCacheState extends TasksState {
-  Map<DateTime, List<PojoTask>> tasks;
+  final Map<DateTime, List<PojoTask>> tasks;
 
   TasksLoadedCacheState(this.tasks) : assert(tasks!= null), super([tasks]);
   @override

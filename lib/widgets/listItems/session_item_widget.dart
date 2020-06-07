@@ -31,7 +31,7 @@ class _SessionItemWidget extends State<SessionItemWidget>{
     const String value_reauth = "reauth";
     return GestureDetector(
       onTap: () async {
-        await showKretaProfileDialog(context, widget.session);
+        showKretaProfileDialog(context, widget.session);
       },
       child: Card(
         clipBehavior: Clip.antiAliasWithSaveLayer,

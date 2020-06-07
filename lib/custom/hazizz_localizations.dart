@@ -25,7 +25,7 @@ Future<String> localizeWithoutContext({@required String key, List<String> args})
 
 Future<Locale> getPreferredLocale() async{
   String preferredLangCode = (await getPreferredLangCode());
-  HazizzLogger.printLog("preferredLangCode:  ${preferredLangCode}");
+  HazizzLogger.printLog("preferredLangCode:  $preferredLangCode");
   if(preferredLangCode != null) {
     return Locale(preferredLangCode,);
   }

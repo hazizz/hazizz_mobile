@@ -40,4 +40,10 @@ class ViewTaskBloc extends Bloc<HEvent, HState> {
   Stream<HState> mapEventToState(HEvent event) {
     return null;
   }
+
+  void closeBloc(){
+    _singleton.close();
+    commentBlocs.commentSectionBloc.close();
+    commentBlocs.commentWriterBloc.close();
+  }
 }

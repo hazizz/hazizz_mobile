@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/communication/pojos/PojoGrade.dart';
 import 'package:mobile/dialogs/dialog_collection.dart';
 import 'package:mobile/enums/grade_type_enum.dart';
@@ -22,9 +23,25 @@ class GradeItemWidget extends StatelessWidget {
   GradeItemWidget.byDate({@required this.pojoGrade, this.rectForm = false, this.width = 60})
     : isBySubject= false, altSubject = null, super(key: UniqueKey());
 
-
   @override
   Widget build(BuildContext context) {
+
+    Widget topicWidget =  Padding(
+      padding: const EdgeInsets.only(left: 4.0),
+      child: Builder(
+        builder: (context){
+          if(pojoGrade.gradeType == GradeTypeEnum.MIDYEAR
+              && pojoGrade.topic != null
+              && pojoGrade.topic != ""){
+            return Padding(
+              padding: const EdgeInsets.only(top: 3),
+              child: Text(pojoGrade.topic.toUpperFirst(), style: TextStyle(fontSize: 15, height: 0.98),),
+            );
+          }
+          return Container();
+        },
+      ),
+    );
 
     Widget gradeRectWidget(){
       return Stack(
@@ -68,23 +85,21 @@ class GradeItemWidget extends StatelessWidget {
                     )
                 ),
 
-
               if(pojoGrade.creationDate.isBefore(DateTime.now().add(1.days))
               && pojoGrade.creationDate.isAfter(DateTime.now().subtract(1.days)))
                 Align(alignment: Alignment.topRight,
                   child: Padding(
-                    padding: const EdgeInsets.all(1),
+                    padding: const EdgeInsets.all(2),
                     child: TagChip(
                       hasCloseButton: false,
                       padding: EdgeInsets.only(left: 2, right: 2),
-                      height: 18,
-                      child: Text("new".localize(context), style: TextStyle(fontSize: 10),),
-                      backgroundColor: Colors.red,
+                      height: 20,
+                      child: Text("new".localize(context), style: TextStyle(fontSize: 11),),
+                      backgroundColor: Colors.red, elevation: 3,
                     ),
                   ),
                 )
-
-            ]
+              ]
             ),
           ),
         ],
@@ -167,22 +182,20 @@ class GradeItemWidget extends StatelessWidget {
                             },
                           ),
 
-                          Padding(
-                            padding: const EdgeInsets.only(left: 4.0),
-                            child: Builder(
-                              builder: (context){
-                                if(pojoGrade.gradeType == GradeTypeEnum.MIDYEAR
-                                    && pojoGrade.topic != null
-                                    && pojoGrade.topic != ""){
-                                  return Padding(
-                                    padding: const EdgeInsets.only(top: 3),
-                                    child: Text(pojoGrade.topic.toUpperFirst(), style: TextStyle(fontSize: 15, height: 0.98),),
-                                  );
-                                }
-                                return Container();
-                              },
-                            ),
-                          ),
+
+                          pojoGrade.accountId == "ghost"
+                          ? Row(children: <Widget>[
+                              topicWidget,
+                              Padding(
+                                padding: const EdgeInsets.all(0),
+                                child: Transform.scale(
+                                  scale: 0.8,
+                                  child: Icon(FontAwesomeIcons.ghost)
+                                ),
+                              )
+                            ],
+                          )
+                          : topicWidget
                         ],
                       ),
                     )

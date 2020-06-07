@@ -117,14 +117,14 @@ class FirebaseAnalyticsManager{
       return;
     }
     HazizzLogger.printLog("log event to analytics: " + "created_task_page: " + taskId.toString());
-    String tags_string = "";
+    String tagsString = "";
 
-    tags.forEach((String tag) => tags_string += tag);
+    tags.forEach((String tag) => tagsString += tag);
 
     Map<String, dynamic> parameters = {
       "task_id": taskId,
       "has_subject": (subjectId != null).toString(),
-      "tags": tags_string,
+      "tags": tagsString,
       "contains_image": containsImage.toString()
     };
     await analytics.logEvent(name: "opened_view_task_page", parameters: parameters);

@@ -195,7 +195,7 @@ class _GroupTasksPage extends State<GroupTasksPage> with AutomaticKeepAliveClien
                               physics: NeverScrollableScrollPhysics(),
                               itemBuilder: (context, index2, animation) => buildItem(context, index2, animation, map[key][index2], (){
 
-                                HazizzLogger.printLog("bro: me: ${currentCompletedTaskState}");
+                                HazizzLogger.printLog("bro: me: $currentCompletedTaskState");
 
                                 if(currentCompletedTaskState != TaskCompleteStateEnum.BOTH){
                                   HazizzLogger.printLog("bro: im trigered");

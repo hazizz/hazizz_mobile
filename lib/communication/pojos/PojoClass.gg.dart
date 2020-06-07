@@ -6,9 +6,9 @@ part of 'PojoClass.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-TimeOfDay convertToHazizzTimeOfDay(String str_time){
+TimeOfDay convertToHazizzTimeOfDay(String strTime){
   try{
-    List<String> timePeriod = str_time.split(":");
+    List<String> timePeriod = strTime.split(":");
 
     TimeOfDay hazizzTimeOfDay;
     int hour = int.parse(timePeriod[0]);
@@ -24,15 +24,15 @@ TimeOfDay convertToHazizzTimeOfDay(String str_time){
 String convertBack(TimeOfDay a){
   int hour = a.hour;
   int minute = a.minute;
-  String str_hour = a.hour.toString();
-  String str_minute = a.minute.toString();
+  String strHour = a.hour.toString();
+  String strMinute = a.minute.toString();
   if(hour < 10){
-    str_hour = "0$str_hour";
+    strHour = "0$strHour";
   }
   if(minute < 10){
-    str_minute = "0$str_minute";
+    strMinute = "0$strMinute";
   }
-  return "$str_hour:$str_minute:00";
+  return "$strHour:$strMinute:00";
 }
 
 PojoClass _$PojoClassFromJson(Map<String, dynamic> json) {

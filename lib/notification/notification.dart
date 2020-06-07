@@ -8,6 +8,7 @@ import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 
+
 Future callbackadder2() async {
   HazizzLogger.printLog("ALARM MANAGER FIRED");
   await HazizzNotification.showHazizzNotification();
@@ -208,11 +209,11 @@ class HazizzNotification{
 
    static Future<TimeOfDay> getNotificationTime() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
-    String str_time = sp.getString(key_notificationTime);
-    if(str_time != null) {
-      List<String> str_list_time = str_time.split(":");
+    String strTime = sp.getString(key_notificationTime);
+    if(strTime != null) {
+      List<String> strListTime = strTime.split(":");
       List<int> time = [];
-      for(String s in str_list_time) {
+      for(String s in strListTime) {
         int t = int.parse(s);
         if(t == null) {
           return  TimeOfDay(hour: 17, minute: 0);
@@ -272,3 +273,4 @@ class HazizzNotification{
   }
 
 }
+

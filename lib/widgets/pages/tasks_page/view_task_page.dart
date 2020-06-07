@@ -146,8 +146,8 @@ class _ViewTaskPage extends State<ViewTaskPage> {
         }
       }
 
-      DateTime date_deadline =  pojoTask.dueDate;
-      _deadline = date_deadline.hazizzShowDateFormat;//"${date_deadline.day}.${date_deadline.month}.${date_deadline.year}";
+      DateTime dateDeadline =  pojoTask.dueDate;
+      _deadline = dateDeadline.hazizzShowDateFormat;//"${dateDeadline.day}.${dateDeadline.month}.${dateDeadline.year}";
       _description = pojoTask.description;
       _title = pojoTask.title;
 

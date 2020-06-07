@@ -29,8 +29,6 @@ class _TaskCalendarPage extends State<TaskCalendarPage> {
 
   _TaskCalendarPage();
 
-  Map<DateTime, List> _events = {};
-
   List<Widget> currentTasksList = [];
 
 
@@ -136,7 +134,7 @@ class _TaskCalendarPage extends State<TaskCalendarPage> {
 
   onDaySelected(DateTime date, List<dynamic> tasks){
 
-    print("szolga: ${date}, ${tasks.toString()}");
+    print("szolga: $date, ${tasks.toString()}");
 
     String day = date.day >= 10 ? date.day.toString() : "0${date.day}";
     String month = date.month >= 10 ? date.month.toString() : "0${date.month}";
@@ -159,7 +157,7 @@ class _TaskCalendarPage extends State<TaskCalendarPage> {
     }else{
       HazizzLogger.printLog("calendar: tasks is null");
     }
-    print("szolga12131: ${a}");
+    print("szolga12131: $a");
     setState(() {
       currentTasksList = a;
     });
@@ -247,7 +245,7 @@ class _TaskCalendarPage extends State<TaskCalendarPage> {
                     if (state is TasksCalendarLoadedState) {
                       events = state.tasks;
 
-                      print("szolgas0: ${events}");
+                      print("szolgas0: $events");
                       print("szolgas: ${events[currentDay].toString()}");
 
                       if(firstTime){

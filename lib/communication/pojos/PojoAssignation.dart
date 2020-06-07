@@ -15,7 +15,6 @@ class PojoAssignation  implements Pojo {
   factory PojoAssignation.fromJson(Map<String, dynamic> json) =>
       _$PojoAssignationFromJson(json);
 
-  @override
   Map<String, dynamic> toJson() => _$PojoAssignationToJson(this);
 
 }

@@ -84,7 +84,7 @@ class TomorrowTasksBloc extends Bloc<TasksTomorrowEvent, TasksTomorrowState> {
       try {
         yield TasksTomorrowWaitingState();
         HazizzResponse hazizzResponse = await RequestSender().getResponse(new GetTasksFromMe());
-        HazizzLogger.printLog("log: responseData: ${hazizzResponse}");
+        HazizzLogger.printLog("log: responseData: $hazizzResponse");
         HazizzLogger.printLog("log: responseData type:  ${hazizzResponse.runtimeType.toString()}");
 
         if(hazizzResponse.isSuccessful){

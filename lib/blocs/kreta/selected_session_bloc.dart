@@ -28,7 +28,7 @@ class SelectedSessionInactiveEvent extends SelectedSessionEvent {
   List<Object> get props => null;
 }
 class SelectedSessionSetEvent extends SelectedSessionEvent {
-  PojoSession session;
+  final PojoSession session;
 
   SelectedSessionSetEvent(this.session) : assert(session!= null), super([session]);
   @override
@@ -61,7 +61,7 @@ class SelectedSessionEmptyState extends SelectedSessionState {
 }
 
 class SelectedSessionFineState extends SelectedSessionState {
-  PojoSession session;
+  final PojoSession session;
 
   SelectedSessionFineState(this.session) : assert(session!= null), super([session]);
   @override
@@ -161,7 +161,9 @@ class SelectedSessionBloc extends Bloc<SelectedSessionEvent, SelectedSessionStat
   @override
   SelectedSessionState get initialState => SelectedSessionInitialState();
 
-
+  void closeBloc(){
+    _singleton.close();
+  }
 }
 //endregion
 //endregion

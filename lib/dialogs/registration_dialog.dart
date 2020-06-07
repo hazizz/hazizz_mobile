@@ -40,7 +40,7 @@ class _RegistrationDialog extends State<RegistrationDialog> {
       if(currentLang != "en" && currentLang != "hu" ){
         currentLang = "en";
       }
-      String link = "https://hazizz.github.io/tos-${currentLang}.txt";
+      String link = "https://hazizz.github.io/tos-$currentLang.txt";
       return link;
     }
 

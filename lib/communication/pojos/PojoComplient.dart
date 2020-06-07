@@ -17,7 +17,6 @@ class PojoComplient  implements Pojo {
   factory PojoComplient.fromJson(Map<String, dynamic> json) =>
       _$PojoComplientFromJson(json);
 
-  @override
   Map<String, dynamic> toJson() => _$PojoComplientToJson(this);
 
 }

@@ -28,6 +28,7 @@ class _GradesChart extends State<GradesChart> with TickerProviderStateMixin {
 
   @override
   void dispose() {
+    controller.close();
     super.dispose();
   }
 

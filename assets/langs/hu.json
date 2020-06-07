@@ -469,6 +469,10 @@
   "vakacio" : "VAKÁCIÓ!",
   "vakacio_until" : "{} nap {} óra {} perc és {} másodperc maradt a nyári szünetig!",
 
+
+  "add_grade":"Szellem jegy hozzáadás",
+  "ghost_grade": "Szellem jegy",
+
   "filterType_map":{
     "new":"Új",
     "subject":"Tantárgy",

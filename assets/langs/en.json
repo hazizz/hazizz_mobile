@@ -467,6 +467,9 @@
   "vakacio" : "VAKÁCIÓ!",
   "vakacio_until" : "{} days {} hours {} minutes and {} seconds until summer vacation!",
 
+  "add_grade": "Add ghost grade",
+  "ghost_grade": "Ghost grade",
+
   "homework_map":{
     "homework":"Homework",
     "assignment":"Assignment",

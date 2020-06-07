@@ -68,11 +68,13 @@ class _SchedulesTabPage extends State<SchedulesTabPage> with TickerProviderState
     WidgetsBinding.instance.addPostFrameCallback((_){
       if(index != null) currentEventIndex = index;
       print("scrolling to index $currentEventIndex");
-      itemScrollController?.scrollTo(
-        index: currentEventIndex,
-        duration: 600.milliseconds,
-        curve: Curves.easeInOutCubic
-      );
+      try{
+        itemScrollController?.scrollTo(
+          index: currentEventIndex,
+          duration: 600.milliseconds,
+          curve: Curves.easeInOutCubic
+        );
+      }catch(e){}
     });
   }
 

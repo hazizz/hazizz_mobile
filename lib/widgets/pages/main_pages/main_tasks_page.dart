@@ -156,8 +156,9 @@ class _TasksPage extends State<TasksPage>
                                 initialItemCount: map[key].length,
 
                                 physics: NeverScrollableScrollPhysics(),
-                                itemBuilder: (context, index2, animation) =>
-                                  buildItem(context, index2, animation, map[key][index2], (){
+                                itemBuilder: (context, index2, animation){
+                                  if(map[key].length-1 < index2) return Container();
+                                  return buildItem(context, index2, animation, map[key][index2], (){
                                     if(currentCompletedTaskState != TaskCompleteStateEnum.BOTH){
                                       var removedItem = map[key][index2];
                                       listKeyList[index-1].currentState.removeItem(index2, (context2, animation2){
@@ -168,10 +169,12 @@ class _TasksPage extends State<TasksPage>
                                         });
                                         return buildItem(context2, index2, animation2, removedItem, (){});
                                       },
-                                      duration: 500.milliseconds
+                                          duration: 500.milliseconds
                                       );
                                     }
-                                  }),
+                                  });
+                                }
+
                               ),
                             ],
                           );

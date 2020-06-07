@@ -30,8 +30,6 @@ class PojoClass extends Pojo{
     return pojoClass;
   }
 
-
-  @override
   Map<String, dynamic> toJson() => _$PojoClassToJson(this);
 
 }

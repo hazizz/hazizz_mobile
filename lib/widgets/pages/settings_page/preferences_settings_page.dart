@@ -107,7 +107,7 @@ class _PreferencesSettingsPage extends State<PreferencesSettingsPage> {
                   trailing: Switch(
                     value: isRemember,
                     onChanged: (value){
-                      HazizzLogger.printLog("remember kreta password is enabled: ${value}");
+                      HazizzLogger.printLog("remember kreta password is enabled: $value");
                       KretaSessionManager.setRememberPassword(value);
                       if(value){
 

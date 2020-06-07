@@ -16,11 +16,13 @@ class TagChip extends StatefulWidget {
 
   final double height;
 
+  final double elevation;
+
   TagChip({Key key, @required this.child,
     this.backgroundColor = HazizzTheme.blue, this.hasCloseButton = true,
     this.padding = const EdgeInsets.only(left: 9, right: 9, top: 2, bottom: 2),
     this.onClick, this.onCloseClick,
-    this.height})
+    this.height, this.elevation = 4})
   : super(key: key);
 
   @override
@@ -55,7 +57,7 @@ class _TagChip extends State<TagChip> {
 
             ),
             clipBehavior: Clip.antiAliasWithSaveLayer,
-            elevation: 5,
+            elevation: widget.elevation,
             child: Padding(
               padding: widget.padding,
               child: Row(

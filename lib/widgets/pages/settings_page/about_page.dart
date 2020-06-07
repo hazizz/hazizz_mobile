@@ -230,67 +230,53 @@ class _AboutPage extends State<AboutPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      GestureDetector(
-                        onTap: () async {
+                      FlatButton(
+                        onPressed: (){
                           openFacebookPage();
                         },
-                        child: Container(
-                          child: SvgPicture.asset(
-                            "assets/icons/facebook.svg",
-                            height: 40,
-                            width: 40,
-                          ),
+                        child: SvgPicture.asset(
+                          "assets/icons/facebook.svg",
+                          height: 40,
+                          width: 40,
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () async {
+                      FlatButton(
+                        onPressed: ()async{
                           if (await canLaunch(AboutPage.tw_site)) {
                             await launch(AboutPage.tw_site);
                           }
                         },
-                        child: Container(
+                        child: SvgPicture.asset(
+                          "assets/icons/twitter.svg",
+                          fit: BoxFit.fitHeight,
                           height: 40,
                           width: 40,
-                          child: SvgPicture.asset(
-                            "assets/icons/twitter.svg",
-                            fit: BoxFit.fitHeight,
-                            height: 40,
-                            width: 40,
-                          ),
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () async {
+                      FlatButton(
+                        onPressed: () async {
                           if (await canLaunch(AboutPage.dc_site)) {
                             await launch(AboutPage.dc_site);
                           }
                         },
-                        child: Container(
+                        child: SvgPicture.asset(
+                          "assets/icons/discord.svg",
+                          fit: BoxFit.fitHeight,
                           height: 40,
                           width: 40,
-                          child: SvgPicture.asset(
-                            "assets/icons/discord.svg",
-                            fit: BoxFit.fitHeight,
-                            height: 40,
-                            width: 40,
-                          ),
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () async {
+                      FlatButton(
+                        onPressed: () async {
                           if (await canLaunch(AboutPage.gh_site)) {
                             await launch(AboutPage.gh_site);
                           }
                         },
-                        child: Container(
+                        child: SvgPicture.asset(
+                          "assets/icons/github.svg",
+                          fit: BoxFit.fitHeight,
                           height: 40,
                           width: 40,
-                          child: SvgPicture.asset(
-                            "assets/icons/github.svg",
-                            fit: BoxFit.fitHeight,
-                            height: 40,
-                            width: 40,
-                          ),
                         ),
                       ),
                     ],

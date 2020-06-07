@@ -62,14 +62,6 @@ class SessionsBloc extends Bloc<HEvent, HState> {
 
         SelectedSessionBloc().add(SelectedSessionSetEvent(sessions[0]));
       }
-
-      /*
-      if( !sessions.any((element) => element.username == SelectedSessionBloc().selectedSession.username)){
-        print("bruh moment XD 11");
-
-        SelectedSessionBloc().add(SelectedSessionSetEvent(sessions[0]));
-      }
-      */
     }
     print("bruh moment XD 12");
   }
@@ -95,8 +87,6 @@ class SessionsBloc extends Bloc<HEvent, HState> {
     }
 
     print("removing dups: 2");
-
-
     sessions = newSessions;
   }
 
@@ -117,10 +107,8 @@ class SessionsBloc extends Bloc<HEvent, HState> {
 
       print("bruh moment XD 2: number of sessions that were cached:${activeSessions.length}");
 
-
       prepareSessions();
       print("bruh moment XD 3: number of sessions that are prepared:${sessions.length}");
-
 
       activeSessions = getActiveSessions(sessions);
       print("bruh moment XD 4: number of sessions that are active:${activeSessions.length}");
@@ -157,6 +145,10 @@ class SessionsBloc extends Bloc<HEvent, HState> {
         }
       }
     }
+  }
+
+  void closeBloc(){
+    _singleton.close();
   }
 }
 //endregion

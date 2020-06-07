@@ -3,9 +3,9 @@ import 'package:mobile/extension_methods/duration_extension.dart';
 
 extension TimeOfDayExtension on TimeOfDay {
   String get hazizzFormat{
-    String str_h = this.hour >= 10 ? this.hour.toString() : "0${this.hour}";
-    String str_m = this.minute >= 10 ? this.minute.toString() : "0${this.minute}";
-    return "$str_h:$str_m";
+    String strHour = this.hour >= 10 ? this.hour.toString() : "0${this.hour}";
+    String strMinute = this.minute >= 10 ? this.minute.toString() : "0${this.minute}";
+    return "$strHour:$strMinute";
   }
 
   Duration compare(TimeOfDay other){

@@ -20,6 +20,5 @@ class PojoComment  implements Pojo {
   factory PojoComment.fromJson(Map<String, dynamic> json) =>
       _$PojoCommentFromJson(json);
 
-  @override
   Map<String, dynamic> toJson() => _$PojoCommentToJson(this);
 }

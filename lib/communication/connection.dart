@@ -26,7 +26,7 @@ class Connection{
 
   static void addConnectionOnlineListener(Function listener, String identifier){
     listeners[identifier] = listener;
-    HazizzLogger.printLog("Added Connection listener: ${identifier}");
+    HazizzLogger.printLog("Added Connection listener: $identifier");
   }
 
   static Future<bool> isOnline() async{
@@ -41,5 +41,9 @@ class Connection{
 
   static Future<bool> isOffline() async{
     return !(await isOnline());
+  }
+
+  static void close(){
+    streamConnectionStatus.cancel();
   }
 }

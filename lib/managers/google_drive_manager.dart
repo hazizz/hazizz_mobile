@@ -113,7 +113,7 @@ class GoogleDriveManager {
       ..name = hazizzFolderName
       ..mimeType = "application/vnd.google-apps.folder"
       ..description = "Please, do not edit this folder";
-    ;
+
     print("pesti pip <3: 5");
 
     folder = await driveApi.files.create(folder, $fields: "id");
@@ -160,7 +160,7 @@ class GoogleDriveManager {
 
     Permission a = await driveApi.permissions.create(permission, driveFile.id, supportsAllDrives: true, supportsTeamDrives: true, );
 
-    print("brughh001: ${a}, ${a.type}, ${a.role}");
+    print("brughh001: $a, ${a.type}, ${a.role}");
 
     print("brughh000: ${driveFile.permissions.toString()}");
 

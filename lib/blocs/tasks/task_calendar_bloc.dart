@@ -79,10 +79,7 @@ class TasksCalendarErrorState extends TasksCalendarState {
 //region TasksCalendar bloc
 class TasksCalendarBloc extends Bloc<TasksCalendarEvent, TasksCalendarState> {
 
-  TasksCalendarBloc();
-
   DateTime lastUpdated = DateTime(0, 0, 0, 0, 0);
-
   List<PojoTask> tasksRaw;
 
   Map<DateTime, List<PojoTask>> tasks;
@@ -153,8 +150,7 @@ class TasksCalendarBloc extends Bloc<TasksCalendarEvent, TasksCalendarState> {
 
           }
         }
-      } on Exception catch(e){
-      }
+      } on Exception catch(e){}
     }
   }
 }

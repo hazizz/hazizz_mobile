@@ -13,6 +13,7 @@ import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/enums/grade_type_enum.dart';
 import 'package:mobile/enums/grades_sort_enum.dart';
 import 'package:mobile/managers/preference_service.dart';
+import 'package:mobile/services/grade_avarage_calculator.dart';
 import 'package:mobile/services/selected_session_helper.dart';
 import 'package:mobile/widgets/ad_widget.dart';
 import 'package:mobile/widgets/flushbars.dart';
@@ -38,9 +39,8 @@ class GradesPage extends TabWidget {
 
 class _GradesPage extends State<GradesPage>
     with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
-  final List<Widget> _tabList = [];
 
-  TabController _tabController;
+ // TabController _tabController;
 
   int currentPage = 0;
 
@@ -55,8 +55,8 @@ class _GradesPage extends State<GradesPage>
     PreferenceService.getGradeRectForm().then((bool r) {
       isRectForm = r;
     });
-    _tabController =
-        TabController(vsync: this, length: _tabList.length, initialIndex: currentPage);
+  //  _tabController =
+  //      TabController(vsync: this, length: _tabList.length, initialIndex: currentPage);
     super.initState();
   }
 
@@ -188,16 +188,17 @@ class _GradesPage extends State<GradesPage>
           itemBuilder: (BuildContext context, int index) {
             if (index == 0) {
               return Center(
-                  child: Text(MainTabBlocs()
-                      .gradesBloc
-                      .lastUpdated
-                      .dateTimeToLastUpdatedFormatLocalized(context)));
+                child: Text(MainTabBlocs()
+                  .gradesBloc
+                  .lastUpdated
+                  .dateTimeToLastUpdatedFormatLocalized(context)
+                )
+              );
             }
 
             String key = grades.keys.elementAt(index - 1);
 
-            String gradesAvarage =
-                MainTabBlocs().gradesBloc.calculateAvarage(grades[key]);
+            String gradesAvarage = calculateGradeAverage(grades[key]).toString();
 
             return StickyHeader(
               header: Column(
@@ -267,7 +268,7 @@ class _GradesPage extends State<GradesPage>
 
       print("Grades page length: ${gradesByDate.length}");
 
-      print("Grades page map: ${gradesByDate}");
+      print("Grades page map: $gradesByDate");
 
       if (isRectForm) {
         List<Widget> widgetList = [];
@@ -422,7 +423,7 @@ class _GradesPage extends State<GradesPage>
                             child: BlocBuilder(
                                 bloc: MainTabBlocs().gradesBloc,
                                 builder: (_, GradesState state) {
-                                  print("mystate: ${state}");
+                                  print("mystate: $state");
 
                                   if (state is GradesLoadedState) {
                                     print(
@@ -488,7 +489,7 @@ class _GradesPage extends State<GradesPage>
           onTap: (int index) {
             setState(() {
               currentPage = index;
-              HazizzLogger.printLog("yeahh: ${currentPage}");
+              HazizzLogger.printLog("yeahh: $currentPage");
             });
           },
           items: [

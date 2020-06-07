@@ -12,8 +12,8 @@ import 'dart:core';
 
 class TokenManager {
   static const String _keyTokens = "key_tokens";
-  @Deprecated("Use instead [_keyTokens]") static const String _keyToken = "key_token";
-  @Deprecated("Use instead [_keyTokens]") static const String _keyRefreshToken = "key_refreshToken";
+ // @Deprecated("Use instead [_keyTokens]") static const String _keyToken = "key_token";
+//  @Deprecated("Use instead [_keyTokens]") static const String _keyRefreshToken = "key_refreshToken";
   static bool tokenIsValid = true;
 
   static PojoTokens _tokens;
@@ -23,7 +23,7 @@ class TokenManager {
     HazizzLogger.printLog("In createTokenWithRefresh function");
    // HazizzLogger.printLog("In createTokenWithRefresh function0: " + (await tokens).token);
    // HazizzLogger.printLog("In createTokenWithRefresh function1: " + (await tokens).refresh);
-    HazizzResponse hazizzResponse = await RequestSender().getAuthResponse(new CreateToken.withRefresh(qUsername: await CacheManager.getMyUsername(), qRefreshToken: await getRefreshToken()));
+    HazizzResponse hazizzResponse = await RequestSender().getAuthResponse(new CreateToken.withRefresh(qUsername: await CacheManager.getMyUsername(), qRefreshToken: (await tokens).refresh));
     if(hazizzResponse.isSuccessful){
       HazizzLogger.printLog("In createTokenWithRefresh function: token response successful");
       PojoTokens tokens = hazizzResponse.convertedData;
@@ -62,6 +62,7 @@ class TokenManager {
   }
 
 
+  /*
   @Deprecated("Use instead accessToken property")
   static Future<bool> hasToken() async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -82,6 +83,7 @@ class TokenManager {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(_keyRefreshToken);
   }
+  */
 
 
   static const String key_lastTokenUpdateTime = "key_lastTokenUpdateTime";
@@ -102,12 +104,15 @@ class TokenManager {
   }
 
 
+  /*
+  @Deprecated("Use instead [tokens]")
   static Future<String> get accessToken async{
     if(_tokens != null) return _tokens.token;
 
-    String t = (await getTokens())?.token ?? await getToken();
+    String t = (await getTokens())?.token;
     return t;
   }
+  */
   
   static Future<PojoTokens> get tokens async{
     if(_tokens != null) return _tokens;
@@ -150,10 +155,12 @@ class TokenManager {
   }
 
   static void invalidateTokens() {
-    _setRefreshToken("");
-    _setToken("");
+    setTokens(null);
+   // _setRefreshToken("");
+  //  _setToken("");
   }
 
+  /*
   static void _setToken(String newToken) async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(_keyToken, newToken);
@@ -162,5 +169,5 @@ class TokenManager {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(_keyRefreshToken, newRefreshToken);
   }
-
+  */
 }

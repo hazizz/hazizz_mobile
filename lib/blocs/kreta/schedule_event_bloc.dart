@@ -33,8 +33,8 @@ class ScheduleEventInitializeState extends ScheduleEventState {
 
 
 class ScheduleEventFineState extends ScheduleEventState {
-  EventItem currentEvent;
-  EventItem nextEvent;
+  final EventItem currentEvent;
+  final EventItem nextEvent;
   ScheduleEventFineState({@required this.currentEvent, @required this.nextEvent}) : super([currentEvent]);
 
   @override
@@ -372,6 +372,10 @@ class ScheduleEventBloc extends Bloc<ScheduleEventEvent, ScheduleEventState> {
       }
     }
     HazizzLogger.printLog("log: class state: loop end");
+  }
+
+  void closeBloc(){
+    scheduleEventBloc.close();
   }
 }
 //endregion

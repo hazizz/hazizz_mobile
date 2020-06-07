@@ -20,15 +20,7 @@ class _ProfileEditorPage extends State<ProfileEditorPage> with TickerProviderSta
 
   _ProfileEditorPage();
 
-  ProfileEditorBlocs profileEditorBlocs = new ProfileEditorBlocs();
-
-  static const IconData _editIconData = FontAwesomeIcons.solidEdit;
-  static const IconData _checkIconData = FontAwesomeIcons.check;
-
-
-  IconData _currentDisplayNameEditorIconData = _editIconData;
-
-  IconData _currentProfilePicIconData = _editIconData;
+  ProfileEditorBlocs profileEditorBlocs = ProfileEditorBlocs();
 
   @override
   void initState() {
@@ -40,9 +32,6 @@ class _ProfileEditorPage extends State<ProfileEditorPage> with TickerProviderSta
 
    // File image = await ImagePicker.pickImage(source: ImageSource.gallery);
     File image;
-
-
-
 
     if(image == null){
       HazizzLogger.printLog("picked image is null ");
@@ -94,15 +83,6 @@ class _ProfileEditorPage extends State<ProfileEditorPage> with TickerProviderSta
                 BlocBuilder(
                   bloc: profileEditorBlocs.pictureEditorBloc,
                   builder: (context, state){
-
-                    if(state is ProfilePictureEditorFineState){
-                      _currentProfilePicIconData = _editIconData;
-                    }else if(state is ProfilePictureEditorChangedState){
-                      _currentProfilePicIconData = _checkIconData;
-                    }else if(state is ProfilePictureEditorWaitingState){
-                      _currentProfilePicIconData = FontAwesomeIcons.spinner;
-                    }
-
                     return Stack(
                       children: <Widget>[
                         Padding(
@@ -125,14 +105,10 @@ class _ProfileEditorPage extends State<ProfileEditorPage> with TickerProviderSta
                                     }else{
 
                                       var sad= profileEditorBlocs.pictureEditorBloc.profilePictureBytes;
-
                                       var sad2 = ImageOperations.fromBytesImageToBase64(sad);
-
                                       var sad3 = ImageOperations.fromBase64ToBytesImage(sad2);
 
                                       profilePicProvider = Image.memory(sad3).image;
-
-
 
                                       return Container(
                                         decoration: new BoxDecoration(

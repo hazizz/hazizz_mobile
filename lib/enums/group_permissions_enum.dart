@@ -5,8 +5,8 @@ enum GroupPermissionsEnum{
   NULL
 }
 
-GroupPermissionsEnum toGroupPermissionsEnum(String str_permission){
-  switch(str_permission){
+GroupPermissionsEnum toGroupPermissionsEnum(String strPermission){
+  switch(strPermission){
     case "USER":
       return GroupPermissionsEnum.USER;
     case "MODERATOR":

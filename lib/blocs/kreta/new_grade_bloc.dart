@@ -66,6 +66,11 @@ class NewGradesBloc extends Bloc<NewGradesEvent, NewGradesState> {
       yield DoesntHaveNewGradesState();
     }
   }
+
+  void closeBloc(){
+    _singleton.close();
+  }
+
 }
 //endregion
 //endregion

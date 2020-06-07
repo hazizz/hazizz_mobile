@@ -22,7 +22,6 @@ class FacebookLoginBloc extends SocialLoginBloc{
     switch(result.status){
       case FacebookLoginStatus.loggedIn:
         print("facebook token: ${result.accessToken.token}");
-
         final AuthCredential credential = FacebookAuthProvider.getCredential(
           accessToken: result.accessToken.token,
         );

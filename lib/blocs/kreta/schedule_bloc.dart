@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile/blocs/kreta/selected_session_bloc.dart';
 import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
@@ -312,6 +311,10 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
         HazizzLogger.printLog("log: Exception: ${e.toString()}");
       }
     }
+  }
+
+  void closeBloc(){
+    scheduleEventBloc.close();
   }
 }
 //endregion

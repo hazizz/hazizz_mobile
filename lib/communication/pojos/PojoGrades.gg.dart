@@ -7,7 +7,7 @@ part of 'PojoGrades.dart';
 // **************************************************************************
 
 PojoGrades _$PojoGradesFromJson(Map<String, dynamic> json) {
-  return PojoGrades((json as Map<String, dynamic>)?.map(
+  return PojoGrades(json?.map(
         (k, e) => MapEntry(
         k,
         (e as List)

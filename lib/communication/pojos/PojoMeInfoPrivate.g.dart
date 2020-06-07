@@ -27,3 +27,4 @@ Map<String, dynamic> _$PojoMeInfoPrivateToJson(PojoMeInfoPrivate instance) =>
       'permissions': instance.permissions,
       'groups': instance.groups,
     };
+

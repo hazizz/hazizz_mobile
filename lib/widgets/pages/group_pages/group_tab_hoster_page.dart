@@ -76,7 +76,7 @@ class _GroupTabHosterPage extends State<GroupTabHosterPage> with SingleTickerPro
     if(widget.visitorEnum == VisitorEnum.newComer){
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         await showJoinedGroupDialog(context, group: widget.group);
-        await showSubscribeToSubjectDialog(context);
+        showSubscribeToSubjectDialog(context);
       }
       );
     }else if(widget.visitorEnum == VisitorEnum.notNewComer){

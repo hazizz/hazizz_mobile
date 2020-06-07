@@ -26,7 +26,6 @@ import 'package:mobile/communication/pojos/pojo_comment.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/managers/kreta_session_manager.dart';
-import 'package:mobile/managers/preference_service.dart';
 import 'package:mobile/managers/server_url_manager.dart';
 import 'package:mobile/managers/token_manager.dart';
 import 'package:meta/meta.dart';
@@ -39,7 +38,7 @@ import '../htttp_method_enum.dart';
 import 'package:mobile/extension_methods/datetime_extension.dart';
 
 Future<Request> refreshTokenInRequest(Request request) async {
-  request.header[HttpHeaders.authorizationHeader] = await TokenManager.accessToken;
+  request.header[HttpHeaders.authorizationHeader] = (await TokenManager.tokens).token;
   return request;
 }
 
@@ -69,7 +68,7 @@ class Request {
 
     HazizzLogger.printLog("Building header: 3");
     if(authTokenHeader){
-      header[HttpHeaders.authorizationHeader] = "Bearer ${await TokenManager.accessToken}";
+      header[HttpHeaders.authorizationHeader] = "Bearer ${(await TokenManager.tokens).token}";
     }if(contentTypeHeader) {
       header[HttpHeaders.contentTypeHeader] = "application/json";
     }
@@ -633,7 +632,7 @@ class CreateSubject extends HazizzRequest {
 }
 
 class UpdateSubject extends HazizzRequest {
-  UpdateSubject({ @required int pSubjectId, @required String bSubjectName, @required bool bSubscriberOnly = false})  {
+  UpdateSubject({ @required int pSubjectId, @required String bSubjectName, bool bSubscriberOnly = false})  {
     httpMethod = HttpMethod.PATCH;
     path = "subjects/$pSubjectId";
     authTokenHeader = true;
@@ -1150,7 +1149,7 @@ class KretaRemoveSessions extends TheraRequest {
 class KretaAuthenticateSession extends TheraRequest {
   KretaAuthenticateSession({ @required int pSession, @required String bPassword})  {
     httpMethod = HttpMethod.POST;
-    path = "kreta/sessions/${pSession}/auth";
+    path = "kreta/sessions/$pSession/auth";
     authTokenHeader = true;
     contentTypeHeader = true;
 

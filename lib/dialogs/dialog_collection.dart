@@ -26,7 +26,6 @@ import 'package:mobile/dialogs/sure_to_leave_group_dialog.dart';
 import 'package:mobile/dialogs/user_dialog.dart';
 import 'package:mobile/enums/grade_type_enum.dart';
 import 'package:mobile/enums/group_permissions_enum.dart';
-import 'package:mobile/services/facebook_opener.dart';
 import 'package:mobile/storage/cache_manager.dart';
 import 'package:mobile/widgets/hero_dialog_route.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -37,6 +36,7 @@ import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'add_ghost_grade_dialog.dart';
 import 'choose_subject_dialog.dart';
 import 'create_group_dialog.dart';
 import 'grant_access_to_gdrive_dialog.dart';
@@ -137,25 +137,25 @@ Future showCreateGroupDialog(BuildContext context,) async{
 }
 
 Future<PojoGroup> showDialogGroup(BuildContext context, {List<PojoGroup> data}) async{
-  List<PojoGroup> groups_data = List();
+  List<PojoGroup> groupsData = List();
   if(data == null) {
     HazizzResponse response = await RequestSender().getResponse(new GetMyGroups());
 
     if(response.isSuccessful){
-      groups_data = response.convertedData;
+      groupsData = response.convertedData;
     }
   }else{
-    groups_data.addAll(data);
+    groupsData.addAll(data);
   }
 
-  groups_data.insert(0, getEmptyPojoGroup(context));
+  groupsData.insert(0, getEmptyPojoGroup(context));
 
   double groupsHeights;
 
-  if(groups_data.length > 6){
+  if(groupsData.length > 6){
     groupsHeights = 6 * 38.0;
   }else{
-    groupsHeights = groups_data.length * 38.0;
+    groupsHeights = groupsData.length * 38.0;
   }
 
   double height = 80  + groupsHeights;
@@ -184,7 +184,7 @@ Future<PojoGroup> showDialogGroup(BuildContext context, {List<PojoGroup> data}) 
           children: <Widget>[
             Builder(
               builder: (context){
-                if(groups_data.length <= 1){
+                if(groupsData.length <= 1){
                   return Text(localize(context, key: "not_member_of_groups"));
                 }
                 return Container();
@@ -192,11 +192,11 @@ Future<PojoGroup> showDialogGroup(BuildContext context, {List<PojoGroup> data}) 
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: groups_data.length,
+                itemCount: groupsData.length,
                 itemBuilder: (BuildContext context, int index){
                   return GestureDetector(
                       onTap: (){
-                        Navigator.pop(context, groups_data[index]);
+                        Navigator.pop(context, groupsData[index]);
                       },
                       child: Padding(
                         padding: const EdgeInsets.only(left: 30.0, right: 30, top: 4,bottom: 4),
@@ -207,7 +207,7 @@ Future<PojoGroup> showDialogGroup(BuildContext context, {List<PojoGroup> data}) 
                           ),
                           width: width,
                           child: Center(
-                            child: Text( groups_data[index].name ,//   data[index].name,
+                            child: Text( groupsData[index].name ,//   data[index].name,
                               style: TextStyle(
                                   fontSize: 26
                               ),
@@ -612,13 +612,13 @@ Future<Widget> showGradeDialog(context, {@required PojoGrade grade}) {
           Align(
             alignment: Alignment.topCenter,
             child: AutoSizeText(
-              grade.grade == null ? "5" : grade.grade,
+              grade.grade == null ? "null" : grade.grade,
               maxLines: 1,
               style: TextStyle(
                 fontSize: 58,
                 color: Colors.black,
-                fontFamily: "Nunito",
-                fontWeight: FontWeight.w700
+                fontWeight: FontWeight.w700,
+                fontFamily: "Nunito"
               ),
             ),
           ),
@@ -630,8 +630,8 @@ Future<Widget> showGradeDialog(context, {@required PojoGrade grade}) {
                 style: TextStyle(
                   fontSize: 20,
                   color: Colors.black,
-                  fontFamily: "Nunito",
-                  fontWeight: FontWeight.w700
+                  fontWeight: FontWeight.w700,
+                  fontFamily: "Nunito"
                 ),
               ),
             ),
@@ -642,9 +642,6 @@ Future<Widget> showGradeDialog(context, {@required PojoGrade grade}) {
       radius: 46,
     );
   }
-
-
-
 
   return Navigator.push(context, HeroDialogRoute(builder: (context){
     HazizzDialog hazizzDialog = HazizzDialog(
@@ -675,8 +672,7 @@ Future<Widget> showGradeDialog(context, {@required PojoGrade grade}) {
         content: Container(child:  Padding(
           padding: const EdgeInsets.only(left: 10, right: 10),
           child: Column(
-              children:
-              [
+              children: [
                 Center(child: Text(grade.subject.toUpperFirst(), style: TextStyle(fontSize: 22, height: 0.95), textAlign: TextAlign.center,) ),
                 Spacer(),
                 Row(
@@ -731,26 +727,25 @@ Future<Widget> showGradeDialog(context, {@required PojoGrade grade}) {
                     Expanded(child: Text(grade.date == null ? "" : grade.date.hazizzShowDateFormat, style: TextStyle(fontSize: 18), textAlign: TextAlign.end,)),
                   ],
                 ),
-
               ]
           ),
         ),),
         actionButtons: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 0),
-                child: FlatButton(
-                    child: Center(
-                      child: Text(localize(context, key: "close").toUpperCase(),),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    color: Colors.transparent
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 0),
+              child: FlatButton(
+                child: Center(
+                  child: Text(localize(context, key: "close").toUpperCase(),),
                 ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                color: Colors.transparent
               ),
-            ]
+            ),
+          ]
         ),
         height: 280,
         width: 200
@@ -760,7 +755,6 @@ Future<Widget> showGradeDialog(context, {@required PojoGrade grade}) {
       flightShuttleBuilder: (context, animation, heroFlightDirection, context2, context3){
         return hazizzDialog;
       },
-
       child: hazizzDialog,
     );
   }));
@@ -806,7 +800,7 @@ Future<bool> showJoinedGroupDialog(context, {@required PojoGroup group}) async {
 }
 
 
-Future showSubscribeToSubjectDialog(context){
+void showSubscribeToSubjectDialog(context){
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -815,7 +809,7 @@ Future showSubscribeToSubjectDialog(context){
   );
 }
 
-Future showKretaProfileDialog(BuildContext context, PojoSession session){
+void showKretaProfileDialog(BuildContext context, PojoSession session){
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -1492,7 +1486,7 @@ Future<bool> showGiveawayDialog(context) async {
   );
 }
 
-Future<bool> showNoAssociatedEmail(context,) async {
+Future<bool> showNoAssociatedEmail(BuildContext context) async {
   double width = 300;
   double height = 200;
 
@@ -1554,5 +1548,14 @@ Future<bool> showNoAssociatedEmail(context,) async {
       builder: (BuildContext context) {
         return h;
       }
+  );
+}
+
+Future<PojoGrade> showAddGradeDialog(context, {@required String subject}) async {
+  return await showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AddGradeDialog(subject: subject);
+    },
   );
 }

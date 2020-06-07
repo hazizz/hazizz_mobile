@@ -483,9 +483,7 @@ class MyUserDataInitialState extends MyUserDataState {
 
 class MyUserDataLoadedState extends MyUserDataState {
   final PojoMyDetailedInfo meInfo;
-  MyUserDataLoadedState({@required this.meInfo}) : super([meInfo]){
-
-  }
+  MyUserDataLoadedState({@required this.meInfo}) : super([meInfo]);
   @override
   String toString() => 'MyUserDataLoadedState';
   List<Object> get props => [meInfo];

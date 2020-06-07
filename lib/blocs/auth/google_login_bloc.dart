@@ -25,18 +25,18 @@ class GoogleLoginBloc extends SocialLoginBloc{
   @override
   Future<String> getSocialToken() async {
     HazizzLogger.printLog("google login: 1");
-    final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+    final GoogleSignInAccount googleUser = await _googleSignIn?.signIn();
     HazizzLogger.printLog("google login: 2");
 
     HazizzLogger.printLog("google login: 3");
 
-    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+    final GoogleSignInAuthentication googleAuth = await googleUser?.authentication;
 
     HazizzLogger.printLog("google login: 4");
 
     final AuthCredential credential = GoogleAuthProvider.getCredential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
     );
     HazizzLogger.printLog("google login: 5");
 

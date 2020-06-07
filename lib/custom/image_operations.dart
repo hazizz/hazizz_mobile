@@ -70,11 +70,11 @@ class HazizzImageData{
 
   void encrypt(String key) async {
     assert (imageFile != null);
-    print("encrypt: ${imageFile?.path} ${key}");
+    print("encrypt: ${imageFile?.path} $key");
     if(imageFile != null){
 
 
-      print("melody oof: ${key}");
+      print("melody oof: $key");
 
       print("hason0: ${imageFile.readAsBytesSync()}");
 
@@ -111,7 +111,7 @@ class HazizzImageData{
       );
       print("asdasda: 4");
       imageFile = compressedImage;
-      print("asdasda: 5: ${imageFile}");
+      print("asdasda: 5: $imageFile");
     }
   }
 

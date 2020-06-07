@@ -1,6 +1,5 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class FlutterErrorDetailItemWidget extends StatefulWidget {
 	final FlutterErrorDetails flutterErrorDetails;
@@ -82,9 +81,6 @@ class _FlutterErrorDetailItemWidgetState extends State<FlutterErrorDetailItemWid
 		    //	hasIcon: true,
 		    ),
 		  ),
-		);
-		return Container(
-			child: Text(widget.flutterErrorDetails.stack.toString()),
 		);
 	}
 	

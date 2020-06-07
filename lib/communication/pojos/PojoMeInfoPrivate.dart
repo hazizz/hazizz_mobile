@@ -1,8 +1,6 @@
 
 import 'package:json_annotation/json_annotation.dart';
 import 'package:mobile/communication/pojos/PojoMeInfo.dart';
-
-import 'Pojo.dart';
 import 'PojoGroup.dart';
 
 part 'PojoMeInfoPrivate.g.dart';
@@ -19,5 +17,4 @@ class PojoMeInfoPrivate extends PojoMeInfo{
       _$PojoMeInfoPrivateFromJson(json);
 
   Map<String, dynamic> toJson() => _$PojoMeInfoPrivateToJson(this);
-
 }

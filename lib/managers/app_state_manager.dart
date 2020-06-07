@@ -148,7 +148,7 @@ class AppState{
 
 
   static Future<bool> isLoggedIn() async {
-    bool hasTokens = await TokenManager.accessToken != null;
+    bool hasTokens = (await TokenManager.tokens)?.token != null;
     var sh = await SharedPreferences.getInstance();
     bool isLoggedIn = sh.getBool(key_isLoggedIn) ?? false;
 

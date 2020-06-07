@@ -58,7 +58,7 @@ class RequestSender{
         return response;
       },
       onError: (DioError e) async{
-        HazizzLogger.printLog("got response error: ${e}");
+        HazizzLogger.printLog("got response error: $e");
         return  e;
       }
     ));
