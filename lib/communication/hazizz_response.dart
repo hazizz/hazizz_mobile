@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:meta/meta.dart';
-import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/blocs/other/flush_bloc.dart';
 import 'package:mobile/blocs/kreta/kreta_status_bloc.dart';
 import 'package:mobile/blocs/kreta/selected_session_bloc.dart';
+import 'package:mobile/blocs/other/flush_bloc.dart';
 import 'package:mobile/communication/pojos/PojoError.dart';
 import 'package:mobile/communication/pojos/PojoSession.dart';
 import 'package:mobile/communication/request_sender.dart';
@@ -14,7 +14,7 @@ import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/managers/app_state_manager.dart';
 import 'package:mobile/managers/server_url_manager.dart';
 import 'package:mobile/managers/token_manager.dart';
-import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/firebase_analytics.dart';
+import 'package:mobile/managers/firebase_analytics.dart';
 
 import 'custom_response_errors.dart';
 
@@ -78,6 +78,7 @@ class HazizzResponse{
         || dioError.type == DioErrorType.RECEIVE_TIMEOUT
         || dioError?.response?.statusCode == 503
     ){
+      /// ^ rewrite this mess
       ServerUrlManager.switchToSecondary();
 
       FlushBloc().add(FlushServerUnavailableEvent());
@@ -98,7 +99,8 @@ class HazizzResponse{
           KretaStatusBloc().add(KretaStatusUnavailableEvent());
           FlushBloc().add(FlushKretaUnavailableEvent());
         }
-        else if(pojoError.errorCode == 19) { // to many requests
+        else if(pojoError.errorCode == 19) {
+          /// to many requests
           HazizzLogger.printLog("Too many requests");
           FirebaseAnalyticsManager.logRateLimitReached();
           await RequestSender().waitCooldown();
@@ -160,6 +162,7 @@ class HazizzResponse{
         || dioError.type == DioErrorType.RECEIVE_TIMEOUT
         || dioError?.response?.statusCode == 503
         ){
+          /// ^ rewrite this mess
           ServerUrlManager.switchToSecondary();
 
           FlushBloc().add(FlushServerUnavailableEvent());

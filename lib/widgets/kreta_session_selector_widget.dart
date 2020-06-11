@@ -86,7 +86,7 @@ class _SessionSelectorWidget extends State<SessionSelectorWidget> with Automatic
     return Scaffold(
       floatingActionButton: SessionsBloc().sessions.length <= 10 ?
         FloatingActionButton(
-          heroTag: null,
+          heroTag: "session_selector_fab",
           child: Icon(FontAwesomeIcons.userPlus),
           onPressed: () async {
             var doRefresh = await Navigator.pushNamed(context, "/kreta/login", /* arguments: (){

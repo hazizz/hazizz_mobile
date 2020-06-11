@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/firebase_analytics.dart';
+import 'package:mobile/managers/firebase_analytics.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'hazizz_logger.dart';

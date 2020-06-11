@@ -2,13 +2,13 @@ import 'package:intl/intl.dart';
 import 'package:mobile/communication/pojos/PojoTokens.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
-import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/firebase_analytics.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'app_state_manager.dart';
 import 'package:mobile/storage/cache_manager.dart';
 import 'dart:core';
+import 'package:mobile/managers/firebase_analytics.dart';
 
 class TokenManager {
   static const String _keyTokens = "key_tokens";

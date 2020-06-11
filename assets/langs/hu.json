@@ -472,6 +472,8 @@
 
   "add_grade":"Szellem jegy hozzáadás",
   "ghost_grade": "Szellem jegy",
+  "weight": "Súly",
+  "grade": "Jegy",
 
   "filterType_map":{
     "new":"Új",

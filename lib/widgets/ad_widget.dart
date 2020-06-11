@@ -3,6 +3,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:mobile/custom/hazizz_localizations.dart';
+import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/managers/preference_service.dart';
 import 'package:mobile/services/facebook_opener.dart';
 import 'package:mobile/widgets/card_header_widget.dart';
@@ -157,6 +158,10 @@ class _AdWidgetState extends State<AdWidget> {
 
     if(durationUntilVakacio.inDays <= vakacioLocalized.length){
       off = durationUntilVakacio.inDays - vakacioLocalized.length;
+    }
+    off = off.abs();
+    if(off >= 8){
+      off = 8;
     }
 
     return Stack(

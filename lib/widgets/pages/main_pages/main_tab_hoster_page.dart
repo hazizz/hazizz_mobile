@@ -21,10 +21,9 @@ import 'package:mobile/dialogs/dialog_collection.dart';
 import 'package:mobile/managers/app_state_manager.dart';
 import 'package:mobile/managers/app_state_restorer.dart';
 import 'package:mobile/managers/preference_service.dart';
-import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/firebase_analytics.dart';
+import 'package:mobile/services/version_handler.dart';
 import 'package:mobile/storage/cache_manager.dart';
 import 'package:mobile/managers/deep_link_controller.dart';
-import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/services/version_handler.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'package:mobile/widgets/flushbars.dart';
@@ -34,6 +33,7 @@ import 'main_schedules_page.dart';
 import 'package:mobile/extension_methods/duration_extension.dart';
 
 import 'main_tasks_page.dart';
+import 'package:mobile/managers/firebase_analytics.dart';
 
 class MainTabHosterPage extends StatefulWidget {
 

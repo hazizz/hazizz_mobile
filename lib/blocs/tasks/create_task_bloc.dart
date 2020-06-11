@@ -15,7 +15,7 @@ import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/custom/image_operations.dart';
 import 'package:mobile/managers/app_state_restorer.dart';
-import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/firebase_analytics.dart';
+import 'package:mobile/managers/firebase_analytics.dart';
 import 'package:mobile/services/task_similarity_checker.dart';
 import 'package:mobile/widgets/image_viewer_widget.dart';
 

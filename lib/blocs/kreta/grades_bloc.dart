@@ -17,7 +17,6 @@ import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/services/selected_session_helper.dart';
 import 'package:mobile/storage/caches/data_cache.dart';
-import 'package:mobile/extension_methods/round_double_extension.dart';
 
 //region Grades bloc parts
 //region Grades events
@@ -74,7 +73,7 @@ class GradesLoadedState extends GradesState {
   }
   @override
   String toString() => 'GradesLoadedState';
-  List<Object> get props => [data, SelectedSessionBloc().selectedSession];
+  List<Object> get props => [data, SelectedSessionBloc().selectedSession, DateTime.now()];
 }
 
 class GradesLoadedCacheState extends GradesState {

@@ -6,7 +6,7 @@ import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/managers/token_manager.dart';
-import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/firebase_analytics.dart';
+import 'package:mobile/managers/firebase_analytics.dart';
 
 class GoogleLoginBloc extends SocialLoginBloc{
   GoogleSignIn _googleSignIn;

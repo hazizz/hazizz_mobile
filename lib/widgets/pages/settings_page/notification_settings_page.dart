@@ -3,7 +3,7 @@ import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/communication/pojos/PojoAlertSettings.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
-import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/hazizz_message_handler.dart';
+import 'package:mobile/managers/hazizz_message_handler.dart';
 import 'package:mobile/storage/cache_manager.dart';
 import 'package:mobile/widgets/flushbars.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
@@ -263,7 +263,7 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage>  {
                 Padding(
                   padding: const EdgeInsets.only(top: 6, bottom: 12),
                   child: FloatingActionButton(
-                    heroTag: null,
+                    heroTag: "notification_settings_page",
                     child: Icon(FontAwesomeIcons.save),//Text(locText(context, key: "save")),
                     onPressed: () async {
 

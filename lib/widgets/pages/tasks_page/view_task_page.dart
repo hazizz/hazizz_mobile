@@ -16,7 +16,7 @@ import 'package:mobile/dialogs/report_dialog.dart';
 import 'package:mobile/enums/group_permissions_enum.dart';
 import 'package:mobile/managers/deep_link_controller.dart';
 import 'package:mobile/managers/google_drive_manager.dart';
-import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/firebase_analytics.dart';
+import 'package:mobile/managers/firebase_analytics.dart';
 import 'package:mobile/storage/cache_manager.dart';
 import 'package:mobile/widgets/comment_section_widget.dart';
 import 'package:mobile/widgets/flushbars.dart';
@@ -280,8 +280,6 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                       children: <Widget>[
                                         Container(
                                             color: mainTag != null ? mainTag.getColor(): Theme.of(context).primaryColor,
-                                            //  width: 400,
-
                                             child: Stack(
                                               children: <Widget>[
                                                 Positioned(
@@ -416,7 +414,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
 
                                                           new Flexible(
                                                             child: Padding(
-                                                              padding: const EdgeInsets.only(top: 4.0),
+                                                              padding: const EdgeInsets.only(top: 4.0, right: 10),
                                                               child:
                                                                   AutoSizeText("$_deadline, "
                                                                       + widget.pojoTask.dueDate.weekdayLocalize(context)
@@ -669,9 +667,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                                         }else{
                                                           HazizzLogger.printLog("showDeleteTaskDialog: no success");
                                                         }
-
                                                       },
-
                                                     ),
                                                   ],
                                                 );

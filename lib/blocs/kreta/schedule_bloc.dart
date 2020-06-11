@@ -77,7 +77,7 @@ class ScheduleLoadedState extends ScheduleState {
       : assert(schedules!= null), super([schedules, SelectedSessionBloc().selectedSession]);
   @override
   String toString() => 'ScheduleLoadedState';
-  List<Object> get props => [schedules, SelectedSessionBloc().selectedSession];
+  List<Object> get props => [schedules, SelectedSessionBloc().selectedSession, DateTime.now()];
 }
 
 class ScheduleLoadedCacheState extends ScheduleState {

@@ -325,7 +325,7 @@ class _GroupTasksPage extends State<GroupTasksPage> with AutomaticKeepAliveClien
           }
       ),
       floatingActionButton:FloatingActionButton(
-        // heroTag: "hero_fab_tasks_main",
+        heroTag: "hero_fab_tasks_group",
         onPressed: (){
 
           Navigator.pushNamed(context, "/createTask");

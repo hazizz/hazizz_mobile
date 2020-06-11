@@ -82,6 +82,7 @@ class _MyGroupsPage extends State<MyGroupsPage> {
             onRefresh: () async => myGroupsBloc.add(FetchData()) //await getData()
         ),
         floatingActionButton: FloatingActionButton(
+          heroTag: "my_groups_page",
           child: Icon(FontAwesomeIcons.plus),
           onPressed: () async {
             bool result = await showCreateGroupDialog(context);

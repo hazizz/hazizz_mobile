@@ -7,9 +7,8 @@ import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:mobile/blocs/auth/social_login_bloc.dart';
 import 'package:mobile/blocs/other/show_framerate_bloc.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
+import 'package:mobile/managers/hazizz_message_handler.dart';
 import 'package:mobile/navigation/route_generator.dart';
-import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/firebase_analytics.dart';
-import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/hazizz_message_handler.dart';
 import 'package:native_state/native_state.dart';
 import 'package:statsfl/statsfl.dart';
 import 'blocs/main_tab/main_tab_blocs.dart';
@@ -24,6 +23,7 @@ import 'managers/welcome_manager.dart';
 import 'notification/notification.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
+import 'package:mobile/managers/firebase_analytics.dart';
 
 String startPage;
 

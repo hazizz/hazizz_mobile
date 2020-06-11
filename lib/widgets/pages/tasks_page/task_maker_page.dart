@@ -528,6 +528,7 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                   builder: (BuildContext context, TaskMakerState state) {
                     if(state is TaskMakerWaitingState) {
                       return FloatingActionButton(
+                        heroTag: "task_maker_page",
                         backgroundColor: Colors.grey,
                         onPressed: null,
                         child: Transform.scale(
@@ -543,6 +544,7 @@ class _TaskMakerPage extends State<TaskMakerPage> {
                       );
                     }else{
                       return FloatingActionButton(
+                          heroTag: "task_maker_page_2",
                           child: widget.mode == TaskMakerMode.create
                             ?  Icon(FontAwesomeIcons.check)
                             : Padding(

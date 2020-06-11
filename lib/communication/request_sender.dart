@@ -103,9 +103,11 @@ class RequestSender{
   }
 
   Future<void> waitCooldown() async{
-    lock();
-    await new Future.delayed(1000.milliseconds);
-    unlock();
+    if(!_isLocked){
+      lock();
+      await new Future.delayed(1000.milliseconds);
+      unlock();
+    }
   }
   void lock(){
  //   refreshRequestQueue.clear();

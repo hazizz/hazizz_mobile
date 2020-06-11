@@ -128,7 +128,7 @@ class SelectedSessionBloc extends Bloc<SelectedSessionEvent, SelectedSessionStat
         // MainTabBlocs().gradesBloc.add(GradesFetchEvent());
         yield SelectedSessionFineState(selectedSession);
         MainTabBlocs().schedulesBloc.add(ScheduleSetSessionEvent(dateTime: DateTime.now()));
-        MainTabBlocs().gradesBloc.add(GradesSetSessionEvent(dateTime: DateTime.now()));
+        MainTabBlocs().gradesBloc.add(GradesSetSessionEvent());
       }
     }
     else if (event is SelectedSessionInactiveEvent) {

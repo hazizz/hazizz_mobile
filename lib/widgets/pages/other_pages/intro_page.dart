@@ -302,7 +302,9 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
-                          FloatingActionButton(child: Icon(FontAwesomeIcons.chevronRight),
+                          FloatingActionButton(
+                            heroTag: "intro_page_1",
+                            child: Icon(FontAwesomeIcons.chevronRight),
                             onPressed: (){
                               nextPage();
                             },
@@ -342,7 +344,9 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
                   ),
                   Padding(
                     padding: const EdgeInsets.all(20.0),
-                    child: FloatingActionButton(child: Icon(FontAwesomeIcons.chevronRight),
+                    child: FloatingActionButton(
+                      heroTag: "intro_page_2",
+                      child: Icon(FontAwesomeIcons.chevronRight),
                       onPressed: (){
                         nextPage();
                       },

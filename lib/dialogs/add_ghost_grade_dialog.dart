@@ -60,17 +60,9 @@ import 'package:mobile/extension_methods/duration_extension.dart';
 import 'package:animator/animator.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/communication/pojos/PojoGrade.dart';
-import 'package:mobile/communication/pojos/PojoGroup.dart';
-import 'package:mobile/communication/pojos/PojoInviteLink.dart';
-import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/enums/grade_type_enum.dart';
-import 'package:mobile/enums/group_types_enum.dart';
-import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/firebase_analytics.dart';
-import 'package:share/share.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
-import 'package:mobile/communication/request_sender.dart';
 import 'dialog_collection.dart';
 
 class AddGradeDialog extends StatefulWidget {
@@ -98,14 +90,14 @@ class _AddGradeDialog extends State<AddGradeDialog> {
 		  	Center(
 		  	  child: Animator(
 						tween: Tween<Offset>(begin: Offset(60, -height/2+45),  end: Offset(60, -MediaQuery.of(context).size.height/2 )),
-						duration: 2500.milliseconds,
+						duration: 2000.milliseconds,
 						cycles: 1,
 						builder: (anim){
 							return Transform.translate(
 									offset: anim.value,
 									child: Animator(
 										tween: Tween<double>(begin:1, end: 0),
-										duration: 2500.milliseconds,
+										duration: 2000.milliseconds,
 										cycles: 1,
 										builder: (anim2){
 											return Opacity(
@@ -132,7 +124,12 @@ class _AddGradeDialog extends State<AddGradeDialog> {
 		    		),
 		    		content: Container(
 		    			child: Column(
+								crossAxisAlignment: CrossAxisAlignment.center,
 		    				children: <Widget>[
+									Row(
+										mainAxisAlignment: MainAxisAlignment.center,
+									  children: <Widget>[
+									    Text("grade".localize(context) + ":  "),
 		    					DropdownButton(
 		    						value: currentGrade,
 		    						onChanged: (value){
@@ -148,11 +145,14 @@ class _AddGradeDialog extends State<AddGradeDialog> {
 		    							DropdownMenuItem(child: Text("1", style: TextStyle(fontSize: 20)), value: 1),
 		    						],
 		    					),
-		    					Wrap(
+									  ],
+									),
+		    					Text("weight".localize(context) + ":"),
+									Wrap(
 		    						children: <Widget>[
 		    							Column(
 		    								children: <Widget>[
-		    									Text("50"),
+		    									Text("50%"),
 		    									Radio(
 		    										value: 50,
 		    										groupValue: groupValueWeight,
@@ -166,7 +166,7 @@ class _AddGradeDialog extends State<AddGradeDialog> {
 		    							),
 		    							Column(
 		    							  children: <Widget>[
-		    							    Text("100"),
+		    							    Text("100%"),
 		    							    Radio(
 		    							    	value: 100,
 		    							    	groupValue: groupValueWeight,
@@ -180,7 +180,7 @@ class _AddGradeDialog extends State<AddGradeDialog> {
 		    							),
 		    							Column(
 		    							  children: <Widget>[
-		    							    Text("150"),
+		    							    Text("150%"),
 		    							    Radio(
 		    							    	value: 150,
 		    							    	groupValue: groupValueWeight,
@@ -194,7 +194,7 @@ class _AddGradeDialog extends State<AddGradeDialog> {
 		    							),
 		    							Column(
 		    							  children: <Widget>[
-		    							    Text("200"),
+		    							    Text("200%"),
 		    							    Radio(
 		    							    	value: 200,
 		    							    	groupValue: groupValueWeight,
@@ -208,7 +208,7 @@ class _AddGradeDialog extends State<AddGradeDialog> {
 		    							),
 		    							Column(
 		    							  children: <Widget>[
-		    							    Text("300"),
+		    							    Text("300%"),
 		    							    Radio(
 		    							    	value: 300,
 		    							    	groupValue: groupValueWeight,

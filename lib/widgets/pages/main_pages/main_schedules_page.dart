@@ -314,7 +314,7 @@ class _SchedulesPage extends State<SchedulesPage> with TickerProviderStateMixin 
                                   if (state is ScheduleLoadedState) {
                                     if(MainTabBlocs().schedulesBloc.classes?.classes != null/*state.schedules != null && state.data.isNotEmpty()*/){
                                       if (doesContainSelectedSession(state.failedSessions)) {
-                                        return Container();
+                                        return Center(child: Text("wrong session"),);
                                       }
                                       return onLoaded();
                                     }

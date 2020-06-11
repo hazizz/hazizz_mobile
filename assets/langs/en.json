@@ -469,6 +469,8 @@
 
   "add_grade": "Add ghost grade",
   "ghost_grade": "Ghost grade",
+  "weight": "Weight",
+  "grade": "Grade",
 
   "homework_map":{
     "homework":"Homework",

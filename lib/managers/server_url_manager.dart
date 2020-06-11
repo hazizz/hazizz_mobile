@@ -18,6 +18,7 @@ class ServerUrlManager{
 
 	static void switchToSecondary(){
 		HazizzLogger.printLog("chagne the world. My final message. Goodbye");
+		return;
 		if(serverUrl != BASE_URL_SECONDARY){
 			serverUrl = BASE_URL_SECONDARY;
 			MainTabBlocs().tasksBloc.add(TasksFetchEvent());

@@ -226,10 +226,10 @@ class _TaskCalendarPage extends State<TaskCalendarPage> {
         opacity: !fabIsInactive ? 0.0 : 1.0,
         duration: 500.milliseconds,
         child: FloatingActionButton(
+          heroTag: "task_calendar_page",
           onPressed: fabIsInactive ? (){
             Navigator.pushNamed(context, "/createTask");
           } : null,
-          tooltip: 'Increment',
           child: Icon(FontAwesomeIcons.plus),
         ),
       ),

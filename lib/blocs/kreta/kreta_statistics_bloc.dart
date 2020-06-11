@@ -1,15 +1,10 @@
 import 'dart:async';
-
 import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:mobile/blocs/kreta/selected_session_bloc.dart';
 import 'package:mobile/blocs/main_tab/main_tab_blocs.dart';
-
 import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/response_states.dart';
-import 'package:mobile/communication/connection.dart';
-import 'package:mobile/communication/custom_response_errors.dart';
 import 'package:mobile/communication/pojos/PojoGrade.dart';
 import 'package:mobile/communication/pojos/PojoGradeAvarage.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
@@ -55,6 +50,14 @@ class KretaGradeRemoveEvent extends KretaGradeStatisticsEvent {
   List<Object> get props => [index];
 }
 
+class KretaGradeStatisticOnResponseEvent extends KretaGradeStatisticsEvent {
+  final HazizzResponse hazizzResponse;
+  KretaGradeStatisticOnResponseEvent({@required this.hazizzResponse});
+  @override
+  String toString() => 'KretaGradeStatisticOnResponseEvent';
+  List<Object> get props => [hazizzResponse];
+}
+
 //endregion
 
 //region KretaGradeStatistics states
@@ -84,11 +87,11 @@ class KretaGradeStatisticsLoadedState extends KretaGradeStatisticsState {
 }
 
 class KretaGradeStatisticsLoadedCacheState extends KretaGradeStatisticsState {
-  final List<PojoGradeAverage> gradeAvarages;
-  KretaGradeStatisticsLoadedCacheState(this.gradeAvarages) : assert(gradeAvarages!= null), super([gradeAvarages, SelectedSessionBloc().selectedSession]);
+  final List<PojoGradeAverage> gradeAverages;
+  KretaGradeStatisticsLoadedCacheState(this.gradeAverages) : assert(gradeAverages!= null), super([gradeAverages, SelectedSessionBloc().selectedSession]);
   @override
   String toString() => 'KretaGradeStatisticsLoadedCacheState';
-  List<Object> get props => [gradeAvarages, SelectedSessionBloc().selectedSession];
+  List<Object> get props => [gradeAverages, SelectedSessionBloc().selectedSession];
 }
 
 class KretaGradeStatisticsErrorState extends KretaGradeStatisticsState {
@@ -121,8 +124,8 @@ class GradeStatistic{
 //region KretaGradeStatisticsBloc
 class KretaGradeStatisticsBloc extends Bloc<KretaGradeStatisticsEvent, KretaGradeStatisticsState> {
 
-  List<PojoGradeAverage> gradeAvarages = List();
- // Map<String, PojoGradeAverage> gradeAvaragesBySubject = Map();
+  List<PojoGradeAverage> gradeAverages = List();
+ // Map<String, PojoGradeAverage> gradeAveragesBySubject = Map();
 
   Map<String, GradeStatistic> gradeStatistics = {};
 
@@ -137,7 +140,44 @@ class KretaGradeStatisticsBloc extends Bloc<KretaGradeStatisticsEvent, KretaGrad
 
   @override
   Stream<KretaGradeStatisticsState> mapEventToState(KretaGradeStatisticsEvent event) async* {
-    if(event is KretaGradeStatisticsGetEvent){
+    if(event is KretaGradeStatisticOnResponseEvent){
+      if(event.hazizzResponse.isSuccessful){
+        print("being black is fine :O: 0");
+        if(event.hazizzResponse.convertedData != null){
+          print("being black is fine :O: 1");
+          gradeAverages = event.hazizzResponse.convertedData;
+          print("being black is fine :O: 2");
+
+          /*
+          for(PojoGradeAverage gradeAverage in gradeAverages){
+            List<PojoGrade> grades = MainTabBlocs().gradesBloc.getGradesFromSession()
+                .grades[gradeAverage.subject]?.reversed?.toList();
+            grades?.removeWhere((item) =>
+            item.gradeType == GradeTypeEnum.HALFYEAR ||
+                item.gradeType == GradeTypeEnum.ENDYEAR
+            );
+            HazizzLogger.printLog("íasfukhsdv: " + gradeAverage.subject + ": " + grades.toString());
+            gradeStatistics[gradeAverage.subject] = GradeStatistic(gradeAverage: gradeAverage, gradeList: grades);
+          }
+          */
+
+          for(PojoGradeAverage gradeAverage in gradeAverages){
+            if(gradeStatistics.containsKey(gradeAverage.subject)){
+              HazizzLogger.printLog("gradeAverage.subject: " + gradeAverage.subject);
+              gradeStatistics[gradeAverage.subject].gradeAverage.classGrade = gradeAverage.classGrade;
+              gradeStatistics[gradeAverage.subject].gradeAverage.difference = (gradeStatistics[gradeAverage.subject].gradeAverage.grade - gradeAverage.classGrade).round2();
+
+            }
+          }
+
+          currentGradeStatistic = gradeStatistics[currentSubject];
+          yield KretaGradeStatisticsGetState(currentGradeStatistic: currentGradeStatistic);
+
+          print("being black is fine :O: 3");
+        }
+      }
+    }
+    else if(event is KretaGradeStatisticsGetEvent){
       currentSubject = event.subject;
       currentGradeStatistic = gradeStatistics[currentSubject];
       yield KretaGradeStatisticsGetState(currentGradeStatistic: currentGradeStatistic);
@@ -146,56 +186,57 @@ class KretaGradeStatisticsBloc extends Bloc<KretaGradeStatisticsEvent, KretaGrad
       if(currentGradeStatistic.gradeList != null){
         currentGradeStatistic.gradeList.insert(0, event.grade);
         currentGradeStatistic.gradeAverage.grade = calculateGradeAverage(currentGradeStatistic.gradeList);
-        currentGradeStatistic.gradeAverage.difference = (currentGradeStatistic.gradeAverage.grade - currentGradeStatistic.gradeAverage.classGrade).round2();
-
+        if(currentGradeStatistic.gradeAverage.difference != null){
+          currentGradeStatistic.gradeAverage.difference = (currentGradeStatistic.gradeAverage.grade - currentGradeStatistic.gradeAverage.classGrade).round2();
+        }
         yield KretaGradeStatisticsGetState(currentGradeStatistic: currentGradeStatistic);
       }
-
     }
     else if(event is KretaGradeRemoveEvent){
       currentGradeStatistic.gradeList.removeAt(event.index);
       currentGradeStatistic.gradeAverage.grade = calculateGradeAverage(currentGradeStatistic.gradeList);
-      currentGradeStatistic.gradeAverage.difference = (currentGradeStatistic.gradeAverage.grade - currentGradeStatistic.gradeAverage.classGrade).round2();
-
+      if(currentGradeStatistic.gradeAverage.difference != null){
+        currentGradeStatistic.gradeAverage.difference = (currentGradeStatistic.gradeAverage.grade - currentGradeStatistic.gradeAverage.classGrade).round2();
+      }
       yield KretaGradeStatisticsGetState(currentGradeStatistic: currentGradeStatistic);
     }
     else if (event is KretaGradeStatisticsFetchEvent) {
       try {
         yield KretaGradeStatisticsWaitingState();
 
-        HazizzResponse hazizzResponse = await RequestSender().getResponse(new KretaGetGradeAvarages());
-        if(hazizzResponse.isSuccessful){
-          print("being black is fine :O: 0");
-          if(hazizzResponse.convertedData != null){
-            print("being black is fine :O: 1");
-            gradeAvarages = hazizzResponse.convertedData;
-            print("being black is fine :O: 2");
+        Map<String, List<PojoGrade>> grades = MainTabBlocs()
+            .gradesBloc.getGradesFromSession().grades;
 
-            for(PojoGradeAverage gradeAverage in gradeAvarages){
-              List<PojoGrade> grades = MainTabBlocs().gradesBloc.getGradesFromSession()
-                  .grades[gradeAverage.subject]?.reversed?.toList();
-              grades?.removeWhere((item) =>
-                item.gradeType == GradeTypeEnum.HALFYEAR ||
-                item.gradeType == GradeTypeEnum.ENDYEAR
-              );
-              HazizzLogger.printLog("íasfukhsdv: " + gradeAverage.subject + ": " + grades.toString());
-              gradeStatistics[gradeAverage.subject] = GradeStatistic(gradeAverage: gradeAverage, gradeList: grades);
-            }
+        int index = 0;
+        grades.values.forEach((element) {
+          element?.removeWhere((item) =>
+            item.gradeType == GradeTypeEnum.HALFYEAR ||
+            item.gradeType == GradeTypeEnum.ENDYEAR
+          );
 
-          //  yield KretaGradeStatisticsGetState(currentGradeStatistic: );
+          final String subject = grades.keys.toList()[index];
+          final double grade = calculateGradeAverage(element);
+          final double difference = null;
+          final PojoGradeAverage pojoGradeAverage= PojoGradeAverage(grade: grade, classGrade: null, difference: difference, subject: subject);
 
-            List<String> keyList = gradeStatistics.keys.toList();
-            currentGradeStatistic = gradeStatistics[keyList[keyList.length-1]];
-            yield KretaGradeStatisticsGetState(currentGradeStatistic: currentGradeStatistic);
+          gradeStatistics[subject] = GradeStatistic(gradeAverage: pojoGradeAverage, gradeList: element.reversed.toList());
 
-
-         //   yield KretaGradeStatisticsLoadedState(gradeStatistics);
-            print("being black is fine :O: 3");
-          }else{
-            yield KretaGradeStatisticsErrorState(hazizzResponse);
+          if(currentSubject == null && element.isNotEmpty){
+            currentSubject = subject;
           }
-        }
 
+          index++;
+        });
+
+       // List<String> keyList = gradeStatistics.keys.toList();
+       // currentGradeStatistic = gradeStatistics[keyList[keyList.length-1]];
+        currentGradeStatistic = gradeStatistics[currentSubject];
+        yield KretaGradeStatisticsGetState(currentGradeStatistic: currentGradeStatistic);
+
+        getResponse(new KretaGetGradeAverages()).then((hazizzResponse)
+        => add(KretaGradeStatisticOnResponseEvent(hazizzResponse: hazizzResponse)));
+
+        /*
         else{
           if(hazizzResponse.dioError == noConnectionError){
             yield KretaGradeStatisticsErrorState(hazizzResponse);
@@ -213,9 +254,9 @@ class KretaGradeStatisticsBloc extends Bloc<KretaGradeStatisticsEvent, KretaGrad
           }
           else{
             yield KretaGradeStatisticsErrorState(hazizzResponse);
-
           }
         }
+        */
       } on Exception catch(e){
         HazizzLogger.printLog("log: Exception: ${e.toString()}");
       }

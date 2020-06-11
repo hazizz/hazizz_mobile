@@ -11,13 +11,18 @@ import 'package:mobile/communication/request_sender.dart';
 // TODO rewrite this mess
 
 Widget getCorrectTaskItemWidget(PojoTask task, {Function onCompletedChanged, Key key}){
+
+  return TaskItemWidget(originalPojoTask: task, onCompletedChanged: onCompletedChanged, key: key,);
+  /*
   if(task.assignation.name == "THERA"){
     return TheraTaskItemWidget(task, key: key);
   }else{
     return TaskItemWidget(originalPojoTask: task, onCompletedChanged: onCompletedChanged, key: key,);
   }
+  */
 }
 
+/*
 class TheraTaskItemWidget extends StatelessWidget  {
 
   final PojoTask task;
@@ -254,12 +259,12 @@ class TheraTaskItemWidget extends StatelessWidget  {
     );
   }
 }
+*/
 
 
 class TaskItemWidget extends StatefulWidget  {
 
   final PojoTask originalPojoTask;
-
   final Function onCompletedChanged;
 
   TaskItemWidget({Key key, this.originalPojoTask, this.onCompletedChanged}) : super(key: key);
@@ -271,7 +276,6 @@ class TaskItemWidget extends StatefulWidget  {
 class _TaskItemWidget extends State<TaskItemWidget>  {
 
   PojoTask pojoTask;
-
   bool isCompleted;
 
   List<PojoTag> tags = [];
@@ -382,7 +386,6 @@ class _TaskItemWidget extends State<TaskItemWidget>  {
               top: 0, right: 0,
               child: Builder(
                 builder: (context){
-
                   pojoTask.completed = isCompleted;
 
                   return Transform.scale(
@@ -410,7 +413,6 @@ class _TaskItemWidget extends State<TaskItemWidget>  {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
-
                   children: <Widget>[
                     Container(
                       width: MediaQuery.of(context).size.width-60,
@@ -421,19 +423,18 @@ class _TaskItemWidget extends State<TaskItemWidget>  {
                           spacing: 2,
                           children: [
                             Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.only(bottomRight: Radius.circular(12)),
-                                    color: mainColor
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 3, right: 6),
-                                  child: Text(mainTag.getDisplayName(context),
-                                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),),
-                                )
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(bottomRight: Radius.circular(12)),
+                                color: mainColor
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 3, right: 6),
+                                child: Text(mainTag.getDisplayName(context),
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),),
+                              )
                             ),
                             for (PojoTag t in tags) Padding(
-                              padding: const EdgeInsets.only(top: 2, left:2),
+                              padding: const EdgeInsets.only(top: 2, left:1),
                               child: Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -460,12 +461,12 @@ class _TaskItemWidget extends State<TaskItemWidget>  {
                       padding: const EdgeInsets.only(top: 3, left: 2),
                       child: Container(
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderRadius: BorderRadius.all(Radius.circular(6)),
                           color: mainColor,
                         ),
                         child: Padding(
                           padding: const EdgeInsets.only(
-                              left: 5, top: 2.4, right: 4, bottom: 2.4),
+                              left: 5, top: 0.5, right: 4, bottom: 0.5),
                           child: Text(pojoTask.subject.name,
                             style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700),),
                         )
@@ -478,72 +479,53 @@ class _TaskItemWidget extends State<TaskItemWidget>  {
                   builder: (context){
                     if(pojoTask.title == null) return Container();
                     return Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 6),
-                            child: Text(pojoTask.title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),),
-                          ),
-                        ]
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 6),
+                          child: Text(pojoTask.title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),),
+                        ),
+                      ]
                     );
                   },
                 ),
 
                 Padding(
-                    padding: const EdgeInsets.only(right: 20, top: 0, bottom: 0),
-                    // child: Text(markdownImageRemover(pojoTask.description), style: TextStyle(fontSize: 18),),
-                    child: Builder(
-                      builder: (context){
+                  padding: const EdgeInsets.only(right: 20),
+                  // child: Text(markdownImageRemover(pojoTask.description), style: TextStyle(fontSize: 18),),
+                  child: Builder(
+                    builder: (context){
 
-                        if(pojoTask.description.length >= 200){
+                      if(pojoTask.description.length >= 200){
 
-                        }
+                      }
+                      return Stack(
+                          children: [
+                            ConstrainedBox(
+                              constraints: BoxConstraints(),
+                              child: Builder(
+                                builder: (context){
+                                  Color textColor = Colors.black;
+                                  if(HazizzTheme.currentThemeIsDark){
+                                    textColor = Colors.white;
+                                  }
+                                  return Transform.translate(
+                                    offset: const Offset(-6, -9),
+                                    child: Markdown(data: pojoTask.description,
+                                      padding:  const EdgeInsets.only(left: 20, top: 12),
+                                      shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      imageBuilder: (uri){
 
-                        return Stack(
-                            children: [
-                              ConstrainedBox(
-                                constraints: BoxConstraints(),
-                                child: Builder(
-                                  builder: (context){
-                                    Color textColor = Colors.black;
-                                    if(HazizzTheme.currentThemeIsDark){
-                                      textColor = Colors.white;
-                                    }
-                                    return Transform.translate(
-                                      offset: const Offset(-6, -9),
-                                      child: Markdown(data: pojoTask.description,
-                                        padding:  const EdgeInsets.only(left: 20, top: 12),
-                                        shrinkWrap: true,
-                                        physics: NeverScrollableScrollPhysics(),
-                                        imageBuilder: (uri){
+                                        final List<String> a = uri.toString().split("?id=");
+                                        final String id = a.length > 1 ? a[1] : null;
 
-                                          final List<String> a = uri.toString().split("?id=");
-                                          final String id = a.length > 1 ? a[1] : null;
-
-                                          if(id != null){
-                                            return Padding(
-                                              padding: const EdgeInsets.only(left: 2, right: 2, bottom: 4),
-                                              child: Container(
-                                                height: 60,
-                                                child: ClipRRect(
-                                                  child: Image.network( "https://drive.google.com/thumbnail?id=$id",
-                                                    loadingBuilder: (context, child, progress){
-                                                      return progress == null
-                                                          ? child
-                                                          : CircularProgressIndicator();
-                                                    },
-                                                  ),
-                                                  borderRadius: BorderRadius.circular(3),
-                                                ),
-                                              ),
-                                            );
-                                          }
-
+                                        if(id != null){
                                           return Padding(
                                             padding: const EdgeInsets.only(left: 2, right: 2, bottom: 4),
                                             child: Container(
                                               height: 60,
                                               child: ClipRRect(
-                                                child: Image.network(uri.toString(),
+                                                child: Image.network( "https://drive.google.com/thumbnail?id=$id",
                                                   loadingBuilder: (context, child, progress){
                                                     return progress == null
                                                         ? child
@@ -552,34 +534,52 @@ class _TaskItemWidget extends State<TaskItemWidget>  {
                                                 ),
                                                 borderRadius: BorderRadius.circular(3),
                                               ),
-
                                             ),
                                           );
-                                        },
+                                        }
 
-                                        onTapLink: (String url) async {
-                                          onTap();
-                                        },
+                                        return Padding(
+                                          padding: const EdgeInsets.only(left: 2, right: 2, bottom: 4),
+                                          child: Container(
+                                            height: 60,
+                                            child: ClipRRect(
+                                              child: Image.network(uri.toString(),
+                                                loadingBuilder: (context, child, progress){
+                                                  return progress == null
+                                                      ? child
+                                                      : CircularProgressIndicator();
+                                                },
+                                              ),
+                                              borderRadius: BorderRadius.circular(3),
+                                            ),
 
-                                        styleSheet: MarkdownStyleSheet(
-                                          p:  TextStyle(fontFamily: "Nunito", fontSize: 14, color: textColor),
-                                          h1: TextStyle(fontFamily: "Nunito", fontSize: 26, color: textColor),
-                                          h2: TextStyle(fontFamily: "Nunito", fontSize: 24, color: textColor),
-                                          h3: TextStyle(fontFamily: "Nunito", fontSize: 22, color: textColor),
-                                          h4: TextStyle(fontFamily: "Nunito", fontSize: 20, color: textColor),
-                                          h5: TextStyle(fontFamily: "Nunito", fontSize: 18, color: textColor),
-                                          h6: TextStyle(fontFamily: "Nunito", fontSize: 16, color: textColor),
-                                          a:  TextStyle(fontFamily: "Nunito", color: Colors.blue, decoration: TextDecoration.underline),
-                                        ),
+                                          ),
+                                        );
+                                      },
+
+                                      onTapLink: (String url) async {
+                                        onTap();
+                                      },
+
+                                      styleSheet: MarkdownStyleSheet(
+                                        p:  TextStyle(fontFamily: "Nunito", fontSize: 14, color: textColor),
+                                        h1: TextStyle(fontFamily: "Nunito", fontSize: 26, color: textColor),
+                                        h2: TextStyle(fontFamily: "Nunito", fontSize: 24, color: textColor),
+                                        h3: TextStyle(fontFamily: "Nunito", fontSize: 22, color: textColor),
+                                        h4: TextStyle(fontFamily: "Nunito", fontSize: 20, color: textColor),
+                                        h5: TextStyle(fontFamily: "Nunito", fontSize: 18, color: textColor),
+                                        h6: TextStyle(fontFamily: "Nunito", fontSize: 16, color: textColor),
+                                        a:  TextStyle(fontFamily: "Nunito", color: Colors.blue, decoration: TextDecoration.underline),
                                       ),
-                                    );
-                                  },
-                                ),
+                                    ),
+                                  );
+                                },
                               ),
-                            ]
-                        );
-                      },
-                    )
+                            ),
+                          ]
+                      );
+                    },
+                  )
                 ),
 
                 Row(

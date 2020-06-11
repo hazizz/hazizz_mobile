@@ -8,9 +8,8 @@ import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/dialogs/dialog_collection.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 import 'package:mobile/widgets/listItems/grade_item_widget.dart';
-import 'package:mobile/widgets/scroll_space_widget.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:mobile/extension_methods/duration_extension.dart';
+
 class KretaStatisticsPage extends StatefulWidget {
   @override
   _KretaStatisticsPage createState() => _KretaStatisticsPage();
@@ -18,13 +17,12 @@ class KretaStatisticsPage extends StatefulWidget {
 
 class _KretaStatisticsPage extends State<KretaStatisticsPage> {
 
-  final KretaGradeStatisticsBloc gradeAvaragesBloc = KretaGradeStatisticsBloc();
-
+  final KretaGradeStatisticsBloc gradeAveragesBloc = KretaGradeStatisticsBloc();
   final ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
-    gradeAvaragesBloc.add(KretaGradeStatisticsFetchEvent());
+    gradeAveragesBloc.add(KretaGradeStatisticsFetchEvent());
     super.initState();
   }
 
@@ -33,14 +31,13 @@ class _KretaStatisticsPage extends State<KretaStatisticsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: AppBar(
           leading: HazizzBackButton(),
           title: Text(localize(context, key: "kreta_grade_statistics")),
         ),
       body: RefreshIndicator(
         onRefresh: () async{
-          gradeAvaragesBloc.add(KretaGradeStatisticsFetchEvent());
+          gradeAveragesBloc.add(KretaGradeStatisticsFetchEvent());
         },
         child: Stack(
           children: <Widget>[
@@ -52,25 +49,25 @@ class _KretaStatisticsPage extends State<KretaStatisticsPage> {
                 Column(
                   children: <Widget>[
                     BlocBuilder(
-                      bloc: gradeAvaragesBloc,//MainTabBlocs().gradesBloc,
+                      bloc: gradeAveragesBloc,
                       builder: (context, state){
                         if(state is KretaGradeStatisticsGetState){
                           List<DropdownMenuItem> items = [];
 
-                          for(String key in gradeAvaragesBloc.gradeStatistics.keys){
+                          for(String key in gradeAveragesBloc.gradeStatistics.keys){
                             items.add(DropdownMenuItem(child: Text(key), value: key, ));
                           }
                           return Center(
-                              child: DropdownButton(
-                                  value: selectedSubject,
-                                  onChanged: (item) {
-                                    setState(() {
-                                      selectedSubject = item;
-                                    });
-                                    gradeAvaragesBloc.add(KretaGradeStatisticsGetEvent(subject: selectedSubject));
-                                  },
-                                  items: items
-                              )
+                            child: DropdownButton(
+                              value: selectedSubject,
+                              onChanged: (item) {
+                                setState(() {
+                                  selectedSubject = item;
+                                });
+                                gradeAveragesBloc.add(KretaGradeStatisticsGetEvent(subject: selectedSubject));
+                              },
+                              items: items
+                            )
                           );
                         }
                         /*
@@ -102,12 +99,12 @@ class _KretaStatisticsPage extends State<KretaStatisticsPage> {
                       },
                     ),
                     BlocBuilder(
-                      bloc: gradeAvaragesBloc,
+                      bloc: gradeAveragesBloc,
                       builder: (context, state){
-                       // if(state is KretaGradeStatisticsLoadedState && selectedSubject != null &&  gradeAvaragesBloc.gradeAvarages.isNotEmpty){
-                        //  PojoGradeAverage avarage = gradeAvaragesBloc.gradeAvarages.firstWhere((element) => element.subject == selectedSubject, orElse: () => null);
+                       // if(state is KretaGradeStatisticsLoadedState && selectedSubject != null &&  gradeAveragesBloc.gradeAverages.isNotEmpty){
+                        //  PojoGradeAverage avarage = gradeAveragesBloc.gradeAverages.firstWhere((element) => element.subject == selectedSubject, orElse: () => null);
                         if(state is KretaGradeStatisticsGetState){
-                          PojoGradeAverage avarage = state.currentGradeStatistic.gradeAverage;
+                          PojoGradeAverage avarage = state.currentGradeStatistic?.gradeAverage;
                           if(avarage != null){
                             return Padding(
                               padding: const EdgeInsets.only( bottom: 10, top: 6),
@@ -126,23 +123,31 @@ class _KretaStatisticsPage extends State<KretaStatisticsPage> {
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: <Widget>[
                                         Text("${localize(context, key: "class_average")}:", style: TextStyle(fontSize: 18),),
-                                        Text(avarage.classGrade.toString(), style: TextStyle(fontSize: 18),),
+                                        Text(avarage?.classGrade?.toString() ?? "", style: TextStyle(fontSize: 18),),
                                       ],
                                     ),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: <Widget>[
                                         Text("${localize(context, key: "difference")}:", style: TextStyle(fontSize: 18),),
-                                        avarage.difference >= 0 ?
-                                        Text("+${avarage.difference.toString()}", style: TextStyle(color: Colors.green, fontSize: 18),) :
-                                        Text(avarage.difference.toString(), style: TextStyle(color: Colors.red, fontSize: 18))
+                                        Builder(
+                                          builder: (c){
+                                            if(avarage.difference == null) return Container();
+                                            if(avarage.difference > 0){
+                                              return Text("+${avarage.difference.toString()}", style: TextStyle(color: Colors.green, fontSize: 18),);
+                                            }if(avarage.difference == 0){
+                                              return Text("${avarage.difference.toString()}", style: TextStyle(fontSize: 18),);
+                                            }
+                                            return Text(avarage.difference.toString() ?? "", style: TextStyle(color: Colors.red, fontSize: 18));
+                                          },
+                                        )
                                       ],
                                     ),
                                   ],
                                 ),
                               ),
                             );
-                          }
+    }
                           return Container();
                         }
                         return Container();
@@ -152,9 +157,12 @@ class _KretaStatisticsPage extends State<KretaStatisticsPage> {
                 ),
                 Expanded(
                   child: BlocConsumer(
-                    bloc: gradeAvaragesBloc,//MainTabBlocs().gradesBloc,
+                    bloc: gradeAveragesBloc,//MainTabBlocs().gradesBloc,
                     listener: (context, state ){
                        if(state is KretaGradeStatisticsGetState){
+                         if(selectedSubject == null){
+                           selectedSubject = gradeAveragesBloc.currentSubject;
+                         }
                          try{
                            scrollController?.animateTo(
                               0,
@@ -166,34 +174,33 @@ class _KretaStatisticsPage extends State<KretaStatisticsPage> {
                     },
                     builder: (context, state){
                       if(state is KretaGradeStatisticsGetState) {
-                        Widget buildItem(){
-                          List<PojoGrade> grades = state.currentGradeStatistic.gradeList;
+                        List<PojoGrade> grades = state.currentGradeStatistic?.gradeList;
 
-                          if(grades == null || grades.isEmpty){
-                            return Center(child: Text(localize(context, key: "no_grades_yet")));
-                          }
-                          return ListView.builder(
-                            controller: scrollController,
-                            itemCount: grades.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Stack(
-                                children: <Widget>[
-                                  GradeItemWidget.bySubject(pojoGrade: grades[index]),
-                                  if(grades[index].accountId == "ghost")
-                                    Positioned(top: 0, right: 0,
-                                      child: IconButton(
-                                        icon: Icon(FontAwesomeIcons.times, color: Colors.red,),
-                                        onPressed: () {
-                                          gradeAvaragesBloc.add(KretaGradeRemoveEvent(index: index));
-                                        },
-                                      )
-                                    )
-                                ],
-                              );
-                            }
-                          );
+                        if(grades == null) return Center(child: Text("no_grades_yet".localize(context)),);
+
+                        if(grades == null || grades.isEmpty){
+                          return Center(child: Text(localize(context, key: "no_grades_yet")));
                         }
-                        return buildItem();
+                        return ListView.builder(
+                          controller: scrollController,
+                          itemCount: grades.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Stack(
+                              children: <Widget>[
+                                GradeItemWidget.bySubject(pojoGrade: grades[index]),
+                                if(grades[index].accountId == "ghost")
+                                  Positioned(top: 0, right: 0,
+                                    child: IconButton(
+                                      icon: Icon(FontAwesomeIcons.times, color: Colors.red,),
+                                      onPressed: () {
+                                        gradeAveragesBloc.add(KretaGradeRemoveEvent(index: index));
+                                      },
+                                    )
+                                  )
+                              ],
+                            );
+                          }
+                        );
                       }
                       /*
                       if(state is GradesLoadedState){
@@ -235,11 +242,12 @@ class _KretaStatisticsPage extends State<KretaStatisticsPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: "kreta_statistics_page",
         child: Icon(FontAwesomeIcons.plus),
         onPressed: () async {
-          PojoGrade newGrade = await showAddGradeDialog(context, subject: gradeAvaragesBloc.currentSubject);
+          PojoGrade newGrade = await showAddGradeDialog(context, subject: gradeAveragesBloc.currentSubject);
           if(newGrade  != null){
-            gradeAvaragesBloc.add(KretaGradeAddEvent(grade: newGrade));
+            gradeAveragesBloc.add(KretaGradeAddEvent(grade: newGrade));
           }
         },
       ),

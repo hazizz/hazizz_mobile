@@ -78,8 +78,13 @@ class _GradesPage extends State<GradesPage>
     if(g == null) return Center(child: Text("error"),);
 
     if (currentPage == 1) {
-      Map<String, List<PojoGrade>> grades = copyMap(g);
+     // Map<String, List<PojoGrade>> grades = copyMap(g);
       // copyMap(MainTabBlocs().gradesBloc.grades.grades);
+     // MainTabBlocs().gradesBloc.getGradesFromSession().grades; // pojoGrades.grades;
+
+      Map<String, List<PojoGrade>> grades =
+          MainTabBlocs().gradesBloc.getGradesFromSession().grades; // pojoGrades.grades;
+
 
       List<PojoGrade> halfYearGrades = [];
 
@@ -106,7 +111,7 @@ class _GradesPage extends State<GradesPage>
                   pojoGrade: halfYearGrades[index - 1], rectForm: false);
             });
       }
-      return Center(child: Text("empty"));
+      return Center(child: Text("no_grades_yet".localize(context)),);
     } else if (currentPage == 2) {
       /// End of year grades
       Map<String, List<PojoGrade>> grades = copyMap(g);
@@ -138,7 +143,7 @@ class _GradesPage extends State<GradesPage>
                   pojoGrade: endOfYearGrades[index - 1], rectForm: false);
             });
       }
-      return Center(child: Text("empty"));
+      return Center(child: Text("no_grades_yet".localize(context)),);
     }
 
     if (MainTabBlocs().gradesBloc.currentGradeSort == GradesSortEnum.BYSUBJECT) {
@@ -179,6 +184,7 @@ class _GradesPage extends State<GradesPage>
           ],
         );
       }
+      if(itemCount <= 1) return Center(child: Text("no_grades_yet".localize(context)),);
       return new ListView.separated(
           //  controller: scrollController,
           itemCount: itemCount,
@@ -306,6 +312,7 @@ class _GradesPage extends State<GradesPage>
         );
       }
       int itemCount = gradesByDate.length + 1;
+      if(itemCount <= 1) return Center(child: Text("no_grades_yet".localize(context)),);
       return new ListView.builder(
           itemCount: itemCount,
           itemBuilder: (BuildContext context, int index) {
