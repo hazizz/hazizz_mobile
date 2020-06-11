@@ -15,7 +15,13 @@
   "owner":"Tulajdonos",
   "moderator":"Moderátor",
   "kick":"Kirugás",
+
   "group_type_open":"Nyitott",
+  "group_type_open_detail":"Bármelyik csoport tag küldhet meghívót",
+
+  "group_type_closed":"Zárt",
+  "group_type_closed_detail":"Csak tulaj és moderátor küldhet meghívót",
+
   "group_type_invite_only":"Meghívás alapú",
   "group_type_password":"Jelszó alapú",
   "appwidget_text":"EXAMPLE",
@@ -26,7 +32,6 @@
   "send":"Küldés",
   "report_this":"Ez a",
   "report":"Jelentés",
-  "commment":"Megjegyzés",
   "report_something":"{} jelentése",
   "report_successful":"{} sikeresen jelentve",
   "accept_hazizz_guidelines1":"Elfogadom a ",
@@ -315,7 +320,7 @@
   "already_a_member_of_group":"Már tagja vagy a(z) {} csoportnak",
   "about_group_description1":"Ha az osztályodnak még nincs csoportja, legyél te az első aki csinál egyet:",
   "about_group_description2":"Ha az osztályodnak már van csoportja, akkor kérd meg őket hogy küldjenek egy meghívó linket. Miután elküldték, csak nyomja a linkre és már bent is vagy a csoportban.",
-  "group_name_suggestion":"A csoport címe lehet az iskolád rövidítése és az osztályod. pl.: NEU. 10.D",
+  "group_name_suggestion":"A csoport címe lehet az iskolád rövidítése és az osztályod.\n pl.: NEU. 10.D",
   "group_created":"A csoport sikeresen létrehozva",
   "groupType_open":"Nyitott",
   "groupType_invite":"Meghivó alapú",

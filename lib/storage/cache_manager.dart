@@ -30,10 +30,12 @@ class CacheManager{
     return myId;
   }
 
+  /*
   static Future<String> getMyUsername() async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(_keyMe + _username);
   }
+  */
 
   static void forgetMyUser() async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -44,13 +46,16 @@ class CacheManager{
     prefs.setInt(_keyMe + _id, null);
 
     prefs.setString(_keyMe + _profilePicture, null);
-    prefs.setString(_keyMe + _userData, null);
+
+    setMyUserData(null);
   }
 
+  /*
   static void setMyUsername(String myUsername) async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(_keyMe + _username, myUsername);
   }
+  */
 
   static Future<String> getMyDisplayName() async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -62,6 +67,7 @@ class CacheManager{
     prefs.setString(_keyMe + _displayName, myDisplayName);
   }
 
+  /*
   static Future<int> getMyId() async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     int myId = prefs.getInt(_keyMe + _id);
@@ -74,6 +80,7 @@ class CacheManager{
     myId = userId;
     prefs.setInt(_keyMe + _id, userId);
   }
+  */
 
   static Future<String> getMyProfilePicture() async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -101,8 +108,12 @@ class CacheManager{
   }
 
   static void setMyUserData(PojoMyDetailedInfo me) async{
-
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+    if(me == null){
+      prefs.setString(_keyMe + _userData, null);
+      return;
+    }
+
     prefs.setString(_keyMe + _userData, jsonEncode(me));
     meInfo = me;
     myId = meInfo.id;
@@ -110,6 +121,7 @@ class CacheManager{
   }
 
 
+  @Deprecated("This not good")
   static Future<PojoMeInfoPrivate> getMyUserDataOld() async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String strMyUserData = prefs.getString(_keyMe + _userDataOld);
@@ -123,6 +135,7 @@ class CacheManager{
     return meInfoOld;
   }
 
+  /*
   static void setMyUserDataOld(PojoMeInfoPrivate me) async{
 
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -131,6 +144,7 @@ class CacheManager{
     myId = meInfo.id;
     FirebaseAnalyticsManager.setUserId(meInfo);
   }
+  */
 
   static Future<bool> seenGiveaway() async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();

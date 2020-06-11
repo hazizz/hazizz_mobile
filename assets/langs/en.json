@@ -18,7 +18,13 @@
   "owner":"Owner",
   "moderator":"Moderator",
   "kick":"Kick",
+
   "group_type_open":"Open",
+  "group_type_open_detail":"Any group member can send invites",
+
+  "group_type_closed":"Closed",
+  "group_type_closed_detail":"Only the owner and the moderator can send invites",
+
   "group_type_invite_only":"Invite only",
   "group_type_password":"Password",
   "appwidget_text":"EXAMPLE",
@@ -349,7 +355,7 @@
   "error_groupNameNotAcceptable":"Incorrect group name",
   "error_groupAlreadyExists":"Group already exists",
   "error_noSuchGroup":"Group does not exist",
-  "group_name_suggestion":"The group's name can be your school's name and your class name. E.g.: NEU. 10.D",
+  "group_name_suggestion":"The group's name can be your school's name and your class name.\n E.g.: NEU. 10.D",
   "not_member_of_groups":"You are not a member of a group",
   "error_subjectNotSelected":"No subject selected",
   "error_deadlineNotSet":"No deadline set",

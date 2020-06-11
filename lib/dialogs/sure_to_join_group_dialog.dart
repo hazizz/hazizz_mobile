@@ -10,8 +10,9 @@ import 'dialog_collection.dart';
 class SureToJoinGroupDialog extends StatefulWidget {
 
   final int groupId;
+  final String password;
 
-  SureToJoinGroupDialog({@required this.groupId});
+  SureToJoinGroupDialog({@required this.groupId, this.password});
 
   @override
   _SureToJoinGroupDialog createState() => new _SureToJoinGroupDialog();
@@ -131,7 +132,7 @@ class _SureToJoinGroupDialog extends State<SureToJoinGroupDialog> {
                 setState(() {
                   isLoading = true;
                 });
-                HazizzResponse hazizzResponse = await RequestSender().getResponse(JoinGroup(pGroupId: group.id));
+                HazizzResponse hazizzResponse = await getResponse(JoinGroup(pGroupId: group.id, pPassword: widget.password));
 
                 if(hazizzResponse.isSuccessful){
                   FirebaseAnalyticsManager.logJoinGroup(widget.groupId);

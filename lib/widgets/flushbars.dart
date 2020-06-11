@@ -5,7 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/extension_methods/duration_extension.dart';
-
+import 'package:mobile/extension_methods/string_length_limiter_extension.dart';
 dynamic showHaventSavedFlushBar(BuildContext context){
   return Flushbar(
     icon: Padding(
@@ -49,15 +49,18 @@ dynamic showFlutterErrorFlushBar(BuildContext context, {@required FlutterErrorDe
         flush.dismiss(true);
       },
     ),
-   messageText: Container(
-     child: Padding(
-       padding: const EdgeInsets.all(2),
-       child: Text(flutterErrorDetails.exceptionAsString()),
-     ),
-     decoration: new BoxDecoration(
-       borderRadius: BorderRadius.all(Radius.circular(6)),
-       color: Colors.grey
-      // color: Theme.of(context).dialogBackgroundColor,
+   messageText: ConstrainedBox(
+     constraints: BoxConstraints(maxHeight: 200),
+     child: Container(
+       child: Padding(
+         padding: const EdgeInsets.all(2),
+         child: Text(flutterErrorDetails.exceptionAsString(), overflow: TextOverflow.ellipsis,),
+       ),
+       decoration: new BoxDecoration(
+         borderRadius: BorderRadius.all(Radius.circular(6)),
+         color: Colors.grey
+        // color: Theme.of(context).dialogBackgroundColor,
+       ),
      ),
    ),
     onTap: (a) {

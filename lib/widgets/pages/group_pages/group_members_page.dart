@@ -45,11 +45,28 @@ class _GroupMembersPage extends State<GroupMembersPage> with AutomaticKeepAliveC
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        child: Icon(FontAwesomeIcons.userPlus),
-        heroTag: "hero_fab_members",
-        onPressed: (){
-          showInviteDialog(context, group: groupMembersBloc.group);
+      floatingActionButton: BlocBuilder(
+        bloc: GroupBlocs().myPermissionBloc,
+        builder: (context, state){
+          Widget showFab ()=> FloatingActionButton(
+            child: Icon(FontAwesomeIcons.userPlus),
+            heroTag: "hero_fab_members",
+            onPressed: (){
+              showInviteDialog(context, group: groupMembersBloc.group);
+            },
+          );
+
+          if(GroupBlocs().group.groupType == "OPEN"){
+            return showFab();
+          }
+          else if(state is MyPermissionSetState){
+            if(state.permission == GroupPermissionsEnum.OWNER
+            || state.permission == GroupPermissionsEnum.MODERATOR){
+              return showFab();
+            }
+            return Container();
+          }
+          return Container();
         },
       ),
       body: new RefreshIndicator(

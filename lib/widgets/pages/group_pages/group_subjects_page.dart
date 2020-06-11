@@ -31,10 +31,11 @@ class _GroupSubjectsPage extends State<GroupSubjectsPage> with AutomaticKeepAliv
 
   @override
   void initState() {
-    if(groupSubjectsBloc.state is ResponseError) {
-      groupSubjectsBloc.add(FetchData());
-    }
-
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if(groupSubjectsBloc.state is ResponseError) {
+        groupSubjectsBloc.add(FetchData());
+      }
+    });
 
     super.initState();
   }

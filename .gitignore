@@ -39,6 +39,8 @@
 **/android/app/private_key.properties
 **/android/app/private.jks
 
+**/android/app/google-services.json
+
 
 # iOS/XCode related
 **/ios/**/*.mode1v3
@@ -74,4 +76,3 @@
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 
 TODO.txt
-google-services.json

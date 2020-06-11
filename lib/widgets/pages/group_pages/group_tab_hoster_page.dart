@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/group/group_bloc.dart';
@@ -117,7 +118,7 @@ class _GroupTabHosterPage extends State<GroupTabHosterPage> with SingleTickerPro
         leading: HazizzBackButton(),
         title: Padding(
           padding: const EdgeInsets.only(top: 3.0, ),
-          child: Text(title, style: TextStyle(fontWeight: FontWeight.w700, fontFamily: "Nunito", /*fontSize: 20*/),),
+          child: AutoSizeText(title, style: TextStyle(fontWeight: FontWeight.w700, fontFamily: "Nunito", fontSize: 20), maxLines: 1, maxFontSize: 21, minFontSize: 12,),
         ),
         bottom: TabBar(controller: _tabController, tabs: [
           Tab(text: tasksTabPage.getTabName(context), icon: Icon(FontAwesomeIcons.bookOpen),),

@@ -90,9 +90,8 @@ class _SubjectEditorDialog extends State<SubjectEditorDialog> {
                     children: <Widget>[
                       TextField(
                         style: TextStyle(fontSize: 22),
-                        inputFormatters:[
-                          LengthLimitingTextInputFormatter(20),
-                        ],
+                        maxLength: 20,
+
                         autofocus: true,
                         controller: _subjectTextEditingController,
                         textInputAction: TextInputAction.send,

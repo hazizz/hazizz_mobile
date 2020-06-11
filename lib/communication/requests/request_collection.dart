@@ -549,21 +549,28 @@ class JoinGroup extends HazizzRequest {
   bool isDetailed = false;
   bool isWithoutMe = false;
 
-  JoinGroup({ @required int pGroupId,})  {
-    httpMethod = HttpMethod.GET;
-    path = "users/${CacheManager.getMyIdSafely}/joingroup/$pGroupId";
+  JoinGroup({@required int pGroupId, String pPassword})  {
+    httpMethod = HttpMethod.POST;
+  //  path = "users/${CacheManager.getMyIdSafely}/joingroup/$pGroupId";
+    path = pPassword == null
+      ? "groups/$pGroupId/join"
+      : "groups/$pGroupId/join/$pPassword";
     includeAuthTokenHeader = true;
   }
 
+  /*
   JoinGroup.withPassword({ @required int pGroupId, @required String pPassword})  {
-    httpMethod = HttpMethod.GET;
-    path = "users/${CacheManager.getMyIdSafely}/joingroup/$pGroupId/$pPassword";
+    httpMethod = HttpMethod.POST;
+   // path = "users/${CacheManager.getMyIdSafely}/joingroup/$pGroupId/$pPassword";
+    path = "groups/$pGroupId/join/$pPassword";
     includeAuthTokenHeader = true;
   }
+  */
 
   @override
-  convertData(Response response) => getIterable(response.data)
-      .map<PojoGroup>((json) => PojoGroup.fromJson(json)).toList();
+  convertData(Response response) => PojoGroupDetailed.fromJson(jsonDecode(response.data));
+      
+     // getIterable(response.data).map<PojoGroup>((json) => PojoGroup.fromJson(json)).toList();
 }
 
 
@@ -827,11 +834,12 @@ class GetRecentEvents extends HazizzRequest {
 //ha pGroupId != 0 és subject = 0
 //akkor csak a csoporthoz rendeltet küldi vissza
 class GetTasksFromMe extends HazizzRequest {
-  GetTasksFromMe({ bool qShowThera = true,
-                  bool qUnfinishedOnly, bool qFinishedOnly,
-                  List<String> qTags, String qStartingDate,
-                  String qEndDate, int qGroupId,
-                  int qSubjectId, qWholeGroup = false
+  GetTasksFromMe({
+    bool qShowThera = true,
+    bool qUnfinishedOnly, bool qFinishedOnly,
+    List<String> qTags, String qStartingDate,
+    String qEndDate, int qGroupId,
+    int qSubjectId, qWholeGroup = false
   })  {
     httpMethod = HttpMethod.GET;
     path = "users/${CacheManager.getMyIdSafely}/tasks";

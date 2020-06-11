@@ -1,6 +1,8 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/group/create_group_bloc.dart';
 import 'package:mobile/enums/group_types_enum.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
@@ -36,7 +38,7 @@ class _CreateGroupDialog extends State<CreateGroupDialog> {
 
 
   final double width = 300;
-  final double height = 260;
+  final double height = 310;
 
   final double searchBarHeight = 50;
 
@@ -73,23 +75,21 @@ class _CreateGroupDialog extends State<CreateGroupDialog> {
           child: Padding(
             padding: const EdgeInsets.only(left: 8.0, right: 8, top: 0),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 TextField(
-                    inputFormatters:[
-                      LengthLimitingTextInputFormatter(20),
-                    ],
-                      style: TextStyle(fontSize: 18),
-                      controller: groupNameController,
-                      decoration: InputDecoration(
-                        labelText: localize(context, key: "group"),
-                      )
+                  maxLength: 20,
+                  style: TextStyle(fontSize: 18),
+                  controller: groupNameController,
+                  decoration: InputDecoration(
+                    labelText: localize(context, key: "group"),
+                  )
                 ),
                 BlocBuilder(
                   bloc: createGroupBloc,
                   builder: (context, state){
                     if(state is CreateGroupInvalidState){
-                      return Text(localize(context, key: "error_groupName_length_error"), style: TextStyle(color: Colors.red),);
+                      return AutoSizeText(localize(context, key: "error_groupName_length_error"), style: TextStyle(color: Colors.red), maxLines: 1,);
                     }else if(state is CreateGroupGroupNameTakenState){
                       return Text(localize(context, key: "error_groupName_taken"), style: TextStyle(color: Colors.red),);
                     }
@@ -98,19 +98,16 @@ class _CreateGroupDialog extends State<CreateGroupDialog> {
                 ),
                 Text(localize(context, key: "group_name_suggestion")),
 
-        /*
+/*
                 Builder(
                     builder: (context){
                       var color = null;
                       const double padding = 8;
                       double height2 = 0;
-                      if(groupValue == GroupType.PASSWORD){
+                      if(groupValue == GroupTypeEnum.CLOSED){
                         height2 = 60;
                         color = Colors.transparent;
                       }
-
-
-
 
                       return Padding(
                         padding: const EdgeInsets.only(left: padding, right: padding),
@@ -152,9 +149,9 @@ class _CreateGroupDialog extends State<CreateGroupDialog> {
                       );
                     }
                 ),
-                */
-
-                if (false) Column(
+*/
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     GestureDetector(
                       onTap: (){
@@ -173,7 +170,25 @@ class _CreateGroupDialog extends State<CreateGroupDialog> {
                               });
                             },
                           ),
-                          Text("OPEN")
+                          Container(
+                            width: width-85,
+                            child: AutoSizeText.rich(
+                              TextSpan(
+                                  text: "${"group_type_open".localize(context)} ",
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 14, fontFamily: "Nunito"),
+
+                                  children: <TextSpan>[
+                                    TextSpan(text: "(${"group_type_open_detail".localize(context)})",
+                                      style: TextStyle(color: Colors.grey, fontSize: 13, fontStyle: FontStyle.italic),
+                                    )
+                                  ]
+                              ),
+                              maxLines: 2,
+                              maxFontSize: 16,
+                              minFontSize: 10,
+                            ),
+                          )
                         ],
                       ),
                     ),
@@ -194,7 +209,25 @@ class _CreateGroupDialog extends State<CreateGroupDialog> {
                               });
                             },
                           ),
-                          Text("CLOSED"),
+                          Container(
+                            width: width-85,
+                            child: AutoSizeText.rich(
+                              TextSpan(
+                                  text: "${"group_type_closed".localize(context)} ",
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 14, fontFamily: "Nunito"),
+
+                                  children: <TextSpan>[
+                                    TextSpan(text: "(${"group_type_closed_detail".localize(context)})",
+                                      style: TextStyle(color: Colors.grey, fontSize: 13, fontStyle: FontStyle.italic),
+                                    )
+                                  ]
+                              ),
+                              maxLines: 2,
+                              maxFontSize: 16,
+                              minFontSize: 10,
+                            ),
+                          )
                         ],
                       ),
                     ),

@@ -12,8 +12,6 @@ import 'package:mobile/managers/firebase_analytics.dart';
 
 class TokenManager {
   static const String _keyTokens = "key_tokens";
- // @Deprecated("Use instead [_keyTokens]") static const String _keyToken = "key_token";
-//  @Deprecated("Use instead [_keyTokens]") static const String _keyRefreshToken = "key_refreshToken";
   static bool tokenIsValid = true;
 
   static PojoTokens _tokens;
@@ -23,7 +21,7 @@ class TokenManager {
     HazizzLogger.printLog("In createTokenWithRefresh function");
    // HazizzLogger.printLog("In createTokenWithRefresh function0: " + (await tokens).token);
    // HazizzLogger.printLog("In createTokenWithRefresh function1: " + (await tokens).refresh);
-    HazizzResponse hazizzResponse = await RequestSender().getAuthResponse(new CreateToken.withRefresh(qUsername: await CacheManager.getMyUsername(), qRefreshToken: (await tokens).refresh));
+    HazizzResponse hazizzResponse = await RequestSender().getAuthResponse(new CreateToken.withRefresh(qUsername: await CacheManager.meInfo.username, qRefreshToken: (await tokens).refresh));
     if(hazizzResponse.isSuccessful){
       HazizzLogger.printLog("In createTokenWithRefresh function: token response successful");
       PojoTokens tokens = hazizzResponse.convertedData;
@@ -39,7 +37,6 @@ class TokenManager {
     HazizzResponse hazizzResponse = await RequestSender().getAuthResponse(new CreateToken.withGoogleAccount(qOpenIdToken: openIdToken));
     if(hazizzResponse.isSuccessful){
       PojoTokens tokens = hazizzResponse.convertedData;
-     // setTokens(tokens);
       await AppState.logInProcedure(tokens: tokens);
       FirebaseAnalyticsManager.logLogin("google");
     }else if(hazizzResponse.hasPojoError){
@@ -61,31 +58,6 @@ class TokenManager {
     return hazizzResponse;
   }
 
-
-  /*
-  @Deprecated("Use instead accessToken property")
-  static Future<bool> hasToken() async{
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    String token = prefs.getString(_keyToken);
-    return !(token == null || token == "");
-  }
-
-  @Deprecated("Use instead the accessToken property")
-  static Future<String> getToken() async{
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_keyToken);
-  }
-
-  @Deprecated("Use instead [tokens] property")
-  static Future<String> getRefreshToken() async{
-    final String refresh = (await tokens)?.refresh;
-    if(refresh != null) return refresh;
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_keyRefreshToken);
-  }
-  */
-
-
   static const String key_lastTokenUpdateTime = "key_lastTokenUpdateTime";
 
   static Future<DateTime> getLastTokenUpdateTime() async{
@@ -103,16 +75,6 @@ class TokenManager {
     prefs.setString(key_lastTokenUpdateTime, lastTokenUpdateTime.toString());
   }
 
-
-  /*
-  @Deprecated("Use instead [tokens]")
-  static Future<String> get accessToken async{
-    if(_tokens != null) return _tokens.token;
-
-    String t = (await getTokens())?.token;
-    return t;
-  }
-  */
   
   static Future<PojoTokens> get tokens async{
     if(_tokens != null) return _tokens;
@@ -124,8 +86,15 @@ class TokenManager {
   static void setTokens(PojoTokens pojoTokens) async{
     setLastTokenUpdateTime(DateTime.now());
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_keyTokens, pojoTokens.toRawJson());
-    HazizzLogger.printLog("tokens updated and saved");
+
+    if(pojoTokens != null){
+      await prefs.setString(_keyTokens, pojoTokens.toRawJson());
+      HazizzLogger.printLog("tokens updated and saved");
+    }else{
+      await prefs.setString(_keyTokens, null);
+      HazizzLogger.printLog("token was removed");
+    }
+    _tokens = pojoTokens;
   }
 
   static Future<PojoTokens> getTokens() async{
@@ -156,18 +125,6 @@ class TokenManager {
 
   static void invalidateTokens() {
     setTokens(null);
-   // _setRefreshToken("");
-  //  _setToken("");
+    _tokens = null;
   }
-
-  /*
-  static void _setToken(String newToken) async{
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(_keyToken, newToken);
-  }
-  static void _setRefreshToken(String newRefreshToken) async{
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(_keyRefreshToken, newRefreshToken);
-  }
-  */
 }

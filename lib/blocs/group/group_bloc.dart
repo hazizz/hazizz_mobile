@@ -241,6 +241,7 @@ class GroupBlocs{
   GroupBlocs._internal();
 
   void newGroup(PojoGroup group){
+
     this.group = group;
     groupTasksBloc = new TasksBloc.group(group.id, theraEnabled: false);
     groupTasksBloc.add(TasksFetchEvent());

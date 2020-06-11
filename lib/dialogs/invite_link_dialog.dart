@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/communication/pojos/PojoGroup.dart';
@@ -80,7 +81,7 @@ class _InviteLinkDialog extends State<InviteLinkDialog> {
               padding: const EdgeInsets.all(8.0),
               child: Builder(builder: (context){
                 if(inviteLink != null ){
-                  return Text(inviteLink, style: TextStyle(fontSize: 15));
+                  return AutoSizeText(inviteLink, style: TextStyle(fontSize: 17), maxFontSize: 17, minFontSize: 13,);
                 }else if(inviteLink == errorText){
                   return Text(localize(context, key: "info_something_went_wrong"), style: TextStyle(fontSize: 15));
                 }

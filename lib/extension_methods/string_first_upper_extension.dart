@@ -1,4 +1,4 @@
-extension StringFirstUpper on String {
+extension StringFirstUpperExtension on String {
   String toUpperFirst() {
     if(this.length == 0) return this;
     String s = this;

@@ -15,7 +15,7 @@ class DeepLinkController{
     if (deepLink != null) {
 
       HazizzLogger.printLog("sadsadasd " + deepLink.pathSegments[1]);
-      if(deepLink.pathSegments[0] == "groups" /*||  deepLink.queryParameters.containsKey("group") || deepLink.queryParameters.containsKey("groups")*/){
+      if(deepLink.pathSegments[0] == "groups" ){
         String strGroupId = deepLink.pathSegments[1];
 
         if(strGroupId == null || strGroupId == ""){
@@ -23,7 +23,13 @@ class DeepLinkController{
         }
         int groupId = int.parse(strGroupId);
         if(groupId != null){
-          await showSureToJoinGroupDialog(context, groupId: groupId);
+
+          String password;
+          if(deepLink.queryParameters.containsKey("password")){
+            password = deepLink.queryParameters["password"];
+          }
+
+          await showSureToJoinGroupDialog(context, groupId: groupId, password: password);
           HazizzLogger.printLog("showed showSureToJoinGroupDialog");
         }
       }else if(deepLink.queryParameters.containsKey("task")) {
@@ -36,10 +42,26 @@ class DeepLinkController{
         if(taskId != null) {
           Navigator.pushNamed(context, "/viewTask", arguments: taskId);
         }
+      }else if(deepLink.queryParameters.containsKey("group")){
+        String strGroupId = deepLink.queryParameters["group"];
+
+        if(strGroupId == null || strGroupId == ""){
+          strGroupId = deepLink.pathSegments[deepLink.pathSegments.length-1];
+        }
+        int groupId = int.parse(strGroupId);
+        if(groupId != null){
+
+          String password;
+          if(deepLink.queryParameters.containsKey("password")){
+            password = deepLink.queryParameters["password"];
+          }
+
+          await showSureToJoinGroupDialog(context, groupId: groupId, password: password);
+          HazizzLogger.printLog("showed showSureToJoinGroupDialog");
+        }
       }
     }
   }
-
   static StreamSubscription _sub;
 
   static Future<Null> initUniLinks(BuildContext context) async {

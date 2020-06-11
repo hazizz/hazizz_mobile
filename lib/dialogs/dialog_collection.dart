@@ -311,12 +311,12 @@ Future<bool> showSureToDeleteAllGDriveImageDialog(BuildContext context) async{
 }
 
 
-Future<void> showSureToJoinGroupDialog(BuildContext context, {@required int groupId}) async{
+Future<void> showSureToJoinGroupDialog(BuildContext context, {@required int groupId, String password}) async{
 
   var result = await showDialog(
     context: context,
     builder: (BuildContext context) {
-      return SureToJoinGroupDialog(groupId: groupId,);
+      return SureToJoinGroupDialog(groupId: groupId, password: password);
     },
   );
   return result;
