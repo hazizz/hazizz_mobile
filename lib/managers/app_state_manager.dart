@@ -74,14 +74,17 @@ class AppState{
   static Future<void> appStartProcedure() async {
     PreferenceService.loadAllPreferences();
     RequestSender().initialize();
-    await HazizzAppInfo().initalize();
+   // await HazizzAppInfo().initalize();
     await Connection.listener();
-    Crashlytics.instance.enableInDevMode = false;
+
+   // Crashlytics.instance.enableInDevMode = false;
     FlutterError.onError = (FlutterErrorDetails details){
       FlutterErrorCollector.add(details);
-      Crashlytics.instance.recordFlutterError(details);
+     // Crashlytics.instance.recordFlutterError(details);
     };
-    await AndroidAlarmManager.initialize();
+
+   // web config
+   // await AndroidAlarmManager.initialize();
   }
 
   static Future<void> mainAppPartStartProcedure() async {
@@ -106,7 +109,7 @@ class AppState{
     HazizzLogger.printLog("mainAppPartStartProcedure 7");
 
     KretaSessionManager.getCachedSessions().then((List<PojoSession> sessions){
-      FirebaseAnalyticsManager.logNumberOfKretaSessionsAdded(sessions != null ? sessions.length : 0);
+    //  FirebaseAnalyticsManager.logNumberOfKretaSessionsAdded(sessions != null ? sessions.length : 0);
     });
   }
 

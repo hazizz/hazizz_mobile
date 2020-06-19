@@ -72,6 +72,6 @@ class GoogleLoginBloc extends SocialLoginBloc{
       print(error.toString());
     });
     await _googleSignIn.signOut();
-    FirebaseAnalyticsManager.logLogout(error: error);
+   // FirebaseAnalyticsManager.logLogout(error: error);
   }
 }

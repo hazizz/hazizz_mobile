@@ -38,7 +38,7 @@ class TokenManager {
     if(hazizzResponse.isSuccessful){
       PojoTokens tokens = hazizzResponse.convertedData;
       await AppState.logInProcedure(tokens: tokens);
-      FirebaseAnalyticsManager.logLogin("google");
+     // FirebaseAnalyticsManager.logLogin("google");
     }else if(hazizzResponse.hasPojoError){
 
     }
@@ -51,7 +51,7 @@ class TokenManager {
       PojoTokens tokens = hazizzResponse.convertedData;
      // setTokens(tokens.token, tokens.refresh);
       await AppState.logInProcedure(tokens: tokens);
-      FirebaseAnalyticsManager.logLogin("facebook");
+    //  FirebaseAnalyticsManager.logLogin("facebook");
     }else if(hazizzResponse.hasPojoError){
 
     }

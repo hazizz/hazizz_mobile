@@ -119,13 +119,15 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage>  {
                             iconBell = FontAwesomeIcons.solidBell;
                             receive = value;
                           });
-                          await getResponse(AddFirebaseToken(pUserId: CacheManager.getMyIdSafely, bFirebaseToken: await HazizzMessageHandler().token));
+                          // web config
+                          // await getResponse(AddFirebaseToken(pUserId: CacheManager.getMyIdSafely, bFirebaseToken: await HazizzMessageHandler().token));
                         }else{
                           setState(() {
                             iconBell = FontAwesomeIcons.solidBellSlash;
                             receive = value;
                           });
-                          await getResponse(RemoveFirebaseTokens(pUserId: CacheManager.getMyIdSafely, firebaseToken: await HazizzMessageHandler().token));
+                          // web config
+                          // await getResponse(RemoveFirebaseTokens(pUserId: CacheManager.getMyIdSafely, firebaseToken: await HazizzMessageHandler().token));
                         }
                       }
                     )
