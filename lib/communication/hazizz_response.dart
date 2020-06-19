@@ -92,8 +92,8 @@ class HazizzResponse{
       if(pojoError != null){
         hasPojoError = true;
         if(pojoError.errorCode == 1){
-          FirebaseAnalyticsManager.logUnknownErrorResponse();
-          Crashlytics().recordError(CustomException(pojoError.toJson().toString()), StackTrace.current);
+        //  FirebaseAnalyticsManager.logUnknownErrorResponse();
+       //   Crashlytics().recordError(CustomException(pojoError.toJson().toString()), StackTrace.current);
         }
         else if(pojoError.errorCode == 138){
           KretaStatusBloc().add(KretaStatusUnavailableEvent());
@@ -102,7 +102,7 @@ class HazizzResponse{
         else if(pojoError.errorCode == 19) {
           /// to many requests
           HazizzLogger.printLog("Too many requests");
-          FirebaseAnalyticsManager.logRateLimitReached();
+        //  FirebaseAnalyticsManager.logRateLimitReached();
           await RequestSender().waitCooldown();
 
         }
@@ -138,14 +138,14 @@ class HazizzResponse{
           /// navigate to login/register page
         }else if(pojoError.errorCode == 132 && !(request is KretaAuthenticateSession)){
          // SelectedSessionBloc().add(SelectedSessionSetEvent(null));
-          Crashlytics().recordError(CustomException("Tried authenticating a non existing session"), StackTrace.current, context: "Session is null");
+        //  Crashlytics().recordError(CustomException("Tried authenticating a non existing session"), StackTrace.current, context: "Session is null");
           // TODO handle this
           HazizzResponse hazizzResponse = await RequestSender().getResponse(KretaCreateSession(bUsername: SelectedSessionBloc().selectedSession.username, bPassword: SelectedSessionBloc().selectedSession.password, bUrl: SelectedSessionBloc().selectedSession.url));
           if(hazizzResponse.isSuccessful){
             PojoSession newSession = hazizzResponse.convertedData;
             SelectedSessionBloc().add(SelectedSessionSetEvent(newSession));
           }else{
-            Crashlytics().recordError(CustomException("Session creation failed. ErrorCode: ${pojoError?.errorCode}"), StackTrace.current, context: "Session creation failed");
+           // Crashlytics().recordError(CustomException("Session creation failed. ErrorCode: ${pojoError?.errorCode}"), StackTrace.current, context: "Session creation failed");
             SelectedSessionBloc().add(SelectedSessionInactiveEvent());
           }
         }

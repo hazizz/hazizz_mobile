@@ -100,7 +100,7 @@ class CacheManager{
     HazizzLogger.printLog("strMyUserData: $strMyUserData");
     if(strMyUserData != null) {
       meInfo = PojoMyDetailedInfo.fromJson(jsonDecode(strMyUserData));
-      FirebaseAnalyticsManager.setUserId(meInfo);
+    //  FirebaseAnalyticsManager.setUserId(meInfo);
     }else{
       return null;
     }
@@ -117,7 +117,7 @@ class CacheManager{
     prefs.setString(_keyMe + _userData, jsonEncode(me));
     meInfo = me;
     myId = meInfo.id;
-    FirebaseAnalyticsManager.setUserId(meInfo);
+  //  FirebaseAnalyticsManager.setUserId(meInfo);
   }
 
 
@@ -128,7 +128,7 @@ class CacheManager{
     HazizzLogger.printLog("strMyUserDataOld: $strMyUserData");
     if(strMyUserData != null) {
       meInfoOld = PojoMeInfoPrivate.fromJson(jsonDecode(strMyUserData));
-      FirebaseAnalyticsManager.setUserId(meInfo);
+    //  FirebaseAnalyticsManager.setUserId(meInfo);
     }else{
       return null;
     }

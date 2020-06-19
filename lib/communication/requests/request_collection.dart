@@ -62,9 +62,9 @@ class Request {
 
   Future<Map<String, dynamic>> buildHeader() async{
     HazizzLogger.printLog("Building header: 1");
-    PackageInfo p = await PackageInfo.fromPlatform();
+  //  PackageInfo p = await PackageInfo.fromPlatform();
     HazizzLogger.printLog("Building header: 2");
-    header["User-Agent"] = "HM-${p.version}";
+   // header["User-Agent"] = "HM-web";
 
     HazizzLogger.printLog("Building header: 3");
     if(includeAuthTokenHeader){

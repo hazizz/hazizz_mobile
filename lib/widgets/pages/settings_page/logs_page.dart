@@ -78,7 +78,7 @@ class _LogsPage extends State<LogsPage> {
 
                       if(logFile != null){
                         final MailOptions mailOptions = MailOptions(
-                          body: 'version: ${HazizzAppInfo().getInfo.version}\nbuildNumber: ${HazizzAppInfo().getInfo.buildNumber}\nstory: ${controller.text}',
+                          body: 'version: web\nbuildNumber: ${HazizzAppInfo().getInfo.buildNumber}\nstory: ${controller.text}',
                           subject: 'Hazizz Mobile log',
                           recipients: ['hazizzvelunk@gmail.com'],
                           attachments: [ filePath, ],

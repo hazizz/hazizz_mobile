@@ -35,11 +35,14 @@ class _DeveloperSettingsPage extends State<DeveloperSettingsPage> {
   @override
   void initState() {
 
+    /*
+    // web config
     HazizzMessageHandler().token.then((token){
       setState(() {
         this.token = token;
       });
     });
+    */
 
     serverUrlController.text = ServerUrlManager.BASE_URL_DEFAULT;
     _enableFramerate = PreferenceService.enabledShowFramerate;

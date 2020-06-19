@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 
 class AboutPage extends StatefulWidget {
 
-  static final String version = HazizzAppInfo().getInfo.version;
+  static final String version = "web";//HazizzAppInfo().getInfo.version;
   static const String website = "https://hazizz.hu";
   static const String fb_site = "https://www.facebook.com/hazizzvelunk/";
   static const String tw_site = "https://twitter.com/hazizzvelunk";

@@ -52,7 +52,8 @@ class HazizzMessageHandler{
       final dynamic notification = message['notification'];
     }
     print("onBackgroundMessage: $message");
-    await HazizzMessageHandler().processMessage(message);
+    // web config
+    // await HazizzMessageHandler().processMessage(message);
   }
 
 }

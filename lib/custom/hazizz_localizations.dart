@@ -99,7 +99,7 @@ class HazizzLocalizationsNoContext{
     String nullCheckAndReturn(String text){
       if(text == null){
         HazizzLogger.printLog("Error translating text for key \"" + key + "\"");
-        FirebaseAnalyticsManager.logTranslationError(key: key, arguments: args, translatedText: text);
+      //  FirebaseAnalyticsManager.logTranslationError(key: key, arguments: args, translatedText: text);
         return "ERROR: KEY NOT FOUND";
       }
       return text;
@@ -119,7 +119,7 @@ class HazizzLocalizationsNoContext{
         text = text.replaceFirst(RegExp('{}'), args[i]);
       }
     }catch(e){
-      FirebaseAnalyticsManager.logTranslationError(key: key, arguments: args, translatedText: text);
+    //  FirebaseAnalyticsManager.logTranslationError(key: key, arguments: args, translatedText: text);
     }
 
     return nullCheckAndReturn(text);
@@ -153,7 +153,7 @@ class HazizzLocalizations {
     String nullCheckAndReturn(String text){
       if(text == null){
         HazizzLogger.printLog("Error translating text for key \"" + key + "\"");
-        FirebaseAnalyticsManager.logTranslationError(key: key, arguments: args, translatedText: text);
+       // FirebaseAnalyticsManager.logTranslationError(key: key, arguments: args, translatedText: text);
         return "ERROR: KEY NOT FOUND";
       }
       return text;
@@ -170,7 +170,7 @@ class HazizzLocalizations {
         text = text.replaceFirst(RegExp('{}'), args[i]);
       }
     }catch(e){
-      FirebaseAnalyticsManager.logTranslationError(key: key, arguments: args, translatedText: text);
+  //    FirebaseAnalyticsManager.logTranslationError(key: key, arguments: args, translatedText: text);
     }
     return nullCheckAndReturn(text);
   }
