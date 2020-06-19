@@ -153,10 +153,10 @@ class HazizzNotification{
   }
   */
 
-  static const int hazizzNotifId = 5587346431808710000;
+  static const int hazizzNotifId = 55873464318;
 
 
-  static const int tasksTomorrowNotificationId = 5587346431000000000;
+  static const int tasksTomorrowNotificationId = 5587346431;
   static const int classesNotificationId = 5587346432;
 
   static Future scheduleNotificationAlarmManager({TimeOfDay timeOfDay}) async {
