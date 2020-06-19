@@ -31,7 +31,7 @@ class TheraTaskItemWidget extends StatelessWidget  {
 							mainTag = t;
 							mainColor = t.getColor();
 							doBreak = true;
-							break;
+							break;getCorrectTaskItemWidget
 						}
 					}
 				}else{

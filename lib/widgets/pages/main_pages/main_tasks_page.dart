@@ -208,7 +208,7 @@ class _TasksPage extends State<TasksPage>
     );
     return SlideTransition(
         position: a,
-        child: getCorrectTaskItemWidget(pojoTask, onCompletedChanged: onCompletedChanged, key: Key(pojoTask.toJson().toString()),)
+        child: TaskItemWidget(originalPojoTask: pojoTask, onCompletedChanged: onCompletedChanged, key: Key(pojoTask.toJson().toString()),)
        // child: TaskItemWidget(originalPojoTask: pojoTask, onCompletedChanged: onCompletedChanged, key: Key(pojoTask.toJson().toString()),)
     );
   }

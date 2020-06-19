@@ -8,6 +8,7 @@ import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'package:mobile/communication/request_sender.dart';
 
+/*
 // TODO rewrite this mess
 
 Widget getCorrectTaskItemWidget(PojoTask task, {Function onCompletedChanged, Key key}){
@@ -21,6 +22,7 @@ Widget getCorrectTaskItemWidget(PojoTask task, {Function onCompletedChanged, Key
   }
   */
 }
+*/
 
 /*
 class TheraTaskItemWidget extends StatelessWidget  {
@@ -422,7 +424,7 @@ class _TaskItemWidget extends State<TaskItemWidget>  {
                           crossAxisAlignment: WrapCrossAlignment.center,
                           spacing: 2,
                           children: [
-                            Container(
+                            if(mainTag != null) Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.only(bottomRight: Radius.circular(12)),
                                 color: mainColor

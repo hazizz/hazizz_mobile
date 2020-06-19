@@ -1,12 +1,14 @@
 name: mobile
 description: Hazizz Mobile application.
 
-version: 1.5.4+71
+version: 1.5.5+72
 
 environment:
   sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
+  flutter_form_builder: 3.10.1
+
   ffloat: 1.0.1
   statsfl: 0.1.0
 

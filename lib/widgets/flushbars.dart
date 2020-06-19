@@ -5,7 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/extension_methods/duration_extension.dart';
-import 'package:mobile/extension_methods/string_length_limiter_extension.dart';
+
 dynamic showHaventSavedFlushBar(BuildContext context){
   return Flushbar(
     icon: Padding(

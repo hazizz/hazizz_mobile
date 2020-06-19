@@ -30,25 +30,6 @@ Widget imageViewerFromHazizzImageData(HazizzImageData imageData, {Key key, Funct
     return ImageViewer.fromGoogleDrive(imageData.url, key: key, salt: imageData.key, heroTag: imageData.url, onSmallDelete: onSmallDelete, onDelete: onDelete, width: width, height: height);
   }
   return null;
-  return Stack( key: key,
-    children: <Widget>[
-      Builder(
-        builder: (c){
-          if(imageData.imageType == ImageType.FILE){
-            return ImageViewer.fromFile(imageData.imageFile, /*key: key,*/ heroTag: imageData.imageFile.path, onSmallDelete: onSmallDelete, onDelete: onDelete, width: width, height: height,);
-          }else if(imageData.imageType == ImageType.NETWORK){
-            return ImageViewer.fromNetwork(imageData.url, /*key: key,*/ heroTag: imageData.url, onSmallDelete: onSmallDelete, onDelete: onDelete, width: width, height: height);
-          }else if(imageData.imageType == ImageType.GOOGLE_DRIVE){
-            return ImageViewer.fromGoogleDrive(imageData.url, /*key: key,*/ salt: imageData.key, heroTag: imageData.url, onSmallDelete: onSmallDelete, onDelete: onDelete, width: width, height: height);
-          }
-          return null;
-
-        },
-      ),
-      Center(child: Text(index.toString()),)
-    ],
-  );
-
 
 }
 

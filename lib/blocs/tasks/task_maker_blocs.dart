@@ -159,6 +159,10 @@ class GroupItemPickerBloc extends ItemListPickerBloc {
     }
     super.mapEventToState(event);
   }
+
+  void cancel(){
+    subjectItemPickerBlocSubscription.cancel();
+  }
 }
 //endregion
 //endregion

@@ -21,7 +21,7 @@ class TokenManager {
     HazizzLogger.printLog("In createTokenWithRefresh function");
    // HazizzLogger.printLog("In createTokenWithRefresh function0: " + (await tokens).token);
    // HazizzLogger.printLog("In createTokenWithRefresh function1: " + (await tokens).refresh);
-    HazizzResponse hazizzResponse = await RequestSender().getAuthResponse(new CreateToken.withRefresh(qUsername: await CacheManager.meInfo.username, qRefreshToken: (await tokens).refresh));
+    HazizzResponse hazizzResponse = await RequestSender().getAuthResponse(new CreateToken.withRefresh(qUsername: CacheManager.meInfo.username, qRefreshToken: (await tokens).refresh));
     if(hazizzResponse.isSuccessful){
       HazizzLogger.printLog("In createTokenWithRefresh function: token response successful");
       PojoTokens tokens = hazizzResponse.convertedData;
