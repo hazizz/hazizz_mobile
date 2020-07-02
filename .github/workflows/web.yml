@@ -10,11 +10,11 @@ jobs:
     steps:
       - name: Checkout 🛎️
       - uses: actions/checkout@v2
+        run: flutter pub get
 
       - name: Build 🔧
         run: |
           flutter config --enable-web
-          flutter pub get
           flutter build web --release
 
       - name: Deploy 🚀
