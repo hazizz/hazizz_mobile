@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,7 +37,7 @@ class IntroPage extends StatefulWidget {
 }
 
 class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin{
-  HazizzTabController _tabController;
+  TabController _tabController;
 
   bool joinLater = false;
 
@@ -83,8 +84,10 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
 
   @override
   void initState() {
-    DeepLinkController.initUniLinks(context);
-    _tabController = new HazizzTabController(length: 4, vsync: this);
+    if(!kIsWeb){
+      DeepLinkController.initUniLinks(context);
+    }
+    _tabController = new TabController(length: 4, vsync: this);
     super.initState();
   }
 
@@ -146,7 +149,7 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
 
   void exitIntro(){
     WelcomeManager.haveSeenIntro();
-    BusinessNavigator().state().pushReplacementNamed('/',);
+    BusinessNavigator().state().pushReplacementNamed('/');
   }
 
   @override
@@ -155,7 +158,15 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
     final autoSizeGroup = AutoSizeGroup();
 
     void nextPage(){
-      _tabController.animateTo(_tabController.index+1,  duration: 2000.milliseconds);
+
+      if(kIsWeb){
+        WidgetsBinding.instance.addPostFrameCallback((_){
+          exitIntro();
+        });
+
+      }else{
+        _tabController.animateTo(_tabController.index + 1, duration: 2000.milliseconds);
+      }
     }
 
     slides = [
@@ -401,7 +412,7 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
 
       child: Scaffold(
         body: SafeArea(
-          child: HazizzTabBarView(
+          child: TabBarView(
             physics: NeverScrollableScrollPhysics(),
             controller: _tabController,
             children: slides,

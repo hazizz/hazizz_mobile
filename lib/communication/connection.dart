@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
-
+import 'package:flutter/foundation.dart' show kIsWeb;
 class Connection{
 
   static StreamSubscription streamConnectionStatus;
@@ -30,6 +30,7 @@ class Connection{
   }
 
   static Future<bool> isOnline() async{
+    if (kIsWeb) return true;
     var connectivityResult = await (Connectivity().checkConnectivity());
     if(connectivityResult == ConnectivityResult.mobile) {
       return true;
@@ -37,10 +38,6 @@ class Connection{
       return true;
     }
     return false;
-  }
-
-  static Future<bool> isOffline() async{
-    return !(await isOnline());
   }
 
   static void close(){
