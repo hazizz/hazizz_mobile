@@ -20,7 +20,7 @@ jobs:
         run: flutter pub get
 
       - name: Build 🔧
-          run: flutter build web --release
+        run: flutter build web --release
 
       - name: Deploy 🚀
           uses: JamesIves/github-pages-deploy-action@releases/v3
