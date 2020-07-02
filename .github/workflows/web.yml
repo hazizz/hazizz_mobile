@@ -9,9 +9,7 @@ jobs:
       image:  cirrusci/flutter:beta
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v2
-        with:
-          persist-credentials: false
+      - uses: actions/checkout@v2
 
       - name: Build 🔧
         run: |
