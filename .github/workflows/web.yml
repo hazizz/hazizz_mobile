@@ -3,19 +3,19 @@ on:
   push:
     branches: [ web, web-actions ]
 jobs:
-  build-and-deploy:
+  build:
+
     runs-on: ubuntu-latest
+
     container:
-      image:  cirrusci/flutter:beta
+      image:  google/dart:latest
+
     steps:
       - uses: actions/checkout@v2
       - name: Install dependencies
         run: pub get
-
-      - name: Build 🔧
-        run: |
-          flutter config --enable-web
-          flutter build web --release
+      - name: Run tests
+        run: pub run test
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@releases/v3
