@@ -8,9 +8,9 @@ jobs:
     container:
       image:  cirrusci/flutter:beta
     steps:
-      - name: Checkout 🛎️
       - uses: actions/checkout@v2
-        run: flutter pub get
+      - name: Install dependencies
+        run: pub get
 
       - name: Build 🔧
         run: |
