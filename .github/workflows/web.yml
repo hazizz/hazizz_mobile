@@ -3,23 +3,28 @@ on:
   push:
     branches: [ web, web-actions ]
 jobs:
-  build:
-
+  build-and-deploy:
     runs-on: ubuntu-latest
-
-    container:
-      image:  cirrusci/flutter:beta
-
     steps:
-      - uses: actions/checkout@v2
-      - name: Install dependencies
-        run: pub get
-      - name: Run tests
-        run: pub run test
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2
+
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'beta'
+
+      - name: Config
+        run: flutter config --enable-web
+
+      - name: Update
+        run: flutter pub get
+
+      - name: Build 🔧
+          run: flutter build web --release
 
       - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@releases/v3
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: gh-pages # The branch the action should deploy to.
-          FOLDER: build/web # The folder the action should deploy.
+          uses: JamesIves/github-pages-deploy-action@releases/v3
+          with:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            BRANCH: gh-pages # The branch the action should deploy to.
+            FOLDER: build/web # The folder the action should deploy.
