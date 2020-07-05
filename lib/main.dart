@@ -42,7 +42,7 @@ final LoginBlocs loginBlocs = LoginBlocs();
 Locale preferredLocale;
 
 Future<bool> fromNotification() async {
-  /*
+  /* Might need other framework? https://github.com/MaikuB/flutter_local_notifications/issues/481
   var flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   var notificationAppLaunchDetails =
   await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
