@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -67,8 +68,9 @@ void main() async{
 
   preferredLocale = await getPreferredLocale();
 
-  // web config
- // await HazizzMessageHandler().configure();
+  if (!kIsWeb) {
+    await HazizzMessageHandler().configure();
+  }
 
   fromNotification();
 
@@ -220,6 +222,7 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
                           navigatorObservers: [
                             SavedStateRouteObserver(savedState: savedState),
                             //  FirebaseAnalyticsObserver(analytics: FirebaseAnalyticsManager.analytics),
+                            FirebaseAnalyticsManager.observer
                           ],
                           onGenerateRoute: (RouteSettings routeSettings) => RouteGenerator.generateRoute(routeSettings),
                           title: localize(context, key: "hazizz_appname") ?? "Hazizz Mobile",
@@ -236,19 +239,19 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
                             print("prCode1: ${preferredLocale.toString()}");
                             if(preferredLocale != null){
                               print("prCode: ${preferredLocale.languageCode}, ${preferredLocale.countryCode}");
-                             // FirebaseAnalyticsManager.setUsedLanguage(preferredLocale.languageCode);
+                              FirebaseAnalyticsManager.setUsedLanguage(preferredLocale.languageCode);
                               return preferredLocale;
                             }
                             for(var supportedLocale in supportedLocales) {
                               if(supportedLocale.languageCode == locale?.languageCode &&
                                   supportedLocale.countryCode == locale.countryCode) {
                                 setPreferredLocale(supportedLocale);
-                               // FirebaseAnalyticsManager.setUsedLanguage(preferredLocale.languageCode);
+                                FirebaseAnalyticsManager.setUsedLanguage(preferredLocale.languageCode);
                                 preferredLocale = supportedLocale;
                                 return supportedLocale;
                               }
                             }
-                          //  FirebaseAnalyticsManager.setUsedLanguage(preferredLocale.languageCode);
+                            FirebaseAnalyticsManager.setUsedLanguage(preferredLocale.languageCode);
                             preferredLocale = supportedLocales.first;
                             return supportedLocales.first;
                           },

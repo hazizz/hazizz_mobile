@@ -135,7 +135,7 @@ class _SureToJoinGroupDialog extends State<SureToJoinGroupDialog> {
                 HazizzResponse hazizzResponse = await getResponse(JoinGroup(pGroupId: group.id, pPassword: widget.password));
 
                 if(hazizzResponse.isSuccessful){
-                 // FirebaseAnalyticsManager.logJoinGroup(widget.groupId);
+                  FirebaseAnalyticsManager.logJoinGroup(widget.groupId);
                   Navigator.pop(context);
                   Navigator.pushNamed(context, "/group/groupId/newComer", arguments: group);
                 }else{

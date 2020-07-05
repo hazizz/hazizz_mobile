@@ -152,7 +152,7 @@ class TaskCreateBloc extends TaskMakerBloc {
       print("majas3: broo");
       if(hazizzResponse.isSuccessful){
         int taskId = (hazizzResponse.convertedData as PojoTask).id;
-       // FirebaseAnalyticsManager.logCreatedTask(taskId, subjectId, tags, imageDatas.isNotEmpty);
+        FirebaseAnalyticsManager.logCreatedTask(taskId, subjectId, tags, imageDatas.isNotEmpty);
         if(imageDatas != null && imageDatas.isNotEmpty){
           imageDatas.forEach((HazizzImageData hazizzImageData){
             hazizzImageData.renameFile(taskId);

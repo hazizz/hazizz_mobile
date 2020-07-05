@@ -88,7 +88,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
     if(_tabController.index == 2){
       NewGradesBloc().add(DoesntHaveNewGradesEvent());
     }
-   // FirebaseAnalyticsManager.logMainTabSelected(_tabController.index);
+    FirebaseAnalyticsManager.logMainTabSelected(_tabController.index);
     setState(() {
 
     });
@@ -211,12 +211,12 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-  //  FirebaseAnalyticsManager.observer.subscribe(this, ModalRoute.of(context));
+    FirebaseAnalyticsManager.observer.subscribe(this, ModalRoute.of(context));
   }
 
   @override
   void dispose() {
-   // FirebaseAnalyticsManager.observer.unsubscribe(this);
+    FirebaseAnalyticsManager.observer.unsubscribe(this);
     DeepLinkController.dispose();
     _tabController.dispose();
     animationController.dispose();
@@ -251,11 +251,9 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
   }
 
   void _sendCurrentTabToAnalytics() {
-    /*
     FirebaseAnalyticsManager.observer.analytics.setCurrentScreen(
       screenName: currentTabName ?? "tab name not set",
     );
-    */
   }
 
 

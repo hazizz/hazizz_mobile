@@ -109,7 +109,7 @@ class _InviteLinkDialog extends State<InviteLinkDialog> {
                   child: Text(localize(context, key: "share").toUpperCase(),),
                 ),
                 onPressed: () {
-                //  FirebaseAnalyticsManager.logGroupInviteLinkShare(widget.group.id);
+                  FirebaseAnalyticsManager.logGroupInviteLinkShare(widget.group.id);
                   Share.share(localize(context, key: "invite_to_group_text_title", args: [widget.group.name, inviteLink]));
                 },
                 color: Colors.transparent

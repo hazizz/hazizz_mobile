@@ -94,7 +94,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
     void _initializeWidgetData(PojoTask pTask){
       pojoTask = pTask;
       originalPojoTask = pojoTask;
-    //  FirebaseAnalyticsManager.logOpenedViewTaskPage(pojoTask);
+      FirebaseAnalyticsManager.logOpenedViewTaskPage(pojoTask);
       if(pojoTask.creator.id == CacheManager.getMyIdSafely){
         setState(() {
           canModify = true;

@@ -109,7 +109,7 @@ class AppState{
     HazizzLogger.printLog("mainAppPartStartProcedure 7");
 
     KretaSessionManager.getCachedSessions().then((List<PojoSession> sessions){
-    //  FirebaseAnalyticsManager.logNumberOfKretaSessionsAdded(sessions != null ? sessions.length : 0);
+      FirebaseAnalyticsManager.logNumberOfKretaSessionsAdded(sessions != null ? sessions.length : 0);
     });
   }
 

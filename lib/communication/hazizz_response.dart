@@ -92,8 +92,7 @@ class HazizzResponse{
       if(pojoError != null){
         hasPojoError = true;
         if(pojoError.errorCode == 1){
-        //  FirebaseAnalyticsManager.logUnknownErrorResponse();
-       //   Crashlytics().recordError(CustomException(pojoError.toJson().toString()), StackTrace.current);
+          FirebaseAnalyticsManager.logUnknownErrorResponse();
         }
         else if(pojoError.errorCode == 138){
           KretaStatusBloc().add(KretaStatusUnavailableEvent());
@@ -102,7 +101,7 @@ class HazizzResponse{
         else if(pojoError.errorCode == 19) {
           /// to many requests
           HazizzLogger.printLog("Too many requests");
-        //  FirebaseAnalyticsManager.logRateLimitReached();
+          FirebaseAnalyticsManager.logRateLimitReached();
           await RequestSender().waitCooldown();
 
         }
