@@ -77,19 +77,28 @@ class PojoGrade extends Pojo implements Comparable {
     return null;
   }
 
-  bool operator == (dynamic other){
-    if(other is PojoGrade) {
-      return (other.gradeType == gradeType &&
-          other.grade == grade &&
-          other.subject == subject &&
-          other.accountId == accountId &&
-          other.date == date &&
-          other.topic == topic &&
-          other.weight == weight &&
-          other.creationDate == creationDate
-      );
-    }
-    return false;
-  }
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PojoGrade &&
+          runtimeType == other.runtimeType &&
+          accountId == other.accountId &&
+          date == other.date &&
+          creationDate == other.creationDate &&
+          subject == other.subject &&
+          topic == other.topic &&
+          gradeType == other.gradeType &&
+          grade == other.grade &&
+          weight == other.weight;
 
+  @override
+  int get hashCode =>
+      accountId.hashCode ^
+      date.hashCode ^
+      creationDate.hashCode ^
+      subject.hashCode ^
+      topic.hashCode ^
+      gradeType.hashCode ^
+      grade.hashCode ^
+      weight.hashCode;
 }

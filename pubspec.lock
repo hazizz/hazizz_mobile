@@ -50,6 +50,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.6.0"
+  asn1lib:
+    dependency: transitive
+    description:
+      name: asn1lib
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.6.5"
   async:
     dependency: transitive
     description:
@@ -443,11 +450,9 @@ packages:
   flutter_facebook_login:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "feature/web_support"
-      resolved-ref: "9d2c84ad40c252ab3cbfece163259899479985a3"
-      url: "https://github.com/romulojjunior/flutter_facebook_login.git"
-    source: git
+      name: flutter_facebook_login
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "3.0.0"
   flutter_form_builder:
     dependency: "direct main"
@@ -575,7 +580,7 @@ packages:
       name: google_sign_in
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.5.1"
+    version: "4.2.0"
   google_sign_in_platform_interface:
     dependency: transitive
     description:
@@ -589,7 +594,7 @@ packages:
       name: google_sign_in_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.9.1+1"
+    version: "0.8.4"
   googleapis:
     dependency: "direct main"
     description:
@@ -1064,6 +1069,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.0"
+  steel_crypt:
+    dependency: "direct main"
+    description:
+      name: steel_crypt
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.7.1+1"
   sticky_headers:
     dependency: "direct main"
     description:
