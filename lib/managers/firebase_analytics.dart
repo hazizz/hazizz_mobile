@@ -7,16 +7,24 @@ import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/managers/app_state_manager.dart';
 import 'package:mobile/storage/cache_manager.dart';
+import 'package:flutter/foundation.dart';
+
 
 class FirebaseAnalyticsManager{
-  static final FirebaseAnalytics analytics = FirebaseAnalytics();
-  static final FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
+
+  static FirebaseAnalytics analytics = FirebaseAnalytics();
+  static FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
+
+  static void init(){}
 
   static Future<void> setUserId(PojoMyDetailedInfo meInfo) async {
+    if(kIsWeb) return;
     if(!(await AppState.isLoggedIn())){
       HazizzLogger.printLog("Wasn't able to log due to not being logged in");
       return;
     }
+
+
     HazizzLogger.printLog("log user property to analytics: " "id: " + meInfo.id.toString());
 
     await analytics.setUserProperty(name: "user_id", value: meInfo.id.toString());
@@ -29,6 +37,7 @@ class FirebaseAnalyticsManager{
   }
 
   static Future<void> setUsedLanguage(String languageCode) async {
+    if(kIsWeb) return;
     if(!(await AppState.isLoggedIn())){
       HazizzLogger.printLog("Wasn't able to log due to not being logged in");
       return;
@@ -41,12 +50,13 @@ class FirebaseAnalyticsManager{
       "user_id": CacheManager.getMyIdSafely,
       "language_code": languageCode
     };
-  //  await analytics?.logEvent(name: "used_language", parameters: parameters);
+    //  await analytics?.logEvent(name: "used_language", parameters: parameters);
   }
 
 
 
   static Future<void> logEvent(String name, Map<String, dynamic> parameters) async {
+    if(kIsWeb) return;
     if(!(await AppState.isLoggedIn())){
       HazizzLogger.printLog("Wasn't able to log due to not being logged in");
       return;
@@ -56,6 +66,7 @@ class FirebaseAnalyticsManager{
   }
 
   static Future<void> logLogin(String method) async {
+    if(kIsWeb) return;
     if(!(await AppState.isLoggedIn())){
       HazizzLogger.printLog("Wasn't able to log due to not being logged in");
       return;
@@ -65,6 +76,7 @@ class FirebaseAnalyticsManager{
   }
 
   static Future<void> logLogout({String error = "no error"}) async {
+    if(kIsWeb) return;
     if(!(await AppState.isLoggedIn())){
       HazizzLogger.printLog("Wasn't able to log due to not being logged in");
       return;
@@ -78,6 +90,7 @@ class FirebaseAnalyticsManager{
   }
 
   static Future<void> logJoinGroup(int groupId) async {
+    if(kIsWeb) return;
     if(!(await AppState.isLoggedIn())){
       HazizzLogger.printLog("Wasn't able to log due to not being logged in");
       return;
@@ -87,6 +100,7 @@ class FirebaseAnalyticsManager{
   }
 
   static Future<void> logOpenedViewTaskPage(PojoTask task) async {
+    if(kIsWeb) return;
     if(!(await AppState.isLoggedIn())){
       HazizzLogger.printLog("Wasn't able to log due to not being logged in");
       return;
@@ -112,6 +126,7 @@ class FirebaseAnalyticsManager{
   }
 
   static Future<void> logCreatedTask(int taskId, int subjectId, List<String> tags, bool containsImage) async {
+    if(kIsWeb) return;
     if(!(await AppState.isLoggedIn())){
       HazizzLogger.printLog("Wasn't able to log due to not being logged in");
       return;
@@ -131,6 +146,7 @@ class FirebaseAnalyticsManager{
   }
 
   static Future<void> logTheme(bool isDark) async {
+    if(kIsWeb) return;
     if(!(await AppState.isLoggedIn())){
       HazizzLogger.printLog("Wasn't able to log due to not being logged in");
       return;
@@ -145,6 +161,7 @@ class FirebaseAnalyticsManager{
   }
 
   static Future<void> logOpenedGroupsPage() async {
+    if(kIsWeb) return;
     if(!(await AppState.isLoggedIn())){
       HazizzLogger.printLog("Wasn't able to log due to not being logged in");
       return;
@@ -156,6 +173,7 @@ class FirebaseAnalyticsManager{
   }
 
   static Future<void> logOpenedTaskCalendarPage() async {
+    if(kIsWeb) return;
     if(!(await AppState.isLoggedIn())){
       HazizzLogger.printLog("Wasn't able to log due to not being logged in");
       return;
@@ -167,6 +185,7 @@ class FirebaseAnalyticsManager{
   }
 
   static Future<void> logOpenedGradeStatisticsPage() async {
+    if(kIsWeb) return;
     if(!(await AppState.isLoggedIn())){
       HazizzLogger.printLog("Wasn't able to log due to not being logged in");
       return;
@@ -178,6 +197,7 @@ class FirebaseAnalyticsManager{
   }
 
   static Future<void> logOpenedKretaNotesPage() async {
+    if(kIsWeb) return;
     if(!(await AppState.isLoggedIn())){
       HazizzLogger.printLog("Wasn't able to log due to not being logged in");
       return;
@@ -189,6 +209,7 @@ class FirebaseAnalyticsManager{
   }
 
   static Future<void> logOpenedGradeStatistics() async {
+    if(kIsWeb) return;
     if(!(await AppState.isLoggedIn())){
       HazizzLogger.printLog("Wasn't able to log due to not being logged in");
       return;
@@ -211,6 +232,7 @@ class FirebaseAnalyticsManager{
   */
 
   static Future<void> logNumberOfKretaSessionsAdded(int count) async {
+    if(kIsWeb) return;
     if(!(await AppState.isLoggedIn())){
       HazizzLogger.printLog("Wasn't able to log due to not being logged in");
       return;
@@ -224,6 +246,7 @@ class FirebaseAnalyticsManager{
   }
 
   static Future<void> logGroupInviteLinkShare(int groupId) async {
+    if(kIsWeb) return;
     if(!(await AppState.isLoggedIn())){
       HazizzLogger.printLog("Wasn't able to log due to not being logged in");
       return;
@@ -237,6 +260,7 @@ class FirebaseAnalyticsManager{
   }
 
   static Future<void> logMainTabSelected(int pageIndex) async {
+    if(kIsWeb) return;
     if(!(await AppState.isLoggedIn())){
       HazizzLogger.printLog("Wasn't able to log due to not being logged in");
       return;
@@ -260,6 +284,7 @@ class FirebaseAnalyticsManager{
   }
 
   static Future<void> logRateLimitReached() async {
+    if(kIsWeb) return;
     if(!(await AppState.isLoggedIn())){
       HazizzLogger.printLog("Wasn't able to log due to not being logged in");
       return;
@@ -273,6 +298,7 @@ class FirebaseAnalyticsManager{
   }
 
   static Future<void> logUnknownErrorResponse() async {
+    if(kIsWeb) return;
     if(!(await AppState.isLoggedIn())){
       HazizzLogger.printLog("Wasn't able to log due to not being logged in");
       return;
@@ -286,6 +312,7 @@ class FirebaseAnalyticsManager{
   }
 
   static Future<void> logTranslationError({@required String key, @required List<String> arguments, @required String translatedText }) async {
+    if(kIsWeb) return;
     if(!(await AppState.isLoggedIn())){
       HazizzLogger.printLog("Wasn't able to log due to not being logged in");
       return;

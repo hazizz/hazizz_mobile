@@ -78,7 +78,7 @@ dependencies:
   dio: 3.0.9
 
   cookie_jar: 1.0.1
-  connectivity: 0.4.8+6
+  connectivity: 0.4.9
   shared_preferences: ^0.5.7+1
   json_annotation: ^3.0.1 # 2.3.0
   http: ^0.12.1 # 0.+4

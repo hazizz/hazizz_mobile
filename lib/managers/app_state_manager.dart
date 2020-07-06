@@ -89,6 +89,7 @@ class AppState{
 
   static Future<void> mainAppPartStartProcedure() async {
     HazizzLogger.printLog("mainAppPartStartProcedure 0");
+    FirebaseAnalyticsManager.init();
    // UserDataBlocs().initialize();
    // await TokenManager.fetchRefreshTokens(username: (await InfoCache.getMyUserData()).username, refreshToken: await TokenManager.getRefreshToken());
     Future.delayed(3.seconds).then((_) => ServerChecker.checkAll());

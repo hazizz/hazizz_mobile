@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -155,7 +156,11 @@ class _IntroPage extends State<IntroPage> with AutomaticKeepAliveClientMixin, Si
     final autoSizeGroup = AutoSizeGroup();
 
     void nextPage(){
-      _tabController.animateTo(_tabController.index+1,  duration: 2000.milliseconds);
+      if(kIsWeb){
+        exitIntro();
+      }else{
+        _tabController.animateTo(_tabController.index+1,  duration: 2000.milliseconds);
+      }
     }
 
     slides = [
