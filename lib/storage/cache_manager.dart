@@ -101,6 +101,7 @@ class CacheManager{
     if(strMyUserData != null) {
       meInfo = PojoMyDetailedInfo.fromJson(jsonDecode(strMyUserData));
       FirebaseAnalyticsManager.setUserId(meInfo);
+      myId = meInfo.id;
     }else{
       return null;
     }

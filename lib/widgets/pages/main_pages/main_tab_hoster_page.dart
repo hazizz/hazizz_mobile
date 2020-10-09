@@ -648,6 +648,15 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                       ),
 
 
+                      ListTile(
+                        leading: Icon(FontAwesomeIcons.percentage),
+                        title: Text(localize(context, key: "custom_schedule")),
+                        onTap: () {
+                          Navigator.popAndPushNamed(context, "/custom/schedule");
+                        },
+                      ),
+
+
                       Expanded(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.end,

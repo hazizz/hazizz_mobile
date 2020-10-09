@@ -425,6 +425,7 @@
   "no_kreta_account_added_yet":"No Kreta account added yet",
   "failed_session":"Unsuccessful request with the selected session",
   "thera_schedules":"Thera schedules",
+  "custom_schedule":"Custom schedule",
   "thera_standin":"Replacement",
   "thera_canceled":"canceled",
   "classes_not_started":"Classes will start in {} minutes",

@@ -28,10 +28,7 @@ class UserDataBlocs{
   void initialize(){
     userDataBloc.add(MyUserDataGetEvent());
     pictureBloc.add(ProfilePictureGetEvent());
-
   }
-
-
 
   Future<void> close(){
     displayNameBloc.close();
@@ -529,8 +526,6 @@ class MyUserDataBloc extends Bloc<MyUserDataEvent, MyUserDataState> {
 
         yield MyUserDataLoadedState(meInfo: meInfoGenerated);
 
-
-
         HazizzResponse hazizzResponse = await RequestSender().getResponse(GetMyInfo.private());
         HazizzLogger.printLog("log: 13123s: 1");
 
@@ -577,17 +572,3 @@ class MyUserDataBloc extends Bloc<MyUserDataEvent, MyUserDataState> {
     }
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

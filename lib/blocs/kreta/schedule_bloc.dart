@@ -257,7 +257,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
             lastUpdated = dataCache.lastUpdated;
             classes = dataCache.data;
 
-            yield ScheduleLoadedCacheState(classes);
+            yield ScheduleLoadedCacheState(classes ?? PojoSchedules({}));
           }
         }
 
@@ -281,7 +281,10 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
               yield ScheduleLoadedState(classes, year: currentYearNumber, week: currentWeekNumber, failedSessions: failedSessions);
             }
           }else{
-            yield ScheduleLoadedCacheState(classes, failedSessions: failedSessions);
+            if(classes != null){
+              yield ScheduleLoadedCacheState(classes, failedSessions: failedSessions);
+
+            }
           }
         }
         else if(hazizzResponse.isError){
@@ -301,7 +304,9 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
             if(_failedRequestCount <= 1) {
               this.add(ScheduleFetchEvent());
             }else{
-              yield ScheduleLoadedCacheState(classes);
+              if(classes != null){
+                yield ScheduleLoadedCacheState(classes);
+              }
             }
           }else{
             yield ScheduleErrorState(hazizzResponse);

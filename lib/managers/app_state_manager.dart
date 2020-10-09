@@ -85,6 +85,9 @@ class AppState{
   }
 
   static Future<void> mainAppPartStartProcedure() async {
+
+    UserDataBlocs().initialize();
+
     HazizzLogger.printLog("mainAppPartStartProcedure 0");
    // UserDataBlocs().initialize();
    // await TokenManager.fetchRefreshTokens(username: (await InfoCache.getMyUserData()).username, refreshToken: await TokenManager.getRefreshToken());
@@ -102,7 +105,7 @@ class AppState{
    // await Future.delayed(const Duration(milliseconds: 50));
     SessionsBloc().add(FetchData());
     HazizzLogger.printLog("mainAppPartStartProcedure 6");
-    UserDataBlocs().initialize();
+
     HazizzLogger.printLog("mainAppPartStartProcedure 7");
 
     KretaSessionManager.getCachedSessions().then((List<PojoSession> sessions){

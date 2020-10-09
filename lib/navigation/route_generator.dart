@@ -11,6 +11,7 @@ import 'package:mobile/widgets/pages/kreta_pages/kreta_session_selector_page.dar
 import 'package:mobile/widgets/pages/kreta_pages/kreta_statistics_page.dart';
 import 'package:mobile/widgets/pages/main_pages/main_tab_hoster_page.dart';
 import 'package:mobile/widgets/pages/other_pages/intro_page.dart';
+import 'package:mobile/widgets/pages/schedule_editor_page.dart';
 import 'package:mobile/widgets/pages/settings_page/about_page.dart';
 import 'package:mobile/widgets/pages/settings_page/developer_settings_page.dart';
 import 'package:mobile/widgets/pages/settings_page/flutter_error_page.dart';
@@ -129,6 +130,8 @@ class RouteGenerator{
         return MaterialPageRoute(builder: (_) => KretaNotesPage());
       case '/kreta/statistics':
         return MaterialPageRoute(builder: (_) => KretaStatisticsPage());
+      case '/custom/schedule':
+        return MaterialPageRoute(builder: (_) => ScheduleEditorPage());
       default:
         String errorLog = "log: route: ${settings.name}, args: ${settings.arguments}";
         return _errorRoute(errorLog);

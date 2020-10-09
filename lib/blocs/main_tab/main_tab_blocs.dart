@@ -1,5 +1,6 @@
 import 'package:mobile/blocs/kreta/grades_bloc.dart';
 import 'package:mobile/blocs/kreta/schedule_bloc.dart';
+import 'package:mobile/blocs/other/custom_schedule_bloc.dart';
 import 'package:mobile/blocs/tasks/tasks_bloc.dart';
 import 'package:mobile/managers/preference_service.dart';
 
@@ -15,6 +16,7 @@ class MainTabBlocs{
 
   final TasksBloc tasksBloc = new TasksBloc();
    final ScheduleBloc schedulesBloc = new ScheduleBloc();
+   final CustomScheduleBloc customScheduleBloc = new CustomScheduleBloc();
    final GradesBloc gradesBloc = new GradesBloc();
 
   void fetchAll(){

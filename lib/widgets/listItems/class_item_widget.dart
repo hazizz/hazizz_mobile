@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/communication/pojos/PojoClass.dart';
+import 'package:mobile/communication/pojos/pojo_custom_class.dart';
 import 'package:mobile/dialogs/dialog_collection.dart';
 import 'package:mobile/extension_methods/time_of_day_extension.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
@@ -9,12 +10,15 @@ import "package:mobile/extension_methods/datetime_extension.dart";
 
 class ClassItemWidget extends StatelessWidget{
 
+  final PojoCustomClass pojoCustomClass;
   final PojoClass pojoClass;
   final bool isCurrentEvent;
 
-  ClassItemWidget({this.pojoClass}) : isCurrentEvent = false;
+  ClassItemWidget({@required this.pojoClass}) : isCurrentEvent = false, pojoCustomClass = null;
+  ClassItemWidget.isCurrentEvent({@required this.pojoClass}) : isCurrentEvent = true, pojoCustomClass = null;
 
-  ClassItemWidget.isCurrentEvent({this.pojoClass}) : isCurrentEvent = true;
+  ClassItemWidget.custom({@required this.pojoCustomClass}) : isCurrentEvent = false, pojoClass = null;
+  ClassItemWidget.customIsCurrentEvent({@required this.pojoCustomClass}) : isCurrentEvent = true, pojoClass = null;
 
   @override
   Widget build(BuildContext context) {
@@ -25,14 +29,14 @@ class ClassItemWidget extends StatelessWidget{
 
     Color bgColor;
 
-    if(currentDateTime.isAfterTimeOfDay(timeOfDay: pojoClass.startOfClass) &&
-       currentDateTime.isBeforeTimeOfDay(timeOfDay: pojoClass.startOfClass)
+    if(currentDateTime.isAfterTimeOfDay(timeOfDay: pojoClass?.startOfClass ?? pojoCustomClass?.start) &&
+       currentDateTime.isBeforeTimeOfDay(timeOfDay: pojoClass?.startOfClass ?? pojoCustomClass?.start)
     ){
       bgColor = HazizzTheme.blue;
     }
 
     return Hero(
-      tag: pojoClass,
+      tag: pojoClass ?? pojoCustomClass,
       child: Card(
         margin: EdgeInsets.only(left: 3, right: 3, bottom: 2.1, top: 2.1),
         color: bgColor,
@@ -40,10 +44,9 @@ class ClassItemWidget extends StatelessWidget{
         elevation: 5,
         child: InkWell(
             onTap: () {
-              showClassDialog(context, pojoClass: pojoClass);
+              showClassDialog(context, pojoClass: pojoClass ?? pojoCustomClass);
             },
             child: Container(
-
               decoration: isCurrentEvent ? BoxDecoration(
                 border: Border.all(
                     width: 4.0,
@@ -65,7 +68,7 @@ class ClassItemWidget extends StatelessWidget{
                       //    height: 200,
                         color: Theme.of(context).primaryColor,
                         child: Center(
-                          child: Text(pojoClass.periodNumber == null ? "1." : "${pojoClass.periodNumber}.",
+                          child: Text((pojoClass?.periodNumber ?? pojoCustomClass?.periodNumber) == null ? "1." : "${(pojoClass?.periodNumber ?? pojoCustomClass?.periodNumber)}.",
                             style: TextStyle(fontSize: 38, ),
                             maxLines: 1,
                           ),
@@ -88,7 +91,7 @@ class ClassItemWidget extends StatelessWidget{
                                       children: [
 
                                   //  Text(pojoClass.subject == null ? "subject" : pojoClass.subject, style: TextStyle(fontSize: 20)),
-                                        Text(pojoClass.subject == null ? "className" : pojoClass.subject.toUpperFirst(),
+                                        Text((pojoClass?.subject ?? pojoCustomClass?.title) == null ? "className" : (pojoClass?.subject?.toUpperFirst() ?? pojoCustomClass?.title),
                                           style: TextStyle(fontSize: 18, height: 1),
                                         ),
                                       ]
@@ -99,10 +102,10 @@ class ClassItemWidget extends StatelessWidget{
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 4.0),
                                 child: Builder(builder: (context){
-                                  if(pojoClass.topic != null && pojoClass.topic != ""){
+                                  if((pojoClass?.topic ?? pojoCustomClass?.description) != null && (pojoClass?.topic ?? pojoCustomClass?.description) != ""){
                                     return Padding(
                                       padding: const EdgeInsets.only(top: 2.4, bottom: 4),
-                                      child: Text(pojoClass.topic, style: TextStyle(fontSize: 16, color: Colors.grey, height:1)),
+                                      child: Text((pojoClass?.topic ?? pojoCustomClass?.description), style: TextStyle(fontSize: 16, color: Colors.grey, height:1)),
                                     );
                                   }
                                   return Container();
@@ -112,11 +115,12 @@ class ClassItemWidget extends StatelessWidget{
                             Padding(
                               padding: const EdgeInsets.only(left: 4.0),
                               child: Builder(builder: (context){
-                                if(pojoClass.cancelled){
-                                  return Text(localize(context, key: "thera_canceled").toUpperCase(), style: TextStyle(fontSize: 19, color: HazizzTheme.red));
-                                }else if(pojoClass.standIn){
-                                  return Text("${localize(context, key: "thera_standin")}: ${pojoClass.teacher}", style: TextStyle(fontSize: 19, color: HazizzTheme.red));
-
+                                if(pojoClass != null){
+                                  if(pojoClass.cancelled){
+                                    return Text(localize(context, key: "thera_canceled").toUpperCase(), style: TextStyle(fontSize: 19, color: HazizzTheme.red));
+                                  }else if(pojoClass.standIn){
+                                    return Text("${localize(context, key: "thera_standin")}: ${pojoClass.teacher}", style: TextStyle(fontSize: 19, color: HazizzTheme.red));
+                                  }
                                 }
                                 return Container();
                               }),
@@ -125,9 +129,9 @@ class ClassItemWidget extends StatelessWidget{
                               padding: const EdgeInsets.only(left: 4),
                               child: Row(
                                 children: <Widget>[
-                                  Text(pojoClass.startOfClass.hazizzFormat, style: TextStyle(fontSize: 18, height: 0.85),),
+                                  Text(((pojoClass?.startOfClass ?? pojoCustomClass?.start) as TimeOfDay).hazizzFormat, style: TextStyle(fontSize: 18, height: 0.85),),
                                   Text("-", style: TextStyle(fontSize: 18, height: 0.85),),
-                                  Text(pojoClass.endOfClass.hazizzFormat, style: TextStyle(fontSize: 18, height: 0.85),),
+                                  Text(((pojoClass?.endOfClass ?? pojoCustomClass?.end) as TimeOfDay).hazizzFormat, style: TextStyle(fontSize: 18, height: 0.85),),
                                 ],
                               ),
                             )
@@ -140,7 +144,7 @@ class ClassItemWidget extends StatelessWidget{
                         children: <Widget>[
                           Padding(
                             padding: const EdgeInsets.only(right: 1.5),
-                            child: Text(pojoClass.room ?? "", style: TextStyle(fontSize: 18, height: 0.85),),
+                            child: Text((pojoClass?.room ?? pojoCustomClass?.location) ?? "", style: TextStyle(fontSize: 18, height: 0.85),),
                           )
                         ],
                       ),

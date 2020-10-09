@@ -23,6 +23,7 @@ import 'package:mobile/communication/pojos/PojoTheraHealth.dart';
 import 'package:mobile/communication/pojos/PojoTokens.dart';
 import 'package:mobile/communication/pojos/PojoUser.dart';
 import 'package:mobile/communication/pojos/pojo_comment.dart';
+import 'package:mobile/communication/pojos/pojo_custom_class.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/managers/kreta_session_manager.dart';
@@ -1297,6 +1298,74 @@ class KretaGetSchedulesWithSession extends TheraRequest {
     }catch(e){
       return null;
     }
+  }
+}
+
+
+class GetCustomSchedule extends TheraRequest {
+  GetCustomSchedule()  {
+    httpMethod = HttpMethod.GET;
+    path = "users/${CacheManager.getMyIdSafely}/schedules/custom";
+    includeAuthTokenHeader = true;
+  }
+
+  @override
+  dynamic convertData(Response response) {
+    Iterable iter = getIterable(response.data);
+    List<PojoCustomClass> schedule = iter.map<PojoCustomClass>((json) => PojoCustomClass.fromJson(json)).toList();
+    return schedule;
+  }
+}
+
+class GetCustomClass extends TheraRequest {
+  GetCustomClass({ int customClassId})  {
+    httpMethod = HttpMethod.GET;
+    path = "users/${CacheManager.getMyIdSafely}/schedules/custom/$customClassId";
+    includeAuthTokenHeader = true;
+  }
+
+  @override
+  dynamic convertData(Response response) {
+    return PojoCustomClass.fromJson(jsonDecode(response.data));
+  }
+}
+
+class CreateCustomClass extends TheraRequest {
+  CreateCustomClass({
+    String recurrenceRule = "FREQ=WEEKLY;INTERVAL=1;WKST=MO;BYDAY=WE",
+    @required String start, @required String end, bool wholeDay = false, @required int periodNumber,
+    @required String title, @required String description, @required String host, @required String location
+  })  {
+    httpMethod = HttpMethod.POST;
+    path = "users/${CacheManager.getMyIdSafely}/schedules/custom";
+    includeAuthTokenHeader = true;
+    body["recurrenceRule"] =  recurrenceRule;
+    body["start"] =  start;
+    body["end"] =  end;
+    body["wholeDay"] =  wholeDay;
+    body["periodNumber"] =  periodNumber;
+    body["title"] =  title;
+    body["description"] =  description;
+    body["host"] =  host;
+    body["location"] =  location;
+  }
+
+  @override
+  dynamic convertData(Response response) {
+    return response;
+  }
+}
+
+class DeleteCustomClass extends TheraRequest {
+  DeleteCustomClass({int customClassId})  {
+    httpMethod = HttpMethod.DELETE;
+    path = "users/${CacheManager.getMyIdSafely}/schedules/custom/$customClassId";
+    includeAuthTokenHeader = true;
+  }
+
+  @override
+  dynamic convertData(Response response) {
+    return response;
   }
 }
 
