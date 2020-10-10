@@ -22,10 +22,8 @@ class FacebookLoginBloc extends SocialLoginBloc{
     switch(result.status){
       case FacebookLoginStatus.loggedIn:
         print("facebook token: ${result.accessToken.token}");
-        final AuthCredential credential = FacebookAuthProvider.getCredential(
-          accessToken: result.accessToken.token,
-        );
-        final FirebaseUser user = (await FirebaseAuth.instance.signInWithCredential(credential)).user;
+        final AuthCredential credential = FacebookAuthProvider.credential(result.accessToken.token,);
+        final User user = (await FirebaseAuth.instance.signInWithCredential(credential)).user;
         return result.accessToken.token;
       case FacebookLoginStatus.cancelledByUser:
         print("facebook token: $result, FacebookLoginStatus.cancelledByUser");

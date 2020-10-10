@@ -60,7 +60,7 @@ TextEditingValue _selectionAwareTextManipulation(
   }
   return TextEditingValue(
     text: manipulatedText,
-    selection: manipulatedSelection ?? const TextSelection.collapsed(offset: -1),
+    selection: manipulatedSelection ?? TextSelection.collapsed(offset: -1),
     composing: manipulatedText == value.text
         ? value.composing
         : TextRange.empty,

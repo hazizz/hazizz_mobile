@@ -92,16 +92,16 @@ class _AddGradeDialog extends State<AddGradeDialog> {
 						tween: Tween<Offset>(begin: Offset(60, -height/2+45),  end: Offset(60, -MediaQuery.of(context).size.height/2 )),
 						duration: 2000.milliseconds,
 						cycles: 1,
-						builder: (anim){
+						builder: (BuildContext context, AnimatorState animatorState, Widget child){
 							return Transform.translate(
-									offset: anim.value,
+									offset: animatorState.value,
 									child: Animator(
 										tween: Tween<double>(begin:1, end: 0),
 										duration: 2000.milliseconds,
 										cycles: 1,
-										builder: (anim2){
+										builder: (BuildContext context2, AnimatorState animatorState2, Widget child2){
 											return Opacity(
-												opacity: anim2.value,
+												opacity: animatorState2.value,
 												child: Icon(FontAwesomeIcons.ghost, size: 60,)
 											);
 										},

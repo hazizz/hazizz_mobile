@@ -72,14 +72,15 @@ class AppState{
   }
 
   static Future<void> appStartProcedure() async {
+
     PreferenceService.loadAllPreferences();
     RequestSender().initialize();
     await HazizzAppInfo().initalize();
     await Connection.listener();
-    Crashlytics.instance.enableInDevMode = false;
+    FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
     FlutterError.onError = (FlutterErrorDetails details){
       FlutterErrorCollector.add(details);
-      Crashlytics.instance.recordFlutterError(details);
+      FirebaseCrashlytics.instance.recordFlutterError(details);
     };
     await AndroidAlarmManager.initialize();
   }

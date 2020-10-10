@@ -18,10 +18,10 @@ class HazizzLogger{
   // only logs
   static void log(String msg){
    // Crashlytics().
-    Crashlytics().log(_processMessage(msg));
+    FirebaseCrashlytics.instance.log(_processMessage(msg));
   }
 
   static void addKeys(String key, String value){
-    Crashlytics().setString(key, value);
+    FirebaseCrashlytics.instance.setCustomKey(key, value);
   }
 }

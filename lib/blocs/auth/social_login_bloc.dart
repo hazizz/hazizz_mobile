@@ -139,12 +139,12 @@ abstract class SocialLoginBloc extends Bloc<SocialLoginEvent, SocialLoginState> 
       try{
         _socialToken = await getSocialToken();
         if(_socialToken == null && _socialToken == "canceled"){
-          Crashlytics().recordError(CustomException("Social Token is null"),
-              StackTrace.current, context: "Social Token is null");
+          FirebaseCrashlytics.instance.recordError(CustomException("Social Token is null"),
+              StackTrace.current, reason: "Social Token is null");
           yield SocialLoginFineState();
         }
       }catch(exception, stacktrace){
-        Crashlytics().recordError(exception, stacktrace);
+        FirebaseCrashlytics.instance.recordError(exception, stacktrace);
         yield SocialLoginFineState();
       }
 
@@ -193,7 +193,7 @@ abstract class SocialLoginBloc extends Bloc<SocialLoginEvent, SocialLoginState> 
         }
 
       }else{
-        Crashlytics().recordError(CustomException("Social login failed second time"), StackTrace.current);
+        FirebaseCrashlytics.instance.recordError(CustomException("Social login failed second time"), StackTrace.current);
         await logout();
         yield SocialLoginFailedState(error: hazizzResponseRegistration.pojoError);
       }

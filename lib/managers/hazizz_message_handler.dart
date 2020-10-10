@@ -24,6 +24,7 @@ class HazizzMessageHandler{
   }
 
   Future<void> configure() async {
+
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");

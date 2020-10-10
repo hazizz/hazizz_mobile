@@ -34,13 +34,13 @@ class GoogleLoginBloc extends SocialLoginBloc{
 
     HazizzLogger.printLog("google login: 4");
 
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
+    final AuthCredential credential = GoogleAuthProvider.credential(
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
     HazizzLogger.printLog("google login: 5");
 
-    final FirebaseUser user = (await _auth.signInWithCredential(credential)).user;
+    final User user = (await _auth.signInWithCredential(credential)).user;
     HazizzLogger.printLog("signed in " + user.displayName);
 
     String _openIdToken = googleAuth.idToken;

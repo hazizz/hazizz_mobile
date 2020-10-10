@@ -726,23 +726,23 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                     tween: Tween<Offset>(begin: Offset(w*0.86, h+100),  end: Offset(w/2,-100)),
                     duration: 4.seconds,
                     cycles: 1,
-                    builder: (anim){
+                    builder: (BuildContext context, AnimatorState animatorState, Widget child){
                       return Transform.translate(
-                        offset: anim.value,
+                        offset: animatorState.value,
                         child: Animator(
                           tween: Tween<double>(begin: -math.pi/6, end:  math.pi/6),
                           duration: 700.milliseconds,
                           cycles: 20,
-                          builder: (anim2){
+                          builder: (BuildContext context2, AnimatorState animatorState2, Widget child2){
                             return Transform.rotate(
                                 origin: Offset(0, -60),
-                                angle: anim2.value,
+                                angle: animatorState2.value,
                                 child: Animator(
                                   duration: 700.milliseconds,
                                   cycles: 20,
-                                  builder: (anim3){
+                                  builder: (BuildContext context3, AnimatorState animatorState3, Widget child3){
                                     return Transform.translate(
-                                      offset: Offset(anim3.value, 0),
+                                      offset: Offset(animatorState3.value, 0),
 
                                       child: Transform.scale(
                                         scale: 3,

@@ -59,8 +59,7 @@ class HazizzNotification{
   static var initializationSettingsIOS = new IOSInitializationSettings(
     //  onDidReceiveLocalNotification: onDidReceiveLocalNotification
   );
-  static var initializationSettings = new InitializationSettings(
-  initializationSettingsAndroid, initializationSettingsIOS);
+  static var initializationSettings = new InitializationSettings();
 
 
   static Future showHazizzNotification() async {
@@ -81,8 +80,8 @@ class HazizzNotification{
 
       final androidPlatformChannelSpecifics = AndroidNotificationDetails(
         tasksTomorrowChannelId, tasksTomorrowChannelName, tasksTomorrowChannelDescription,
-        importance: Importance.Max,
-        priority: Priority.High,
+        importance: Importance.max,
+        priority: Priority.high,
       //  color: HazizzTheme.blue,
       //  ledColor: HazizzTheme.blue,
       // icon: "ic_launcher_foreground",
@@ -90,7 +89,7 @@ class HazizzNotification{
       );
       final iOSPlatformChannelSpecifics = IOSNotificationDetails();
       final platformChannelSpecifics = NotificationDetails(
-          androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+          android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
 
       HazizzResponse hazizzResponse = await RequestSender().getResponse(GetTasksFromMe());
 
@@ -177,8 +176,8 @@ class HazizzNotification{
 
     final androidPlatformChannelSpecifics = AndroidNotificationDetails(
       tasksTomorrowChannelId, tasksTomorrowChannelName, tasksTomorrowChannelDescription,
-      importance: Importance.Max,
-      priority: Priority.High,
+      importance: Importance.max,
+      priority: Priority.high,
       //  color: HazizzTheme.blue,
       //  ledColor: HazizzTheme.blue,
       // icon: "ic_launcher_foreground",
@@ -186,8 +185,7 @@ class HazizzNotification{
     );
     final iOSPlatformChannelSpecifics = IOSNotificationDetails();
     final platformChannelSpecifics = NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-
+        android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
 
     Time time = new Time(timeOfDay.hour, timeOfDay.minute, 0);
 
@@ -253,8 +251,8 @@ class HazizzNotification{
   static Future<void> showNotif(String title, String body) async {
     final androidPlatformChannelSpecifics = AndroidNotificationDetails(
       tasksTomorrowChannelId, "asd", "sad",
-      importance: Importance.Max,
-      priority: Priority.High,
+      importance: Importance.max,
+      priority: Priority.high,
       //  color: HazizzTheme.blue,
       //  ledColor: HazizzTheme.blue,
       // icon: "ic_launcher_foreground",
@@ -262,7 +260,7 @@ class HazizzNotification{
     );
     final iOSPlatformChannelSpecifics = IOSNotificationDetails();
     final platformChannelSpecifics = NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+      android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
 
     await flutterLocalNotificationsPlugin.show(
         0, title, body,

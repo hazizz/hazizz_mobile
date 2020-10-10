@@ -527,7 +527,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
                                                               padding:  const EdgeInsets.only(left: 10, top: 10),
                                                               shrinkWrap: true,
                                                               physics: NeverScrollableScrollPhysics(),
-                                                              imageBuilder: (uri){
+                                                              imageBuilder: (Uri uri, String title, String alt){
                                                                 if(uri.host != "drive.google.com"){
                                                                   return Padding(
                                                                     padding: const EdgeInsets.only(top: 2, bottom: 2),

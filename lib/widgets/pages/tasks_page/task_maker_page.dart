@@ -30,7 +30,7 @@ import 'package:mobile/widgets/similar_tasks_widget.dart';
 import 'package:mobile/widgets/tag_chip.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
-import 'package:native_state/native_state.dart';
+// import 'package:native_state/native_state.dart';
 import 'package:mobile/extension_methods/datetime_extension.dart';
 import 'package:mobile/extension_methods/duration_extension.dart';
 
@@ -141,9 +141,11 @@ class _TaskMakerPage extends State<TaskMakerPage> {
       HazizzLogger.printLog("this should not be visible: 542311z8");
     }
 
+    /*
     taskMakerBloc.descriptionController.addListener((){
       SavedState.of(context).putString("task_description", taskMakerBloc.descriptionController.text);
     });
+    */
     super.initState();
   }
 

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -9,7 +10,7 @@ import 'package:mobile/blocs/other/show_framerate_bloc.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/managers/hazizz_message_handler.dart';
 import 'package:mobile/navigation/route_generator.dart';
-import 'package:native_state/native_state.dart';
+// import 'package:native_state/native_state.dart';
 import 'package:statsfl/statsfl.dart';
 import 'blocs/main_tab/main_tab_blocs.dart';
 import 'communication/pojos/task/PojoTask.dart';
@@ -61,7 +62,7 @@ Future<bool> fromNotification() async {
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-
+  await Firebase.initializeApp();
   preferredLocale = await getPreferredLocale();
 
   await HazizzMessageHandler().configure();
@@ -100,9 +101,7 @@ void main() async{
     startPage = "login";
   }
 
-  runApp(SavedState(
-    name: "Main State",
-    child: EasyLocalization(
+  runApp(EasyLocalization(
       preloaderWidget: Center(
         child: Image.asset(
           'assets/images/Logo.png',
@@ -112,7 +111,6 @@ void main() async{
       useOnlyLangCode: true,
       supportedLocales: supportedLocals,
       child: HazizzApp()
-    ),
   ));
 }
 
@@ -175,8 +173,6 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
   @override
   Widget build(BuildContext context) {
     print("startpage: $startPage");
-    var savedState = SavedState.of(context);
-    print("restore route: ${SavedStateRouteObserver.restoreRoute(savedState)}");
     return BlocProvider(
       create: (context) => ShowFramerateBloc(),
       child: DynamicTheme(
@@ -214,7 +210,6 @@ class _HazizzApp extends State<HazizzApp> with WidgetsBindingObserver{
                           navigatorKey: BusinessNavigator().navigatorKey,
                           initialRoute: startPage,
                           navigatorObservers: [
-                            SavedStateRouteObserver(savedState: savedState),
                             //  FirebaseAnalyticsObserver(analytics: FirebaseAnalyticsManager.analytics),
                             FirebaseAnalyticsManager.observer
                           ],

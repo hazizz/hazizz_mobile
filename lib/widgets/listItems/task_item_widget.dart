@@ -516,7 +516,7 @@ class _TaskItemWidget extends State<TaskItemWidget>  {
                                       padding:  const EdgeInsets.only(left: 20, top: 12),
                                       shrinkWrap: true,
                                       physics: NeverScrollableScrollPhysics(),
-                                      imageBuilder: (uri){
+                                      imageBuilder: (Uri uri, String title, String alt){
 
                                         final List<String> a = uri.toString().split("?id=");
                                         final String id = a.length > 1 ? a[1] : null;

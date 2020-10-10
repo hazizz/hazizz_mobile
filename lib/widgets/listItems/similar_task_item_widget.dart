@@ -197,7 +197,8 @@ class _SimilarTaskItemWidget extends State<SimilarTaskItemWidget> with TickerPro
                                           child: Markdown(data: widget.taskSimilarity.task.description,
                                             shrinkWrap: true,
                                             physics: NeverScrollableScrollPhysics(),
-                                            imageBuilder: (uri){
+
+                                            imageBuilder: (Uri uri, String title, String alt){
 
                                               final List<String> a = uri.toString().split("?id=");
                                               final String id = a.length > 1 ? a[1] : null;

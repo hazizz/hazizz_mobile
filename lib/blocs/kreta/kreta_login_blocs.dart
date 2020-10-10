@@ -297,7 +297,7 @@ class KretaLoginBloc extends Bloc<KretaLoginEvent, KretaLoginState> {
       }else{
 
         if(SessionsBloc().sessions.length == 9){
-          Crashlytics().recordError(CustomException("Login in to the 10th Kréta account. Impressive"), StackTrace.current, context: "10th account");
+          FirebaseCrashlytics.instance.recordError(CustomException("Login in to the 10th Kréta account. Impressive"), StackTrace.current, reason: "10th account");
         }
 
         if(usernameController.text != null && usernameController.text != ""
