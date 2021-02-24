@@ -20,9 +20,10 @@ import 'package:mobile/custom/session_status_converter.dart';
 import 'package:mobile/dialogs/dialog_collection.dart';
 import 'package:mobile/managers/app_state_manager.dart';
 import 'package:mobile/managers/app_state_restorer.dart';
-import 'package:mobile/managers/preference_service.dart';
+import 'package:mobile/managers/preference_manager.dart';
+import 'package:mobile/managers/user_manager.dart';
 import 'package:mobile/services/version_handler.dart';
-import 'package:mobile/storage/cache_manager.dart';
+import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/cache_manager.dart';
 import 'package:mobile/managers/deep_link_controller.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
@@ -102,7 +103,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
   void initState() {
 
     if(currentTabName == null){
-      PreferenceService.getStartPageIndex().then(
+      PreferenceManager.getStartPageIndex().then(
       (int pageIndex){
         mapTabIndexToTabName(pageIndex);
       });
@@ -113,14 +114,14 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
 
     DeepLinkController.initUniLinks(context);
 
-    CacheManager.getMyDisplayName().then(
-            (value){
-          HazizzLogger.printLog("getMyDisplayName: $value");
+    UserManager.getMyDisplayName().then(
+      (value){
+        HazizzLogger.printLog("getMyDisplayName: $value");
 
-          setState(() {
-            displayName = value;
-          });
-        }
+        setState(() {
+          displayName = value;
+        });
+      }
     );
 
     VersionHandler.getLastRecordedVersion().then((String lastVersion){
@@ -134,7 +135,7 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
     
     DateTime now = DateTime.now();
     
-    CacheManager.seenGiveaway().then((bool haveSeen){
+    UserManager.seenGiveaway().then((bool haveSeen){
       if(!haveSeen && now.isBefore(DateTime(2020, 04, 17, 23, 59))){
         WidgetsBinding.instance.addPostFrameCallback((_) =>
             showGiveawayDialog(context)
@@ -322,28 +323,6 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                         ],
                       ),
                       ),
-                      /*
-            GestureDetector(
-                onLongPress: (){
-                  HazizzLogger.printLog("log: long press");
-                },
-                child: Tab(text: tasksTabPage.getTabName(context), icon: Icon(FontAwesomeIcons.bookOpen),)
-              ),
-              GestureDetector(
-                onLongPress: (){
-                  HazizzLogger.printLog("log: long press");
-                },
-                child: Tab(text: schedulesTabPage.getTabName(context), icon: Icon(FontAwesomeIcons.calendarAlt)),
-              ),
-              GestureDetector(
-                onLongPress: (){
-                  HazizzLogger.printLog("log: long press");
-                },
-                child: Tab(text: gradesTabPage.getTabName(context), icon: Icon(FontAwesomeIcons.listOl)),
-              ),
-              */
-                      // Tab(text: SchedulesPage.tabName),//, icon: Icon(Icons.scatter_plot)),
-                      //, icon: Icon(Icons.group))
                     ]
                 ),
               ),
@@ -403,12 +382,9 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
               drawer: SizedBox(
                 width: 270,
                 child: Drawer(
-
-
                   child: Column(
                     children: <Widget>[
                       UserAccountsDrawerHeader(
-
                         decoration: BoxDecoration(
                           color: Theme.of(context).primaryColorDark,
                         ),
@@ -421,8 +397,6 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                                 style: TextStyle(fontSize: 18, fontFamily: "Nunito", fontWeight: FontWeight.w700),);
                             }
                             return Text(localize(context, key: "loading"), style: TextStyle(fontSize: 18),);
-
-
                           },
                         ),
                         accountEmail: BlocBuilder(
@@ -487,6 +461,14 @@ class _MainTabHosterPage extends State<MainTabHosterPage> with TickerProviderSta
                         title: Text(localize(context, key: "task_calendar")),
                         onTap: () {
                           Navigator.popAndPushNamed(context, "/calendarTasks");
+                        },
+                      ),
+
+                      ListTile(
+                        leading: Icon(FontAwesomeIcons.calendarDay),
+                        title: Text("custom_schedules_settings".localize(context)),
+                        onTap: () {
+                          Navigator.popAndPushNamed(context, "/schedule/settings");
                         },
                       ),
 

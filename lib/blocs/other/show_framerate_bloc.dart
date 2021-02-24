@@ -1,7 +1,7 @@
 import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/response_states.dart';
 import 'package:bloc/bloc.dart';
-import 'package:mobile/managers/preference_service.dart';
+import 'package:mobile/managers/preference_manager.dart';
 
 //region ShowFramerate event and state parts
 abstract class ShowFramerateEvent extends HEvent {
@@ -41,7 +41,7 @@ class ShowFramerateDisabledState extends ShowFramerateState {
 class ShowFramerateBloc extends Bloc<ShowFramerateEvent, ShowFramerateState> {
 
   ShowFramerateState get initialState =>
-    PreferenceService.enabledShowFramerate
+    PreferenceManager.enabledShowFramerate
       ? ShowFramerateEnabledState()
       : ShowFramerateDisabledState();
 

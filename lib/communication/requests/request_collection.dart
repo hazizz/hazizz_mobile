@@ -30,8 +30,9 @@ import 'package:mobile/managers/kreta_session_manager.dart';
 import 'package:mobile/managers/server_url_manager.dart';
 import 'package:mobile/managers/token_manager.dart';
 import 'package:meta/meta.dart';
+import 'package:mobile/managers/user_manager.dart';
 import 'package:mobile/services/pojo_converter_helper.dart';
-import 'package:mobile/storage/cache_manager.dart';
+import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/cache_manager.dart';
 import 'package:package_info/package_info.dart';
 import 'dart:core';
 import '../htttp_method_enum.dart';
@@ -369,12 +370,12 @@ class GetUserProfilePicture extends HazizzRequest {
 
 class GetMyProfilePicture extends HazizzRequest {
   GetMyProfilePicture.mini()  {
-    path = "users/${CacheManager.getMyIdSafely}/picture";
+    path = "users/${UserManager.getMyIdSafely}/picture";
     hardCodeReducer();
   }
 
   GetMyProfilePicture.full()  {
-    path = "users/${CacheManager.getMyIdSafely}/picture/full";
+    path = "users/${UserManager.getMyIdSafely}/picture/full";
     hardCodeReducer();
   }
 
@@ -393,7 +394,7 @@ class GetMyProfilePicture extends HazizzRequest {
 
 class UpdateMyProfilePicture extends HazizzRequest {
   UpdateMyProfilePicture({ @required String encodedImage})  {
-    path = "users/${CacheManager.getMyIdSafely}/picture";
+    path = "users/${UserManager.getMyIdSafely}/picture";
     httpMethod = HttpMethod.POST;
     includeAuthTokenHeader = true;
     contentTypeHeader = true;
@@ -412,7 +413,7 @@ class UpdateMyProfilePicture extends HazizzRequest {
 
 class UpdateMyDisplayName extends HazizzRequest {
   UpdateMyDisplayName({ @required String  bDisplayName})  {
-    path = "users/${CacheManager.getMyIdSafely}/displayname";
+    path = "users/${UserManager.getMyIdSafely}/displayname";
     httpMethod = HttpMethod.POST;
     includeAuthTokenHeader = true;
     contentTypeHeader = true;
@@ -535,7 +536,7 @@ class LeaveGroup extends HazizzRequest {
 
   LeaveGroup({@required int pGroupId})  {
     httpMethod = HttpMethod.GET;
-    path = "users/${CacheManager.getMyIdSafely}/leavegroup/$pGroupId";
+    path = "users/${UserManager.getMyIdSafely}/leavegroup/$pGroupId";
     includeAuthTokenHeader = true;
   }
 
@@ -602,7 +603,7 @@ class PromoteMember extends HazizzRequest {
 class GetMyGroups extends HazizzRequest {
   GetMyGroups()  {
     httpMethod = HttpMethod.GET;
-    path = "users/${CacheManager.getMyIdSafely}/groups";
+    path = "users/${UserManager.getMyIdSafely}/groups";
     includeAuthTokenHeader = true;
   }
 
@@ -822,7 +823,7 @@ class UpdateAlertSettings extends HazizzRequest {
 class GetRecentEvents extends HazizzRequest {
   GetRecentEvents()  {
     httpMethod = HttpMethod.GET;
-    path = "users/${CacheManager.getMyIdSafely}/notifications";
+    path = "users/${UserManager.getMyIdSafely}/notifications";
     includeAuthTokenHeader = true;
   }
 
@@ -843,7 +844,7 @@ class GetTasksFromMe extends HazizzRequest {
     int qSubjectId, qWholeGroup = false
   })  {
     httpMethod = HttpMethod.GET;
-    path = "users/${CacheManager.getMyIdSafely}/tasks";
+    path = "users/${UserManager.getMyIdSafely}/tasks";
     includeAuthTokenHeader = true;
 
     if(qShowThera != null)    query["showThera"] = qShowThera;
@@ -1197,7 +1198,7 @@ class KretaGetNotes extends TheraRequest {
 class KretaGetGrades extends TheraRequest {
   KretaGetGrades()  {
     httpMethod = HttpMethod.GET;
-    path = "users/${CacheManager.getMyIdSafely}/grades";
+    path = "users/${UserManager.getMyIdSafely}/grades";
     includeAuthTokenHeader = true;
   }
 
@@ -1244,7 +1245,7 @@ class KretaGetGradeAverages extends TheraRequest {
 class KretaGetSchedules extends TheraRequest {
   KretaGetSchedules({ int qWeekNumber, int qYear})  {
     httpMethod = HttpMethod.GET;
-    path = "users/${CacheManager.getMyIdSafely}/schedules";
+    path = "users/${UserManager.getMyIdSafely}/schedules";
     includeAuthTokenHeader = true;
 
     if(qWeekNumber != null && qYear != null) {
@@ -1305,7 +1306,7 @@ class KretaGetSchedulesWithSession extends TheraRequest {
 class GetCustomSchedule extends TheraRequest {
   GetCustomSchedule()  {
     httpMethod = HttpMethod.GET;
-    path = "users/${CacheManager.getMyIdSafely}/schedules/custom";
+    path = "users/${UserManager.getMyIdSafely}/schedules/custom";
     includeAuthTokenHeader = true;
   }
 
@@ -1320,7 +1321,7 @@ class GetCustomSchedule extends TheraRequest {
 class GetCustomClass extends TheraRequest {
   GetCustomClass({ int customClassId})  {
     httpMethod = HttpMethod.GET;
-    path = "users/${CacheManager.getMyIdSafely}/schedules/custom/$customClassId";
+    path = "users/${UserManager.getMyIdSafely}/schedules/custom/$customClassId";
     includeAuthTokenHeader = true;
   }
 
@@ -1337,7 +1338,7 @@ class CreateCustomClass extends TheraRequest {
     @required String title, @required String description, @required String host, @required String location
   })  {
     httpMethod = HttpMethod.POST;
-    path = "users/${CacheManager.getMyIdSafely}/schedules/custom";
+    path = "users/${UserManager.getMyIdSafely}/schedules/custom";
     includeAuthTokenHeader = true;
     body["recurrenceRule"] =  recurrenceRule;
     body["start"] =  start;
@@ -1359,7 +1360,7 @@ class CreateCustomClass extends TheraRequest {
 class DeleteCustomClass extends TheraRequest {
   DeleteCustomClass({int customClassId})  {
     httpMethod = HttpMethod.DELETE;
-    path = "users/${CacheManager.getMyIdSafely}/schedules/custom/$customClassId";
+    path = "users/${UserManager.getMyIdSafely}/schedules/custom/$customClassId";
     includeAuthTokenHeader = true;
   }
 

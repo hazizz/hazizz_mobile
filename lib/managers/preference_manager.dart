@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/enums/schedule_type_enum.dart';
 import 'package:mobile/managers/server_url_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -10,7 +11,7 @@ class StartPageItem{
   StartPageItem(this.name, this.index);
 }
 
-class PreferenceService{
+class PreferenceManager{
   static const String _key_imageAutoLoad = "_key_imageAutoLoad";
   static const String _key_imageAutoDownload = "_key_imageAutoDownload";
 
@@ -23,6 +24,8 @@ class PreferenceService{
 
   static const String _key_enable_show_framerate = "_key_enable_show_framerate";
   static const String _key_enable_exception_catcher = "_key_enable_exception_catcher";
+
+  static const String _key_schedule_type = "_key_schedule_type";
 
 
   static const int tasksPage = 0;
@@ -140,5 +143,24 @@ class PreferenceService{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     enabledExceptionCatcher = enable;
     prefs.setBool(_key_enable_exception_catcher, enable);
+  }
+
+  static Future<ScheduleTypeEnum> getScheduleType()async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String s = prefs.getString(_key_schedule_type);
+    if(s == null || s == "kreta"){
+      return ScheduleTypeEnum.KRETA;
+    }else{
+      return ScheduleTypeEnum.CUSTOM;
+    }
+  }
+  static Future setScheduleType(ScheduleTypeEnum scheduleType)async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if(scheduleType == ScheduleTypeEnum.KRETA){
+      prefs.setString(_key_schedule_type, "kreta");
+    }else{
+      prefs.setString(_key_schedule_type, "custom");
+    }
+
   }
 }

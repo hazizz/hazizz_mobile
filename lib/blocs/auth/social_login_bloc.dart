@@ -7,9 +7,7 @@ import 'package:mobile/communication/pojos/PojoError.dart';
 import 'package:mobile/custom/custom_exception.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:bloc/bloc.dart';
-
 import 'package:mobile/communication/hazizz_response.dart';
-
 import 'google_login_bloc.dart';
 
 abstract class SocialLoginEvent extends HEvent {

@@ -269,7 +269,7 @@ class TaskItemWidget extends StatefulWidget  {
   final PojoTask originalPojoTask;
   final Function onCompletedChanged;
 
-  TaskItemWidget({Key key, this.originalPojoTask, this.onCompletedChanged}) : super(key: key);
+  TaskItemWidget({Key key, @required this.originalPojoTask, @required this.onCompletedChanged}) : super(key: key);
 
   @override
   _TaskItemWidget createState() => _TaskItemWidget();

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
-import 'package:mobile/managers/preference_service.dart';
+import 'package:mobile/managers/preference_manager.dart';
 import 'package:mobile/services/hazizz_crypt.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile/widgets/image_viewer_widget.dart';
@@ -34,7 +34,7 @@ class _GoogleDriveImage extends State<GoogleDriveImage>{
 
   Uint8List byteImg;
 
-  bool loadImageEnabled = PreferenceService.imageAutoLoad;
+  bool loadImageEnabled = PreferenceManager.imageAutoLoad;
 
   Image thumbnailImage;
 

@@ -6,7 +6,8 @@ import 'package:mobile/communication/pojos/PojoTag.dart';
 import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/managers/app_state_manager.dart';
-import 'package:mobile/storage/cache_manager.dart';
+import 'package:mobile/managers/user_manager.dart';
+import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/cache_manager.dart';
 
 class FirebaseAnalyticsManager{
   static final FirebaseAnalytics analytics = FirebaseAnalytics();
@@ -23,7 +24,7 @@ class FirebaseAnalyticsManager{
     await analytics.setUserId(meInfo.id.toString());
     HazizzLogger.printLog("log event to analytics: " "user_id: " + meInfo.id.toString());
     Map<String, dynamic> parameters = {
-      "user_id": CacheManager.getMyIdSafely,
+      "user_id": UserManager.getMyIdSafely,
     };
     await analytics.logEvent(name: "user_id", parameters: parameters);
   }
@@ -38,7 +39,7 @@ class FirebaseAnalyticsManager{
     await analytics?.setUserProperty(name: "language_code", value: languageCode);
     HazizzLogger.printLog("log event to analytics: " "language_code: " +languageCode);
     Map<String, dynamic> parameters = {
-      "user_id": CacheManager.getMyIdSafely,
+      "user_id": UserManager.getMyIdSafely,
       "language_code": languageCode
     };
   //  await analytics?.logEvent(name: "used_language", parameters: parameters);
@@ -71,7 +72,7 @@ class FirebaseAnalyticsManager{
     }
     HazizzLogger.printLog("log event to analytics: " + "logout");
     Map<String, dynamic> parameters = {
-      "user_id": CacheManager.getMyIdSafely,
+      "user_id": UserManager.getMyIdSafely,
       "error": error
     };
     await analytics.logEvent(name: "logout", parameters: parameters);
@@ -267,7 +268,7 @@ class FirebaseAnalyticsManager{
     HazizzLogger.printLog("log event to analytics: " + "rate_limit_reached");
 
     Map<String, dynamic> parameters = {
-      "user_id": CacheManager.getMyIdSafely
+      "user_id": UserManager.getMyIdSafely
     };
     await analytics.logEvent(name: "rate_limit_reached", parameters: parameters);
   }
@@ -280,7 +281,7 @@ class FirebaseAnalyticsManager{
     HazizzLogger.printLog("log event to analytics: " + "unknown_error_response");
 
     Map<String, dynamic> parameters = {
-      "user_id": CacheManager.getMyIdSafely
+      "user_id": UserManager.getMyIdSafely
     };
     await analytics.logEvent(name: "unknown_error_response", parameters: parameters);
   }

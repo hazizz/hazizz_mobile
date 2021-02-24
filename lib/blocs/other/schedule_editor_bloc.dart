@@ -16,7 +16,7 @@ import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/blocs/kreta/schedule_event_bloc.dart';
 import 'package:mobile/services/selected_session_helper.dart';
-import 'package:mobile/storage/caches/data_cache.dart';
+import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/data_cache.dart';
 import 'package:mobile/extension_methods/duration_extension.dart';
 
 //region CustomScheduleEditor bloc parts

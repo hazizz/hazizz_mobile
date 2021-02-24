@@ -8,7 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/communication/pojos/pojo_comment.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/custom/image_operations.dart';
-import 'package:mobile/managers/preference_service.dart';
+import 'package:mobile/managers/preference_manager.dart';
 import 'package:mobile/services/hazizz_crypt.dart';
 import 'package:mobile/widgets/image_viewer_page.dart';
 import 'package:http/http.dart' as http;
@@ -51,7 +51,7 @@ class ImageViewer extends StatefulWidget {
 
   final Image image;
   final String salt;
-  final bool loadImageEnabled = PreferenceService.imageAutoLoad;
+  final bool loadImageEnabled = PreferenceManager.imageAutoLoad;
   final Image thumbnailImage;
   final bool tapped = false;
 

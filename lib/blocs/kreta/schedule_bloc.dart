@@ -16,8 +16,9 @@ import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/blocs/kreta/schedule_event_bloc.dart';
+import 'package:mobile/managers/schedule_manager.dart';
 import 'package:mobile/services/selected_session_helper.dart';
-import 'package:mobile/storage/caches/data_cache.dart';
+import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/data_cache.dart';
 import 'package:mobile/extension_methods/duration_extension.dart';
 
 //region Schedule bloc parts
@@ -127,6 +128,8 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
   DateTime selectedDate;
 
+
+
   PojoSchedules getScheduleFromSession(){
     Map<String, List<PojoClass>> sessionSchedules = {};
 
@@ -145,8 +148,6 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     }
     return PojoSchedules(sessionSchedules);
   }
-
-
 
   ScheduleBloc(){
     nowDate = DateTime.now();
@@ -252,7 +253,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
         HazizzLogger.printLog("event.yearNumber, event.weekNumber: ${event.yearNumber}, ${event.weekNumber}");
 
         if(currentYearNumber == currentCurrentYearNumber && currentWeekNumber == currentCurrentWeekNumber){
-          DataCache dataCache = await loadScheduleCache(year: currentYearNumber, weekNumber: currentWeekNumber);
+          CacheData dataCache = await ScheduleManager.loadCache(year: currentYearNumber, weekNumber: currentWeekNumber);
           if(dataCache!= null){
             lastUpdated = dataCache.lastUpdated;
             classes = dataCache.data;
@@ -276,7 +277,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
             if(classes != null ){
               lastUpdated = DateTime.now();
               if(currentYearNumber == currentCurrentYearNumber && currentWeekNumber == currentCurrentWeekNumber) {
-                saveScheduleCache(classes, year: currentYearNumber, weekNumber: currentWeekNumber);
+                ScheduleManager.saveCache(classes, year: currentYearNumber, weekNumber: currentWeekNumber);
               }
               yield ScheduleLoadedState(classes, year: currentYearNumber, week: currentWeekNumber, failedSessions: failedSessions);
             }

@@ -11,7 +11,8 @@ import 'package:mobile/communication/pojos/task/PojoTask.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/enums/group_permissions_enum.dart';
-import 'package:mobile/storage/cache_manager.dart';
+import 'package:mobile/managers/user_manager.dart';
+import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/cache_manager.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 
@@ -108,7 +109,7 @@ class GroupMembersBloc extends Bloc<HEvent, HState> {
         if(hazizzResponse.isSuccessful){
           membersPermissions = hazizzResponse.convertedData;
 
-          int myId = CacheManager.getMyIdSafely;
+          int myId = UserManager.getMyIdSafely;
           bool found = false;
           
           for(PojoUser member in membersPermissions.owner){

@@ -16,7 +16,8 @@ import 'package:mobile/extension_methods/datetime_extension.dart';
 
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/communication/request_sender.dart';
-import 'package:mobile/storage/caches/data_cache.dart';
+import 'package:mobile/managers/task_manager.dart';
+import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/data_cache.dart';
 import 'package:mobile/extension_methods/duration_extension.dart';
 
 //region Tasks bloc parts
@@ -166,7 +167,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
         if(currentTaskExpiredState == TaskExpiredStateEnum.UNEXPIRED
         && currentTaskCompleteState == TaskCompleteStateEnum.UNCOMPLETED
         && groupId == null){
-          DataCache dataCache = await loadTasksCache();
+          CacheData dataCache = await TaskManager.loadCache();
           if(dataCache!= null){
             lastUpdated = dataCache.lastUpdated;
             tasksList = dataCache.data;
@@ -215,7 +216,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
             if(currentTaskExpiredState == TaskExpiredStateEnum.UNEXPIRED
             && currentTaskCompleteState == TaskCompleteStateEnum.UNCOMPLETED
             && groupId == null) {
-              saveTasksCache(tasksList);
+              TaskManager.saveCache(tasksList);
             }
 
             HazizzLogger.printLog("juhuhuuu: 2");

@@ -3,7 +3,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:mobile/custom/hazizz_localizations.dart';
-import 'package:mobile/managers/preference_service.dart';
+import 'package:mobile/managers/preference_manager.dart';
 import 'package:mobile/services/facebook_opener.dart';
 import 'package:mobile/widgets/card_header_widget.dart';
 import 'package:mobile/widgets/hyper_link.dart';
@@ -21,7 +21,7 @@ enum AdType{
 }
 
 Widget showAd(BuildContext context, {bool show = true, bool showHeader = false}){
-  if(PreferenceService.enabledAd && show){
+  if(PreferenceManager.enabledAd && show){
     if(showHeader) return StickyHeader(
       header: CardHeaderWidget(text: localize(context, key: "ad"),),
       content: AdWidget(),

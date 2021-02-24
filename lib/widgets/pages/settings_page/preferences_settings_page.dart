@@ -7,7 +7,7 @@ import 'package:mobile/widgets/hazizz_back_button.dart';
 
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/managers/preference_service.dart';
+import 'package:mobile/managers/preference_manager.dart';
 
 
 class PreferencesSettingsPage extends StatefulWidget {
@@ -24,10 +24,10 @@ class _PreferencesSettingsPage extends State<PreferencesSettingsPage> {
 
   int currentStartPageItemIndex = 0;
 
-  bool autoLoad = PreferenceService.imageAutoLoad;
-  bool autoDownload = PreferenceService.imageAutoDownload;
+  bool autoLoad = PreferenceManager.imageAutoLoad;
+  bool autoDownload = PreferenceManager.imageAutoDownload;
 
-  bool enabledAd = PreferenceService.enabledAd;
+  bool enabledAd = PreferenceManager.enabledAd;
 
 
   bool isRemember = true;
@@ -38,7 +38,7 @@ class _PreferencesSettingsPage extends State<PreferencesSettingsPage> {
 
   @override
   void initState() {
-    PreferenceService.getStartPageIndex().then((int value){
+    PreferenceManager.getStartPageIndex().then((int value){
       setState(() {
         currentStartPageItemIndex = value;
       });
@@ -51,7 +51,7 @@ class _PreferencesSettingsPage extends State<PreferencesSettingsPage> {
   Widget build(BuildContext context) {
     if(startPageItems.isEmpty) {
 
-      List<StartPageItem> startPages = PreferenceService.getStartPages(context);
+      List<StartPageItem> startPages = PreferenceManager.getStartPages(context);
       for(StartPageItem startPage in startPages) {
         startPageItems.add(DropdownMenuItem(
           value: startPage.index,
@@ -81,7 +81,7 @@ class _PreferencesSettingsPage extends State<PreferencesSettingsPage> {
                       onChanged: (val){
                         setState(() {
                           enabledAd = val;
-                          PreferenceService.setEnabledAd(enabledAd);
+                          PreferenceManager.setEnabledAd(enabledAd);
                         });
                       },
                     )
@@ -93,7 +93,7 @@ class _PreferencesSettingsPage extends State<PreferencesSettingsPage> {
                     trailing: DropdownButton(
                       items: startPageItems,
                       onChanged: (dynamic newStartPageIndex) async {
-                        PreferenceService.setStartPageIndex(newStartPageIndex);
+                        PreferenceManager.setStartPageIndex(newStartPageIndex);
                         setState(() {
                           currentStartPageItemIndex = newStartPageIndex;
                         });
@@ -139,7 +139,7 @@ class _PreferencesSettingsPage extends State<PreferencesSettingsPage> {
                     onChanged: (val){
                       setState(() {
                         autoLoad = val;
-                        PreferenceService.setImageAutoLoad(autoLoad);
+                        PreferenceManager.setImageAutoLoad(autoLoad);
                       });
                     },
                   )
@@ -153,7 +153,7 @@ class _PreferencesSettingsPage extends State<PreferencesSettingsPage> {
                     onChanged: (val){
                       setState(() {
                         autoDownload = val;
-                        PreferenceService.setImageAutoDownload(autoDownload);
+                        PreferenceManager.setImageAutoDownload(autoDownload);
                       });
                     },
                   )

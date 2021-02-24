@@ -11,7 +11,8 @@ import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/custom/image_operations.dart';
 import 'package:mobile/communication/request_sender.dart';
-import 'package:mobile/storage/cache_manager.dart';
+import 'package:mobile/managers/user_manager.dart';
+import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/cache_manager.dart';
 
 class UserDataBlocs{
 
@@ -113,7 +114,7 @@ class ProfilePictureBloc extends Bloc<ProfilePictureEvent, ProfilePictureState> 
 
     if(event is ProfilePictureGetEvent) {
       yield ProfilePictureWaitingState();
-      String strProfilePicture = await CacheManager.getMyProfilePicture();
+      String strProfilePicture = await UserManager.getMyProfilePicture();
       if(strProfilePicture == null){
         HazizzLogger.printLog("baj van fönök: 1");
 
@@ -138,7 +139,7 @@ class ProfilePictureBloc extends Bloc<ProfilePictureEvent, ProfilePictureState> 
           new UpdateMyProfilePicture(
               encodedImage: fromBytesImageToBase64(event.imageBytes)));
       if(hazizzResponse.isSuccessful) {
-        CacheManager.setMyProfilePicture(hazizzResponse.convertedData);
+        UserManager.setMyProfilePicture(hazizzResponse.convertedData);
         profilePictureBytes = event.imageBytes;
         yield ProfilePictureLoadedState();
       }
@@ -149,7 +150,7 @@ class ProfilePictureBloc extends Bloc<ProfilePictureEvent, ProfilePictureState> 
       HazizzResponse hazizzResponse = await RequestSender().getResponse(
           new GetMyProfilePicture.full());
       if(hazizzResponse.isSuccessful) {
-        CacheManager.setMyProfilePicture(hazizzResponse.convertedData);
+        UserManager.setMyProfilePicture(hazizzResponse.convertedData);
         profilePictureBytes = hazizzResponse.convertedData;
         yield ProfilePictureLoadedState();
       }
@@ -420,7 +421,7 @@ class DisplayNameBloc extends Bloc<DisplayNameEvent, DisplayNameState> {
 
         PojoMeInfo meInfo = hazizzResponse.convertedData;
 
-        CacheManager.setMyDisplayName(meInfo.displayName);
+        UserManager.setMyDisplayName(meInfo.displayName);
         displayName = meInfo.displayName;
         yield DisplayNameLoadedState();
       }
@@ -431,7 +432,7 @@ class DisplayNameBloc extends Bloc<DisplayNameEvent, DisplayNameState> {
       HazizzResponse hazizzResponse = await RequestSender().getResponse(
           new GetMyProfilePicture.full());
       if(hazizzResponse.isSuccessful) {
-        CacheManager.setMyProfilePicture(hazizzResponse.convertedData);
+        UserManager.setMyProfilePicture(hazizzResponse.convertedData);
       //  profilePictureBytes = event.imageBytes;
         yield DisplayNameLoadedState();
       }
@@ -508,11 +509,11 @@ class MyUserDataBloc extends Bloc<MyUserDataEvent, MyUserDataState> {
     if(event is MyUserDataGetEvent) {
       yield MyUserDataWaitingState();
 
-      PojoMyDetailedInfo meInfoCached = await CacheManager.getMyUserData();
+      PojoMyDetailedInfo meInfoCached = await UserManager.getMyUserData();
       HazizzLogger.printLog("log: 13123s: 0");
       if(meInfoCached == null){
 
-        PojoMeInfoPrivate meInfoCachedOld = await CacheManager.getMyUserDataOld();
+        PojoMeInfoPrivate meInfoCachedOld = await UserManager.getMyUserDataOld();
 
         PojoMyDetailedInfo meInfoGenerated = PojoMyDetailedInfo(
           id: meInfoCachedOld.id,
@@ -522,7 +523,7 @@ class MyUserDataBloc extends Bloc<MyUserDataEvent, MyUserDataState> {
           facebookId: null, googleEmailAddress: null,
           lastUpdated: null, locked: null
         );
-        CacheManager.setMyUserData(meInfoGenerated);
+        UserManager.setMyUserData(meInfoGenerated);
 
         yield MyUserDataLoadedState(meInfo: meInfoGenerated);
 
@@ -534,7 +535,7 @@ class MyUserDataBloc extends Bloc<MyUserDataEvent, MyUserDataState> {
 
           PojoMyDetailedInfo myDetailedInfoRefreshed = hazizzResponse.convertedData;
           myUserData = myDetailedInfoRefreshed;
-          CacheManager.setMyUserData(myDetailedInfoRefreshed);
+          UserManager.setMyUserData(myDetailedInfoRefreshed);
           meInfoCached = myDetailedInfoRefreshed;
         }
       }else{

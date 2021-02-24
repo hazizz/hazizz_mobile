@@ -4,7 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mobile/blocs/other/show_framerate_bloc.dart';
 import 'package:mobile/dialogs/dialog_collection.dart';
 import 'package:mobile/managers/hazizz_message_handler.dart';
-import 'package:mobile/managers/preference_service.dart';
+import 'package:mobile/managers/preference_manager.dart';
 import 'package:mobile/managers/server_url_manager.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
@@ -42,8 +42,8 @@ class _DeveloperSettingsPage extends State<DeveloperSettingsPage> {
     });
 
     serverUrlController.text = ServerUrlManager.BASE_URL_DEFAULT;
-    _enableFramerate = PreferenceService.enabledShowFramerate;
-    _enableExceptionCatcher = PreferenceService.enabledExceptionCatcher;
+    _enableFramerate = PreferenceManager.enabledShowFramerate;
+    _enableExceptionCatcher = PreferenceManager.enabledExceptionCatcher;
 
     super.initState();
   }
@@ -123,7 +123,7 @@ class _DeveloperSettingsPage extends State<DeveloperSettingsPage> {
                           event = ShowFramerateDisableEvent();
                         }
                         BlocProvider.of<ShowFramerateBloc>(context).add(event);
-                        PreferenceService.setEnabledShowFramerate(_enableFramerate);
+                        PreferenceManager.setEnabledShowFramerate(_enableFramerate);
                       },
                     )
                 ),
@@ -137,7 +137,7 @@ class _DeveloperSettingsPage extends State<DeveloperSettingsPage> {
                         setState(() {
                           _enableExceptionCatcher = val;
                         });
-                        PreferenceService.setEnabledExceptionCatcher(_enableExceptionCatcher);
+                        PreferenceManager.setEnabledExceptionCatcher(_enableExceptionCatcher);
                       },
                     )
                 ),

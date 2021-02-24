@@ -17,7 +17,8 @@ import 'package:mobile/enums/group_permissions_enum.dart';
 import 'package:mobile/managers/deep_link_controller.dart';
 import 'package:mobile/managers/google_drive_manager.dart';
 import 'package:mobile/managers/firebase_analytics.dart';
-import 'package:mobile/storage/cache_manager.dart';
+import 'package:mobile/managers/user_manager.dart';
+import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/cache_manager.dart';
 import 'package:mobile/widgets/comment_section_widget.dart';
 import 'package:mobile/widgets/flushbars.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
@@ -95,7 +96,7 @@ class _ViewTaskPage extends State<ViewTaskPage> {
       pojoTask = pTask;
       originalPojoTask = pojoTask;
       FirebaseAnalyticsManager.logOpenedViewTaskPage(pojoTask);
-      if(pojoTask.creator.id == CacheManager.getMyIdSafely){
+      if(pojoTask.creator.id == UserManager.getMyIdSafely){
         setState(() {
           canModify = true;
         });

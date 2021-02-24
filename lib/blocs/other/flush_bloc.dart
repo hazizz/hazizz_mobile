@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:mobile/blocs/other/request_event.dart';
 import 'package:mobile/blocs/other/response_states.dart';
 import 'package:bloc/bloc.dart';
-import 'package:mobile/managers/preference_service.dart';
+import 'package:mobile/managers/preference_manager.dart';
 
 //region Flush event and state parts
 abstract class FlushEvent extends HEvent {
@@ -156,7 +156,7 @@ class FlushBloc extends Bloc<FlushEvent, FlushState> {
 
 
     if (event is FlushFlutterErrorEvent) {
-      if(PreferenceService.enabledExceptionCatcher){
+      if(PreferenceManager.enabledExceptionCatcher){
         yield FlushFlutterErrorState(event.flutterErrorDetails);
       }
     }

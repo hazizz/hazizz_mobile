@@ -4,7 +4,8 @@ import 'package:mobile/communication/pojos/PojoAlertSettings.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/managers/hazizz_message_handler.dart';
-import 'package:mobile/storage/cache_manager.dart';
+import 'package:mobile/managers/user_manager.dart';
+import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/cache_manager.dart';
 import 'package:mobile/widgets/flushbars.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
@@ -54,7 +55,7 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage>  {
 
   @override
   void initState() {
-    RequestSender().getResponse(GetAlertSettings(qUserId: CacheManager.getMyIdSafely)).then((HazizzResponse response){
+    RequestSender().getResponse(GetAlertSettings(qUserId: UserManager.getMyIdSafely)).then((HazizzResponse response){
       if(response.isSuccessful){
         PojoAlertSettings alertSetting = response.convertedData;
         //   WidgetsBinding.instance.addPostFrameCallback((_){
@@ -119,13 +120,13 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage>  {
                             iconBell = FontAwesomeIcons.solidBell;
                             receive = value;
                           });
-                          await getResponse(AddFirebaseToken(pUserId: CacheManager.getMyIdSafely, bFirebaseToken: await HazizzMessageHandler().token));
+                          await getResponse(AddFirebaseToken(pUserId: UserManager.getMyIdSafely, bFirebaseToken: await HazizzMessageHandler().token));
                         }else{
                           setState(() {
                             iconBell = FontAwesomeIcons.solidBellSlash;
                             receive = value;
                           });
-                          await getResponse(RemoveFirebaseTokens(pUserId: CacheManager.getMyIdSafely, firebaseToken: await HazizzMessageHandler().token));
+                          await getResponse(RemoveFirebaseTokens(pUserId: UserManager.getMyIdSafely, firebaseToken: await HazizzMessageHandler().token));
                         }
                       }
                     )
@@ -285,7 +286,7 @@ class _NotificationSettingsPage extends State<NotificationSettingsPage>  {
                       }
 
                       HazizzResponse response = await RequestSender().getResponse(UpdateAlertSettings(
-                        qUserId: CacheManager.getMyIdSafely, bAlarmTime: "${add0(newTime.hour)}:${add0(newTime.minute)}:00+$timeZoneOffset", bMondayEnabled: mondayEnabled,
+                        qUserId: UserManager.getMyIdSafely, bAlarmTime: "${add0(newTime.hour)}:${add0(newTime.minute)}:00+$timeZoneOffset", bMondayEnabled: mondayEnabled,
                         bTuesdayEnabled: tuesdayEnabled, bWednesdayEnabled: wednesdayEnabled, bThursdayEnabled: thursdayEnabled,
                         bFridayEnabled: fridayEnabled, bSaturdayEnabled: saturdayEnabled, bSundayEnabled: sundayEnabled
                       ));

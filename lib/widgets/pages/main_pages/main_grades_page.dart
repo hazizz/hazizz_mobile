@@ -12,7 +12,7 @@ import 'package:mobile/communication/pojos/PojoGrade.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/enums/grade_type_enum.dart';
 import 'package:mobile/enums/grades_sort_enum.dart';
-import 'package:mobile/managers/preference_service.dart';
+import 'package:mobile/managers/preference_manager.dart';
 import 'package:mobile/services/grade_avarage_calculator.dart';
 import 'package:mobile/services/selected_session_helper.dart';
 import 'package:mobile/widgets/ad_widget.dart';
@@ -52,7 +52,7 @@ class _GradesPage extends State<GradesPage>
 
   @override
   void initState() {
-    PreferenceService.getGradeRectForm().then((bool r) {
+    PreferenceManager.getGradeRectForm().then((bool r) {
       isRectForm = r;
     });
   //  _tabController =
@@ -420,7 +420,7 @@ class _GradesPage extends State<GradesPage>
                                       setState(() {
                                         isRectForm = !isRectForm;
                                       });
-                                      PreferenceService.setGradeRectForm(isRectForm);
+                                      PreferenceManager.setGradeRectForm(isRectForm);
                                     },
                                   ),
                                 ],

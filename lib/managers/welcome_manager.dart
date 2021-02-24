@@ -57,6 +57,4 @@ class WelcomeManager{
     sh.setBool(key, true);
     return isFirstTime == null ? true : isFirstTime;
   }
-
-
 }

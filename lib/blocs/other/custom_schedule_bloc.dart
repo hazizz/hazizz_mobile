@@ -16,7 +16,7 @@ import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/blocs/kreta/schedule_event_bloc.dart';
 import 'package:mobile/services/selected_session_helper.dart';
-import 'package:mobile/storage/caches/data_cache.dart';
+import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/data_cache.dart';
 import 'package:mobile/extension_methods/duration_extension.dart';
 
 //region CustomSchedule bloc parts
@@ -39,6 +39,7 @@ class CustomScheduleFetchEvent extends CustomScheduleEvent {
 }
 
 class CustomScheduleAddClassEvent extends CustomScheduleEvent {
+	final String recurrenceRule;
 	final String start;
   final String end;
 	final bool wholeDay;
@@ -48,13 +49,13 @@ class CustomScheduleAddClassEvent extends CustomScheduleEvent {
 	final String host;
 	final String location;
 
-	CustomScheduleAddClassEvent({this.start, this.end, this.wholeDay = false, this.periodNumber,
+	CustomScheduleAddClassEvent({this.recurrenceRule, this.start, this.end, this.wholeDay = false, this.periodNumber,
 		this.title, this.description, this.host, this.location});
 
 	@override
 	String toString() => 'CustomScheduleAddClassEvent';
 	@override
-	List<Object> get props => [start, end, wholeDay, periodNumber, title, description, host, location];
+	List<Object> get props => [recurrenceRule, start, end, wholeDay, periodNumber, title, description, host, location];
 }
 
 class CustomScheduleRemoveClassEvent extends CustomScheduleEvent {
@@ -176,11 +177,9 @@ class CustomScheduleBloc extends Bloc<CustomScheduleEvent, CustomScheduleState> 
 		return  ((dayOfYear - date.weekday + 10) / 7).floor();
 	}
 
-
 	bool get selectedWeekIsCurrent => fromCurrentWeek == 0;
 	bool get selectedWeekIsPrevious => fromCurrentWeek == -1;
 	bool get selectedWeekIsNext =>  fromCurrentWeek == 1;
-
 
 	void nextWeek(){
 		fromCurrentWeek++;
@@ -191,7 +190,6 @@ class CustomScheduleBloc extends Bloc<CustomScheduleEvent, CustomScheduleState> 
 
 		//	MainTabBlocs().schedulesBloc.add(CustomScheduleFetchEvent(yearNumber: year, weekNumber: weekNumber));
 	}
-
 
 	void previousWeek(){
 		fromCurrentWeek--;
@@ -211,7 +209,6 @@ class CustomScheduleBloc extends Bloc<CustomScheduleEvent, CustomScheduleState> 
 	Stream<CustomScheduleState> mapEventToState(CustomScheduleEvent event) async* {
 		if (event is CustomScheduleFetchEvent) {
 			try {
-
 				yield CustomScheduleWaitingState();
 
 				currentDayIndex = todayIndex;
@@ -236,8 +233,6 @@ class CustomScheduleBloc extends Bloc<CustomScheduleEvent, CustomScheduleState> 
 				);
 
 				if(hazizzResponse.isSuccessful){
-					failedSessions = getFailedSessionsFromHeader(hazizzResponse.response.headers);
-
 					List<PojoCustomClass> classes = hazizzResponse.convertedData;
 					if(classes != null && classes.isNotEmpty){
 						classes = hazizzResponse.convertedData;
@@ -255,7 +250,6 @@ class CustomScheduleBloc extends Bloc<CustomScheduleEvent, CustomScheduleState> 
 					}else{
 						if(classes != null){
 							yield CustomScheduleLoadedCacheState(classes);
-
 						}
 					}
 				}
@@ -293,11 +287,12 @@ class CustomScheduleBloc extends Bloc<CustomScheduleEvent, CustomScheduleState> 
 		}
 		if(event is CustomScheduleAddClassEvent){
 			HazizzResponse hazizzResponse = await getResponse(
-					CreateCustomClass(
-						start: event.start, end: event.end, wholeDay: event.wholeDay,
-						periodNumber: event.periodNumber, title: event.title, description: event.description,
-						host: event.host, location: event.location
-					)
+				CreateCustomClass(
+					recurrenceRule: event.recurrenceRule,
+					start: event.start, end: event.end, wholeDay: event.wholeDay,
+					periodNumber: event.periodNumber, title: event.title, description: event.description,
+					host: event.host, location: event.location
+				)
 			);
 
 			if(hazizzResponse.isSuccessful){
@@ -307,7 +302,7 @@ class CustomScheduleBloc extends Bloc<CustomScheduleEvent, CustomScheduleState> 
 
 			}
 		}
-		if(event is CustomScheduleRemoveClassEvent){
+		else if(event is CustomScheduleRemoveClassEvent){
 			HazizzResponse hazizzResponse = await getResponse(
 					DeleteCustomClass(customClassId: event.customClassId)
 			);

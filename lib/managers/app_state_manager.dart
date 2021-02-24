@@ -17,18 +17,23 @@ import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/managers/firebase_analytics.dart';
-import 'package:mobile/managers/preference_service.dart';
+import 'package:mobile/managers/preference_manager.dart';
+import 'package:mobile/managers/schedule_manager.dart';
 import 'package:mobile/managers/server_checker.dart';
+import 'package:mobile/managers/task_manager.dart';
+import 'package:mobile/managers/user_manager.dart';
 import 'package:mobile/navigation/route_generator.dart';
 import 'package:mobile/services/flutter_error_collector.dart';
-import 'package:mobile/storage/caches/data_cache.dart';
+import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/data_cache.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mobile/custom/hazizz_app_info.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/managers/kreta_session_manager.dart';
 import 'package:mobile/managers/token_manager.dart';
-import 'package:mobile/storage/cache_manager.dart';
+import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/cache_manager.dart';
 import 'package:mobile/extension_methods/duration_extension.dart';
+
+import 'grade_manager.dart';
 
 class AppState{
   static const key_newComer = "key_newComer";
@@ -58,12 +63,12 @@ class AppState{
     HazizzResponse hazizzResponse = await RequestSender().getResponse(GetMyInfo.private());
     if(hazizzResponse.isSuccessful){
       PojoMyDetailedInfo myDetailedInfo = hazizzResponse.convertedData;
-      CacheManager.setMyUserData(myDetailedInfo);
+      UserManager.setMyUserData(myDetailedInfo);
     }else{
       hazizzResponse = await RequestSender().getResponse(GetMyInfo.private());
       if(hazizzResponse.isSuccessful){
         PojoMyDetailedInfo myDetailedInfo = hazizzResponse.convertedData;
-        CacheManager.setMyUserData(myDetailedInfo);
+        UserManager.setMyUserData(myDetailedInfo);
       }
     }
     HazizzLogger.printLog("logInProcedure: 4");
@@ -73,7 +78,7 @@ class AppState{
 
   static Future<void> appStartProcedure() async {
 
-    PreferenceService.loadAllPreferences();
+    PreferenceManager.loadAllPreferences();
     RequestSender().initialize();
     await HazizzAppInfo().initalize();
     await Connection.listener();
@@ -123,10 +128,10 @@ class AppState{
     TokenManager.invalidateTokens();
     var sh = await SharedPreferences.getInstance();
     sh.setBool(key_isLoggedIn, false);
-    CacheManager.forgetMyUser();
-    forgetTasksCache();
-    forgetScheduleCache();
-    forgetGradesCache();
+    UserManager.forgetMyUser();
+    TaskManager.forgetCache();
+    ScheduleManager.forgetCache();
+    GradeManager.forgetCache();
     setDisallowedGDrive();
     RequestSender().clearAllRequests();
     RequestSender().unlock();

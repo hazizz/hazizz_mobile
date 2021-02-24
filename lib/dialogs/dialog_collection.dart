@@ -26,7 +26,8 @@ import 'package:mobile/dialogs/sure_to_leave_group_dialog.dart';
 import 'package:mobile/dialogs/user_dialog.dart';
 import 'package:mobile/enums/grade_type_enum.dart';
 import 'package:mobile/enums/group_permissions_enum.dart';
-import 'package:mobile/storage/cache_manager.dart';
+import 'package:mobile/managers/user_manager.dart';
+import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/cache_manager.dart';
 import 'package:mobile/widgets/hero_dialog_route.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:mobile/extension_methods/time_of_day_extension.dart';
@@ -1402,7 +1403,7 @@ Future<bool> showMarkdownInfo(context,) async {
 Future<bool> showGiveawayDialog(context) async {
 
   void quit(){
-    CacheManager.setSeenGiveaway();
+    UserManager.setSeenGiveaway();
     Navigator.pop(context);
   }
 

@@ -4,7 +4,7 @@ import 'package:mobile/widgets/ad_widget.dart';
 import 'package:mobile/widgets/hazizz_back_button.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/managers/preference_service.dart';
+import 'package:mobile/managers/preference_manager.dart';
 
 class SettingsPage extends StatefulWidget {
   SettingsPage({Key key}) : super(key: key);
@@ -40,7 +40,7 @@ class _SettingsPage extends State<SettingsPage>  {
       });
     });
 
-    PreferenceService.getStartPageIndex().then(
+    PreferenceManager.getStartPageIndex().then(
       (int value){
         setState(() {
           currentStartPageItemIndex = value;
@@ -58,7 +58,7 @@ class _SettingsPage extends State<SettingsPage>  {
   Widget build(BuildContext context) {
     if(startPageItems.isEmpty) {
 
-      List<StartPageItem> startPages = PreferenceService.getStartPages(context);
+      List<StartPageItem> startPages = PreferenceManager.getStartPages(context);
       for(StartPageItem startPage in startPages) {
         startPageItems.add(DropdownMenuItem(
           value: startPage.index,

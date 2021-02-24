@@ -4,7 +4,8 @@ import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/managers/app_state_manager.dart';
-import 'package:mobile/storage/cache_manager.dart';
+import 'package:mobile/managers/user_manager.dart';
+import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/cache_manager.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
 import 'dialog_collection.dart';
 
@@ -81,7 +82,7 @@ class _SureToDeleteMeDialog extends State<SureToDeleteMeDialog> {
                 isLoading = true;
               });
               HazizzResponse hazizzResponse = await RequestSender().getResponse(
-                  DeleteMe(pUserId: CacheManager.getMyIdSafely)
+                  DeleteMe(pUserId: UserManager.getMyIdSafely)
               );
 
               if(hazizzResponse.isSuccessful){

@@ -6,7 +6,8 @@ import 'package:mobile/communication/pojos/pojo_comment.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/dialogs/dialog_collection.dart';
 import 'package:mobile/dialogs/report_dialog.dart';
-import 'package:mobile/storage/cache_manager.dart';
+import 'package:mobile/managers/user_manager.dart';
+import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/cache_manager.dart';
 import 'package:mobile/widgets/flushbars.dart';
 import 'package:mobile/custom/hazizz_localizations.dart';
 import 'package:mobile/theme/hazizz_theme.dart';
@@ -31,7 +32,7 @@ class _CommentItemWidget extends State<CommentItemWidget>{
 
   @override
   void initState() {
-    if(widget.comment.creator.id == CacheManager.getMyIdSafely){
+    if(widget.comment.creator.id == UserManager.getMyIdSafely){
       setState(() {
         imTheAuthor = true;
       });

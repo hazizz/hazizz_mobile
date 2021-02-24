@@ -15,8 +15,9 @@ import 'package:mobile/custom/hazizz_logger.dart';
 import 'package:mobile/enums/grades_sort_enum.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'package:mobile/communication/request_sender.dart';
+import 'package:mobile/managers/grade_manager.dart';
 import 'package:mobile/services/selected_session_helper.dart';
-import 'package:mobile/storage/caches/data_cache.dart';
+import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/data_cache.dart';
 
 //region Grades bloc parts
 //region Grades events
@@ -115,6 +116,9 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
   List<PojoGrade> gradesByDate = List();
 
   PojoGrades getGradesFromSession(){
+    if(grades == null){
+      return null;
+    }
     Map<String, List<PojoGrade>> sessionGrades = {};
     for(String key in grades.grades.keys){
       int newI = 0;
@@ -186,7 +190,7 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
         yield GradesWaitingState();
         HazizzLogger.printLog("log: am0 i here?");
 
-        DataCache dataCache = await loadGradesCache();
+        CacheData dataCache = await GradeManager.loadCache();
         if(dataCache!= null){
           lastUpdated = dataCache.lastUpdated;
           grades = dataCache.data ?? PojoGrades({});
@@ -227,7 +231,7 @@ class GradesBloc extends Bloc<GradesEvent, GradesState> {
               }
 
               lastUpdated = DateTime.now();
-              saveGradesCache(grades);
+              GradeManager.saveCache(grades);
 
               yield GradesLoadedState(grades, failedSessions: failedSessions);
             }else{

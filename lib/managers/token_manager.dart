@@ -2,11 +2,12 @@ import 'package:intl/intl.dart';
 import 'package:mobile/communication/pojos/PojoTokens.dart';
 import 'package:mobile/communication/requests/request_collection.dart';
 import 'package:mobile/custom/hazizz_logger.dart';
+import 'package:mobile/managers/user_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mobile/communication/request_sender.dart';
 import 'package:mobile/communication/hazizz_response.dart';
 import 'app_state_manager.dart';
-import 'package:mobile/storage/cache_manager.dart';
+import 'file:///C:/Users/Erik/Projects/apps/hazizz_mobile2/lib/managers/cache_manager.dart';
 import 'dart:core';
 import 'package:mobile/managers/firebase_analytics.dart';
 
@@ -21,7 +22,7 @@ class TokenManager {
     HazizzLogger.printLog("In createTokenWithRefresh function");
    // HazizzLogger.printLog("In createTokenWithRefresh function0: " + (await tokens).token);
    // HazizzLogger.printLog("In createTokenWithRefresh function1: " + (await tokens).refresh);
-    HazizzResponse hazizzResponse = await RequestSender().getAuthResponse(new CreateToken.withRefresh(qUsername: CacheManager.meInfo.username, qRefreshToken: (await tokens).refresh));
+    HazizzResponse hazizzResponse = await RequestSender().getAuthResponse(new CreateToken.withRefresh(qUsername: UserManager.meInfo.username, qRefreshToken: (await tokens).refresh));
     if(hazizzResponse.isSuccessful){
       HazizzLogger.printLog("In createTokenWithRefresh function: token response successful");
       PojoTokens tokens = hazizzResponse.convertedData;

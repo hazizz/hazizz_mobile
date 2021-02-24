@@ -2,7 +2,7 @@ import 'package:mobile/blocs/kreta/grades_bloc.dart';
 import 'package:mobile/blocs/kreta/schedule_bloc.dart';
 import 'package:mobile/blocs/other/custom_schedule_bloc.dart';
 import 'package:mobile/blocs/tasks/tasks_bloc.dart';
-import 'package:mobile/managers/preference_service.dart';
+import 'package:mobile/managers/preference_manager.dart';
 
 class MainTabBlocs{
 
@@ -12,7 +12,7 @@ class MainTabBlocs{
   }
   MainTabBlocs._internal();
 
-  int initialIndex = PreferenceService.tasksPage;
+  int initialIndex = PreferenceManager.tasksPage;
 
   final TasksBloc tasksBloc = new TasksBloc();
    final ScheduleBloc schedulesBloc = new ScheduleBloc();
@@ -27,7 +27,7 @@ class MainTabBlocs{
 
   void initialize()async{
     fetchAll();
-    initialIndex = await PreferenceService.getStartPageIndex();
+    initialIndex = await PreferenceManager.getStartPageIndex();
   }
 }
 
